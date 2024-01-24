@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingServerSideExcludeUpdate(t *testing.T) {
+func TestZoneSettingPrivacyPassUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingServerSideExcludeUpdate(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.ServerSideExcludes.Update(
+	_, err := client.Zones.Settings.PrivacyPasses.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingServerSideExcludeUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingServerSideExcludeUpdateParamsValueOn),
+		cloudflare.ZoneSettingPrivacyPassUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingPrivacyPassUpdateParamsValueOn),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingServerSideExcludeUpdate(t *testing.T) {
 	}
 }
 
-func TestZoneSettingServerSideExcludeList(t *testing.T) {
+func TestZoneSettingPrivacyPassList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingServerSideExcludeList(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.ServerSideExcludes.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.PrivacyPasses.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

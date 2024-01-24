@@ -9,11 +9,12 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneRateLimitGet(t *testing.T) {
+func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,10 +27,12 @@ func TestZoneRateLimitGet(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.RateLimits.Get(
+	_, err := client.AI.Baai.BgeBaseEnV1_5(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"372e67954025e0ba6aaa6d586b9e0b59",
+		cloudflare.AIBaaiBgeBaseEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AIBaaiBgeBaseEnV1_5ParamsText](shared.UnionString("string")),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -40,7 +43,7 @@ func TestZoneRateLimitGet(t *testing.T) {
 	}
 }
 
-func TestZoneRateLimitListWithOptionalParams(t *testing.T) {
+func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -53,12 +56,40 @@ func TestZoneRateLimitListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.RateLimits.List(
+	_, err := client.AI.Baai.BgeLargeEnV1_5(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneRateLimitListParams{
-			Page:    cloudflare.F(1.000000),
-			PerPage: cloudflare.F(1.000000),
+		cloudflare.AIBaaiBgeLargeEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AIBaaiBgeLargeEnV1_5ParamsText](shared.UnionString("string")),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAIBaaiBgeSmallEnV1_5(t *testing.T) {
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithEmail("dev@cloudflare.com"),
+	)
+	_, err := client.AI.Baai.BgeSmallEnV1_5(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AIBaaiBgeSmallEnV1_5Params{
+			Text: cloudflare.F[cloudflare.AIBaaiBgeSmallEnV1_5ParamsText](shared.UnionString("string")),
 		},
 	)
 	if err != nil {

@@ -33,52 +33,130 @@ func NewZoneLoadBalancerService(opts ...option.RequestOption) (r *ZoneLoadBalanc
 }
 
 // Create a new load balancer.
-func (r *ZoneLoadBalancerService) New(ctx context.Context, identifier string, body ZoneLoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
+func (r *ZoneLoadBalancerService) New(ctx context.Context, identifier interface{}, body ZoneLoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers", identifier)
+	path := fmt.Sprintf("zones/%v/load_balancers", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Fetch a single configured load balancer.
-func (r *ZoneLoadBalancerService) Get(ctx context.Context, identifier1 string, identifier string, opts ...option.RequestOption) (res *LoadBalancer, err error) {
+func (r *ZoneLoadBalancerService) Get(ctx context.Context, identifier1 interface{}, identifier interface{}, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", identifier1, identifier)
+	path := fmt.Sprintf("zones/%v/load_balancers/%v", identifier1, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Update a configured load balancer.
-func (r *ZoneLoadBalancerService) Update(ctx context.Context, identifier1 string, identifier string, body ZoneLoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
+func (r *ZoneLoadBalancerService) Update(ctx context.Context, identifier1 interface{}, identifier interface{}, body ZoneLoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", identifier1, identifier)
+	path := fmt.Sprintf("zones/%v/load_balancers/%v", identifier1, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 // List configured load balancers.
-func (r *ZoneLoadBalancerService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *ZoneLoadBalancerListResponse, err error) {
+func (r *ZoneLoadBalancerService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *LoadBalancerCollection, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers", identifier)
+	path := fmt.Sprintf("zones/%v/load_balancers", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Delete a configured load balancer.
-func (r *ZoneLoadBalancerService) Delete(ctx context.Context, identifier1 string, identifier string, opts ...option.RequestOption) (res *ZoneLoadBalancerDeleteResponse, err error) {
+func (r *ZoneLoadBalancerService) Delete(ctx context.Context, identifier1 interface{}, identifier interface{}, opts ...option.RequestOption) (res *IDResponseZtdTboH6, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", identifier1, identifier)
+	path := fmt.Sprintf("zones/%v/load_balancers/%v", identifier1, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
-// Apply changes to an existing load balancer, overwriting the supplied properties.
-func (r *ZoneLoadBalancerService) Patch(ctx context.Context, identifier1 string, identifier string, body ZoneLoadBalancerPatchParams, opts ...option.RequestOption) (res *LoadBalancer, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", identifier1, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
-	return
+type IDResponseZtdTboH6 struct {
+	Errors   []IDResponseZtdTboH6Error   `json:"errors"`
+	Messages []IDResponseZtdTboH6Message `json:"messages"`
+	Result   IDResponseZtdTboH6Result    `json:"result"`
+	// Whether the API call was successful
+	Success IDResponseZtdTboH6Success `json:"success"`
+	JSON    idResponseZtdTboH6JSON    `json:"-"`
 }
+
+// idResponseZtdTboH6JSON contains the JSON metadata for the struct
+// [IDResponseZtdTboH6]
+type idResponseZtdTboH6JSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IDResponseZtdTboH6) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IDResponseZtdTboH6Error struct {
+	Code    int64                       `json:"code,required"`
+	Message string                      `json:"message,required"`
+	JSON    idResponseZtdTboH6ErrorJSON `json:"-"`
+}
+
+// idResponseZtdTboH6ErrorJSON contains the JSON metadata for the struct
+// [IDResponseZtdTboH6Error]
+type idResponseZtdTboH6ErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IDResponseZtdTboH6Error) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IDResponseZtdTboH6Message struct {
+	Code    int64                         `json:"code,required"`
+	Message string                        `json:"message,required"`
+	JSON    idResponseZtdTboH6MessageJSON `json:"-"`
+}
+
+// idResponseZtdTboH6MessageJSON contains the JSON metadata for the struct
+// [IDResponseZtdTboH6Message]
+type idResponseZtdTboH6MessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IDResponseZtdTboH6Message) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IDResponseZtdTboH6Result struct {
+	ID   interface{}                  `json:"id"`
+	JSON idResponseZtdTboH6ResultJSON `json:"-"`
+}
+
+// idResponseZtdTboH6ResultJSON contains the JSON metadata for the struct
+// [IDResponseZtdTboH6Result]
+type idResponseZtdTboH6ResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IDResponseZtdTboH6Result) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type IDResponseZtdTboH6Success bool
+
+const (
+	IDResponseZtdTboH6SuccessTrue IDResponseZtdTboH6Success = true
+)
 
 type LoadBalancer struct {
 	Errors   []LoadBalancerError   `json:"errors"`
@@ -142,7 +220,7 @@ func (r *LoadBalancerMessage) UnmarshalJSON(data []byte) (err error) {
 }
 
 type LoadBalancerResult struct {
-	ID string `json:"id"`
+	ID interface{} `json:"id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -180,14 +258,8 @@ type LoadBalancerResult struct {
 	PopPools interface{} `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering LoadBalancerResultRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -196,18 +268,14 @@ type LoadBalancerResult struct {
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules []LoadBalancerResultRule `json:"rules"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes LoadBalancerResultSessionAffinityAttributes `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -221,14 +289,6 @@ type LoadBalancerResult struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy LoadBalancerResultSteeringPolicy `json:"steering_policy"`
@@ -361,14 +421,8 @@ const (
 	LoadBalancerResultLocationStrategyPreferEcsGeo       LoadBalancerResultLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type LoadBalancerResultRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -499,31 +553,21 @@ type LoadBalancerResultRulesOverrides struct {
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	PopPools interface{} `json:"pop_pools"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering LoadBalancerResultRulesOverridesRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools interface{} `json:"region_pools"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes LoadBalancerResultRulesOverridesSessionAffinityAttributes `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -537,14 +581,6 @@ type LoadBalancerResultRulesOverrides struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy LoadBalancerResultRulesOverridesSteeringPolicy `json:"steering_policy"`
@@ -669,14 +705,8 @@ const (
 	LoadBalancerResultRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerResultRulesOverridesLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type LoadBalancerResultRulesOverridesRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -700,64 +730,11 @@ func (r *LoadBalancerResultRulesOverridesRandomSteering) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerResultRulesOverridesSessionAffinity string
-
-const (
-	LoadBalancerResultRulesOverridesSessionAffinityNone     LoadBalancerResultRulesOverridesSessionAffinity = "none"
-	LoadBalancerResultRulesOverridesSessionAffinityCookie   LoadBalancerResultRulesOverridesSessionAffinity = "cookie"
-	LoadBalancerResultRulesOverridesSessionAffinityIPCookie LoadBalancerResultRulesOverridesSessionAffinity = "ip_cookie"
-	LoadBalancerResultRulesOverridesSessionAffinityHeader   LoadBalancerResultRulesOverridesSessionAffinity = "header"
-	LoadBalancerResultRulesOverridesSessionAffinityEmpty    LoadBalancerResultRulesOverridesSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type LoadBalancerResultRulesOverridesSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers []string `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders bool `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -768,16 +745,13 @@ type LoadBalancerResultRulesOverridesSessionAffinityAttributes struct {
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure LoadBalancerResultRulesOverridesSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover LoadBalancerResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
 	JSON                 loadBalancerResultRulesOverridesSessionAffinityAttributesJSON                 `json:"-"`
 }
@@ -787,8 +761,6 @@ type LoadBalancerResultRulesOverridesSessionAffinityAttributes struct {
 // [LoadBalancerResultRulesOverridesSessionAffinityAttributes]
 type loadBalancerResultRulesOverridesSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
-	Headers              apijson.Field
-	RequireAllHeaders    apijson.Field
 	Samesite             apijson.Field
 	Secure               apijson.Field
 	ZeroDowntimeFailover apijson.Field
@@ -825,16 +797,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type LoadBalancerResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -855,87 +824,24 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type LoadBalancerResultRulesOverridesSteeringPolicy string
 
 const (
-	LoadBalancerResultRulesOverridesSteeringPolicyOff                      LoadBalancerResultRulesOverridesSteeringPolicy = "off"
-	LoadBalancerResultRulesOverridesSteeringPolicyGeo                      LoadBalancerResultRulesOverridesSteeringPolicy = "geo"
-	LoadBalancerResultRulesOverridesSteeringPolicyRandom                   LoadBalancerResultRulesOverridesSteeringPolicy = "random"
-	LoadBalancerResultRulesOverridesSteeringPolicyDynamicLatency           LoadBalancerResultRulesOverridesSteeringPolicy = "dynamic_latency"
-	LoadBalancerResultRulesOverridesSteeringPolicyProximity                LoadBalancerResultRulesOverridesSteeringPolicy = "proximity"
-	LoadBalancerResultRulesOverridesSteeringPolicyLeastOutstandingRequests LoadBalancerResultRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerResultRulesOverridesSteeringPolicyLeastConnections         LoadBalancerResultRulesOverridesSteeringPolicy = "least_connections"
-	LoadBalancerResultRulesOverridesSteeringPolicyEmpty                    LoadBalancerResultRulesOverridesSteeringPolicy = "\"\""
+	LoadBalancerResultRulesOverridesSteeringPolicyOff            LoadBalancerResultRulesOverridesSteeringPolicy = "off"
+	LoadBalancerResultRulesOverridesSteeringPolicyGeo            LoadBalancerResultRulesOverridesSteeringPolicy = "geo"
+	LoadBalancerResultRulesOverridesSteeringPolicyRandom         LoadBalancerResultRulesOverridesSteeringPolicy = "random"
+	LoadBalancerResultRulesOverridesSteeringPolicyDynamicLatency LoadBalancerResultRulesOverridesSteeringPolicy = "dynamic_latency"
+	LoadBalancerResultRulesOverridesSteeringPolicyProximity      LoadBalancerResultRulesOverridesSteeringPolicy = "proximity"
+	LoadBalancerResultRulesOverridesSteeringPolicyEmpty          LoadBalancerResultRulesOverridesSteeringPolicy = "\"\""
 )
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type LoadBalancerResultSessionAffinity string
-
-const (
-	LoadBalancerResultSessionAffinityNone     LoadBalancerResultSessionAffinity = "none"
-	LoadBalancerResultSessionAffinityCookie   LoadBalancerResultSessionAffinity = "cookie"
-	LoadBalancerResultSessionAffinityIPCookie LoadBalancerResultSessionAffinity = "ip_cookie"
-	LoadBalancerResultSessionAffinityHeader   LoadBalancerResultSessionAffinity = "header"
-	LoadBalancerResultSessionAffinityEmpty    LoadBalancerResultSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type LoadBalancerResultSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers []string `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders bool `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -946,16 +852,13 @@ type LoadBalancerResultSessionAffinityAttributes struct {
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure LoadBalancerResultSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover LoadBalancerResultSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
 	JSON                 loadBalancerResultSessionAffinityAttributesJSON                 `json:"-"`
 }
@@ -964,8 +867,6 @@ type LoadBalancerResultSessionAffinityAttributes struct {
 // the struct [LoadBalancerResultSessionAffinityAttributes]
 type loadBalancerResultSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
-	Headers              apijson.Field
-	RequireAllHeaders    apijson.Field
 	Samesite             apijson.Field
 	Secure               apijson.Field
 	ZeroDowntimeFailover apijson.Field
@@ -1002,16 +903,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type LoadBalancerResultSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -1032,27 +930,17 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type LoadBalancerResultSteeringPolicy string
 
 const (
-	LoadBalancerResultSteeringPolicyOff                      LoadBalancerResultSteeringPolicy = "off"
-	LoadBalancerResultSteeringPolicyGeo                      LoadBalancerResultSteeringPolicy = "geo"
-	LoadBalancerResultSteeringPolicyRandom                   LoadBalancerResultSteeringPolicy = "random"
-	LoadBalancerResultSteeringPolicyDynamicLatency           LoadBalancerResultSteeringPolicy = "dynamic_latency"
-	LoadBalancerResultSteeringPolicyProximity                LoadBalancerResultSteeringPolicy = "proximity"
-	LoadBalancerResultSteeringPolicyLeastOutstandingRequests LoadBalancerResultSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerResultSteeringPolicyLeastConnections         LoadBalancerResultSteeringPolicy = "least_connections"
-	LoadBalancerResultSteeringPolicyEmpty                    LoadBalancerResultSteeringPolicy = "\"\""
+	LoadBalancerResultSteeringPolicyOff            LoadBalancerResultSteeringPolicy = "off"
+	LoadBalancerResultSteeringPolicyGeo            LoadBalancerResultSteeringPolicy = "geo"
+	LoadBalancerResultSteeringPolicyRandom         LoadBalancerResultSteeringPolicy = "random"
+	LoadBalancerResultSteeringPolicyDynamicLatency LoadBalancerResultSteeringPolicy = "dynamic_latency"
+	LoadBalancerResultSteeringPolicyProximity      LoadBalancerResultSteeringPolicy = "proximity"
+	LoadBalancerResultSteeringPolicyEmpty          LoadBalancerResultSteeringPolicy = "\"\""
 )
 
 // Whether the API call was successful
@@ -1062,19 +950,19 @@ const (
 	LoadBalancerSuccessTrue LoadBalancerSuccess = true
 )
 
-type ZoneLoadBalancerListResponse struct {
-	Errors     []ZoneLoadBalancerListResponseError    `json:"errors"`
-	Messages   []ZoneLoadBalancerListResponseMessage  `json:"messages"`
-	Result     []ZoneLoadBalancerListResponseResult   `json:"result"`
-	ResultInfo ZoneLoadBalancerListResponseResultInfo `json:"result_info"`
+type LoadBalancerCollection struct {
+	Errors     []LoadBalancerCollectionError    `json:"errors"`
+	Messages   []LoadBalancerCollectionMessage  `json:"messages"`
+	Result     []LoadBalancerCollectionResult   `json:"result"`
+	ResultInfo LoadBalancerCollectionResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success ZoneLoadBalancerListResponseSuccess `json:"success"`
-	JSON    zoneLoadBalancerListResponseJSON    `json:"-"`
+	Success LoadBalancerCollectionSuccess `json:"success"`
+	JSON    loadBalancerCollectionJSON    `json:"-"`
 }
 
-// zoneLoadBalancerListResponseJSON contains the JSON metadata for the struct
-// [ZoneLoadBalancerListResponse]
-type zoneLoadBalancerListResponseJSON struct {
+// loadBalancerCollectionJSON contains the JSON metadata for the struct
+// [LoadBalancerCollection]
+type loadBalancerCollectionJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1084,57 +972,57 @@ type zoneLoadBalancerListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneLoadBalancerListResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    zoneLoadBalancerListResponseErrorJSON `json:"-"`
+type LoadBalancerCollectionError struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    loadBalancerCollectionErrorJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneLoadBalancerListResponseError]
-type zoneLoadBalancerListResponseErrorJSON struct {
+// loadBalancerCollectionErrorJSON contains the JSON metadata for the struct
+// [LoadBalancerCollectionError]
+type loadBalancerCollectionErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneLoadBalancerListResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    zoneLoadBalancerListResponseMessageJSON `json:"-"`
+type LoadBalancerCollectionMessage struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    loadBalancerCollectionMessageJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseMessageJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerListResponseMessage]
-type zoneLoadBalancerListResponseMessageJSON struct {
+// loadBalancerCollectionMessageJSON contains the JSON metadata for the struct
+// [LoadBalancerCollectionMessage]
+type loadBalancerCollectionMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneLoadBalancerListResponseResult struct {
-	ID string `json:"id"`
+type LoadBalancerCollectionResult struct {
+	ID interface{} `json:"id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
 	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 	// response codes. If there is another healthy origin in the same pool, the request
 	// is retried once against this alternate origin.
-	AdaptiveRouting ZoneLoadBalancerListResponseResultAdaptiveRouting `json:"adaptive_routing"`
+	AdaptiveRouting LoadBalancerCollectionResultAdaptiveRouting `json:"adaptive_routing"`
 	// A mapping of country codes to a list of pool IDs (ordered by their failover
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
@@ -1152,8 +1040,8 @@ type ZoneLoadBalancerListResponseResult struct {
 	FallbackPool interface{} `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
-	LocationStrategy ZoneLoadBalancerListResponseResultLocationStrategy `json:"location_strategy"`
-	ModifiedOn       time.Time                                          `json:"modified_on" format:"date-time"`
+	LocationStrategy LoadBalancerCollectionResultLocationStrategy `json:"location_strategy"`
+	ModifiedOn       time.Time                                    `json:"modified_on" format:"date-time"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
@@ -1165,34 +1053,24 @@ type ZoneLoadBalancerListResponseResult struct {
 	PopPools interface{} `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied bool `json:"proxied"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
-	RandomSteering ZoneLoadBalancerListResponseResultRandomSteering `json:"random_steering"`
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
+	RandomSteering LoadBalancerCollectionResultRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools interface{} `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules []ZoneLoadBalancerListResponseResultRule `json:"rules"`
-	// Configures attributes for session affinity.
-	SessionAffinityAttributes ZoneLoadBalancerListResponseResultSessionAffinityAttributes `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	Rules []LoadBalancerCollectionResultRule `json:"rules"`
+	// Configures cookie attributes for session affinity cookie.
+	SessionAffinityAttributes LoadBalancerCollectionResultSessionAffinityAttributes `json:"session_affinity_attributes"`
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -1206,26 +1084,18 @@ type ZoneLoadBalancerListResponseResult struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy ZoneLoadBalancerListResponseResultSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy LoadBalancerCollectionResultSteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl  float64                                `json:"ttl"`
-	JSON zoneLoadBalancerListResponseResultJSON `json:"-"`
+	Ttl  float64                          `json:"ttl"`
+	JSON loadBalancerCollectionResultJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultJSON contains the JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResult]
-type zoneLoadBalancerListResponseResultJSON struct {
+// loadBalancerCollectionResultJSON contains the JSON metadata for the struct
+// [LoadBalancerCollectionResult]
+type loadBalancerCollectionResultJSON struct {
 	ID                        apijson.Field
 	AdaptiveRouting           apijson.Field
 	CountryPools              apijson.Field
@@ -1250,7 +1120,7 @@ type zoneLoadBalancerListResponseResultJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1260,39 +1130,39 @@ func (r *ZoneLoadBalancerListResponseResult) UnmarshalJSON(data []byte) (err err
 // immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 // response codes. If there is another healthy origin in the same pool, the request
 // is retried once against this alternate origin.
-type ZoneLoadBalancerListResponseResultAdaptiveRouting struct {
+type LoadBalancerCollectionResultAdaptiveRouting struct {
 	// Extends zero-downtime failover of requests to healthy origins from alternate
 	// pools, when no healthy alternate exists in the same pool, according to the
 	// failover order defined by traffic and origin steering. When set false (the
 	// default) zero-downtime failover will only occur between origins within the same
 	// pool. See `session_affinity_attributes` for control over when sessions are
 	// broken or reassigned.
-	FailoverAcrossPools bool                                                  `json:"failover_across_pools"`
-	JSON                zoneLoadBalancerListResponseResultAdaptiveRoutingJSON `json:"-"`
+	FailoverAcrossPools bool                                            `json:"failover_across_pools"`
+	JSON                loadBalancerCollectionResultAdaptiveRoutingJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultAdaptiveRoutingJSON contains the JSON metadata
-// for the struct [ZoneLoadBalancerListResponseResultAdaptiveRouting]
-type zoneLoadBalancerListResponseResultAdaptiveRoutingJSON struct {
+// loadBalancerCollectionResultAdaptiveRoutingJSON contains the JSON metadata for
+// the struct [LoadBalancerCollectionResultAdaptiveRouting]
+type loadBalancerCollectionResultAdaptiveRoutingJSON struct {
 	FailoverAcrossPools apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
 // to learn how steering is affected.
-type ZoneLoadBalancerListResponseResultLocationStrategy struct {
+type LoadBalancerCollectionResultLocationStrategy struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
 	//   - `"pop"`: Use the Cloudflare PoP location.
 	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 	//     unsuccessful, use the Cloudflare PoP location.
-	Mode ZoneLoadBalancerListResponseResultLocationStrategyMode `json:"mode"`
+	Mode LoadBalancerCollectionResultLocationStrategyMode `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
 	//
@@ -1300,20 +1170,20 @@ type ZoneLoadBalancerListResponseResultLocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs `json:"prefer_ecs"`
-	JSON      zoneLoadBalancerListResponseResultLocationStrategyJSON      `json:"-"`
+	PreferEcs LoadBalancerCollectionResultLocationStrategyPreferEcs `json:"prefer_ecs"`
+	JSON      loadBalancerCollectionResultLocationStrategyJSON      `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultLocationStrategyJSON contains the JSON
-// metadata for the struct [ZoneLoadBalancerListResponseResultLocationStrategy]
-type zoneLoadBalancerListResponseResultLocationStrategyJSON struct {
+// loadBalancerCollectionResultLocationStrategyJSON contains the JSON metadata for
+// the struct [LoadBalancerCollectionResultLocationStrategy]
+type loadBalancerCollectionResultLocationStrategyJSON struct {
 	Mode        apijson.Field
 	PreferEcs   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultLocationStrategy) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1323,11 +1193,11 @@ func (r *ZoneLoadBalancerListResponseResultLocationStrategy) UnmarshalJSON(data 
 //   - `"pop"`: Use the Cloudflare PoP location.
 //   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 //     unsuccessful, use the Cloudflare PoP location.
-type ZoneLoadBalancerListResponseResultLocationStrategyMode string
+type LoadBalancerCollectionResultLocationStrategyMode string
 
 const (
-	ZoneLoadBalancerListResponseResultLocationStrategyModePop        ZoneLoadBalancerListResponseResultLocationStrategyMode = "pop"
-	ZoneLoadBalancerListResponseResultLocationStrategyModeResolverIP ZoneLoadBalancerListResponseResultLocationStrategyMode = "resolver_ip"
+	LoadBalancerCollectionResultLocationStrategyModePop        LoadBalancerCollectionResultLocationStrategyMode = "pop"
+	LoadBalancerCollectionResultLocationStrategyModeResolverIP LoadBalancerCollectionResultLocationStrategyMode = "resolver_ip"
 )
 
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
@@ -1337,49 +1207,43 @@ const (
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs string
+type LoadBalancerCollectionResultLocationStrategyPreferEcs string
 
 const (
-	ZoneLoadBalancerListResponseResultLocationStrategyPreferEcsAlways    ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs = "always"
-	ZoneLoadBalancerListResponseResultLocationStrategyPreferEcsNever     ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs = "never"
-	ZoneLoadBalancerListResponseResultLocationStrategyPreferEcsProximity ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs = "proximity"
-	ZoneLoadBalancerListResponseResultLocationStrategyPreferEcsGeo       ZoneLoadBalancerListResponseResultLocationStrategyPreferEcs = "geo"
+	LoadBalancerCollectionResultLocationStrategyPreferEcsAlways    LoadBalancerCollectionResultLocationStrategyPreferEcs = "always"
+	LoadBalancerCollectionResultLocationStrategyPreferEcsNever     LoadBalancerCollectionResultLocationStrategyPreferEcs = "never"
+	LoadBalancerCollectionResultLocationStrategyPreferEcsProximity LoadBalancerCollectionResultLocationStrategyPreferEcs = "proximity"
+	LoadBalancerCollectionResultLocationStrategyPreferEcsGeo       LoadBalancerCollectionResultLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
-type ZoneLoadBalancerListResponseResultRandomSteering struct {
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
+type LoadBalancerCollectionResultRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights interface{}                                          `json:"pool_weights"`
-	JSON        zoneLoadBalancerListResponseResultRandomSteeringJSON `json:"-"`
+	PoolWeights interface{}                                    `json:"pool_weights"`
+	JSON        loadBalancerCollectionResultRandomSteeringJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRandomSteeringJSON contains the JSON metadata
-// for the struct [ZoneLoadBalancerListResponseResultRandomSteering]
-type zoneLoadBalancerListResponseResultRandomSteeringJSON struct {
+// loadBalancerCollectionResultRandomSteeringJSON contains the JSON metadata for
+// the struct [LoadBalancerCollectionResultRandomSteering]
+type loadBalancerCollectionResultRandomSteeringJSON struct {
 	DefaultWeight apijson.Field
 	PoolWeights   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRandomSteering) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
-type ZoneLoadBalancerListResponseResultRule struct {
+type LoadBalancerCollectionResultRule struct {
 	// The condition expressions to evaluate. If the condition evaluates to true, the
 	// overrides or fixed_response in this rule will be applied. An empty condition is
 	// always true. For more details on condition expressions, please see
@@ -1391,12 +1255,12 @@ type ZoneLoadBalancerListResponseResultRule struct {
 	// A collection of fields used to directly respond to the eyeball instead of
 	// routing to a pool. If a fixed_response is supplied the rule will be marked as
 	// terminates.
-	FixedResponse ZoneLoadBalancerListResponseResultRulesFixedResponse `json:"fixed_response"`
+	FixedResponse LoadBalancerCollectionResultRulesFixedResponse `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name string `json:"name"`
 	// A collection of overrides to apply to the load balancer when this rule's
 	// condition is true. All fields are optional.
-	Overrides ZoneLoadBalancerListResponseResultRulesOverrides `json:"overrides"`
+	Overrides LoadBalancerCollectionResultRulesOverrides `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
 	// provided for any rule the array order of the rules field will be used to assign
@@ -1404,13 +1268,13 @@ type ZoneLoadBalancerListResponseResultRule struct {
 	Priority int64 `json:"priority"`
 	// If this rule's condition is true, this causes rule evaluation to stop after
 	// processing this rule.
-	Terminates bool                                       `json:"terminates"`
-	JSON       zoneLoadBalancerListResponseResultRuleJSON `json:"-"`
+	Terminates bool                                 `json:"terminates"`
+	JSON       loadBalancerCollectionResultRuleJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRuleJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerListResponseResultRule]
-type zoneLoadBalancerListResponseResultRuleJSON struct {
+// loadBalancerCollectionResultRuleJSON contains the JSON metadata for the struct
+// [LoadBalancerCollectionResultRule]
+type loadBalancerCollectionResultRuleJSON struct {
 	Condition     apijson.Field
 	Disabled      apijson.Field
 	FixedResponse apijson.Field
@@ -1422,14 +1286,14 @@ type zoneLoadBalancerListResponseResultRuleJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A collection of fields used to directly respond to the eyeball instead of
 // routing to a pool. If a fixed_response is supplied the rule will be marked as
 // terminates.
-type ZoneLoadBalancerListResponseResultRulesFixedResponse struct {
+type LoadBalancerCollectionResultRulesFixedResponse struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType string `json:"content_type"`
 	// The http 'Location' header to include in the response.
@@ -1437,13 +1301,13 @@ type ZoneLoadBalancerListResponseResultRulesFixedResponse struct {
 	// Text to include as the http body.
 	MessageBody string `json:"message_body"`
 	// The http status code to respond with.
-	StatusCode int64                                                    `json:"status_code"`
-	JSON       zoneLoadBalancerListResponseResultRulesFixedResponseJSON `json:"-"`
+	StatusCode int64                                              `json:"status_code"`
+	JSON       loadBalancerCollectionResultRulesFixedResponseJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesFixedResponseJSON contains the JSON
-// metadata for the struct [ZoneLoadBalancerListResponseResultRulesFixedResponse]
-type zoneLoadBalancerListResponseResultRulesFixedResponseJSON struct {
+// loadBalancerCollectionResultRulesFixedResponseJSON contains the JSON metadata
+// for the struct [LoadBalancerCollectionResultRulesFixedResponse]
+type loadBalancerCollectionResultRulesFixedResponseJSON struct {
 	ContentType apijson.Field
 	Location    apijson.Field
 	MessageBody apijson.Field
@@ -1452,20 +1316,20 @@ type zoneLoadBalancerListResponseResultRulesFixedResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A collection of overrides to apply to the load balancer when this rule's
 // condition is true. All fields are optional.
-type ZoneLoadBalancerListResponseResultRulesOverrides struct {
+type LoadBalancerCollectionResultRulesOverrides struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
 	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 	// response codes. If there is another healthy origin in the same pool, the request
 	// is retried once against this alternate origin.
-	AdaptiveRouting ZoneLoadBalancerListResponseResultRulesOverridesAdaptiveRouting `json:"adaptive_routing"`
+	AdaptiveRouting LoadBalancerCollectionResultRulesOverridesAdaptiveRouting `json:"adaptive_routing"`
 	// A mapping of country codes to a list of pool IDs (ordered by their failover
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
@@ -1478,37 +1342,27 @@ type ZoneLoadBalancerListResponseResultRulesOverrides struct {
 	FallbackPool interface{} `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
-	LocationStrategy ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy `json:"location_strategy"`
+	LocationStrategy LoadBalancerCollectionResultRulesOverridesLocationStrategy `json:"location_strategy"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	PopPools interface{} `json:"pop_pools"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
-	RandomSteering ZoneLoadBalancerListResponseResultRulesOverridesRandomSteering `json:"random_steering"`
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
+	RandomSteering LoadBalancerCollectionResultRulesOverridesRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools interface{} `json:"region_pools"`
-	// Configures attributes for session affinity.
-	SessionAffinityAttributes ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributes `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Configures cookie attributes for session affinity cookie.
+	SessionAffinityAttributes LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributes `json:"session_affinity_attributes"`
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl float64 `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -1522,26 +1376,18 @@ type ZoneLoadBalancerListResponseResultRulesOverrides struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy LoadBalancerCollectionResultRulesOverridesSteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl  float64                                              `json:"ttl"`
-	JSON zoneLoadBalancerListResponseResultRulesOverridesJSON `json:"-"`
+	Ttl  float64                                        `json:"ttl"`
+	JSON loadBalancerCollectionResultRulesOverridesJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesOverridesJSON contains the JSON metadata
-// for the struct [ZoneLoadBalancerListResponseResultRulesOverrides]
-type zoneLoadBalancerListResponseResultRulesOverridesJSON struct {
+// loadBalancerCollectionResultRulesOverridesJSON contains the JSON metadata for
+// the struct [LoadBalancerCollectionResultRulesOverrides]
+type loadBalancerCollectionResultRulesOverridesJSON struct {
 	AdaptiveRouting           apijson.Field
 	CountryPools              apijson.Field
 	DefaultPools              apijson.Field
@@ -1558,7 +1404,7 @@ type zoneLoadBalancerListResponseResultRulesOverridesJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesOverrides) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesOverrides) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1568,40 +1414,40 @@ func (r *ZoneLoadBalancerListResponseResultRulesOverrides) UnmarshalJSON(data []
 // immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 // response codes. If there is another healthy origin in the same pool, the request
 // is retried once against this alternate origin.
-type ZoneLoadBalancerListResponseResultRulesOverridesAdaptiveRouting struct {
+type LoadBalancerCollectionResultRulesOverridesAdaptiveRouting struct {
 	// Extends zero-downtime failover of requests to healthy origins from alternate
 	// pools, when no healthy alternate exists in the same pool, according to the
 	// failover order defined by traffic and origin steering. When set false (the
 	// default) zero-downtime failover will only occur between origins within the same
 	// pool. See `session_affinity_attributes` for control over when sessions are
 	// broken or reassigned.
-	FailoverAcrossPools bool                                                                `json:"failover_across_pools"`
-	JSON                zoneLoadBalancerListResponseResultRulesOverridesAdaptiveRoutingJSON `json:"-"`
+	FailoverAcrossPools bool                                                          `json:"failover_across_pools"`
+	JSON                loadBalancerCollectionResultRulesOverridesAdaptiveRoutingJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesOverridesAdaptiveRoutingJSON contains the
-// JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResultRulesOverridesAdaptiveRouting]
-type zoneLoadBalancerListResponseResultRulesOverridesAdaptiveRoutingJSON struct {
+// loadBalancerCollectionResultRulesOverridesAdaptiveRoutingJSON contains the JSON
+// metadata for the struct
+// [LoadBalancerCollectionResultRulesOverridesAdaptiveRouting]
+type loadBalancerCollectionResultRulesOverridesAdaptiveRoutingJSON struct {
 	FailoverAcrossPools apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesOverridesAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesOverridesAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
 // to learn how steering is affected.
-type ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy struct {
+type LoadBalancerCollectionResultRulesOverridesLocationStrategy struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
 	//   - `"pop"`: Use the Cloudflare PoP location.
 	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 	//     unsuccessful, use the Cloudflare PoP location.
-	Mode ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyMode `json:"mode"`
+	Mode LoadBalancerCollectionResultRulesOverridesLocationStrategyMode `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
 	//
@@ -1609,21 +1455,21 @@ type ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs `json:"prefer_ecs"`
-	JSON      zoneLoadBalancerListResponseResultRulesOverridesLocationStrategyJSON      `json:"-"`
+	PreferEcs LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs `json:"prefer_ecs"`
+	JSON      loadBalancerCollectionResultRulesOverridesLocationStrategyJSON      `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesOverridesLocationStrategyJSON contains
-// the JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy]
-type zoneLoadBalancerListResponseResultRulesOverridesLocationStrategyJSON struct {
+// loadBalancerCollectionResultRulesOverridesLocationStrategyJSON contains the JSON
+// metadata for the struct
+// [LoadBalancerCollectionResultRulesOverridesLocationStrategy]
+type loadBalancerCollectionResultRulesOverridesLocationStrategyJSON struct {
 	Mode        apijson.Field
 	PreferEcs   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesOverridesLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1633,11 +1479,11 @@ func (r *ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategy) Unmar
 //   - `"pop"`: Use the Cloudflare PoP location.
 //   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 //     unsuccessful, use the Cloudflare PoP location.
-type ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyMode string
+type LoadBalancerCollectionResultRulesOverridesLocationStrategyMode string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyModePop        ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyMode = "pop"
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyModeResolverIP ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyMode = "resolver_ip"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyModePop        LoadBalancerCollectionResultRulesOverridesLocationStrategyMode = "pop"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyModeResolverIP LoadBalancerCollectionResultRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
@@ -1647,136 +1493,72 @@ const (
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs string
+type LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcsAlways    ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs = "always"
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcsNever     ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs = "never"
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcsProximity ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs = "proximity"
-	ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcsGeo       ZoneLoadBalancerListResponseResultRulesOverridesLocationStrategyPreferEcs = "geo"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcsAlways    LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs = "always"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcsNever     LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs = "never"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs = "proximity"
+	LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerCollectionResultRulesOverridesLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
-type ZoneLoadBalancerListResponseResultRulesOverridesRandomSteering struct {
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
+type LoadBalancerCollectionResultRulesOverridesRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights interface{}                                                        `json:"pool_weights"`
-	JSON        zoneLoadBalancerListResponseResultRulesOverridesRandomSteeringJSON `json:"-"`
+	PoolWeights interface{}                                                  `json:"pool_weights"`
+	JSON        loadBalancerCollectionResultRulesOverridesRandomSteeringJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesOverridesRandomSteeringJSON contains the
-// JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResultRulesOverridesRandomSteering]
-type zoneLoadBalancerListResponseResultRulesOverridesRandomSteeringJSON struct {
+// loadBalancerCollectionResultRulesOverridesRandomSteeringJSON contains the JSON
+// metadata for the struct
+// [LoadBalancerCollectionResultRulesOverridesRandomSteering]
+type loadBalancerCollectionResultRulesOverridesRandomSteeringJSON struct {
 	DefaultWeight apijson.Field
 	PoolWeights   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity string
-
-const (
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityNone     ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity = "none"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityCookie   ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity = "cookie"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityIPCookie ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityHeader   ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity = "header"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityEmpty    ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
-type ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributes struct {
+// Configures cookie attributes for session affinity cookie.
+type LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers []string `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders bool `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite `json:"samesite"`
+	Samesite LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite `json:"samesite"`
 	// Configures the Secure attribute on session affinity cookie. Value "Always"
 	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
 	// attribute depending if Always Use HTTPS is enabled.
-	Secure ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecure `json:"secure"`
+	Secure LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
-	JSON                 zoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesJSON                 `json:"-"`
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
+	ZeroDowntimeFailover LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
+	JSON                 loadBalancerCollectionResultRulesOverridesSessionAffinityAttributesJSON                 `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesJSON
-// contains the JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributes]
-type zoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesJSON struct {
+// loadBalancerCollectionResultRulesOverridesSessionAffinityAttributesJSON contains
+// the JSON metadata for the struct
+// [LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributes]
+type loadBalancerCollectionResultRulesOverridesSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
-	Headers              apijson.Field
-	RequireAllHeaders    apijson.Field
 	Samesite             apijson.Field
 	Secure               apijson.Field
 	ZeroDowntimeFailover apijson.Field
@@ -1784,51 +1566,48 @@ type zoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesJS
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 // be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 // when using value "None", the secure attribute can not be set to "Never".
-type ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite string
+type LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesiteAuto   ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Auto"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesiteLax    ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Lax"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesiteNone   ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite = "None"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesiteStrict ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Strict"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesiteAuto   LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite = "Auto"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesiteLax    LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite = "Lax"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesiteNone   LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite = "None"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
 // attribute depending if Always Use HTTPS is enabled.
-type ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecure string
+type LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecure string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecureAuto   ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecure = "Auto"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecureAlways ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecure = "Always"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecureNever  ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesSecure = "Never"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecureAuto   LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecure = "Auto"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecure = "Always"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
-type ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
+type LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone      ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "none"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    ZoneLoadBalancerListResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "none"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
+	LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerCollectionResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
 
 // Steering Policy for this load balancer.
@@ -1843,118 +1622,49 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy string
+type LoadBalancerCollectionResultRulesOverridesSteeringPolicy string
 
 const (
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyOff                      ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "off"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyGeo                      ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "geo"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyRandom                   ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "random"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyDynamicLatency           ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyProximity                ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "proximity"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyLeastConnections         ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "least_connections"
-	ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicyEmpty                    ZoneLoadBalancerListResponseResultRulesOverridesSteeringPolicy = "\"\""
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyOff            LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "off"
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyGeo            LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "geo"
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyRandom         LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "random"
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyDynamicLatency LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "dynamic_latency"
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyProximity      LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "proximity"
+	LoadBalancerCollectionResultRulesOverridesSteeringPolicyEmpty          LoadBalancerCollectionResultRulesOverridesSteeringPolicy = "\"\""
 )
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerListResponseResultSessionAffinity string
-
-const (
-	ZoneLoadBalancerListResponseResultSessionAffinityNone     ZoneLoadBalancerListResponseResultSessionAffinity = "none"
-	ZoneLoadBalancerListResponseResultSessionAffinityCookie   ZoneLoadBalancerListResponseResultSessionAffinity = "cookie"
-	ZoneLoadBalancerListResponseResultSessionAffinityIPCookie ZoneLoadBalancerListResponseResultSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerListResponseResultSessionAffinityHeader   ZoneLoadBalancerListResponseResultSessionAffinity = "header"
-	ZoneLoadBalancerListResponseResultSessionAffinityEmpty    ZoneLoadBalancerListResponseResultSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
-type ZoneLoadBalancerListResponseResultSessionAffinityAttributes struct {
+// Configures cookie attributes for session affinity cookie.
+type LoadBalancerCollectionResultSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers []string `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders bool `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite `json:"samesite"`
+	Samesite LoadBalancerCollectionResultSessionAffinityAttributesSamesite `json:"samesite"`
 	// Configures the Secure attribute on session affinity cookie. Value "Always"
 	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
 	// attribute depending if Always Use HTTPS is enabled.
-	Secure ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecure `json:"secure"`
+	Secure LoadBalancerCollectionResultSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
-	JSON                 zoneLoadBalancerListResponseResultSessionAffinityAttributesJSON                 `json:"-"`
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
+	ZeroDowntimeFailover LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
+	JSON                 loadBalancerCollectionResultSessionAffinityAttributesJSON                 `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultSessionAffinityAttributesJSON contains the
-// JSON metadata for the struct
-// [ZoneLoadBalancerListResponseResultSessionAffinityAttributes]
-type zoneLoadBalancerListResponseResultSessionAffinityAttributesJSON struct {
+// loadBalancerCollectionResultSessionAffinityAttributesJSON contains the JSON
+// metadata for the struct [LoadBalancerCollectionResultSessionAffinityAttributes]
+type loadBalancerCollectionResultSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
-	Headers              apijson.Field
-	RequireAllHeaders    apijson.Field
 	Samesite             apijson.Field
 	Secure               apijson.Field
 	ZeroDowntimeFailover apijson.Field
@@ -1962,51 +1672,48 @@ type zoneLoadBalancerListResponseResultSessionAffinityAttributesJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 // be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 // when using value "None", the secure attribute can not be set to "Never".
-type ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite string
+type LoadBalancerCollectionResultSessionAffinityAttributesSamesite string
 
 const (
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesiteAuto   ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite = "Auto"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesiteLax    ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite = "Lax"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesiteNone   ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite = "None"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesiteStrict ZoneLoadBalancerListResponseResultSessionAffinityAttributesSamesite = "Strict"
+	LoadBalancerCollectionResultSessionAffinityAttributesSamesiteAuto   LoadBalancerCollectionResultSessionAffinityAttributesSamesite = "Auto"
+	LoadBalancerCollectionResultSessionAffinityAttributesSamesiteLax    LoadBalancerCollectionResultSessionAffinityAttributesSamesite = "Lax"
+	LoadBalancerCollectionResultSessionAffinityAttributesSamesiteNone   LoadBalancerCollectionResultSessionAffinityAttributesSamesite = "None"
+	LoadBalancerCollectionResultSessionAffinityAttributesSamesiteStrict LoadBalancerCollectionResultSessionAffinityAttributesSamesite = "Strict"
 )
 
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
 // attribute depending if Always Use HTTPS is enabled.
-type ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecure string
+type LoadBalancerCollectionResultSessionAffinityAttributesSecure string
 
 const (
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecureAuto   ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecure = "Auto"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecureAlways ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecure = "Always"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecureNever  ZoneLoadBalancerListResponseResultSessionAffinityAttributesSecure = "Never"
+	LoadBalancerCollectionResultSessionAffinityAttributesSecureAuto   LoadBalancerCollectionResultSessionAffinityAttributesSecure = "Auto"
+	LoadBalancerCollectionResultSessionAffinityAttributesSecureAlways LoadBalancerCollectionResultSessionAffinityAttributesSecure = "Always"
+	LoadBalancerCollectionResultSessionAffinityAttributesSecureNever  LoadBalancerCollectionResultSessionAffinityAttributesSecure = "Never"
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
-type ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailover string
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
+type LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailoverNone      ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailover = "none"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailoverTemporary ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailoverSticky    ZoneLoadBalancerListResponseResultSessionAffinityAttributesZeroDowntimeFailover = "sticky"
+	LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailover = "none"
+	LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailover = "temporary"
+	LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerCollectionResultSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
 
 // Steering Policy for this load balancer.
@@ -2021,30 +1728,20 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type ZoneLoadBalancerListResponseResultSteeringPolicy string
+type LoadBalancerCollectionResultSteeringPolicy string
 
 const (
-	ZoneLoadBalancerListResponseResultSteeringPolicyOff                      ZoneLoadBalancerListResponseResultSteeringPolicy = "off"
-	ZoneLoadBalancerListResponseResultSteeringPolicyGeo                      ZoneLoadBalancerListResponseResultSteeringPolicy = "geo"
-	ZoneLoadBalancerListResponseResultSteeringPolicyRandom                   ZoneLoadBalancerListResponseResultSteeringPolicy = "random"
-	ZoneLoadBalancerListResponseResultSteeringPolicyDynamicLatency           ZoneLoadBalancerListResponseResultSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerListResponseResultSteeringPolicyProximity                ZoneLoadBalancerListResponseResultSteeringPolicy = "proximity"
-	ZoneLoadBalancerListResponseResultSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerListResponseResultSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerListResponseResultSteeringPolicyLeastConnections         ZoneLoadBalancerListResponseResultSteeringPolicy = "least_connections"
-	ZoneLoadBalancerListResponseResultSteeringPolicyEmpty                    ZoneLoadBalancerListResponseResultSteeringPolicy = "\"\""
+	LoadBalancerCollectionResultSteeringPolicyOff            LoadBalancerCollectionResultSteeringPolicy = "off"
+	LoadBalancerCollectionResultSteeringPolicyGeo            LoadBalancerCollectionResultSteeringPolicy = "geo"
+	LoadBalancerCollectionResultSteeringPolicyRandom         LoadBalancerCollectionResultSteeringPolicy = "random"
+	LoadBalancerCollectionResultSteeringPolicyDynamicLatency LoadBalancerCollectionResultSteeringPolicy = "dynamic_latency"
+	LoadBalancerCollectionResultSteeringPolicyProximity      LoadBalancerCollectionResultSteeringPolicy = "proximity"
+	LoadBalancerCollectionResultSteeringPolicyEmpty          LoadBalancerCollectionResultSteeringPolicy = "\"\""
 )
 
-type ZoneLoadBalancerListResponseResultInfo struct {
+type LoadBalancerCollectionResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -2052,13 +1749,13 @@ type ZoneLoadBalancerListResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       zoneLoadBalancerListResponseResultInfoJSON `json:"-"`
+	TotalCount float64                              `json:"total_count"`
+	JSON       loadBalancerCollectionResultInfoJSON `json:"-"`
 }
 
-// zoneLoadBalancerListResponseResultInfoJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerListResponseResultInfo]
-type zoneLoadBalancerListResponseResultInfoJSON struct {
+// loadBalancerCollectionResultInfoJSON contains the JSON metadata for the struct
+// [LoadBalancerCollectionResultInfo]
+type loadBalancerCollectionResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -2067,101 +1764,15 @@ type zoneLoadBalancerListResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneLoadBalancerListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerCollectionResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZoneLoadBalancerListResponseSuccess bool
+type LoadBalancerCollectionSuccess bool
 
 const (
-	ZoneLoadBalancerListResponseSuccessTrue ZoneLoadBalancerListResponseSuccess = true
-)
-
-type ZoneLoadBalancerDeleteResponse struct {
-	Errors   []ZoneLoadBalancerDeleteResponseError   `json:"errors"`
-	Messages []ZoneLoadBalancerDeleteResponseMessage `json:"messages"`
-	Result   ZoneLoadBalancerDeleteResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success ZoneLoadBalancerDeleteResponseSuccess `json:"success"`
-	JSON    zoneLoadBalancerDeleteResponseJSON    `json:"-"`
-}
-
-// zoneLoadBalancerDeleteResponseJSON contains the JSON metadata for the struct
-// [ZoneLoadBalancerDeleteResponse]
-type zoneLoadBalancerDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneLoadBalancerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneLoadBalancerDeleteResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    zoneLoadBalancerDeleteResponseErrorJSON `json:"-"`
-}
-
-// zoneLoadBalancerDeleteResponseErrorJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerDeleteResponseError]
-type zoneLoadBalancerDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneLoadBalancerDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneLoadBalancerDeleteResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    zoneLoadBalancerDeleteResponseMessageJSON `json:"-"`
-}
-
-// zoneLoadBalancerDeleteResponseMessageJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerDeleteResponseMessage]
-type zoneLoadBalancerDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneLoadBalancerDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneLoadBalancerDeleteResponseResult struct {
-	ID   string                                   `json:"id"`
-	JSON zoneLoadBalancerDeleteResponseResultJSON `json:"-"`
-}
-
-// zoneLoadBalancerDeleteResponseResultJSON contains the JSON metadata for the
-// struct [ZoneLoadBalancerDeleteResponseResult]
-type zoneLoadBalancerDeleteResponseResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneLoadBalancerDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ZoneLoadBalancerDeleteResponseSuccess bool
-
-const (
-	ZoneLoadBalancerDeleteResponseSuccessTrue ZoneLoadBalancerDeleteResponseSuccess = true
+	LoadBalancerCollectionSuccessTrue LoadBalancerCollectionSuccess = true
 )
 
 type ZoneLoadBalancerNewParams struct {
@@ -2198,14 +1809,8 @@ type ZoneLoadBalancerNewParams struct {
 	PopPools param.Field[interface{}] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering param.Field[ZoneLoadBalancerNewParamsRandomSteering] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -2214,18 +1819,14 @@ type ZoneLoadBalancerNewParams struct {
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]ZoneLoadBalancerNewParamsRule] `json:"rules"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes param.Field[ZoneLoadBalancerNewParamsSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -2239,14 +1840,6 @@ type ZoneLoadBalancerNewParams struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[ZoneLoadBalancerNewParamsSteeringPolicy] `json:"steering_policy"`
@@ -2332,14 +1925,8 @@ const (
 	ZoneLoadBalancerNewParamsLocationStrategyPreferEcsGeo       ZoneLoadBalancerNewParamsLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type ZoneLoadBalancerNewParamsRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -2433,31 +2020,21 @@ type ZoneLoadBalancerNewParamsRulesOverrides struct {
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	PopPools param.Field[interface{}] `json:"pop_pools"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering param.Field[ZoneLoadBalancerNewParamsRulesOverridesRandomSteering] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools param.Field[interface{}] `json:"region_pools"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes param.Field[ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -2471,14 +2048,6 @@ type ZoneLoadBalancerNewParamsRulesOverrides struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy] `json:"steering_policy"`
@@ -2564,14 +2133,8 @@ const (
 	ZoneLoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcsGeo       ZoneLoadBalancerNewParamsRulesOverridesLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type ZoneLoadBalancerNewParamsRulesOverridesRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -2585,64 +2148,11 @@ func (r ZoneLoadBalancerNewParamsRulesOverridesRandomSteering) MarshalJSON() (da
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity string
-
-const (
-	ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityNone     ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity = "none"
-	ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityCookie   ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity = "cookie"
-	ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityIPCookie ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityHeader   ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity = "header"
-	ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityEmpty    ZoneLoadBalancerNewParamsRulesOverridesSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -2653,16 +2163,13 @@ type ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes struct {
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure param.Field[ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesSecure] `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover param.Field[ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
 }
 
@@ -2695,16 +2202,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -2725,87 +2229,24 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy string
 
 const (
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyOff                      ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "off"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyGeo                      ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "geo"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyRandom                   ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "random"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyDynamicLatency           ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyProximity                ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "proximity"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyLeastConnections         ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "least_connections"
-	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyEmpty                    ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "\"\""
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyOff            ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "off"
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyGeo            ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "geo"
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyRandom         ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "random"
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyDynamicLatency ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "dynamic_latency"
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyProximity      ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "proximity"
+	ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicyEmpty          ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy = "\"\""
 )
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerNewParamsSessionAffinity string
-
-const (
-	ZoneLoadBalancerNewParamsSessionAffinityNone     ZoneLoadBalancerNewParamsSessionAffinity = "none"
-	ZoneLoadBalancerNewParamsSessionAffinityCookie   ZoneLoadBalancerNewParamsSessionAffinity = "cookie"
-	ZoneLoadBalancerNewParamsSessionAffinityIPCookie ZoneLoadBalancerNewParamsSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerNewParamsSessionAffinityHeader   ZoneLoadBalancerNewParamsSessionAffinity = "header"
-	ZoneLoadBalancerNewParamsSessionAffinityEmpty    ZoneLoadBalancerNewParamsSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type ZoneLoadBalancerNewParamsSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -2816,16 +2257,13 @@ type ZoneLoadBalancerNewParamsSessionAffinityAttributes struct {
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure param.Field[ZoneLoadBalancerNewParamsSessionAffinityAttributesSecure] `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover param.Field[ZoneLoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
 }
 
@@ -2858,16 +2296,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type ZoneLoadBalancerNewParamsSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -2888,27 +2323,17 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type ZoneLoadBalancerNewParamsSteeringPolicy string
 
 const (
-	ZoneLoadBalancerNewParamsSteeringPolicyOff                      ZoneLoadBalancerNewParamsSteeringPolicy = "off"
-	ZoneLoadBalancerNewParamsSteeringPolicyGeo                      ZoneLoadBalancerNewParamsSteeringPolicy = "geo"
-	ZoneLoadBalancerNewParamsSteeringPolicyRandom                   ZoneLoadBalancerNewParamsSteeringPolicy = "random"
-	ZoneLoadBalancerNewParamsSteeringPolicyDynamicLatency           ZoneLoadBalancerNewParamsSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerNewParamsSteeringPolicyProximity                ZoneLoadBalancerNewParamsSteeringPolicy = "proximity"
-	ZoneLoadBalancerNewParamsSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerNewParamsSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerNewParamsSteeringPolicyLeastConnections         ZoneLoadBalancerNewParamsSteeringPolicy = "least_connections"
-	ZoneLoadBalancerNewParamsSteeringPolicyEmpty                    ZoneLoadBalancerNewParamsSteeringPolicy = "\"\""
+	ZoneLoadBalancerNewParamsSteeringPolicyOff            ZoneLoadBalancerNewParamsSteeringPolicy = "off"
+	ZoneLoadBalancerNewParamsSteeringPolicyGeo            ZoneLoadBalancerNewParamsSteeringPolicy = "geo"
+	ZoneLoadBalancerNewParamsSteeringPolicyRandom         ZoneLoadBalancerNewParamsSteeringPolicy = "random"
+	ZoneLoadBalancerNewParamsSteeringPolicyDynamicLatency ZoneLoadBalancerNewParamsSteeringPolicy = "dynamic_latency"
+	ZoneLoadBalancerNewParamsSteeringPolicyProximity      ZoneLoadBalancerNewParamsSteeringPolicy = "proximity"
+	ZoneLoadBalancerNewParamsSteeringPolicyEmpty          ZoneLoadBalancerNewParamsSteeringPolicy = "\"\""
 )
 
 type ZoneLoadBalancerUpdateParams struct {
@@ -2947,14 +2372,8 @@ type ZoneLoadBalancerUpdateParams struct {
 	PopPools param.Field[interface{}] `json:"pop_pools"`
 	// Whether the hostname should be gray clouded (false) or orange clouded (true).
 	Proxied param.Field[bool] `json:"proxied"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering param.Field[ZoneLoadBalancerUpdateParamsRandomSteering] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
@@ -2963,18 +2382,14 @@ type ZoneLoadBalancerUpdateParams struct {
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
 	Rules param.Field[[]ZoneLoadBalancerUpdateParamsRule] `json:"rules"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes param.Field[ZoneLoadBalancerUpdateParamsSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -2988,14 +2403,6 @@ type ZoneLoadBalancerUpdateParams struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[ZoneLoadBalancerUpdateParamsSteeringPolicy] `json:"steering_policy"`
@@ -3081,14 +2488,8 @@ const (
 	ZoneLoadBalancerUpdateParamsLocationStrategyPreferEcsGeo       ZoneLoadBalancerUpdateParamsLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type ZoneLoadBalancerUpdateParamsRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -3182,31 +2583,21 @@ type ZoneLoadBalancerUpdateParamsRulesOverrides struct {
 	// explicitly defined will fall back to using the corresponding country_pool, then
 	// region_pool mapping if it exists else to default_pools.
 	PopPools param.Field[interface{}] `json:"pop_pools"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
+	// Configures pool weights for random steering. When steering_policy is 'random', a
+	// random pool is selected with probability proportional to these pool weights.
 	RandomSteering param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesRandomSteering] `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools param.Field[interface{}] `json:"region_pools"`
-	// Configures attributes for session affinity.
+	// Configures cookie attributes for session affinity cookie.
 	SessionAffinityAttributes param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
+	// Time, in seconds, until this load balancer's session affinity cookie expires
+	// after being created. This parameter is ignored unless a supported session
+	// affinity policy is set. The current default of 23 hours will be used unless
+	// session_affinity_ttl is explicitly set. The accepted range of values is between
+	// [1800, 604800]. Once the expiry time has been reached, subsequent requests may
+	// get sent to a different origin server.
 	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
@@ -3220,14 +2611,6 @@ type ZoneLoadBalancerUpdateParamsRulesOverrides struct {
 	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 	//     pool using the Cloudflare PoP location for proxied requests or the location
 	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 	SteeringPolicy param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy] `json:"steering_policy"`
@@ -3313,14 +2696,8 @@ const (
 	ZoneLoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcsGeo       ZoneLoadBalancerUpdateParamsRulesOverridesLocationStrategyPreferEcs = "geo"
 )
 
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
+// Configures pool weights for random steering. When steering_policy is 'random', a
+// random pool is selected with probability proportional to these pool weights.
 type ZoneLoadBalancerUpdateParamsRulesOverridesRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
@@ -3334,64 +2711,11 @@ func (r ZoneLoadBalancerUpdateParamsRulesOverridesRandomSteering) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity string
-
-const (
-	ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityNone     ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity = "none"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityCookie   ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity = "cookie"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityIPCookie ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityHeader   ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity = "header"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityEmpty    ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -3402,16 +2726,13 @@ type ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes struct 
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesSecure] `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
 }
 
@@ -3444,16 +2765,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -3474,87 +2792,24 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy string
 
 const (
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyOff                      ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "off"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyGeo                      ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "geo"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyRandom                   ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "random"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyDynamicLatency           ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyProximity                ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "proximity"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyLeastConnections         ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "least_connections"
-	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyEmpty                    ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "\"\""
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyOff            ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "off"
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyGeo            ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "geo"
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyRandom         ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "random"
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyDynamicLatency ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "dynamic_latency"
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyProximity      ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "proximity"
+	ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicyEmpty          ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy = "\"\""
 )
 
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerUpdateParamsSessionAffinity string
-
-const (
-	ZoneLoadBalancerUpdateParamsSessionAffinityNone     ZoneLoadBalancerUpdateParamsSessionAffinity = "none"
-	ZoneLoadBalancerUpdateParamsSessionAffinityCookie   ZoneLoadBalancerUpdateParamsSessionAffinity = "cookie"
-	ZoneLoadBalancerUpdateParamsSessionAffinityIPCookie ZoneLoadBalancerUpdateParamsSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerUpdateParamsSessionAffinityHeader   ZoneLoadBalancerUpdateParamsSessionAffinity = "header"
-	ZoneLoadBalancerUpdateParamsSessionAffinityEmpty    ZoneLoadBalancerUpdateParamsSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
+// Configures cookie attributes for session affinity cookie.
 type ZoneLoadBalancerUpdateParamsSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
@@ -3565,16 +2820,13 @@ type ZoneLoadBalancerUpdateParamsSessionAffinityAttributes struct {
 	// attribute depending if Always Use HTTPS is enabled.
 	Secure param.Field[ZoneLoadBalancerUpdateParamsSessionAffinityAttributesSecure] `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
+	// affinity is enabled. Value "none" means no failover takes place for sessions
+	// pinned to the origin (default). Value "temporary" means traffic will be sent to
+	// another other healthy origin until the originally pinned origin is available;
+	// note that this can potentially result in heavy origin flapping. Value "sticky"
+	// means the session affinity cookie is updated and subsequent requests are sent to
+	// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+	// and Bandwidth Alliance.
 	ZeroDowntimeFailover param.Field[ZoneLoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
 }
 
@@ -3607,16 +2859,13 @@ const (
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
+// affinity is enabled. Value "none" means no failover takes place for sessions
+// pinned to the origin (default). Value "temporary" means traffic will be sent to
+// another other healthy origin until the originally pinned origin is available;
+// note that this can potentially result in heavy origin flapping. Value "sticky"
+// means the session affinity cookie is updated and subsequent requests are sent to
+// the new origin. This feature is currently incompatible with Argo, Tiered Cache,
+// and Bandwidth Alliance.
 type ZoneLoadBalancerUpdateParamsSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
@@ -3637,774 +2886,15 @@ const (
 //   - `"proximity"`: Use the pools' latitude and longitude to select the closest
 //     pool using the Cloudflare PoP location for proxied requests or the location
 //     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
 type ZoneLoadBalancerUpdateParamsSteeringPolicy string
 
 const (
-	ZoneLoadBalancerUpdateParamsSteeringPolicyOff                      ZoneLoadBalancerUpdateParamsSteeringPolicy = "off"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyGeo                      ZoneLoadBalancerUpdateParamsSteeringPolicy = "geo"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyRandom                   ZoneLoadBalancerUpdateParamsSteeringPolicy = "random"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyDynamicLatency           ZoneLoadBalancerUpdateParamsSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyProximity                ZoneLoadBalancerUpdateParamsSteeringPolicy = "proximity"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerUpdateParamsSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyLeastConnections         ZoneLoadBalancerUpdateParamsSteeringPolicy = "least_connections"
-	ZoneLoadBalancerUpdateParamsSteeringPolicyEmpty                    ZoneLoadBalancerUpdateParamsSteeringPolicy = "\"\""
-)
-
-type ZoneLoadBalancerPatchParams struct {
-	// Controls features that modify the routing of requests to pools and origins in
-	// response to dynamic conditions, such as during the interval between active
-	// health monitoring requests. For example, zero-downtime failover occurs
-	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
-	// response codes. If there is another healthy origin in the same pool, the request
-	// is retried once against this alternate origin.
-	AdaptiveRouting param.Field[ZoneLoadBalancerPatchParamsAdaptiveRouting] `json:"adaptive_routing"`
-	// A mapping of country codes to a list of pool IDs (ordered by their failover
-	// priority) for the given country. Any country not explicitly defined will fall
-	// back to using the corresponding region_pool mapping if it exists else to
-	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
-	// A list of pool IDs ordered by their failover priority. Pools defined here are
-	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]string] `json:"default_pools"`
-	// Object description.
-	Description param.Field[string] `json:"description"`
-	// Whether to enable (the default) this load balancer.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool"`
-	// Controls location-based steering for non-proxied requests. See `steering_policy`
-	// to learn how steering is affected.
-	LocationStrategy param.Field[ZoneLoadBalancerPatchParamsLocationStrategy] `json:"location_strategy"`
-	// The DNS hostname to associate with your Load Balancer. If this hostname already
-	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
-	// precedence and the DNS record will not be used.
-	Name param.Field[string] `json:"name"`
-	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-	// explicitly defined will fall back to using the corresponding country_pool, then
-	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
-	// Whether the hostname should be gray clouded (false) or orange clouded (true).
-	Proxied param.Field[bool] `json:"proxied"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
-	RandomSteering param.Field[ZoneLoadBalancerPatchParamsRandomSteering] `json:"random_steering"`
-	// A mapping of region codes to a list of pool IDs (ordered by their failover
-	// priority) for the given region. Any regions not explicitly defined will fall
-	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
-	// BETA Field Not General Access: A list of rules for this load balancer to
-	// execute.
-	Rules param.Field[[]ZoneLoadBalancerPatchParamsRule] `json:"rules"`
-	// Configures attributes for session affinity.
-	SessionAffinityAttributes param.Field[ZoneLoadBalancerPatchParamsSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
-	// Steering Policy for this load balancer.
-	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[ZoneLoadBalancerPatchParamsSteeringPolicy] `json:"steering_policy"`
-	// Time to live (TTL) of the DNS entry for the IP address returned by this load
-	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
-}
-
-func (r ZoneLoadBalancerPatchParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Controls features that modify the routing of requests to pools and origins in
-// response to dynamic conditions, such as during the interval between active
-// health monitoring requests. For example, zero-downtime failover occurs
-// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
-// response codes. If there is another healthy origin in the same pool, the request
-// is retried once against this alternate origin.
-type ZoneLoadBalancerPatchParamsAdaptiveRouting struct {
-	// Extends zero-downtime failover of requests to healthy origins from alternate
-	// pools, when no healthy alternate exists in the same pool, according to the
-	// failover order defined by traffic and origin steering. When set false (the
-	// default) zero-downtime failover will only occur between origins within the same
-	// pool. See `session_affinity_attributes` for control over when sessions are
-	// broken or reassigned.
-	FailoverAcrossPools param.Field[bool] `json:"failover_across_pools"`
-}
-
-func (r ZoneLoadBalancerPatchParamsAdaptiveRouting) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Controls location-based steering for non-proxied requests. See `steering_policy`
-// to learn how steering is affected.
-type ZoneLoadBalancerPatchParamsLocationStrategy struct {
-	// Determines the authoritative location when ECS is not preferred, does not exist
-	// in the request, or its GeoIP lookup is unsuccessful.
-	//
-	//   - `"pop"`: Use the Cloudflare PoP location.
-	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-	//     unsuccessful, use the Cloudflare PoP location.
-	Mode param.Field[ZoneLoadBalancerPatchParamsLocationStrategyMode] `json:"mode"`
-	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
-	// authoritative location.
-	//
-	// - `"always"`: Always prefer ECS.
-	// - `"never"`: Never prefer ECS.
-	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
-	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs param.Field[ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs] `json:"prefer_ecs"`
-}
-
-func (r ZoneLoadBalancerPatchParamsLocationStrategy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Determines the authoritative location when ECS is not preferred, does not exist
-// in the request, or its GeoIP lookup is unsuccessful.
-//
-//   - `"pop"`: Use the Cloudflare PoP location.
-//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-//     unsuccessful, use the Cloudflare PoP location.
-type ZoneLoadBalancerPatchParamsLocationStrategyMode string
-
-const (
-	ZoneLoadBalancerPatchParamsLocationStrategyModePop        ZoneLoadBalancerPatchParamsLocationStrategyMode = "pop"
-	ZoneLoadBalancerPatchParamsLocationStrategyModeResolverIP ZoneLoadBalancerPatchParamsLocationStrategyMode = "resolver_ip"
-)
-
-// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
-// authoritative location.
-//
-// - `"always"`: Always prefer ECS.
-// - `"never"`: Never prefer ECS.
-// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
-// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs string
-
-const (
-	ZoneLoadBalancerPatchParamsLocationStrategyPreferEcsAlways    ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs = "always"
-	ZoneLoadBalancerPatchParamsLocationStrategyPreferEcsNever     ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs = "never"
-	ZoneLoadBalancerPatchParamsLocationStrategyPreferEcsProximity ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs = "proximity"
-	ZoneLoadBalancerPatchParamsLocationStrategyPreferEcsGeo       ZoneLoadBalancerPatchParamsLocationStrategyPreferEcs = "geo"
-)
-
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
-type ZoneLoadBalancerPatchParamsRandomSteering struct {
-	// The default weight for pools in the load balancer that are not specified in the
-	// pool_weights map.
-	DefaultWeight param.Field[float64] `json:"default_weight"`
-	// A mapping of pool IDs to custom weights. The weight is relative to other pools
-	// in the load balancer.
-	PoolWeights param.Field[interface{}] `json:"pool_weights"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRandomSteering) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A rule object containing conditions and overrides for this load balancer to
-// evaluate.
-type ZoneLoadBalancerPatchParamsRule struct {
-	// The condition expressions to evaluate. If the condition evaluates to true, the
-	// overrides or fixed_response in this rule will be applied. An empty condition is
-	// always true. For more details on condition expressions, please see
-	// https://developers.cloudflare.com/load-balancing/understand-basics/load-balancing-rules/expressions.
-	Condition param.Field[string] `json:"condition"`
-	// Disable this specific rule. It will no longer be evaluated by this load
-	// balancer.
-	Disabled param.Field[bool] `json:"disabled"`
-	// A collection of fields used to directly respond to the eyeball instead of
-	// routing to a pool. If a fixed_response is supplied the rule will be marked as
-	// terminates.
-	FixedResponse param.Field[ZoneLoadBalancerPatchParamsRulesFixedResponse] `json:"fixed_response"`
-	// Name of this rule. Only used for human readability.
-	Name param.Field[string] `json:"name"`
-	// A collection of overrides to apply to the load balancer when this rule's
-	// condition is true. All fields are optional.
-	Overrides param.Field[ZoneLoadBalancerPatchParamsRulesOverrides] `json:"overrides"`
-	// The order in which rules should be executed in relation to each other. Lower
-	// values are executed first. Values do not need to be sequential. If no value is
-	// provided for any rule the array order of the rules field will be used to assign
-	// a priority.
-	Priority param.Field[int64] `json:"priority"`
-	// If this rule's condition is true, this causes rule evaluation to stop after
-	// processing this rule.
-	Terminates param.Field[bool] `json:"terminates"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A collection of fields used to directly respond to the eyeball instead of
-// routing to a pool. If a fixed_response is supplied the rule will be marked as
-// terminates.
-type ZoneLoadBalancerPatchParamsRulesFixedResponse struct {
-	// The http 'Content-Type' header to include in the response.
-	ContentType param.Field[string] `json:"content_type"`
-	// The http 'Location' header to include in the response.
-	Location param.Field[string] `json:"location"`
-	// Text to include as the http body.
-	MessageBody param.Field[string] `json:"message_body"`
-	// The http status code to respond with.
-	StatusCode param.Field[int64] `json:"status_code"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesFixedResponse) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A collection of overrides to apply to the load balancer when this rule's
-// condition is true. All fields are optional.
-type ZoneLoadBalancerPatchParamsRulesOverrides struct {
-	// Controls features that modify the routing of requests to pools and origins in
-	// response to dynamic conditions, such as during the interval between active
-	// health monitoring requests. For example, zero-downtime failover occurs
-	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
-	// response codes. If there is another healthy origin in the same pool, the request
-	// is retried once against this alternate origin.
-	AdaptiveRouting param.Field[ZoneLoadBalancerPatchParamsRulesOverridesAdaptiveRouting] `json:"adaptive_routing"`
-	// A mapping of country codes to a list of pool IDs (ordered by their failover
-	// priority) for the given country. Any country not explicitly defined will fall
-	// back to using the corresponding region_pool mapping if it exists else to
-	// default_pools.
-	CountryPools param.Field[interface{}] `json:"country_pools"`
-	// A list of pool IDs ordered by their failover priority. Pools defined here are
-	// used by default, or when region_pools are not configured for a given region.
-	DefaultPools param.Field[[]string] `json:"default_pools"`
-	// The pool ID to use when all other pools are detected as unhealthy.
-	FallbackPool param.Field[interface{}] `json:"fallback_pool"`
-	// Controls location-based steering for non-proxied requests. See `steering_policy`
-	// to learn how steering is affected.
-	LocationStrategy param.Field[ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategy] `json:"location_strategy"`
-	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
-	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
-	// explicitly defined will fall back to using the corresponding country_pool, then
-	// region_pool mapping if it exists else to default_pools.
-	PopPools param.Field[interface{}] `json:"pop_pools"`
-	// Configures pool weights.
-	//
-	//   - `steering_policy="random"`: A random pool is selected with probability
-	//     proportional to pool weights.
-	//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-	//     pool's outstanding requests.
-	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-	//     open connections.
-	RandomSteering param.Field[ZoneLoadBalancerPatchParamsRulesOverridesRandomSteering] `json:"random_steering"`
-	// A mapping of region codes to a list of pool IDs (ordered by their failover
-	// priority) for the given region. Any regions not explicitly defined will fall
-	// back to using default_pools.
-	RegionPools param.Field[interface{}] `json:"region_pools"`
-	// Configures attributes for session affinity.
-	SessionAffinityAttributes param.Field[ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes] `json:"session_affinity_attributes"`
-	// Time, in seconds, until a client's session expires after being created. Once the
-	// expiry time has been reached, subsequent requests may get sent to a different
-	// origin server. The accepted ranges per `session_affinity` policy are:
-	//
-	//   - `"cookie"` / `"ip_cookie"`: The current default of 23 hours will be used
-	//     unless explicitly set. The accepted range of values is between [1800, 604800].
-	//   - `"header"`: The current default of 1800 seconds will be used unless explicitly
-	//     set. The accepted range of values is between [30, 3600]. Note: With session
-	//     affinity by header, sessions only expire after they haven't been used for the
-	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
-	// Steering Policy for this load balancer.
-	//
-	//   - `"off"`: Use `default_pools`.
-	//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-	//     requests, the country for `country_pools` is determined by
-	//     `location_strategy`.
-	//   - `"random"`: Select a pool randomly.
-	//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-	//     default_pools (requires pool health checks).
-	//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-	//     pool using the Cloudflare PoP location for proxied requests or the location
-	//     determined by `location_strategy` for non-proxied requests.
-	//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of outstanding
-	//     requests. Pools with more pending requests are weighted proportionately less
-	//     relative to others.
-	//   - `"least_connections"`: Select a pool by taking into consideration
-	//     `random_steering` weights, as well as each pool's number of open connections.
-	//     Pools with more open connections are weighted proportionately less relative to
-	//     others. Supported for HTTP/1 and HTTP/2 connections.
-	//   - `""`: Will map to `"geo"` if you use
-	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy param.Field[ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy] `json:"steering_policy"`
-	// Time to live (TTL) of the DNS entry for the IP address returned by this load
-	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesOverrides) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Controls features that modify the routing of requests to pools and origins in
-// response to dynamic conditions, such as during the interval between active
-// health monitoring requests. For example, zero-downtime failover occurs
-// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
-// response codes. If there is another healthy origin in the same pool, the request
-// is retried once against this alternate origin.
-type ZoneLoadBalancerPatchParamsRulesOverridesAdaptiveRouting struct {
-	// Extends zero-downtime failover of requests to healthy origins from alternate
-	// pools, when no healthy alternate exists in the same pool, according to the
-	// failover order defined by traffic and origin steering. When set false (the
-	// default) zero-downtime failover will only occur between origins within the same
-	// pool. See `session_affinity_attributes` for control over when sessions are
-	// broken or reassigned.
-	FailoverAcrossPools param.Field[bool] `json:"failover_across_pools"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesOverridesAdaptiveRouting) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Controls location-based steering for non-proxied requests. See `steering_policy`
-// to learn how steering is affected.
-type ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategy struct {
-	// Determines the authoritative location when ECS is not preferred, does not exist
-	// in the request, or its GeoIP lookup is unsuccessful.
-	//
-	//   - `"pop"`: Use the Cloudflare PoP location.
-	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-	//     unsuccessful, use the Cloudflare PoP location.
-	Mode param.Field[ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyMode] `json:"mode"`
-	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
-	// authoritative location.
-	//
-	// - `"always"`: Always prefer ECS.
-	// - `"never"`: Never prefer ECS.
-	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
-	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs param.Field[ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs] `json:"prefer_ecs"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Determines the authoritative location when ECS is not preferred, does not exist
-// in the request, or its GeoIP lookup is unsuccessful.
-//
-//   - `"pop"`: Use the Cloudflare PoP location.
-//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
-//     unsuccessful, use the Cloudflare PoP location.
-type ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyMode string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyModePop        ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyMode = "pop"
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyModeResolverIP ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyMode = "resolver_ip"
-)
-
-// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
-// authoritative location.
-//
-// - `"always"`: Always prefer ECS.
-// - `"never"`: Never prefer ECS.
-// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
-// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcsAlways    ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs = "always"
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcsNever     ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs = "never"
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcsProximity ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs = "proximity"
-	ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcsGeo       ZoneLoadBalancerPatchParamsRulesOverridesLocationStrategyPreferEcs = "geo"
-)
-
-// Configures pool weights.
-//
-//   - `steering_policy="random"`: A random pool is selected with probability
-//     proportional to pool weights.
-//   - `steering_policy="least_outstanding_requests"`: Use pool weights to scale each
-//     pool's outstanding requests.
-//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
-//     open connections.
-type ZoneLoadBalancerPatchParamsRulesOverridesRandomSteering struct {
-	// The default weight for pools in the load balancer that are not specified in the
-	// pool_weights map.
-	DefaultWeight param.Field[float64] `json:"default_weight"`
-	// A mapping of pool IDs to custom weights. The weight is relative to other pools
-	// in the load balancer.
-	PoolWeights param.Field[interface{}] `json:"pool_weights"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesOverridesRandomSteering) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityNone     ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity = "none"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityCookie   ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity = "cookie"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityIPCookie ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityHeader   ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity = "header"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityEmpty    ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
-type ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes struct {
-	// Configures the drain duration in seconds. This field is only used when session
-	// affinity is enabled on the load balancer.
-	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
-	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
-	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
-	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite param.Field[ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite] `json:"samesite"`
-	// Configures the Secure attribute on session affinity cookie. Value "Always"
-	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
-	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
-	// attribute depending if Always Use HTTPS is enabled.
-	Secure param.Field[ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecure] `json:"secure"`
-	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover param.Field[ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
-}
-
-func (r ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
-// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
-// when using value "None", the secure attribute can not be set to "Never".
-type ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesiteAuto   ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite = "Auto"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesiteLax    ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite = "Lax"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesiteNone   ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite = "None"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesiteStrict ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSamesite = "Strict"
-)
-
-// Configures the Secure attribute on session affinity cookie. Value "Always"
-// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
-// indicates the Secure attribute will not be set, and "Auto" will set the Secure
-// attribute depending if Always Use HTTPS is enabled.
-type ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecure string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecureAuto   ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecure = "Auto"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecureAlways ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecure = "Always"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecureNever  ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesSecure = "Never"
-)
-
-// Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
-type ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone      ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "none"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
-)
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy string
-
-const (
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyOff                      ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "off"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyGeo                      ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "geo"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyRandom                   ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "random"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyDynamicLatency           ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyProximity                ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "proximity"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyLeastConnections         ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "least_connections"
-	ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicyEmpty                    ZoneLoadBalancerPatchParamsRulesOverridesSteeringPolicy = "\"\""
-)
-
-// Specifies the type of session affinity the load balancer should use unless
-// specified as `"none"` or "" (default). The supported types are:
-//
-//   - `"cookie"`: On the first request to a proxied load balancer, a cookie is
-//     generated, encoding information of which origin the request will be forwarded
-//     to. Subsequent requests, by the same client to the same load balancer, will be
-//     sent to the origin server the cookie encodes, for the duration of the cookie
-//     and as long as the origin server remains healthy. If the cookie has expired or
-//     the origin server is unhealthy, then a new origin server is calculated and
-//     used.
-//   - `"ip_cookie"`: Behaves the same as `"cookie"` except the initial origin
-//     selection is stable and based on the client's ip address.
-//   - `"header"`: On the first request to a proxied load balancer, a session key
-//     based on the configured HTTP headers (see
-//     `session_affinity_attributes.headers`) is generated, encoding the request
-//     headers used for storing in the load balancer session state which origin the
-//     request will be forwarded to. Subsequent requests to the load balancer with
-//     the same headers will be sent to the same origin server, for the duration of
-//     the session and as long as the origin server remains healthy. If the session
-//     has been idle for the duration of `session_affinity_ttl` seconds or the origin
-//     server is unhealthy, then a new origin server is calculated and used. See
-//     `headers` in `session_affinity_attributes` for additional required
-//     configuration.
-type ZoneLoadBalancerPatchParamsSessionAffinity string
-
-const (
-	ZoneLoadBalancerPatchParamsSessionAffinityNone     ZoneLoadBalancerPatchParamsSessionAffinity = "none"
-	ZoneLoadBalancerPatchParamsSessionAffinityCookie   ZoneLoadBalancerPatchParamsSessionAffinity = "cookie"
-	ZoneLoadBalancerPatchParamsSessionAffinityIPCookie ZoneLoadBalancerPatchParamsSessionAffinity = "ip_cookie"
-	ZoneLoadBalancerPatchParamsSessionAffinityHeader   ZoneLoadBalancerPatchParamsSessionAffinity = "header"
-	ZoneLoadBalancerPatchParamsSessionAffinityEmpty    ZoneLoadBalancerPatchParamsSessionAffinity = "\"\""
-)
-
-// Configures attributes for session affinity.
-type ZoneLoadBalancerPatchParamsSessionAffinityAttributes struct {
-	// Configures the drain duration in seconds. This field is only used when session
-	// affinity is enabled on the load balancer.
-	DrainDuration param.Field[float64] `json:"drain_duration"`
-	// Configures the names of HTTP headers to base session affinity on when header
-	// `session_affinity` is enabled. At least one HTTP header name must be provided.
-	// To specify the exact cookies to be used, include an item in the following
-	// format: `"cookie:<cookie-name-1>,<cookie-name-2>"` (example) where everything
-	// after the colon is a comma-separated list of cookie names. Providing only
-	// `"cookie"` will result in all cookies being used. The default max number of HTTP
-	// header names that can be provided depends on your plan: 5 for Enterprise, 1 for
-	// all other plans.
-	Headers param.Field[[]string] `json:"headers"`
-	// When header `session_affinity` is enabled, this option can be used to specify
-	// how HTTP headers on load balancing requests will be used. The supported values
-	// are:
-	//
-	//   - `"true"`: Load balancing requests must contain _all_ of the HTTP headers
-	//     specified by the `headers` session affinity attribute, otherwise sessions
-	//     aren't created.
-	//   - `"false"`: Load balancing requests must contain _at least one_ of the HTTP
-	//     headers specified by the `headers` session affinity attribute, otherwise
-	//     sessions aren't created.
-	RequireAllHeaders param.Field[bool] `json:"require_all_headers"`
-	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
-	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
-	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite param.Field[ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite] `json:"samesite"`
-	// Configures the Secure attribute on session affinity cookie. Value "Always"
-	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
-	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
-	// attribute depending if Always Use HTTPS is enabled.
-	Secure param.Field[ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecure] `json:"secure"`
-	// Configures the zero-downtime failover between origins within a pool when session
-	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-	// Cache, and Bandwidth Alliance. The supported values are:
-	//
-	//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-	//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-	//     originally pinned origin is available; note that this can potentially result
-	//     in heavy origin flapping.
-	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover param.Field[ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailover] `json:"zero_downtime_failover"`
-}
-
-func (r ZoneLoadBalancerPatchParamsSessionAffinityAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
-// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
-// when using value "None", the secure attribute can not be set to "Never".
-type ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite string
-
-const (
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesiteAuto   ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite = "Auto"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesiteLax    ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite = "Lax"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesiteNone   ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite = "None"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesiteStrict ZoneLoadBalancerPatchParamsSessionAffinityAttributesSamesite = "Strict"
-)
-
-// Configures the Secure attribute on session affinity cookie. Value "Always"
-// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
-// indicates the Secure attribute will not be set, and "Auto" will set the Secure
-// attribute depending if Always Use HTTPS is enabled.
-type ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecure string
-
-const (
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecureAuto   ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecure = "Auto"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecureAlways ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecure = "Always"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecureNever  ZoneLoadBalancerPatchParamsSessionAffinityAttributesSecure = "Never"
-)
-
-// Configures the zero-downtime failover between origins within a pool when session
-// affinity is enabled. This feature is currently incompatible with Argo, Tiered
-// Cache, and Bandwidth Alliance. The supported values are:
-//
-//   - `"none"`: No failover takes place for sessions pinned to the origin (default).
-//   - `"temporary"`: Traffic will be sent to another other healthy origin until the
-//     originally pinned origin is available; note that this can potentially result
-//     in heavy origin flapping.
-//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
-//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
-//     currently not supported for session affinity by header.
-type ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailover string
-
-const (
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailoverNone      ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailover = "none"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailoverTemporary ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailoverSticky    ZoneLoadBalancerPatchParamsSessionAffinityAttributesZeroDowntimeFailover = "sticky"
-)
-
-// Steering Policy for this load balancer.
-//
-//   - `"off"`: Use `default_pools`.
-//   - `"geo"`: Use `region_pools`/`country_pools`/`pop_pools`. For non-proxied
-//     requests, the country for `country_pools` is determined by
-//     `location_strategy`.
-//   - `"random"`: Select a pool randomly.
-//   - `"dynamic_latency"`: Use round trip time to select the closest pool in
-//     default_pools (requires pool health checks).
-//   - `"proximity"`: Use the pools' latitude and longitude to select the closest
-//     pool using the Cloudflare PoP location for proxied requests or the location
-//     determined by `location_strategy` for non-proxied requests.
-//   - `"least_outstanding_requests"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of outstanding
-//     requests. Pools with more pending requests are weighted proportionately less
-//     relative to others.
-//   - `"least_connections"`: Select a pool by taking into consideration
-//     `random_steering` weights, as well as each pool's number of open connections.
-//     Pools with more open connections are weighted proportionately less relative to
-//     others. Supported for HTTP/1 and HTTP/2 connections.
-//   - `""`: Will map to `"geo"` if you use
-//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type ZoneLoadBalancerPatchParamsSteeringPolicy string
-
-const (
-	ZoneLoadBalancerPatchParamsSteeringPolicyOff                      ZoneLoadBalancerPatchParamsSteeringPolicy = "off"
-	ZoneLoadBalancerPatchParamsSteeringPolicyGeo                      ZoneLoadBalancerPatchParamsSteeringPolicy = "geo"
-	ZoneLoadBalancerPatchParamsSteeringPolicyRandom                   ZoneLoadBalancerPatchParamsSteeringPolicy = "random"
-	ZoneLoadBalancerPatchParamsSteeringPolicyDynamicLatency           ZoneLoadBalancerPatchParamsSteeringPolicy = "dynamic_latency"
-	ZoneLoadBalancerPatchParamsSteeringPolicyProximity                ZoneLoadBalancerPatchParamsSteeringPolicy = "proximity"
-	ZoneLoadBalancerPatchParamsSteeringPolicyLeastOutstandingRequests ZoneLoadBalancerPatchParamsSteeringPolicy = "least_outstanding_requests"
-	ZoneLoadBalancerPatchParamsSteeringPolicyLeastConnections         ZoneLoadBalancerPatchParamsSteeringPolicy = "least_connections"
-	ZoneLoadBalancerPatchParamsSteeringPolicyEmpty                    ZoneLoadBalancerPatchParamsSteeringPolicy = "\"\""
+	ZoneLoadBalancerUpdateParamsSteeringPolicyOff            ZoneLoadBalancerUpdateParamsSteeringPolicy = "off"
+	ZoneLoadBalancerUpdateParamsSteeringPolicyGeo            ZoneLoadBalancerUpdateParamsSteeringPolicy = "geo"
+	ZoneLoadBalancerUpdateParamsSteeringPolicyRandom         ZoneLoadBalancerUpdateParamsSteeringPolicy = "random"
+	ZoneLoadBalancerUpdateParamsSteeringPolicyDynamicLatency ZoneLoadBalancerUpdateParamsSteeringPolicy = "dynamic_latency"
+	ZoneLoadBalancerUpdateParamsSteeringPolicyProximity      ZoneLoadBalancerUpdateParamsSteeringPolicy = "proximity"
+	ZoneLoadBalancerUpdateParamsSteeringPolicyEmpty          ZoneLoadBalancerUpdateParamsSteeringPolicy = "\"\""
 )

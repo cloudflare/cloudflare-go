@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIRun(t *testing.T) {
+func TestAIMicrosoftResnet50(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,12 +26,7 @@ func TestAIRun(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.AI.Run(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"string",
-		cloudflare.AIRunParams{},
-	)
+	_, err := client.AI.Microsoft.Resnet50(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
