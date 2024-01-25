@@ -3,6 +3,7 @@
 package option
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -187,6 +188,14 @@ func WithEnvironmentProduction() RequestOption {
 	return WithBaseURL("https://api.cloudflare.com/client/v4/")
 }
 
+// WithAPIEmail returns a RequestOption that sets the client setting "api_email".
+func WithAPIEmail(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.APIEmail = value
+		return r.Apply(WithHeader("X-Auth-Email", r.APIEmail))
+	}
+}
+
 // WithAPIKey returns a RequestOption that sets the client setting "api_key".
 func WithAPIKey(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
@@ -195,10 +204,18 @@ func WithAPIKey(value string) RequestOption {
 	}
 }
 
-// WithEmail returns a RequestOption that sets the client setting "email".
-func WithEmail(value string) RequestOption {
+// WithAPIToken returns a RequestOption that sets the client setting "api_token".
+func WithAPIToken(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		r.Email = value
-		return r.Apply(WithHeader("x-auth-email", value))
+		r.APIToken = value
+		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIToken)))
+	}
+}
+
+// WithUserServiceKey returns a RequestOption that sets the client setting "user_service_key".
+func WithUserServiceKey(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.UserServiceKey = value
+		return r.Apply(WithHeader("X-Auth-User-Service-Key", r.UserServiceKey))
 	}
 }
