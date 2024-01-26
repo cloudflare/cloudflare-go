@@ -141,6 +141,7 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -213,6 +214,7 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -285,6 +287,7 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -300,6 +303,7 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
+			SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsSessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerNewParamsSessionAffinityAttributes{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
@@ -482,6 +486,7 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -554,6 +559,7 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -626,6 +632,7 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -641,6 +648,7 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
+			SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsSessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerUpdateParamsSessionAffinityAttributes{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
@@ -849,6 +857,7 @@ func TestZoneLoadBalancerPatchWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -921,6 +930,7 @@ func TestZoneLoadBalancerPatchWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -993,6 +1003,7 @@ func TestZoneLoadBalancerPatchWithOptionalParams(t *testing.T) {
 							"1": "9290f38c5d07c2e2f4df57b1f61d4196",
 						},
 					}),
+					SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityCookie),
 					SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsRulesOverridesSessionAffinityAttributes{
 						DrainDuration:        cloudflare.F(100.000000),
 						Headers:              cloudflare.F([]string{"x"}),
@@ -1008,6 +1019,7 @@ func TestZoneLoadBalancerPatchWithOptionalParams(t *testing.T) {
 				Priority:   cloudflare.F(int64(0)),
 				Terminates: cloudflare.F(true),
 			}}),
+			SessionAffinity: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsSessionAffinityCookie),
 			SessionAffinityAttributes: cloudflare.F(cloudflare.ZoneLoadBalancerPatchParamsSessionAffinityAttributes{
 				DrainDuration:        cloudflare.F(100.000000),
 				Headers:              cloudflare.F([]string{"x"}),
