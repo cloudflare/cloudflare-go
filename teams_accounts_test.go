@@ -85,6 +85,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
           				},
 					"body_scanning": {
 						"inspection_mode": "deep"
+					},
+					"extended_email_matching": {
+						"enabled": true
 					}
 				}
 			}
@@ -120,6 +123,9 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 				UrlBrowserIsolationEnabled: BoolPtr(true),
 				NonIdentityEnabled:         BoolPtr(true),
 			},
+			ExtendedEmailMatching: &TeamsExtendedEmailMatching{
+				Enabled: BoolPtr(true),
+			},
 		})
 	}
 }
@@ -148,6 +154,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 					},
 					"protocol_detection": {
 						"enabled": true
+					},
+					"extended_email_matching": {
+						"enabled": true
 					}
 				}
 			}
@@ -160,6 +169,9 @@ func TestTeamsAccountUpdateConfiguration(t *testing.T) {
 		ActivityLog:       &TeamsActivityLog{Enabled: true},
 		TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 		ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
+		ExtendedEmailMatching: &TeamsExtendedEmailMatching{
+			Enabled: BoolPtr(true),
+		},
 	}
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/gateway/configuration", handler)
