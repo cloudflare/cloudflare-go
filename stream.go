@@ -209,10 +209,12 @@ type StreamInitiateTUSUploadResponse struct {
 
 type TUSUploadMetadata struct {
 	Name                  string     `json:"name,omitempty"`
+	MaxDurationSeconds    int        `json:"maxDurationSeconds,omitempty"`
 	RequireSignedURLs     bool       `json:"requiresignedurls,omitempty"`
 	AllowedOrigins        string     `json:"allowedorigins,omitempty"`
 	ThumbnailTimestampPct float64    `json:"thumbnailtimestamppct,omitempty"`
 	ScheduledDeletion     *time.Time `json:"scheduledDeletion,omitempty"`
+	Expiry                *time.Time `json:"expiry,omitempty"`
 	Watermark             string     `json:"watermark,omitempty"`
 }
 
@@ -220,6 +222,9 @@ func (t TUSUploadMetadata) ToTUSCsv() (string, error) {
 	var metadataValues []string
 	if t.Name != "" {
 		metadataValues = append(metadataValues, fmt.Sprintf("%s %s", "name", base64.StdEncoding.EncodeToString([]byte(t.Name))))
+	}
+	if t.MaxDurationSeconds != 0 {
+		metadataValues = append(metadataValues, fmt.Sprintf("%s %s", "maxDurationSeconds", base64.StdEncoding.EncodeToString([]byte(strconv.Itoa(t.MaxDurationSeconds)))))
 	}
 	if t.RequireSignedURLs {
 		metadataValues = append(metadataValues, "requiresignedurls")
@@ -232,6 +237,9 @@ func (t TUSUploadMetadata) ToTUSCsv() (string, error) {
 	}
 	if t.ScheduledDeletion != nil {
 		metadataValues = append(metadataValues, fmt.Sprintf("%s %s", "scheduledDeletion", base64.StdEncoding.EncodeToString([]byte(t.ScheduledDeletion.Format(time.RFC3339)))))
+	}
+	if t.Expiry != nil {
+		metadataValues = append(metadataValues, fmt.Sprintf("%s %s", "expiry", base64.StdEncoding.EncodeToString([]byte(t.Expiry.Format(time.RFC3339)))))
 	}
 	if t.Watermark != "" {
 		metadataValues = append(metadataValues, fmt.Sprintf("%s %s", "watermark", base64.StdEncoding.EncodeToString([]byte(t.Watermark))))
