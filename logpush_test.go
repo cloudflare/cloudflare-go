@@ -33,6 +33,28 @@ const (
 	"max_upload_bytes": 5000000
   }
 `
+	serverLogpushJobWithOutputOptionsDescription = `{
+	"id": %d,
+	"dataset": "http_requests",
+	"kind": "",
+	"enabled": false,
+	"name": "example.com",
+	"output_options": {
+		"field_names":[
+			"RayID",
+			"ClientIP",
+			"EdgeStartTimestamp"
+		],
+		"timestamp_format": "rfc3339"
+	},
+	"destination_conf": "s3://mybucket/logs?region=us-west-2",
+	"last_complete": "%[2]s",
+	"last_error": "%[2]s",
+	"error_message": "test",
+	"frequency": "high",
+	"max_upload_bytes": 5000000
+  }
+`
 	serverEdgeLogpushJobDescription = `{
 	"id": %d,
 	"dataset": "http_requests",
@@ -69,6 +91,26 @@ var (
 		Enabled:         false,
 		Name:            "example.com",
 		LogpullOptions:  "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+		DestinationConf: "s3://mybucket/logs?region=us-west-2",
+		LastComplete:    &testLogpushTimestamp,
+		LastError:       &testLogpushTimestamp,
+		ErrorMessage:    "test",
+		Frequency:       "high",
+		MaxUploadBytes:  5000000,
+	}
+	expectedLogpushJobWithOutputOptionsStruct = LogpushJob{
+		ID:      jobID,
+		Dataset: "http_requests",
+		Enabled: false,
+		Name:    "example.com",
+		OutputOptions: &LogpushOutputOptions{
+			FieldNames: []string{
+				"RayID",
+				"ClientIP",
+				"EdgeStartTimestamp",
+			},
+			TimestampFormat: "rfc3339",
+		},
 		DestinationConf: "s3://mybucket/logs?region=us-west-2",
 		LastComplete:    &testLogpushTimestamp,
 		LastError:       &testLogpushTimestamp,
@@ -138,6 +180,10 @@ func TestGetLogpushJob(t *testing.T) {
 			result: serverLogpushJobDescription,
 			want:   expectedLogpushJobStruct,
 		},
+		"core logpush job with output options": {
+			result: serverLogpushJobWithOutputOptionsDescription,
+			want:   expectedLogpushJobWithOutputOptionsStruct,
+		},
 		"edge logpush job": {
 			result: serverEdgeLogpushJobDescription,
 			want:   expectedEdgeLogpushJobStruct,
@@ -197,6 +243,40 @@ func TestCreateLogpushJob(t *testing.T) {
 			}`,
 			result: serverLogpushJobDescription,
 			want:   expectedLogpushJobStruct,
+		},
+		"core logpush job with output options": {
+			newJob: CreateLogpushJobParams{
+				Dataset: "http_requests",
+				Enabled: false,
+				Name:    "example.com",
+				OutputOptions: &LogpushOutputOptions{
+					FieldNames: []string{
+						"RayID",
+						"ClientIP",
+						"EdgeStartTimestamp",
+					},
+					TimestampFormat: "rfc3339",
+				},
+				DestinationConf:  "s3://mybucket/logs?region=us-west-2",
+				MaxUploadRecords: 1000,
+			},
+			payload: `{
+				"dataset": "http_requests",
+				"enabled":false,
+				"name":"example.com",
+				"output_options": {
+					"field_names":[
+						"RayID",
+						"ClientIP",
+						"EdgeStartTimestamp"
+					],
+					"timestamp_format": "rfc3339"
+				},
+				"destination_conf":"s3://mybucket/logs?region=us-west-2",
+				"max_upload_records": 1000
+			}`,
+			result: serverLogpushJobWithOutputOptionsDescription,
+			want:   expectedLogpushJobWithOutputOptionsStruct,
 		},
 		"edge logpush job": {
 			newJob: CreateLogpushJobParams{

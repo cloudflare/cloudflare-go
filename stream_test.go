@@ -581,10 +581,21 @@ func TestStream_TUSUploadMetadataToTUSCsv(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=", csv)
 
+	expiry, _ := time.Parse(time.RFC3339, "2023-09-25T02:45:00Z")
+	md.Expiry = &expiry
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=,expiry MjAyMy0wOS0yNVQwMjo0NTowMFo=", csv)
+
 	md.Watermark = "watermark-profile-uid"
 	csv, err = md.ToTUSCsv()
 	assert.NoError(t, err)
-	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=,watermark d2F0ZXJtYXJrLXByb2ZpbGUtdWlk", csv)
+	assert.Equal(t, "name dGVzdC5tcDQ=,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=,expiry MjAyMy0wOS0yNVQwMjo0NTowMFo=,watermark d2F0ZXJtYXJrLXByb2ZpbGUtdWlk", csv)
+
+	md.MaxDurationSeconds = 300
+	csv, err = md.ToTUSCsv()
+	assert.NoError(t, err)
+	assert.Equal(t, "name dGVzdC5tcDQ=,maxDurationSeconds MzAw,requiresignedurls,allowedorigins ZXhhbXBsZS5jb20=,thumbnailtimestamppct MC41,scheduledDeletion MjAyMy0xMC0wMVQwMjoyMDowMFo=,expiry MjAyMy0wOS0yNVQwMjo0NTowMFo=,watermark d2F0ZXJtYXJrLXByb2ZpbGUtdWlk", csv)
 
 	// empty metadata should return empty string
 	md = TUSUploadMetadata{}
