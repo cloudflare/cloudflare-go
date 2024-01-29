@@ -3,6 +3,7 @@
 ENHANCEMENTS:
 
 * dlp: add support for EDM and CWL datasets ([#1485](https://github.com/cloudflare/cloudflare-go/issues/1485))
+* logpush: Add support for Output Options ([#1468](https://github.com/cloudflare/cloudflare-go/issues/1468))
 
 BUG FIXES:
 
