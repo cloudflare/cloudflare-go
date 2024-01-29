@@ -471,11 +471,30 @@ func (d *decoder) newTimeTypeDecoder(t reflect.Type) decoderFunc {
 	format := d.dateFormat
 	return func(n gjson.Result, v reflect.Value) error {
 		parsed, err := time.Parse(format, n.Str)
-		if err != nil {
-			return err
+		if err == nil {
+			v.Set(reflect.ValueOf(parsed).Convert(t))
+			return nil
 		}
-		v.Set(reflect.ValueOf(parsed).Convert(t))
-		return nil
+
+		layouts := []string{
+			"2006-01-02",
+			"2006-01-02T15:04:05Z07:00",
+			"2006-01-02T15:04:05Z0700",
+			"2006-01-02T15:04:05",
+			"2006-01-02 15:04:05Z07:00",
+			"2006-01-02 15:04:05Z0700",
+			"2006-01-02 15:04:05",
+		}
+
+		for _, layout := range layouts {
+			parsed, err := time.Parse(layout, n.Str)
+			if err == nil {
+				v.Set(reflect.ValueOf(parsed).Convert(t))
+				return nil
+			}
+		}
+
+		return fmt.Errorf("unable to leniently parse date-time string: %s", n.Str)
 	}
 }
 
