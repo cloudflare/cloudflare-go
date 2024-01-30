@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingHttp2Update(t *testing.T) {
+func TestZoneSettingHTTP2Update(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingHttp2Update(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Http2s.Update(
+	_, err := client.Zones.Settings.HTTP2s.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingHttp2UpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingHttp2UpdateParamsValueOn),
+		cloudflare.ZoneSettingHTTP2UpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingHTTP2UpdateParamsValueOn),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingHttp2Update(t *testing.T) {
 	}
 }
 
-func TestZoneSettingHttp2List(t *testing.T) {
+func TestZoneSettingHTTP2List(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingHttp2List(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Http2s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.HTTP2s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

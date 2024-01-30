@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingWafUpdate(t *testing.T) {
+func TestZoneSettingWAFUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingWafUpdate(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Wafs.Update(
+	_, err := client.Zones.Settings.WAFs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingWafUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingWafUpdateParamsValueOn),
+		cloudflare.ZoneSettingWAFUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingWAFUpdateParamsValueOn),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingWafUpdate(t *testing.T) {
 	}
 }
 
-func TestZoneSettingWafList(t *testing.T) {
+func TestZoneSettingWAFList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingWafList(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Wafs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.WAFs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

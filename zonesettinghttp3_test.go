@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingHttp3Update(t *testing.T) {
+func TestZoneSettingHTTP3Update(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingHttp3Update(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Http3s.Update(
+	_, err := client.Zones.Settings.HTTP3s.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingHttp3UpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingHttp3UpdateParamsValueOn),
+		cloudflare.ZoneSettingHTTP3UpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingHTTP3UpdateParamsValueOn),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingHttp3Update(t *testing.T) {
 	}
 }
 
-func TestZoneSettingHttp3List(t *testing.T) {
+func TestZoneSettingHTTP3List(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingHttp3List(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Http3s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.HTTP3s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

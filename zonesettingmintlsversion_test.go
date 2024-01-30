@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingMinTlsVersionUpdate(t *testing.T) {
+func TestZoneSettingMinTLSVersionUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingMinTlsVersionUpdate(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.MinTlsVersions.Update(
+	_, err := client.Zones.Settings.MinTLSVersions.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingMinTlsVersionUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingMinTlsVersionUpdateParamsValue1_0),
+		cloudflare.ZoneSettingMinTLSVersionUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingMinTLSVersionUpdateParamsValue1_0),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingMinTlsVersionUpdate(t *testing.T) {
 	}
 }
 
-func TestZoneSettingMinTlsVersionList(t *testing.T) {
+func TestZoneSettingMinTLSVersionList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingMinTlsVersionList(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.MinTlsVersions.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.MinTLSVersions.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

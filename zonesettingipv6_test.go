@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingIpv6Update(t *testing.T) {
+func TestZoneSettingIPV6Update(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,11 +26,11 @@ func TestZoneSettingIpv6Update(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Ipv6s.Update(
+	_, err := client.Zones.Settings.IPV6s.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingIpv6UpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingIpv6UpdateParamsValueOff),
+		cloudflare.ZoneSettingIPV6UpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingIPV6UpdateParamsValueOff),
 		},
 	)
 	if err != nil {
@@ -42,7 +42,7 @@ func TestZoneSettingIpv6Update(t *testing.T) {
 	}
 }
 
-func TestZoneSettingIpv6List(t *testing.T) {
+func TestZoneSettingIPV6List(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,7 +55,7 @@ func TestZoneSettingIpv6List(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Ipv6s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.IPV6s.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -14,20 +14,20 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// ZoneSettingWafService contains methods and other services that help with
+// ZoneSettingWAFService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewZoneSettingWafService] method
+// this service directly, and instead use the [NewZoneSettingWAFService] method
 // instead.
-type ZoneSettingWafService struct {
+type ZoneSettingWAFService struct {
 	Options []option.RequestOption
 }
 
-// NewZoneSettingWafService generates a new service that applies the given options
+// NewZoneSettingWAFService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewZoneSettingWafService(opts ...option.RequestOption) (r *ZoneSettingWafService) {
-	r = &ZoneSettingWafService{}
+func NewZoneSettingWAFService(opts ...option.RequestOption) (r *ZoneSettingWAFService) {
+	r = &ZoneSettingWAFService{}
 	r.Options = opts
 	return
 }
@@ -42,7 +42,7 @@ func NewZoneSettingWafService(opts ...option.RequestOption) (r *ZoneSettingWafSe
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *ZoneSettingWafService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingWafUpdateParams, opts ...option.RequestOption) (res *ZoneSettingWafUpdateResponse, err error) {
+func (r *ZoneSettingWAFService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingWAFUpdateParams, opts ...option.RequestOption) (res *ZoneSettingWAFUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/waf", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -59,25 +59,25 @@ func (r *ZoneSettingWafService) Update(ctx context.Context, zoneIdentifier strin
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *ZoneSettingWafService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingWafListResponse, err error) {
+func (r *ZoneSettingWAFService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingWAFListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/waf", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ZoneSettingWafUpdateResponse struct {
-	Errors   []ZoneSettingWafUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingWafUpdateResponseMessage `json:"messages,required"`
+type ZoneSettingWAFUpdateResponse struct {
+	Errors   []ZoneSettingWAFUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWAFUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                               `json:"success,required"`
-	Result  ZoneSettingWafUpdateResponseResult `json:"result"`
-	JSON    zoneSettingWafUpdateResponseJSON   `json:"-"`
+	Result  ZoneSettingWAFUpdateResponseResult `json:"result"`
+	JSON    zoneSettingWAFUpdateResponseJSON   `json:"-"`
 }
 
-// zoneSettingWafUpdateResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingWafUpdateResponse]
-type zoneSettingWafUpdateResponseJSON struct {
+// zoneSettingWAFUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFUpdateResponse]
+type zoneSettingWAFUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -86,64 +86,64 @@ type zoneSettingWafUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafUpdateResponseError struct {
+type ZoneSettingWAFUpdateResponseError struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingWafUpdateResponseErrorJSON `json:"-"`
+	JSON    zoneSettingWAFUpdateResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingWafUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingWafUpdateResponseError]
-type zoneSettingWafUpdateResponseErrorJSON struct {
+// zoneSettingWAFUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFUpdateResponseError]
+type zoneSettingWAFUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafUpdateResponseMessage struct {
+type ZoneSettingWAFUpdateResponseMessage struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    zoneSettingWafUpdateResponseMessageJSON `json:"-"`
+	JSON    zoneSettingWAFUpdateResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingWafUpdateResponseMessageJSON contains the JSON metadata for the
-// struct [ZoneSettingWafUpdateResponseMessage]
-type zoneSettingWafUpdateResponseMessageJSON struct {
+// zoneSettingWAFUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSettingWAFUpdateResponseMessage]
+type zoneSettingWAFUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafUpdateResponseResult struct {
+type ZoneSettingWAFUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWafUpdateResponseResultID `json:"id,required"`
+	ID ZoneSettingWAFUpdateResponseResultID `json:"id,required"`
 	// Value of the zone setting.
-	Value ZoneSettingWafUpdateResponseResultValue `json:"value,required"`
+	Value ZoneSettingWAFUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWafUpdateResponseResultEditable `json:"editable"`
+	Editable ZoneSettingWAFUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWafUpdateResponseResultJSON `json:"-"`
+	JSON       zoneSettingWAFUpdateResponseResultJSON `json:"-"`
 }
 
-// zoneSettingWafUpdateResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingWafUpdateResponseResult]
-type zoneSettingWafUpdateResponseResultJSON struct {
+// zoneSettingWAFUpdateResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFUpdateResponseResult]
+type zoneSettingWAFUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -152,46 +152,46 @@ type zoneSettingWafUpdateResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type ZoneSettingWafUpdateResponseResultID string
+type ZoneSettingWAFUpdateResponseResultID string
 
 const (
-	ZoneSettingWafUpdateResponseResultIDWaf ZoneSettingWafUpdateResponseResultID = "waf"
+	ZoneSettingWAFUpdateResponseResultIDWAF ZoneSettingWAFUpdateResponseResultID = "waf"
 )
 
 // Value of the zone setting.
-type ZoneSettingWafUpdateResponseResultValue string
+type ZoneSettingWAFUpdateResponseResultValue string
 
 const (
-	ZoneSettingWafUpdateResponseResultValueOn  ZoneSettingWafUpdateResponseResultValue = "on"
-	ZoneSettingWafUpdateResponseResultValueOff ZoneSettingWafUpdateResponseResultValue = "off"
+	ZoneSettingWAFUpdateResponseResultValueOn  ZoneSettingWAFUpdateResponseResultValue = "on"
+	ZoneSettingWAFUpdateResponseResultValueOff ZoneSettingWAFUpdateResponseResultValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWafUpdateResponseResultEditable bool
+type ZoneSettingWAFUpdateResponseResultEditable bool
 
 const (
-	ZoneSettingWafUpdateResponseResultEditableTrue  ZoneSettingWafUpdateResponseResultEditable = true
-	ZoneSettingWafUpdateResponseResultEditableFalse ZoneSettingWafUpdateResponseResultEditable = false
+	ZoneSettingWAFUpdateResponseResultEditableTrue  ZoneSettingWAFUpdateResponseResultEditable = true
+	ZoneSettingWAFUpdateResponseResultEditableFalse ZoneSettingWAFUpdateResponseResultEditable = false
 )
 
-type ZoneSettingWafListResponse struct {
-	Errors   []ZoneSettingWafListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingWafListResponseMessage `json:"messages,required"`
+type ZoneSettingWAFListResponse struct {
+	Errors   []ZoneSettingWAFListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWAFListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                             `json:"success,required"`
-	Result  ZoneSettingWafListResponseResult `json:"result"`
-	JSON    zoneSettingWafListResponseJSON   `json:"-"`
+	Result  ZoneSettingWAFListResponseResult `json:"result"`
+	JSON    zoneSettingWAFListResponseJSON   `json:"-"`
 }
 
-// zoneSettingWafListResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingWafListResponse]
-type zoneSettingWafListResponseJSON struct {
+// zoneSettingWAFListResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFListResponse]
+type zoneSettingWAFListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -200,64 +200,64 @@ type zoneSettingWafListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafListResponseError struct {
+type ZoneSettingWAFListResponseError struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
-	JSON    zoneSettingWafListResponseErrorJSON `json:"-"`
+	JSON    zoneSettingWAFListResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingWafListResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingWafListResponseError]
-type zoneSettingWafListResponseErrorJSON struct {
+// zoneSettingWAFListResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFListResponseError]
+type zoneSettingWAFListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafListResponseMessage struct {
+type ZoneSettingWAFListResponseMessage struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingWafListResponseMessageJSON `json:"-"`
+	JSON    zoneSettingWAFListResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingWafListResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneSettingWafListResponseMessage]
-type zoneSettingWafListResponseMessageJSON struct {
+// zoneSettingWAFListResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFListResponseMessage]
+type zoneSettingWAFListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingWafListResponseResult struct {
+type ZoneSettingWAFListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWafListResponseResultID `json:"id,required"`
+	ID ZoneSettingWAFListResponseResultID `json:"id,required"`
 	// Value of the zone setting.
-	Value ZoneSettingWafListResponseResultValue `json:"value,required"`
+	Value ZoneSettingWAFListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWafListResponseResultEditable `json:"editable"`
+	Editable ZoneSettingWAFListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWafListResponseResultJSON `json:"-"`
+	JSON       zoneSettingWAFListResponseResultJSON `json:"-"`
 }
 
-// zoneSettingWafListResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingWafListResponseResult]
-type zoneSettingWafListResponseResultJSON struct {
+// zoneSettingWAFListResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingWAFListResponseResult]
+type zoneSettingWAFListResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -266,47 +266,47 @@ type zoneSettingWafListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWafListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingWAFListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type ZoneSettingWafListResponseResultID string
+type ZoneSettingWAFListResponseResultID string
 
 const (
-	ZoneSettingWafListResponseResultIDWaf ZoneSettingWafListResponseResultID = "waf"
+	ZoneSettingWAFListResponseResultIDWAF ZoneSettingWAFListResponseResultID = "waf"
 )
 
 // Value of the zone setting.
-type ZoneSettingWafListResponseResultValue string
+type ZoneSettingWAFListResponseResultValue string
 
 const (
-	ZoneSettingWafListResponseResultValueOn  ZoneSettingWafListResponseResultValue = "on"
-	ZoneSettingWafListResponseResultValueOff ZoneSettingWafListResponseResultValue = "off"
+	ZoneSettingWAFListResponseResultValueOn  ZoneSettingWAFListResponseResultValue = "on"
+	ZoneSettingWAFListResponseResultValueOff ZoneSettingWAFListResponseResultValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWafListResponseResultEditable bool
+type ZoneSettingWAFListResponseResultEditable bool
 
 const (
-	ZoneSettingWafListResponseResultEditableTrue  ZoneSettingWafListResponseResultEditable = true
-	ZoneSettingWafListResponseResultEditableFalse ZoneSettingWafListResponseResultEditable = false
+	ZoneSettingWAFListResponseResultEditableTrue  ZoneSettingWAFListResponseResultEditable = true
+	ZoneSettingWAFListResponseResultEditableFalse ZoneSettingWAFListResponseResultEditable = false
 )
 
-type ZoneSettingWafUpdateParams struct {
+type ZoneSettingWAFUpdateParams struct {
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingWafUpdateParamsValue] `json:"value,required"`
+	Value param.Field[ZoneSettingWAFUpdateParamsValue] `json:"value,required"`
 }
 
-func (r ZoneSettingWafUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingWAFUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type ZoneSettingWafUpdateParamsValue string
+type ZoneSettingWAFUpdateParamsValue string
 
 const (
-	ZoneSettingWafUpdateParamsValueOn  ZoneSettingWafUpdateParamsValue = "on"
-	ZoneSettingWafUpdateParamsValueOff ZoneSettingWafUpdateParamsValue = "off"
+	ZoneSettingWAFUpdateParamsValueOn  ZoneSettingWAFUpdateParamsValue = "on"
+	ZoneSettingWAFUpdateParamsValueOff ZoneSettingWAFUpdateParamsValue = "off"
 )

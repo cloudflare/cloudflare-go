@@ -14,26 +14,26 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// ZoneSettingTls1_3Service contains methods and other services that help with
+// ZoneSettingTLS1_3Service contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewZoneSettingTls1_3Service] method
+// this service directly, and instead use the [NewZoneSettingTLS1_3Service] method
 // instead.
-type ZoneSettingTls1_3Service struct {
+type ZoneSettingTLS1_3Service struct {
 	Options []option.RequestOption
 }
 
-// NewZoneSettingTls1_3Service generates a new service that applies the given
+// NewZoneSettingTLS1_3Service generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewZoneSettingTls1_3Service(opts ...option.RequestOption) (r *ZoneSettingTls1_3Service) {
-	r = &ZoneSettingTls1_3Service{}
+func NewZoneSettingTLS1_3Service(opts ...option.RequestOption) (r *ZoneSettingTLS1_3Service) {
+	r = &ZoneSettingTLS1_3Service{}
 	r.Options = opts
 	return
 }
 
 // Changes TLS 1.3 setting.
-func (r *ZoneSettingTls1_3Service) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingTls1_3UpdateParams, opts ...option.RequestOption) (res *ZoneSettingTls1_3UpdateResponse, err error) {
+func (r *ZoneSettingTLS1_3Service) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingTLS1_3UpdateParams, opts ...option.RequestOption) (res *ZoneSettingTls1_3UpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/tls_1_3", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -41,7 +41,7 @@ func (r *ZoneSettingTls1_3Service) Update(ctx context.Context, zoneIdentifier st
 }
 
 // Gets TLS 1.3 setting enabled for a zone.
-func (r *ZoneSettingTls1_3Service) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingTls1_3ListResponse, err error) {
+func (r *ZoneSettingTLS1_3Service) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingTls1_3ListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/tls_1_3", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -143,7 +143,7 @@ func (r *ZoneSettingTls1_3UpdateResponseResult) UnmarshalJSON(data []byte) (err 
 type ZoneSettingTls1_3UpdateResponseResultID string
 
 const (
-	ZoneSettingTls1_3UpdateResponseResultIDTls1_3 ZoneSettingTls1_3UpdateResponseResultID = "tls_1_3"
+	ZoneSettingTls1_3UpdateResponseResultIDTLS1_3 ZoneSettingTls1_3UpdateResponseResultID = "tls_1_3"
 )
 
 // Value of the zone setting. Notes: Default value depends on the zone's plan
@@ -260,7 +260,7 @@ func (r *ZoneSettingTls1_3ListResponseResult) UnmarshalJSON(data []byte) (err er
 type ZoneSettingTls1_3ListResponseResultID string
 
 const (
-	ZoneSettingTls1_3ListResponseResultIDTls1_3 ZoneSettingTls1_3ListResponseResultID = "tls_1_3"
+	ZoneSettingTls1_3ListResponseResultIDTLS1_3 ZoneSettingTls1_3ListResponseResultID = "tls_1_3"
 )
 
 // Value of the zone setting. Notes: Default value depends on the zone's plan
@@ -282,13 +282,13 @@ const (
 	ZoneSettingTls1_3ListResponseResultEditableFalse ZoneSettingTls1_3ListResponseResultEditable = false
 )
 
-type ZoneSettingTls1_3UpdateParams struct {
+type ZoneSettingTLS1_3UpdateParams struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value param.Field[ZoneSettingTls1_3UpdateParamsValue] `json:"value,required"`
 }
 
-func (r ZoneSettingTls1_3UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingTLS1_3UpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

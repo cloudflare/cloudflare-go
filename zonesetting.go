@@ -26,22 +26,22 @@ type ZoneSettingService struct {
 	AutomaticHTTPsRewrites         *ZoneSettingAutomaticHTTPsRewriteService
 	AutomaticPlatformOptimizations *ZoneSettingAutomaticPlatformOptimizationService
 	Brotli                         *ZoneSettingBrotliService
-	BrowserCacheTtls               *ZoneSettingBrowserCacheTtlService
+	BrowserCacheTTLS               *ZoneSettingBrowserCacheTTLSService
 	BrowserChecks                  *ZoneSettingBrowserCheckService
 	CacheLevels                    *ZoneSettingCacheLevelService
-	ChallengeTtls                  *ZoneSettingChallengeTtlService
+	ChallengeTTLS                  *ZoneSettingChallengeTTLSService
 	Ciphers                        *ZoneSettingCipherService
 	DevelopmentModes               *ZoneSettingDevelopmentModeService
 	EarlyHints                     *ZoneSettingEarlyHintService
 	EmailObfuscations              *ZoneSettingEmailObfuscationService
 	H2Prioritizations              *ZoneSettingH2PrioritizationService
 	HotlinkProtections             *ZoneSettingHotlinkProtectionService
-	Http2s                         *ZoneSettingHttp2Service
-	Http3s                         *ZoneSettingHttp3Service
+	HTTP2s                         *ZoneSettingHTTP2Service
+	HTTP3s                         *ZoneSettingHTTP3Service
 	ImageResizings                 *ZoneSettingImageResizingService
 	IPGeolocations                 *ZoneSettingIPGeolocationService
-	Ipv6s                          *ZoneSettingIpv6Service
-	MinTlsVersions                 *ZoneSettingMinTlsVersionService
+	IPV6s                          *ZoneSettingIPV6Service
+	MinTLSVersions                 *ZoneSettingMinTLSVersionService
 	Minifies                       *ZoneSettingMinifyService
 	Mirages                        *ZoneSettingMirageService
 	MobileRedirects                *ZoneSettingMobileRedirectService
@@ -64,10 +64,10 @@ type ZoneSettingService struct {
 	SortQueryStringForCaches       *ZoneSettingSortQueryStringForCachService
 	Ssls                           *ZoneSettingSslService
 	SslRecommenders                *ZoneSettingSslRecommenderService
-	Tls1_3s                        *ZoneSettingTls1_3Service
-	TlsClientAuths                 *ZoneSettingTlsClientAuthService
+	TLS1_3s                        *ZoneSettingTLS1_3Service
+	TLSClientAuths                 *ZoneSettingTLSClientAuthService
 	TrueClientIPHeaders            *ZoneSettingTrueClientIPHeaderService
-	Wafs                           *ZoneSettingWafService
+	WAFs                           *ZoneSettingWAFService
 	Webps                          *ZoneSettingWebpService
 	Websockets                     *ZoneSettingWebsocketService
 }
@@ -84,22 +84,22 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.AutomaticHTTPsRewrites = NewZoneSettingAutomaticHTTPsRewriteService(opts...)
 	r.AutomaticPlatformOptimizations = NewZoneSettingAutomaticPlatformOptimizationService(opts...)
 	r.Brotli = NewZoneSettingBrotliService(opts...)
-	r.BrowserCacheTtls = NewZoneSettingBrowserCacheTtlService(opts...)
+	r.BrowserCacheTTLS = NewZoneSettingBrowserCacheTTLSService(opts...)
 	r.BrowserChecks = NewZoneSettingBrowserCheckService(opts...)
 	r.CacheLevels = NewZoneSettingCacheLevelService(opts...)
-	r.ChallengeTtls = NewZoneSettingChallengeTtlService(opts...)
+	r.ChallengeTTLS = NewZoneSettingChallengeTTLSService(opts...)
 	r.Ciphers = NewZoneSettingCipherService(opts...)
 	r.DevelopmentModes = NewZoneSettingDevelopmentModeService(opts...)
 	r.EarlyHints = NewZoneSettingEarlyHintService(opts...)
 	r.EmailObfuscations = NewZoneSettingEmailObfuscationService(opts...)
 	r.H2Prioritizations = NewZoneSettingH2PrioritizationService(opts...)
 	r.HotlinkProtections = NewZoneSettingHotlinkProtectionService(opts...)
-	r.Http2s = NewZoneSettingHttp2Service(opts...)
-	r.Http3s = NewZoneSettingHttp3Service(opts...)
+	r.HTTP2s = NewZoneSettingHTTP2Service(opts...)
+	r.HTTP3s = NewZoneSettingHTTP3Service(opts...)
 	r.ImageResizings = NewZoneSettingImageResizingService(opts...)
 	r.IPGeolocations = NewZoneSettingIPGeolocationService(opts...)
-	r.Ipv6s = NewZoneSettingIpv6Service(opts...)
-	r.MinTlsVersions = NewZoneSettingMinTlsVersionService(opts...)
+	r.IPV6s = NewZoneSettingIPV6Service(opts...)
+	r.MinTLSVersions = NewZoneSettingMinTLSVersionService(opts...)
 	r.Minifies = NewZoneSettingMinifyService(opts...)
 	r.Mirages = NewZoneSettingMirageService(opts...)
 	r.MobileRedirects = NewZoneSettingMobileRedirectService(opts...)
@@ -122,10 +122,10 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.SortQueryStringForCaches = NewZoneSettingSortQueryStringForCachService(opts...)
 	r.Ssls = NewZoneSettingSslService(opts...)
 	r.SslRecommenders = NewZoneSettingSslRecommenderService(opts...)
-	r.Tls1_3s = NewZoneSettingTls1_3Service(opts...)
-	r.TlsClientAuths = NewZoneSettingTlsClientAuthService(opts...)
+	r.TLS1_3s = NewZoneSettingTLS1_3Service(opts...)
+	r.TLSClientAuths = NewZoneSettingTLSClientAuthService(opts...)
 	r.TrueClientIPHeaders = NewZoneSettingTrueClientIPHeaderService(opts...)
-	r.Wafs = NewZoneSettingWafService(opts...)
+	r.WAFs = NewZoneSettingWAFService(opts...)
 	r.Webps = NewZoneSettingWebpService(opts...)
 	r.Websockets = NewZoneSettingWebsocketService(opts...)
 	return
