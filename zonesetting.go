@@ -45,7 +45,7 @@ type ZoneSettingService struct {
 	Minifies                       *ZoneSettingMinifyService
 	Mirages                        *ZoneSettingMirageService
 	MobileRedirects                *ZoneSettingMobileRedirectService
-	Nels                           *ZoneSettingNelService
+	NELs                           *ZoneSettingNELService
 	OpportunisticEncryptions       *ZoneSettingOpportunisticEncryptionService
 	OpportunisticOnions            *ZoneSettingOpportunisticOnionService
 	OrangeToOranges                *ZoneSettingOrangeToOrangeService
@@ -103,7 +103,7 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.Minifies = NewZoneSettingMinifyService(opts...)
 	r.Mirages = NewZoneSettingMirageService(opts...)
 	r.MobileRedirects = NewZoneSettingMobileRedirectService(opts...)
-	r.Nels = NewZoneSettingNelService(opts...)
+	r.NELs = NewZoneSettingNELService(opts...)
 	r.OpportunisticEncryptions = NewZoneSettingOpportunisticEncryptionService(opts...)
 	r.OpportunisticOnions = NewZoneSettingOpportunisticOnionService(opts...)
 	r.OrangeToOranges = NewZoneSettingOrangeToOrangeService(opts...)

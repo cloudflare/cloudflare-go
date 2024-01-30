@@ -14,20 +14,20 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// ZoneSettingNelService contains methods and other services that help with
+// ZoneSettingNELService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewZoneSettingNelService] method
+// this service directly, and instead use the [NewZoneSettingNELService] method
 // instead.
-type ZoneSettingNelService struct {
+type ZoneSettingNELService struct {
 	Options []option.RequestOption
 }
 
-// NewZoneSettingNelService generates a new service that applies the given options
+// NewZoneSettingNELService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewZoneSettingNelService(opts ...option.RequestOption) (r *ZoneSettingNelService) {
-	r = &ZoneSettingNelService{}
+func NewZoneSettingNELService(opts ...option.RequestOption) (r *ZoneSettingNELService) {
+	r = &ZoneSettingNELService{}
 	r.Options = opts
 	return
 }
@@ -35,7 +35,7 @@ func NewZoneSettingNelService(opts ...option.RequestOption) (r *ZoneSettingNelSe
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/nel-solving-mobile-speed)
 // for more information.
-func (r *ZoneSettingNelService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingNelUpdateParams, opts ...option.RequestOption) (res *ZoneSettingNelUpdateResponse, err error) {
+func (r *ZoneSettingNELService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingNELUpdateParams, opts ...option.RequestOption) (res *ZoneSettingNELUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/nel", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -43,25 +43,25 @@ func (r *ZoneSettingNelService) Update(ctx context.Context, zoneIdentifier strin
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-func (r *ZoneSettingNelService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingNelListResponse, err error) {
+func (r *ZoneSettingNELService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingNELListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/nel", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ZoneSettingNelUpdateResponse struct {
-	Errors   []ZoneSettingNelUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingNelUpdateResponseMessage `json:"messages,required"`
+type ZoneSettingNELUpdateResponse struct {
+	Errors   []ZoneSettingNELUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingNELUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                               `json:"success,required"`
-	Result  ZoneSettingNelUpdateResponseResult `json:"result"`
-	JSON    zoneSettingNelUpdateResponseJSON   `json:"-"`
+	Result  ZoneSettingNELUpdateResponseResult `json:"result"`
+	JSON    zoneSettingNELUpdateResponseJSON   `json:"-"`
 }
 
-// zoneSettingNelUpdateResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingNelUpdateResponse]
-type zoneSettingNelUpdateResponseJSON struct {
+// zoneSettingNELUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingNELUpdateResponse]
+type zoneSettingNELUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -70,64 +70,64 @@ type zoneSettingNelUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelUpdateResponseError struct {
+type ZoneSettingNELUpdateResponseError struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingNelUpdateResponseErrorJSON `json:"-"`
+	JSON    zoneSettingNELUpdateResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingNelUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingNelUpdateResponseError]
-type zoneSettingNelUpdateResponseErrorJSON struct {
+// zoneSettingNELUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingNELUpdateResponseError]
+type zoneSettingNELUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelUpdateResponseMessage struct {
+type ZoneSettingNELUpdateResponseMessage struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    zoneSettingNelUpdateResponseMessageJSON `json:"-"`
+	JSON    zoneSettingNELUpdateResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingNelUpdateResponseMessageJSON contains the JSON metadata for the
-// struct [ZoneSettingNelUpdateResponseMessage]
-type zoneSettingNelUpdateResponseMessageJSON struct {
+// zoneSettingNELUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSettingNELUpdateResponseMessage]
+type zoneSettingNELUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelUpdateResponseResult struct {
+type ZoneSettingNELUpdateResponseResult struct {
 	// Zone setting identifier.
-	ID ZoneSettingNelUpdateResponseResultID `json:"id,required"`
+	ID ZoneSettingNELUpdateResponseResultID `json:"id,required"`
 	// Value of the zone setting.
-	Value ZoneSettingNelUpdateResponseResultValue `json:"value,required"`
+	Value ZoneSettingNELUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingNelUpdateResponseResultEditable `json:"editable"`
+	Editable ZoneSettingNELUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingNelUpdateResponseResultJSON `json:"-"`
+	JSON       zoneSettingNELUpdateResponseResultJSON `json:"-"`
 }
 
-// zoneSettingNelUpdateResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingNelUpdateResponseResult]
-type zoneSettingNelUpdateResponseResultJSON struct {
+// zoneSettingNELUpdateResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingNELUpdateResponseResult]
+type zoneSettingNELUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -136,56 +136,56 @@ type zoneSettingNelUpdateResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Zone setting identifier.
-type ZoneSettingNelUpdateResponseResultID string
+type ZoneSettingNELUpdateResponseResultID string
 
 const (
-	ZoneSettingNelUpdateResponseResultIDNel ZoneSettingNelUpdateResponseResultID = "nel"
+	ZoneSettingNELUpdateResponseResultIDNEL ZoneSettingNELUpdateResponseResultID = "nel"
 )
 
 // Value of the zone setting.
-type ZoneSettingNelUpdateResponseResultValue struct {
+type ZoneSettingNELUpdateResponseResultValue struct {
 	Enabled bool                                        `json:"enabled"`
-	JSON    zoneSettingNelUpdateResponseResultValueJSON `json:"-"`
+	JSON    zoneSettingNELUpdateResponseResultValueJSON `json:"-"`
 }
 
-// zoneSettingNelUpdateResponseResultValueJSON contains the JSON metadata for the
-// struct [ZoneSettingNelUpdateResponseResultValue]
-type zoneSettingNelUpdateResponseResultValueJSON struct {
+// zoneSettingNELUpdateResponseResultValueJSON contains the JSON metadata for the
+// struct [ZoneSettingNELUpdateResponseResultValue]
+type zoneSettingNELUpdateResponseResultValueJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelUpdateResponseResultValue) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELUpdateResponseResultValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingNelUpdateResponseResultEditable bool
+type ZoneSettingNELUpdateResponseResultEditable bool
 
 const (
-	ZoneSettingNelUpdateResponseResultEditableTrue  ZoneSettingNelUpdateResponseResultEditable = true
-	ZoneSettingNelUpdateResponseResultEditableFalse ZoneSettingNelUpdateResponseResultEditable = false
+	ZoneSettingNELUpdateResponseResultEditableTrue  ZoneSettingNELUpdateResponseResultEditable = true
+	ZoneSettingNELUpdateResponseResultEditableFalse ZoneSettingNELUpdateResponseResultEditable = false
 )
 
-type ZoneSettingNelListResponse struct {
-	Errors   []ZoneSettingNelListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingNelListResponseMessage `json:"messages,required"`
+type ZoneSettingNELListResponse struct {
+	Errors   []ZoneSettingNELListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingNELListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                             `json:"success,required"`
-	Result  ZoneSettingNelListResponseResult `json:"result"`
-	JSON    zoneSettingNelListResponseJSON   `json:"-"`
+	Result  ZoneSettingNELListResponseResult `json:"result"`
+	JSON    zoneSettingNELListResponseJSON   `json:"-"`
 }
 
-// zoneSettingNelListResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingNelListResponse]
-type zoneSettingNelListResponseJSON struct {
+// zoneSettingNELListResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingNELListResponse]
+type zoneSettingNELListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -194,64 +194,64 @@ type zoneSettingNelListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelListResponseError struct {
+type ZoneSettingNELListResponseError struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
-	JSON    zoneSettingNelListResponseErrorJSON `json:"-"`
+	JSON    zoneSettingNELListResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingNelListResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingNelListResponseError]
-type zoneSettingNelListResponseErrorJSON struct {
+// zoneSettingNELListResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingNELListResponseError]
+type zoneSettingNELListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelListResponseMessage struct {
+type ZoneSettingNELListResponseMessage struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingNelListResponseMessageJSON `json:"-"`
+	JSON    zoneSettingNELListResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingNelListResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneSettingNelListResponseMessage]
-type zoneSettingNelListResponseMessageJSON struct {
+// zoneSettingNELListResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneSettingNELListResponseMessage]
+type zoneSettingNELListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingNelListResponseResult struct {
+type ZoneSettingNELListResponseResult struct {
 	// Zone setting identifier.
-	ID ZoneSettingNelListResponseResultID `json:"id,required"`
+	ID ZoneSettingNELListResponseResultID `json:"id,required"`
 	// Value of the zone setting.
-	Value ZoneSettingNelListResponseResultValue `json:"value,required"`
+	Value ZoneSettingNELListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingNelListResponseResultEditable `json:"editable"`
+	Editable ZoneSettingNELListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingNelListResponseResultJSON `json:"-"`
+	JSON       zoneSettingNELListResponseResultJSON `json:"-"`
 }
 
-// zoneSettingNelListResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingNelListResponseResult]
-type zoneSettingNelListResponseResultJSON struct {
+// zoneSettingNELListResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingNELListResponseResult]
+type zoneSettingNELListResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -260,86 +260,86 @@ type zoneSettingNelListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Zone setting identifier.
-type ZoneSettingNelListResponseResultID string
+type ZoneSettingNELListResponseResultID string
 
 const (
-	ZoneSettingNelListResponseResultIDNel ZoneSettingNelListResponseResultID = "nel"
+	ZoneSettingNELListResponseResultIDNEL ZoneSettingNELListResponseResultID = "nel"
 )
 
 // Value of the zone setting.
-type ZoneSettingNelListResponseResultValue struct {
+type ZoneSettingNELListResponseResultValue struct {
 	Enabled bool                                      `json:"enabled"`
-	JSON    zoneSettingNelListResponseResultValueJSON `json:"-"`
+	JSON    zoneSettingNELListResponseResultValueJSON `json:"-"`
 }
 
-// zoneSettingNelListResponseResultValueJSON contains the JSON metadata for the
-// struct [ZoneSettingNelListResponseResultValue]
-type zoneSettingNelListResponseResultValueJSON struct {
+// zoneSettingNELListResponseResultValueJSON contains the JSON metadata for the
+// struct [ZoneSettingNELListResponseResultValue]
+type zoneSettingNELListResponseResultValueJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingNelListResponseResultValue) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingNELListResponseResultValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingNelListResponseResultEditable bool
+type ZoneSettingNELListResponseResultEditable bool
 
 const (
-	ZoneSettingNelListResponseResultEditableTrue  ZoneSettingNelListResponseResultEditable = true
-	ZoneSettingNelListResponseResultEditableFalse ZoneSettingNelListResponseResultEditable = false
+	ZoneSettingNELListResponseResultEditableTrue  ZoneSettingNELListResponseResultEditable = true
+	ZoneSettingNELListResponseResultEditableFalse ZoneSettingNELListResponseResultEditable = false
 )
 
-type ZoneSettingNelUpdateParams struct {
+type ZoneSettingNELUpdateParams struct {
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Value param.Field[ZoneSettingNelUpdateParamsValue] `json:"value,required"`
+	Value param.Field[ZoneSettingNELUpdateParamsValue] `json:"value,required"`
 }
 
-func (r ZoneSettingNelUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingNELUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-type ZoneSettingNelUpdateParamsValue struct {
+type ZoneSettingNELUpdateParamsValue struct {
 	// Zone setting identifier.
-	ID param.Field[ZoneSettingNelUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingNELUpdateParamsValueID] `json:"id,required"`
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingNelUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[ZoneSettingNELUpdateParamsValueValue] `json:"value,required"`
 }
 
-func (r ZoneSettingNelUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingNELUpdateParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Zone setting identifier.
-type ZoneSettingNelUpdateParamsValueID string
+type ZoneSettingNELUpdateParamsValueID string
 
 const (
-	ZoneSettingNelUpdateParamsValueIDNel ZoneSettingNelUpdateParamsValueID = "nel"
+	ZoneSettingNELUpdateParamsValueIDNEL ZoneSettingNELUpdateParamsValueID = "nel"
 )
 
 // Value of the zone setting.
-type ZoneSettingNelUpdateParamsValueValue struct {
+type ZoneSettingNELUpdateParamsValueValue struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ZoneSettingNelUpdateParamsValueValue) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingNELUpdateParamsValueValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingNelUpdateParamsValueEditable bool
+type ZoneSettingNELUpdateParamsValueEditable bool
 
 const (
-	ZoneSettingNelUpdateParamsValueEditableTrue  ZoneSettingNelUpdateParamsValueEditable = true
-	ZoneSettingNelUpdateParamsValueEditableFalse ZoneSettingNelUpdateParamsValueEditable = false
+	ZoneSettingNELUpdateParamsValueEditableTrue  ZoneSettingNELUpdateParamsValueEditable = true
+	ZoneSettingNELUpdateParamsValueEditableFalse ZoneSettingNELUpdateParamsValueEditable = false
 )

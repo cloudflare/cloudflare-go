@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingNelUpdateWithOptionalParams(t *testing.T) {
+func TestZoneSettingNELUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -26,13 +26,13 @@ func TestZoneSettingNelUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Nels.Update(
+	_, err := client.Zones.Settings.NELs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingNelUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingNelUpdateParamsValue{
-				ID: cloudflare.F(cloudflare.ZoneSettingNelUpdateParamsValueIDNel),
-				Value: cloudflare.F(cloudflare.ZoneSettingNelUpdateParamsValueValue{
+		cloudflare.ZoneSettingNELUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingNELUpdateParamsValue{
+				ID: cloudflare.F(cloudflare.ZoneSettingNELUpdateParamsValueIDNEL),
+				Value: cloudflare.F(cloudflare.ZoneSettingNELUpdateParamsValueValue{
 					Enabled: cloudflare.F(false),
 				}),
 			}),
@@ -47,7 +47,7 @@ func TestZoneSettingNelUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZoneSettingNelList(t *testing.T) {
+func TestZoneSettingNELList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,7 +60,7 @@ func TestZoneSettingNelList(t *testing.T) {
 		option.WithAPIKey("my-cloudflare-api-key"),
 		option.WithEmail("dev@cloudflare.com"),
 	)
-	_, err := client.Zones.Settings.Nels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.NELs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
