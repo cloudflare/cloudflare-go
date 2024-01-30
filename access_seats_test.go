@@ -34,7 +34,7 @@ func TestUpdateAccessUsersSeats_MissingUID(t *testing.T) {
 	setup()
 	defer teardown()
 
-	_, err := client.UpdateAccessUsersSeats(context.Background(), testAccountRC, []UpdateAccessUserSeatParams{{GatewaySeat: BoolPtr(false), SeatUID: "seat_id"}, {SeatUID: "", AccessSeat: BoolPtr(true)}})
+	_, err := client.UpdateAccessUsersSeats(context.Background(), testAccountRC, UpdateAccessUsersSeatsParams{{GatewaySeat: BoolPtr(false), SeatUID: "seat_id"}, {SeatUID: "", AccessSeat: BoolPtr(true)}})
 	assert.EqualError(t, err, "missing required access seat UID")
 }
 
@@ -164,7 +164,7 @@ func TestUpdateAccessUsersSeats(t *testing.T) {
 		},
 	}
 
-	actual, err := client.UpdateAccessUsersSeats(context.Background(), testAccountRC, []UpdateAccessUserSeatParams{
+	actual, err := client.UpdateAccessUsersSeats(context.Background(), testAccountRC, UpdateAccessUsersSeatsParams{
 		{
 			SeatUID:     testAccessGroupSeatUID,
 			AccessSeat:  BoolPtr(false),

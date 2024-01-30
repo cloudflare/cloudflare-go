@@ -28,6 +28,13 @@ type UpdateAccessUserSeatParams struct {
 	GatewaySeat *bool  `json:"gateway_seat"`
 }
 
+// UpdateAccessUsersSeatsParams represents the update payload for multiple access seats.
+type UpdateAccessUsersSeatsParams []struct {
+	SeatUID     string `json:"seat_uid,omitempty"`
+	AccessSeat  *bool  `json:"access_seat"`
+	GatewaySeat *bool  `json:"gateway_seat"`
+}
+
 // AccessUserSeatResponse represents the response from the access user seat endpoints.
 type UpdateAccessUserSeatResponse struct {
 	Response
@@ -71,7 +78,7 @@ func (api *API) UpdateAccessUserSeat(ctx context.Context, rc *ResourceContainer,
 // UpdateAccessUsersSeats updates many Access User Seats.
 //
 // API documentation: https://developers.cloudflare.com/api/operations/zero-trust-seats-update-a-user-seat
-func (api *API) UpdateAccessUsersSeats(ctx context.Context, rc *ResourceContainer, params []UpdateAccessUserSeatParams) ([]AccessUpdateAccessUserSeatResult, error) {
+func (api *API) UpdateAccessUsersSeats(ctx context.Context, rc *ResourceContainer, params UpdateAccessUsersSeatsParams) ([]AccessUpdateAccessUserSeatResult, error) {
 	if rc.Level != AccountRouteLevel {
 		return []AccessUpdateAccessUserSeatResult{}, fmt.Errorf(errInvalidResourceContainerAccess, rc.Level)
 	}
