@@ -14,7 +14,6 @@ import (
 )
 
 func TestZoneSettingAutomaticPlatformOptimizationUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -24,10 +23,8 @@ func TestZoneSettingAutomaticPlatformOptimizationUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithAPIToken("my-cloudflare-api-token"),
-		option.WithUserServiceKey("my-cloudflare-user-service-key"),
+		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.AutomaticPlatformOptimizations.Update(
 		context.TODO(),
@@ -53,7 +50,6 @@ func TestZoneSettingAutomaticPlatformOptimizationUpdate(t *testing.T) {
 }
 
 func TestZoneSettingAutomaticPlatformOptimizationList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -63,10 +59,8 @@ func TestZoneSettingAutomaticPlatformOptimizationList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIKey("my-cloudflare-api-key"),
-		option.WithAPIToken("my-cloudflare-api-token"),
-		option.WithUserServiceKey("my-cloudflare-user-service-key"),
+		option.WithEmail("dev@cloudflare.com"),
 	)
 	_, err := client.Zones.Settings.AutomaticPlatformOptimizations.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

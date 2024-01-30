@@ -55,16 +55,12 @@ func (r *ZoneSettingBrowserCacheTtlService) List(ctx context.Context, zoneIdenti
 }
 
 type ZoneSettingBrowserCacheTtlUpdateResponse struct {
-	Errors   []ZoneSettingBrowserCacheTtlUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingBrowserCacheTtlUpdateResponseMessage `json:"messages"`
-	// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-	// will remain on your visitors' computers. Cloudflare will honor any larger times
-	// specified by your server.
-	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-	Result ZoneSettingBrowserCacheTtlUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingBrowserCacheTtlUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingBrowserCacheTtlUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success"`
-	JSON    zoneSettingBrowserCacheTtlUpdateResponseJSON `json:"-"`
+	Success bool                                           `json:"success,required"`
+	Result  ZoneSettingBrowserCacheTtlUpdateResponseResult `json:"result"`
+	JSON    zoneSettingBrowserCacheTtlUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseJSON contains the JSON metadata for the
@@ -72,8 +68,8 @@ type ZoneSettingBrowserCacheTtlUpdateResponse struct {
 type zoneSettingBrowserCacheTtlUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -120,31 +116,27 @@ func (r *ZoneSettingBrowserCacheTtlUpdateResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-// will remain on your visitors' computers. Cloudflare will honor any larger times
-// specified by your server.
-// (https://support.cloudflare.com/hc/en-us/articles/200168276).
 type ZoneSettingBrowserCacheTtlUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrowserCacheTtlUpdateResponseResultID `json:"id"`
+	ID ZoneSettingBrowserCacheTtlUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
+	// `Respect Existing Headers`
+	Value ZoneSettingBrowserCacheTtlUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingBrowserCacheTtlUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
-	// `Respect Existing Headers`
-	Value ZoneSettingBrowserCacheTtlUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCacheTtlUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingBrowserCacheTtlUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingBrowserCacheTtlUpdateResponseResult]
 type zoneSettingBrowserCacheTtlUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -158,15 +150,6 @@ type ZoneSettingBrowserCacheTtlUpdateResponseResultID string
 
 const (
 	ZoneSettingBrowserCacheTtlUpdateResponseResultIDBrowserCacheTtl ZoneSettingBrowserCacheTtlUpdateResponseResultID = "browser_cache_ttl"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingBrowserCacheTtlUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingBrowserCacheTtlUpdateResponseResultEditableTrue  ZoneSettingBrowserCacheTtlUpdateResponseResultEditable = true
-	ZoneSettingBrowserCacheTtlUpdateResponseResultEditableFalse ZoneSettingBrowserCacheTtlUpdateResponseResultEditable = false
 )
 
 // Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
@@ -204,17 +187,22 @@ const (
 	ZoneSettingBrowserCacheTtlUpdateResponseResultValue31536000 ZoneSettingBrowserCacheTtlUpdateResponseResultValue = 31536000
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingBrowserCacheTtlUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingBrowserCacheTtlUpdateResponseResultEditableTrue  ZoneSettingBrowserCacheTtlUpdateResponseResultEditable = true
+	ZoneSettingBrowserCacheTtlUpdateResponseResultEditableFalse ZoneSettingBrowserCacheTtlUpdateResponseResultEditable = false
+)
+
 type ZoneSettingBrowserCacheTtlListResponse struct {
-	Errors   []ZoneSettingBrowserCacheTtlListResponseError   `json:"errors"`
-	Messages []ZoneSettingBrowserCacheTtlListResponseMessage `json:"messages"`
-	// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-	// will remain on your visitors' computers. Cloudflare will honor any larger times
-	// specified by your server.
-	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-	Result ZoneSettingBrowserCacheTtlListResponseResult `json:"result"`
+	Errors   []ZoneSettingBrowserCacheTtlListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingBrowserCacheTtlListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success"`
-	JSON    zoneSettingBrowserCacheTtlListResponseJSON `json:"-"`
+	Success bool                                         `json:"success,required"`
+	Result  ZoneSettingBrowserCacheTtlListResponseResult `json:"result"`
+	JSON    zoneSettingBrowserCacheTtlListResponseJSON   `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseJSON contains the JSON metadata for the
@@ -222,8 +210,8 @@ type ZoneSettingBrowserCacheTtlListResponse struct {
 type zoneSettingBrowserCacheTtlListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -270,31 +258,27 @@ func (r *ZoneSettingBrowserCacheTtlListResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-// will remain on your visitors' computers. Cloudflare will honor any larger times
-// specified by your server.
-// (https://support.cloudflare.com/hc/en-us/articles/200168276).
 type ZoneSettingBrowserCacheTtlListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrowserCacheTtlListResponseResultID `json:"id"`
+	ID ZoneSettingBrowserCacheTtlListResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
+	// `Respect Existing Headers`
+	Value ZoneSettingBrowserCacheTtlListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingBrowserCacheTtlListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
-	// `Respect Existing Headers`
-	Value ZoneSettingBrowserCacheTtlListResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCacheTtlListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingBrowserCacheTtlListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingBrowserCacheTtlListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingBrowserCacheTtlListResponseResult]
 type zoneSettingBrowserCacheTtlListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -308,15 +292,6 @@ type ZoneSettingBrowserCacheTtlListResponseResultID string
 
 const (
 	ZoneSettingBrowserCacheTtlListResponseResultIDBrowserCacheTtl ZoneSettingBrowserCacheTtlListResponseResultID = "browser_cache_ttl"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingBrowserCacheTtlListResponseResultEditable bool
-
-const (
-	ZoneSettingBrowserCacheTtlListResponseResultEditableTrue  ZoneSettingBrowserCacheTtlListResponseResultEditable = true
-	ZoneSettingBrowserCacheTtlListResponseResultEditableFalse ZoneSettingBrowserCacheTtlListResponseResultEditable = false
 )
 
 // Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
@@ -352,6 +327,15 @@ const (
 	ZoneSettingBrowserCacheTtlListResponseResultValue5356800  ZoneSettingBrowserCacheTtlListResponseResultValue = 5356800
 	ZoneSettingBrowserCacheTtlListResponseResultValue16070400 ZoneSettingBrowserCacheTtlListResponseResultValue = 16070400
 	ZoneSettingBrowserCacheTtlListResponseResultValue31536000 ZoneSettingBrowserCacheTtlListResponseResultValue = 31536000
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingBrowserCacheTtlListResponseResultEditable bool
+
+const (
+	ZoneSettingBrowserCacheTtlListResponseResultEditableTrue  ZoneSettingBrowserCacheTtlListResponseResultEditable = true
+	ZoneSettingBrowserCacheTtlListResponseResultEditableFalse ZoneSettingBrowserCacheTtlListResponseResultEditable = false
 )
 
 type ZoneSettingBrowserCacheTtlUpdateParams struct {

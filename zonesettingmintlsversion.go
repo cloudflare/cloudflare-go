@@ -49,15 +49,12 @@ func (r *ZoneSettingMinTlsVersionService) List(ctx context.Context, zoneIdentifi
 }
 
 type ZoneSettingMinTlsVersionUpdateResponse struct {
-	Errors   []ZoneSettingMinTlsVersionUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingMinTlsVersionUpdateResponseMessage `json:"messages"`
-	// Only accepts HTTPS requests that use at least the TLS protocol version
-	// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-	Result ZoneSettingMinTlsVersionUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingMinTlsVersionUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingMinTlsVersionUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success"`
-	JSON    zoneSettingMinTlsVersionUpdateResponseJSON `json:"-"`
+	Success bool                                         `json:"success,required"`
+	Result  ZoneSettingMinTlsVersionUpdateResponseResult `json:"result"`
+	JSON    zoneSettingMinTlsVersionUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseJSON contains the JSON metadata for the
@@ -65,8 +62,8 @@ type ZoneSettingMinTlsVersionUpdateResponse struct {
 type zoneSettingMinTlsVersionUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -113,29 +110,26 @@ func (r *ZoneSettingMinTlsVersionUpdateResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Only accepts HTTPS requests that use at least the TLS protocol version
-// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
 type ZoneSettingMinTlsVersionUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingMinTlsVersionUpdateResponseResultID `json:"id"`
+	ID ZoneSettingMinTlsVersionUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingMinTlsVersionUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMinTlsVersionUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingMinTlsVersionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingMinTlsVersionUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingMinTlsVersionUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingMinTlsVersionUpdateResponseResult]
 type zoneSettingMinTlsVersionUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,15 +145,6 @@ const (
 	ZoneSettingMinTlsVersionUpdateResponseResultIDMinTlsVersion ZoneSettingMinTlsVersionUpdateResponseResultID = "min_tls_version"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingMinTlsVersionUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingMinTlsVersionUpdateResponseResultEditableTrue  ZoneSettingMinTlsVersionUpdateResponseResultEditable = true
-	ZoneSettingMinTlsVersionUpdateResponseResultEditableFalse ZoneSettingMinTlsVersionUpdateResponseResultEditable = false
-)
-
 // Value of the zone setting.
 type ZoneSettingMinTlsVersionUpdateResponseResultValue string
 
@@ -170,16 +155,22 @@ const (
 	ZoneSettingMinTlsVersionUpdateResponseResultValue1_3 ZoneSettingMinTlsVersionUpdateResponseResultValue = "1.3"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingMinTlsVersionUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingMinTlsVersionUpdateResponseResultEditableTrue  ZoneSettingMinTlsVersionUpdateResponseResultEditable = true
+	ZoneSettingMinTlsVersionUpdateResponseResultEditableFalse ZoneSettingMinTlsVersionUpdateResponseResultEditable = false
+)
+
 type ZoneSettingMinTlsVersionListResponse struct {
-	Errors   []ZoneSettingMinTlsVersionListResponseError   `json:"errors"`
-	Messages []ZoneSettingMinTlsVersionListResponseMessage `json:"messages"`
-	// Only accepts HTTPS requests that use at least the TLS protocol version
-	// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-	// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-	Result ZoneSettingMinTlsVersionListResponseResult `json:"result"`
+	Errors   []ZoneSettingMinTlsVersionListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingMinTlsVersionListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                     `json:"success"`
-	JSON    zoneSettingMinTlsVersionListResponseJSON `json:"-"`
+	Success bool                                       `json:"success,required"`
+	Result  ZoneSettingMinTlsVersionListResponseResult `json:"result"`
+	JSON    zoneSettingMinTlsVersionListResponseJSON   `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseJSON contains the JSON metadata for the
@@ -187,8 +178,8 @@ type ZoneSettingMinTlsVersionListResponse struct {
 type zoneSettingMinTlsVersionListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -235,29 +226,26 @@ func (r *ZoneSettingMinTlsVersionListResponseMessage) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Only accepts HTTPS requests that use at least the TLS protocol version
-// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
 type ZoneSettingMinTlsVersionListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingMinTlsVersionListResponseResultID `json:"id"`
+	ID ZoneSettingMinTlsVersionListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingMinTlsVersionListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMinTlsVersionListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingMinTlsVersionListResponseResultValue `json:"value"`
-	JSON  zoneSettingMinTlsVersionListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingMinTlsVersionListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingMinTlsVersionListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingMinTlsVersionListResponseResult]
 type zoneSettingMinTlsVersionListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -273,15 +261,6 @@ const (
 	ZoneSettingMinTlsVersionListResponseResultIDMinTlsVersion ZoneSettingMinTlsVersionListResponseResultID = "min_tls_version"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingMinTlsVersionListResponseResultEditable bool
-
-const (
-	ZoneSettingMinTlsVersionListResponseResultEditableTrue  ZoneSettingMinTlsVersionListResponseResultEditable = true
-	ZoneSettingMinTlsVersionListResponseResultEditableFalse ZoneSettingMinTlsVersionListResponseResultEditable = false
-)
-
 // Value of the zone setting.
 type ZoneSettingMinTlsVersionListResponseResultValue string
 
@@ -290,6 +269,15 @@ const (
 	ZoneSettingMinTlsVersionListResponseResultValue1_1 ZoneSettingMinTlsVersionListResponseResultValue = "1.1"
 	ZoneSettingMinTlsVersionListResponseResultValue1_2 ZoneSettingMinTlsVersionListResponseResultValue = "1.2"
 	ZoneSettingMinTlsVersionListResponseResultValue1_3 ZoneSettingMinTlsVersionListResponseResultValue = "1.3"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingMinTlsVersionListResponseResultEditable bool
+
+const (
+	ZoneSettingMinTlsVersionListResponseResultEditableTrue  ZoneSettingMinTlsVersionListResponseResultEditable = true
+	ZoneSettingMinTlsVersionListResponseResultEditableFalse ZoneSettingMinTlsVersionListResponseResultEditable = false
 )
 
 type ZoneSettingMinTlsVersionUpdateParams struct {

@@ -49,13 +49,12 @@ func (r *ZoneSettingPseudoIpv4Service) List(ctx context.Context, zoneIdentifier 
 }
 
 type ZoneSettingPseudoIpv4UpdateResponse struct {
-	Errors   []ZoneSettingPseudoIpv4UpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingPseudoIpv4UpdateResponseMessage `json:"messages"`
-	// The value set for the Pseudo IPv4 setting.
-	Result ZoneSettingPseudoIpv4UpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingPseudoIpv4UpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPseudoIpv4UpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                    `json:"success"`
-	JSON    zoneSettingPseudoIpv4UpdateResponseJSON `json:"-"`
+	Success bool                                      `json:"success,required"`
+	Result  ZoneSettingPseudoIpv4UpdateResponseResult `json:"result"`
+	JSON    zoneSettingPseudoIpv4UpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseJSON contains the JSON metadata for the
@@ -63,8 +62,8 @@ type ZoneSettingPseudoIpv4UpdateResponse struct {
 type zoneSettingPseudoIpv4UpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -111,27 +110,26 @@ func (r *ZoneSettingPseudoIpv4UpdateResponseMessage) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The value set for the Pseudo IPv4 setting.
 type ZoneSettingPseudoIpv4UpdateResponseResult struct {
 	// Value of the Pseudo IPv4 setting.
-	ID ZoneSettingPseudoIpv4UpdateResponseResultID `json:"id"`
+	ID ZoneSettingPseudoIpv4UpdateResponseResultID `json:"id,required"`
+	// Value of the Pseudo IPv4 setting.
+	Value ZoneSettingPseudoIpv4UpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPseudoIpv4UpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the Pseudo IPv4 setting.
-	Value ZoneSettingPseudoIpv4UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPseudoIpv4UpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPseudoIpv4UpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4UpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingPseudoIpv4UpdateResponseResult]
 type zoneSettingPseudoIpv4UpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,15 +145,6 @@ const (
 	ZoneSettingPseudoIpv4UpdateResponseResultIDPseudoIpv4 ZoneSettingPseudoIpv4UpdateResponseResultID = "pseudo_ipv4"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingPseudoIpv4UpdateResponseResultEditable bool
-
-const (
-	ZoneSettingPseudoIpv4UpdateResponseResultEditableTrue  ZoneSettingPseudoIpv4UpdateResponseResultEditable = true
-	ZoneSettingPseudoIpv4UpdateResponseResultEditableFalse ZoneSettingPseudoIpv4UpdateResponseResultEditable = false
-)
-
 // Value of the Pseudo IPv4 setting.
 type ZoneSettingPseudoIpv4UpdateResponseResultValue string
 
@@ -165,14 +154,22 @@ const (
 	ZoneSettingPseudoIpv4UpdateResponseResultValueOverwriteHeader ZoneSettingPseudoIpv4UpdateResponseResultValue = "overwrite_header"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPseudoIpv4UpdateResponseResultEditable bool
+
+const (
+	ZoneSettingPseudoIpv4UpdateResponseResultEditableTrue  ZoneSettingPseudoIpv4UpdateResponseResultEditable = true
+	ZoneSettingPseudoIpv4UpdateResponseResultEditableFalse ZoneSettingPseudoIpv4UpdateResponseResultEditable = false
+)
+
 type ZoneSettingPseudoIpv4ListResponse struct {
-	Errors   []ZoneSettingPseudoIpv4ListResponseError   `json:"errors"`
-	Messages []ZoneSettingPseudoIpv4ListResponseMessage `json:"messages"`
-	// The value set for the Pseudo IPv4 setting.
-	Result ZoneSettingPseudoIpv4ListResponseResult `json:"result"`
+	Errors   []ZoneSettingPseudoIpv4ListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPseudoIpv4ListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                  `json:"success"`
-	JSON    zoneSettingPseudoIpv4ListResponseJSON `json:"-"`
+	Success bool                                    `json:"success,required"`
+	Result  ZoneSettingPseudoIpv4ListResponseResult `json:"result"`
+	JSON    zoneSettingPseudoIpv4ListResponseJSON   `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseJSON contains the JSON metadata for the struct
@@ -180,8 +177,8 @@ type ZoneSettingPseudoIpv4ListResponse struct {
 type zoneSettingPseudoIpv4ListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -228,27 +225,26 @@ func (r *ZoneSettingPseudoIpv4ListResponseMessage) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The value set for the Pseudo IPv4 setting.
 type ZoneSettingPseudoIpv4ListResponseResult struct {
 	// Value of the Pseudo IPv4 setting.
-	ID ZoneSettingPseudoIpv4ListResponseResultID `json:"id"`
+	ID ZoneSettingPseudoIpv4ListResponseResultID `json:"id,required"`
+	// Value of the Pseudo IPv4 setting.
+	Value ZoneSettingPseudoIpv4ListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPseudoIpv4ListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the Pseudo IPv4 setting.
-	Value ZoneSettingPseudoIpv4ListResponseResultValue `json:"value"`
-	JSON  zoneSettingPseudoIpv4ListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPseudoIpv4ListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPseudoIpv4ListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingPseudoIpv4ListResponseResult]
 type zoneSettingPseudoIpv4ListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -264,15 +260,6 @@ const (
 	ZoneSettingPseudoIpv4ListResponseResultIDPseudoIpv4 ZoneSettingPseudoIpv4ListResponseResultID = "pseudo_ipv4"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingPseudoIpv4ListResponseResultEditable bool
-
-const (
-	ZoneSettingPseudoIpv4ListResponseResultEditableTrue  ZoneSettingPseudoIpv4ListResponseResultEditable = true
-	ZoneSettingPseudoIpv4ListResponseResultEditableFalse ZoneSettingPseudoIpv4ListResponseResultEditable = false
-)
-
 // Value of the Pseudo IPv4 setting.
 type ZoneSettingPseudoIpv4ListResponseResultValue string
 
@@ -280,6 +267,15 @@ const (
 	ZoneSettingPseudoIpv4ListResponseResultValueOff             ZoneSettingPseudoIpv4ListResponseResultValue = "off"
 	ZoneSettingPseudoIpv4ListResponseResultValueAddHeader       ZoneSettingPseudoIpv4ListResponseResultValue = "add_header"
 	ZoneSettingPseudoIpv4ListResponseResultValueOverwriteHeader ZoneSettingPseudoIpv4ListResponseResultValue = "overwrite_header"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPseudoIpv4ListResponseResultEditable bool
+
+const (
+	ZoneSettingPseudoIpv4ListResponseResultEditableTrue  ZoneSettingPseudoIpv4ListResponseResultEditable = true
+	ZoneSettingPseudoIpv4ListResponseResultEditableFalse ZoneSettingPseudoIpv4ListResponseResultEditable = false
 )
 
 type ZoneSettingPseudoIpv4UpdateParams struct {

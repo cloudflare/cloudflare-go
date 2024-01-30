@@ -51,14 +51,12 @@ func (r *ZoneSettingPrefetchPreloadService) List(ctx context.Context, zoneIdenti
 }
 
 type ZoneSettingPrefetchPreloadUpdateResponse struct {
-	Errors   []ZoneSettingPrefetchPreloadUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingPrefetchPreloadUpdateResponseMessage `json:"messages"`
-	// Cloudflare will prefetch any URLs that are included in the response headers.
-	// This is limited to Enterprise Zones.
-	Result ZoneSettingPrefetchPreloadUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingPrefetchPreloadUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPrefetchPreloadUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success"`
-	JSON    zoneSettingPrefetchPreloadUpdateResponseJSON `json:"-"`
+	Success bool                                           `json:"success,required"`
+	Result  ZoneSettingPrefetchPreloadUpdateResponseResult `json:"result"`
+	JSON    zoneSettingPrefetchPreloadUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseJSON contains the JSON metadata for the
@@ -66,8 +64,8 @@ type ZoneSettingPrefetchPreloadUpdateResponse struct {
 type zoneSettingPrefetchPreloadUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,28 +112,26 @@ func (r *ZoneSettingPrefetchPreloadUpdateResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Cloudflare will prefetch any URLs that are included in the response headers.
-// This is limited to Enterprise Zones.
 type ZoneSettingPrefetchPreloadUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingPrefetchPreloadUpdateResponseResultID `json:"id"`
+	ID ZoneSettingPrefetchPreloadUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingPrefetchPreloadUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPrefetchPreloadUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingPrefetchPreloadUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPrefetchPreloadUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPrefetchPreloadUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingPrefetchPreloadUpdateResponseResult]
 type zoneSettingPrefetchPreloadUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,6 +147,14 @@ const (
 	ZoneSettingPrefetchPreloadUpdateResponseResultIDPrefetchPreload ZoneSettingPrefetchPreloadUpdateResponseResultID = "prefetch_preload"
 )
 
+// Value of the zone setting.
+type ZoneSettingPrefetchPreloadUpdateResponseResultValue string
+
+const (
+	ZoneSettingPrefetchPreloadUpdateResponseResultValueOn  ZoneSettingPrefetchPreloadUpdateResponseResultValue = "on"
+	ZoneSettingPrefetchPreloadUpdateResponseResultValueOff ZoneSettingPrefetchPreloadUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingPrefetchPreloadUpdateResponseResultEditable bool
@@ -160,23 +164,13 @@ const (
 	ZoneSettingPrefetchPreloadUpdateResponseResultEditableFalse ZoneSettingPrefetchPreloadUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingPrefetchPreloadUpdateResponseResultValue string
-
-const (
-	ZoneSettingPrefetchPreloadUpdateResponseResultValueOn  ZoneSettingPrefetchPreloadUpdateResponseResultValue = "on"
-	ZoneSettingPrefetchPreloadUpdateResponseResultValueOff ZoneSettingPrefetchPreloadUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingPrefetchPreloadListResponse struct {
-	Errors   []ZoneSettingPrefetchPreloadListResponseError   `json:"errors"`
-	Messages []ZoneSettingPrefetchPreloadListResponseMessage `json:"messages"`
-	// Cloudflare will prefetch any URLs that are included in the response headers.
-	// This is limited to Enterprise Zones.
-	Result ZoneSettingPrefetchPreloadListResponseResult `json:"result"`
+	Errors   []ZoneSettingPrefetchPreloadListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPrefetchPreloadListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success"`
-	JSON    zoneSettingPrefetchPreloadListResponseJSON `json:"-"`
+	Success bool                                         `json:"success,required"`
+	Result  ZoneSettingPrefetchPreloadListResponseResult `json:"result"`
+	JSON    zoneSettingPrefetchPreloadListResponseJSON   `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseJSON contains the JSON metadata for the
@@ -184,8 +178,8 @@ type ZoneSettingPrefetchPreloadListResponse struct {
 type zoneSettingPrefetchPreloadListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -232,28 +226,26 @@ func (r *ZoneSettingPrefetchPreloadListResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Cloudflare will prefetch any URLs that are included in the response headers.
-// This is limited to Enterprise Zones.
 type ZoneSettingPrefetchPreloadListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingPrefetchPreloadListResponseResultID `json:"id"`
+	ID ZoneSettingPrefetchPreloadListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingPrefetchPreloadListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPrefetchPreloadListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingPrefetchPreloadListResponseResultValue `json:"value"`
-	JSON  zoneSettingPrefetchPreloadListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPrefetchPreloadListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPrefetchPreloadListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingPrefetchPreloadListResponseResult]
 type zoneSettingPrefetchPreloadListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -269,6 +261,14 @@ const (
 	ZoneSettingPrefetchPreloadListResponseResultIDPrefetchPreload ZoneSettingPrefetchPreloadListResponseResultID = "prefetch_preload"
 )
 
+// Value of the zone setting.
+type ZoneSettingPrefetchPreloadListResponseResultValue string
+
+const (
+	ZoneSettingPrefetchPreloadListResponseResultValueOn  ZoneSettingPrefetchPreloadListResponseResultValue = "on"
+	ZoneSettingPrefetchPreloadListResponseResultValueOff ZoneSettingPrefetchPreloadListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingPrefetchPreloadListResponseResultEditable bool
@@ -276,14 +276,6 @@ type ZoneSettingPrefetchPreloadListResponseResultEditable bool
 const (
 	ZoneSettingPrefetchPreloadListResponseResultEditableTrue  ZoneSettingPrefetchPreloadListResponseResultEditable = true
 	ZoneSettingPrefetchPreloadListResponseResultEditableFalse ZoneSettingPrefetchPreloadListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingPrefetchPreloadListResponseResultValue string
-
-const (
-	ZoneSettingPrefetchPreloadListResponseResultValueOn  ZoneSettingPrefetchPreloadListResponseResultValue = "on"
-	ZoneSettingPrefetchPreloadListResponseResultValueOff ZoneSettingPrefetchPreloadListResponseResultValue = "off"
 )
 
 type ZoneSettingPrefetchPreloadUpdateParams struct {

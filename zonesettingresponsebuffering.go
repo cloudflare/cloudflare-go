@@ -55,16 +55,12 @@ func (r *ZoneSettingResponseBufferingService) List(ctx context.Context, zoneIden
 }
 
 type ZoneSettingResponseBufferingUpdateResponse struct {
-	Errors   []ZoneSettingResponseBufferingUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingResponseBufferingUpdateResponseMessage `json:"messages"`
-	// Enables or disables buffering of responses from the proxied server. Cloudflare
-	// may buffer the whole payload to deliver it at once to the client versus allowing
-	// it to be delivered in chunks. By default, the proxied server streams directly
-	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-	Result ZoneSettingResponseBufferingUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingResponseBufferingUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingResponseBufferingUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                           `json:"success"`
-	JSON    zoneSettingResponseBufferingUpdateResponseJSON `json:"-"`
+	Success bool                                             `json:"success,required"`
+	Result  ZoneSettingResponseBufferingUpdateResponseResult `json:"result"`
+	JSON    zoneSettingResponseBufferingUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseJSON contains the JSON metadata for
@@ -72,8 +68,8 @@ type ZoneSettingResponseBufferingUpdateResponse struct {
 type zoneSettingResponseBufferingUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -120,30 +116,26 @@ func (r *ZoneSettingResponseBufferingUpdateResponseMessage) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enables or disables buffering of responses from the proxied server. Cloudflare
-// may buffer the whole payload to deliver it at once to the client versus allowing
-// it to be delivered in chunks. By default, the proxied server streams directly
-// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
 type ZoneSettingResponseBufferingUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingResponseBufferingUpdateResponseResultID `json:"id"`
+	ID ZoneSettingResponseBufferingUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingResponseBufferingUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingResponseBufferingUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingResponseBufferingUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingResponseBufferingUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingResponseBufferingUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingResponseBufferingUpdateResponseResult]
 type zoneSettingResponseBufferingUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -159,6 +151,14 @@ const (
 	ZoneSettingResponseBufferingUpdateResponseResultIDResponseBuffering ZoneSettingResponseBufferingUpdateResponseResultID = "response_buffering"
 )
 
+// Value of the zone setting.
+type ZoneSettingResponseBufferingUpdateResponseResultValue string
+
+const (
+	ZoneSettingResponseBufferingUpdateResponseResultValueOn  ZoneSettingResponseBufferingUpdateResponseResultValue = "on"
+	ZoneSettingResponseBufferingUpdateResponseResultValueOff ZoneSettingResponseBufferingUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingResponseBufferingUpdateResponseResultEditable bool
@@ -168,25 +168,13 @@ const (
 	ZoneSettingResponseBufferingUpdateResponseResultEditableFalse ZoneSettingResponseBufferingUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingResponseBufferingUpdateResponseResultValue string
-
-const (
-	ZoneSettingResponseBufferingUpdateResponseResultValueOn  ZoneSettingResponseBufferingUpdateResponseResultValue = "on"
-	ZoneSettingResponseBufferingUpdateResponseResultValueOff ZoneSettingResponseBufferingUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingResponseBufferingListResponse struct {
-	Errors   []ZoneSettingResponseBufferingListResponseError   `json:"errors"`
-	Messages []ZoneSettingResponseBufferingListResponseMessage `json:"messages"`
-	// Enables or disables buffering of responses from the proxied server. Cloudflare
-	// may buffer the whole payload to deliver it at once to the client versus allowing
-	// it to be delivered in chunks. By default, the proxied server streams directly
-	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-	Result ZoneSettingResponseBufferingListResponseResult `json:"result"`
+	Errors   []ZoneSettingResponseBufferingListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingResponseBufferingListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success"`
-	JSON    zoneSettingResponseBufferingListResponseJSON `json:"-"`
+	Success bool                                           `json:"success,required"`
+	Result  ZoneSettingResponseBufferingListResponseResult `json:"result"`
+	JSON    zoneSettingResponseBufferingListResponseJSON   `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseJSON contains the JSON metadata for the
@@ -194,8 +182,8 @@ type ZoneSettingResponseBufferingListResponse struct {
 type zoneSettingResponseBufferingListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -242,30 +230,26 @@ func (r *ZoneSettingResponseBufferingListResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enables or disables buffering of responses from the proxied server. Cloudflare
-// may buffer the whole payload to deliver it at once to the client versus allowing
-// it to be delivered in chunks. By default, the proxied server streams directly
-// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
 type ZoneSettingResponseBufferingListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingResponseBufferingListResponseResultID `json:"id"`
+	ID ZoneSettingResponseBufferingListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingResponseBufferingListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingResponseBufferingListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingResponseBufferingListResponseResultValue `json:"value"`
-	JSON  zoneSettingResponseBufferingListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingResponseBufferingListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingResponseBufferingListResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingResponseBufferingListResponseResult]
 type zoneSettingResponseBufferingListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -281,6 +265,14 @@ const (
 	ZoneSettingResponseBufferingListResponseResultIDResponseBuffering ZoneSettingResponseBufferingListResponseResultID = "response_buffering"
 )
 
+// Value of the zone setting.
+type ZoneSettingResponseBufferingListResponseResultValue string
+
+const (
+	ZoneSettingResponseBufferingListResponseResultValueOn  ZoneSettingResponseBufferingListResponseResultValue = "on"
+	ZoneSettingResponseBufferingListResponseResultValueOff ZoneSettingResponseBufferingListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingResponseBufferingListResponseResultEditable bool
@@ -288,14 +280,6 @@ type ZoneSettingResponseBufferingListResponseResultEditable bool
 const (
 	ZoneSettingResponseBufferingListResponseResultEditableTrue  ZoneSettingResponseBufferingListResponseResultEditable = true
 	ZoneSettingResponseBufferingListResponseResultEditableFalse ZoneSettingResponseBufferingListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingResponseBufferingListResponseResultValue string
-
-const (
-	ZoneSettingResponseBufferingListResponseResultValueOn  ZoneSettingResponseBufferingListResponseResultValue = "on"
-	ZoneSettingResponseBufferingListResponseResultValueOff ZoneSettingResponseBufferingListResponseResultValue = "off"
 )
 
 type ZoneSettingResponseBufferingUpdateParams struct {

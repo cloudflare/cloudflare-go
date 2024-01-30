@@ -79,28 +79,12 @@ func (r *ZoneSettingSslService) List(ctx context.Context, zoneIdentifier string,
 }
 
 type ZoneSettingSslUpdateResponse struct {
-	Errors   []ZoneSettingSslUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingSslUpdateResponseMessage `json:"messages"`
-	// SSL encrypts your visitor's connection and safeguards credit card numbers and
-	// other personal data to and from your website. SSL can take up to 5 minutes to
-	// fully activate. Requires Cloudflare active on your root domain or www domain.
-	// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-	// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-	// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-	// your web server. You don't need to have an SSL cert on your web server, but your
-	// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-	// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-	// Cloudflare and your web server. You'll need to have your own SSL cert or
-	// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-	// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-	// your web server. You'll need to have a valid SSL certificate installed on your
-	// web server. This certificate must be signed by a certificate authority, have an
-	// expiration date in the future, and respond for the request domain name
-	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result ZoneSettingSslUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingSslUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSslUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                             `json:"success"`
-	JSON    zoneSettingSslUpdateResponseJSON `json:"-"`
+	Success bool                               `json:"success,required"`
+	Result  ZoneSettingSslUpdateResponseResult `json:"result"`
+	JSON    zoneSettingSslUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseJSON contains the JSON metadata for the struct
@@ -108,8 +92,8 @@ type ZoneSettingSslUpdateResponse struct {
 type zoneSettingSslUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -156,42 +140,26 @@ func (r *ZoneSettingSslUpdateResponseMessage) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// SSL encrypts your visitor's connection and safeguards credit card numbers and
-// other personal data to and from your website. SSL can take up to 5 minutes to
-// fully activate. Requires Cloudflare active on your root domain or www domain.
-// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-// your web server. You don't need to have an SSL cert on your web server, but your
-// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-// Cloudflare and your web server. You'll need to have your own SSL cert or
-// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-// your web server. You'll need to have a valid SSL certificate installed on your
-// web server. This certificate must be signed by a certificate authority, have an
-// expiration date in the future, and respond for the request domain name
-// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
 type ZoneSettingSslUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingSslUpdateResponseResultID `json:"id"`
+	ID ZoneSettingSslUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Depends on the zone's plan level
+	Value ZoneSettingSslUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingSslUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value ZoneSettingSslUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingSslUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSslUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslUpdateResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingSslUpdateResponseResult]
 type zoneSettingSslUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -207,15 +175,6 @@ const (
 	ZoneSettingSslUpdateResponseResultIDSsl ZoneSettingSslUpdateResponseResultID = "ssl"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSslUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingSslUpdateResponseResultEditableTrue  ZoneSettingSslUpdateResponseResultEditable = true
-	ZoneSettingSslUpdateResponseResultEditableFalse ZoneSettingSslUpdateResponseResultEditable = false
-)
-
 // Value of the zone setting. Notes: Depends on the zone's plan level
 type ZoneSettingSslUpdateResponseResultValue string
 
@@ -226,29 +185,22 @@ const (
 	ZoneSettingSslUpdateResponseResultValueStrict   ZoneSettingSslUpdateResponseResultValue = "strict"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingSslUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingSslUpdateResponseResultEditableTrue  ZoneSettingSslUpdateResponseResultEditable = true
+	ZoneSettingSslUpdateResponseResultEditableFalse ZoneSettingSslUpdateResponseResultEditable = false
+)
+
 type ZoneSettingSslListResponse struct {
-	Errors   []ZoneSettingSslListResponseError   `json:"errors"`
-	Messages []ZoneSettingSslListResponseMessage `json:"messages"`
-	// SSL encrypts your visitor's connection and safeguards credit card numbers and
-	// other personal data to and from your website. SSL can take up to 5 minutes to
-	// fully activate. Requires Cloudflare active on your root domain or www domain.
-	// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-	// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-	// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-	// your web server. You don't need to have an SSL cert on your web server, but your
-	// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-	// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-	// Cloudflare and your web server. You'll need to have your own SSL cert or
-	// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-	// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-	// your web server. You'll need to have a valid SSL certificate installed on your
-	// web server. This certificate must be signed by a certificate authority, have an
-	// expiration date in the future, and respond for the request domain name
-	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result ZoneSettingSslListResponseResult `json:"result"`
+	Errors   []ZoneSettingSslListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSslListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                           `json:"success"`
-	JSON    zoneSettingSslListResponseJSON `json:"-"`
+	Success bool                             `json:"success,required"`
+	Result  ZoneSettingSslListResponseResult `json:"result"`
+	JSON    zoneSettingSslListResponseJSON   `json:"-"`
 }
 
 // zoneSettingSslListResponseJSON contains the JSON metadata for the struct
@@ -256,8 +208,8 @@ type ZoneSettingSslListResponse struct {
 type zoneSettingSslListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -304,42 +256,26 @@ func (r *ZoneSettingSslListResponseMessage) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// SSL encrypts your visitor's connection and safeguards credit card numbers and
-// other personal data to and from your website. SSL can take up to 5 minutes to
-// fully activate. Requires Cloudflare active on your root domain or www domain.
-// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-// your web server. You don't need to have an SSL cert on your web server, but your
-// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-// Cloudflare and your web server. You'll need to have your own SSL cert or
-// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-// your web server. You'll need to have a valid SSL certificate installed on your
-// web server. This certificate must be signed by a certificate authority, have an
-// expiration date in the future, and respond for the request domain name
-// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
 type ZoneSettingSslListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingSslListResponseResultID `json:"id"`
+	ID ZoneSettingSslListResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Depends on the zone's plan level
+	Value ZoneSettingSslListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingSslListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value ZoneSettingSslListResponseResultValue `json:"value"`
-	JSON  zoneSettingSslListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSslListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSslListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingSslListResponseResult]
 type zoneSettingSslListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -355,15 +291,6 @@ const (
 	ZoneSettingSslListResponseResultIDSsl ZoneSettingSslListResponseResultID = "ssl"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSslListResponseResultEditable bool
-
-const (
-	ZoneSettingSslListResponseResultEditableTrue  ZoneSettingSslListResponseResultEditable = true
-	ZoneSettingSslListResponseResultEditableFalse ZoneSettingSslListResponseResultEditable = false
-)
-
 // Value of the zone setting. Notes: Depends on the zone's plan level
 type ZoneSettingSslListResponseResultValue string
 
@@ -372,6 +299,15 @@ const (
 	ZoneSettingSslListResponseResultValueFlexible ZoneSettingSslListResponseResultValue = "flexible"
 	ZoneSettingSslListResponseResultValueFull     ZoneSettingSslListResponseResultValue = "full"
 	ZoneSettingSslListResponseResultValueStrict   ZoneSettingSslListResponseResultValue = "strict"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingSslListResponseResultEditable bool
+
+const (
+	ZoneSettingSslListResponseResultEditableTrue  ZoneSettingSslListResponseResultEditable = true
+	ZoneSettingSslListResponseResultEditableFalse ZoneSettingSslListResponseResultEditable = false
 )
 
 type ZoneSettingSslUpdateParams struct {

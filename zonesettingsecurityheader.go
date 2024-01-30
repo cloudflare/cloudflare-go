@@ -49,13 +49,12 @@ func (r *ZoneSettingSecurityHeaderService) List(ctx context.Context, zoneIdentif
 }
 
 type ZoneSettingSecurityHeaderUpdateResponse struct {
-	Errors   []ZoneSettingSecurityHeaderUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingSecurityHeaderUpdateResponseMessage `json:"messages"`
-	// Cloudflare security header for a zone.
-	Result ZoneSettingSecurityHeaderUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingSecurityHeaderUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSecurityHeaderUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                        `json:"success"`
-	JSON    zoneSettingSecurityHeaderUpdateResponseJSON `json:"-"`
+	Success bool                                          `json:"success,required"`
+	Result  ZoneSettingSecurityHeaderUpdateResponseResult `json:"result"`
+	JSON    zoneSettingSecurityHeaderUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseJSON contains the JSON metadata for the
@@ -63,8 +62,8 @@ type ZoneSettingSecurityHeaderUpdateResponse struct {
 type zoneSettingSecurityHeaderUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -111,26 +110,25 @@ func (r *ZoneSettingSecurityHeaderUpdateResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Cloudflare security header for a zone.
 type ZoneSettingSecurityHeaderUpdateResponseResult struct {
 	// ID of the zone's security header.
-	ID ZoneSettingSecurityHeaderUpdateResponseResultID `json:"id"`
+	ID    ZoneSettingSecurityHeaderUpdateResponseResultID    `json:"id,required"`
+	Value ZoneSettingSecurityHeaderUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingSecurityHeaderUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	Value      ZoneSettingSecurityHeaderUpdateResponseResultValue `json:"value"`
-	JSON       zoneSettingSecurityHeaderUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSecurityHeaderUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingSecurityHeaderUpdateResponseResult]
 type zoneSettingSecurityHeaderUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -144,15 +142,6 @@ type ZoneSettingSecurityHeaderUpdateResponseResultID string
 
 const (
 	ZoneSettingSecurityHeaderUpdateResponseResultIDSecurityHeader ZoneSettingSecurityHeaderUpdateResponseResultID = "security_header"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSecurityHeaderUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingSecurityHeaderUpdateResponseResultEditableTrue  ZoneSettingSecurityHeaderUpdateResponseResultEditable = true
-	ZoneSettingSecurityHeaderUpdateResponseResultEditableFalse ZoneSettingSecurityHeaderUpdateResponseResultEditable = false
 )
 
 type ZoneSettingSecurityHeaderUpdateResponseResultValue struct {
@@ -202,14 +191,22 @@ func (r *ZoneSettingSecurityHeaderUpdateResponseResultValueStrictTransportSecuri
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingSecurityHeaderUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingSecurityHeaderUpdateResponseResultEditableTrue  ZoneSettingSecurityHeaderUpdateResponseResultEditable = true
+	ZoneSettingSecurityHeaderUpdateResponseResultEditableFalse ZoneSettingSecurityHeaderUpdateResponseResultEditable = false
+)
+
 type ZoneSettingSecurityHeaderListResponse struct {
-	Errors   []ZoneSettingSecurityHeaderListResponseError   `json:"errors"`
-	Messages []ZoneSettingSecurityHeaderListResponseMessage `json:"messages"`
-	// Cloudflare security header for a zone.
-	Result ZoneSettingSecurityHeaderListResponseResult `json:"result"`
+	Errors   []ZoneSettingSecurityHeaderListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSecurityHeaderListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success"`
-	JSON    zoneSettingSecurityHeaderListResponseJSON `json:"-"`
+	Success bool                                        `json:"success,required"`
+	Result  ZoneSettingSecurityHeaderListResponseResult `json:"result"`
+	JSON    zoneSettingSecurityHeaderListResponseJSON   `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseJSON contains the JSON metadata for the
@@ -217,8 +214,8 @@ type ZoneSettingSecurityHeaderListResponse struct {
 type zoneSettingSecurityHeaderListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -265,26 +262,25 @@ func (r *ZoneSettingSecurityHeaderListResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Cloudflare security header for a zone.
 type ZoneSettingSecurityHeaderListResponseResult struct {
 	// ID of the zone's security header.
-	ID ZoneSettingSecurityHeaderListResponseResultID `json:"id"`
+	ID    ZoneSettingSecurityHeaderListResponseResultID    `json:"id,required"`
+	Value ZoneSettingSecurityHeaderListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingSecurityHeaderListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	Value      ZoneSettingSecurityHeaderListResponseResultValue `json:"value"`
-	JSON       zoneSettingSecurityHeaderListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSecurityHeaderListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingSecurityHeaderListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingSecurityHeaderListResponseResult]
 type zoneSettingSecurityHeaderListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -298,15 +294,6 @@ type ZoneSettingSecurityHeaderListResponseResultID string
 
 const (
 	ZoneSettingSecurityHeaderListResponseResultIDSecurityHeader ZoneSettingSecurityHeaderListResponseResultID = "security_header"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingSecurityHeaderListResponseResultEditable bool
-
-const (
-	ZoneSettingSecurityHeaderListResponseResultEditableTrue  ZoneSettingSecurityHeaderListResponseResultEditable = true
-	ZoneSettingSecurityHeaderListResponseResultEditableFalse ZoneSettingSecurityHeaderListResponseResultEditable = false
 )
 
 type ZoneSettingSecurityHeaderListResponseResultValue struct {
@@ -355,6 +342,15 @@ type zoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurityJSON
 func (r *ZoneSettingSecurityHeaderListResponseResultValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingSecurityHeaderListResponseResultEditable bool
+
+const (
+	ZoneSettingSecurityHeaderListResponseResultEditableTrue  ZoneSettingSecurityHeaderListResponseResultEditable = true
+	ZoneSettingSecurityHeaderListResponseResultEditableFalse ZoneSettingSecurityHeaderListResponseResultEditable = false
+)
 
 type ZoneSettingSecurityHeaderUpdateParams struct {
 	Value param.Field[ZoneSettingSecurityHeaderUpdateParamsValue] `json:"value,required"`

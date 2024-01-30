@@ -57,17 +57,12 @@ func (r *ZoneSettingBrowserCheckService) List(ctx context.Context, zoneIdentifie
 }
 
 type ZoneSettingBrowserCheckUpdateResponse struct {
-	Errors   []ZoneSettingBrowserCheckUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingBrowserCheckUpdateResponseMessage `json:"messages"`
-	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-	// headers abused most commonly by spammers and denies access to your page. It will
-	// also challenge visitors that do not have a user agent or a non standard user
-	// agent (also commonly used by abuse bots, crawlers or visitors).
-	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result ZoneSettingBrowserCheckUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingBrowserCheckUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingBrowserCheckUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success"`
-	JSON    zoneSettingBrowserCheckUpdateResponseJSON `json:"-"`
+	Success bool                                        `json:"success,required"`
+	Result  ZoneSettingBrowserCheckUpdateResponseResult `json:"result"`
+	JSON    zoneSettingBrowserCheckUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseJSON contains the JSON metadata for the
@@ -75,8 +70,8 @@ type ZoneSettingBrowserCheckUpdateResponse struct {
 type zoneSettingBrowserCheckUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -123,31 +118,26 @@ func (r *ZoneSettingBrowserCheckUpdateResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-// headers abused most commonly by spammers and denies access to your page. It will
-// also challenge visitors that do not have a user agent or a non standard user
-// agent (also commonly used by abuse bots, crawlers or visitors).
-// (https://support.cloudflare.com/hc/en-us/articles/200170086).
 type ZoneSettingBrowserCheckUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrowserCheckUpdateResponseResultID `json:"id"`
+	ID ZoneSettingBrowserCheckUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingBrowserCheckUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingBrowserCheckUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingBrowserCheckUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCheckUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingBrowserCheckUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingBrowserCheckUpdateResponseResult]
 type zoneSettingBrowserCheckUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,6 +153,14 @@ const (
 	ZoneSettingBrowserCheckUpdateResponseResultIDBrowserCheck ZoneSettingBrowserCheckUpdateResponseResultID = "browser_check"
 )
 
+// Value of the zone setting.
+type ZoneSettingBrowserCheckUpdateResponseResultValue string
+
+const (
+	ZoneSettingBrowserCheckUpdateResponseResultValueOn  ZoneSettingBrowserCheckUpdateResponseResultValue = "on"
+	ZoneSettingBrowserCheckUpdateResponseResultValueOff ZoneSettingBrowserCheckUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingBrowserCheckUpdateResponseResultEditable bool
@@ -172,26 +170,13 @@ const (
 	ZoneSettingBrowserCheckUpdateResponseResultEditableFalse ZoneSettingBrowserCheckUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingBrowserCheckUpdateResponseResultValue string
-
-const (
-	ZoneSettingBrowserCheckUpdateResponseResultValueOn  ZoneSettingBrowserCheckUpdateResponseResultValue = "on"
-	ZoneSettingBrowserCheckUpdateResponseResultValueOff ZoneSettingBrowserCheckUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingBrowserCheckListResponse struct {
-	Errors   []ZoneSettingBrowserCheckListResponseError   `json:"errors"`
-	Messages []ZoneSettingBrowserCheckListResponseMessage `json:"messages"`
-	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-	// headers abused most commonly by spammers and denies access to your page. It will
-	// also challenge visitors that do not have a user agent or a non standard user
-	// agent (also commonly used by abuse bots, crawlers or visitors).
-	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result ZoneSettingBrowserCheckListResponseResult `json:"result"`
+	Errors   []ZoneSettingBrowserCheckListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingBrowserCheckListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                    `json:"success"`
-	JSON    zoneSettingBrowserCheckListResponseJSON `json:"-"`
+	Success bool                                      `json:"success,required"`
+	Result  ZoneSettingBrowserCheckListResponseResult `json:"result"`
+	JSON    zoneSettingBrowserCheckListResponseJSON   `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseJSON contains the JSON metadata for the
@@ -199,8 +184,8 @@ type ZoneSettingBrowserCheckListResponse struct {
 type zoneSettingBrowserCheckListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -247,31 +232,26 @@ func (r *ZoneSettingBrowserCheckListResponseMessage) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-// headers abused most commonly by spammers and denies access to your page. It will
-// also challenge visitors that do not have a user agent or a non standard user
-// agent (also commonly used by abuse bots, crawlers or visitors).
-// (https://support.cloudflare.com/hc/en-us/articles/200170086).
 type ZoneSettingBrowserCheckListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingBrowserCheckListResponseResultID `json:"id"`
+	ID ZoneSettingBrowserCheckListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingBrowserCheckListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingBrowserCheckListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingBrowserCheckListResponseResultValue `json:"value"`
-	JSON  zoneSettingBrowserCheckListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingBrowserCheckListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingBrowserCheckListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingBrowserCheckListResponseResult]
 type zoneSettingBrowserCheckListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -287,6 +267,14 @@ const (
 	ZoneSettingBrowserCheckListResponseResultIDBrowserCheck ZoneSettingBrowserCheckListResponseResultID = "browser_check"
 )
 
+// Value of the zone setting.
+type ZoneSettingBrowserCheckListResponseResultValue string
+
+const (
+	ZoneSettingBrowserCheckListResponseResultValueOn  ZoneSettingBrowserCheckListResponseResultValue = "on"
+	ZoneSettingBrowserCheckListResponseResultValueOff ZoneSettingBrowserCheckListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingBrowserCheckListResponseResultEditable bool
@@ -294,14 +282,6 @@ type ZoneSettingBrowserCheckListResponseResultEditable bool
 const (
 	ZoneSettingBrowserCheckListResponseResultEditableTrue  ZoneSettingBrowserCheckListResponseResultEditable = true
 	ZoneSettingBrowserCheckListResponseResultEditableFalse ZoneSettingBrowserCheckListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingBrowserCheckListResponseResultValue string
-
-const (
-	ZoneSettingBrowserCheckListResponseResultValueOn  ZoneSettingBrowserCheckListResponseResultValue = "on"
-	ZoneSettingBrowserCheckListResponseResultValueOff ZoneSettingBrowserCheckListResponseResultValue = "off"
 )
 
 type ZoneSettingBrowserCheckUpdateParams struct {

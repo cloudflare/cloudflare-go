@@ -53,12 +53,12 @@ func (r *ZoneSettingAutomaticPlatformOptimizationService) List(ctx context.Conte
 }
 
 type ZoneSettingAutomaticPlatformOptimizationUpdateResponse struct {
-	Errors   []ZoneSettingAutomaticPlatformOptimizationUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingAutomaticPlatformOptimizationUpdateResponseMessage `json:"messages"`
-	Result   ZoneSettingAutomaticPlatformOptimizationUpdateResponseResult    `json:"result"`
+	Errors   []ZoneSettingAutomaticPlatformOptimizationUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingAutomaticPlatformOptimizationUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                                       `json:"success"`
-	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON `json:"-"`
+	Success bool                                                         `json:"success,required"`
+	Result  ZoneSettingAutomaticPlatformOptimizationUpdateResponseResult `json:"result"`
+	JSON    zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON contains the JSON
@@ -66,8 +66,8 @@ type ZoneSettingAutomaticPlatformOptimizationUpdateResponse struct {
 type zoneSettingAutomaticPlatformOptimizationUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -156,12 +156,12 @@ func (r *ZoneSettingAutomaticPlatformOptimizationUpdateResponseResult) Unmarshal
 }
 
 type ZoneSettingAutomaticPlatformOptimizationListResponse struct {
-	Errors   []ZoneSettingAutomaticPlatformOptimizationListResponseError   `json:"errors"`
-	Messages []ZoneSettingAutomaticPlatformOptimizationListResponseMessage `json:"messages"`
-	Result   ZoneSettingAutomaticPlatformOptimizationListResponseResult    `json:"result"`
+	Errors   []ZoneSettingAutomaticPlatformOptimizationListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingAutomaticPlatformOptimizationListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                                     `json:"success"`
-	JSON    zoneSettingAutomaticPlatformOptimizationListResponseJSON `json:"-"`
+	Success bool                                                       `json:"success,required"`
+	Result  ZoneSettingAutomaticPlatformOptimizationListResponseResult `json:"result"`
+	JSON    zoneSettingAutomaticPlatformOptimizationListResponseJSON   `json:"-"`
 }
 
 // zoneSettingAutomaticPlatformOptimizationListResponseJSON contains the JSON
@@ -169,8 +169,8 @@ type ZoneSettingAutomaticPlatformOptimizationListResponse struct {
 type zoneSettingAutomaticPlatformOptimizationListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

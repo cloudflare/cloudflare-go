@@ -67,22 +67,12 @@ func (r *ZoneSettingWafService) List(ctx context.Context, zoneIdentifier string,
 }
 
 type ZoneSettingWafUpdateResponse struct {
-	Errors   []ZoneSettingWafUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingWafUpdateResponseMessage `json:"messages"`
-	// The WAF examines HTTP requests to your website. It inspects both GET and POST
-	// requests and applies rules to help filter out illegitimate traffic from
-	// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-	// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-	// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-	// page that asks them to submit a CAPTCHA successfully to continue their action.
-	// If the challenge is failed, the action will be stopped. What this means is that
-	// Cloudflare's WAF will block any traffic identified as illegitimate before it
-	// reaches your origin web server.
-	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWafUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingWafUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWafUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                             `json:"success"`
-	JSON    zoneSettingWafUpdateResponseJSON `json:"-"`
+	Success bool                               `json:"success,required"`
+	Result  ZoneSettingWafUpdateResponseResult `json:"result"`
+	JSON    zoneSettingWafUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseJSON contains the JSON metadata for the struct
@@ -90,8 +80,8 @@ type ZoneSettingWafUpdateResponse struct {
 type zoneSettingWafUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -138,36 +128,26 @@ func (r *ZoneSettingWafUpdateResponseMessage) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The WAF examines HTTP requests to your website. It inspects both GET and POST
-// requests and applies rules to help filter out illegitimate traffic from
-// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-// page that asks them to submit a CAPTCHA successfully to continue their action.
-// If the challenge is failed, the action will be stopped. What this means is that
-// Cloudflare's WAF will block any traffic identified as illegitimate before it
-// reaches your origin web server.
-// (https://support.cloudflare.com/hc/en-us/articles/200172016).
 type ZoneSettingWafUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWafUpdateResponseResultID `json:"id"`
+	ID ZoneSettingWafUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWafUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWafUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWafUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWafUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWafUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWafUpdateResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingWafUpdateResponseResult]
 type zoneSettingWafUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -183,6 +163,14 @@ const (
 	ZoneSettingWafUpdateResponseResultIDWaf ZoneSettingWafUpdateResponseResultID = "waf"
 )
 
+// Value of the zone setting.
+type ZoneSettingWafUpdateResponseResultValue string
+
+const (
+	ZoneSettingWafUpdateResponseResultValueOn  ZoneSettingWafUpdateResponseResultValue = "on"
+	ZoneSettingWafUpdateResponseResultValueOff ZoneSettingWafUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWafUpdateResponseResultEditable bool
@@ -192,31 +180,13 @@ const (
 	ZoneSettingWafUpdateResponseResultEditableFalse ZoneSettingWafUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingWafUpdateResponseResultValue string
-
-const (
-	ZoneSettingWafUpdateResponseResultValueOn  ZoneSettingWafUpdateResponseResultValue = "on"
-	ZoneSettingWafUpdateResponseResultValueOff ZoneSettingWafUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingWafListResponse struct {
-	Errors   []ZoneSettingWafListResponseError   `json:"errors"`
-	Messages []ZoneSettingWafListResponseMessage `json:"messages"`
-	// The WAF examines HTTP requests to your website. It inspects both GET and POST
-	// requests and applies rules to help filter out illegitimate traffic from
-	// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-	// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-	// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-	// page that asks them to submit a CAPTCHA successfully to continue their action.
-	// If the challenge is failed, the action will be stopped. What this means is that
-	// Cloudflare's WAF will block any traffic identified as illegitimate before it
-	// reaches your origin web server.
-	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result ZoneSettingWafListResponseResult `json:"result"`
+	Errors   []ZoneSettingWafListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWafListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                           `json:"success"`
-	JSON    zoneSettingWafListResponseJSON `json:"-"`
+	Success bool                             `json:"success,required"`
+	Result  ZoneSettingWafListResponseResult `json:"result"`
+	JSON    zoneSettingWafListResponseJSON   `json:"-"`
 }
 
 // zoneSettingWafListResponseJSON contains the JSON metadata for the struct
@@ -224,8 +194,8 @@ type ZoneSettingWafListResponse struct {
 type zoneSettingWafListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -272,36 +242,26 @@ func (r *ZoneSettingWafListResponseMessage) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The WAF examines HTTP requests to your website. It inspects both GET and POST
-// requests and applies rules to help filter out illegitimate traffic from
-// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-// page that asks them to submit a CAPTCHA successfully to continue their action.
-// If the challenge is failed, the action will be stopped. What this means is that
-// Cloudflare's WAF will block any traffic identified as illegitimate before it
-// reaches your origin web server.
-// (https://support.cloudflare.com/hc/en-us/articles/200172016).
 type ZoneSettingWafListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWafListResponseResultID `json:"id"`
+	ID ZoneSettingWafListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWafListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWafListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWafListResponseResultValue `json:"value"`
-	JSON  zoneSettingWafListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWafListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWafListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingWafListResponseResult]
 type zoneSettingWafListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -317,6 +277,14 @@ const (
 	ZoneSettingWafListResponseResultIDWaf ZoneSettingWafListResponseResultID = "waf"
 )
 
+// Value of the zone setting.
+type ZoneSettingWafListResponseResultValue string
+
+const (
+	ZoneSettingWafListResponseResultValueOn  ZoneSettingWafListResponseResultValue = "on"
+	ZoneSettingWafListResponseResultValueOff ZoneSettingWafListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWafListResponseResultEditable bool
@@ -324,14 +292,6 @@ type ZoneSettingWafListResponseResultEditable bool
 const (
 	ZoneSettingWafListResponseResultEditableTrue  ZoneSettingWafListResponseResultEditable = true
 	ZoneSettingWafListResponseResultEditableFalse ZoneSettingWafListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingWafListResponseResultValue string
-
-const (
-	ZoneSettingWafListResponseResultValueOn  ZoneSettingWafListResponseResultValue = "on"
-	ZoneSettingWafListResponseResultValueOff ZoneSettingWafListResponseResultValue = "off"
 )
 
 type ZoneSettingWafUpdateParams struct {

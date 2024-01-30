@@ -55,12 +55,16 @@ func (r *ZoneSettingOriginMaxHTTPVersionService) List(ctx context.Context, zoneI
 }
 
 type ZoneSettingOriginMaxHTTPVersionUpdateResponse struct {
-	Errors   []ZoneSettingOriginMaxHTTPVersionUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingOriginMaxHTTPVersionUpdateResponseMessage `json:"messages"`
-	Result   ZoneSettingOriginMaxHTTPVersionUpdateResponseResult    `json:"result"`
+	Errors   []ZoneSettingOriginMaxHTTPVersionUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingOriginMaxHTTPVersionUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                              `json:"success"`
-	JSON    zoneSettingOriginMaxHTTPVersionUpdateResponseJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// The highest HTTP version Cloudflare will attempt to use with your origin. This
+	// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+	// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+	// for more information.).
+	Result ZoneSettingOriginMaxHTTPVersionUpdateResponseResult `json:"result"`
+	JSON   zoneSettingOriginMaxHTTPVersionUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionUpdateResponseJSON contains the JSON metadata for
@@ -68,8 +72,8 @@ type ZoneSettingOriginMaxHTTPVersionUpdateResponse struct {
 type zoneSettingOriginMaxHTTPVersionUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,6 +120,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionUpdateResponseMessage) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The highest HTTP version Cloudflare will attempt to use with your origin. This
+// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.).
 type ZoneSettingOriginMaxHTTPVersionUpdateResponseResult struct {
 	// Identifier of the zone setting.
 	ID ZoneSettingOriginMaxHTTPVersionUpdateResponseResultID `json:"id,required"`
@@ -145,12 +153,16 @@ const (
 )
 
 type ZoneSettingOriginMaxHTTPVersionListResponse struct {
-	Errors   []ZoneSettingOriginMaxHTTPVersionListResponseError   `json:"errors"`
-	Messages []ZoneSettingOriginMaxHTTPVersionListResponseMessage `json:"messages"`
-	Result   ZoneSettingOriginMaxHTTPVersionListResponseResult    `json:"result"`
+	Errors   []ZoneSettingOriginMaxHTTPVersionListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingOriginMaxHTTPVersionListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                            `json:"success"`
-	JSON    zoneSettingOriginMaxHTTPVersionListResponseJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// The highest HTTP version Cloudflare will attempt to use with your origin. This
+	// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+	// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+	// for more information.).
+	Result ZoneSettingOriginMaxHTTPVersionListResponseResult `json:"result"`
+	JSON   zoneSettingOriginMaxHTTPVersionListResponseJSON   `json:"-"`
 }
 
 // zoneSettingOriginMaxHTTPVersionListResponseJSON contains the JSON metadata for
@@ -158,8 +170,8 @@ type ZoneSettingOriginMaxHTTPVersionListResponse struct {
 type zoneSettingOriginMaxHTTPVersionListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -206,6 +218,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionListResponseMessage) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The highest HTTP version Cloudflare will attempt to use with your origin. This
+// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.).
 type ZoneSettingOriginMaxHTTPVersionListResponseResult struct {
 	// Identifier of the zone setting.
 	ID ZoneSettingOriginMaxHTTPVersionListResponseResultID `json:"id,required"`
@@ -235,6 +251,10 @@ const (
 )
 
 type ZoneSettingOriginMaxHTTPVersionUpdateParams struct {
+	// The highest HTTP version Cloudflare will attempt to use with your origin. This
+	// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+	// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+	// for more information.).
 	Value param.Field[ZoneSettingOriginMaxHTTPVersionUpdateParamsValue] `json:"value,required"`
 }
 
@@ -242,6 +262,10 @@ func (r ZoneSettingOriginMaxHTTPVersionUpdateParams) MarshalJSON() (data []byte,
 	return apijson.MarshalRoot(r)
 }
 
+// The highest HTTP version Cloudflare will attempt to use with your origin. This
+// setting allows Cloudflare to make HTTP/2 requests to your origin. (Refer to
+// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
+// for more information.).
 type ZoneSettingOriginMaxHTTPVersionUpdateParamsValue struct {
 	// Identifier of the zone setting.
 	ID param.Field[ZoneSettingOriginMaxHTTPVersionUpdateParamsValueID] `json:"id,required"`

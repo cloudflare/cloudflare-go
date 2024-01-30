@@ -42,15 +42,12 @@ func (r *ZoneSettingAdvancedDdoService) List(ctx context.Context, zoneIdentifier
 }
 
 type ZoneSettingAdvancedDdoListResponse struct {
-	Errors   []ZoneSettingAdvancedDdoListResponseError   `json:"errors"`
-	Messages []ZoneSettingAdvancedDdoListResponseMessage `json:"messages"`
-	// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
-	// website. This is an uneditable value that is 'on' in the case of Business and
-	// Enterprise zones.
-	Result ZoneSettingAdvancedDdoListResponseResult `json:"result"`
+	Errors   []ZoneSettingAdvancedDdoListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingAdvancedDdoListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                   `json:"success"`
-	JSON    zoneSettingAdvancedDdoListResponseJSON `json:"-"`
+	Success bool                                     `json:"success,required"`
+	Result  ZoneSettingAdvancedDdoListResponseResult `json:"result"`
+	JSON    zoneSettingAdvancedDdoListResponseJSON   `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseJSON contains the JSON metadata for the struct
@@ -58,8 +55,8 @@ type ZoneSettingAdvancedDdoListResponse struct {
 type zoneSettingAdvancedDdoListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -106,29 +103,26 @@ func (r *ZoneSettingAdvancedDdoListResponseMessage) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
-// website. This is an uneditable value that is 'on' in the case of Business and
-// Enterprise zones.
 type ZoneSettingAdvancedDdoListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingAdvancedDdoListResponseResultID `json:"id"`
+	ID ZoneSettingAdvancedDdoListResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Defaults to on for Business+ plans
+	Value ZoneSettingAdvancedDdoListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingAdvancedDdoListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Defaults to on for Business+ plans
-	Value ZoneSettingAdvancedDdoListResponseResultValue `json:"value"`
-	JSON  zoneSettingAdvancedDdoListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingAdvancedDdoListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingAdvancedDdoListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingAdvancedDdoListResponseResult]
 type zoneSettingAdvancedDdoListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -144,6 +138,14 @@ const (
 	ZoneSettingAdvancedDdoListResponseResultIDAdvancedDdos ZoneSettingAdvancedDdoListResponseResultID = "advanced_ddos"
 )
 
+// Value of the zone setting. Notes: Defaults to on for Business+ plans
+type ZoneSettingAdvancedDdoListResponseResultValue string
+
+const (
+	ZoneSettingAdvancedDdoListResponseResultValueOn  ZoneSettingAdvancedDdoListResponseResultValue = "on"
+	ZoneSettingAdvancedDdoListResponseResultValueOff ZoneSettingAdvancedDdoListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingAdvancedDdoListResponseResultEditable bool
@@ -151,12 +153,4 @@ type ZoneSettingAdvancedDdoListResponseResultEditable bool
 const (
 	ZoneSettingAdvancedDdoListResponseResultEditableTrue  ZoneSettingAdvancedDdoListResponseResultEditable = true
 	ZoneSettingAdvancedDdoListResponseResultEditableFalse ZoneSettingAdvancedDdoListResponseResultEditable = false
-)
-
-// Value of the zone setting. Notes: Defaults to on for Business+ plans
-type ZoneSettingAdvancedDdoListResponseResultValue string
-
-const (
-	ZoneSettingAdvancedDdoListResponseResultValueOn  ZoneSettingAdvancedDdoListResponseResultValue = "on"
-	ZoneSettingAdvancedDdoListResponseResultValueOff ZoneSettingAdvancedDdoListResponseResultValue = "off"
 )

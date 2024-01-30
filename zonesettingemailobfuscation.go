@@ -51,14 +51,12 @@ func (r *ZoneSettingEmailObfuscationService) List(ctx context.Context, zoneIdent
 }
 
 type ZoneSettingEmailObfuscationUpdateResponse struct {
-	Errors   []ZoneSettingEmailObfuscationUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingEmailObfuscationUpdateResponseMessage `json:"messages"`
-	// Encrypt email adresses on your web page from bots, while keeping them visible to
-	// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-	Result ZoneSettingEmailObfuscationUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingEmailObfuscationUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingEmailObfuscationUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                          `json:"success"`
-	JSON    zoneSettingEmailObfuscationUpdateResponseJSON `json:"-"`
+	Success bool                                            `json:"success,required"`
+	Result  ZoneSettingEmailObfuscationUpdateResponseResult `json:"result"`
+	JSON    zoneSettingEmailObfuscationUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseJSON contains the JSON metadata for the
@@ -66,8 +64,8 @@ type ZoneSettingEmailObfuscationUpdateResponse struct {
 type zoneSettingEmailObfuscationUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,28 +112,26 @@ func (r *ZoneSettingEmailObfuscationUpdateResponseMessage) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Encrypt email adresses on your web page from bots, while keeping them visible to
-// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
 type ZoneSettingEmailObfuscationUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingEmailObfuscationUpdateResponseResultID `json:"id"`
+	ID ZoneSettingEmailObfuscationUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingEmailObfuscationUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingEmailObfuscationUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingEmailObfuscationUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingEmailObfuscationUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingEmailObfuscationUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingEmailObfuscationUpdateResponseResult]
 type zoneSettingEmailObfuscationUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,6 +147,14 @@ const (
 	ZoneSettingEmailObfuscationUpdateResponseResultIDEmailObfuscation ZoneSettingEmailObfuscationUpdateResponseResultID = "email_obfuscation"
 )
 
+// Value of the zone setting.
+type ZoneSettingEmailObfuscationUpdateResponseResultValue string
+
+const (
+	ZoneSettingEmailObfuscationUpdateResponseResultValueOn  ZoneSettingEmailObfuscationUpdateResponseResultValue = "on"
+	ZoneSettingEmailObfuscationUpdateResponseResultValueOff ZoneSettingEmailObfuscationUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingEmailObfuscationUpdateResponseResultEditable bool
@@ -160,23 +164,13 @@ const (
 	ZoneSettingEmailObfuscationUpdateResponseResultEditableFalse ZoneSettingEmailObfuscationUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingEmailObfuscationUpdateResponseResultValue string
-
-const (
-	ZoneSettingEmailObfuscationUpdateResponseResultValueOn  ZoneSettingEmailObfuscationUpdateResponseResultValue = "on"
-	ZoneSettingEmailObfuscationUpdateResponseResultValueOff ZoneSettingEmailObfuscationUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingEmailObfuscationListResponse struct {
-	Errors   []ZoneSettingEmailObfuscationListResponseError   `json:"errors"`
-	Messages []ZoneSettingEmailObfuscationListResponseMessage `json:"messages"`
-	// Encrypt email adresses on your web page from bots, while keeping them visible to
-	// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-	Result ZoneSettingEmailObfuscationListResponseResult `json:"result"`
+	Errors   []ZoneSettingEmailObfuscationListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingEmailObfuscationListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                        `json:"success"`
-	JSON    zoneSettingEmailObfuscationListResponseJSON `json:"-"`
+	Success bool                                          `json:"success,required"`
+	Result  ZoneSettingEmailObfuscationListResponseResult `json:"result"`
+	JSON    zoneSettingEmailObfuscationListResponseJSON   `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseJSON contains the JSON metadata for the
@@ -184,8 +178,8 @@ type ZoneSettingEmailObfuscationListResponse struct {
 type zoneSettingEmailObfuscationListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -232,28 +226,26 @@ func (r *ZoneSettingEmailObfuscationListResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Encrypt email adresses on your web page from bots, while keeping them visible to
-// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
 type ZoneSettingEmailObfuscationListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingEmailObfuscationListResponseResultID `json:"id"`
+	ID ZoneSettingEmailObfuscationListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingEmailObfuscationListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingEmailObfuscationListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingEmailObfuscationListResponseResultValue `json:"value"`
-	JSON  zoneSettingEmailObfuscationListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingEmailObfuscationListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingEmailObfuscationListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingEmailObfuscationListResponseResult]
 type zoneSettingEmailObfuscationListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -269,6 +261,14 @@ const (
 	ZoneSettingEmailObfuscationListResponseResultIDEmailObfuscation ZoneSettingEmailObfuscationListResponseResultID = "email_obfuscation"
 )
 
+// Value of the zone setting.
+type ZoneSettingEmailObfuscationListResponseResultValue string
+
+const (
+	ZoneSettingEmailObfuscationListResponseResultValueOn  ZoneSettingEmailObfuscationListResponseResultValue = "on"
+	ZoneSettingEmailObfuscationListResponseResultValueOff ZoneSettingEmailObfuscationListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingEmailObfuscationListResponseResultEditable bool
@@ -276,14 +276,6 @@ type ZoneSettingEmailObfuscationListResponseResultEditable bool
 const (
 	ZoneSettingEmailObfuscationListResponseResultEditableTrue  ZoneSettingEmailObfuscationListResponseResultEditable = true
 	ZoneSettingEmailObfuscationListResponseResultEditableFalse ZoneSettingEmailObfuscationListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingEmailObfuscationListResponseResultValue string
-
-const (
-	ZoneSettingEmailObfuscationListResponseResultValueOn  ZoneSettingEmailObfuscationListResponseResultValue = "on"
-	ZoneSettingEmailObfuscationListResponseResultValueOff ZoneSettingEmailObfuscationListResponseResultValue = "off"
 )
 
 type ZoneSettingEmailObfuscationUpdateParams struct {

@@ -53,15 +53,12 @@ func (r *ZoneSettingWebpService) List(ctx context.Context, zoneIdentifier string
 }
 
 type ZoneSettingWebpUpdateResponse struct {
-	Errors   []ZoneSettingWebpUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingWebpUpdateResponseMessage `json:"messages"`
-	// When the client requesting the image supports the WebP image codec, and WebP
-	// offers a performance advantage over the original image format, Cloudflare will
-	// serve a WebP version of the original image.
-	Result ZoneSettingWebpUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingWebpUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWebpUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                              `json:"success"`
-	JSON    zoneSettingWebpUpdateResponseJSON `json:"-"`
+	Success bool                                `json:"success,required"`
+	Result  ZoneSettingWebpUpdateResponseResult `json:"result"`
+	JSON    zoneSettingWebpUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseJSON contains the JSON metadata for the struct
@@ -69,8 +66,8 @@ type ZoneSettingWebpUpdateResponse struct {
 type zoneSettingWebpUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -117,29 +114,26 @@ func (r *ZoneSettingWebpUpdateResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// When the client requesting the image supports the WebP image codec, and WebP
-// offers a performance advantage over the original image format, Cloudflare will
-// serve a WebP version of the original image.
 type ZoneSettingWebpUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebpUpdateResponseResultID `json:"id"`
+	ID ZoneSettingWebpUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWebpUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWebpUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWebpUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWebpUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWebpUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWebpUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingWebpUpdateResponseResult]
 type zoneSettingWebpUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -155,6 +149,14 @@ const (
 	ZoneSettingWebpUpdateResponseResultIDWebp ZoneSettingWebpUpdateResponseResultID = "webp"
 )
 
+// Value of the zone setting.
+type ZoneSettingWebpUpdateResponseResultValue string
+
+const (
+	ZoneSettingWebpUpdateResponseResultValueOff ZoneSettingWebpUpdateResponseResultValue = "off"
+	ZoneSettingWebpUpdateResponseResultValueOn  ZoneSettingWebpUpdateResponseResultValue = "on"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWebpUpdateResponseResultEditable bool
@@ -164,24 +166,13 @@ const (
 	ZoneSettingWebpUpdateResponseResultEditableFalse ZoneSettingWebpUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingWebpUpdateResponseResultValue string
-
-const (
-	ZoneSettingWebpUpdateResponseResultValueOff ZoneSettingWebpUpdateResponseResultValue = "off"
-	ZoneSettingWebpUpdateResponseResultValueOn  ZoneSettingWebpUpdateResponseResultValue = "on"
-)
-
 type ZoneSettingWebpListResponse struct {
-	Errors   []ZoneSettingWebpListResponseError   `json:"errors"`
-	Messages []ZoneSettingWebpListResponseMessage `json:"messages"`
-	// When the client requesting the image supports the WebP image codec, and WebP
-	// offers a performance advantage over the original image format, Cloudflare will
-	// serve a WebP version of the original image.
-	Result ZoneSettingWebpListResponseResult `json:"result"`
+	Errors   []ZoneSettingWebpListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWebpListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                            `json:"success"`
-	JSON    zoneSettingWebpListResponseJSON `json:"-"`
+	Success bool                              `json:"success,required"`
+	Result  ZoneSettingWebpListResponseResult `json:"result"`
+	JSON    zoneSettingWebpListResponseJSON   `json:"-"`
 }
 
 // zoneSettingWebpListResponseJSON contains the JSON metadata for the struct
@@ -189,8 +180,8 @@ type ZoneSettingWebpListResponse struct {
 type zoneSettingWebpListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -237,29 +228,26 @@ func (r *ZoneSettingWebpListResponseMessage) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// When the client requesting the image supports the WebP image codec, and WebP
-// offers a performance advantage over the original image format, Cloudflare will
-// serve a WebP version of the original image.
 type ZoneSettingWebpListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebpListResponseResultID `json:"id"`
+	ID ZoneSettingWebpListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWebpListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWebpListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWebpListResponseResultValue `json:"value"`
-	JSON  zoneSettingWebpListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWebpListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWebpListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingWebpListResponseResult]
 type zoneSettingWebpListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -275,6 +263,14 @@ const (
 	ZoneSettingWebpListResponseResultIDWebp ZoneSettingWebpListResponseResultID = "webp"
 )
 
+// Value of the zone setting.
+type ZoneSettingWebpListResponseResultValue string
+
+const (
+	ZoneSettingWebpListResponseResultValueOff ZoneSettingWebpListResponseResultValue = "off"
+	ZoneSettingWebpListResponseResultValueOn  ZoneSettingWebpListResponseResultValue = "on"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWebpListResponseResultEditable bool
@@ -282,14 +278,6 @@ type ZoneSettingWebpListResponseResultEditable bool
 const (
 	ZoneSettingWebpListResponseResultEditableTrue  ZoneSettingWebpListResponseResultEditable = true
 	ZoneSettingWebpListResponseResultEditableFalse ZoneSettingWebpListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingWebpListResponseResultValue string
-
-const (
-	ZoneSettingWebpListResponseResultValueOff ZoneSettingWebpListResponseResultValue = "off"
-	ZoneSettingWebpListResponseResultValueOn  ZoneSettingWebpListResponseResultValue = "on"
 )
 
 type ZoneSettingWebpUpdateParams struct {

@@ -51,14 +51,12 @@ func (r *ZoneSettingOpportunisticOnionService) List(ctx context.Context, zoneIde
 }
 
 type ZoneSettingOpportunisticOnionUpdateResponse struct {
-	Errors   []ZoneSettingOpportunisticOnionUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingOpportunisticOnionUpdateResponseMessage `json:"messages"`
-	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-	// connection to use our onion services instead of exit nodes.
-	Result ZoneSettingOpportunisticOnionUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingOpportunisticOnionUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingOpportunisticOnionUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                            `json:"success"`
-	JSON    zoneSettingOpportunisticOnionUpdateResponseJSON `json:"-"`
+	Success bool                                              `json:"success,required"`
+	Result  ZoneSettingOpportunisticOnionUpdateResponseResult `json:"result"`
+	JSON    zoneSettingOpportunisticOnionUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseJSON contains the JSON metadata for
@@ -66,8 +64,8 @@ type ZoneSettingOpportunisticOnionUpdateResponse struct {
 type zoneSettingOpportunisticOnionUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,29 +112,27 @@ func (r *ZoneSettingOpportunisticOnionUpdateResponseMessage) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-// connection to use our onion services instead of exit nodes.
 type ZoneSettingOpportunisticOnionUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOpportunisticOnionUpdateResponseResultID `json:"id"`
+	ID ZoneSettingOpportunisticOnionUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingOpportunisticOnionUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOpportunisticOnionUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingOpportunisticOnionUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticOnionUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOpportunisticOnionUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingOpportunisticOnionUpdateResponseResult]
 type zoneSettingOpportunisticOnionUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -152,15 +148,6 @@ const (
 	ZoneSettingOpportunisticOnionUpdateResponseResultIDOpportunisticOnion ZoneSettingOpportunisticOnionUpdateResponseResultID = "opportunistic_onion"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingOpportunisticOnionUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingOpportunisticOnionUpdateResponseResultEditableTrue  ZoneSettingOpportunisticOnionUpdateResponseResultEditable = true
-	ZoneSettingOpportunisticOnionUpdateResponseResultEditableFalse ZoneSettingOpportunisticOnionUpdateResponseResultEditable = false
-)
-
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
 type ZoneSettingOpportunisticOnionUpdateResponseResultValue string
@@ -170,15 +157,22 @@ const (
 	ZoneSettingOpportunisticOnionUpdateResponseResultValueOff ZoneSettingOpportunisticOnionUpdateResponseResultValue = "off"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingOpportunisticOnionUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingOpportunisticOnionUpdateResponseResultEditableTrue  ZoneSettingOpportunisticOnionUpdateResponseResultEditable = true
+	ZoneSettingOpportunisticOnionUpdateResponseResultEditableFalse ZoneSettingOpportunisticOnionUpdateResponseResultEditable = false
+)
+
 type ZoneSettingOpportunisticOnionListResponse struct {
-	Errors   []ZoneSettingOpportunisticOnionListResponseError   `json:"errors"`
-	Messages []ZoneSettingOpportunisticOnionListResponseMessage `json:"messages"`
-	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-	// connection to use our onion services instead of exit nodes.
-	Result ZoneSettingOpportunisticOnionListResponseResult `json:"result"`
+	Errors   []ZoneSettingOpportunisticOnionListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingOpportunisticOnionListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                          `json:"success"`
-	JSON    zoneSettingOpportunisticOnionListResponseJSON `json:"-"`
+	Success bool                                            `json:"success,required"`
+	Result  ZoneSettingOpportunisticOnionListResponseResult `json:"result"`
+	JSON    zoneSettingOpportunisticOnionListResponseJSON   `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseJSON contains the JSON metadata for the
@@ -186,8 +180,8 @@ type ZoneSettingOpportunisticOnionListResponse struct {
 type zoneSettingOpportunisticOnionListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -234,29 +228,27 @@ func (r *ZoneSettingOpportunisticOnionListResponseMessage) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-// connection to use our onion services instead of exit nodes.
 type ZoneSettingOpportunisticOnionListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOpportunisticOnionListResponseResultID `json:"id"`
+	ID ZoneSettingOpportunisticOnionListResponseResultID `json:"id,required"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingOpportunisticOnionListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOpportunisticOnionListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingOpportunisticOnionListResponseResultValue `json:"value"`
-	JSON  zoneSettingOpportunisticOnionListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOpportunisticOnionListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingOpportunisticOnionListResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingOpportunisticOnionListResponseResult]
 type zoneSettingOpportunisticOnionListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -272,15 +264,6 @@ const (
 	ZoneSettingOpportunisticOnionListResponseResultIDOpportunisticOnion ZoneSettingOpportunisticOnionListResponseResultID = "opportunistic_onion"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingOpportunisticOnionListResponseResultEditable bool
-
-const (
-	ZoneSettingOpportunisticOnionListResponseResultEditableTrue  ZoneSettingOpportunisticOnionListResponseResultEditable = true
-	ZoneSettingOpportunisticOnionListResponseResultEditableFalse ZoneSettingOpportunisticOnionListResponseResultEditable = false
-)
-
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
 type ZoneSettingOpportunisticOnionListResponseResultValue string
@@ -288,6 +271,15 @@ type ZoneSettingOpportunisticOnionListResponseResultValue string
 const (
 	ZoneSettingOpportunisticOnionListResponseResultValueOn  ZoneSettingOpportunisticOnionListResponseResultValue = "on"
 	ZoneSettingOpportunisticOnionListResponseResultValueOff ZoneSettingOpportunisticOnionListResponseResultValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingOpportunisticOnionListResponseResultEditable bool
+
+const (
+	ZoneSettingOpportunisticOnionListResponseResultEditableTrue  ZoneSettingOpportunisticOnionListResponseResultEditable = true
+	ZoneSettingOpportunisticOnionListResponseResultEditableFalse ZoneSettingOpportunisticOnionListResponseResultEditable = false
 )
 
 type ZoneSettingOpportunisticOnionUpdateParams struct {

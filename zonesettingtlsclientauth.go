@@ -51,14 +51,12 @@ func (r *ZoneSettingTlsClientAuthService) List(ctx context.Context, zoneIdentifi
 }
 
 type ZoneSettingTlsClientAuthUpdateResponse struct {
-	Errors   []ZoneSettingTlsClientAuthUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingTlsClientAuthUpdateResponseMessage `json:"messages"`
-	// TLS Client Auth requires Cloudflare to connect to your origin server using a
-	// client certificate (Enterprise Only).
-	Result ZoneSettingTlsClientAuthUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingTlsClientAuthUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingTlsClientAuthUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success"`
-	JSON    zoneSettingTlsClientAuthUpdateResponseJSON `json:"-"`
+	Success bool                                         `json:"success,required"`
+	Result  ZoneSettingTlsClientAuthUpdateResponseResult `json:"result"`
+	JSON    zoneSettingTlsClientAuthUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseJSON contains the JSON metadata for the
@@ -66,8 +64,8 @@ type ZoneSettingTlsClientAuthUpdateResponse struct {
 type zoneSettingTlsClientAuthUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,28 +112,26 @@ func (r *ZoneSettingTlsClientAuthUpdateResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// TLS Client Auth requires Cloudflare to connect to your origin server using a
-// client certificate (Enterprise Only).
 type ZoneSettingTlsClientAuthUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingTlsClientAuthUpdateResponseResultID `json:"id"`
+	ID ZoneSettingTlsClientAuthUpdateResponseResultID `json:"id,required"`
+	// value of the zone setting.
+	Value ZoneSettingTlsClientAuthUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingTlsClientAuthUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// value of the zone setting.
-	Value ZoneSettingTlsClientAuthUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingTlsClientAuthUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingTlsClientAuthUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingTlsClientAuthUpdateResponseResult]
 type zoneSettingTlsClientAuthUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,6 +147,14 @@ const (
 	ZoneSettingTlsClientAuthUpdateResponseResultIDTlsClientAuth ZoneSettingTlsClientAuthUpdateResponseResultID = "tls_client_auth"
 )
 
+// value of the zone setting.
+type ZoneSettingTlsClientAuthUpdateResponseResultValue string
+
+const (
+	ZoneSettingTlsClientAuthUpdateResponseResultValueOn  ZoneSettingTlsClientAuthUpdateResponseResultValue = "on"
+	ZoneSettingTlsClientAuthUpdateResponseResultValueOff ZoneSettingTlsClientAuthUpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingTlsClientAuthUpdateResponseResultEditable bool
@@ -160,23 +164,13 @@ const (
 	ZoneSettingTlsClientAuthUpdateResponseResultEditableFalse ZoneSettingTlsClientAuthUpdateResponseResultEditable = false
 )
 
-// value of the zone setting.
-type ZoneSettingTlsClientAuthUpdateResponseResultValue string
-
-const (
-	ZoneSettingTlsClientAuthUpdateResponseResultValueOn  ZoneSettingTlsClientAuthUpdateResponseResultValue = "on"
-	ZoneSettingTlsClientAuthUpdateResponseResultValueOff ZoneSettingTlsClientAuthUpdateResponseResultValue = "off"
-)
-
 type ZoneSettingTlsClientAuthListResponse struct {
-	Errors   []ZoneSettingTlsClientAuthListResponseError   `json:"errors"`
-	Messages []ZoneSettingTlsClientAuthListResponseMessage `json:"messages"`
-	// TLS Client Auth requires Cloudflare to connect to your origin server using a
-	// client certificate (Enterprise Only).
-	Result ZoneSettingTlsClientAuthListResponseResult `json:"result"`
+	Errors   []ZoneSettingTlsClientAuthListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingTlsClientAuthListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                     `json:"success"`
-	JSON    zoneSettingTlsClientAuthListResponseJSON `json:"-"`
+	Success bool                                       `json:"success,required"`
+	Result  ZoneSettingTlsClientAuthListResponseResult `json:"result"`
+	JSON    zoneSettingTlsClientAuthListResponseJSON   `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseJSON contains the JSON metadata for the
@@ -184,8 +178,8 @@ type ZoneSettingTlsClientAuthListResponse struct {
 type zoneSettingTlsClientAuthListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -232,28 +226,26 @@ func (r *ZoneSettingTlsClientAuthListResponseMessage) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// TLS Client Auth requires Cloudflare to connect to your origin server using a
-// client certificate (Enterprise Only).
 type ZoneSettingTlsClientAuthListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingTlsClientAuthListResponseResultID `json:"id"`
+	ID ZoneSettingTlsClientAuthListResponseResultID `json:"id,required"`
+	// value of the zone setting.
+	Value ZoneSettingTlsClientAuthListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingTlsClientAuthListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// value of the zone setting.
-	Value ZoneSettingTlsClientAuthListResponseResultValue `json:"value"`
-	JSON  zoneSettingTlsClientAuthListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingTlsClientAuthListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingTlsClientAuthListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingTlsClientAuthListResponseResult]
 type zoneSettingTlsClientAuthListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -269,6 +261,14 @@ const (
 	ZoneSettingTlsClientAuthListResponseResultIDTlsClientAuth ZoneSettingTlsClientAuthListResponseResultID = "tls_client_auth"
 )
 
+// value of the zone setting.
+type ZoneSettingTlsClientAuthListResponseResultValue string
+
+const (
+	ZoneSettingTlsClientAuthListResponseResultValueOn  ZoneSettingTlsClientAuthListResponseResultValue = "on"
+	ZoneSettingTlsClientAuthListResponseResultValueOff ZoneSettingTlsClientAuthListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingTlsClientAuthListResponseResultEditable bool
@@ -276,14 +276,6 @@ type ZoneSettingTlsClientAuthListResponseResultEditable bool
 const (
 	ZoneSettingTlsClientAuthListResponseResultEditableTrue  ZoneSettingTlsClientAuthListResponseResultEditable = true
 	ZoneSettingTlsClientAuthListResponseResultEditableFalse ZoneSettingTlsClientAuthListResponseResultEditable = false
-)
-
-// value of the zone setting.
-type ZoneSettingTlsClientAuthListResponseResultValue string
-
-const (
-	ZoneSettingTlsClientAuthListResponseResultValueOn  ZoneSettingTlsClientAuthListResponseResultValue = "on"
-	ZoneSettingTlsClientAuthListResponseResultValueOff ZoneSettingTlsClientAuthListResponseResultValue = "off"
 )
 
 type ZoneSettingTlsClientAuthUpdateParams struct {

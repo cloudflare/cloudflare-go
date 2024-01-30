@@ -13,7 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -22,58 +21,11 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewZoneService] method instead.
 type ZoneService struct {
-	Options                []option.RequestOption
-	LoadBalancers          *ZoneLoadBalancerService
-	Accesses               *ZoneAccessService
-	DNSAnalytics           *ZoneDNSAnalyticService
-	PurgeCaches            *ZonePurgeCachService
-	Ssls                   *ZoneSslService
-	Subscriptions          *ZoneSubscriptionService
-	Acms                   *ZoneAcmService
-	Analytics              *ZoneAnalyticsService
-	Argos                  *ZoneArgoService
-	AvailablePlans         *ZoneAvailablePlanService
-	AvailableRatePlans     *ZoneAvailableRatePlanService
-	Caches                 *ZoneCachService
-	CertificateAuthorities *ZoneCertificateAuthorityService
-	ClientCertificates     *ZoneClientCertificateService
-	CustomCertificates     *ZoneCustomCertificateService
-	CustomHostnames        *ZoneCustomHostnameService
-	CustomNs               *ZoneCustomNService
-	CustomPages            *ZoneCustomPageService
-	DNSRecords             *ZoneDNSRecordService
-	Dnssecs                *ZoneDnssecService
-	Emails                 *ZoneEmailService
-	Filters                *ZoneFilterService
-	Firewalls              *ZoneFirewallService
-	Healthchecks           *ZoneHealthcheckService
-	KeylessCertificates    *ZoneKeylessCertificateService
-	Logpushes              *ZoneLogpushService
-	Logs                   *ZoneLogService
-	OriginTlsClientAuths   *ZoneOriginTlsClientAuthService
-	Pagerules              *ZonePageruleService
-	Railguns               *ZoneRailgunService
-	RateLimits             *ZoneRateLimitService
-	SecondaryDNS           *ZoneSecondaryDNSService
-	Settings               *ZoneSettingService
-	WaitingRooms           *ZoneWaitingRoomService
-	Web3s                  *ZoneWeb3Service
-	Workers                *ZoneWorkerService
-	ActivationChecks       *ZoneActivationCheckService
-	APIGateway             *ZoneAPIGatewayService
-	ManagedHeaders         *ZoneManagedHeaderService
-	Rulesets               *ZoneRulesetService
-	URLNormalizations      *ZoneURLNormalizationService
-	Spectrums              *ZoneSpectrumService
-	Holds                  *ZoneHoldService
-	PageShield             *ZonePageShieldService
-	BotManagement          *ZoneBotManagementService
-	Cache                  *ZoneCacheService
-	DcvDelegations         *ZoneDcvDelegationService
-	Zarazs                 *ZoneZarazService
-	Snippets               *ZoneSnippetService
-	SnippetsRules          *ZoneSnippetsRuleService
-	SpeedAPI               *ZoneSpeedAPIService
+	Options       []option.RequestOption
+	LoadBalancers *ZoneLoadBalancerService
+	Dnssecs       *ZoneDnssecService
+	RateLimits    *ZoneRateLimitService
+	Settings      *ZoneSettingService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -83,56 +35,9 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
 	r.LoadBalancers = NewZoneLoadBalancerService(opts...)
-	r.Accesses = NewZoneAccessService(opts...)
-	r.DNSAnalytics = NewZoneDNSAnalyticService(opts...)
-	r.PurgeCaches = NewZonePurgeCachService(opts...)
-	r.Ssls = NewZoneSslService(opts...)
-	r.Subscriptions = NewZoneSubscriptionService(opts...)
-	r.Acms = NewZoneAcmService(opts...)
-	r.Analytics = NewZoneAnalyticsService(opts...)
-	r.Argos = NewZoneArgoService(opts...)
-	r.AvailablePlans = NewZoneAvailablePlanService(opts...)
-	r.AvailableRatePlans = NewZoneAvailableRatePlanService(opts...)
-	r.Caches = NewZoneCachService(opts...)
-	r.CertificateAuthorities = NewZoneCertificateAuthorityService(opts...)
-	r.ClientCertificates = NewZoneClientCertificateService(opts...)
-	r.CustomCertificates = NewZoneCustomCertificateService(opts...)
-	r.CustomHostnames = NewZoneCustomHostnameService(opts...)
-	r.CustomNs = NewZoneCustomNService(opts...)
-	r.CustomPages = NewZoneCustomPageService(opts...)
-	r.DNSRecords = NewZoneDNSRecordService(opts...)
 	r.Dnssecs = NewZoneDnssecService(opts...)
-	r.Emails = NewZoneEmailService(opts...)
-	r.Filters = NewZoneFilterService(opts...)
-	r.Firewalls = NewZoneFirewallService(opts...)
-	r.Healthchecks = NewZoneHealthcheckService(opts...)
-	r.KeylessCertificates = NewZoneKeylessCertificateService(opts...)
-	r.Logpushes = NewZoneLogpushService(opts...)
-	r.Logs = NewZoneLogService(opts...)
-	r.OriginTlsClientAuths = NewZoneOriginTlsClientAuthService(opts...)
-	r.Pagerules = NewZonePageruleService(opts...)
-	r.Railguns = NewZoneRailgunService(opts...)
 	r.RateLimits = NewZoneRateLimitService(opts...)
-	r.SecondaryDNS = NewZoneSecondaryDNSService(opts...)
 	r.Settings = NewZoneSettingService(opts...)
-	r.WaitingRooms = NewZoneWaitingRoomService(opts...)
-	r.Web3s = NewZoneWeb3Service(opts...)
-	r.Workers = NewZoneWorkerService(opts...)
-	r.ActivationChecks = NewZoneActivationCheckService(opts...)
-	r.APIGateway = NewZoneAPIGatewayService(opts...)
-	r.ManagedHeaders = NewZoneManagedHeaderService(opts...)
-	r.Rulesets = NewZoneRulesetService(opts...)
-	r.URLNormalizations = NewZoneURLNormalizationService(opts...)
-	r.Spectrums = NewZoneSpectrumService(opts...)
-	r.Holds = NewZoneHoldService(opts...)
-	r.PageShield = NewZonePageShieldService(opts...)
-	r.BotManagement = NewZoneBotManagementService(opts...)
-	r.Cache = NewZoneCacheService(opts...)
-	r.DcvDelegations = NewZoneDcvDelegationService(opts...)
-	r.Zarazs = NewZoneZarazService(opts...)
-	r.Snippets = NewZoneSnippetService(opts...)
-	r.SnippetsRules = NewZoneSnippetsRuleService(opts...)
-	r.SpeedAPI = NewZoneSpeedAPIService(opts...)
 	return
 }
 
@@ -161,21 +66,11 @@ func (r *ZoneService) Update(ctx context.Context, identifier string, body ZoneUp
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *shared.Page[ZoneListResponse], err error) {
-	var raw *http.Response
-	opts = append(r.Options, opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *ZoneListResponse, err error) {
+	opts = append(r.Options[:], opts...)
 	path := "zones"
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
 }
 
 // Deletes an existing zone.
@@ -187,20 +82,20 @@ func (r *ZoneService) Delete(ctx context.Context, identifier string, opts ...opt
 }
 
 type ZoneNewResponse struct {
-	Errors   []ZoneNewResponseError   `json:"errors"`
-	Messages []ZoneNewResponseMessage `json:"messages"`
-	Result   ZoneNewResponseResult    `json:"result"`
+	Errors   []ZoneNewResponseError   `json:"errors,required"`
+	Messages []ZoneNewResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                `json:"success"`
-	JSON    zoneNewResponseJSON `json:"-"`
+	Success bool                  `json:"success,required"`
+	Result  ZoneNewResponseResult `json:"result"`
+	JSON    zoneNewResponseJSON   `json:"-"`
 }
 
 // zoneNewResponseJSON contains the JSON metadata for the struct [ZoneNewResponse]
 type zoneNewResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -389,20 +284,20 @@ func (r *ZoneNewResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneGetResponse struct {
-	Errors   []ZoneGetResponseError   `json:"errors"`
-	Messages []ZoneGetResponseMessage `json:"messages"`
-	Result   ZoneGetResponseResult    `json:"result"`
+	Errors   []ZoneGetResponseError   `json:"errors,required"`
+	Messages []ZoneGetResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                `json:"success"`
-	JSON    zoneGetResponseJSON `json:"-"`
+	Success bool                  `json:"success,required"`
+	Result  ZoneGetResponseResult `json:"result"`
+	JSON    zoneGetResponseJSON   `json:"-"`
 }
 
 // zoneGetResponseJSON contains the JSON metadata for the struct [ZoneGetResponse]
 type zoneGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -591,12 +486,12 @@ func (r *ZoneGetResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneUpdateResponse struct {
-	Errors   []ZoneUpdateResponseError   `json:"errors"`
-	Messages []ZoneUpdateResponseMessage `json:"messages"`
-	Result   ZoneUpdateResponseResult    `json:"result"`
+	Errors   []ZoneUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                   `json:"success"`
-	JSON    zoneUpdateResponseJSON `json:"-"`
+	Success bool                     `json:"success,required"`
+	Result  ZoneUpdateResponseResult `json:"result"`
+	JSON    zoneUpdateResponseJSON   `json:"-"`
 }
 
 // zoneUpdateResponseJSON contains the JSON metadata for the struct
@@ -604,8 +499,8 @@ type ZoneUpdateResponse struct {
 type zoneUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -794,10 +689,74 @@ func (r *ZoneUpdateResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneListResponse struct {
+	Errors   []ZoneListResponseError   `json:"errors,required"`
+	Messages []ZoneListResponseMessage `json:"messages,required"`
+	// Whether the API call was successful
+	Success    bool                       `json:"success,required"`
+	Result     []ZoneListResponseResult   `json:"result"`
+	ResultInfo ZoneListResponseResultInfo `json:"result_info"`
+	JSON       zoneListResponseJSON       `json:"-"`
+}
+
+// zoneListResponseJSON contains the JSON metadata for the struct
+// [ZoneListResponse]
+type zoneListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneListResponseError struct {
+	Code    int64                     `json:"code,required"`
+	Message string                    `json:"message,required"`
+	JSON    zoneListResponseErrorJSON `json:"-"`
+}
+
+// zoneListResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneListResponseError]
+type zoneListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneListResponseMessage struct {
+	Code    int64                       `json:"code,required"`
+	Message string                      `json:"message,required"`
+	JSON    zoneListResponseMessageJSON `json:"-"`
+}
+
+// zoneListResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneListResponseMessage]
+type zoneListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneListResponseResult struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The account the zone belongs to
-	Account ZoneListResponseAccount `json:"account,required"`
+	Account ZoneListResponseResultAccount `json:"account,required"`
 	// The last time proof of ownership was detected and the zone was made active
 	ActivatedOn time.Time `json:"activated_on,required,nullable" format:"date-time"`
 	// When the zone was created
@@ -807,7 +766,7 @@ type ZoneListResponse struct {
 	// been enabled, this value is 0.
 	DevelopmentMode float64 `json:"development_mode,required"`
 	// Metadata about the zone
-	Meta ZoneListResponseMeta `json:"meta,required"`
+	Meta ZoneListResponseResultMeta `json:"meta,required"`
 	// When the zone was last modified
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// The domain name
@@ -820,16 +779,16 @@ type ZoneListResponse struct {
 	// Registrar for the domain at the time of switching to Cloudflare
 	OriginalRegistrar string `json:"original_registrar,required,nullable"`
 	// The owner of the zone
-	Owner ZoneListResponseOwner `json:"owner,required"`
+	Owner ZoneListResponseResultOwner `json:"owner,required"`
 	// An array of domains used for custom name servers. This is only available for
 	// Business and Enterprise plans.
-	VanityNameServers []string             `json:"vanity_name_servers" format:"hostname"`
-	JSON              zoneListResponseJSON `json:"-"`
+	VanityNameServers []string                   `json:"vanity_name_servers" format:"hostname"`
+	JSON              zoneListResponseResultJSON `json:"-"`
 }
 
-// zoneListResponseJSON contains the JSON metadata for the struct
-// [ZoneListResponse]
-type zoneListResponseJSON struct {
+// zoneListResponseResultJSON contains the JSON metadata for the struct
+// [ZoneListResponseResult]
+type zoneListResponseResultJSON struct {
 	ID                  apijson.Field
 	Account             apijson.Field
 	ActivatedOn         apijson.Field
@@ -847,34 +806,34 @@ type zoneListResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZoneListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The account the zone belongs to
-type ZoneListResponseAccount struct {
+type ZoneListResponseResultAccount struct {
 	// Identifier
 	ID string `json:"id"`
 	// The name of the account
-	Name string                      `json:"name"`
-	JSON zoneListResponseAccountJSON `json:"-"`
+	Name string                            `json:"name"`
+	JSON zoneListResponseResultAccountJSON `json:"-"`
 }
 
-// zoneListResponseAccountJSON contains the JSON metadata for the struct
-// [ZoneListResponseAccount]
-type zoneListResponseAccountJSON struct {
+// zoneListResponseResultAccountJSON contains the JSON metadata for the struct
+// [ZoneListResponseResultAccount]
+type zoneListResponseResultAccountJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneListResponseAccount) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneListResponseResultAccount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Metadata about the zone
-type ZoneListResponseMeta struct {
+type ZoneListResponseResultMeta struct {
 	// The zone is only configured for CDN
 	CdnOnly bool `json:"cdn_only"`
 	// Number of Custom Certificates the zone can have
@@ -886,14 +845,14 @@ type ZoneListResponseMeta struct {
 	// Number of Page Rules a zone can have
 	PageRuleQuota int64 `json:"page_rule_quota"`
 	// The zone has been flagged for phishing
-	PhishingDetected bool                     `json:"phishing_detected"`
-	Step             int64                    `json:"step"`
-	JSON             zoneListResponseMetaJSON `json:"-"`
+	PhishingDetected bool                           `json:"phishing_detected"`
+	Step             int64                          `json:"step"`
+	JSON             zoneListResponseResultMetaJSON `json:"-"`
 }
 
-// zoneListResponseMetaJSON contains the JSON metadata for the struct
-// [ZoneListResponseMeta]
-type zoneListResponseMetaJSON struct {
+// zoneListResponseResultMetaJSON contains the JSON metadata for the struct
+// [ZoneListResponseResultMeta]
+type zoneListResponseResultMetaJSON struct {
 	CdnOnly                apijson.Field
 	CustomCertificateQuota apijson.Field
 	DNSOnly                apijson.Field
@@ -905,24 +864,24 @@ type zoneListResponseMetaJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *ZoneListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The owner of the zone
-type ZoneListResponseOwner struct {
+type ZoneListResponseResultOwner struct {
 	// Identifier
 	ID string `json:"id"`
 	// Name of the owner
 	Name string `json:"name"`
 	// The type of owner
-	Type string                    `json:"type"`
-	JSON zoneListResponseOwnerJSON `json:"-"`
+	Type string                          `json:"type"`
+	JSON zoneListResponseResultOwnerJSON `json:"-"`
 }
 
-// zoneListResponseOwnerJSON contains the JSON metadata for the struct
-// [ZoneListResponseOwner]
-type zoneListResponseOwnerJSON struct {
+// zoneListResponseResultOwnerJSON contains the JSON metadata for the struct
+// [ZoneListResponseResultOwner]
+type zoneListResponseResultOwnerJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -930,16 +889,42 @@ type zoneListResponseOwnerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneListResponseOwner) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneListResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                        `json:"total_count"`
+	JSON       zoneListResponseResultInfoJSON `json:"-"`
+}
+
+// zoneListResponseResultInfoJSON contains the JSON metadata for the struct
+// [ZoneListResponseResultInfo]
+type zoneListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZoneDeleteResponse struct {
-	Errors   []ZoneDeleteResponseError   `json:"errors"`
-	Messages []ZoneDeleteResponseMessage `json:"messages"`
-	Result   ZoneDeleteResponseResult    `json:"result,nullable"`
+	Errors   []ZoneDeleteResponseError   `json:"errors,required"`
+	Messages []ZoneDeleteResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                   `json:"success"`
+	Success bool                   `json:"success,required"`
 	JSON    zoneDeleteResponseJSON `json:"-"`
 }
 
@@ -948,7 +933,6 @@ type ZoneDeleteResponse struct {
 type zoneDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -993,24 +977,6 @@ type zoneDeleteResponseMessageJSON struct {
 }
 
 func (r *ZoneDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneDeleteResponseResult struct {
-	// Identifier
-	ID   string                       `json:"id,required"`
-	JSON zoneDeleteResponseResultJSON `json:"-"`
-}
-
-// zoneDeleteResponseResultJSON contains the JSON metadata for the struct
-// [ZoneDeleteResponseResult]
-type zoneDeleteResponseResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

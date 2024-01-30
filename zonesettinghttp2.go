@@ -49,13 +49,12 @@ func (r *ZoneSettingHttp2Service) List(ctx context.Context, zoneIdentifier strin
 }
 
 type ZoneSettingHttp2UpdateResponse struct {
-	Errors   []ZoneSettingHttp2UpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingHttp2UpdateResponseMessage `json:"messages"`
-	// HTTP2 enabled for this zone.
-	Result ZoneSettingHttp2UpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingHttp2UpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingHttp2UpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                               `json:"success"`
-	JSON    zoneSettingHttp2UpdateResponseJSON `json:"-"`
+	Success bool                                 `json:"success,required"`
+	Result  ZoneSettingHttp2UpdateResponseResult `json:"result"`
+	JSON    zoneSettingHttp2UpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseJSON contains the JSON metadata for the struct
@@ -63,8 +62,8 @@ type ZoneSettingHttp2UpdateResponse struct {
 type zoneSettingHttp2UpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -111,27 +110,26 @@ func (r *ZoneSettingHttp2UpdateResponseMessage) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// HTTP2 enabled for this zone.
 type ZoneSettingHttp2UpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHttp2UpdateResponseResultID `json:"id"`
+	ID ZoneSettingHttp2UpdateResponseResultID `json:"id,required"`
+	// Value of the HTTP2 setting.
+	Value ZoneSettingHttp2UpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHttp2UpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the HTTP2 setting.
-	Value ZoneSettingHttp2UpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingHttp2UpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingHttp2UpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingHttp2UpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingHttp2UpdateResponseResult]
 type zoneSettingHttp2UpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,6 +145,14 @@ const (
 	ZoneSettingHttp2UpdateResponseResultIDHttp2 ZoneSettingHttp2UpdateResponseResultID = "http2"
 )
 
+// Value of the HTTP2 setting.
+type ZoneSettingHttp2UpdateResponseResultValue string
+
+const (
+	ZoneSettingHttp2UpdateResponseResultValueOn  ZoneSettingHttp2UpdateResponseResultValue = "on"
+	ZoneSettingHttp2UpdateResponseResultValueOff ZoneSettingHttp2UpdateResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHttp2UpdateResponseResultEditable bool
@@ -156,22 +162,13 @@ const (
 	ZoneSettingHttp2UpdateResponseResultEditableFalse ZoneSettingHttp2UpdateResponseResultEditable = false
 )
 
-// Value of the HTTP2 setting.
-type ZoneSettingHttp2UpdateResponseResultValue string
-
-const (
-	ZoneSettingHttp2UpdateResponseResultValueOn  ZoneSettingHttp2UpdateResponseResultValue = "on"
-	ZoneSettingHttp2UpdateResponseResultValueOff ZoneSettingHttp2UpdateResponseResultValue = "off"
-)
-
 type ZoneSettingHttp2ListResponse struct {
-	Errors   []ZoneSettingHttp2ListResponseError   `json:"errors"`
-	Messages []ZoneSettingHttp2ListResponseMessage `json:"messages"`
-	// HTTP2 enabled for this zone.
-	Result ZoneSettingHttp2ListResponseResult `json:"result"`
+	Errors   []ZoneSettingHttp2ListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingHttp2ListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                             `json:"success"`
-	JSON    zoneSettingHttp2ListResponseJSON `json:"-"`
+	Success bool                               `json:"success,required"`
+	Result  ZoneSettingHttp2ListResponseResult `json:"result"`
+	JSON    zoneSettingHttp2ListResponseJSON   `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseJSON contains the JSON metadata for the struct
@@ -179,8 +176,8 @@ type ZoneSettingHttp2ListResponse struct {
 type zoneSettingHttp2ListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -227,27 +224,26 @@ func (r *ZoneSettingHttp2ListResponseMessage) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// HTTP2 enabled for this zone.
 type ZoneSettingHttp2ListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHttp2ListResponseResultID `json:"id"`
+	ID ZoneSettingHttp2ListResponseResultID `json:"id,required"`
+	// Value of the HTTP2 setting.
+	Value ZoneSettingHttp2ListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHttp2ListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the HTTP2 setting.
-	Value ZoneSettingHttp2ListResponseResultValue `json:"value"`
-	JSON  zoneSettingHttp2ListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingHttp2ListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingHttp2ListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingHttp2ListResponseResult]
 type zoneSettingHttp2ListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -263,6 +259,14 @@ const (
 	ZoneSettingHttp2ListResponseResultIDHttp2 ZoneSettingHttp2ListResponseResultID = "http2"
 )
 
+// Value of the HTTP2 setting.
+type ZoneSettingHttp2ListResponseResultValue string
+
+const (
+	ZoneSettingHttp2ListResponseResultValueOn  ZoneSettingHttp2ListResponseResultValue = "on"
+	ZoneSettingHttp2ListResponseResultValueOff ZoneSettingHttp2ListResponseResultValue = "off"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHttp2ListResponseResultEditable bool
@@ -270,14 +274,6 @@ type ZoneSettingHttp2ListResponseResultEditable bool
 const (
 	ZoneSettingHttp2ListResponseResultEditableTrue  ZoneSettingHttp2ListResponseResultEditable = true
 	ZoneSettingHttp2ListResponseResultEditableFalse ZoneSettingHttp2ListResponseResultEditable = false
-)
-
-// Value of the HTTP2 setting.
-type ZoneSettingHttp2ListResponseResultValue string
-
-const (
-	ZoneSettingHttp2ListResponseResultValueOn  ZoneSettingHttp2ListResponseResultValue = "on"
-	ZoneSettingHttp2ListResponseResultValueOff ZoneSettingHttp2ListResponseResultValue = "off"
 )
 
 type ZoneSettingHttp2UpdateParams struct {

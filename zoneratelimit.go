@@ -12,7 +12,6 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,15 +33,6 @@ func NewZoneRateLimitService(opts ...option.RequestOption) (r *ZoneRateLimitServ
 	return
 }
 
-// Creates a new rate limit for a zone. Refer to the object definition for a list
-// of required attributes.
-func (r *ZoneRateLimitService) New(ctx context.Context, zoneIdentifier string, body ZoneRateLimitNewParams, opts ...option.RequestOption) (res *ZoneRateLimitNewResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
-}
-
 // Fetches the details of a rate limit.
 func (r *ZoneRateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *ZoneRateLimitGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -51,115 +41,20 @@ func (r *ZoneRateLimitService) Get(ctx context.Context, zoneIdentifier string, i
 	return
 }
 
-// Updates an existing rate limit.
-func (r *ZoneRateLimitService) Update(ctx context.Context, zoneIdentifier string, id string, body ZoneRateLimitUpdateParams, opts ...option.RequestOption) (res *ZoneRateLimitUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
-	return
-}
-
 // Fetches the rate limits for a zone.
-func (r *ZoneRateLimitService) List(ctx context.Context, zoneIdentifier string, query ZoneRateLimitListParams, opts ...option.RequestOption) (res *shared.Page[ZoneRateLimitListResponse], err error) {
-	var raw *http.Response
-	opts = append(r.Options, opts...)
-	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
-	if err != nil {
-		return nil, err
-	}
-	err = cfg.Execute()
-	if err != nil {
-		return nil, err
-	}
-	res.SetPageConfig(cfg, raw)
-	return res, nil
-}
-
-// Deletes an existing rate limit.
-func (r *ZoneRateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *ZoneRateLimitDeleteResponse, err error) {
+func (r *ZoneRateLimitService) List(ctx context.Context, zoneIdentifier string, query ZoneRateLimitListParams, opts ...option.RequestOption) (res *ZoneRateLimitListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
-
-type ZoneRateLimitNewResponse struct {
-	Errors   []ZoneRateLimitNewResponseError   `json:"errors"`
-	Messages []ZoneRateLimitNewResponseMessage `json:"messages"`
-	Result   interface{}                       `json:"result"`
-	// Whether the API call was successful
-	Success ZoneRateLimitNewResponseSuccess `json:"success"`
-	JSON    zoneRateLimitNewResponseJSON    `json:"-"`
-}
-
-// zoneRateLimitNewResponseJSON contains the JSON metadata for the struct
-// [ZoneRateLimitNewResponse]
-type zoneRateLimitNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitNewResponseError struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    zoneRateLimitNewResponseErrorJSON `json:"-"`
-}
-
-// zoneRateLimitNewResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneRateLimitNewResponseError]
-type zoneRateLimitNewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitNewResponseMessage struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    zoneRateLimitNewResponseMessageJSON `json:"-"`
-}
-
-// zoneRateLimitNewResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneRateLimitNewResponseMessage]
-type zoneRateLimitNewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ZoneRateLimitNewResponseSuccess bool
-
-const (
-	ZoneRateLimitNewResponseSuccessTrue ZoneRateLimitNewResponseSuccess = true
-)
 
 type ZoneRateLimitGetResponse struct {
-	Errors   []ZoneRateLimitGetResponseError   `json:"errors"`
-	Messages []ZoneRateLimitGetResponseMessage `json:"messages"`
-	Result   interface{}                       `json:"result"`
+	Errors   []ZoneRateLimitGetResponseError   `json:"errors,required"`
+	Messages []ZoneRateLimitGetResponseMessage `json:"messages,required"`
+	Result   interface{}                       `json:"result,required"`
 	// Whether the API call was successful
-	Success ZoneRateLimitGetResponseSuccess `json:"success"`
+	Success ZoneRateLimitGetResponseSuccess `json:"success,required"`
 	JSON    zoneRateLimitGetResponseJSON    `json:"-"`
 }
 
@@ -223,18 +118,18 @@ const (
 	ZoneRateLimitGetResponseSuccessTrue ZoneRateLimitGetResponseSuccess = true
 )
 
-type ZoneRateLimitUpdateResponse struct {
-	Errors   []ZoneRateLimitUpdateResponseError   `json:"errors"`
-	Messages []ZoneRateLimitUpdateResponseMessage `json:"messages"`
-	Result   interface{}                          `json:"result"`
+type ZoneRateLimitListResponse struct {
+	Errors   []ZoneRateLimitListResponseError   `json:"errors,required"`
+	Messages []ZoneRateLimitListResponseMessage `json:"messages,required"`
+	Result   []ZoneRateLimitListResponseResult  `json:"result,required"`
 	// Whether the API call was successful
-	Success ZoneRateLimitUpdateResponseSuccess `json:"success"`
-	JSON    zoneRateLimitUpdateResponseJSON    `json:"-"`
+	Success ZoneRateLimitListResponseSuccess `json:"success,required"`
+	JSON    zoneRateLimitListResponseJSON    `json:"-"`
 }
 
-// zoneRateLimitUpdateResponseJSON contains the JSON metadata for the struct
-// [ZoneRateLimitUpdateResponse]
-type zoneRateLimitUpdateResponseJSON struct {
+// zoneRateLimitListResponseJSON contains the JSON metadata for the struct
+// [ZoneRateLimitListResponse]
+type zoneRateLimitListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -243,84 +138,77 @@ type zoneRateLimitUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneRateLimitUpdateResponseError struct {
+type ZoneRateLimitListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    zoneRateLimitListResponseErrorJSON `json:"-"`
+}
+
+// zoneRateLimitListResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneRateLimitListResponseError]
+type zoneRateLimitListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRateLimitListResponseMessage struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
-	JSON    zoneRateLimitUpdateResponseErrorJSON `json:"-"`
+	JSON    zoneRateLimitListResponseMessageJSON `json:"-"`
 }
 
-// zoneRateLimitUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneRateLimitUpdateResponseError]
-type zoneRateLimitUpdateResponseErrorJSON struct {
+// zoneRateLimitListResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneRateLimitListResponseMessage]
+type zoneRateLimitListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneRateLimitUpdateResponseMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    zoneRateLimitUpdateResponseMessageJSON `json:"-"`
-}
-
-// zoneRateLimitUpdateResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneRateLimitUpdateResponseMessage]
-type zoneRateLimitUpdateResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ZoneRateLimitUpdateResponseSuccess bool
-
-const (
-	ZoneRateLimitUpdateResponseSuccessTrue ZoneRateLimitUpdateResponseSuccess = true
-)
-
-type ZoneRateLimitListResponse struct {
+type ZoneRateLimitListResponseResult struct {
 	// The unique identifier of the rate limit.
 	ID string `json:"id"`
 	// The action to perform when the threshold of matched traffic within the
 	// configured period is exceeded.
-	Action ZoneRateLimitListResponseAction `json:"action"`
+	Action ZoneRateLimitListResponseResultAction `json:"action"`
 	// Criteria specifying when the current rate limit should be bypassed. You can
 	// specify that the rate limit should not apply to one or more URLs.
-	Bypass []ZoneRateLimitListResponseBypass `json:"bypass"`
+	Bypass []ZoneRateLimitListResponseResultBypass `json:"bypass"`
 	// An informative summary of the rate limit. This value is sanitized and any tags
 	// will be removed.
 	Description string `json:"description"`
 	// When true, indicates that the rate limit is currently disabled.
 	Disabled bool `json:"disabled"`
 	// Determines which traffic the rate limit counts towards the threshold.
-	Match ZoneRateLimitListResponseMatch `json:"match"`
+	Match ZoneRateLimitListResponseResultMatch `json:"match"`
 	// The time in seconds (an integer value) to count matching traffic. If the count
 	// exceeds the configured threshold within this period, Cloudflare will perform the
 	// configured action.
 	Period float64 `json:"period"`
 	// The threshold that will trigger the configured mitigation action. Configure this
 	// value along with the `period` property to establish a threshold per period.
-	Threshold float64                       `json:"threshold"`
-	JSON      zoneRateLimitListResponseJSON `json:"-"`
+	Threshold float64                             `json:"threshold"`
+	JSON      zoneRateLimitListResponseResultJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseJSON contains the JSON metadata for the struct
-// [ZoneRateLimitListResponse]
-type zoneRateLimitListResponseJSON struct {
+// zoneRateLimitListResponseResultJSON contains the JSON metadata for the struct
+// [ZoneRateLimitListResponseResult]
+type zoneRateLimitListResponseResultJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Bypass      apijson.Field
@@ -333,33 +221,33 @@ type zoneRateLimitListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to perform when the threshold of matched traffic within the
 // configured period is exceeded.
-type ZoneRateLimitListResponseAction struct {
+type ZoneRateLimitListResponseResultAction struct {
 	// The action to perform.
-	Mode ZoneRateLimitListResponseActionMode `json:"mode"`
+	Mode ZoneRateLimitListResponseResultActionMode `json:"mode"`
 	// A custom content type and reponse to return when the threshold is exceeded. The
 	// custom response configured in this object will override the custom error for the
 	// zone. This object is optional. Notes: If you omit this object, Cloudflare will
 	// use the default HTML error page. If "mode" is "challenge", "managed_challenge",
 	// or "js_challenge", Cloudflare will use the zone challenge pages and you should
 	// not provide the "response" object.
-	Response ZoneRateLimitListResponseActionResponse `json:"response"`
+	Response ZoneRateLimitListResponseResultActionResponse `json:"response"`
 	// The time in seconds during which Cloudflare will perform the mitigation action.
 	// Must be an integer value greater than or equal to the period. Notes: If "mode"
 	// is "challenge", "managed_challenge", or "js_challenge", Cloudflare will use the
 	// zone's Challenge Passage time and you should not provide this value.
-	Timeout float64                             `json:"timeout"`
-	JSON    zoneRateLimitListResponseActionJSON `json:"-"`
+	Timeout float64                                   `json:"timeout"`
+	JSON    zoneRateLimitListResponseResultActionJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseActionJSON contains the JSON metadata for the struct
-// [ZoneRateLimitListResponseAction]
-type zoneRateLimitListResponseActionJSON struct {
+// zoneRateLimitListResponseResultActionJSON contains the JSON metadata for the
+// struct [ZoneRateLimitListResponseResultAction]
+type zoneRateLimitListResponseResultActionJSON struct {
 	Mode        apijson.Field
 	Response    apijson.Field
 	Timeout     apijson.Field
@@ -367,19 +255,19 @@ type zoneRateLimitListResponseActionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseAction) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to perform.
-type ZoneRateLimitListResponseActionMode string
+type ZoneRateLimitListResponseResultActionMode string
 
 const (
-	ZoneRateLimitListResponseActionModeSimulate         ZoneRateLimitListResponseActionMode = "simulate"
-	ZoneRateLimitListResponseActionModeBan              ZoneRateLimitListResponseActionMode = "ban"
-	ZoneRateLimitListResponseActionModeChallenge        ZoneRateLimitListResponseActionMode = "challenge"
-	ZoneRateLimitListResponseActionModeJsChallenge      ZoneRateLimitListResponseActionMode = "js_challenge"
-	ZoneRateLimitListResponseActionModeManagedChallenge ZoneRateLimitListResponseActionMode = "managed_challenge"
+	ZoneRateLimitListResponseResultActionModeSimulate         ZoneRateLimitListResponseResultActionMode = "simulate"
+	ZoneRateLimitListResponseResultActionModeBan              ZoneRateLimitListResponseResultActionMode = "ban"
+	ZoneRateLimitListResponseResultActionModeChallenge        ZoneRateLimitListResponseResultActionMode = "challenge"
+	ZoneRateLimitListResponseResultActionModeJsChallenge      ZoneRateLimitListResponseResultActionMode = "js_challenge"
+	ZoneRateLimitListResponseResultActionModeManagedChallenge ZoneRateLimitListResponseResultActionMode = "managed_challenge"
 )
 
 // A custom content type and reponse to return when the threshold is exceeded. The
@@ -388,66 +276,66 @@ const (
 // use the default HTML error page. If "mode" is "challenge", "managed_challenge",
 // or "js_challenge", Cloudflare will use the zone challenge pages and you should
 // not provide the "response" object.
-type ZoneRateLimitListResponseActionResponse struct {
+type ZoneRateLimitListResponseResultActionResponse struct {
 	// The response body to return. The value must conform to the configured content
 	// type.
 	Body string `json:"body"`
 	// The content type of the body. Must be one of the following: `text/plain`,
 	// `text/xml`, or `application/json`.
-	ContentType string                                      `json:"content_type"`
-	JSON        zoneRateLimitListResponseActionResponseJSON `json:"-"`
+	ContentType string                                            `json:"content_type"`
+	JSON        zoneRateLimitListResponseResultActionResponseJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseActionResponseJSON contains the JSON metadata for the
-// struct [ZoneRateLimitListResponseActionResponse]
-type zoneRateLimitListResponseActionResponseJSON struct {
+// zoneRateLimitListResponseResultActionResponseJSON contains the JSON metadata for
+// the struct [ZoneRateLimitListResponseResultActionResponse]
+type zoneRateLimitListResponseResultActionResponseJSON struct {
 	Body        apijson.Field
 	ContentType apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseActionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultActionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneRateLimitListResponseBypass struct {
-	Name ZoneRateLimitListResponseBypassName `json:"name"`
+type ZoneRateLimitListResponseResultBypass struct {
+	Name ZoneRateLimitListResponseResultBypassName `json:"name"`
 	// The URL to bypass.
-	Value string                              `json:"value"`
-	JSON  zoneRateLimitListResponseBypassJSON `json:"-"`
+	Value string                                    `json:"value"`
+	JSON  zoneRateLimitListResponseResultBypassJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseBypassJSON contains the JSON metadata for the struct
-// [ZoneRateLimitListResponseBypass]
-type zoneRateLimitListResponseBypassJSON struct {
+// zoneRateLimitListResponseResultBypassJSON contains the JSON metadata for the
+// struct [ZoneRateLimitListResponseResultBypass]
+type zoneRateLimitListResponseResultBypassJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseBypass) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultBypass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneRateLimitListResponseBypassName string
+type ZoneRateLimitListResponseResultBypassName string
 
 const (
-	ZoneRateLimitListResponseBypassNameURL ZoneRateLimitListResponseBypassName = "url"
+	ZoneRateLimitListResponseResultBypassNameURL ZoneRateLimitListResponseResultBypassName = "url"
 )
 
 // Determines which traffic the rate limit counts towards the threshold.
-type ZoneRateLimitListResponseMatch struct {
-	Headers  []ZoneRateLimitListResponseMatchHeader `json:"headers"`
-	Request  ZoneRateLimitListResponseMatchRequest  `json:"request"`
-	Response ZoneRateLimitListResponseMatchResponse `json:"response"`
-	JSON     zoneRateLimitListResponseMatchJSON     `json:"-"`
+type ZoneRateLimitListResponseResultMatch struct {
+	Headers  []ZoneRateLimitListResponseResultMatchHeader `json:"headers"`
+	Request  ZoneRateLimitListResponseResultMatchRequest  `json:"request"`
+	Response ZoneRateLimitListResponseResultMatchResponse `json:"response"`
+	JSON     zoneRateLimitListResponseResultMatchJSON     `json:"-"`
 }
 
-// zoneRateLimitListResponseMatchJSON contains the JSON metadata for the struct
-// [ZoneRateLimitListResponseMatch]
-type zoneRateLimitListResponseMatchJSON struct {
+// zoneRateLimitListResponseResultMatchJSON contains the JSON metadata for the
+// struct [ZoneRateLimitListResponseResultMatch]
+type zoneRateLimitListResponseResultMatchJSON struct {
 	Headers     apijson.Field
 	Request     apijson.Field
 	Response    apijson.Field
@@ -455,23 +343,23 @@ type zoneRateLimitListResponseMatchJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseMatch) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneRateLimitListResponseMatchHeader struct {
+type ZoneRateLimitListResponseResultMatchHeader struct {
 	// The name of the response header to match.
 	Name string `json:"name"`
 	// The operator used when matching: `eq` means "equal" and `ne` means "not equal".
-	Op ZoneRateLimitListResponseMatchHeadersOp `json:"op"`
+	Op ZoneRateLimitListResponseResultMatchHeadersOp `json:"op"`
 	// The value of the response header, which must match exactly.
-	Value string                                   `json:"value"`
-	JSON  zoneRateLimitListResponseMatchHeaderJSON `json:"-"`
+	Value string                                         `json:"value"`
+	JSON  zoneRateLimitListResponseResultMatchHeaderJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseMatchHeaderJSON contains the JSON metadata for the
-// struct [ZoneRateLimitListResponseMatchHeader]
-type zoneRateLimitListResponseMatchHeaderJSON struct {
+// zoneRateLimitListResponseResultMatchHeaderJSON contains the JSON metadata for
+// the struct [ZoneRateLimitListResponseResultMatchHeader]
+type zoneRateLimitListResponseResultMatchHeaderJSON struct {
 	Name        apijson.Field
 	Op          apijson.Field
 	Value       apijson.Field
@@ -479,23 +367,23 @@ type zoneRateLimitListResponseMatchHeaderJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseMatchHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultMatchHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The operator used when matching: `eq` means "equal" and `ne` means "not equal".
-type ZoneRateLimitListResponseMatchHeadersOp string
+type ZoneRateLimitListResponseResultMatchHeadersOp string
 
 const (
-	ZoneRateLimitListResponseMatchHeadersOpEq ZoneRateLimitListResponseMatchHeadersOp = "eq"
-	ZoneRateLimitListResponseMatchHeadersOpNe ZoneRateLimitListResponseMatchHeadersOp = "ne"
+	ZoneRateLimitListResponseResultMatchHeadersOpEq ZoneRateLimitListResponseResultMatchHeadersOp = "eq"
+	ZoneRateLimitListResponseResultMatchHeadersOpNe ZoneRateLimitListResponseResultMatchHeadersOp = "ne"
 )
 
-type ZoneRateLimitListResponseMatchRequest struct {
+type ZoneRateLimitListResponseResultMatchRequest struct {
 	// The HTTP methods to match. You can specify a subset (for example,
 	// `['POST','PUT']`) or all methods (`['_ALL_']`). This field is optional when
 	// creating a rate limit.
-	Methods []ZoneRateLimitListResponseMatchRequestMethod `json:"methods"`
+	Methods []ZoneRateLimitListResponseResultMatchRequestMethod `json:"methods"`
 	// The HTTP schemes to match. You can specify one scheme (`['HTTPS']`), both
 	// schemes (`['HTTP','HTTPS']`), or all schemes (`['_ALL_']`). This field is
 	// optional.
@@ -504,13 +392,13 @@ type ZoneRateLimitListResponseMatchRequest struct {
 	// `example.org/path*`. Normalization is applied before the pattern is matched. `*`
 	// wildcards are expanded to match applicable traffic. Query strings are not
 	// matched. Set the value to `*` to match all traffic to your zone.
-	URL  string                                    `json:"url"`
-	JSON zoneRateLimitListResponseMatchRequestJSON `json:"-"`
+	URL  string                                          `json:"url"`
+	JSON zoneRateLimitListResponseResultMatchRequestJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseMatchRequestJSON contains the JSON metadata for the
-// struct [ZoneRateLimitListResponseMatchRequest]
-type zoneRateLimitListResponseMatchRequestJSON struct {
+// zoneRateLimitListResponseResultMatchRequestJSON contains the JSON metadata for
+// the struct [ZoneRateLimitListResponseResultMatchRequest]
+type zoneRateLimitListResponseResultMatchRequestJSON struct {
 	Methods     apijson.Field
 	Schemes     apijson.Field
 	URL         apijson.Field
@@ -518,147 +406,51 @@ type zoneRateLimitListResponseMatchRequestJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseMatchRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultMatchRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // An HTTP method or `_ALL_` to indicate all methods.
-type ZoneRateLimitListResponseMatchRequestMethod string
+type ZoneRateLimitListResponseResultMatchRequestMethod string
 
 const (
-	ZoneRateLimitListResponseMatchRequestMethodGet    ZoneRateLimitListResponseMatchRequestMethod = "GET"
-	ZoneRateLimitListResponseMatchRequestMethodPost   ZoneRateLimitListResponseMatchRequestMethod = "POST"
-	ZoneRateLimitListResponseMatchRequestMethodPut    ZoneRateLimitListResponseMatchRequestMethod = "PUT"
-	ZoneRateLimitListResponseMatchRequestMethodDelete ZoneRateLimitListResponseMatchRequestMethod = "DELETE"
-	ZoneRateLimitListResponseMatchRequestMethodPatch  ZoneRateLimitListResponseMatchRequestMethod = "PATCH"
-	ZoneRateLimitListResponseMatchRequestMethodHead   ZoneRateLimitListResponseMatchRequestMethod = "HEAD"
-	ZoneRateLimitListResponseMatchRequestMethod_All   ZoneRateLimitListResponseMatchRequestMethod = "_ALL_"
+	ZoneRateLimitListResponseResultMatchRequestMethodGet    ZoneRateLimitListResponseResultMatchRequestMethod = "GET"
+	ZoneRateLimitListResponseResultMatchRequestMethodPost   ZoneRateLimitListResponseResultMatchRequestMethod = "POST"
+	ZoneRateLimitListResponseResultMatchRequestMethodPut    ZoneRateLimitListResponseResultMatchRequestMethod = "PUT"
+	ZoneRateLimitListResponseResultMatchRequestMethodDelete ZoneRateLimitListResponseResultMatchRequestMethod = "DELETE"
+	ZoneRateLimitListResponseResultMatchRequestMethodPatch  ZoneRateLimitListResponseResultMatchRequestMethod = "PATCH"
+	ZoneRateLimitListResponseResultMatchRequestMethodHead   ZoneRateLimitListResponseResultMatchRequestMethod = "HEAD"
+	ZoneRateLimitListResponseResultMatchRequestMethod_All   ZoneRateLimitListResponseResultMatchRequestMethod = "_ALL_"
 )
 
-type ZoneRateLimitListResponseMatchResponse struct {
+type ZoneRateLimitListResponseResultMatchResponse struct {
 	// When true, only the uncached traffic served from your origin servers will count
 	// towards rate limiting. In this case, any cached traffic served by Cloudflare
 	// will not count towards rate limiting. This field is optional. Notes: This field
 	// is deprecated. Instead, use response headers and set "origin_traffic" to "false"
 	// to avoid legacy behaviour interacting with the "response_headers" property.
-	OriginTraffic bool                                       `json:"origin_traffic"`
-	JSON          zoneRateLimitListResponseMatchResponseJSON `json:"-"`
+	OriginTraffic bool                                             `json:"origin_traffic"`
+	JSON          zoneRateLimitListResponseResultMatchResponseJSON `json:"-"`
 }
 
-// zoneRateLimitListResponseMatchResponseJSON contains the JSON metadata for the
-// struct [ZoneRateLimitListResponseMatchResponse]
-type zoneRateLimitListResponseMatchResponseJSON struct {
+// zoneRateLimitListResponseResultMatchResponseJSON contains the JSON metadata for
+// the struct [ZoneRateLimitListResponseResultMatchResponse]
+type zoneRateLimitListResponseResultMatchResponseJSON struct {
 	OriginTraffic apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneRateLimitListResponseMatchResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitDeleteResponse struct {
-	Errors   []ZoneRateLimitDeleteResponseError   `json:"errors"`
-	Messages []ZoneRateLimitDeleteResponseMessage `json:"messages"`
-	Result   ZoneRateLimitDeleteResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success ZoneRateLimitDeleteResponseSuccess `json:"success"`
-	JSON    zoneRateLimitDeleteResponseJSON    `json:"-"`
-}
-
-// zoneRateLimitDeleteResponseJSON contains the JSON metadata for the struct
-// [ZoneRateLimitDeleteResponse]
-type zoneRateLimitDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitDeleteResponseError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    zoneRateLimitDeleteResponseErrorJSON `json:"-"`
-}
-
-// zoneRateLimitDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneRateLimitDeleteResponseError]
-type zoneRateLimitDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitDeleteResponseMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    zoneRateLimitDeleteResponseMessageJSON `json:"-"`
-}
-
-// zoneRateLimitDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneRateLimitDeleteResponseMessage]
-type zoneRateLimitDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneRateLimitDeleteResponseResult struct {
-	// The unique identifier of the rate limit.
-	ID   string                                `json:"id"`
-	JSON zoneRateLimitDeleteResponseResultJSON `json:"-"`
-}
-
-// zoneRateLimitDeleteResponseResultJSON contains the JSON metadata for the struct
-// [ZoneRateLimitDeleteResponseResult]
-type zoneRateLimitDeleteResponseResultJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneRateLimitDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneRateLimitListResponseResultMatchResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZoneRateLimitDeleteResponseSuccess bool
+type ZoneRateLimitListResponseSuccess bool
 
 const (
-	ZoneRateLimitDeleteResponseSuccessTrue ZoneRateLimitDeleteResponseSuccess = true
+	ZoneRateLimitListResponseSuccessTrue ZoneRateLimitListResponseSuccess = true
 )
-
-type ZoneRateLimitNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r ZoneRateLimitNewParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type ZoneRateLimitUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r ZoneRateLimitUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
 
 type ZoneRateLimitListParams struct {
 	// The page number of paginated results.

@@ -53,18 +53,12 @@ func (r *ZoneSettingPolishService) List(ctx context.Context, zoneIdentifier stri
 }
 
 type ZoneSettingPolishUpdateResponse struct {
-	Errors   []ZoneSettingPolishUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingPolishUpdateResponseMessage `json:"messages"`
-	// Removes metadata and compresses your images for faster page load times. Basic
-	// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-	// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-	// image loading. Larger JPEGs are converted to progressive images, loading a
-	// lower-resolution image first and ending in a higher-resolution version. Not
-	// recommended for hi-res photography sites.
-	Result ZoneSettingPolishUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingPolishUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPolishUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                `json:"success"`
-	JSON    zoneSettingPolishUpdateResponseJSON `json:"-"`
+	Success bool                                  `json:"success,required"`
+	Result  ZoneSettingPolishUpdateResponseResult `json:"result"`
+	JSON    zoneSettingPolishUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseJSON contains the JSON metadata for the struct
@@ -72,8 +66,8 @@ type ZoneSettingPolishUpdateResponse struct {
 type zoneSettingPolishUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -120,32 +114,26 @@ func (r *ZoneSettingPolishUpdateResponseMessage) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Removes metadata and compresses your images for faster page load times. Basic
-// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-// image loading. Larger JPEGs are converted to progressive images, loading a
-// lower-resolution image first and ending in a higher-resolution version. Not
-// recommended for hi-res photography sites.
 type ZoneSettingPolishUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingPolishUpdateResponseResultID `json:"id"`
+	ID ZoneSettingPolishUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingPolishUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPolishUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingPolishUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingPolishUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPolishUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPolishUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingPolishUpdateResponseResult]
 type zoneSettingPolishUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -161,15 +149,6 @@ const (
 	ZoneSettingPolishUpdateResponseResultIDPolish ZoneSettingPolishUpdateResponseResultID = "polish"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingPolishUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingPolishUpdateResponseResultEditableTrue  ZoneSettingPolishUpdateResponseResultEditable = true
-	ZoneSettingPolishUpdateResponseResultEditableFalse ZoneSettingPolishUpdateResponseResultEditable = false
-)
-
 // Value of the zone setting.
 type ZoneSettingPolishUpdateResponseResultValue string
 
@@ -179,19 +158,22 @@ const (
 	ZoneSettingPolishUpdateResponseResultValueLossy    ZoneSettingPolishUpdateResponseResultValue = "lossy"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPolishUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingPolishUpdateResponseResultEditableTrue  ZoneSettingPolishUpdateResponseResultEditable = true
+	ZoneSettingPolishUpdateResponseResultEditableFalse ZoneSettingPolishUpdateResponseResultEditable = false
+)
+
 type ZoneSettingPolishListResponse struct {
-	Errors   []ZoneSettingPolishListResponseError   `json:"errors"`
-	Messages []ZoneSettingPolishListResponseMessage `json:"messages"`
-	// Removes metadata and compresses your images for faster page load times. Basic
-	// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-	// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-	// image loading. Larger JPEGs are converted to progressive images, loading a
-	// lower-resolution image first and ending in a higher-resolution version. Not
-	// recommended for hi-res photography sites.
-	Result ZoneSettingPolishListResponseResult `json:"result"`
+	Errors   []ZoneSettingPolishListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingPolishListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                              `json:"success"`
-	JSON    zoneSettingPolishListResponseJSON `json:"-"`
+	Success bool                                `json:"success,required"`
+	Result  ZoneSettingPolishListResponseResult `json:"result"`
+	JSON    zoneSettingPolishListResponseJSON   `json:"-"`
 }
 
 // zoneSettingPolishListResponseJSON contains the JSON metadata for the struct
@@ -199,8 +181,8 @@ type ZoneSettingPolishListResponse struct {
 type zoneSettingPolishListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -247,32 +229,26 @@ func (r *ZoneSettingPolishListResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Removes metadata and compresses your images for faster page load times. Basic
-// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-// image loading. Larger JPEGs are converted to progressive images, loading a
-// lower-resolution image first and ending in a higher-resolution version. Not
-// recommended for hi-res photography sites.
 type ZoneSettingPolishListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingPolishListResponseResultID `json:"id"`
+	ID ZoneSettingPolishListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingPolishListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingPolishListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingPolishListResponseResultValue `json:"value"`
-	JSON  zoneSettingPolishListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPolishListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingPolishListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingPolishListResponseResult]
 type zoneSettingPolishListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -288,15 +264,6 @@ const (
 	ZoneSettingPolishListResponseResultIDPolish ZoneSettingPolishListResponseResultID = "polish"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingPolishListResponseResultEditable bool
-
-const (
-	ZoneSettingPolishListResponseResultEditableTrue  ZoneSettingPolishListResponseResultEditable = true
-	ZoneSettingPolishListResponseResultEditableFalse ZoneSettingPolishListResponseResultEditable = false
-)
-
 // Value of the zone setting.
 type ZoneSettingPolishListResponseResultValue string
 
@@ -304,6 +271,15 @@ const (
 	ZoneSettingPolishListResponseResultValueOff      ZoneSettingPolishListResponseResultValue = "off"
 	ZoneSettingPolishListResponseResultValueLossless ZoneSettingPolishListResponseResultValue = "lossless"
 	ZoneSettingPolishListResponseResultValueLossy    ZoneSettingPolishListResponseResultValue = "lossy"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPolishListResponseResultEditable bool
+
+const (
+	ZoneSettingPolishListResponseResultEditableTrue  ZoneSettingPolishListResponseResultEditable = true
+	ZoneSettingPolishListResponseResultEditableFalse ZoneSettingPolishListResponseResultEditable = false
 )
 
 type ZoneSettingPolishUpdateParams struct {
@@ -328,9 +304,9 @@ func (r ZoneSettingPolishUpdateParams) MarshalJSON() (data []byte, err error) {
 // recommended for hi-res photography sites.
 type ZoneSettingPolishUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingPolishUpdateParamsValueID] `json:"id"`
+	ID param.Field[ZoneSettingPolishUpdateParamsValueID] `json:"id,required"`
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingPolishUpdateParamsValueValue] `json:"value"`
+	Value param.Field[ZoneSettingPolishUpdateParamsValueValue] `json:"value,required"`
 }
 
 func (r ZoneSettingPolishUpdateParamsValue) MarshalJSON() (data []byte, err error) {
@@ -344,15 +320,6 @@ const (
 	ZoneSettingPolishUpdateParamsValueIDPolish ZoneSettingPolishUpdateParamsValueID = "polish"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingPolishUpdateParamsValueEditable bool
-
-const (
-	ZoneSettingPolishUpdateParamsValueEditableTrue  ZoneSettingPolishUpdateParamsValueEditable = true
-	ZoneSettingPolishUpdateParamsValueEditableFalse ZoneSettingPolishUpdateParamsValueEditable = false
-)
-
 // Value of the zone setting.
 type ZoneSettingPolishUpdateParamsValueValue string
 
@@ -360,4 +327,13 @@ const (
 	ZoneSettingPolishUpdateParamsValueValueOff      ZoneSettingPolishUpdateParamsValueValue = "off"
 	ZoneSettingPolishUpdateParamsValueValueLossless ZoneSettingPolishUpdateParamsValueValue = "lossless"
 	ZoneSettingPolishUpdateParamsValueValueLossy    ZoneSettingPolishUpdateParamsValueValue = "lossy"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPolishUpdateParamsValueEditable bool
+
+const (
+	ZoneSettingPolishUpdateParamsValueEditableTrue  ZoneSettingPolishUpdateParamsValueEditable = true
+	ZoneSettingPolishUpdateParamsValueEditableFalse ZoneSettingPolishUpdateParamsValueEditable = false
 )

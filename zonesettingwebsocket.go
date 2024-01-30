@@ -52,19 +52,12 @@ func (r *ZoneSettingWebsocketService) List(ctx context.Context, zoneIdentifier s
 }
 
 type ZoneSettingWebsocketUpdateResponse struct {
-	Errors   []ZoneSettingWebsocketUpdateResponseError   `json:"errors"`
-	Messages []ZoneSettingWebsocketUpdateResponseMessage `json:"messages"`
-	// WebSockets are open connections sustained between the client and the origin
-	// server. Inside a WebSockets connection, the client and the origin can pass data
-	// back and forth without having to reestablish sessions. This makes exchanging
-	// data within a WebSockets connection fast. WebSockets are often used for
-	// real-time applications such as live chat and gaming. For more information refer
-	// to
-	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsocketUpdateResponseResult `json:"result"`
+	Errors   []ZoneSettingWebsocketUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWebsocketUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                   `json:"success"`
-	JSON    zoneSettingWebsocketUpdateResponseJSON `json:"-"`
+	Success bool                                     `json:"success,required"`
+	Result  ZoneSettingWebsocketUpdateResponseResult `json:"result"`
+	JSON    zoneSettingWebsocketUpdateResponseJSON   `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseJSON contains the JSON metadata for the struct
@@ -72,8 +65,8 @@ type ZoneSettingWebsocketUpdateResponse struct {
 type zoneSettingWebsocketUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -120,33 +113,26 @@ func (r *ZoneSettingWebsocketUpdateResponseMessage) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// WebSockets are open connections sustained between the client and the origin
-// server. Inside a WebSockets connection, the client and the origin can pass data
-// back and forth without having to reestablish sessions. This makes exchanging
-// data within a WebSockets connection fast. WebSockets are often used for
-// real-time applications such as live chat and gaming. For more information refer
-// to
-// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
 type ZoneSettingWebsocketUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebsocketUpdateResponseResultID `json:"id"`
+	ID ZoneSettingWebsocketUpdateResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWebsocketUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWebsocketUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWebsocketUpdateResponseResultValue `json:"value"`
-	JSON  zoneSettingWebsocketUpdateResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWebsocketUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWebsocketUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingWebsocketUpdateResponseResult]
 type zoneSettingWebsocketUpdateResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -162,6 +148,14 @@ const (
 	ZoneSettingWebsocketUpdateResponseResultIDWebsockets ZoneSettingWebsocketUpdateResponseResultID = "websockets"
 )
 
+// Value of the zone setting.
+type ZoneSettingWebsocketUpdateResponseResultValue string
+
+const (
+	ZoneSettingWebsocketUpdateResponseResultValueOff ZoneSettingWebsocketUpdateResponseResultValue = "off"
+	ZoneSettingWebsocketUpdateResponseResultValueOn  ZoneSettingWebsocketUpdateResponseResultValue = "on"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWebsocketUpdateResponseResultEditable bool
@@ -171,28 +165,13 @@ const (
 	ZoneSettingWebsocketUpdateResponseResultEditableFalse ZoneSettingWebsocketUpdateResponseResultEditable = false
 )
 
-// Value of the zone setting.
-type ZoneSettingWebsocketUpdateResponseResultValue string
-
-const (
-	ZoneSettingWebsocketUpdateResponseResultValueOff ZoneSettingWebsocketUpdateResponseResultValue = "off"
-	ZoneSettingWebsocketUpdateResponseResultValueOn  ZoneSettingWebsocketUpdateResponseResultValue = "on"
-)
-
 type ZoneSettingWebsocketListResponse struct {
-	Errors   []ZoneSettingWebsocketListResponseError   `json:"errors"`
-	Messages []ZoneSettingWebsocketListResponseMessage `json:"messages"`
-	// WebSockets are open connections sustained between the client and the origin
-	// server. Inside a WebSockets connection, the client and the origin can pass data
-	// back and forth without having to reestablish sessions. This makes exchanging
-	// data within a WebSockets connection fast. WebSockets are often used for
-	// real-time applications such as live chat and gaming. For more information refer
-	// to
-	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsocketListResponseResult `json:"result"`
+	Errors   []ZoneSettingWebsocketListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingWebsocketListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                 `json:"success"`
-	JSON    zoneSettingWebsocketListResponseJSON `json:"-"`
+	Success bool                                   `json:"success,required"`
+	Result  ZoneSettingWebsocketListResponseResult `json:"result"`
+	JSON    zoneSettingWebsocketListResponseJSON   `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseJSON contains the JSON metadata for the struct
@@ -200,8 +179,8 @@ type ZoneSettingWebsocketListResponse struct {
 type zoneSettingWebsocketListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -248,33 +227,26 @@ func (r *ZoneSettingWebsocketListResponseMessage) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// WebSockets are open connections sustained between the client and the origin
-// server. Inside a WebSockets connection, the client and the origin can pass data
-// back and forth without having to reestablish sessions. This makes exchanging
-// data within a WebSockets connection fast. WebSockets are often used for
-// real-time applications such as live chat and gaming. For more information refer
-// to
-// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
 type ZoneSettingWebsocketListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebsocketListResponseResultID `json:"id"`
+	ID ZoneSettingWebsocketListResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingWebsocketListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingWebsocketListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting.
-	Value ZoneSettingWebsocketListResponseResultValue `json:"value"`
-	JSON  zoneSettingWebsocketListResponseResultJSON  `json:"-"`
+	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingWebsocketListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingWebsocketListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingWebsocketListResponseResult]
 type zoneSettingWebsocketListResponseResultJSON struct {
 	ID          apijson.Field
+	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -290,6 +262,14 @@ const (
 	ZoneSettingWebsocketListResponseResultIDWebsockets ZoneSettingWebsocketListResponseResultID = "websockets"
 )
 
+// Value of the zone setting.
+type ZoneSettingWebsocketListResponseResultValue string
+
+const (
+	ZoneSettingWebsocketListResponseResultValueOff ZoneSettingWebsocketListResponseResultValue = "off"
+	ZoneSettingWebsocketListResponseResultValueOn  ZoneSettingWebsocketListResponseResultValue = "on"
+)
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingWebsocketListResponseResultEditable bool
@@ -297,14 +277,6 @@ type ZoneSettingWebsocketListResponseResultEditable bool
 const (
 	ZoneSettingWebsocketListResponseResultEditableTrue  ZoneSettingWebsocketListResponseResultEditable = true
 	ZoneSettingWebsocketListResponseResultEditableFalse ZoneSettingWebsocketListResponseResultEditable = false
-)
-
-// Value of the zone setting.
-type ZoneSettingWebsocketListResponseResultValue string
-
-const (
-	ZoneSettingWebsocketListResponseResultValueOff ZoneSettingWebsocketListResponseResultValue = "off"
-	ZoneSettingWebsocketListResponseResultValueOn  ZoneSettingWebsocketListResponseResultValue = "on"
 )
 
 type ZoneSettingWebsocketUpdateParams struct {
