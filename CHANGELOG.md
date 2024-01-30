@@ -9,6 +9,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
+* access_users: ListAccessUsers was returning wrong values in pointer fields due to variable missused in loop ([#1482](https://github.com/cloudflare/cloudflare-go/issues/1482))
 * flarectl: alias zone certs to "ct" instead of duplicating the "c" alias ([#1484](https://github.com/cloudflare/cloudflare-go/issues/1484))
 
 DEPENDENCIES:
