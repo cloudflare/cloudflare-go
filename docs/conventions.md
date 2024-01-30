@@ -5,7 +5,7 @@ making changes the Go SDK.
 
 ## Methods
 
-- All methods should take a maxium of 3 parameter. See examples in [experimental](./experimental.md)
+- All methods should take a maximum of 3 parameter. See examples in [experimental](./experimental.md)
 - The first parameter is always `context.Context`.
 - The second is a `*ResourceContainer`.
 - The final is a struct of available parameters for the method. 

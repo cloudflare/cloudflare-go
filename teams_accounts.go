@@ -37,14 +37,15 @@ type TeamsConfiguration struct {
 }
 
 type TeamsAccountSettings struct {
-	Antivirus         *TeamsAntivirus         `json:"antivirus,omitempty"`
-	TLSDecrypt        *TeamsTLSDecrypt        `json:"tls_decrypt,omitempty"`
-	ActivityLog       *TeamsActivityLog       `json:"activity_log,omitempty"`
-	BlockPage         *TeamsBlockPage         `json:"block_page,omitempty"`
-	BrowserIsolation  *BrowserIsolation       `json:"browser_isolation,omitempty"`
-	FIPS              *TeamsFIPS              `json:"fips,omitempty"`
-	ProtocolDetection *TeamsProtocolDetection `json:"protocol_detection,omitempty"`
-	BodyScanning      *TeamsBodyScanning      `json:"body_scanning,omitempty"`
+	Antivirus             *TeamsAntivirus             `json:"antivirus,omitempty"`
+	TLSDecrypt            *TeamsTLSDecrypt            `json:"tls_decrypt,omitempty"`
+	ActivityLog           *TeamsActivityLog           `json:"activity_log,omitempty"`
+	BlockPage             *TeamsBlockPage             `json:"block_page,omitempty"`
+	BrowserIsolation      *BrowserIsolation           `json:"browser_isolation,omitempty"`
+	FIPS                  *TeamsFIPS                  `json:"fips,omitempty"`
+	ProtocolDetection     *TeamsProtocolDetection     `json:"protocol_detection,omitempty"`
+	BodyScanning          *TeamsBodyScanning          `json:"body_scanning,omitempty"`
+	ExtendedEmailMatching *TeamsExtendedEmailMatching `json:"extended_email_matching,omitempty"`
 }
 
 type BrowserIsolation struct {
@@ -95,6 +96,10 @@ const (
 
 type TeamsBodyScanning struct {
 	InspectionMode TeamsInspectionMode `json:"inspection_mode,omitempty"`
+}
+
+type TeamsExtendedEmailMatching struct {
+	Enabled *bool `json:"enabled,omitempty"`
 }
 
 type TeamsRuleType = string
