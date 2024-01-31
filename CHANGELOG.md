@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* access_seats: Add `UpdateAccessUsersSeats` with an array as input for multiple operations ([#1480](https://github.com/cloudflare/cloudflare-go/issues/1480))
 * dlp: add support for EDM and CWL datasets ([#1485](https://github.com/cloudflare/cloudflare-go/issues/1485))
 * logpush: Add support for Output Options ([#1468](https://github.com/cloudflare/cloudflare-go/issues/1468))
 * pages_project: Add `build_caching` attribute ([#1489](https://github.com/cloudflare/cloudflare-go/issues/1489))
@@ -10,6 +11,7 @@ ENHANCEMENTS:
 
 BUG FIXES:
 
+* access_seats: UpdateAccessUserSeat: fix parameters not being an array when sending to the api. This caused an error when updating a user's seat ([#1480](https://github.com/cloudflare/cloudflare-go/issues/1480))
 * access_users: ListAccessUsers was returning wrong values in pointer fields due to variable missused in loop ([#1482](https://github.com/cloudflare/cloudflare-go/issues/1482))
 * flarectl: alias zone certs to "ct" instead of duplicating the "c" alias ([#1484](https://github.com/cloudflare/cloudflare-go/issues/1484))
 
