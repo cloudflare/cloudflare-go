@@ -122,9 +122,8 @@ func init() {
 		reflect.TypeOf((*ZoneDnssecGetResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -213,9 +212,8 @@ func init() {
 		reflect.TypeOf((*ZoneDnssecUpdateResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }

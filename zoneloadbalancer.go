@@ -147,9 +147,8 @@ func init() {
 		reflect.TypeOf((*ZoneLoadBalancerNewResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -238,9 +237,8 @@ func init() {
 		reflect.TypeOf((*ZoneLoadBalancerGetResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -329,9 +327,8 @@ func init() {
 		reflect.TypeOf((*ZoneLoadBalancerUpdateResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -422,9 +419,8 @@ func init() {
 		reflect.TypeOf((*ZoneLoadBalancerListResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
@@ -540,9 +536,8 @@ func init() {
 		reflect.TypeOf((*ZoneLoadBalancerDeleteResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
-			TypeFilter:         gjson.String,
-			DiscriminatorValue: "",
-			Type:               reflect.TypeOf(shared.UnionString("")),
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
 }
