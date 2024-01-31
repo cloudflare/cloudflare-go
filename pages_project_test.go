@@ -44,6 +44,7 @@ const (
           }
         },
         "build_config": {
+          "build_caching": true,
           "build_command": "npm run build",
           "destination_dir": "build",
           "root_dir": "/",
@@ -178,6 +179,7 @@ const (
             }
           ],
           "build_config": {
+            "build_caching": true,
             "build_command": "npm run build",
             "destination_dir": "build",
             "root_dir": "/",
@@ -269,6 +271,7 @@ const (
             }
           ],
           "build_config": {
+            "build_caching": true,
             "build_command": "npm run build",
             "destination_dir": "build",
             "root_dir": "/",
@@ -399,6 +402,7 @@ var (
 	}
 
 	expectedPagesProjectBuildConfig = &PagesProjectBuildConfig{
+		BuildCaching:      BoolPtr(true),
 		BuildCommand:      "npm run build",
 		DestinationDir:    "build",
 		RootDir:           "/",

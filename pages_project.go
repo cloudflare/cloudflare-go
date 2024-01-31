@@ -53,6 +53,7 @@ type PagesProjectSourceConfig struct {
 
 // PagesProjectBuildConfig represents the configuration of a Pages project build process.
 type PagesProjectBuildConfig struct {
+	BuildCaching      *bool  `json:"build_caching,omitempty"`
 	BuildCommand      string `json:"build_command"`
 	DestinationDir    string `json:"destination_dir"`
 	RootDir           string `json:"root_dir"`
