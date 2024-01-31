@@ -4,6 +4,7 @@ ENHANCEMENTS:
 
 * dlp: add support for EDM and CWL datasets ([#1485](https://github.com/cloudflare/cloudflare-go/issues/1485))
 * logpush: Add support for Output Options ([#1468](https://github.com/cloudflare/cloudflare-go/issues/1468))
+* pages_project: Add `build_caching` attribute ([#1489](https://github.com/cloudflare/cloudflare-go/issues/1489))
 * streams: adds support for stream create parameters for tus upload initiate ([#1386](https://github.com/cloudflare/cloudflare-go/issues/1386))
 * teams_accounts: add support for extended email matching ([#1486](https://github.com/cloudflare/cloudflare-go/issues/1486))
 
