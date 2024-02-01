@@ -22,8 +22,9 @@ func TestUsage(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
 		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{

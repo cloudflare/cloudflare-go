@@ -23,8 +23,9 @@ func TestZoneLoadBalancerNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.LoadBalancers.New(
 		context.TODO(),
@@ -333,8 +334,9 @@ func TestZoneLoadBalancerGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.LoadBalancers.Get(
 		context.TODO(),
@@ -360,8 +362,9 @@ func TestZoneLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.LoadBalancers.Update(
 		context.TODO(),
@@ -672,8 +675,9 @@ func TestZoneLoadBalancerList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.LoadBalancers.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
@@ -695,8 +699,9 @@ func TestZoneLoadBalancerDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.LoadBalancers.Delete(
 		context.TODO(),

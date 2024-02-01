@@ -23,8 +23,9 @@ func TestZoneSettingMobileRedirectUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.Settings.MobileRedirects.Update(
 		context.TODO(),
@@ -56,8 +57,9 @@ func TestZoneSettingMobileRedirectList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.Settings.MobileRedirects.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

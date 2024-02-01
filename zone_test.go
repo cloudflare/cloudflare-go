@@ -23,8 +23,9 @@ func TestZoneNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
 		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
@@ -52,8 +53,9 @@ func TestZoneGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -75,8 +77,9 @@ func TestZoneUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.Update(
 		context.TODO(),
@@ -108,8 +111,9 @@ func TestZoneListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.List(context.TODO(), cloudflare.ZoneListParams{
 		Account: cloudflare.F(cloudflare.ZoneListParamsAccount{
@@ -144,8 +148,9 @@ func TestZoneDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("my-cloudflare-api-key"),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
 	_, err := client.Zones.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

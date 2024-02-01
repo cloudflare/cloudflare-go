@@ -202,3 +202,11 @@ func WithEmail(value string) RequestOption {
 		return r.Apply(WithHeader("x-auth-email", value))
 	}
 }
+
+// WithAPIToken returns a RequestOption that sets the client setting "api_token".
+func WithAPIToken(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.APIToken = value
+		return r.Apply(WithHeader("authoriazaion", value))
+	}
+}
