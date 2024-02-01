@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingSslRecommenderUpdateWithOptionalParams(t *testing.T) {
+func TestZoneSettingSSLRecommenderUpdateWithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,13 +27,13 @@ func TestZoneSettingSslRecommenderUpdateWithOptionalParams(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.SslRecommenders.Update(
+	_, err := client.Zones.Settings.SSLRecommenders.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingSslRecommenderUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingSslRecommenderUpdateParamsValue{
+		cloudflare.ZoneSettingSSLRecommenderUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingSSLRecommenderUpdateParamsValue{
 				Enabled: cloudflare.F(true),
-				ID:      cloudflare.F(cloudflare.ZoneSettingSslRecommenderUpdateParamsValueIDSslRecommender),
+				ID:      cloudflare.F(cloudflare.ZoneSettingSSLRecommenderUpdateParamsValueIDSSLRecommender),
 			}),
 		},
 	)
@@ -46,7 +46,7 @@ func TestZoneSettingSslRecommenderUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZoneSettingSslRecommenderList(t *testing.T) {
+func TestZoneSettingSSLRecommenderList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -60,7 +60,7 @@ func TestZoneSettingSslRecommenderList(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.SslRecommenders.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.SSLRecommenders.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

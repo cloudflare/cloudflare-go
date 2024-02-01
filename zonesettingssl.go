@@ -14,20 +14,20 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// ZoneSettingSslService contains methods and other services that help with
+// ZoneSettingSSLService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewZoneSettingSslService] method
+// this service directly, and instead use the [NewZoneSettingSSLService] method
 // instead.
-type ZoneSettingSslService struct {
+type ZoneSettingSSLService struct {
 	Options []option.RequestOption
 }
 
-// NewZoneSettingSslService generates a new service that applies the given options
+// NewZoneSettingSSLService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewZoneSettingSslService(opts ...option.RequestOption) (r *ZoneSettingSslService) {
-	r = &ZoneSettingSslService{}
+func NewZoneSettingSSLService(opts ...option.RequestOption) (r *ZoneSettingSSLService) {
+	r = &ZoneSettingSSLService{}
 	r.Options = opts
 	return
 }
@@ -48,7 +48,7 @@ func NewZoneSettingSslService(opts ...option.RequestOption) (r *ZoneSettingSslSe
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *ZoneSettingSslService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingSslUpdateParams, opts ...option.RequestOption) (res *ZoneSettingSslUpdateResponse, err error) {
+func (r *ZoneSettingSSLService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingSSLUpdateParams, opts ...option.RequestOption) (res *ZoneSettingSSLUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/ssl", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
@@ -71,25 +71,25 @@ func (r *ZoneSettingSslService) Update(ctx context.Context, zoneIdentifier strin
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *ZoneSettingSslService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingSslListResponse, err error) {
+func (r *ZoneSettingSSLService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingSSLListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/ssl", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type ZoneSettingSslUpdateResponse struct {
-	Errors   []ZoneSettingSslUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingSslUpdateResponseMessage `json:"messages,required"`
+type ZoneSettingSSLUpdateResponse struct {
+	Errors   []ZoneSettingSSLUpdateResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSSLUpdateResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                               `json:"success,required"`
-	Result  ZoneSettingSslUpdateResponseResult `json:"result"`
-	JSON    zoneSettingSslUpdateResponseJSON   `json:"-"`
+	Result  ZoneSettingSSLUpdateResponseResult `json:"result"`
+	JSON    zoneSettingSSLUpdateResponseJSON   `json:"-"`
 }
 
-// zoneSettingSslUpdateResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingSslUpdateResponse]
-type zoneSettingSslUpdateResponseJSON struct {
+// zoneSettingSSLUpdateResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLUpdateResponse]
+type zoneSettingSSLUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -98,64 +98,64 @@ type zoneSettingSslUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslUpdateResponseError struct {
+type ZoneSettingSSLUpdateResponseError struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingSslUpdateResponseErrorJSON `json:"-"`
+	JSON    zoneSettingSSLUpdateResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingSslUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingSslUpdateResponseError]
-type zoneSettingSslUpdateResponseErrorJSON struct {
+// zoneSettingSSLUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLUpdateResponseError]
+type zoneSettingSSLUpdateResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslUpdateResponseMessage struct {
+type ZoneSettingSSLUpdateResponseMessage struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    zoneSettingSslUpdateResponseMessageJSON `json:"-"`
+	JSON    zoneSettingSSLUpdateResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingSslUpdateResponseMessageJSON contains the JSON metadata for the
-// struct [ZoneSettingSslUpdateResponseMessage]
-type zoneSettingSslUpdateResponseMessageJSON struct {
+// zoneSettingSSLUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSettingSSLUpdateResponseMessage]
+type zoneSettingSSLUpdateResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslUpdateResponseResult struct {
+type ZoneSettingSSLUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingSslUpdateResponseResultID `json:"id,required"`
+	ID ZoneSettingSSLUpdateResponseResultID `json:"id,required"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value ZoneSettingSslUpdateResponseResultValue `json:"value,required"`
+	Value ZoneSettingSSLUpdateResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingSslUpdateResponseResultEditable `json:"editable"`
+	Editable ZoneSettingSSLUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslUpdateResponseResultJSON `json:"-"`
+	JSON       zoneSettingSSLUpdateResponseResultJSON `json:"-"`
 }
 
-// zoneSettingSslUpdateResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingSslUpdateResponseResult]
-type zoneSettingSslUpdateResponseResultJSON struct {
+// zoneSettingSSLUpdateResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLUpdateResponseResult]
+type zoneSettingSSLUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -164,48 +164,48 @@ type zoneSettingSslUpdateResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type ZoneSettingSslUpdateResponseResultID string
+type ZoneSettingSSLUpdateResponseResultID string
 
 const (
-	ZoneSettingSslUpdateResponseResultIDSsl ZoneSettingSslUpdateResponseResultID = "ssl"
+	ZoneSettingSSLUpdateResponseResultIDSSL ZoneSettingSSLUpdateResponseResultID = "ssl"
 )
 
 // Value of the zone setting. Notes: Depends on the zone's plan level
-type ZoneSettingSslUpdateResponseResultValue string
+type ZoneSettingSSLUpdateResponseResultValue string
 
 const (
-	ZoneSettingSslUpdateResponseResultValueOff      ZoneSettingSslUpdateResponseResultValue = "off"
-	ZoneSettingSslUpdateResponseResultValueFlexible ZoneSettingSslUpdateResponseResultValue = "flexible"
-	ZoneSettingSslUpdateResponseResultValueFull     ZoneSettingSslUpdateResponseResultValue = "full"
-	ZoneSettingSslUpdateResponseResultValueStrict   ZoneSettingSslUpdateResponseResultValue = "strict"
+	ZoneSettingSSLUpdateResponseResultValueOff      ZoneSettingSSLUpdateResponseResultValue = "off"
+	ZoneSettingSSLUpdateResponseResultValueFlexible ZoneSettingSSLUpdateResponseResultValue = "flexible"
+	ZoneSettingSSLUpdateResponseResultValueFull     ZoneSettingSSLUpdateResponseResultValue = "full"
+	ZoneSettingSSLUpdateResponseResultValueStrict   ZoneSettingSSLUpdateResponseResultValue = "strict"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingSslUpdateResponseResultEditable bool
+type ZoneSettingSSLUpdateResponseResultEditable bool
 
 const (
-	ZoneSettingSslUpdateResponseResultEditableTrue  ZoneSettingSslUpdateResponseResultEditable = true
-	ZoneSettingSslUpdateResponseResultEditableFalse ZoneSettingSslUpdateResponseResultEditable = false
+	ZoneSettingSSLUpdateResponseResultEditableTrue  ZoneSettingSSLUpdateResponseResultEditable = true
+	ZoneSettingSSLUpdateResponseResultEditableFalse ZoneSettingSSLUpdateResponseResultEditable = false
 )
 
-type ZoneSettingSslListResponse struct {
-	Errors   []ZoneSettingSslListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingSslListResponseMessage `json:"messages,required"`
+type ZoneSettingSSLListResponse struct {
+	Errors   []ZoneSettingSSLListResponseError   `json:"errors,required"`
+	Messages []ZoneSettingSSLListResponseMessage `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool                             `json:"success,required"`
-	Result  ZoneSettingSslListResponseResult `json:"result"`
-	JSON    zoneSettingSslListResponseJSON   `json:"-"`
+	Result  ZoneSettingSSLListResponseResult `json:"result"`
+	JSON    zoneSettingSSLListResponseJSON   `json:"-"`
 }
 
-// zoneSettingSslListResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingSslListResponse]
-type zoneSettingSslListResponseJSON struct {
+// zoneSettingSSLListResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLListResponse]
+type zoneSettingSSLListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -214,64 +214,64 @@ type zoneSettingSslListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslListResponseError struct {
+type ZoneSettingSSLListResponseError struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
-	JSON    zoneSettingSslListResponseErrorJSON `json:"-"`
+	JSON    zoneSettingSSLListResponseErrorJSON `json:"-"`
 }
 
-// zoneSettingSslListResponseErrorJSON contains the JSON metadata for the struct
-// [ZoneSettingSslListResponseError]
-type zoneSettingSslListResponseErrorJSON struct {
+// zoneSettingSSLListResponseErrorJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLListResponseError]
+type zoneSettingSSLListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslListResponseMessage struct {
+type ZoneSettingSSLListResponseMessage struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    zoneSettingSslListResponseMessageJSON `json:"-"`
+	JSON    zoneSettingSSLListResponseMessageJSON `json:"-"`
 }
 
-// zoneSettingSslListResponseMessageJSON contains the JSON metadata for the struct
-// [ZoneSettingSslListResponseMessage]
-type zoneSettingSslListResponseMessageJSON struct {
+// zoneSettingSSLListResponseMessageJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLListResponseMessage]
+type zoneSettingSSLListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingSslListResponseResult struct {
+type ZoneSettingSSLListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingSslListResponseResultID `json:"id,required"`
+	ID ZoneSettingSSLListResponseResultID `json:"id,required"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value ZoneSettingSslListResponseResultValue `json:"value,required"`
+	Value ZoneSettingSSLListResponseResultValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingSslListResponseResultEditable `json:"editable"`
+	Editable ZoneSettingSSLListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingSslListResponseResultJSON `json:"-"`
+	JSON       zoneSettingSSLListResponseResultJSON `json:"-"`
 }
 
-// zoneSettingSslListResponseResultJSON contains the JSON metadata for the struct
-// [ZoneSettingSslListResponseResult]
-type zoneSettingSslListResponseResultJSON struct {
+// zoneSettingSSLListResponseResultJSON contains the JSON metadata for the struct
+// [ZoneSettingSSLListResponseResult]
+type zoneSettingSSLListResponseResultJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -280,51 +280,51 @@ type zoneSettingSslListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingSslListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSSLListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type ZoneSettingSslListResponseResultID string
+type ZoneSettingSSLListResponseResultID string
 
 const (
-	ZoneSettingSslListResponseResultIDSsl ZoneSettingSslListResponseResultID = "ssl"
+	ZoneSettingSSLListResponseResultIDSSL ZoneSettingSSLListResponseResultID = "ssl"
 )
 
 // Value of the zone setting. Notes: Depends on the zone's plan level
-type ZoneSettingSslListResponseResultValue string
+type ZoneSettingSSLListResponseResultValue string
 
 const (
-	ZoneSettingSslListResponseResultValueOff      ZoneSettingSslListResponseResultValue = "off"
-	ZoneSettingSslListResponseResultValueFlexible ZoneSettingSslListResponseResultValue = "flexible"
-	ZoneSettingSslListResponseResultValueFull     ZoneSettingSslListResponseResultValue = "full"
-	ZoneSettingSslListResponseResultValueStrict   ZoneSettingSslListResponseResultValue = "strict"
+	ZoneSettingSSLListResponseResultValueOff      ZoneSettingSSLListResponseResultValue = "off"
+	ZoneSettingSSLListResponseResultValueFlexible ZoneSettingSSLListResponseResultValue = "flexible"
+	ZoneSettingSSLListResponseResultValueFull     ZoneSettingSSLListResponseResultValue = "full"
+	ZoneSettingSSLListResponseResultValueStrict   ZoneSettingSSLListResponseResultValue = "strict"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingSslListResponseResultEditable bool
+type ZoneSettingSSLListResponseResultEditable bool
 
 const (
-	ZoneSettingSslListResponseResultEditableTrue  ZoneSettingSslListResponseResultEditable = true
-	ZoneSettingSslListResponseResultEditableFalse ZoneSettingSslListResponseResultEditable = false
+	ZoneSettingSSLListResponseResultEditableTrue  ZoneSettingSSLListResponseResultEditable = true
+	ZoneSettingSSLListResponseResultEditableFalse ZoneSettingSSLListResponseResultEditable = false
 )
 
-type ZoneSettingSslUpdateParams struct {
+type ZoneSettingSSLUpdateParams struct {
 	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value param.Field[ZoneSettingSslUpdateParamsValue] `json:"value,required"`
+	Value param.Field[ZoneSettingSSLUpdateParamsValue] `json:"value,required"`
 }
 
-func (r ZoneSettingSslUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingSSLUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Depends on the zone's plan level
-type ZoneSettingSslUpdateParamsValue string
+type ZoneSettingSSLUpdateParamsValue string
 
 const (
-	ZoneSettingSslUpdateParamsValueOff      ZoneSettingSslUpdateParamsValue = "off"
-	ZoneSettingSslUpdateParamsValueFlexible ZoneSettingSslUpdateParamsValue = "flexible"
-	ZoneSettingSslUpdateParamsValueFull     ZoneSettingSslUpdateParamsValue = "full"
-	ZoneSettingSslUpdateParamsValueStrict   ZoneSettingSslUpdateParamsValue = "strict"
+	ZoneSettingSSLUpdateParamsValueOff      ZoneSettingSSLUpdateParamsValue = "off"
+	ZoneSettingSSLUpdateParamsValueFlexible ZoneSettingSSLUpdateParamsValue = "flexible"
+	ZoneSettingSSLUpdateParamsValueFull     ZoneSettingSSLUpdateParamsValue = "full"
+	ZoneSettingSSLUpdateParamsValueStrict   ZoneSettingSSLUpdateParamsValue = "strict"
 )

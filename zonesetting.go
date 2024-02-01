@@ -62,8 +62,8 @@ type ZoneSettingService struct {
 	SecurityLevels                 *ZoneSettingSecurityLevelService
 	ServerSideExcludes             *ZoneSettingServerSideExcludeService
 	SortQueryStringForCaches       *ZoneSettingSortQueryStringForCachService
-	Ssls                           *ZoneSettingSslService
-	SslRecommenders                *ZoneSettingSslRecommenderService
+	SSLs                           *ZoneSettingSSLService
+	SSLRecommenders                *ZoneSettingSSLRecommenderService
 	TLS1_3s                        *ZoneSettingTLS1_3Service
 	TLSClientAuths                 *ZoneSettingTLSClientAuthService
 	TrueClientIPHeaders            *ZoneSettingTrueClientIPHeaderService
@@ -120,8 +120,8 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.SecurityLevels = NewZoneSettingSecurityLevelService(opts...)
 	r.ServerSideExcludes = NewZoneSettingServerSideExcludeService(opts...)
 	r.SortQueryStringForCaches = NewZoneSettingSortQueryStringForCachService(opts...)
-	r.Ssls = NewZoneSettingSslService(opts...)
-	r.SslRecommenders = NewZoneSettingSslRecommenderService(opts...)
+	r.SSLs = NewZoneSettingSSLService(opts...)
+	r.SSLRecommenders = NewZoneSettingSSLRecommenderService(opts...)
 	r.TLS1_3s = NewZoneSettingTLS1_3Service(opts...)
 	r.TLSClientAuths = NewZoneSettingTLSClientAuthService(opts...)
 	r.TrueClientIPHeaders = NewZoneSettingTrueClientIPHeaderService(opts...)
@@ -306,7 +306,7 @@ func (r ZoneSettingEditParams) MarshalJSON() (data []byte, err error) {
 // [ZoneSettingEditParamsItemsObject], [ZoneSettingEditParamsItemsObject],
 // [ZoneSettingEditParamsItemsObject], [ZoneSettingEditParamsItemsObject],
 // [ZoneSettingEditParamsItemsObject],
-// [ZoneSettingEditParamsItemsZonesSslRecommender],
+// [ZoneSettingEditParamsItemsZonesSSLRecommender],
 // [ZoneSettingEditParamsItemsObject], [ZoneSettingEditParamsItemsObject],
 // [ZoneSettingEditParamsItemsObject], [ZoneSettingEditParamsItemsObject],
 // [ZoneSettingEditParamsItemsObject], [ZoneSettingEditParamsItemsObject],
@@ -377,22 +377,22 @@ const (
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-type ZoneSettingEditParamsItemsZonesSslRecommender struct {
+type ZoneSettingEditParamsItemsZonesSSLRecommender struct {
 	// Enrollment value for SSL/TLS Recommender.
-	ID param.Field[ZoneSettingEditParamsItemsZonesSslRecommenderID] `json:"id"`
+	ID param.Field[ZoneSettingEditParamsItemsZonesSSLRecommenderID] `json:"id"`
 	// ssl-recommender enrollment setting.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ZoneSettingEditParamsItemsZonesSslRecommender) MarshalJSON() (data []byte, err error) {
+func (r ZoneSettingEditParamsItemsZonesSSLRecommender) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r ZoneSettingEditParamsItemsZonesSslRecommender) implementsZoneSettingEditParamsItem() {}
+func (r ZoneSettingEditParamsItemsZonesSSLRecommender) implementsZoneSettingEditParamsItem() {}
 
 // Enrollment value for SSL/TLS Recommender.
-type ZoneSettingEditParamsItemsZonesSslRecommenderID string
+type ZoneSettingEditParamsItemsZonesSSLRecommenderID string
 
 const (
-	ZoneSettingEditParamsItemsZonesSslRecommenderIDSslRecommender ZoneSettingEditParamsItemsZonesSslRecommenderID = "ssl_recommender"
+	ZoneSettingEditParamsItemsZonesSSLRecommenderIDSSLRecommender ZoneSettingEditParamsItemsZonesSSLRecommenderID = "ssl_recommender"
 )

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingSslUpdate(t *testing.T) {
+func TestZoneSettingSSLUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,11 @@ func TestZoneSettingSslUpdate(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.Ssls.Update(
+	_, err := client.Zones.Settings.SSLs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingSslUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingSslUpdateParamsValueOff),
+		cloudflare.ZoneSettingSSLUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingSSLUpdateParamsValueOff),
 		},
 	)
 	if err != nil {
@@ -43,7 +43,7 @@ func TestZoneSettingSslUpdate(t *testing.T) {
 	}
 }
 
-func TestZoneSettingSslList(t *testing.T) {
+func TestZoneSettingSSLList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,7 +57,7 @@ func TestZoneSettingSslList(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.Ssls.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.SSLs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
