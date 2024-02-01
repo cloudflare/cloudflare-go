@@ -26,7 +26,7 @@ func testHyperdriveConfig() HyperdriveConfig {
 			User:     "postgres",
 		},
 		Caching: HyperdriveConfigCaching{
-			Disabled:             false,
+			Disabled:             BoolPtr(false),
 			MaxAge:               30,
 			StaleWhileRevalidate: 15,
 		},
@@ -64,12 +64,12 @@ func TestHyperdriveConfig_List(t *testing.T) {
 		}`)
 	})
 
-	_, err := client.ListHyperdriveConfigs(context.Background(), AccountIdentifier(""))
+	_, err := client.ListHyperdriveConfigs(context.Background(), AccountIdentifier(""), ListHyperdriveConfigParams{})
 	if assert.Error(t, err) {
 		assert.Equal(t, ErrMissingAccountID, err)
 	}
 
-	result, err := client.ListHyperdriveConfigs(context.Background(), AccountIdentifier(testAccountID))
+	result, err := client.ListHyperdriveConfigs(context.Background(), AccountIdentifier(testAccountID), ListHyperdriveConfigParams{})
 	if assert.NoError(t, err) {
 		assert.Equal(t, 1, len(result))
 		assert.Equal(t, testHyperdriveConfig(), result[0])
@@ -180,7 +180,7 @@ func TestHyperdriveConfig_Create(t *testing.T) {
 			User:     "postgres",
 		},
 		Caching: HyperdriveConfigCaching{
-			Disabled:             false,
+			Disabled:             BoolPtr(false),
 			MaxAge:               30,
 			StaleWhileRevalidate: 15,
 		},
@@ -273,7 +273,7 @@ func TestHyperdriveConfig_Update(t *testing.T) {
 			User:     "postgres",
 		},
 		Caching: HyperdriveConfigCaching{
-			Disabled:             false,
+			Disabled:             BoolPtr(false),
 			MaxAge:               30,
 			StaleWhileRevalidate: 15,
 		},

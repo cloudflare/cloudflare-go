@@ -31,9 +31,9 @@ type HyperdriveConfigOrigin struct {
 }
 
 type HyperdriveConfigCaching struct {
-	Disabled             bool `json:"disabled,omitempty"`
-	MaxAge               int  `json:"max_age,omitempty"`
-	StaleWhileRevalidate int  `json:"stale_while_revalidate,omitempty"`
+	Disabled             *bool `json:"disabled,omitempty"`
+	MaxAge               int   `json:"max_age,omitempty"`
+	StaleWhileRevalidate int   `json:"stale_while_revalidate,omitempty"`
 }
 
 type HyperdriveConfigListResponse struct {
@@ -61,16 +61,17 @@ type UpdateHyperdriveConfigParams struct {
 	Caching      HyperdriveConfigCaching `json:"caching,omitempty"`
 }
 
+type ListHyperdriveConfigParams struct{}
+
 // ListHyperdriveConfigs returns the Hyperdrive configs owned by an account.
 //
 // API reference: https://developers.cloudflare.com/api/operations/list-hyperdrive
-func (api *API) ListHyperdriveConfigs(ctx context.Context, rc *ResourceContainer) ([]HyperdriveConfig, error) {
+func (api *API) ListHyperdriveConfigs(ctx context.Context, rc *ResourceContainer, params ListHyperdriveConfigParams) ([]HyperdriveConfig, error) {
 	if rc.Identifier == "" {
 		return []HyperdriveConfig{}, ErrMissingAccountID
 	}
 
-	var hResponse HyperdriveConfigListResponse
-	hResponse = HyperdriveConfigListResponse{}
+	hResponse := HyperdriveConfigListResponse{}
 	uri := fmt.Sprintf("/accounts/%s/hyperdrive/configs", rc.Identifier)
 
 	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
