@@ -3,6 +3,7 @@
 package option
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -207,6 +208,6 @@ func WithEmail(value string) RequestOption {
 func WithAPIToken(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		r.APIToken = value
-		return r.Apply(WithHeader("authoriazaion", value))
+		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIToken)))
 	}
 }
