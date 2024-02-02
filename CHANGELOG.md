@@ -1,5 +1,9 @@
 ## 0.88.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
+
 ## 0.87.0 (January 31st, 2024)
 
 ENHANCEMENTS:
