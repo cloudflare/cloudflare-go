@@ -3,7 +3,7 @@
 <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-sdk-go.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
-API](https://developers.cloudflare.com/api/) from applications written in Go. The full API of this library can be found in [api.md](https://www.github.com/cloudflare/cloudflare-sdk-go/blob/main/api.md).
+API](https://developers.cloudflare.com/api/) from applications written in Go. The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -25,7 +25,7 @@ This library requires Go 1.18+.
 
 ## Usage
 
-The full API of this library can be found in [api.md](https://www.github.com/cloudflare/cloudflare-sdk-go/blob/main/api.md).
+The full API of this library can be found in [api.md](api.md).
 
 ```go
 package main
