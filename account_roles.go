@@ -64,7 +64,6 @@ func (api *API) ListAccountRoles(ctx context.Context, rc *ResourceContainer, par
 		params.Page = 1
 	}
 	var roles []AccountRole
-	var r AccountRolesListResponse
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/roles", rc.Identifier), params)
 
@@ -72,6 +71,7 @@ func (api *API) ListAccountRoles(ctx context.Context, rc *ResourceContainer, par
 		if err != nil {
 			return []AccountRole{}, err
 		}
+		var r AccountRolesListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {

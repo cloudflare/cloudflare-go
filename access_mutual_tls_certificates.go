@@ -83,7 +83,7 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 	}
 
 	var accessCertificates []AccessMutualTLSCertificate
-	var r AccessMutualTLSCertificateListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -91,11 +91,13 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 		if err != nil {
 			return []AccessMutualTLSCertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r AccessMutualTLSCertificateListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessMutualTLSCertificate{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		accessCertificates = append(accessCertificates, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -103,7 +105,7 @@ func (api *API) ListAccessMutualTLSCertificates(ctx context.Context, rc *Resourc
 		}
 	}
 
-	return accessCertificates, &r.ResultInfo, nil
+	return accessCertificates, lastResultInfo, nil
 }
 
 // GetAccessMutualTLSCertificate returns a single Access Mutual TLS

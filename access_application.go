@@ -222,7 +222,7 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 	}
 
 	var applications []AccessApplication
-	var r AccessApplicationListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -231,11 +231,13 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 		if err != nil {
 			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r AccessApplicationListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessApplication{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		applications = append(applications, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -243,7 +245,7 @@ func (api *API) ListAccessApplications(ctx context.Context, rc *ResourceContaine
 		}
 	}
 
-	return applications, &r.ResultInfo, nil
+	return applications, lastResultInfo, nil
 }
 
 // GetAccessApplication returns a single application based on the application

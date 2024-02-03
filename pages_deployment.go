@@ -147,7 +147,7 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 	}
 
 	var deployments []PagesProjectDeployment
-	var r pagesDeploymentListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(fmt.Sprintf("/accounts/%s/pages/projects/%s/deployments", rc.Identifier, params.ProjectName), params)
@@ -155,17 +155,19 @@ func (api *API) ListPagesDeployments(ctx context.Context, rc *ResourceContainer,
 		if err != nil {
 			return []PagesProjectDeployment{}, &ResultInfo{}, err
 		}
+		var r pagesDeploymentListResponse
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []PagesProjectDeployment{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		deployments = append(deployments, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.Done() || !autoPaginate {
 			break
 		}
 	}
-	return deployments, &r.ResultInfo, nil
+	return deployments, lastResultInfo, nil
 }
 
 // GetPagesDeploymentInfo returns a deployment for a Pages project.

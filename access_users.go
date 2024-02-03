@@ -223,7 +223,7 @@ func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, para
 	}
 
 	var accessUsers []AccessUser
-	var resultInfo *ResultInfo = nil
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -232,12 +232,12 @@ func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, para
 			return []AccessUser{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
 		var r AccessUserListResponse
-		resultInfo = &r.ResultInfo
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessUser{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		accessUsers = append(accessUsers, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -245,7 +245,7 @@ func (api *API) ListAccessUsers(ctx context.Context, rc *ResourceContainer, para
 		}
 	}
 
-	return accessUsers, resultInfo, nil
+	return accessUsers, lastResultInfo, nil
 }
 
 // GetAccessUserActiveSessions returns a list of active sessions for an user.

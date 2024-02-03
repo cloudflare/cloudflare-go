@@ -280,7 +280,7 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 	}
 
 	var accessGroups []AccessGroup
-	var r AccessGroupListResponse
+	var lastResultInfo *ResultInfo = nil
 
 	for {
 		uri := buildURI(baseURL, params)
@@ -288,11 +288,13 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 		if err != nil {
 			return []AccessGroup{}, &ResultInfo{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 		}
+		var r AccessGroupListResponse
 
 		err = json.Unmarshal(res, &r)
 		if err != nil {
 			return []AccessGroup{}, &ResultInfo{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 		}
+		lastResultInfo = &r.ResultInfo
 		accessGroups = append(accessGroups, r.Result...)
 		params.ResultInfo = r.ResultInfo.Next()
 		if params.ResultInfo.Done() || !autoPaginate {
@@ -300,7 +302,7 @@ func (api *API) ListAccessGroups(ctx context.Context, rc *ResourceContainer, par
 		}
 	}
 
-	return accessGroups, &r.ResultInfo, nil
+	return accessGroups, lastResultInfo, nil
 }
 
 // GetAccessGroup returns a single group based on the group ID.
