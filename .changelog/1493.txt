@@ -1,0 +1,3 @@
+```release-note:bug
+access_application,access_ca_certificate,access_group,access_identity_provider,access_mutual_tls_certificates,access_policyaccess_users,account_roles,d1pages_deployment,tunnel,turnstile,: All this endpoints are susceptible to returning wrong data due to the Struct not getting reset for every loop.
+```
