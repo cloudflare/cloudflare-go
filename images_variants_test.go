@@ -13,7 +13,7 @@ const (
 	testImagesVariantID = "hero"
 )
 
-func TestImageVariants_ListVariants(t *testing.T) {
+func TestImageVariants_List(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -98,7 +98,7 @@ func TestImagesVariants_Get(t *testing.T) {
 	}
 }
 
-func TestImagesVariants_CreateVariant(t *testing.T) {
+func TestImagesVariants_Create(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -137,7 +137,7 @@ func TestImagesVariants_CreateVariant(t *testing.T) {
 	}
 }
 
-func TestImagesVariants_UpdateVariant(t *testing.T) {
+func TestImagesVariants_Update(t *testing.T) {
 	setup()
 	defer teardown()
 
