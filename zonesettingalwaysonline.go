@@ -37,10 +37,10 @@ func NewZoneSettingAlwaysOnlineService(opts ...option.RequestOption) (r *ZoneSet
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *ZoneSettingAlwaysOnlineService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingAlwaysOnlineUpdateParams, opts ...option.RequestOption) (res *ZoneSettingAlwaysOnlineUpdateResponse, err error) {
+func (r *ZoneSettingAlwaysOnlineService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingAlwaysOnlineGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/always_online", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -49,12 +49,126 @@ func (r *ZoneSettingAlwaysOnlineService) Update(ctx context.Context, zoneIdentif
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *ZoneSettingAlwaysOnlineService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *ZoneSettingAlwaysOnlineListResponse, err error) {
+func (r *ZoneSettingAlwaysOnlineService) Update(ctx context.Context, zoneIdentifier string, body ZoneSettingAlwaysOnlineUpdateParams, opts ...option.RequestOption) (res *ZoneSettingAlwaysOnlineUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/settings/always_online", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
+
+type ZoneSettingAlwaysOnlineGetResponse struct {
+	Errors   []ZoneSettingAlwaysOnlineGetResponseError   `json:"errors,required"`
+	Messages []ZoneSettingAlwaysOnlineGetResponseMessage `json:"messages,required"`
+	// Whether the API call was successful
+	Success bool                                     `json:"success,required"`
+	Result  ZoneSettingAlwaysOnlineGetResponseResult `json:"result"`
+	JSON    zoneSettingAlwaysOnlineGetResponseJSON   `json:"-"`
+}
+
+// zoneSettingAlwaysOnlineGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingAlwaysOnlineGetResponse]
+type zoneSettingAlwaysOnlineGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingAlwaysOnlineGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingAlwaysOnlineGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineGetResponseErrorJSON `json:"-"`
+}
+
+// zoneSettingAlwaysOnlineGetResponseErrorJSON contains the JSON metadata for the
+// struct [ZoneSettingAlwaysOnlineGetResponseError]
+type zoneSettingAlwaysOnlineGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingAlwaysOnlineGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingAlwaysOnlineGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zoneSettingAlwaysOnlineGetResponseMessageJSON `json:"-"`
+}
+
+// zoneSettingAlwaysOnlineGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZoneSettingAlwaysOnlineGetResponseMessage]
+type zoneSettingAlwaysOnlineGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingAlwaysOnlineGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingAlwaysOnlineGetResponseResult struct {
+	// ID of the zone setting.
+	ID ZoneSettingAlwaysOnlineGetResponseResultID `json:"id,required"`
+	// Value of the zone setting.
+	Value ZoneSettingAlwaysOnlineGetResponseResultValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingAlwaysOnlineGetResponseResultEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingAlwaysOnlineGetResponseResultJSON `json:"-"`
+}
+
+// zoneSettingAlwaysOnlineGetResponseResultJSON contains the JSON metadata for the
+// struct [ZoneSettingAlwaysOnlineGetResponseResult]
+type zoneSettingAlwaysOnlineGetResponseResultJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingAlwaysOnlineGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingAlwaysOnlineGetResponseResultID string
+
+const (
+	ZoneSettingAlwaysOnlineGetResponseResultIDAlwaysOnline ZoneSettingAlwaysOnlineGetResponseResultID = "always_online"
+)
+
+// Value of the zone setting.
+type ZoneSettingAlwaysOnlineGetResponseResultValue string
+
+const (
+	ZoneSettingAlwaysOnlineGetResponseResultValueOn  ZoneSettingAlwaysOnlineGetResponseResultValue = "on"
+	ZoneSettingAlwaysOnlineGetResponseResultValueOff ZoneSettingAlwaysOnlineGetResponseResultValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingAlwaysOnlineGetResponseResultEditable bool
+
+const (
+	ZoneSettingAlwaysOnlineGetResponseResultEditableTrue  ZoneSettingAlwaysOnlineGetResponseResultEditable = true
+	ZoneSettingAlwaysOnlineGetResponseResultEditableFalse ZoneSettingAlwaysOnlineGetResponseResultEditable = false
+)
 
 type ZoneSettingAlwaysOnlineUpdateResponse struct {
 	Errors   []ZoneSettingAlwaysOnlineUpdateResponseError   `json:"errors,required"`
@@ -168,120 +282,6 @@ type ZoneSettingAlwaysOnlineUpdateResponseResultEditable bool
 const (
 	ZoneSettingAlwaysOnlineUpdateResponseResultEditableTrue  ZoneSettingAlwaysOnlineUpdateResponseResultEditable = true
 	ZoneSettingAlwaysOnlineUpdateResponseResultEditableFalse ZoneSettingAlwaysOnlineUpdateResponseResultEditable = false
-)
-
-type ZoneSettingAlwaysOnlineListResponse struct {
-	Errors   []ZoneSettingAlwaysOnlineListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingAlwaysOnlineListResponseMessage `json:"messages,required"`
-	// Whether the API call was successful
-	Success bool                                      `json:"success,required"`
-	Result  ZoneSettingAlwaysOnlineListResponseResult `json:"result"`
-	JSON    zoneSettingAlwaysOnlineListResponseJSON   `json:"-"`
-}
-
-// zoneSettingAlwaysOnlineListResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingAlwaysOnlineListResponse]
-type zoneSettingAlwaysOnlineListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingAlwaysOnlineListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneSettingAlwaysOnlineListResponseError struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineListResponseErrorJSON `json:"-"`
-}
-
-// zoneSettingAlwaysOnlineListResponseErrorJSON contains the JSON metadata for the
-// struct [ZoneSettingAlwaysOnlineListResponseError]
-type zoneSettingAlwaysOnlineListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingAlwaysOnlineListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneSettingAlwaysOnlineListResponseMessage struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    zoneSettingAlwaysOnlineListResponseMessageJSON `json:"-"`
-}
-
-// zoneSettingAlwaysOnlineListResponseMessageJSON contains the JSON metadata for
-// the struct [ZoneSettingAlwaysOnlineListResponseMessage]
-type zoneSettingAlwaysOnlineListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingAlwaysOnlineListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneSettingAlwaysOnlineListResponseResult struct {
-	// ID of the zone setting.
-	ID ZoneSettingAlwaysOnlineListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingAlwaysOnlineListResponseResultValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingAlwaysOnlineListResponseResultEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAlwaysOnlineListResponseResultJSON `json:"-"`
-}
-
-// zoneSettingAlwaysOnlineListResponseResultJSON contains the JSON metadata for the
-// struct [ZoneSettingAlwaysOnlineListResponseResult]
-type zoneSettingAlwaysOnlineListResponseResultJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingAlwaysOnlineListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingAlwaysOnlineListResponseResultID string
-
-const (
-	ZoneSettingAlwaysOnlineListResponseResultIDAlwaysOnline ZoneSettingAlwaysOnlineListResponseResultID = "always_online"
-)
-
-// Value of the zone setting.
-type ZoneSettingAlwaysOnlineListResponseResultValue string
-
-const (
-	ZoneSettingAlwaysOnlineListResponseResultValueOn  ZoneSettingAlwaysOnlineListResponseResultValue = "on"
-	ZoneSettingAlwaysOnlineListResponseResultValueOff ZoneSettingAlwaysOnlineListResponseResultValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingAlwaysOnlineListResponseResultEditable bool
-
-const (
-	ZoneSettingAlwaysOnlineListResponseResultEditableTrue  ZoneSettingAlwaysOnlineListResponseResultEditable = true
-	ZoneSettingAlwaysOnlineListResponseResultEditableFalse ZoneSettingAlwaysOnlineListResponseResultEditable = false
 )
 
 type ZoneSettingAlwaysOnlineUpdateParams struct {

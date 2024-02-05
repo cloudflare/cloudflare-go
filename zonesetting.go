@@ -19,57 +19,57 @@ import (
 // this service directly, and instead use the [NewZoneSettingService] method
 // instead.
 type ZoneSettingService struct {
-	Options                        []option.RequestOption
-	AdvancedDDOS                   *ZoneSettingAdvancedDDOSService
-	AlwaysOnlines                  *ZoneSettingAlwaysOnlineService
-	AlwaysUseHTTPs                 *ZoneSettingAlwaysUseHTTPService
-	AutomaticHTTPsRewrites         *ZoneSettingAutomaticHTTPsRewriteService
-	AutomaticPlatformOptimizations *ZoneSettingAutomaticPlatformOptimizationService
-	Brotli                         *ZoneSettingBrotliService
-	BrowserCacheTTLs               *ZoneSettingBrowserCacheTTLService
-	BrowserChecks                  *ZoneSettingBrowserCheckService
-	CacheLevels                    *ZoneSettingCacheLevelService
-	ChallengeTTLs                  *ZoneSettingChallengeTTLService
-	Ciphers                        *ZoneSettingCipherService
-	DevelopmentModes               *ZoneSettingDevelopmentModeService
-	EarlyHints                     *ZoneSettingEarlyHintService
-	EmailObfuscations              *ZoneSettingEmailObfuscationService
-	H2Prioritizations              *ZoneSettingH2PrioritizationService
-	HotlinkProtections             *ZoneSettingHotlinkProtectionService
-	HTTP2s                         *ZoneSettingHTTP2Service
-	HTTP3s                         *ZoneSettingHTTP3Service
-	ImageResizings                 *ZoneSettingImageResizingService
-	IPGeolocations                 *ZoneSettingIPGeolocationService
-	IPV6s                          *ZoneSettingIPV6Service
-	MinTLSVersions                 *ZoneSettingMinTLSVersionService
-	Minifies                       *ZoneSettingMinifyService
-	Mirages                        *ZoneSettingMirageService
-	MobileRedirects                *ZoneSettingMobileRedirectService
-	NELs                           *ZoneSettingNELService
-	OpportunisticEncryptions       *ZoneSettingOpportunisticEncryptionService
-	OpportunisticOnions            *ZoneSettingOpportunisticOnionService
-	OrangeToOranges                *ZoneSettingOrangeToOrangeService
-	OriginErrorPagePassThrus       *ZoneSettingOriginErrorPagePassThrusService
-	OriginMaxHTTPVersions          *ZoneSettingOriginMaxHTTPVersionService
-	Polishes                       *ZoneSettingPolishService
-	PrefetchPreloads               *ZoneSettingPrefetchPreloadService
-	PrivacyPasses                  *ZoneSettingPrivacyPassService
-	ProxyReadTimeouts              *ZoneSettingProxyReadTimeoutService
-	PseudoIpv4s                    *ZoneSettingPseudoIpv4Service
-	ResponseBufferings             *ZoneSettingResponseBufferingService
-	RocketLoaders                  *ZoneSettingRocketLoaderService
-	SecurityHeaders                *ZoneSettingSecurityHeaderService
-	SecurityLevels                 *ZoneSettingSecurityLevelService
-	ServerSideExcludes             *ZoneSettingServerSideExcludeService
-	SortQueryStringForCaches       *ZoneSettingSortQueryStringForCachService
-	SSLs                           *ZoneSettingSSLService
-	SSLRecommenders                *ZoneSettingSSLRecommenderService
-	TLS1_3s                        *ZoneSettingTLS1_3Service
-	TLSClientAuths                 *ZoneSettingTLSClientAuthService
-	TrueClientIPHeaders            *ZoneSettingTrueClientIPHeaderService
-	WAFs                           *ZoneSettingWAFService
-	Webps                          *ZoneSettingWebpService
-	Websockets                     *ZoneSettingWebsocketService
+	Options                       []option.RequestOption
+	AdvancedDDOS                  *ZoneSettingAdvancedDDOSService
+	AlwaysOnline                  *ZoneSettingAlwaysOnlineService
+	AlwaysUseHTTPs                *ZoneSettingAlwaysUseHTTPService
+	AutomaticHTTPsRewrites        *ZoneSettingAutomaticHTTPsRewriteService
+	AutomaticPlatformOptimization *ZoneSettingAutomaticPlatformOptimizationService
+	Brotli                        *ZoneSettingBrotliService
+	BrowserCacheTTLs              *ZoneSettingBrowserCacheTTLService
+	BrowserChecks                 *ZoneSettingBrowserCheckService
+	CacheLevels                   *ZoneSettingCacheLevelService
+	ChallengeTTLs                 *ZoneSettingChallengeTTLService
+	Ciphers                       *ZoneSettingCipherService
+	DevelopmentModes              *ZoneSettingDevelopmentModeService
+	EarlyHints                    *ZoneSettingEarlyHintService
+	EmailObfuscations             *ZoneSettingEmailObfuscationService
+	H2Prioritizations             *ZoneSettingH2PrioritizationService
+	HotlinkProtections            *ZoneSettingHotlinkProtectionService
+	HTTP2s                        *ZoneSettingHTTP2Service
+	HTTP3s                        *ZoneSettingHTTP3Service
+	ImageResizings                *ZoneSettingImageResizingService
+	IPGeolocations                *ZoneSettingIPGeolocationService
+	IPV6s                         *ZoneSettingIPV6Service
+	MinTLSVersions                *ZoneSettingMinTLSVersionService
+	Minifies                      *ZoneSettingMinifyService
+	Mirages                       *ZoneSettingMirageService
+	MobileRedirects               *ZoneSettingMobileRedirectService
+	NELs                          *ZoneSettingNELService
+	OpportunisticEncryptions      *ZoneSettingOpportunisticEncryptionService
+	OpportunisticOnions           *ZoneSettingOpportunisticOnionService
+	OrangeToOranges               *ZoneSettingOrangeToOrangeService
+	OriginErrorPagePassThrus      *ZoneSettingOriginErrorPagePassThrusService
+	OriginMaxHTTPVersions         *ZoneSettingOriginMaxHTTPVersionService
+	Polishes                      *ZoneSettingPolishService
+	PrefetchPreloads              *ZoneSettingPrefetchPreloadService
+	PrivacyPasses                 *ZoneSettingPrivacyPassService
+	ProxyReadTimeouts             *ZoneSettingProxyReadTimeoutService
+	PseudoIpv4s                   *ZoneSettingPseudoIpv4Service
+	ResponseBufferings            *ZoneSettingResponseBufferingService
+	RocketLoaders                 *ZoneSettingRocketLoaderService
+	SecurityHeaders               *ZoneSettingSecurityHeaderService
+	SecurityLevels                *ZoneSettingSecurityLevelService
+	ServerSideExcludes            *ZoneSettingServerSideExcludeService
+	SortQueryStringForCaches      *ZoneSettingSortQueryStringForCachService
+	SSLs                          *ZoneSettingSSLService
+	SSLRecommenders               *ZoneSettingSSLRecommenderService
+	TLS1_3s                       *ZoneSettingTLS1_3Service
+	TLSClientAuths                *ZoneSettingTLSClientAuthService
+	TrueClientIPHeaders           *ZoneSettingTrueClientIPHeaderService
+	WAFs                          *ZoneSettingWAFService
+	Webps                         *ZoneSettingWebpService
+	Websockets                    *ZoneSettingWebsocketService
 }
 
 // NewZoneSettingService generates a new service that applies the given options to
@@ -79,10 +79,10 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r = &ZoneSettingService{}
 	r.Options = opts
 	r.AdvancedDDOS = NewZoneSettingAdvancedDDOSService(opts...)
-	r.AlwaysOnlines = NewZoneSettingAlwaysOnlineService(opts...)
+	r.AlwaysOnline = NewZoneSettingAlwaysOnlineService(opts...)
 	r.AlwaysUseHTTPs = NewZoneSettingAlwaysUseHTTPService(opts...)
 	r.AutomaticHTTPsRewrites = NewZoneSettingAutomaticHTTPsRewriteService(opts...)
-	r.AutomaticPlatformOptimizations = NewZoneSettingAutomaticPlatformOptimizationService(opts...)
+	r.AutomaticPlatformOptimization = NewZoneSettingAutomaticPlatformOptimizationService(opts...)
 	r.Brotli = NewZoneSettingBrotliService(opts...)
 	r.BrowserCacheTTLs = NewZoneSettingBrowserCacheTTLService(opts...)
 	r.BrowserChecks = NewZoneSettingBrowserCheckService(opts...)

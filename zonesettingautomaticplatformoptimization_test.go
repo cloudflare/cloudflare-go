@@ -27,7 +27,7 @@ func TestZoneSettingAutomaticPlatformOptimizationUpdate(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.AutomaticPlatformOptimizations.Update(
+	_, err := client.Zones.Settings.AutomaticPlatformOptimization.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZoneSettingAutomaticPlatformOptimizationUpdateParams{
@@ -64,7 +64,7 @@ func TestZoneSettingAutomaticPlatformOptimizationList(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.AutomaticPlatformOptimizations.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.AutomaticPlatformOptimization.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
