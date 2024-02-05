@@ -54,24 +54,24 @@ type ImagesVariantResponse struct {
 // Lists existing variants.
 //
 // API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-list-variants
-func (api *API) ListImagesVariants(ctx context.Context, rc *ResourceContainer, params ListImageVariantsParams) (map[string]ImagesVariant, error) {
+func (api *API) ListImagesVariants(ctx context.Context, rc *ResourceContainer, params ListImageVariantsParams) (ListImageVariantsResult, error) {
 	if rc.Identifier == "" {
-		return map[string]ImagesVariant{}, ErrMissingAccountID
+		return ListImageVariantsResult{}, ErrMissingAccountID
 	}
 
 	baseURL := fmt.Sprintf("/accounts/%s/images/v1/variants", rc.Identifier)
 	res, err := api.makeRequestContext(ctx, http.MethodGet, baseURL, nil)
 	if err != nil {
-		return map[string]ImagesVariant{}, err
+		return ListImageVariantsResult{}, err
 	}
 
 	var listImageVariantsResponse ListImagesVariantsResponse
 	err = json.Unmarshal(res, &listImageVariantsResponse)
 	if err != nil {
-		return map[string]ImagesVariant{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+		return ListImageVariantsResult{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
 	}
 
-	return listImageVariantsResponse.Result.ImagesVariants, nil
+	return listImageVariantsResponse.Result, nil
 }
 
 // Fetch details for a single variant.

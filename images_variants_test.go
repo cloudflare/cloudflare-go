@@ -25,15 +25,17 @@ func TestImageVariants_ListVariants(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/images/v1/variants", handler)
 
-	want := map[string]ImagesVariant{
-		"hero": {
-			ID:                     "hero",
-			NeverRequireSignedURLs: true,
-			Options: ImagesVariantsOptions{
-				Fit:      "scale-down",
-				Height:   768,
-				Width:    1366,
-				Metadata: "none",
+	want := ListImageVariantsResult{
+		ImagesVariants: map[string]ImagesVariant{
+			"hero": {
+				ID:                     "hero",
+				NeverRequireSignedURLs: true,
+				Options: ImagesVariantsOptions{
+					Fit:      "scale-down",
+					Height:   768,
+					Width:    1366,
+					Metadata: "none",
+				},
 			},
 		},
 	}
@@ -153,12 +155,34 @@ func TestImagesVariants_UpdateVariant(t *testing.T) {
 	}
 
 	got, err := client.UpdateImagesVariant(context.Background(), AccountIdentifier(testAccountID), UpdateImagesVariantParams{
-		ID:                     want.ID,
-		NeverRequireSignedURLs: want.NeverRequireSignedURLs,
-		Options:                want.Options,
+		ID:                     "hero",
+		NeverRequireSignedURLs: true,
+		Options: ImagesVariantsOptions{
+			Fit:      "scale-down",
+			Height:   768,
+			Width:    1366,
+			Metadata: "none",
+		},
 	})
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
+}
+
+func TestImageVariants_MissingAccountId(t *testing.T) {
+	_, err := client.ListImagesVariants(context.Background(), AccountIdentifier(""), ListImageVariantsParams{})
+	assert.Equal(t, ErrMissingAccountID, err)
+
+	_, err = client.GetImagesVariantDetails(context.Background(), AccountIdentifier(""), testImagesVariantID)
+	assert.Equal(t, ErrMissingAccountID, err)
+
+	_, err = client.CreateImagesVariant(context.Background(), AccountIdentifier(""), CreateImagesVariantParams{})
+	assert.Equal(t, ErrMissingAccountID, err)
+
+	err = client.DeleteImagesVariant(context.Background(), AccountIdentifier(""), testImagesVariantID)
+	assert.Equal(t, ErrMissingAccountID, err)
+
+	_, err = client.UpdateImagesVariant(context.Background(), AccountIdentifier(""), UpdateImagesVariantParams{})
+	assert.Equal(t, ErrMissingAccountID, err)
 }
