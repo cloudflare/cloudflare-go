@@ -10,7 +10,7 @@ import (
 
 type ImagesVariant struct {
 	ID                     string                `json:"id,omitempty"`
-	NeverRequireSignedURLs bool                  `json:"neverRequireSignedURLs,omitempty"`
+	NeverRequireSignedURLs *bool                 `json:"neverRequireSignedURLs,omitempty"`
 	Options                ImagesVariantsOptions `json:"options,omitempty"`
 }
 
@@ -38,7 +38,7 @@ type CreateImagesVariantParams struct {
 
 type UpdateImagesVariantParams struct {
 	ID                     string                `json:"-"`
-	NeverRequireSignedURLs bool                  `json:"neverRequireSignedURLs,omitempty"`
+	NeverRequireSignedURLs *bool                 `json:"neverRequireSignedURLs,omitempty"`
 	Options                ImagesVariantsOptions `json:"options,omitempty"`
 }
 

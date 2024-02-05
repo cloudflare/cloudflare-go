@@ -29,7 +29,7 @@ func TestImageVariants_ListVariants(t *testing.T) {
 		ImagesVariants: map[string]ImagesVariant{
 			"hero": {
 				ID:                     "hero",
-				NeverRequireSignedURLs: true,
+				NeverRequireSignedURLs: BoolPtr(true),
 				Options: ImagesVariantsOptions{
 					Fit:      "scale-down",
 					Height:   768,
@@ -83,7 +83,7 @@ func TestImagesVariants_GetDetails(t *testing.T) {
 
 	want := ImagesVariant{
 		ID:                     "hero",
-		NeverRequireSignedURLs: true,
+		NeverRequireSignedURLs: BoolPtr(true),
 		Options: ImagesVariantsOptions{
 			Fit:      "scale-down",
 			Height:   768,
@@ -113,7 +113,7 @@ func TestImagesVariants_CreateVariant(t *testing.T) {
 
 	want := ImagesVariant{
 		ID:                     "hero",
-		NeverRequireSignedURLs: true,
+		NeverRequireSignedURLs: BoolPtr(true),
 		Options: ImagesVariantsOptions{
 			Fit:      "scale-down",
 			Height:   768,
@@ -145,7 +145,7 @@ func TestImagesVariants_UpdateVariant(t *testing.T) {
 
 	want := ImagesVariant{
 		ID:                     "hero",
-		NeverRequireSignedURLs: true,
+		NeverRequireSignedURLs: BoolPtr(true),
 		Options: ImagesVariantsOptions{
 			Fit:      "scale-down",
 			Height:   768,
@@ -156,7 +156,7 @@ func TestImagesVariants_UpdateVariant(t *testing.T) {
 
 	got, err := client.UpdateImagesVariant(context.Background(), AccountIdentifier(testAccountID), UpdateImagesVariantParams{
 		ID:                     "hero",
-		NeverRequireSignedURLs: true,
+		NeverRequireSignedURLs: BoolPtr(true),
 		Options: ImagesVariantsOptions{
 			Fit:      "scale-down",
 			Height:   768,
