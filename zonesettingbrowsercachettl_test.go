@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZoneSettingChallengeTTLSUpdate(t *testing.T) {
+func TestZoneSettingBrowserCacheTTLUpdate(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,11 @@ func TestZoneSettingChallengeTTLSUpdate(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.ChallengeTTLS.Update(
+	_, err := client.Zones.Settings.BrowserCacheTTLs.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneSettingChallengeTTLSUpdateParams{
-			Value: cloudflare.F(cloudflare.ZoneSettingChallengeTTLSUpdateParamsValue300),
+		cloudflare.ZoneSettingBrowserCacheTTLUpdateParams{
+			Value: cloudflare.F(cloudflare.ZoneSettingBrowserCacheTTLUpdateParamsValue0),
 		},
 	)
 	if err != nil {
@@ -43,7 +43,7 @@ func TestZoneSettingChallengeTTLSUpdate(t *testing.T) {
 	}
 }
 
-func TestZoneSettingChallengeTTLSList(t *testing.T) {
+func TestZoneSettingBrowserCacheTTLList(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -57,7 +57,7 @@ func TestZoneSettingChallengeTTLSList(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.Zones.Settings.ChallengeTTLS.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.Settings.BrowserCacheTTLs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

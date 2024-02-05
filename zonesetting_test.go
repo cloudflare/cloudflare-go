@@ -60,7 +60,7 @@ func TestZoneSettingEdit(t *testing.T) {
 				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectIDAlwaysOnline),
 				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectValueOn),
 			}), cloudflare.ZoneSettingEditParamsItemsObject(cloudflare.ZoneSettingEditParamsItemsObject{
-				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectIDBrowserCacheTtl),
+				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectIDBrowserCacheTTL),
 				Value: cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectValue18000),
 			}), cloudflare.ZoneSettingEditParamsItemsObject(cloudflare.ZoneSettingEditParamsItemsObject{
 				ID:    cloudflare.F(cloudflare.ZoneSettingEditParamsItemsObjectIDIPGeolocation),

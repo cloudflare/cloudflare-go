@@ -26,10 +26,10 @@ type ZoneSettingService struct {
 	AutomaticHTTPsRewrites         *ZoneSettingAutomaticHTTPsRewriteService
 	AutomaticPlatformOptimizations *ZoneSettingAutomaticPlatformOptimizationService
 	Brotli                         *ZoneSettingBrotliService
-	BrowserCacheTTLS               *ZoneSettingBrowserCacheTTLSService
+	BrowserCacheTTLs               *ZoneSettingBrowserCacheTTLService
 	BrowserChecks                  *ZoneSettingBrowserCheckService
 	CacheLevels                    *ZoneSettingCacheLevelService
-	ChallengeTTLS                  *ZoneSettingChallengeTTLSService
+	ChallengeTTLs                  *ZoneSettingChallengeTTLService
 	Ciphers                        *ZoneSettingCipherService
 	DevelopmentModes               *ZoneSettingDevelopmentModeService
 	EarlyHints                     *ZoneSettingEarlyHintService
@@ -84,10 +84,10 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	r.AutomaticHTTPsRewrites = NewZoneSettingAutomaticHTTPsRewriteService(opts...)
 	r.AutomaticPlatformOptimizations = NewZoneSettingAutomaticPlatformOptimizationService(opts...)
 	r.Brotli = NewZoneSettingBrotliService(opts...)
-	r.BrowserCacheTTLS = NewZoneSettingBrowserCacheTTLSService(opts...)
+	r.BrowserCacheTTLs = NewZoneSettingBrowserCacheTTLService(opts...)
 	r.BrowserChecks = NewZoneSettingBrowserCheckService(opts...)
 	r.CacheLevels = NewZoneSettingCacheLevelService(opts...)
-	r.ChallengeTTLS = NewZoneSettingChallengeTTLSService(opts...)
+	r.ChallengeTTLs = NewZoneSettingChallengeTTLService(opts...)
 	r.Ciphers = NewZoneSettingCipherService(opts...)
 	r.DevelopmentModes = NewZoneSettingDevelopmentModeService(opts...)
 	r.EarlyHints = NewZoneSettingEarlyHintService(opts...)

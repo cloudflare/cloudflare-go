@@ -639,7 +639,7 @@ type ZoneLoadBalancerNewParams struct {
 	//     set. The accepted range of values is between [30, 3600]. Note: With session
 	//     affinity by header, sessions only expire after they haven't been used for the
 	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
+	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
 	//   - `"off"`: Use `default_pools`.
@@ -665,7 +665,7 @@ type ZoneLoadBalancerNewParams struct {
 	SteeringPolicy param.Field[ZoneLoadBalancerNewParamsSteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
+	TTL param.Field[float64] `json:"ttl"`
 }
 
 func (r ZoneLoadBalancerNewParams) MarshalJSON() (data []byte, err error) {
@@ -895,7 +895,7 @@ type ZoneLoadBalancerNewParamsRulesOverrides struct {
 	//     set. The accepted range of values is between [30, 3600]. Note: With session
 	//     affinity by header, sessions only expire after they haven't been used for the
 	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
+	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
 	//   - `"off"`: Use `default_pools`.
@@ -921,7 +921,7 @@ type ZoneLoadBalancerNewParamsRulesOverrides struct {
 	SteeringPolicy param.Field[ZoneLoadBalancerNewParamsRulesOverridesSteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
+	TTL param.Field[float64] `json:"ttl"`
 }
 
 func (r ZoneLoadBalancerNewParamsRulesOverrides) MarshalJSON() (data []byte, err error) {
@@ -1436,7 +1436,7 @@ type ZoneLoadBalancerUpdateParams struct {
 	//     set. The accepted range of values is between [30, 3600]. Note: With session
 	//     affinity by header, sessions only expire after they haven't been used for the
 	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
+	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
 	//   - `"off"`: Use `default_pools`.
@@ -1462,7 +1462,7 @@ type ZoneLoadBalancerUpdateParams struct {
 	SteeringPolicy param.Field[ZoneLoadBalancerUpdateParamsSteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
+	TTL param.Field[float64] `json:"ttl"`
 }
 
 func (r ZoneLoadBalancerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1692,7 +1692,7 @@ type ZoneLoadBalancerUpdateParamsRulesOverrides struct {
 	//     set. The accepted range of values is between [30, 3600]. Note: With session
 	//     affinity by header, sessions only expire after they haven't been used for the
 	//     number of seconds specified.
-	SessionAffinityTtl param.Field[float64] `json:"session_affinity_ttl"`
+	SessionAffinityTTL param.Field[float64] `json:"session_affinity_ttl"`
 	// Steering Policy for this load balancer.
 	//
 	//   - `"off"`: Use `default_pools`.
@@ -1718,7 +1718,7 @@ type ZoneLoadBalancerUpdateParamsRulesOverrides struct {
 	SteeringPolicy param.Field[ZoneLoadBalancerUpdateParamsRulesOverridesSteeringPolicy] `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	Ttl param.Field[float64] `json:"ttl"`
+	TTL param.Field[float64] `json:"ttl"`
 }
 
 func (r ZoneLoadBalancerUpdateParamsRulesOverrides) MarshalJSON() (data []byte, err error) {
