@@ -36,16 +36,6 @@ Methods:
 
 ## Dnssecs
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecGetResponse">ZoneDnssecGetResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecUpdateResponse">ZoneDnssecUpdateResponse</a>
-
-Methods:
-
-- <code title="get /zones/{zone_identifier}/dnssec">client.Zones.Dnssecs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecGetResponse">ZoneDnssecGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="patch /zones/{zone_identifier}/dnssec">client.Zones.Dnssecs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecUpdateParams">ZoneDnssecUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneDnssecUpdateResponse">ZoneDnssecUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## RateLimits
 
 Response Types:

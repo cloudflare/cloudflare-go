@@ -9,5 +9,3 @@ func (UnionString) ImplementsZoneLoadBalancerGetResponseResult()    {}
 func (UnionString) ImplementsZoneLoadBalancerUpdateResponseResult() {}
 func (UnionString) ImplementsZoneLoadBalancerListResponseResult()   {}
 func (UnionString) ImplementsZoneLoadBalancerDeleteResponseResult() {}
-func (UnionString) ImplementsZoneDnssecGetResponseResult()          {}
-func (UnionString) ImplementsZoneDnssecUpdateResponseResult()       {}
