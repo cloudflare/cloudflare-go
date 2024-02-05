@@ -33,9 +33,9 @@ type ListImageVariantsResult struct {
 }
 
 type CreateImagesVariantParams struct {
-	ID                     string                `json:"id"`
+	ID                     string                `json:"id,omitempty"`
 	NeverRequireSignedURLs *bool                 `json:"neverRequireSignedURLs,omitempty"`
-	Options                ImagesVariantsOptions `json:"options"`
+	Options                ImagesVariantsOptions `json:"options,omitempty"`
 }
 
 type UpdateImagesVariantParams struct {
