@@ -5,6 +5,7 @@ ENHANCEMENTS:
 * access_application: Add support for `allow_authenticate_via_warp` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * access_organization: Add support for `allow_authenticate_via_warp` and `warp_auth_session_duration` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
+* images_variants: Add support for Images Variants CRUD operations ([#1494](https://github.com/cloudflare/cloudflare-go/issues/1494))
 
 ## 0.87.0 (January 31st, 2024)
 
