@@ -60,15 +60,15 @@ Methods:
 - <code title="get /zones/{zone_identifier}/settings">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingListResponse">ZoneSettingListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="patch /zones/{zone_identifier}/settings">client.Zones.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingEditParams">ZoneSettingEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingEditResponse">ZoneSettingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### AdvancedDdos
+### AdvancedDDOS
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDdoListResponse">ZoneSettingAdvancedDdoListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDDOSListResponse">ZoneSettingAdvancedDDOSListResponse</a>
 
 Methods:
 
-- <code title="get /zones/{zone_identifier}/settings/advanced_ddos">client.Zones.Settings.AdvancedDdos.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDdoService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDdoListResponse">ZoneSettingAdvancedDdoListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_identifier}/settings/advanced_ddos">client.Zones.Settings.AdvancedDDOS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDDOSService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneSettingAdvancedDDOSListResponse">ZoneSettingAdvancedDDOSListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### AlwaysOnlines
 

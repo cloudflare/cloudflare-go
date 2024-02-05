@@ -20,7 +20,7 @@ import (
 // instead.
 type ZoneSettingService struct {
 	Options                        []option.RequestOption
-	AdvancedDdos                   *ZoneSettingAdvancedDdoService
+	AdvancedDDOS                   *ZoneSettingAdvancedDDOSService
 	AlwaysOnlines                  *ZoneSettingAlwaysOnlineService
 	AlwaysUseHTTPs                 *ZoneSettingAlwaysUseHTTPService
 	AutomaticHTTPsRewrites         *ZoneSettingAutomaticHTTPsRewriteService
@@ -78,7 +78,7 @@ type ZoneSettingService struct {
 func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService) {
 	r = &ZoneSettingService{}
 	r.Options = opts
-	r.AdvancedDdos = NewZoneSettingAdvancedDdoService(opts...)
+	r.AdvancedDDOS = NewZoneSettingAdvancedDDOSService(opts...)
 	r.AlwaysOnlines = NewZoneSettingAlwaysOnlineService(opts...)
 	r.AlwaysUseHTTPs = NewZoneSettingAlwaysUseHTTPService(opts...)
 	r.AutomaticHTTPsRewrites = NewZoneSettingAutomaticHTTPsRewriteService(opts...)
