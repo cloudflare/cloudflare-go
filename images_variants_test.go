@@ -68,7 +68,7 @@ func TestImageVariants_Delete(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestImagesVariants_GetDetails(t *testing.T) {
+func TestImagesVariants_Get(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -92,7 +92,7 @@ func TestImagesVariants_GetDetails(t *testing.T) {
 		},
 	}
 
-	got, err := client.GetImagesVariantDetails(context.Background(), AccountIdentifier(testAccountID), testImagesVariantID)
+	got, err := client.GetImagesVariant(context.Background(), AccountIdentifier(testAccountID), testImagesVariantID)
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
 	}
@@ -123,7 +123,14 @@ func TestImagesVariants_CreateVariant(t *testing.T) {
 	}
 
 	got, err := client.CreateImagesVariant(context.Background(), AccountIdentifier(testAccountID), CreateImagesVariantParams{
-		ImagesVariant: want,
+		ID:                     testImagesVariantID,
+		NeverRequireSignedURLs: BoolPtr(true),
+		Options: ImagesVariantsOptions{
+			Fit:      "scale-down",
+			Height:   768,
+			Width:    1366,
+			Metadata: "none",
+		},
 	})
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, got)
@@ -174,7 +181,7 @@ func TestImageVariants_MissingAccountId(t *testing.T) {
 	_, err := client.ListImagesVariants(context.Background(), AccountIdentifier(""), ListImageVariantsParams{})
 	assert.Equal(t, ErrMissingAccountID, err)
 
-	_, err = client.GetImagesVariantDetails(context.Background(), AccountIdentifier(""), testImagesVariantID)
+	_, err = client.GetImagesVariant(context.Background(), AccountIdentifier(""), testImagesVariantID)
 	assert.Equal(t, ErrMissingAccountID, err)
 
 	_, err = client.CreateImagesVariant(context.Background(), AccountIdentifier(""), CreateImagesVariantParams{})

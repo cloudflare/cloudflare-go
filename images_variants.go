@@ -33,7 +33,9 @@ type ListImageVariantsResult struct {
 }
 
 type CreateImagesVariantParams struct {
-	ImagesVariant
+	ID                     string                `json:"id"`
+	NeverRequireSignedURLs *bool                 `json:"neverRequireSignedURLs,omitempty"`
+	Options                ImagesVariantsOptions `json:"options"`
 }
 
 type UpdateImagesVariantParams struct {
@@ -77,7 +79,7 @@ func (api *API) ListImagesVariants(ctx context.Context, rc *ResourceContainer, p
 // Fetch details for a single variant.
 //
 // API Reference: https://developers.cloudflare.com/api/operations/cloudflare-images-variants-variant-details
-func (api *API) GetImagesVariantDetails(ctx context.Context, rc *ResourceContainer, variantID string) (ImagesVariant, error) {
+func (api *API) GetImagesVariant(ctx context.Context, rc *ResourceContainer, variantID string) (ImagesVariant, error) {
 	if rc.Identifier == "" {
 		return ImagesVariant{}, ErrMissingAccountID
 	}
@@ -106,7 +108,7 @@ func (api *API) CreateImagesVariant(ctx context.Context, rc *ResourceContainer, 
 	}
 
 	baseURL := fmt.Sprintf("/accounts/%s/images/v1/variants", rc.Identifier)
-	res, err := api.makeRequestContext(ctx, http.MethodPost, baseURL, params.ImagesVariant)
+	res, err := api.makeRequestContext(ctx, http.MethodPost, baseURL, params)
 	if err != nil {
 		return ImagesVariant{}, err
 	}
