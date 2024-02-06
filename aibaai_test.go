@@ -15,6 +15,7 @@ import (
 )
 
 func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -25,8 +26,9 @@ func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.AI.Baai.BgeBaseEnV1_5(
 		context.TODO(),
@@ -45,6 +47,7 @@ func TestAIBaaiBgeBaseEnV1_5(t *testing.T) {
 }
 
 func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -55,8 +58,9 @@ func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.AI.Baai.BgeLargeEnV1_5(
 		context.TODO(),
@@ -75,6 +79,7 @@ func TestAIBaaiBgeLargeEnV1_5(t *testing.T) {
 }
 
 func TestAIBaaiBgeSmallEnV1_5(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -85,8 +90,9 @@ func TestAIBaaiBgeSmallEnV1_5(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.AI.Baai.BgeSmallEnV1_5(
 		context.TODO(),

@@ -196,11 +196,11 @@ func WithAPIKey(value string) RequestOption {
 	}
 }
 
-// WithEmail returns a RequestOption that sets the client setting "email".
-func WithEmail(value string) RequestOption {
+// WithAPIEmail returns a RequestOption that sets the client setting "api_email".
+func WithAPIEmail(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
-		r.Email = value
-		return r.Apply(WithHeader("x-auth-email", value))
+		r.APIEmail = value
+		return r.Apply(WithHeader("X-Auth-Email", r.APIEmail))
 	}
 }
 
@@ -209,5 +209,13 @@ func WithAPIToken(value string) RequestOption {
 	return func(r *requestconfig.RequestConfig) error {
 		r.APIToken = value
 		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIToken)))
+	}
+}
+
+// WithUserServiceKey returns a RequestOption that sets the client setting "user_service_key".
+func WithUserServiceKey(value string) RequestOption {
+	return func(r *requestconfig.RequestConfig) error {
+		r.UserServiceKey = value
+		return r.Apply(WithHeader("X-Auth-User-Service-Key", r.UserServiceKey))
 	}
 }

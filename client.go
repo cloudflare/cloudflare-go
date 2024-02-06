@@ -12,9 +12,17 @@ import (
 // interacting with the cloudflare API. You should not instantiate this client
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
-	Options []option.RequestOption
-	Zones   *ZoneService
-	AI      *AIService
+	Options        []option.RequestOption
+	Accounts       *AccountService
+	IPs            *IPService
+	Zones          *ZoneService
+	AI             *AIService
+	LoadBalancers  *LoadBalancerService
+	Access         *AccessService
+	DNSRecords     *DNSRecordService
+	Emails         *EmailService
+	AccountMembers *AccountMemberService
+	Tunnels        *TunnelService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -27,7 +35,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 		defaults = append(defaults, option.WithAPIKey(o))
 	}
 	if o, ok := os.LookupEnv("CLOUDFLARE_EMAIL"); ok {
-		defaults = append(defaults, option.WithEmail(o))
+		defaults = append(defaults, option.WithAPIEmail(o))
 	}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
@@ -36,8 +44,16 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 
 	r = &Client{Options: opts}
 
+	r.Accounts = NewAccountService(opts...)
+	r.IPs = NewIPService(opts...)
 	r.Zones = NewZoneService(opts...)
 	r.AI = NewAIService(opts...)
+	r.LoadBalancers = NewLoadBalancerService(opts...)
+	r.Access = NewAccessService(opts...)
+	r.DNSRecords = NewDNSRecordService(opts...)
+	r.Emails = NewEmailService(opts...)
+	r.AccountMembers = NewAccountMemberService(opts...)
+	r.Tunnels = NewTunnelService(opts...)
 
 	return
 }
