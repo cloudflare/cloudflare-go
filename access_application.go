@@ -52,6 +52,7 @@ type AccessApplication struct {
 	HttpOnlyCookieAttribute  *bool                          `json:"http_only_cookie_attribute,omitempty"`
 	ServiceAuth401Redirect   *bool                          `json:"service_auth_401_redirect,omitempty"`
 	PathCookieAttribute      *bool                          `json:"path_cookie_attribute,omitempty"`
+	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	AccessAppLauncherCustomization
@@ -166,6 +167,7 @@ type CreateAccessApplicationParams struct {
 	SessionDuration          string                         `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
+	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	AccessAppLauncherCustomization
@@ -196,6 +198,7 @@ type UpdateAccessApplicationParams struct {
 	SessionDuration          string                         `json:"session_duration,omitempty"`
 	SkipInterstitial         *bool                          `json:"skip_interstitial,omitempty"`
 	Type                     AccessApplicationType          `json:"type,omitempty"`
+	AllowAuthenticateViaWarp *bool                          `json:"allow_authenticate_via_warp,omitempty"`
 	CustomPages              []string                       `json:"custom_pages,omitempty"`
 	Tags                     []string                       `json:"tags,omitempty"`
 	AccessAppLauncherCustomization

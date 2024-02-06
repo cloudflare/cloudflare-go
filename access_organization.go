@@ -22,6 +22,8 @@ type AccessOrganization struct {
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
 	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
+	WarpAuthSessionDuration        *string                       `json:"warp_auth_session_duration,omitempty"`
+	AllowAuthenticateViaWarp       *bool                         `json:"allow_authenticate_via_warp,omitempty"`
 }
 
 // AccessOrganizationLoginDesign represents the login design options.
@@ -67,6 +69,8 @@ type CreateAccessOrganizationParams struct {
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
 	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
+	WarpAuthSessionDuration        *string                       `json:"warp_auth_session_duration,omitempty"`
+	AllowAuthenticateViaWarp       *bool                         `json:"allow_authenticate_via_warp,omitempty"`
 }
 
 type UpdateAccessOrganizationParams struct {
@@ -79,6 +83,8 @@ type UpdateAccessOrganizationParams struct {
 	AutoRedirectToIdentity         *bool                         `json:"auto_redirect_to_identity,omitempty"`
 	SessionDuration                *string                       `json:"session_duration,omitempty"`
 	CustomPages                    AccessOrganizationCustomPages `json:"custom_pages,omitempty"`
+	WarpAuthSessionDuration        *string                       `json:"warp_auth_session_duration,omitempty"`
+	AllowAuthenticateViaWarp       *bool                         `json:"allow_authenticate_via_warp,omitempty"`
 }
 
 func (api *API) GetAccessOrganization(ctx context.Context, rc *ResourceContainer, params GetAccessOrganizationParams) (AccessOrganization, ResultInfo, error) {

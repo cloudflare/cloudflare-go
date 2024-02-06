@@ -29,6 +29,8 @@ func TestAccessOrganization(t *testing.T) {
 				"is_ui_read_only": false,
 				"user_seat_expiration_inactive_time": "720h",
 				"auto_redirect_to_identity": true,
+				"allow_authenticate_via_warp": true,
+				"warp_auth_session_duration": "24h",
 				"session_duration": "12h",
 				"login_design": {
 					"background_color": "#c5ed1b",
@@ -46,10 +48,12 @@ func TestAccessOrganization(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessOrganization{
-		Name:       "Widget Corps Internal Applications",
-		CreatedAt:  &createdAt,
-		UpdatedAt:  &updatedAt,
-		AuthDomain: "test.cloudflareaccess.com",
+		Name:                     "Widget Corps Internal Applications",
+		CreatedAt:                &createdAt,
+		UpdatedAt:                &updatedAt,
+		AuthDomain:               "test.cloudflareaccess.com",
+		AllowAuthenticateViaWarp: BoolPtr(true),
+		WarpAuthSessionDuration:  StringPtr("24h"),
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
@@ -96,6 +100,8 @@ func TestCreateAccessOrganization(t *testing.T) {
 				"updated_at": "2014-01-01T05:20:00.12345Z",
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
+				"allow_authenticate_via_warp": true,
+				"warp_auth_session_duration": "24h",
 				"is_ui_read_only": true,
 				"session_duration": "12h",
 				"login_design": {
@@ -114,10 +120,12 @@ func TestCreateAccessOrganization(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessOrganization{
-		CreatedAt:  &createdAt,
-		UpdatedAt:  &updatedAt,
-		Name:       "Widget Corps Internal Applications",
-		AuthDomain: "test.cloudflareaccess.com",
+		CreatedAt:                &createdAt,
+		UpdatedAt:                &updatedAt,
+		Name:                     "Widget Corps Internal Applications",
+		AuthDomain:               "test.cloudflareaccess.com",
+		AllowAuthenticateViaWarp: BoolPtr(true),
+		WarpAuthSessionDuration:  StringPtr("24h"),
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
@@ -186,6 +194,8 @@ func TestUpdateAccessOrganization(t *testing.T) {
 				"updated_at": "2014-01-01T05:20:00.12345Z",
 				"name": "Widget Corps Internal Applications",
 				"auth_domain": "test.cloudflareaccess.com",
+				"allow_authenticate_via_warp": false,
+				"warp_auth_session_duration": "18h",
 				"login_design": {
 					"background_color": "#c5ed1b",
 					"logo_path": "https://example.com/logo.png",
@@ -205,10 +215,12 @@ func TestUpdateAccessOrganization(t *testing.T) {
 	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
 
 	want := AccessOrganization{
-		CreatedAt:  &createdAt,
-		UpdatedAt:  &updatedAt,
-		Name:       "Widget Corps Internal Applications",
-		AuthDomain: "test.cloudflareaccess.com",
+		CreatedAt:                &createdAt,
+		UpdatedAt:                &updatedAt,
+		Name:                     "Widget Corps Internal Applications",
+		AuthDomain:               "test.cloudflareaccess.com",
+		WarpAuthSessionDuration:  StringPtr("18h"),
+		AllowAuthenticateViaWarp: BoolPtr(false),
 		LoginDesign: AccessOrganizationLoginDesign{
 			BackgroundColor: "#c5ed1b",
 			LogoPath:        "https://example.com/logo.png",
@@ -233,9 +245,11 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:           BoolPtr(false),
-		SessionDuration:        StringPtr("12h"),
-		UIReadOnlyToggleReason: "this is my reason",
+		WarpAuthSessionDuration:  StringPtr("18h"),
+		AllowAuthenticateViaWarp: BoolPtr(false),
+		IsUIReadOnly:             BoolPtr(false),
+		SessionDuration:          StringPtr("12h"),
+		UIReadOnlyToggleReason:   "this is my reason",
 	})
 
 	if assert.NoError(t, err) {
@@ -254,9 +268,11 @@ func TestUpdateAccessOrganization(t *testing.T) {
 			HeaderText:      "Widget Corp",
 			FooterText:      "© Widget Corp",
 		},
-		IsUIReadOnly:           BoolPtr(false),
-		UIReadOnlyToggleReason: "this is my reason",
-		SessionDuration:        StringPtr("12h"),
+		WarpAuthSessionDuration:  StringPtr("18h"),
+		AllowAuthenticateViaWarp: BoolPtr(false),
+		IsUIReadOnly:             BoolPtr(false),
+		UIReadOnlyToggleReason:   "this is my reason",
+		SessionDuration:          StringPtr("12h"),
 	})
 
 	if assert.NoError(t, err) {
