@@ -45,8 +45,13 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 // Create a new load balancer.
 func (r *LoadBalancerService) New(ctx context.Context, identifier string, body LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LoadBalancerNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/load_balancers", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -83,68 +88,6 @@ func (r *LoadBalancerService) Delete(ctx context.Context, identifier1 string, id
 }
 
 type LoadBalancerNewResponse struct {
-	Errors   []LoadBalancerNewResponseError   `json:"errors"`
-	Messages []LoadBalancerNewResponseMessage `json:"messages"`
-	Result   LoadBalancerNewResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success LoadBalancerNewResponseSuccess `json:"success"`
-	JSON    loadBalancerNewResponseJSON    `json:"-"`
-}
-
-// loadBalancerNewResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerNewResponse]
-type loadBalancerNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerNewResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    loadBalancerNewResponseErrorJSON `json:"-"`
-}
-
-// loadBalancerNewResponseErrorJSON contains the JSON metadata for the struct
-// [LoadBalancerNewResponseError]
-type loadBalancerNewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerNewResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    loadBalancerNewResponseMessageJSON `json:"-"`
-}
-
-// loadBalancerNewResponseMessageJSON contains the JSON metadata for the struct
-// [LoadBalancerNewResponseMessage]
-type loadBalancerNewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerNewResponseResult struct {
 	ID string `json:"id"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
@@ -152,7 +95,7 @@ type LoadBalancerNewResponseResult struct {
 	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 	// response codes. If there is another healthy origin in the same pool, the request
 	// is retried once against this alternate origin.
-	AdaptiveRouting LoadBalancerNewResponseResultAdaptiveRouting `json:"adaptive_routing"`
+	AdaptiveRouting LoadBalancerNewResponseAdaptiveRouting `json:"adaptive_routing"`
 	// A mapping of country codes to a list of pool IDs (ordered by their failover
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
@@ -170,8 +113,8 @@ type LoadBalancerNewResponseResult struct {
 	FallbackPool interface{} `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
-	LocationStrategy LoadBalancerNewResponseResultLocationStrategy `json:"location_strategy"`
-	ModifiedOn       time.Time                                     `json:"modified_on" format:"date-time"`
+	LocationStrategy LoadBalancerNewResponseLocationStrategy `json:"location_strategy"`
+	ModifiedOn       time.Time                               `json:"modified_on" format:"date-time"`
 	// The DNS hostname to associate with your Load Balancer. If this hostname already
 	// exists as a DNS record in Cloudflare's DNS, the Load Balancer will take
 	// precedence and the DNS record will not be used.
@@ -191,14 +134,14 @@ type LoadBalancerNewResponseResult struct {
 	//     pool's outstanding requests.
 	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 	//     open connections.
-	RandomSteering LoadBalancerNewResponseResultRandomSteering `json:"random_steering"`
+	RandomSteering LoadBalancerNewResponseRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
 	RegionPools interface{} `json:"region_pools"`
 	// BETA Field Not General Access: A list of rules for this load balancer to
 	// execute.
-	Rules []LoadBalancerNewResponseResultRule `json:"rules"`
+	Rules []LoadBalancerNewResponseRule `json:"rules"`
 	// Specifies the type of session affinity the load balancer should use unless
 	// specified as `"none"` or "" (default). The supported types are:
 	//
@@ -222,9 +165,9 @@ type LoadBalancerNewResponseResult struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity LoadBalancerNewResponseResultSessionAffinity `json:"session_affinity"`
+	SessionAffinity LoadBalancerNewResponseSessionAffinity `json:"session_affinity"`
 	// Configures attributes for session affinity.
-	SessionAffinityAttributes LoadBalancerNewResponseResultSessionAffinityAttributes `json:"session_affinity_attributes"`
+	SessionAffinityAttributes LoadBalancerNewResponseSessionAffinityAttributes `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
 	// expiry time has been reached, subsequent requests may get sent to a different
 	// origin server. The accepted ranges per `session_affinity` policy are:
@@ -258,16 +201,16 @@ type LoadBalancerNewResponseResult struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy LoadBalancerNewResponseResultSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy LoadBalancerNewResponseSteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	TTL  float64                           `json:"ttl"`
-	JSON loadBalancerNewResponseResultJSON `json:"-"`
+	TTL  float64                     `json:"ttl"`
+	JSON loadBalancerNewResponseJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultJSON contains the JSON metadata for the struct
-// [LoadBalancerNewResponseResult]
-type loadBalancerNewResponseResultJSON struct {
+// loadBalancerNewResponseJSON contains the JSON metadata for the struct
+// [LoadBalancerNewResponse]
+type loadBalancerNewResponseJSON struct {
 	ID                        apijson.Field
 	AdaptiveRouting           apijson.Field
 	CountryPools              apijson.Field
@@ -293,7 +236,7 @@ type loadBalancerNewResponseResultJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -303,39 +246,39 @@ func (r *LoadBalancerNewResponseResult) UnmarshalJSON(data []byte) (err error) {
 // immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 // response codes. If there is another healthy origin in the same pool, the request
 // is retried once against this alternate origin.
-type LoadBalancerNewResponseResultAdaptiveRouting struct {
+type LoadBalancerNewResponseAdaptiveRouting struct {
 	// Extends zero-downtime failover of requests to healthy origins from alternate
 	// pools, when no healthy alternate exists in the same pool, according to the
 	// failover order defined by traffic and origin steering. When set false (the
 	// default) zero-downtime failover will only occur between origins within the same
 	// pool. See `session_affinity_attributes` for control over when sessions are
 	// broken or reassigned.
-	FailoverAcrossPools bool                                             `json:"failover_across_pools"`
-	JSON                loadBalancerNewResponseResultAdaptiveRoutingJSON `json:"-"`
+	FailoverAcrossPools bool                                       `json:"failover_across_pools"`
+	JSON                loadBalancerNewResponseAdaptiveRoutingJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultAdaptiveRoutingJSON contains the JSON metadata for
-// the struct [LoadBalancerNewResponseResultAdaptiveRouting]
-type loadBalancerNewResponseResultAdaptiveRoutingJSON struct {
+// loadBalancerNewResponseAdaptiveRoutingJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseAdaptiveRouting]
+type loadBalancerNewResponseAdaptiveRoutingJSON struct {
 	FailoverAcrossPools apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
 // to learn how steering is affected.
-type LoadBalancerNewResponseResultLocationStrategy struct {
+type LoadBalancerNewResponseLocationStrategy struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
 	//   - `"pop"`: Use the Cloudflare PoP location.
 	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 	//     unsuccessful, use the Cloudflare PoP location.
-	Mode LoadBalancerNewResponseResultLocationStrategyMode `json:"mode"`
+	Mode LoadBalancerNewResponseLocationStrategyMode `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
 	//
@@ -343,20 +286,20 @@ type LoadBalancerNewResponseResultLocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs LoadBalancerNewResponseResultLocationStrategyPreferEcs `json:"prefer_ecs"`
-	JSON      loadBalancerNewResponseResultLocationStrategyJSON      `json:"-"`
+	PreferEcs LoadBalancerNewResponseLocationStrategyPreferEcs `json:"prefer_ecs"`
+	JSON      loadBalancerNewResponseLocationStrategyJSON      `json:"-"`
 }
 
-// loadBalancerNewResponseResultLocationStrategyJSON contains the JSON metadata for
-// the struct [LoadBalancerNewResponseResultLocationStrategy]
-type loadBalancerNewResponseResultLocationStrategyJSON struct {
+// loadBalancerNewResponseLocationStrategyJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseLocationStrategy]
+type loadBalancerNewResponseLocationStrategyJSON struct {
 	Mode        apijson.Field
 	PreferEcs   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultLocationStrategy) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -366,11 +309,11 @@ func (r *LoadBalancerNewResponseResultLocationStrategy) UnmarshalJSON(data []byt
 //   - `"pop"`: Use the Cloudflare PoP location.
 //   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 //     unsuccessful, use the Cloudflare PoP location.
-type LoadBalancerNewResponseResultLocationStrategyMode string
+type LoadBalancerNewResponseLocationStrategyMode string
 
 const (
-	LoadBalancerNewResponseResultLocationStrategyModePop        LoadBalancerNewResponseResultLocationStrategyMode = "pop"
-	LoadBalancerNewResponseResultLocationStrategyModeResolverIP LoadBalancerNewResponseResultLocationStrategyMode = "resolver_ip"
+	LoadBalancerNewResponseLocationStrategyModePop        LoadBalancerNewResponseLocationStrategyMode = "pop"
+	LoadBalancerNewResponseLocationStrategyModeResolverIP LoadBalancerNewResponseLocationStrategyMode = "resolver_ip"
 )
 
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
@@ -380,13 +323,13 @@ const (
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type LoadBalancerNewResponseResultLocationStrategyPreferEcs string
+type LoadBalancerNewResponseLocationStrategyPreferEcs string
 
 const (
-	LoadBalancerNewResponseResultLocationStrategyPreferEcsAlways    LoadBalancerNewResponseResultLocationStrategyPreferEcs = "always"
-	LoadBalancerNewResponseResultLocationStrategyPreferEcsNever     LoadBalancerNewResponseResultLocationStrategyPreferEcs = "never"
-	LoadBalancerNewResponseResultLocationStrategyPreferEcsProximity LoadBalancerNewResponseResultLocationStrategyPreferEcs = "proximity"
-	LoadBalancerNewResponseResultLocationStrategyPreferEcsGeo       LoadBalancerNewResponseResultLocationStrategyPreferEcs = "geo"
+	LoadBalancerNewResponseLocationStrategyPreferEcsAlways    LoadBalancerNewResponseLocationStrategyPreferEcs = "always"
+	LoadBalancerNewResponseLocationStrategyPreferEcsNever     LoadBalancerNewResponseLocationStrategyPreferEcs = "never"
+	LoadBalancerNewResponseLocationStrategyPreferEcsProximity LoadBalancerNewResponseLocationStrategyPreferEcs = "proximity"
+	LoadBalancerNewResponseLocationStrategyPreferEcsGeo       LoadBalancerNewResponseLocationStrategyPreferEcs = "geo"
 )
 
 // Configures pool weights.
@@ -397,32 +340,32 @@ const (
 //     pool's outstanding requests.
 //   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 //     open connections.
-type LoadBalancerNewResponseResultRandomSteering struct {
+type LoadBalancerNewResponseRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights interface{}                                     `json:"pool_weights"`
-	JSON        loadBalancerNewResponseResultRandomSteeringJSON `json:"-"`
+	PoolWeights interface{}                               `json:"pool_weights"`
+	JSON        loadBalancerNewResponseRandomSteeringJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRandomSteeringJSON contains the JSON metadata for
-// the struct [LoadBalancerNewResponseResultRandomSteering]
-type loadBalancerNewResponseResultRandomSteeringJSON struct {
+// loadBalancerNewResponseRandomSteeringJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseRandomSteering]
+type loadBalancerNewResponseRandomSteeringJSON struct {
 	DefaultWeight apijson.Field
 	PoolWeights   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRandomSteering) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
-type LoadBalancerNewResponseResultRule struct {
+type LoadBalancerNewResponseRule struct {
 	// The condition expressions to evaluate. If the condition evaluates to true, the
 	// overrides or fixed_response in this rule will be applied. An empty condition is
 	// always true. For more details on condition expressions, please see
@@ -434,12 +377,12 @@ type LoadBalancerNewResponseResultRule struct {
 	// A collection of fields used to directly respond to the eyeball instead of
 	// routing to a pool. If a fixed_response is supplied the rule will be marked as
 	// terminates.
-	FixedResponse LoadBalancerNewResponseResultRulesFixedResponse `json:"fixed_response"`
+	FixedResponse LoadBalancerNewResponseRulesFixedResponse `json:"fixed_response"`
 	// Name of this rule. Only used for human readability.
 	Name string `json:"name"`
 	// A collection of overrides to apply to the load balancer when this rule's
 	// condition is true. All fields are optional.
-	Overrides LoadBalancerNewResponseResultRulesOverrides `json:"overrides"`
+	Overrides LoadBalancerNewResponseRulesOverrides `json:"overrides"`
 	// The order in which rules should be executed in relation to each other. Lower
 	// values are executed first. Values do not need to be sequential. If no value is
 	// provided for any rule the array order of the rules field will be used to assign
@@ -447,13 +390,13 @@ type LoadBalancerNewResponseResultRule struct {
 	Priority int64 `json:"priority"`
 	// If this rule's condition is true, this causes rule evaluation to stop after
 	// processing this rule.
-	Terminates bool                                  `json:"terminates"`
-	JSON       loadBalancerNewResponseResultRuleJSON `json:"-"`
+	Terminates bool                            `json:"terminates"`
+	JSON       loadBalancerNewResponseRuleJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRuleJSON contains the JSON metadata for the struct
-// [LoadBalancerNewResponseResultRule]
-type loadBalancerNewResponseResultRuleJSON struct {
+// loadBalancerNewResponseRuleJSON contains the JSON metadata for the struct
+// [LoadBalancerNewResponseRule]
+type loadBalancerNewResponseRuleJSON struct {
 	Condition     apijson.Field
 	Disabled      apijson.Field
 	FixedResponse apijson.Field
@@ -465,14 +408,14 @@ type loadBalancerNewResponseResultRuleJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A collection of fields used to directly respond to the eyeball instead of
 // routing to a pool. If a fixed_response is supplied the rule will be marked as
 // terminates.
-type LoadBalancerNewResponseResultRulesFixedResponse struct {
+type LoadBalancerNewResponseRulesFixedResponse struct {
 	// The http 'Content-Type' header to include in the response.
 	ContentType string `json:"content_type"`
 	// The http 'Location' header to include in the response.
@@ -480,13 +423,13 @@ type LoadBalancerNewResponseResultRulesFixedResponse struct {
 	// Text to include as the http body.
 	MessageBody string `json:"message_body"`
 	// The http status code to respond with.
-	StatusCode int64                                               `json:"status_code"`
-	JSON       loadBalancerNewResponseResultRulesFixedResponseJSON `json:"-"`
+	StatusCode int64                                         `json:"status_code"`
+	JSON       loadBalancerNewResponseRulesFixedResponseJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesFixedResponseJSON contains the JSON metadata
-// for the struct [LoadBalancerNewResponseResultRulesFixedResponse]
-type loadBalancerNewResponseResultRulesFixedResponseJSON struct {
+// loadBalancerNewResponseRulesFixedResponseJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseRulesFixedResponse]
+type loadBalancerNewResponseRulesFixedResponseJSON struct {
 	ContentType apijson.Field
 	Location    apijson.Field
 	MessageBody apijson.Field
@@ -495,20 +438,20 @@ type loadBalancerNewResponseResultRulesFixedResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A collection of overrides to apply to the load balancer when this rule's
 // condition is true. All fields are optional.
-type LoadBalancerNewResponseResultRulesOverrides struct {
+type LoadBalancerNewResponseRulesOverrides struct {
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
 	// immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 	// response codes. If there is another healthy origin in the same pool, the request
 	// is retried once against this alternate origin.
-	AdaptiveRouting LoadBalancerNewResponseResultRulesOverridesAdaptiveRouting `json:"adaptive_routing"`
+	AdaptiveRouting LoadBalancerNewResponseRulesOverridesAdaptiveRouting `json:"adaptive_routing"`
 	// A mapping of country codes to a list of pool IDs (ordered by their failover
 	// priority) for the given country. Any country not explicitly defined will fall
 	// back to using the corresponding region_pool mapping if it exists else to
@@ -521,7 +464,7 @@ type LoadBalancerNewResponseResultRulesOverrides struct {
 	FallbackPool interface{} `json:"fallback_pool"`
 	// Controls location-based steering for non-proxied requests. See `steering_policy`
 	// to learn how steering is affected.
-	LocationStrategy LoadBalancerNewResponseResultRulesOverridesLocationStrategy `json:"location_strategy"`
+	LocationStrategy LoadBalancerNewResponseRulesOverridesLocationStrategy `json:"location_strategy"`
 	// (Enterprise only): A mapping of Cloudflare PoP identifiers to a list of pool IDs
 	// (ordered by their failover priority) for the PoP (datacenter). Any PoPs not
 	// explicitly defined will fall back to using the corresponding country_pool, then
@@ -535,7 +478,7 @@ type LoadBalancerNewResponseResultRulesOverrides struct {
 	//     pool's outstanding requests.
 	//   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 	//     open connections.
-	RandomSteering LoadBalancerNewResponseResultRulesOverridesRandomSteering `json:"random_steering"`
+	RandomSteering LoadBalancerNewResponseRulesOverridesRandomSteering `json:"random_steering"`
 	// A mapping of region codes to a list of pool IDs (ordered by their failover
 	// priority) for the given region. Any regions not explicitly defined will fall
 	// back to using default_pools.
@@ -563,9 +506,9 @@ type LoadBalancerNewResponseResultRulesOverrides struct {
 	//     server is unhealthy, then a new origin server is calculated and used. See
 	//     `headers` in `session_affinity_attributes` for additional required
 	//     configuration.
-	SessionAffinity LoadBalancerNewResponseResultRulesOverridesSessionAffinity `json:"session_affinity"`
+	SessionAffinity LoadBalancerNewResponseRulesOverridesSessionAffinity `json:"session_affinity"`
 	// Configures attributes for session affinity.
-	SessionAffinityAttributes LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes `json:"session_affinity_attributes"`
+	SessionAffinityAttributes LoadBalancerNewResponseRulesOverridesSessionAffinityAttributes `json:"session_affinity_attributes"`
 	// Time, in seconds, until a client's session expires after being created. Once the
 	// expiry time has been reached, subsequent requests may get sent to a different
 	// origin server. The accepted ranges per `session_affinity` policy are:
@@ -599,16 +542,16 @@ type LoadBalancerNewResponseResultRulesOverrides struct {
 	//     others. Supported for HTTP/1 and HTTP/2 connections.
 	//   - `""`: Will map to `"geo"` if you use
 	//     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-	SteeringPolicy LoadBalancerNewResponseResultRulesOverridesSteeringPolicy `json:"steering_policy"`
+	SteeringPolicy LoadBalancerNewResponseRulesOverridesSteeringPolicy `json:"steering_policy"`
 	// Time to live (TTL) of the DNS entry for the IP address returned by this load
 	// balancer. This only applies to gray-clouded (unproxied) load balancers.
-	TTL  float64                                         `json:"ttl"`
-	JSON loadBalancerNewResponseResultRulesOverridesJSON `json:"-"`
+	TTL  float64                                   `json:"ttl"`
+	JSON loadBalancerNewResponseRulesOverridesJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesOverridesJSON contains the JSON metadata for
-// the struct [LoadBalancerNewResponseResultRulesOverrides]
-type loadBalancerNewResponseResultRulesOverridesJSON struct {
+// loadBalancerNewResponseRulesOverridesJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseRulesOverrides]
+type loadBalancerNewResponseRulesOverridesJSON struct {
 	AdaptiveRouting           apijson.Field
 	CountryPools              apijson.Field
 	DefaultPools              apijson.Field
@@ -626,7 +569,7 @@ type loadBalancerNewResponseResultRulesOverridesJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesOverrides) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesOverrides) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -636,40 +579,39 @@ func (r *LoadBalancerNewResponseResultRulesOverrides) UnmarshalJSON(data []byte)
 // immediately when an origin becomes unavailable due to HTTP 521, 522, or 523
 // response codes. If there is another healthy origin in the same pool, the request
 // is retried once against this alternate origin.
-type LoadBalancerNewResponseResultRulesOverridesAdaptiveRouting struct {
+type LoadBalancerNewResponseRulesOverridesAdaptiveRouting struct {
 	// Extends zero-downtime failover of requests to healthy origins from alternate
 	// pools, when no healthy alternate exists in the same pool, according to the
 	// failover order defined by traffic and origin steering. When set false (the
 	// default) zero-downtime failover will only occur between origins within the same
 	// pool. See `session_affinity_attributes` for control over when sessions are
 	// broken or reassigned.
-	FailoverAcrossPools bool                                                           `json:"failover_across_pools"`
-	JSON                loadBalancerNewResponseResultRulesOverridesAdaptiveRoutingJSON `json:"-"`
+	FailoverAcrossPools bool                                                     `json:"failover_across_pools"`
+	JSON                loadBalancerNewResponseRulesOverridesAdaptiveRoutingJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesOverridesAdaptiveRoutingJSON contains the JSON
-// metadata for the struct
-// [LoadBalancerNewResponseResultRulesOverridesAdaptiveRouting]
-type loadBalancerNewResponseResultRulesOverridesAdaptiveRoutingJSON struct {
+// loadBalancerNewResponseRulesOverridesAdaptiveRoutingJSON contains the JSON
+// metadata for the struct [LoadBalancerNewResponseRulesOverridesAdaptiveRouting]
+type loadBalancerNewResponseRulesOverridesAdaptiveRoutingJSON struct {
 	FailoverAcrossPools apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesOverridesAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesOverridesAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
 // to learn how steering is affected.
-type LoadBalancerNewResponseResultRulesOverridesLocationStrategy struct {
+type LoadBalancerNewResponseRulesOverridesLocationStrategy struct {
 	// Determines the authoritative location when ECS is not preferred, does not exist
 	// in the request, or its GeoIP lookup is unsuccessful.
 	//
 	//   - `"pop"`: Use the Cloudflare PoP location.
 	//   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 	//     unsuccessful, use the Cloudflare PoP location.
-	Mode LoadBalancerNewResponseResultRulesOverridesLocationStrategyMode `json:"mode"`
+	Mode LoadBalancerNewResponseRulesOverridesLocationStrategyMode `json:"mode"`
 	// Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
 	// authoritative location.
 	//
@@ -677,21 +619,20 @@ type LoadBalancerNewResponseResultRulesOverridesLocationStrategy struct {
 	// - `"never"`: Never prefer ECS.
 	// - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 	// - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-	PreferEcs LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs `json:"prefer_ecs"`
-	JSON      loadBalancerNewResponseResultRulesOverridesLocationStrategyJSON      `json:"-"`
+	PreferEcs LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs `json:"prefer_ecs"`
+	JSON      loadBalancerNewResponseRulesOverridesLocationStrategyJSON      `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesOverridesLocationStrategyJSON contains the
-// JSON metadata for the struct
-// [LoadBalancerNewResponseResultRulesOverridesLocationStrategy]
-type loadBalancerNewResponseResultRulesOverridesLocationStrategyJSON struct {
+// loadBalancerNewResponseRulesOverridesLocationStrategyJSON contains the JSON
+// metadata for the struct [LoadBalancerNewResponseRulesOverridesLocationStrategy]
+type loadBalancerNewResponseRulesOverridesLocationStrategyJSON struct {
 	Mode        apijson.Field
 	PreferEcs   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesOverridesLocationStrategy) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesOverridesLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -701,11 +642,11 @@ func (r *LoadBalancerNewResponseResultRulesOverridesLocationStrategy) UnmarshalJ
 //   - `"pop"`: Use the Cloudflare PoP location.
 //   - `"resolver_ip"`: Use the DNS resolver GeoIP location. If the GeoIP lookup is
 //     unsuccessful, use the Cloudflare PoP location.
-type LoadBalancerNewResponseResultRulesOverridesLocationStrategyMode string
+type LoadBalancerNewResponseRulesOverridesLocationStrategyMode string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyModePop        LoadBalancerNewResponseResultRulesOverridesLocationStrategyMode = "pop"
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyModeResolverIP LoadBalancerNewResponseResultRulesOverridesLocationStrategyMode = "resolver_ip"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyModePop        LoadBalancerNewResponseRulesOverridesLocationStrategyMode = "pop"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyModeResolverIP LoadBalancerNewResponseRulesOverridesLocationStrategyMode = "resolver_ip"
 )
 
 // Whether the EDNS Client Subnet (ECS) GeoIP should be preferred as the
@@ -715,13 +656,13 @@ const (
 // - `"never"`: Never prefer ECS.
 // - `"proximity"`: Prefer ECS only when `steering_policy="proximity"`.
 // - `"geo"`: Prefer ECS only when `steering_policy="geo"`.
-type LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs string
+type LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcsAlways    LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs = "always"
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcsNever     LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs = "never"
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs = "proximity"
-	LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerNewResponseResultRulesOverridesLocationStrategyPreferEcs = "geo"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcsAlways    LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs = "always"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcsNever     LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs = "never"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcsProximity LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs = "proximity"
+	LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcsGeo       LoadBalancerNewResponseRulesOverridesLocationStrategyPreferEcs = "geo"
 )
 
 // Configures pool weights.
@@ -732,27 +673,26 @@ const (
 //     pool's outstanding requests.
 //   - `steering_policy="least_connections"`: Use pool weights to scale each pool's
 //     open connections.
-type LoadBalancerNewResponseResultRulesOverridesRandomSteering struct {
+type LoadBalancerNewResponseRulesOverridesRandomSteering struct {
 	// The default weight for pools in the load balancer that are not specified in the
 	// pool_weights map.
 	DefaultWeight float64 `json:"default_weight"`
 	// A mapping of pool IDs to custom weights. The weight is relative to other pools
 	// in the load balancer.
-	PoolWeights interface{}                                                   `json:"pool_weights"`
-	JSON        loadBalancerNewResponseResultRulesOverridesRandomSteeringJSON `json:"-"`
+	PoolWeights interface{}                                             `json:"pool_weights"`
+	JSON        loadBalancerNewResponseRulesOverridesRandomSteeringJSON `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesOverridesRandomSteeringJSON contains the JSON
-// metadata for the struct
-// [LoadBalancerNewResponseResultRulesOverridesRandomSteering]
-type loadBalancerNewResponseResultRulesOverridesRandomSteeringJSON struct {
+// loadBalancerNewResponseRulesOverridesRandomSteeringJSON contains the JSON
+// metadata for the struct [LoadBalancerNewResponseRulesOverridesRandomSteering]
+type loadBalancerNewResponseRulesOverridesRandomSteeringJSON struct {
 	DefaultWeight apijson.Field
 	PoolWeights   apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -779,18 +719,18 @@ func (r *LoadBalancerNewResponseResultRulesOverridesRandomSteering) UnmarshalJSO
 //     server is unhealthy, then a new origin server is calculated and used. See
 //     `headers` in `session_affinity_attributes` for additional required
 //     configuration.
-type LoadBalancerNewResponseResultRulesOverridesSessionAffinity string
+type LoadBalancerNewResponseRulesOverridesSessionAffinity string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityNone     LoadBalancerNewResponseResultRulesOverridesSessionAffinity = "none"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityCookie   LoadBalancerNewResponseResultRulesOverridesSessionAffinity = "cookie"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityIPCookie LoadBalancerNewResponseResultRulesOverridesSessionAffinity = "ip_cookie"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityHeader   LoadBalancerNewResponseResultRulesOverridesSessionAffinity = "header"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityEmpty    LoadBalancerNewResponseResultRulesOverridesSessionAffinity = "\"\""
+	LoadBalancerNewResponseRulesOverridesSessionAffinityNone     LoadBalancerNewResponseRulesOverridesSessionAffinity = "none"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityCookie   LoadBalancerNewResponseRulesOverridesSessionAffinity = "cookie"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityIPCookie LoadBalancerNewResponseRulesOverridesSessionAffinity = "ip_cookie"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityHeader   LoadBalancerNewResponseRulesOverridesSessionAffinity = "header"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityEmpty    LoadBalancerNewResponseRulesOverridesSessionAffinity = "\"\""
 )
 
 // Configures attributes for session affinity.
-type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes struct {
+type LoadBalancerNewResponseRulesOverridesSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
@@ -817,12 +757,12 @@ type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes struct
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite `json:"samesite"`
+	Samesite LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite `json:"samesite"`
 	// Configures the Secure attribute on session affinity cookie. Value "Always"
 	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
 	// attribute depending if Always Use HTTPS is enabled.
-	Secure LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecure `json:"secure"`
+	Secure LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
 	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
 	// Cache, and Bandwidth Alliance. The supported values are:
@@ -834,14 +774,14 @@ type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes struct
 	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
 	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
 	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
-	JSON                 loadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesJSON                 `json:"-"`
+	ZeroDowntimeFailover LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
+	JSON                 loadBalancerNewResponseRulesOverridesSessionAffinityAttributesJSON                 `json:"-"`
 }
 
-// loadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes]
-type loadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesJSON struct {
+// loadBalancerNewResponseRulesOverridesSessionAffinityAttributesJSON contains the
+// JSON metadata for the struct
+// [LoadBalancerNewResponseRulesOverridesSessionAffinityAttributes]
+type loadBalancerNewResponseRulesOverridesSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
 	Headers              apijson.Field
 	RequireAllHeaders    apijson.Field
@@ -852,32 +792,32 @@ type loadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesJSON st
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseRulesOverridesSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 // be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 // when using value "None", the secure attribute can not be set to "Never".
-type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite string
+type LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesiteAuto   LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Auto"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesiteLax    LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Lax"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesiteNone   LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite = "None"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSamesite = "Strict"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesiteAuto   LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite = "Auto"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesiteLax    LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite = "Lax"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesiteNone   LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite = "None"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesiteStrict LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSamesite = "Strict"
 )
 
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
 // attribute depending if Always Use HTTPS is enabled.
-type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecure string
+type LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecure string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecureAuto   LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecure = "Auto"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecure = "Always"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesSecure = "Never"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecureAuto   LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecure = "Auto"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecureAlways LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecure = "Always"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecureNever  LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesSecure = "Never"
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
@@ -891,12 +831,12 @@ const (
 //   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
 //     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
 //     currently not supported for session affinity by header.
-type LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
+type LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "none"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewResponseResultRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "none"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "temporary"
+	LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewResponseRulesOverridesSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
 
 // Steering Policy for this load balancer.
@@ -921,17 +861,17 @@ const (
 //     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerNewResponseResultRulesOverridesSteeringPolicy string
+type LoadBalancerNewResponseRulesOverridesSteeringPolicy string
 
 const (
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyOff                      LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "off"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyGeo                      LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "geo"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyRandom                   LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "random"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyDynamicLatency           LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "dynamic_latency"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyProximity                LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "proximity"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyLeastOutstandingRequests LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyLeastConnections         LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "least_connections"
-	LoadBalancerNewResponseResultRulesOverridesSteeringPolicyEmpty                    LoadBalancerNewResponseResultRulesOverridesSteeringPolicy = "\"\""
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyOff                      LoadBalancerNewResponseRulesOverridesSteeringPolicy = "off"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyGeo                      LoadBalancerNewResponseRulesOverridesSteeringPolicy = "geo"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyRandom                   LoadBalancerNewResponseRulesOverridesSteeringPolicy = "random"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyDynamicLatency           LoadBalancerNewResponseRulesOverridesSteeringPolicy = "dynamic_latency"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyProximity                LoadBalancerNewResponseRulesOverridesSteeringPolicy = "proximity"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyLeastOutstandingRequests LoadBalancerNewResponseRulesOverridesSteeringPolicy = "least_outstanding_requests"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyLeastConnections         LoadBalancerNewResponseRulesOverridesSteeringPolicy = "least_connections"
+	LoadBalancerNewResponseRulesOverridesSteeringPolicyEmpty                    LoadBalancerNewResponseRulesOverridesSteeringPolicy = "\"\""
 )
 
 // Specifies the type of session affinity the load balancer should use unless
@@ -957,18 +897,18 @@ const (
 //     server is unhealthy, then a new origin server is calculated and used. See
 //     `headers` in `session_affinity_attributes` for additional required
 //     configuration.
-type LoadBalancerNewResponseResultSessionAffinity string
+type LoadBalancerNewResponseSessionAffinity string
 
 const (
-	LoadBalancerNewResponseResultSessionAffinityNone     LoadBalancerNewResponseResultSessionAffinity = "none"
-	LoadBalancerNewResponseResultSessionAffinityCookie   LoadBalancerNewResponseResultSessionAffinity = "cookie"
-	LoadBalancerNewResponseResultSessionAffinityIPCookie LoadBalancerNewResponseResultSessionAffinity = "ip_cookie"
-	LoadBalancerNewResponseResultSessionAffinityHeader   LoadBalancerNewResponseResultSessionAffinity = "header"
-	LoadBalancerNewResponseResultSessionAffinityEmpty    LoadBalancerNewResponseResultSessionAffinity = "\"\""
+	LoadBalancerNewResponseSessionAffinityNone     LoadBalancerNewResponseSessionAffinity = "none"
+	LoadBalancerNewResponseSessionAffinityCookie   LoadBalancerNewResponseSessionAffinity = "cookie"
+	LoadBalancerNewResponseSessionAffinityIPCookie LoadBalancerNewResponseSessionAffinity = "ip_cookie"
+	LoadBalancerNewResponseSessionAffinityHeader   LoadBalancerNewResponseSessionAffinity = "header"
+	LoadBalancerNewResponseSessionAffinityEmpty    LoadBalancerNewResponseSessionAffinity = "\"\""
 )
 
 // Configures attributes for session affinity.
-type LoadBalancerNewResponseResultSessionAffinityAttributes struct {
+type LoadBalancerNewResponseSessionAffinityAttributes struct {
 	// Configures the drain duration in seconds. This field is only used when session
 	// affinity is enabled on the load balancer.
 	DrainDuration float64 `json:"drain_duration"`
@@ -995,12 +935,12 @@ type LoadBalancerNewResponseResultSessionAffinityAttributes struct {
 	// Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 	// be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 	// when using value "None", the secure attribute can not be set to "Never".
-	Samesite LoadBalancerNewResponseResultSessionAffinityAttributesSamesite `json:"samesite"`
+	Samesite LoadBalancerNewResponseSessionAffinityAttributesSamesite `json:"samesite"`
 	// Configures the Secure attribute on session affinity cookie. Value "Always"
 	// indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 	// indicates the Secure attribute will not be set, and "Auto" will set the Secure
 	// attribute depending if Always Use HTTPS is enabled.
-	Secure LoadBalancerNewResponseResultSessionAffinityAttributesSecure `json:"secure"`
+	Secure LoadBalancerNewResponseSessionAffinityAttributesSecure `json:"secure"`
 	// Configures the zero-downtime failover between origins within a pool when session
 	// affinity is enabled. This feature is currently incompatible with Argo, Tiered
 	// Cache, and Bandwidth Alliance. The supported values are:
@@ -1012,13 +952,13 @@ type LoadBalancerNewResponseResultSessionAffinityAttributes struct {
 	//   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
 	//     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
 	//     currently not supported for session affinity by header.
-	ZeroDowntimeFailover LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
-	JSON                 loadBalancerNewResponseResultSessionAffinityAttributesJSON                 `json:"-"`
+	ZeroDowntimeFailover LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailover `json:"zero_downtime_failover"`
+	JSON                 loadBalancerNewResponseSessionAffinityAttributesJSON                 `json:"-"`
 }
 
-// loadBalancerNewResponseResultSessionAffinityAttributesJSON contains the JSON
-// metadata for the struct [LoadBalancerNewResponseResultSessionAffinityAttributes]
-type loadBalancerNewResponseResultSessionAffinityAttributesJSON struct {
+// loadBalancerNewResponseSessionAffinityAttributesJSON contains the JSON metadata
+// for the struct [LoadBalancerNewResponseSessionAffinityAttributes]
+type loadBalancerNewResponseSessionAffinityAttributesJSON struct {
 	DrainDuration        apijson.Field
 	Headers              apijson.Field
 	RequireAllHeaders    apijson.Field
@@ -1029,32 +969,32 @@ type loadBalancerNewResponseResultSessionAffinityAttributesJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *LoadBalancerNewResponseResultSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerNewResponseSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 // be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 // when using value "None", the secure attribute can not be set to "Never".
-type LoadBalancerNewResponseResultSessionAffinityAttributesSamesite string
+type LoadBalancerNewResponseSessionAffinityAttributesSamesite string
 
 const (
-	LoadBalancerNewResponseResultSessionAffinityAttributesSamesiteAuto   LoadBalancerNewResponseResultSessionAffinityAttributesSamesite = "Auto"
-	LoadBalancerNewResponseResultSessionAffinityAttributesSamesiteLax    LoadBalancerNewResponseResultSessionAffinityAttributesSamesite = "Lax"
-	LoadBalancerNewResponseResultSessionAffinityAttributesSamesiteNone   LoadBalancerNewResponseResultSessionAffinityAttributesSamesite = "None"
-	LoadBalancerNewResponseResultSessionAffinityAttributesSamesiteStrict LoadBalancerNewResponseResultSessionAffinityAttributesSamesite = "Strict"
+	LoadBalancerNewResponseSessionAffinityAttributesSamesiteAuto   LoadBalancerNewResponseSessionAffinityAttributesSamesite = "Auto"
+	LoadBalancerNewResponseSessionAffinityAttributesSamesiteLax    LoadBalancerNewResponseSessionAffinityAttributesSamesite = "Lax"
+	LoadBalancerNewResponseSessionAffinityAttributesSamesiteNone   LoadBalancerNewResponseSessionAffinityAttributesSamesite = "None"
+	LoadBalancerNewResponseSessionAffinityAttributesSamesiteStrict LoadBalancerNewResponseSessionAffinityAttributesSamesite = "Strict"
 )
 
 // Configures the Secure attribute on session affinity cookie. Value "Always"
 // indicates the Secure attribute will be set in the Set-Cookie header, "Never"
 // indicates the Secure attribute will not be set, and "Auto" will set the Secure
 // attribute depending if Always Use HTTPS is enabled.
-type LoadBalancerNewResponseResultSessionAffinityAttributesSecure string
+type LoadBalancerNewResponseSessionAffinityAttributesSecure string
 
 const (
-	LoadBalancerNewResponseResultSessionAffinityAttributesSecureAuto   LoadBalancerNewResponseResultSessionAffinityAttributesSecure = "Auto"
-	LoadBalancerNewResponseResultSessionAffinityAttributesSecureAlways LoadBalancerNewResponseResultSessionAffinityAttributesSecure = "Always"
-	LoadBalancerNewResponseResultSessionAffinityAttributesSecureNever  LoadBalancerNewResponseResultSessionAffinityAttributesSecure = "Never"
+	LoadBalancerNewResponseSessionAffinityAttributesSecureAuto   LoadBalancerNewResponseSessionAffinityAttributesSecure = "Auto"
+	LoadBalancerNewResponseSessionAffinityAttributesSecureAlways LoadBalancerNewResponseSessionAffinityAttributesSecure = "Always"
+	LoadBalancerNewResponseSessionAffinityAttributesSecureNever  LoadBalancerNewResponseSessionAffinityAttributesSecure = "Never"
 )
 
 // Configures the zero-downtime failover between origins within a pool when session
@@ -1068,12 +1008,12 @@ const (
 //   - `"sticky"`: The session affinity cookie is updated and subsequent requests are
 //     sent to the new origin. Note: Zero-downtime failover with sticky sessions is
 //     currently not supported for session affinity by header.
-type LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailover string
+type LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailover string
 
 const (
-	LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailover = "none"
-	LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailover = "temporary"
-	LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewResponseResultSessionAffinityAttributesZeroDowntimeFailover = "sticky"
+	LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailoverNone      LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailover = "none"
+	LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailoverTemporary LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailover = "temporary"
+	LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailoverSticky    LoadBalancerNewResponseSessionAffinityAttributesZeroDowntimeFailover = "sticky"
 )
 
 // Steering Policy for this load balancer.
@@ -1098,24 +1038,17 @@ const (
 //     others. Supported for HTTP/1 and HTTP/2 connections.
 //   - `""`: Will map to `"geo"` if you use
 //     `region_pools`/`country_pools`/`pop_pools` otherwise `"off"`.
-type LoadBalancerNewResponseResultSteeringPolicy string
+type LoadBalancerNewResponseSteeringPolicy string
 
 const (
-	LoadBalancerNewResponseResultSteeringPolicyOff                      LoadBalancerNewResponseResultSteeringPolicy = "off"
-	LoadBalancerNewResponseResultSteeringPolicyGeo                      LoadBalancerNewResponseResultSteeringPolicy = "geo"
-	LoadBalancerNewResponseResultSteeringPolicyRandom                   LoadBalancerNewResponseResultSteeringPolicy = "random"
-	LoadBalancerNewResponseResultSteeringPolicyDynamicLatency           LoadBalancerNewResponseResultSteeringPolicy = "dynamic_latency"
-	LoadBalancerNewResponseResultSteeringPolicyProximity                LoadBalancerNewResponseResultSteeringPolicy = "proximity"
-	LoadBalancerNewResponseResultSteeringPolicyLeastOutstandingRequests LoadBalancerNewResponseResultSteeringPolicy = "least_outstanding_requests"
-	LoadBalancerNewResponseResultSteeringPolicyLeastConnections         LoadBalancerNewResponseResultSteeringPolicy = "least_connections"
-	LoadBalancerNewResponseResultSteeringPolicyEmpty                    LoadBalancerNewResponseResultSteeringPolicy = "\"\""
-)
-
-// Whether the API call was successful
-type LoadBalancerNewResponseSuccess bool
-
-const (
-	LoadBalancerNewResponseSuccessTrue LoadBalancerNewResponseSuccess = true
+	LoadBalancerNewResponseSteeringPolicyOff                      LoadBalancerNewResponseSteeringPolicy = "off"
+	LoadBalancerNewResponseSteeringPolicyGeo                      LoadBalancerNewResponseSteeringPolicy = "geo"
+	LoadBalancerNewResponseSteeringPolicyRandom                   LoadBalancerNewResponseSteeringPolicy = "random"
+	LoadBalancerNewResponseSteeringPolicyDynamicLatency           LoadBalancerNewResponseSteeringPolicy = "dynamic_latency"
+	LoadBalancerNewResponseSteeringPolicyProximity                LoadBalancerNewResponseSteeringPolicy = "proximity"
+	LoadBalancerNewResponseSteeringPolicyLeastOutstandingRequests LoadBalancerNewResponseSteeringPolicy = "least_outstanding_requests"
+	LoadBalancerNewResponseSteeringPolicyLeastConnections         LoadBalancerNewResponseSteeringPolicy = "least_connections"
+	LoadBalancerNewResponseSteeringPolicyEmpty                    LoadBalancerNewResponseSteeringPolicy = "\"\""
 )
 
 type LoadBalancerGetResponse struct {
@@ -5136,6 +5069,75 @@ const (
 	LoadBalancerNewParamsSteeringPolicyLeastOutstandingRequests LoadBalancerNewParamsSteeringPolicy = "least_outstanding_requests"
 	LoadBalancerNewParamsSteeringPolicyLeastConnections         LoadBalancerNewParamsSteeringPolicy = "least_connections"
 	LoadBalancerNewParamsSteeringPolicyEmpty                    LoadBalancerNewParamsSteeringPolicy = "\"\""
+)
+
+type LoadBalancerNewResponseEnvelope struct {
+	Errors   []LoadBalancerNewResponseEnvelopeErrors   `json:"errors"`
+	Messages []LoadBalancerNewResponseEnvelopeMessages `json:"messages"`
+	Result   LoadBalancerNewResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success"`
+	JSON    loadBalancerNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancerNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [LoadBalancerNewResponseEnvelope]
+type loadBalancerNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    loadBalancerNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// loadBalancerNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseEnvelopeErrors]
+type loadBalancerNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    loadBalancerNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// loadBalancerNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [LoadBalancerNewResponseEnvelopeMessages]
+type loadBalancerNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type LoadBalancerNewResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerNewResponseEnvelopeSuccessTrue LoadBalancerNewResponseEnvelopeSuccess = true
 )
 
 type LoadBalancerUpdateParams struct {
