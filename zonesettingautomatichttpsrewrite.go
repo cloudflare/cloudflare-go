@@ -49,12 +49,13 @@ func (r *ZoneSettingAutomaticHTTPsRewriteService) List(ctx context.Context, zone
 }
 
 type ZoneSettingAutomaticHTTPsRewriteUpdateResponse struct {
-	Errors   []ZoneSettingAutomaticHTTPsRewriteUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingAutomaticHTTPsRewriteUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingAutomaticHTTPsRewriteUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingAutomaticHTTPsRewriteUpdateResponseMessage `json:"messages"`
+	// Enable the Automatic HTTPS Rewrites feature for this zone.
+	Result ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                                 `json:"success,required"`
-	Result  ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult `json:"result"`
-	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON   `json:"-"`
+	Success bool                                               `json:"success"`
+	JSON    zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON contains the JSON metadata
@@ -62,8 +63,8 @@ type ZoneSettingAutomaticHTTPsRewriteUpdateResponse struct {
 type zoneSettingAutomaticHTTPsRewriteUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,27 +111,28 @@ func (r *ZoneSettingAutomaticHTTPsRewriteUpdateResponseMessage) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable the Automatic HTTPS Rewrites feature for this zone.
 type ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON contains the JSON
 // metadata for the struct [ZoneSettingAutomaticHTTPsRewriteUpdateResponseResult]
 type zoneSettingAutomaticHTTPsRewriteUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -146,15 +148,6 @@ const (
 	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultIDAutomaticHTTPsRewrites ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultID = "automatic_https_rewrites"
 )
 
-// Value of the zone setting. Notes: Default value depends on the zone's plan
-// level.
-type ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue string
-
-const (
-	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValueOn  ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue = "on"
-	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValueOff ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultEditable bool
@@ -164,13 +157,23 @@ const (
 	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultEditableFalse ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting. Notes: Default value depends on the zone's plan
+// level.
+type ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue string
+
+const (
+	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValueOn  ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue = "on"
+	ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValueOff ZoneSettingAutomaticHTTPsRewriteUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingAutomaticHTTPsRewriteListResponse struct {
-	Errors   []ZoneSettingAutomaticHTTPsRewriteListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingAutomaticHTTPsRewriteListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingAutomaticHTTPsRewriteListResponseError   `json:"errors"`
+	Messages []ZoneSettingAutomaticHTTPsRewriteListResponseMessage `json:"messages"`
+	// Enable the Automatic HTTPS Rewrites feature for this zone.
+	Result ZoneSettingAutomaticHTTPsRewriteListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                               `json:"success,required"`
-	Result  ZoneSettingAutomaticHTTPsRewriteListResponseResult `json:"result"`
-	JSON    zoneSettingAutomaticHTTPsRewriteListResponseJSON   `json:"-"`
+	Success bool                                             `json:"success"`
+	JSON    zoneSettingAutomaticHTTPsRewriteListResponseJSON `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseJSON contains the JSON metadata for
@@ -178,8 +181,8 @@ type ZoneSettingAutomaticHTTPsRewriteListResponse struct {
 type zoneSettingAutomaticHTTPsRewriteListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -226,27 +229,28 @@ func (r *ZoneSettingAutomaticHTTPsRewriteListResponseMessage) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable the Automatic HTTPS Rewrites feature for this zone.
 type ZoneSettingAutomaticHTTPsRewriteListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingAutomaticHTTPsRewriteListResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingAutomaticHTTPsRewriteListResponseResultValue `json:"value,required"`
+	ID ZoneSettingAutomaticHTTPsRewriteListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingAutomaticHTTPsRewriteListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAutomaticHTTPsRewriteListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingAutomaticHTTPsRewriteListResponseResultValue `json:"value"`
+	JSON  zoneSettingAutomaticHTTPsRewriteListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAutomaticHTTPsRewriteListResponseResultJSON contains the JSON
 // metadata for the struct [ZoneSettingAutomaticHTTPsRewriteListResponseResult]
 type zoneSettingAutomaticHTTPsRewriteListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -262,15 +266,6 @@ const (
 	ZoneSettingAutomaticHTTPsRewriteListResponseResultIDAutomaticHTTPsRewrites ZoneSettingAutomaticHTTPsRewriteListResponseResultID = "automatic_https_rewrites"
 )
 
-// Value of the zone setting. Notes: Default value depends on the zone's plan
-// level.
-type ZoneSettingAutomaticHTTPsRewriteListResponseResultValue string
-
-const (
-	ZoneSettingAutomaticHTTPsRewriteListResponseResultValueOn  ZoneSettingAutomaticHTTPsRewriteListResponseResultValue = "on"
-	ZoneSettingAutomaticHTTPsRewriteListResponseResultValueOff ZoneSettingAutomaticHTTPsRewriteListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingAutomaticHTTPsRewriteListResponseResultEditable bool
@@ -278,6 +273,15 @@ type ZoneSettingAutomaticHTTPsRewriteListResponseResultEditable bool
 const (
 	ZoneSettingAutomaticHTTPsRewriteListResponseResultEditableTrue  ZoneSettingAutomaticHTTPsRewriteListResponseResultEditable = true
 	ZoneSettingAutomaticHTTPsRewriteListResponseResultEditableFalse ZoneSettingAutomaticHTTPsRewriteListResponseResultEditable = false
+)
+
+// Value of the zone setting. Notes: Default value depends on the zone's plan
+// level.
+type ZoneSettingAutomaticHTTPsRewriteListResponseResultValue string
+
+const (
+	ZoneSettingAutomaticHTTPsRewriteListResponseResultValueOn  ZoneSettingAutomaticHTTPsRewriteListResponseResultValue = "on"
+	ZoneSettingAutomaticHTTPsRewriteListResponseResultValueOff ZoneSettingAutomaticHTTPsRewriteListResponseResultValue = "off"
 )
 
 type ZoneSettingAutomaticHTTPsRewriteUpdateParams struct {

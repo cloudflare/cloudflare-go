@@ -51,12 +51,14 @@ func (r *ZoneSettingOrangeToOrangeService) List(ctx context.Context, zoneIdentif
 }
 
 type ZoneSettingOrangeToOrangeUpdateResponse struct {
-	Errors   []ZoneSettingOrangeToOrangeUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingOrangeToOrangeUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingOrangeToOrangeUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingOrangeToOrangeUpdateResponseMessage `json:"messages"`
+	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+	// on Cloudflare.
+	Result ZoneSettingOrangeToOrangeUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                          `json:"success,required"`
-	Result  ZoneSettingOrangeToOrangeUpdateResponseResult `json:"result"`
-	JSON    zoneSettingOrangeToOrangeUpdateResponseJSON   `json:"-"`
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingOrangeToOrangeUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseJSON contains the JSON metadata for the
@@ -64,8 +66,8 @@ type ZoneSettingOrangeToOrangeUpdateResponse struct {
 type zoneSettingOrangeToOrangeUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -112,26 +114,28 @@ func (r *ZoneSettingOrangeToOrangeUpdateResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+// on Cloudflare.
 type ZoneSettingOrangeToOrangeUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOrangeToOrangeUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingOrangeToOrangeUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingOrangeToOrangeUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOrangeToOrangeUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOrangeToOrangeUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingOrangeToOrangeUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingOrangeToOrangeUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingOrangeToOrangeUpdateResponseResult]
 type zoneSettingOrangeToOrangeUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,14 +151,6 @@ const (
 	ZoneSettingOrangeToOrangeUpdateResponseResultIDOrangeToOrange ZoneSettingOrangeToOrangeUpdateResponseResultID = "orange_to_orange"
 )
 
-// Value of the zone setting.
-type ZoneSettingOrangeToOrangeUpdateResponseResultValue string
-
-const (
-	ZoneSettingOrangeToOrangeUpdateResponseResultValueOn  ZoneSettingOrangeToOrangeUpdateResponseResultValue = "on"
-	ZoneSettingOrangeToOrangeUpdateResponseResultValueOff ZoneSettingOrangeToOrangeUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingOrangeToOrangeUpdateResponseResultEditable bool
@@ -164,13 +160,23 @@ const (
 	ZoneSettingOrangeToOrangeUpdateResponseResultEditableFalse ZoneSettingOrangeToOrangeUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingOrangeToOrangeUpdateResponseResultValue string
+
+const (
+	ZoneSettingOrangeToOrangeUpdateResponseResultValueOn  ZoneSettingOrangeToOrangeUpdateResponseResultValue = "on"
+	ZoneSettingOrangeToOrangeUpdateResponseResultValueOff ZoneSettingOrangeToOrangeUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingOrangeToOrangeListResponse struct {
-	Errors   []ZoneSettingOrangeToOrangeListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingOrangeToOrangeListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingOrangeToOrangeListResponseError   `json:"errors"`
+	Messages []ZoneSettingOrangeToOrangeListResponseMessage `json:"messages"`
+	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+	// on Cloudflare.
+	Result ZoneSettingOrangeToOrangeListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                        `json:"success,required"`
-	Result  ZoneSettingOrangeToOrangeListResponseResult `json:"result"`
-	JSON    zoneSettingOrangeToOrangeListResponseJSON   `json:"-"`
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingOrangeToOrangeListResponseJSON `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseJSON contains the JSON metadata for the
@@ -178,8 +184,8 @@ type ZoneSettingOrangeToOrangeListResponse struct {
 type zoneSettingOrangeToOrangeListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -226,26 +232,28 @@ func (r *ZoneSettingOrangeToOrangeListResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+// on Cloudflare.
 type ZoneSettingOrangeToOrangeListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOrangeToOrangeListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingOrangeToOrangeListResponseResultValue `json:"value,required"`
+	ID ZoneSettingOrangeToOrangeListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOrangeToOrangeListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOrangeToOrangeListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingOrangeToOrangeListResponseResultValue `json:"value"`
+	JSON  zoneSettingOrangeToOrangeListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOrangeToOrangeListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingOrangeToOrangeListResponseResult]
 type zoneSettingOrangeToOrangeListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,14 +269,6 @@ const (
 	ZoneSettingOrangeToOrangeListResponseResultIDOrangeToOrange ZoneSettingOrangeToOrangeListResponseResultID = "orange_to_orange"
 )
 
-// Value of the zone setting.
-type ZoneSettingOrangeToOrangeListResponseResultValue string
-
-const (
-	ZoneSettingOrangeToOrangeListResponseResultValueOn  ZoneSettingOrangeToOrangeListResponseResultValue = "on"
-	ZoneSettingOrangeToOrangeListResponseResultValueOff ZoneSettingOrangeToOrangeListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingOrangeToOrangeListResponseResultEditable bool
@@ -276,6 +276,14 @@ type ZoneSettingOrangeToOrangeListResponseResultEditable bool
 const (
 	ZoneSettingOrangeToOrangeListResponseResultEditableTrue  ZoneSettingOrangeToOrangeListResponseResultEditable = true
 	ZoneSettingOrangeToOrangeListResponseResultEditableFalse ZoneSettingOrangeToOrangeListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingOrangeToOrangeListResponseResultValue string
+
+const (
+	ZoneSettingOrangeToOrangeListResponseResultValueOn  ZoneSettingOrangeToOrangeListResponseResultValue = "on"
+	ZoneSettingOrangeToOrangeListResponseResultValueOff ZoneSettingOrangeToOrangeListResponseResultValue = "off"
 )
 
 type ZoneSettingOrangeToOrangeUpdateParams struct {
@@ -292,9 +300,9 @@ func (r ZoneSettingOrangeToOrangeUpdateParams) MarshalJSON() (data []byte, err e
 // on Cloudflare.
 type ZoneSettingOrangeToOrangeUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingOrangeToOrangeUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingOrangeToOrangeUpdateParamsValueID] `json:"id"`
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingOrangeToOrangeUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[ZoneSettingOrangeToOrangeUpdateParamsValueValue] `json:"value"`
 }
 
 func (r ZoneSettingOrangeToOrangeUpdateParamsValue) MarshalJSON() (data []byte, err error) {
@@ -308,14 +316,6 @@ const (
 	ZoneSettingOrangeToOrangeUpdateParamsValueIDOrangeToOrange ZoneSettingOrangeToOrangeUpdateParamsValueID = "orange_to_orange"
 )
 
-// Value of the zone setting.
-type ZoneSettingOrangeToOrangeUpdateParamsValueValue string
-
-const (
-	ZoneSettingOrangeToOrangeUpdateParamsValueValueOn  ZoneSettingOrangeToOrangeUpdateParamsValueValue = "on"
-	ZoneSettingOrangeToOrangeUpdateParamsValueValueOff ZoneSettingOrangeToOrangeUpdateParamsValueValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingOrangeToOrangeUpdateParamsValueEditable bool
@@ -323,4 +323,12 @@ type ZoneSettingOrangeToOrangeUpdateParamsValueEditable bool
 const (
 	ZoneSettingOrangeToOrangeUpdateParamsValueEditableTrue  ZoneSettingOrangeToOrangeUpdateParamsValueEditable = true
 	ZoneSettingOrangeToOrangeUpdateParamsValueEditableFalse ZoneSettingOrangeToOrangeUpdateParamsValueEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingOrangeToOrangeUpdateParamsValueValue string
+
+const (
+	ZoneSettingOrangeToOrangeUpdateParamsValueValueOn  ZoneSettingOrangeToOrangeUpdateParamsValueValue = "on"
+	ZoneSettingOrangeToOrangeUpdateParamsValueValueOff ZoneSettingOrangeToOrangeUpdateParamsValueValue = "off"
 )

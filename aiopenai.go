@@ -3,6 +3,12 @@
 package cloudflare
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -21,4 +27,29 @@ func NewAIOpenAIService(opts ...option.RequestOption) (r *AIOpenAIService) {
 	r = &AIOpenAIService{}
 	r.Options = opts
 	return
+}
+
+// Execute @cf/openai/whisper model.
+func (r *AIOpenAIService) Whisper(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AIOpenAIWhisperResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("apiv4/accounts/%s/ai/run/@cf/openai/whisper", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return
+}
+
+type AIOpenAIWhisperResponse struct {
+	Text string                      `json:"text"`
+	JSON aiOpenAIWhisperResponseJSON `json:"-"`
+}
+
+// aiOpenAIWhisperResponseJSON contains the JSON metadata for the struct
+// [AIOpenAIWhisperResponse]
+type aiOpenAIWhisperResponseJSON struct {
+	Text        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIOpenAIWhisperResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }

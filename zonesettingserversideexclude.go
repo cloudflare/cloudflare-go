@@ -69,12 +69,23 @@ func (r *ZoneSettingServerSideExcludeService) List(ctx context.Context, zoneIden
 }
 
 type ZoneSettingServerSideExcludeUpdateResponse struct {
-	Errors   []ZoneSettingServerSideExcludeUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingServerSideExcludeUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingServerSideExcludeUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingServerSideExcludeUpdateResponseMessage `json:"messages"`
+	// If there is sensitive content on your website that you want visible to real
+	// visitors, but that you want to hide from suspicious visitors, all you have to do
+	// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+	// be excluded from suspicious visitors in the following SSE tags:
+	// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+	// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+	// have HTML minification enabled, you won't see the SSE tags in your HTML source
+	// when it's served through Cloudflare. SSE will still function in this case, as
+	// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+	// resource moves through our network to the visitor's computer.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
+	Result ZoneSettingServerSideExcludeUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                             `json:"success,required"`
-	Result  ZoneSettingServerSideExcludeUpdateResponseResult `json:"result"`
-	JSON    zoneSettingServerSideExcludeUpdateResponseJSON   `json:"-"`
+	Success bool                                           `json:"success"`
+	JSON    zoneSettingServerSideExcludeUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseJSON contains the JSON metadata for
@@ -82,8 +93,8 @@ type ZoneSettingServerSideExcludeUpdateResponse struct {
 type zoneSettingServerSideExcludeUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -130,26 +141,37 @@ func (r *ZoneSettingServerSideExcludeUpdateResponseMessage) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// If there is sensitive content on your website that you want visible to real
+// visitors, but that you want to hide from suspicious visitors, all you have to do
+// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+// be excluded from suspicious visitors in the following SSE tags:
+// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+// have HTML minification enabled, you won't see the SSE tags in your HTML source
+// when it's served through Cloudflare. SSE will still function in this case, as
+// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+// resource moves through our network to the visitor's computer.
+// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 type ZoneSettingServerSideExcludeUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingServerSideExcludeUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingServerSideExcludeUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingServerSideExcludeUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingServerSideExcludeUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingServerSideExcludeUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingServerSideExcludeUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingServerSideExcludeUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingServerSideExcludeUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingServerSideExcludeUpdateResponseResult]
 type zoneSettingServerSideExcludeUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -165,14 +187,6 @@ const (
 	ZoneSettingServerSideExcludeUpdateResponseResultIDServerSideExclude ZoneSettingServerSideExcludeUpdateResponseResultID = "server_side_exclude"
 )
 
-// Value of the zone setting.
-type ZoneSettingServerSideExcludeUpdateResponseResultValue string
-
-const (
-	ZoneSettingServerSideExcludeUpdateResponseResultValueOn  ZoneSettingServerSideExcludeUpdateResponseResultValue = "on"
-	ZoneSettingServerSideExcludeUpdateResponseResultValueOff ZoneSettingServerSideExcludeUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingServerSideExcludeUpdateResponseResultEditable bool
@@ -182,13 +196,32 @@ const (
 	ZoneSettingServerSideExcludeUpdateResponseResultEditableFalse ZoneSettingServerSideExcludeUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingServerSideExcludeUpdateResponseResultValue string
+
+const (
+	ZoneSettingServerSideExcludeUpdateResponseResultValueOn  ZoneSettingServerSideExcludeUpdateResponseResultValue = "on"
+	ZoneSettingServerSideExcludeUpdateResponseResultValueOff ZoneSettingServerSideExcludeUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingServerSideExcludeListResponse struct {
-	Errors   []ZoneSettingServerSideExcludeListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingServerSideExcludeListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingServerSideExcludeListResponseError   `json:"errors"`
+	Messages []ZoneSettingServerSideExcludeListResponseMessage `json:"messages"`
+	// If there is sensitive content on your website that you want visible to real
+	// visitors, but that you want to hide from suspicious visitors, all you have to do
+	// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+	// be excluded from suspicious visitors in the following SSE tags:
+	// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+	// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+	// have HTML minification enabled, you won't see the SSE tags in your HTML source
+	// when it's served through Cloudflare. SSE will still function in this case, as
+	// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+	// resource moves through our network to the visitor's computer.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
+	Result ZoneSettingServerSideExcludeListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                           `json:"success,required"`
-	Result  ZoneSettingServerSideExcludeListResponseResult `json:"result"`
-	JSON    zoneSettingServerSideExcludeListResponseJSON   `json:"-"`
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingServerSideExcludeListResponseJSON `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseJSON contains the JSON metadata for the
@@ -196,8 +229,8 @@ type ZoneSettingServerSideExcludeListResponse struct {
 type zoneSettingServerSideExcludeListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -244,26 +277,37 @@ func (r *ZoneSettingServerSideExcludeListResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// If there is sensitive content on your website that you want visible to real
+// visitors, but that you want to hide from suspicious visitors, all you have to do
+// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+// be excluded from suspicious visitors in the following SSE tags:
+// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+// have HTML minification enabled, you won't see the SSE tags in your HTML source
+// when it's served through Cloudflare. SSE will still function in this case, as
+// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+// resource moves through our network to the visitor's computer.
+// (https://support.cloudflare.com/hc/en-us/articles/200170036).
 type ZoneSettingServerSideExcludeListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingServerSideExcludeListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingServerSideExcludeListResponseResultValue `json:"value,required"`
+	ID ZoneSettingServerSideExcludeListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingServerSideExcludeListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingServerSideExcludeListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingServerSideExcludeListResponseResultValue `json:"value"`
+	JSON  zoneSettingServerSideExcludeListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingServerSideExcludeListResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingServerSideExcludeListResponseResult]
 type zoneSettingServerSideExcludeListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -279,14 +323,6 @@ const (
 	ZoneSettingServerSideExcludeListResponseResultIDServerSideExclude ZoneSettingServerSideExcludeListResponseResultID = "server_side_exclude"
 )
 
-// Value of the zone setting.
-type ZoneSettingServerSideExcludeListResponseResultValue string
-
-const (
-	ZoneSettingServerSideExcludeListResponseResultValueOn  ZoneSettingServerSideExcludeListResponseResultValue = "on"
-	ZoneSettingServerSideExcludeListResponseResultValueOff ZoneSettingServerSideExcludeListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingServerSideExcludeListResponseResultEditable bool
@@ -294,6 +330,14 @@ type ZoneSettingServerSideExcludeListResponseResultEditable bool
 const (
 	ZoneSettingServerSideExcludeListResponseResultEditableTrue  ZoneSettingServerSideExcludeListResponseResultEditable = true
 	ZoneSettingServerSideExcludeListResponseResultEditableFalse ZoneSettingServerSideExcludeListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingServerSideExcludeListResponseResultValue string
+
+const (
+	ZoneSettingServerSideExcludeListResponseResultValueOn  ZoneSettingServerSideExcludeListResponseResultValue = "on"
+	ZoneSettingServerSideExcludeListResponseResultValueOff ZoneSettingServerSideExcludeListResponseResultValue = "off"
 )
 
 type ZoneSettingServerSideExcludeUpdateParams struct {

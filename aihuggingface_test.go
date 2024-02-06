@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIRun(t *testing.T) {
+func TestAIHuggingfaceDistilbertSst2Int8(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,12 @@ func TestAIRun(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.AI.Run(
+	_, err := client.AI.Huggingface.DistilbertSst2Int8(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"string",
-		cloudflare.AIRunParams{},
+		cloudflare.AIHuggingfaceDistilbertSst2Int8Params{
+			Text: cloudflare.F("string"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

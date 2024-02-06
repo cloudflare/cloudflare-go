@@ -82,20 +82,20 @@ func (r *ZoneService) Delete(ctx context.Context, identifier string, opts ...opt
 }
 
 type ZoneNewResponse struct {
-	Errors   []ZoneNewResponseError   `json:"errors,required"`
-	Messages []ZoneNewResponseMessage `json:"messages,required"`
+	Errors   []ZoneNewResponseError   `json:"errors"`
+	Messages []ZoneNewResponseMessage `json:"messages"`
+	Result   ZoneNewResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool                  `json:"success,required"`
-	Result  ZoneNewResponseResult `json:"result"`
-	JSON    zoneNewResponseJSON   `json:"-"`
+	Success bool                `json:"success"`
+	JSON    zoneNewResponseJSON `json:"-"`
 }
 
 // zoneNewResponseJSON contains the JSON metadata for the struct [ZoneNewResponse]
 type zoneNewResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -284,20 +284,20 @@ func (r *ZoneNewResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneGetResponse struct {
-	Errors   []ZoneGetResponseError   `json:"errors,required"`
-	Messages []ZoneGetResponseMessage `json:"messages,required"`
+	Errors   []ZoneGetResponseError   `json:"errors"`
+	Messages []ZoneGetResponseMessage `json:"messages"`
+	Result   ZoneGetResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool                  `json:"success,required"`
-	Result  ZoneGetResponseResult `json:"result"`
-	JSON    zoneGetResponseJSON   `json:"-"`
+	Success bool                `json:"success"`
+	JSON    zoneGetResponseJSON `json:"-"`
 }
 
 // zoneGetResponseJSON contains the JSON metadata for the struct [ZoneGetResponse]
 type zoneGetResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -486,12 +486,12 @@ func (r *ZoneGetResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneUpdateResponse struct {
-	Errors   []ZoneUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneUpdateResponseError   `json:"errors"`
+	Messages []ZoneUpdateResponseMessage `json:"messages"`
+	Result   ZoneUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool                     `json:"success,required"`
-	Result  ZoneUpdateResponseResult `json:"result"`
-	JSON    zoneUpdateResponseJSON   `json:"-"`
+	Success bool                   `json:"success"`
+	JSON    zoneUpdateResponseJSON `json:"-"`
 }
 
 // zoneUpdateResponseJSON contains the JSON metadata for the struct
@@ -499,8 +499,8 @@ type ZoneUpdateResponse struct {
 type zoneUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -689,13 +689,13 @@ func (r *ZoneUpdateResponseResultOwner) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneListResponse struct {
-	Errors   []ZoneListResponseError   `json:"errors,required"`
-	Messages []ZoneListResponseMessage `json:"messages,required"`
-	// Whether the API call was successful
-	Success    bool                       `json:"success,required"`
+	Errors     []ZoneListResponseError    `json:"errors"`
+	Messages   []ZoneListResponseMessage  `json:"messages"`
 	Result     []ZoneListResponseResult   `json:"result"`
 	ResultInfo ZoneListResponseResultInfo `json:"result_info"`
-	JSON       zoneListResponseJSON       `json:"-"`
+	// Whether the API call was successful
+	Success bool                 `json:"success"`
+	JSON    zoneListResponseJSON `json:"-"`
 }
 
 // zoneListResponseJSON contains the JSON metadata for the struct
@@ -703,9 +703,9 @@ type ZoneListResponse struct {
 type zoneListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -921,10 +921,11 @@ func (r *ZoneListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneDeleteResponse struct {
-	Errors   []ZoneDeleteResponseError   `json:"errors,required"`
-	Messages []ZoneDeleteResponseMessage `json:"messages,required"`
+	Errors   []ZoneDeleteResponseError   `json:"errors"`
+	Messages []ZoneDeleteResponseMessage `json:"messages"`
+	Result   ZoneDeleteResponseResult    `json:"result,nullable"`
 	// Whether the API call was successful
-	Success bool                   `json:"success,required"`
+	Success bool                   `json:"success"`
 	JSON    zoneDeleteResponseJSON `json:"-"`
 }
 
@@ -933,6 +934,7 @@ type ZoneDeleteResponse struct {
 type zoneDeleteResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -977,6 +979,24 @@ type zoneDeleteResponseMessageJSON struct {
 }
 
 func (r *ZoneDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneDeleteResponseResult struct {
+	// Identifier
+	ID   string                       `json:"id,required"`
+	JSON zoneDeleteResponseResultJSON `json:"-"`
+}
+
+// zoneDeleteResponseResultJSON contains the JSON metadata for the struct
+// [ZoneDeleteResponseResult]
+type zoneDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -67,12 +67,22 @@ func (r *ZoneSettingRocketLoaderService) List(ctx context.Context, zoneIdentifie
 }
 
 type ZoneSettingRocketLoaderUpdateResponse struct {
-	Errors   []ZoneSettingRocketLoaderUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingRocketLoaderUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingRocketLoaderUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingRocketLoaderUpdateResponseMessage `json:"messages"`
+	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
+	// prioritises rendering your content while loading your site's Javascript
+	// asynchronously. Turning on Rocket Loader will immediately improve a web page's
+	// rendering time sometimes measured as Time to First Paint (TTFP), and also the
+	// `window.onload` time (assuming there is JavaScript on the page). This can have a
+	// positive impact on your Google search ranking. When turned on, Rocket Loader
+	// will automatically defer the loading of all Javascript referenced in your HTML,
+	// with no configuration required. Refer to
+	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
+	// for more information.
+	Result ZoneSettingRocketLoaderUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                        `json:"success,required"`
-	Result  ZoneSettingRocketLoaderUpdateResponseResult `json:"result"`
-	JSON    zoneSettingRocketLoaderUpdateResponseJSON   `json:"-"`
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingRocketLoaderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseJSON contains the JSON metadata for the
@@ -80,8 +90,8 @@ type ZoneSettingRocketLoaderUpdateResponse struct {
 type zoneSettingRocketLoaderUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -128,26 +138,36 @@ func (r *ZoneSettingRocketLoaderUpdateResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
+// prioritises rendering your content while loading your site's Javascript
+// asynchronously. Turning on Rocket Loader will immediately improve a web page's
+// rendering time sometimes measured as Time to First Paint (TTFP), and also the
+// `window.onload` time (assuming there is JavaScript on the page). This can have a
+// positive impact on your Google search ranking. When turned on, Rocket Loader
+// will automatically defer the loading of all Javascript referenced in your HTML,
+// with no configuration required. Refer to
+// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
+// for more information.
 type ZoneSettingRocketLoaderUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingRocketLoaderUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingRocketLoaderUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingRocketLoaderUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingRocketLoaderUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingRocketLoaderUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingRocketLoaderUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingRocketLoaderUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingRocketLoaderUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingRocketLoaderUpdateResponseResult]
 type zoneSettingRocketLoaderUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,14 +183,6 @@ const (
 	ZoneSettingRocketLoaderUpdateResponseResultIDRocketLoader ZoneSettingRocketLoaderUpdateResponseResultID = "rocket_loader"
 )
 
-// Value of the zone setting.
-type ZoneSettingRocketLoaderUpdateResponseResultValue string
-
-const (
-	ZoneSettingRocketLoaderUpdateResponseResultValueOn  ZoneSettingRocketLoaderUpdateResponseResultValue = "on"
-	ZoneSettingRocketLoaderUpdateResponseResultValueOff ZoneSettingRocketLoaderUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingRocketLoaderUpdateResponseResultEditable bool
@@ -180,13 +192,31 @@ const (
 	ZoneSettingRocketLoaderUpdateResponseResultEditableFalse ZoneSettingRocketLoaderUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingRocketLoaderUpdateResponseResultValue string
+
+const (
+	ZoneSettingRocketLoaderUpdateResponseResultValueOn  ZoneSettingRocketLoaderUpdateResponseResultValue = "on"
+	ZoneSettingRocketLoaderUpdateResponseResultValueOff ZoneSettingRocketLoaderUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingRocketLoaderListResponse struct {
-	Errors   []ZoneSettingRocketLoaderListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingRocketLoaderListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingRocketLoaderListResponseError   `json:"errors"`
+	Messages []ZoneSettingRocketLoaderListResponseMessage `json:"messages"`
+	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
+	// prioritises rendering your content while loading your site's Javascript
+	// asynchronously. Turning on Rocket Loader will immediately improve a web page's
+	// rendering time sometimes measured as Time to First Paint (TTFP), and also the
+	// `window.onload` time (assuming there is JavaScript on the page). This can have a
+	// positive impact on your Google search ranking. When turned on, Rocket Loader
+	// will automatically defer the loading of all Javascript referenced in your HTML,
+	// with no configuration required. Refer to
+	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
+	// for more information.
+	Result ZoneSettingRocketLoaderListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success,required"`
-	Result  ZoneSettingRocketLoaderListResponseResult `json:"result"`
-	JSON    zoneSettingRocketLoaderListResponseJSON   `json:"-"`
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingRocketLoaderListResponseJSON `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseJSON contains the JSON metadata for the
@@ -194,8 +224,8 @@ type ZoneSettingRocketLoaderListResponse struct {
 type zoneSettingRocketLoaderListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -242,26 +272,36 @@ func (r *ZoneSettingRocketLoaderListResponseMessage) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
+// prioritises rendering your content while loading your site's Javascript
+// asynchronously. Turning on Rocket Loader will immediately improve a web page's
+// rendering time sometimes measured as Time to First Paint (TTFP), and also the
+// `window.onload` time (assuming there is JavaScript on the page). This can have a
+// positive impact on your Google search ranking. When turned on, Rocket Loader
+// will automatically defer the loading of all Javascript referenced in your HTML,
+// with no configuration required. Refer to
+// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
+// for more information.
 type ZoneSettingRocketLoaderListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingRocketLoaderListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingRocketLoaderListResponseResultValue `json:"value,required"`
+	ID ZoneSettingRocketLoaderListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingRocketLoaderListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingRocketLoaderListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingRocketLoaderListResponseResultValue `json:"value"`
+	JSON  zoneSettingRocketLoaderListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingRocketLoaderListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingRocketLoaderListResponseResult]
 type zoneSettingRocketLoaderListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -277,14 +317,6 @@ const (
 	ZoneSettingRocketLoaderListResponseResultIDRocketLoader ZoneSettingRocketLoaderListResponseResultID = "rocket_loader"
 )
 
-// Value of the zone setting.
-type ZoneSettingRocketLoaderListResponseResultValue string
-
-const (
-	ZoneSettingRocketLoaderListResponseResultValueOn  ZoneSettingRocketLoaderListResponseResultValue = "on"
-	ZoneSettingRocketLoaderListResponseResultValueOff ZoneSettingRocketLoaderListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingRocketLoaderListResponseResultEditable bool
@@ -292,6 +324,14 @@ type ZoneSettingRocketLoaderListResponseResultEditable bool
 const (
 	ZoneSettingRocketLoaderListResponseResultEditableTrue  ZoneSettingRocketLoaderListResponseResultEditable = true
 	ZoneSettingRocketLoaderListResponseResultEditableFalse ZoneSettingRocketLoaderListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingRocketLoaderListResponseResultValue string
+
+const (
+	ZoneSettingRocketLoaderListResponseResultValueOn  ZoneSettingRocketLoaderListResponseResultValue = "on"
+	ZoneSettingRocketLoaderListResponseResultValueOff ZoneSettingRocketLoaderListResponseResultValue = "off"
 )
 
 type ZoneSettingRocketLoaderUpdateParams struct {
@@ -324,9 +364,9 @@ func (r ZoneSettingRocketLoaderUpdateParams) MarshalJSON() (data []byte, err err
 // for more information.
 type ZoneSettingRocketLoaderUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingRocketLoaderUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingRocketLoaderUpdateParamsValueID] `json:"id"`
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingRocketLoaderUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[ZoneSettingRocketLoaderUpdateParamsValueValue] `json:"value"`
 }
 
 func (r ZoneSettingRocketLoaderUpdateParamsValue) MarshalJSON() (data []byte, err error) {
@@ -340,14 +380,6 @@ const (
 	ZoneSettingRocketLoaderUpdateParamsValueIDRocketLoader ZoneSettingRocketLoaderUpdateParamsValueID = "rocket_loader"
 )
 
-// Value of the zone setting.
-type ZoneSettingRocketLoaderUpdateParamsValueValue string
-
-const (
-	ZoneSettingRocketLoaderUpdateParamsValueValueOn  ZoneSettingRocketLoaderUpdateParamsValueValue = "on"
-	ZoneSettingRocketLoaderUpdateParamsValueValueOff ZoneSettingRocketLoaderUpdateParamsValueValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingRocketLoaderUpdateParamsValueEditable bool
@@ -355,4 +387,12 @@ type ZoneSettingRocketLoaderUpdateParamsValueEditable bool
 const (
 	ZoneSettingRocketLoaderUpdateParamsValueEditableTrue  ZoneSettingRocketLoaderUpdateParamsValueEditable = true
 	ZoneSettingRocketLoaderUpdateParamsValueEditableFalse ZoneSettingRocketLoaderUpdateParamsValueEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingRocketLoaderUpdateParamsValueValue string
+
+const (
+	ZoneSettingRocketLoaderUpdateParamsValueValueOn  ZoneSettingRocketLoaderUpdateParamsValueValue = "on"
+	ZoneSettingRocketLoaderUpdateParamsValueValueOff ZoneSettingRocketLoaderUpdateParamsValueValue = "off"
 )

@@ -51,12 +51,14 @@ func (r *ZoneSettingIPV6Service) List(ctx context.Context, zoneIdentifier string
 }
 
 type ZoneSettingIPV6UpdateResponse struct {
-	Errors   []ZoneSettingIPV6UpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingIPV6UpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingIPV6UpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingIPV6UpdateResponseMessage `json:"messages"`
+	// Enable IPv6 on all subdomains that are Cloudflare enabled.
+	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
+	Result ZoneSettingIPV6UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  ZoneSettingIPV6UpdateResponseResult `json:"result"`
-	JSON    zoneSettingIPV6UpdateResponseJSON   `json:"-"`
+	Success bool                              `json:"success"`
+	JSON    zoneSettingIPV6UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingIPV6UpdateResponseJSON contains the JSON metadata for the struct
@@ -64,8 +66,8 @@ type ZoneSettingIPV6UpdateResponse struct {
 type zoneSettingIPV6UpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -112,26 +114,28 @@ func (r *ZoneSettingIPV6UpdateResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable IPv6 on all subdomains that are Cloudflare enabled.
+// (https://support.cloudflare.com/hc/en-us/articles/200168586).
 type ZoneSettingIPV6UpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPV6UpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingIPV6UpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingIPV6UpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingIPV6UpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPV6UpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingIPV6UpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingIPV6UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPV6UpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingIPV6UpdateResponseResult]
 type zoneSettingIPV6UpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,14 +151,6 @@ const (
 	ZoneSettingIPV6UpdateResponseResultIDIPV6 ZoneSettingIPV6UpdateResponseResultID = "ipv6"
 )
 
-// Value of the zone setting.
-type ZoneSettingIPV6UpdateResponseResultValue string
-
-const (
-	ZoneSettingIPV6UpdateResponseResultValueOff ZoneSettingIPV6UpdateResponseResultValue = "off"
-	ZoneSettingIPV6UpdateResponseResultValueOn  ZoneSettingIPV6UpdateResponseResultValue = "on"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingIPV6UpdateResponseResultEditable bool
@@ -164,13 +160,23 @@ const (
 	ZoneSettingIPV6UpdateResponseResultEditableFalse ZoneSettingIPV6UpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingIPV6UpdateResponseResultValue string
+
+const (
+	ZoneSettingIPV6UpdateResponseResultValueOff ZoneSettingIPV6UpdateResponseResultValue = "off"
+	ZoneSettingIPV6UpdateResponseResultValueOn  ZoneSettingIPV6UpdateResponseResultValue = "on"
+)
+
 type ZoneSettingIPV6ListResponse struct {
-	Errors   []ZoneSettingIPV6ListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingIPV6ListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingIPV6ListResponseError   `json:"errors"`
+	Messages []ZoneSettingIPV6ListResponseMessage `json:"messages"`
+	// Enable IPv6 on all subdomains that are Cloudflare enabled.
+	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
+	Result ZoneSettingIPV6ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                              `json:"success,required"`
-	Result  ZoneSettingIPV6ListResponseResult `json:"result"`
-	JSON    zoneSettingIPV6ListResponseJSON   `json:"-"`
+	Success bool                            `json:"success"`
+	JSON    zoneSettingIPV6ListResponseJSON `json:"-"`
 }
 
 // zoneSettingIPV6ListResponseJSON contains the JSON metadata for the struct
@@ -178,8 +184,8 @@ type ZoneSettingIPV6ListResponse struct {
 type zoneSettingIPV6ListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -226,26 +232,28 @@ func (r *ZoneSettingIPV6ListResponseMessage) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable IPv6 on all subdomains that are Cloudflare enabled.
+// (https://support.cloudflare.com/hc/en-us/articles/200168586).
 type ZoneSettingIPV6ListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPV6ListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingIPV6ListResponseResultValue `json:"value,required"`
+	ID ZoneSettingIPV6ListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingIPV6ListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPV6ListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingIPV6ListResponseResultValue `json:"value"`
+	JSON  zoneSettingIPV6ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPV6ListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingIPV6ListResponseResult]
 type zoneSettingIPV6ListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -261,14 +269,6 @@ const (
 	ZoneSettingIPV6ListResponseResultIDIPV6 ZoneSettingIPV6ListResponseResultID = "ipv6"
 )
 
-// Value of the zone setting.
-type ZoneSettingIPV6ListResponseResultValue string
-
-const (
-	ZoneSettingIPV6ListResponseResultValueOff ZoneSettingIPV6ListResponseResultValue = "off"
-	ZoneSettingIPV6ListResponseResultValueOn  ZoneSettingIPV6ListResponseResultValue = "on"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingIPV6ListResponseResultEditable bool
@@ -276,6 +276,14 @@ type ZoneSettingIPV6ListResponseResultEditable bool
 const (
 	ZoneSettingIPV6ListResponseResultEditableTrue  ZoneSettingIPV6ListResponseResultEditable = true
 	ZoneSettingIPV6ListResponseResultEditableFalse ZoneSettingIPV6ListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingIPV6ListResponseResultValue string
+
+const (
+	ZoneSettingIPV6ListResponseResultValueOff ZoneSettingIPV6ListResponseResultValue = "off"
+	ZoneSettingIPV6ListResponseResultValueOn  ZoneSettingIPV6ListResponseResultValue = "on"
 )
 
 type ZoneSettingIPV6UpdateParams struct {

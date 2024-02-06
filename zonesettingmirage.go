@@ -55,12 +55,16 @@ func (r *ZoneSettingMirageService) List(ctx context.Context, zoneIdentifier stri
 }
 
 type ZoneSettingMirageUpdateResponse struct {
-	Errors   []ZoneSettingMirageUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingMirageUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingMirageUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingMirageUpdateResponseMessage `json:"messages"`
+	// Automatically optimize image loading for website visitors on mobile devices.
+	// Refer to
+	// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
+	// more information.
+	Result ZoneSettingMirageUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                  `json:"success,required"`
-	Result  ZoneSettingMirageUpdateResponseResult `json:"result"`
-	JSON    zoneSettingMirageUpdateResponseJSON   `json:"-"`
+	Success bool                                `json:"success"`
+	JSON    zoneSettingMirageUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseJSON contains the JSON metadata for the struct
@@ -68,8 +72,8 @@ type ZoneSettingMirageUpdateResponse struct {
 type zoneSettingMirageUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,26 +120,30 @@ func (r *ZoneSettingMirageUpdateResponseMessage) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Automatically optimize image loading for website visitors on mobile devices.
+// Refer to
+// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
+// more information.
 type ZoneSettingMirageUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingMirageUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingMirageUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingMirageUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMirageUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMirageUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingMirageUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingMirageUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMirageUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingMirageUpdateResponseResult]
 type zoneSettingMirageUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,14 +159,6 @@ const (
 	ZoneSettingMirageUpdateResponseResultIDMirage ZoneSettingMirageUpdateResponseResultID = "mirage"
 )
 
-// Value of the zone setting.
-type ZoneSettingMirageUpdateResponseResultValue string
-
-const (
-	ZoneSettingMirageUpdateResponseResultValueOn  ZoneSettingMirageUpdateResponseResultValue = "on"
-	ZoneSettingMirageUpdateResponseResultValueOff ZoneSettingMirageUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingMirageUpdateResponseResultEditable bool
@@ -168,13 +168,25 @@ const (
 	ZoneSettingMirageUpdateResponseResultEditableFalse ZoneSettingMirageUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingMirageUpdateResponseResultValue string
+
+const (
+	ZoneSettingMirageUpdateResponseResultValueOn  ZoneSettingMirageUpdateResponseResultValue = "on"
+	ZoneSettingMirageUpdateResponseResultValueOff ZoneSettingMirageUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingMirageListResponse struct {
-	Errors   []ZoneSettingMirageListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingMirageListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingMirageListResponseError   `json:"errors"`
+	Messages []ZoneSettingMirageListResponseMessage `json:"messages"`
+	// Automatically optimize image loading for website visitors on mobile devices.
+	// Refer to
+	// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
+	// more information.
+	Result ZoneSettingMirageListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  ZoneSettingMirageListResponseResult `json:"result"`
-	JSON    zoneSettingMirageListResponseJSON   `json:"-"`
+	Success bool                              `json:"success"`
+	JSON    zoneSettingMirageListResponseJSON `json:"-"`
 }
 
 // zoneSettingMirageListResponseJSON contains the JSON metadata for the struct
@@ -182,8 +194,8 @@ type ZoneSettingMirageListResponse struct {
 type zoneSettingMirageListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -230,26 +242,30 @@ func (r *ZoneSettingMirageListResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Automatically optimize image loading for website visitors on mobile devices.
+// Refer to
+// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
+// more information.
 type ZoneSettingMirageListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingMirageListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingMirageListResponseResultValue `json:"value,required"`
+	ID ZoneSettingMirageListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMirageListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMirageListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingMirageListResponseResultValue `json:"value"`
+	JSON  zoneSettingMirageListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMirageListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingMirageListResponseResult]
 type zoneSettingMirageListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -265,14 +281,6 @@ const (
 	ZoneSettingMirageListResponseResultIDMirage ZoneSettingMirageListResponseResultID = "mirage"
 )
 
-// Value of the zone setting.
-type ZoneSettingMirageListResponseResultValue string
-
-const (
-	ZoneSettingMirageListResponseResultValueOn  ZoneSettingMirageListResponseResultValue = "on"
-	ZoneSettingMirageListResponseResultValueOff ZoneSettingMirageListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingMirageListResponseResultEditable bool
@@ -280,6 +288,14 @@ type ZoneSettingMirageListResponseResultEditable bool
 const (
 	ZoneSettingMirageListResponseResultEditableTrue  ZoneSettingMirageListResponseResultEditable = true
 	ZoneSettingMirageListResponseResultEditableFalse ZoneSettingMirageListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingMirageListResponseResultValue string
+
+const (
+	ZoneSettingMirageListResponseResultValueOn  ZoneSettingMirageListResponseResultValue = "on"
+	ZoneSettingMirageListResponseResultValueOff ZoneSettingMirageListResponseResultValue = "off"
 )
 
 type ZoneSettingMirageUpdateParams struct {

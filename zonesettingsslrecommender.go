@@ -52,15 +52,12 @@ func (r *ZoneSettingSSLRecommenderService) List(ctx context.Context, zoneIdentif
 }
 
 type ZoneSettingSSLRecommenderUpdateResponse struct {
-	Errors   []ZoneSettingSSLRecommenderUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingSSLRecommenderUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingSSLRecommenderUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingSSLRecommenderUpdateResponseMessage `json:"messages"`
+	Result   ZoneSettingSSLRecommenderUpdateResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success,required"`
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
-	Result ZoneSettingSSLRecommenderUpdateResponseResult `json:"result"`
-	JSON   zoneSettingSSLRecommenderUpdateResponseJSON   `json:"-"`
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingSSLRecommenderUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingSSLRecommenderUpdateResponseJSON contains the JSON metadata for the
@@ -68,8 +65,8 @@ type ZoneSettingSSLRecommenderUpdateResponse struct {
 type zoneSettingSSLRecommenderUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,9 +113,6 @@ func (r *ZoneSettingSSLRecommenderUpdateResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSSLRecommenderUpdateResponseResult struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID ZoneSettingSSLRecommenderUpdateResponseResultID `json:"id"`
@@ -148,15 +142,12 @@ const (
 )
 
 type ZoneSettingSSLRecommenderListResponse struct {
-	Errors   []ZoneSettingSSLRecommenderListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingSSLRecommenderListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingSSLRecommenderListResponseError   `json:"errors"`
+	Messages []ZoneSettingSSLRecommenderListResponseMessage `json:"messages"`
+	Result   ZoneSettingSSLRecommenderListResponseResult    `json:"result"`
 	// Whether the API call was successful
-	Success bool `json:"success,required"`
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
-	Result ZoneSettingSSLRecommenderListResponseResult `json:"result"`
-	JSON   zoneSettingSSLRecommenderListResponseJSON   `json:"-"`
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingSSLRecommenderListResponseJSON `json:"-"`
 }
 
 // zoneSettingSSLRecommenderListResponseJSON contains the JSON metadata for the
@@ -164,8 +155,8 @@ type ZoneSettingSSLRecommenderListResponse struct {
 type zoneSettingSSLRecommenderListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -212,9 +203,6 @@ func (r *ZoneSettingSSLRecommenderListResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSSLRecommenderListResponseResult struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID ZoneSettingSSLRecommenderListResponseResultID `json:"id"`
@@ -244,9 +232,6 @@ const (
 )
 
 type ZoneSettingSSLRecommenderUpdateParams struct {
-	// Enrollment in the SSL/TLS Recommender service which tries to detect and
-	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-	// origin servers support.
 	Value param.Field[ZoneSettingSSLRecommenderUpdateParamsValue] `json:"value,required"`
 }
 
@@ -254,9 +239,6 @@ func (r ZoneSettingSSLRecommenderUpdateParams) MarshalJSON() (data []byte, err e
 	return apijson.MarshalRoot(r)
 }
 
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
 type ZoneSettingSSLRecommenderUpdateParamsValue struct {
 	// Enrollment value for SSL/TLS Recommender.
 	ID param.Field[ZoneSettingSSLRecommenderUpdateParamsValueID] `json:"id"`

@@ -49,12 +49,13 @@ func (r *ZoneSettingHTTP3Service) List(ctx context.Context, zoneIdentifier strin
 }
 
 type ZoneSettingHTTP3UpdateResponse struct {
-	Errors   []ZoneSettingHTTP3UpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingHTTP3UpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingHTTP3UpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingHTTP3UpdateResponseMessage `json:"messages"`
+	// HTTP3 enabled for this zone.
+	Result ZoneSettingHTTP3UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                 `json:"success,required"`
-	Result  ZoneSettingHTTP3UpdateResponseResult `json:"result"`
-	JSON    zoneSettingHTTP3UpdateResponseJSON   `json:"-"`
+	Success bool                               `json:"success"`
+	JSON    zoneSettingHTTP3UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingHTTP3UpdateResponseJSON contains the JSON metadata for the struct
@@ -62,8 +63,8 @@ type ZoneSettingHTTP3UpdateResponse struct {
 type zoneSettingHTTP3UpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,26 +111,27 @@ func (r *ZoneSettingHTTP3UpdateResponseMessage) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// HTTP3 enabled for this zone.
 type ZoneSettingHTTP3UpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHTTP3UpdateResponseResultID `json:"id,required"`
-	// Value of the HTTP3 setting.
-	Value ZoneSettingHTTP3UpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingHTTP3UpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHTTP3UpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHTTP3UpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the HTTP3 setting.
+	Value ZoneSettingHTTP3UpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingHTTP3UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHTTP3UpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingHTTP3UpdateResponseResult]
 type zoneSettingHTTP3UpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -145,14 +147,6 @@ const (
 	ZoneSettingHTTP3UpdateResponseResultIDHTTP3 ZoneSettingHTTP3UpdateResponseResultID = "http3"
 )
 
-// Value of the HTTP3 setting.
-type ZoneSettingHTTP3UpdateResponseResultValue string
-
-const (
-	ZoneSettingHTTP3UpdateResponseResultValueOn  ZoneSettingHTTP3UpdateResponseResultValue = "on"
-	ZoneSettingHTTP3UpdateResponseResultValueOff ZoneSettingHTTP3UpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHTTP3UpdateResponseResultEditable bool
@@ -162,13 +156,22 @@ const (
 	ZoneSettingHTTP3UpdateResponseResultEditableFalse ZoneSettingHTTP3UpdateResponseResultEditable = false
 )
 
+// Value of the HTTP3 setting.
+type ZoneSettingHTTP3UpdateResponseResultValue string
+
+const (
+	ZoneSettingHTTP3UpdateResponseResultValueOn  ZoneSettingHTTP3UpdateResponseResultValue = "on"
+	ZoneSettingHTTP3UpdateResponseResultValueOff ZoneSettingHTTP3UpdateResponseResultValue = "off"
+)
+
 type ZoneSettingHTTP3ListResponse struct {
-	Errors   []ZoneSettingHTTP3ListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingHTTP3ListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingHTTP3ListResponseError   `json:"errors"`
+	Messages []ZoneSettingHTTP3ListResponseMessage `json:"messages"`
+	// HTTP3 enabled for this zone.
+	Result ZoneSettingHTTP3ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                               `json:"success,required"`
-	Result  ZoneSettingHTTP3ListResponseResult `json:"result"`
-	JSON    zoneSettingHTTP3ListResponseJSON   `json:"-"`
+	Success bool                             `json:"success"`
+	JSON    zoneSettingHTTP3ListResponseJSON `json:"-"`
 }
 
 // zoneSettingHTTP3ListResponseJSON contains the JSON metadata for the struct
@@ -176,8 +179,8 @@ type ZoneSettingHTTP3ListResponse struct {
 type zoneSettingHTTP3ListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -224,26 +227,27 @@ func (r *ZoneSettingHTTP3ListResponseMessage) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// HTTP3 enabled for this zone.
 type ZoneSettingHTTP3ListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHTTP3ListResponseResultID `json:"id,required"`
-	// Value of the HTTP3 setting.
-	Value ZoneSettingHTTP3ListResponseResultValue `json:"value,required"`
+	ID ZoneSettingHTTP3ListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHTTP3ListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHTTP3ListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the HTTP3 setting.
+	Value ZoneSettingHTTP3ListResponseResultValue `json:"value"`
+	JSON  zoneSettingHTTP3ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHTTP3ListResponseResultJSON contains the JSON metadata for the struct
 // [ZoneSettingHTTP3ListResponseResult]
 type zoneSettingHTTP3ListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -259,14 +263,6 @@ const (
 	ZoneSettingHTTP3ListResponseResultIDHTTP3 ZoneSettingHTTP3ListResponseResultID = "http3"
 )
 
-// Value of the HTTP3 setting.
-type ZoneSettingHTTP3ListResponseResultValue string
-
-const (
-	ZoneSettingHTTP3ListResponseResultValueOn  ZoneSettingHTTP3ListResponseResultValue = "on"
-	ZoneSettingHTTP3ListResponseResultValueOff ZoneSettingHTTP3ListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHTTP3ListResponseResultEditable bool
@@ -274,6 +270,14 @@ type ZoneSettingHTTP3ListResponseResultEditable bool
 const (
 	ZoneSettingHTTP3ListResponseResultEditableTrue  ZoneSettingHTTP3ListResponseResultEditable = true
 	ZoneSettingHTTP3ListResponseResultEditableFalse ZoneSettingHTTP3ListResponseResultEditable = false
+)
+
+// Value of the HTTP3 setting.
+type ZoneSettingHTTP3ListResponseResultValue string
+
+const (
+	ZoneSettingHTTP3ListResponseResultValueOn  ZoneSettingHTTP3ListResponseResultValue = "on"
+	ZoneSettingHTTP3ListResponseResultValueOff ZoneSettingHTTP3ListResponseResultValue = "off"
 )
 
 type ZoneSettingHTTP3UpdateParams struct {

@@ -53,12 +53,15 @@ func (r *ZoneSettingAlwaysUseHTTPService) List(ctx context.Context, zoneIdentifi
 }
 
 type ZoneSettingAlwaysUseHTTPUpdateResponse struct {
-	Errors   []ZoneSettingAlwaysUseHTTPUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingAlwaysUseHTTPUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingAlwaysUseHTTPUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingAlwaysUseHTTPUpdateResponseMessage `json:"messages"`
+	// Reply to all requests for URLs that use "http" with a 301 redirect to the
+	// equivalent "https" URL. If you only want to redirect for a subset of requests,
+	// consider creating an "Always use HTTPS" page rule.
+	Result ZoneSettingAlwaysUseHTTPUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success,required"`
-	Result  ZoneSettingAlwaysUseHTTPUpdateResponseResult `json:"result"`
-	JSON    zoneSettingAlwaysUseHTTPUpdateResponseJSON   `json:"-"`
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingAlwaysUseHTTPUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseJSON contains the JSON metadata for the
@@ -66,8 +69,8 @@ type ZoneSettingAlwaysUseHTTPUpdateResponse struct {
 type zoneSettingAlwaysUseHTTPUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,26 +117,29 @@ func (r *ZoneSettingAlwaysUseHTTPUpdateResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Reply to all requests for URLs that use "http" with a 301 redirect to the
+// equivalent "https" URL. If you only want to redirect for a subset of requests,
+// consider creating an "Always use HTTPS" page rule.
 type ZoneSettingAlwaysUseHTTPUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingAlwaysUseHTTPUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingAlwaysUseHTTPUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingAlwaysUseHTTPUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingAlwaysUseHTTPUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAlwaysUseHTTPUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingAlwaysUseHTTPUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingAlwaysUseHTTPUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingAlwaysUseHTTPUpdateResponseResult]
 type zoneSettingAlwaysUseHTTPUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -149,14 +155,6 @@ const (
 	ZoneSettingAlwaysUseHTTPUpdateResponseResultIDAlwaysUseHTTPs ZoneSettingAlwaysUseHTTPUpdateResponseResultID = "always_use_https"
 )
 
-// Value of the zone setting.
-type ZoneSettingAlwaysUseHTTPUpdateResponseResultValue string
-
-const (
-	ZoneSettingAlwaysUseHTTPUpdateResponseResultValueOn  ZoneSettingAlwaysUseHTTPUpdateResponseResultValue = "on"
-	ZoneSettingAlwaysUseHTTPUpdateResponseResultValueOff ZoneSettingAlwaysUseHTTPUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingAlwaysUseHTTPUpdateResponseResultEditable bool
@@ -166,13 +164,24 @@ const (
 	ZoneSettingAlwaysUseHTTPUpdateResponseResultEditableFalse ZoneSettingAlwaysUseHTTPUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingAlwaysUseHTTPUpdateResponseResultValue string
+
+const (
+	ZoneSettingAlwaysUseHTTPUpdateResponseResultValueOn  ZoneSettingAlwaysUseHTTPUpdateResponseResultValue = "on"
+	ZoneSettingAlwaysUseHTTPUpdateResponseResultValueOff ZoneSettingAlwaysUseHTTPUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingAlwaysUseHTTPListResponse struct {
-	Errors   []ZoneSettingAlwaysUseHTTPListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingAlwaysUseHTTPListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingAlwaysUseHTTPListResponseError   `json:"errors"`
+	Messages []ZoneSettingAlwaysUseHTTPListResponseMessage `json:"messages"`
+	// Reply to all requests for URLs that use "http" with a 301 redirect to the
+	// equivalent "https" URL. If you only want to redirect for a subset of requests,
+	// consider creating an "Always use HTTPS" page rule.
+	Result ZoneSettingAlwaysUseHTTPListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success,required"`
-	Result  ZoneSettingAlwaysUseHTTPListResponseResult `json:"result"`
-	JSON    zoneSettingAlwaysUseHTTPListResponseJSON   `json:"-"`
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingAlwaysUseHTTPListResponseJSON `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseJSON contains the JSON metadata for the
@@ -180,8 +189,8 @@ type ZoneSettingAlwaysUseHTTPListResponse struct {
 type zoneSettingAlwaysUseHTTPListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -228,26 +237,29 @@ func (r *ZoneSettingAlwaysUseHTTPListResponseMessage) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Reply to all requests for URLs that use "http" with a 301 redirect to the
+// equivalent "https" URL. If you only want to redirect for a subset of requests,
+// consider creating an "Always use HTTPS" page rule.
 type ZoneSettingAlwaysUseHTTPListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingAlwaysUseHTTPListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingAlwaysUseHTTPListResponseResultValue `json:"value,required"`
+	ID ZoneSettingAlwaysUseHTTPListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingAlwaysUseHTTPListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAlwaysUseHTTPListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingAlwaysUseHTTPListResponseResultValue `json:"value"`
+	JSON  zoneSettingAlwaysUseHTTPListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingAlwaysUseHTTPListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingAlwaysUseHTTPListResponseResult]
 type zoneSettingAlwaysUseHTTPListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -263,14 +275,6 @@ const (
 	ZoneSettingAlwaysUseHTTPListResponseResultIDAlwaysUseHTTPs ZoneSettingAlwaysUseHTTPListResponseResultID = "always_use_https"
 )
 
-// Value of the zone setting.
-type ZoneSettingAlwaysUseHTTPListResponseResultValue string
-
-const (
-	ZoneSettingAlwaysUseHTTPListResponseResultValueOn  ZoneSettingAlwaysUseHTTPListResponseResultValue = "on"
-	ZoneSettingAlwaysUseHTTPListResponseResultValueOff ZoneSettingAlwaysUseHTTPListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingAlwaysUseHTTPListResponseResultEditable bool
@@ -278,6 +282,14 @@ type ZoneSettingAlwaysUseHTTPListResponseResultEditable bool
 const (
 	ZoneSettingAlwaysUseHTTPListResponseResultEditableTrue  ZoneSettingAlwaysUseHTTPListResponseResultEditable = true
 	ZoneSettingAlwaysUseHTTPListResponseResultEditableFalse ZoneSettingAlwaysUseHTTPListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingAlwaysUseHTTPListResponseResultValue string
+
+const (
+	ZoneSettingAlwaysUseHTTPListResponseResultValueOn  ZoneSettingAlwaysUseHTTPListResponseResultValue = "on"
+	ZoneSettingAlwaysUseHTTPListResponseResultValueOff ZoneSettingAlwaysUseHTTPListResponseResultValue = "off"
 )
 
 type ZoneSettingAlwaysUseHTTPUpdateParams struct {

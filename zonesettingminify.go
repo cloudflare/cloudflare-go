@@ -53,12 +53,15 @@ func (r *ZoneSettingMinifyService) List(ctx context.Context, zoneIdentifier stri
 }
 
 type ZoneSettingMinifyUpdateResponse struct {
-	Errors   []ZoneSettingMinifyUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingMinifyUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingMinifyUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingMinifyUpdateResponseMessage `json:"messages"`
+	// Automatically minify certain assets for your website. Refer to
+	// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
+	// for more information.
+	Result ZoneSettingMinifyUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                  `json:"success,required"`
-	Result  ZoneSettingMinifyUpdateResponseResult `json:"result"`
-	JSON    zoneSettingMinifyUpdateResponseJSON   `json:"-"`
+	Success bool                                `json:"success"`
+	JSON    zoneSettingMinifyUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseJSON contains the JSON metadata for the struct
@@ -66,8 +69,8 @@ type ZoneSettingMinifyUpdateResponse struct {
 type zoneSettingMinifyUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,26 +117,29 @@ func (r *ZoneSettingMinifyUpdateResponseMessage) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Automatically minify certain assets for your website. Refer to
+// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
+// for more information.
 type ZoneSettingMinifyUpdateResponseResult struct {
 	// Zone setting identifier.
-	ID ZoneSettingMinifyUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingMinifyUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingMinifyUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMinifyUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMinifyUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingMinifyUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingMinifyUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinifyUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingMinifyUpdateResponseResult]
 type zoneSettingMinifyUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -147,6 +153,15 @@ type ZoneSettingMinifyUpdateResponseResultID string
 
 const (
 	ZoneSettingMinifyUpdateResponseResultIDMinify ZoneSettingMinifyUpdateResponseResultID = "minify"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingMinifyUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingMinifyUpdateResponseResultEditableTrue  ZoneSettingMinifyUpdateResponseResultEditable = true
+	ZoneSettingMinifyUpdateResponseResultEditableFalse ZoneSettingMinifyUpdateResponseResultEditable = false
 )
 
 // Value of the zone setting.
@@ -198,22 +213,16 @@ const (
 	ZoneSettingMinifyUpdateResponseResultValueJsOff ZoneSettingMinifyUpdateResponseResultValueJs = "off"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingMinifyUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingMinifyUpdateResponseResultEditableTrue  ZoneSettingMinifyUpdateResponseResultEditable = true
-	ZoneSettingMinifyUpdateResponseResultEditableFalse ZoneSettingMinifyUpdateResponseResultEditable = false
-)
-
 type ZoneSettingMinifyListResponse struct {
-	Errors   []ZoneSettingMinifyListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingMinifyListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingMinifyListResponseError   `json:"errors"`
+	Messages []ZoneSettingMinifyListResponseMessage `json:"messages"`
+	// Automatically minify certain assets for your website. Refer to
+	// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
+	// for more information.
+	Result ZoneSettingMinifyListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  ZoneSettingMinifyListResponseResult `json:"result"`
-	JSON    zoneSettingMinifyListResponseJSON   `json:"-"`
+	Success bool                              `json:"success"`
+	JSON    zoneSettingMinifyListResponseJSON `json:"-"`
 }
 
 // zoneSettingMinifyListResponseJSON contains the JSON metadata for the struct
@@ -221,8 +230,8 @@ type ZoneSettingMinifyListResponse struct {
 type zoneSettingMinifyListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -269,26 +278,29 @@ func (r *ZoneSettingMinifyListResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Automatically minify certain assets for your website. Refer to
+// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
+// for more information.
 type ZoneSettingMinifyListResponseResult struct {
 	// Zone setting identifier.
-	ID ZoneSettingMinifyListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingMinifyListResponseResultValue `json:"value,required"`
+	ID ZoneSettingMinifyListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingMinifyListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMinifyListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingMinifyListResponseResultValue `json:"value"`
+	JSON  zoneSettingMinifyListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingMinifyListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingMinifyListResponseResult]
 type zoneSettingMinifyListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -302,6 +314,15 @@ type ZoneSettingMinifyListResponseResultID string
 
 const (
 	ZoneSettingMinifyListResponseResultIDMinify ZoneSettingMinifyListResponseResultID = "minify"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingMinifyListResponseResultEditable bool
+
+const (
+	ZoneSettingMinifyListResponseResultEditableTrue  ZoneSettingMinifyListResponseResultEditable = true
+	ZoneSettingMinifyListResponseResultEditableFalse ZoneSettingMinifyListResponseResultEditable = false
 )
 
 // Value of the zone setting.
@@ -351,15 +372,6 @@ type ZoneSettingMinifyListResponseResultValueJs string
 const (
 	ZoneSettingMinifyListResponseResultValueJsOn  ZoneSettingMinifyListResponseResultValueJs = "on"
 	ZoneSettingMinifyListResponseResultValueJsOff ZoneSettingMinifyListResponseResultValueJs = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingMinifyListResponseResultEditable bool
-
-const (
-	ZoneSettingMinifyListResponseResultEditableTrue  ZoneSettingMinifyListResponseResultEditable = true
-	ZoneSettingMinifyListResponseResultEditableFalse ZoneSettingMinifyListResponseResultEditable = false
 )
 
 type ZoneSettingMinifyUpdateParams struct {

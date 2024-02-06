@@ -49,12 +49,14 @@ func (r *ZoneSettingCipherService) List(ctx context.Context, zoneIdentifier stri
 }
 
 type ZoneSettingCipherUpdateResponse struct {
-	Errors   []ZoneSettingCipherUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingCipherUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingCipherUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingCipherUpdateResponseMessage `json:"messages"`
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Result ZoneSettingCipherUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                  `json:"success,required"`
-	Result  ZoneSettingCipherUpdateResponseResult `json:"result"`
-	JSON    zoneSettingCipherUpdateResponseJSON   `json:"-"`
+	Success bool                                `json:"success"`
+	JSON    zoneSettingCipherUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseJSON contains the JSON metadata for the struct
@@ -62,8 +64,8 @@ type ZoneSettingCipherUpdateResponse struct {
 type zoneSettingCipherUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,26 +112,28 @@ func (r *ZoneSettingCipherUpdateResponseMessage) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// An allowlist of ciphers for TLS termination. These ciphers must be in the
+// BoringSSL format.
 type ZoneSettingCipherUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingCipherUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value []string `json:"value,required"`
+	ID ZoneSettingCipherUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingCipherUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingCipherUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value []string                                  `json:"value"`
+	JSON  zoneSettingCipherUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingCipherUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingCipherUpdateResponseResult]
 type zoneSettingCipherUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -155,12 +159,14 @@ const (
 )
 
 type ZoneSettingCipherListResponse struct {
-	Errors   []ZoneSettingCipherListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingCipherListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingCipherListResponseError   `json:"errors"`
+	Messages []ZoneSettingCipherListResponseMessage `json:"messages"`
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Result ZoneSettingCipherListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  ZoneSettingCipherListResponseResult `json:"result"`
-	JSON    zoneSettingCipherListResponseJSON   `json:"-"`
+	Success bool                              `json:"success"`
+	JSON    zoneSettingCipherListResponseJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseJSON contains the JSON metadata for the struct
@@ -168,8 +174,8 @@ type ZoneSettingCipherListResponse struct {
 type zoneSettingCipherListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -216,26 +222,28 @@ func (r *ZoneSettingCipherListResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// An allowlist of ciphers for TLS termination. These ciphers must be in the
+// BoringSSL format.
 type ZoneSettingCipherListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingCipherListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value []string `json:"value,required"`
+	ID ZoneSettingCipherListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingCipherListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingCipherListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value []string                                `json:"value"`
+	JSON  zoneSettingCipherListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingCipherListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingCipherListResponseResult]
 type zoneSettingCipherListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

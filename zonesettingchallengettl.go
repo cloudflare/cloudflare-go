@@ -57,12 +57,17 @@ func (r *ZoneSettingChallengeTTLService) List(ctx context.Context, zoneIdentifie
 }
 
 type ZoneSettingChallengeTTLUpdateResponse struct {
-	Errors   []ZoneSettingChallengeTTLUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingChallengeTTLUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingChallengeTTLUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingChallengeTTLUpdateResponseMessage `json:"messages"`
+	// Specify how long a visitor is allowed access to your site after successfully
+	// completing a challenge (such as a CAPTCHA). After the TTL has expired the
+	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
+	// setting and will attempt to honor any setting above 45 minutes.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
+	Result ZoneSettingChallengeTTLUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                        `json:"success,required"`
-	Result  ZoneSettingChallengeTTLUpdateResponseResult `json:"result"`
-	JSON    zoneSettingChallengeTTLUpdateResponseJSON   `json:"-"`
+	Success bool                                      `json:"success"`
+	JSON    zoneSettingChallengeTTLUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingChallengeTTLUpdateResponseJSON contains the JSON metadata for the
@@ -70,8 +75,8 @@ type ZoneSettingChallengeTTLUpdateResponse struct {
 type zoneSettingChallengeTTLUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -118,26 +123,31 @@ func (r *ZoneSettingChallengeTTLUpdateResponseMessage) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Specify how long a visitor is allowed access to your site after successfully
+// completing a challenge (such as a CAPTCHA). After the TTL has expired the
+// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
+// setting and will attempt to honor any setting above 45 minutes.
+// (https://support.cloudflare.com/hc/en-us/articles/200170136).
 type ZoneSettingChallengeTTLUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingChallengeTTLUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingChallengeTTLUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingChallengeTTLUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingChallengeTTLUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingChallengeTTLUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingChallengeTTLUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingChallengeTTLUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingChallengeTTLUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingChallengeTTLUpdateResponseResult]
 type zoneSettingChallengeTTLUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,6 +161,15 @@ type ZoneSettingChallengeTTLUpdateResponseResultID string
 
 const (
 	ZoneSettingChallengeTTLUpdateResponseResultIDChallengeTTL ZoneSettingChallengeTTLUpdateResponseResultID = "challenge_ttl"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingChallengeTTLUpdateResponseResultEditable bool
+
+const (
+	ZoneSettingChallengeTTLUpdateResponseResultEditableTrue  ZoneSettingChallengeTTLUpdateResponseResultEditable = true
+	ZoneSettingChallengeTTLUpdateResponseResultEditableFalse ZoneSettingChallengeTTLUpdateResponseResultEditable = false
 )
 
 // Value of the zone setting.
@@ -173,22 +192,18 @@ const (
 	ZoneSettingChallengeTTLUpdateResponseResultValue31536000 ZoneSettingChallengeTTLUpdateResponseResultValue = 31536000
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingChallengeTTLUpdateResponseResultEditable bool
-
-const (
-	ZoneSettingChallengeTTLUpdateResponseResultEditableTrue  ZoneSettingChallengeTTLUpdateResponseResultEditable = true
-	ZoneSettingChallengeTTLUpdateResponseResultEditableFalse ZoneSettingChallengeTTLUpdateResponseResultEditable = false
-)
-
 type ZoneSettingChallengeTTLListResponse struct {
-	Errors   []ZoneSettingChallengeTTLListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingChallengeTTLListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingChallengeTTLListResponseError   `json:"errors"`
+	Messages []ZoneSettingChallengeTTLListResponseMessage `json:"messages"`
+	// Specify how long a visitor is allowed access to your site after successfully
+	// completing a challenge (such as a CAPTCHA). After the TTL has expired the
+	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
+	// setting and will attempt to honor any setting above 45 minutes.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
+	Result ZoneSettingChallengeTTLListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success,required"`
-	Result  ZoneSettingChallengeTTLListResponseResult `json:"result"`
-	JSON    zoneSettingChallengeTTLListResponseJSON   `json:"-"`
+	Success bool                                    `json:"success"`
+	JSON    zoneSettingChallengeTTLListResponseJSON `json:"-"`
 }
 
 // zoneSettingChallengeTTLListResponseJSON contains the JSON metadata for the
@@ -196,8 +211,8 @@ type ZoneSettingChallengeTTLListResponse struct {
 type zoneSettingChallengeTTLListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -244,26 +259,31 @@ func (r *ZoneSettingChallengeTTLListResponseMessage) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Specify how long a visitor is allowed access to your site after successfully
+// completing a challenge (such as a CAPTCHA). After the TTL has expired the
+// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
+// setting and will attempt to honor any setting above 45 minutes.
+// (https://support.cloudflare.com/hc/en-us/articles/200170136).
 type ZoneSettingChallengeTTLListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingChallengeTTLListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingChallengeTTLListResponseResultValue `json:"value,required"`
+	ID ZoneSettingChallengeTTLListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingChallengeTTLListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingChallengeTTLListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingChallengeTTLListResponseResultValue `json:"value"`
+	JSON  zoneSettingChallengeTTLListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingChallengeTTLListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingChallengeTTLListResponseResult]
 type zoneSettingChallengeTTLListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -277,6 +297,15 @@ type ZoneSettingChallengeTTLListResponseResultID string
 
 const (
 	ZoneSettingChallengeTTLListResponseResultIDChallengeTTL ZoneSettingChallengeTTLListResponseResultID = "challenge_ttl"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingChallengeTTLListResponseResultEditable bool
+
+const (
+	ZoneSettingChallengeTTLListResponseResultEditableTrue  ZoneSettingChallengeTTLListResponseResultEditable = true
+	ZoneSettingChallengeTTLListResponseResultEditableFalse ZoneSettingChallengeTTLListResponseResultEditable = false
 )
 
 // Value of the zone setting.
@@ -297,15 +326,6 @@ const (
 	ZoneSettingChallengeTTLListResponseResultValue604800   ZoneSettingChallengeTTLListResponseResultValue = 604800
 	ZoneSettingChallengeTTLListResponseResultValue2592000  ZoneSettingChallengeTTLListResponseResultValue = 2592000
 	ZoneSettingChallengeTTLListResponseResultValue31536000 ZoneSettingChallengeTTLListResponseResultValue = 31536000
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingChallengeTTLListResponseResultEditable bool
-
-const (
-	ZoneSettingChallengeTTLListResponseResultEditableTrue  ZoneSettingChallengeTTLListResponseResultEditable = true
-	ZoneSettingChallengeTTLListResponseResultEditableFalse ZoneSettingChallengeTTLListResponseResultEditable = false
 )
 
 type ZoneSettingChallengeTTLUpdateParams struct {

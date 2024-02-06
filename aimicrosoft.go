@@ -3,6 +3,12 @@
 package cloudflare
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -22,4 +28,31 @@ func NewAIMicrosoftService(opts ...option.RequestOption) (r *AIMicrosoftService)
 	r = &AIMicrosoftService{}
 	r.Options = opts
 	return
+}
+
+// Execute @cf/microsoft/resnet-50 model.
+func (r *AIMicrosoftService) Resnet50(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]AIMicrosoftResnet50Response, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("apiv4/accounts/%s/ai/run/@cf/microsoft/resnet-50", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return
+}
+
+type AIMicrosoftResnet50Response struct {
+	Label string                          `json:"label"`
+	Score float64                         `json:"score"`
+	JSON  aiMicrosoftResnet50ResponseJSON `json:"-"`
+}
+
+// aiMicrosoftResnet50ResponseJSON contains the JSON metadata for the struct
+// [AIMicrosoftResnet50Response]
+type aiMicrosoftResnet50ResponseJSON struct {
+	Label       apijson.Field
+	Score       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIMicrosoftResnet50Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }

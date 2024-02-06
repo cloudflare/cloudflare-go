@@ -53,12 +53,15 @@ func (r *ZoneSettingIPGeolocationService) List(ctx context.Context, zoneIdentifi
 }
 
 type ZoneSettingIPGeolocationUpdateResponse struct {
-	Errors   []ZoneSettingIPGeolocationUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingIPGeolocationUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingIPGeolocationUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingIPGeolocationUpdateResponseMessage `json:"messages"`
+	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
+	// pass the country code to you.
+	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
+	Result ZoneSettingIPGeolocationUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success,required"`
-	Result  ZoneSettingIPGeolocationUpdateResponseResult `json:"result"`
-	JSON    zoneSettingIPGeolocationUpdateResponseJSON   `json:"-"`
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingIPGeolocationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseJSON contains the JSON metadata for the
@@ -66,8 +69,8 @@ type ZoneSettingIPGeolocationUpdateResponse struct {
 type zoneSettingIPGeolocationUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -114,26 +117,29 @@ func (r *ZoneSettingIPGeolocationUpdateResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
+// pass the country code to you.
+// (https://support.cloudflare.com/hc/en-us/articles/200168236).
 type ZoneSettingIPGeolocationUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPGeolocationUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingIPGeolocationUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingIPGeolocationUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingIPGeolocationUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPGeolocationUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingIPGeolocationUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingIPGeolocationUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPGeolocationUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingIPGeolocationUpdateResponseResult]
 type zoneSettingIPGeolocationUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -149,14 +155,6 @@ const (
 	ZoneSettingIPGeolocationUpdateResponseResultIDIPGeolocation ZoneSettingIPGeolocationUpdateResponseResultID = "ip_geolocation"
 )
 
-// Value of the zone setting.
-type ZoneSettingIPGeolocationUpdateResponseResultValue string
-
-const (
-	ZoneSettingIPGeolocationUpdateResponseResultValueOn  ZoneSettingIPGeolocationUpdateResponseResultValue = "on"
-	ZoneSettingIPGeolocationUpdateResponseResultValueOff ZoneSettingIPGeolocationUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingIPGeolocationUpdateResponseResultEditable bool
@@ -166,13 +164,24 @@ const (
 	ZoneSettingIPGeolocationUpdateResponseResultEditableFalse ZoneSettingIPGeolocationUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingIPGeolocationUpdateResponseResultValue string
+
+const (
+	ZoneSettingIPGeolocationUpdateResponseResultValueOn  ZoneSettingIPGeolocationUpdateResponseResultValue = "on"
+	ZoneSettingIPGeolocationUpdateResponseResultValueOff ZoneSettingIPGeolocationUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingIPGeolocationListResponse struct {
-	Errors   []ZoneSettingIPGeolocationListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingIPGeolocationListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingIPGeolocationListResponseError   `json:"errors"`
+	Messages []ZoneSettingIPGeolocationListResponseMessage `json:"messages"`
+	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
+	// pass the country code to you.
+	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
+	Result ZoneSettingIPGeolocationListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success,required"`
-	Result  ZoneSettingIPGeolocationListResponseResult `json:"result"`
-	JSON    zoneSettingIPGeolocationListResponseJSON   `json:"-"`
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingIPGeolocationListResponseJSON `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseJSON contains the JSON metadata for the
@@ -180,8 +189,8 @@ type ZoneSettingIPGeolocationListResponse struct {
 type zoneSettingIPGeolocationListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -228,26 +237,29 @@ func (r *ZoneSettingIPGeolocationListResponseMessage) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
+// pass the country code to you.
+// (https://support.cloudflare.com/hc/en-us/articles/200168236).
 type ZoneSettingIPGeolocationListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingIPGeolocationListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingIPGeolocationListResponseResultValue `json:"value,required"`
+	ID ZoneSettingIPGeolocationListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingIPGeolocationListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingIPGeolocationListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingIPGeolocationListResponseResultValue `json:"value"`
+	JSON  zoneSettingIPGeolocationListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingIPGeolocationListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingIPGeolocationListResponseResult]
 type zoneSettingIPGeolocationListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -263,14 +275,6 @@ const (
 	ZoneSettingIPGeolocationListResponseResultIDIPGeolocation ZoneSettingIPGeolocationListResponseResultID = "ip_geolocation"
 )
 
-// Value of the zone setting.
-type ZoneSettingIPGeolocationListResponseResultValue string
-
-const (
-	ZoneSettingIPGeolocationListResponseResultValueOn  ZoneSettingIPGeolocationListResponseResultValue = "on"
-	ZoneSettingIPGeolocationListResponseResultValueOff ZoneSettingIPGeolocationListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingIPGeolocationListResponseResultEditable bool
@@ -278,6 +282,14 @@ type ZoneSettingIPGeolocationListResponseResultEditable bool
 const (
 	ZoneSettingIPGeolocationListResponseResultEditableTrue  ZoneSettingIPGeolocationListResponseResultEditable = true
 	ZoneSettingIPGeolocationListResponseResultEditableFalse ZoneSettingIPGeolocationListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingIPGeolocationListResponseResultValue string
+
+const (
+	ZoneSettingIPGeolocationListResponseResultValueOn  ZoneSettingIPGeolocationListResponseResultValue = "on"
+	ZoneSettingIPGeolocationListResponseResultValueOff ZoneSettingIPGeolocationListResponseResultValue = "off"
 )
 
 type ZoneSettingIPGeolocationUpdateParams struct {

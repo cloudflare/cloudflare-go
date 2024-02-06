@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAIRun(t *testing.T) {
+func TestAIMistralMistral7bInstructV0_1WithOptionalParams(t *testing.T) {
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -27,11 +27,13 @@ func TestAIRun(t *testing.T) {
 		option.WithEmail("dev@cloudflare.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 	)
-	_, err := client.AI.Run(
+	_, err := client.AI.Mistral.Mistral7bInstructV0_1(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"string",
-		cloudflare.AIRunParams{},
+		cloudflare.AIMistralMistral7bInstructV0_1ParamsVariant0{
+			Prompt: cloudflare.F("string"),
+			Stream: cloudflare.F(true),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

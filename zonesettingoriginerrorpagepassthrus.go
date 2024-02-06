@@ -54,12 +54,15 @@ func (r *ZoneSettingOriginErrorPagePassThrusService) List(ctx context.Context, z
 }
 
 type ZoneSettingOriginErrorPagePassThrusUpdateResponse struct {
-	Errors   []ZoneSettingOriginErrorPagePassThrusUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingOriginErrorPagePassThrusUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingOriginErrorPagePassThrusUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingOriginErrorPagePassThrusUpdateResponseMessage `json:"messages"`
+	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
+	// server instead of showing a default Cloudflare error page. This does not apply
+	// to 522 errors and is limited to Enterprise Zones.
+	Result ZoneSettingOriginErrorPagePassThrusUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                                    `json:"success,required"`
-	Result  ZoneSettingOriginErrorPagePassThrusUpdateResponseResult `json:"result"`
-	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseJSON   `json:"-"`
+	Success bool                                                  `json:"success"`
+	JSON    zoneSettingOriginErrorPagePassThrusUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseJSON contains the JSON metadata
@@ -67,8 +70,8 @@ type ZoneSettingOriginErrorPagePassThrusUpdateResponse struct {
 type zoneSettingOriginErrorPagePassThrusUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,17 +119,20 @@ func (r *ZoneSettingOriginErrorPagePassThrusUpdateResponseMessage) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Cloudflare will proxy customer error pages on any 502,504 errors on origin
+// server instead of showing a default Cloudflare error page. This does not apply
+// to 522 errors and is limited to Enterprise Zones.
 type ZoneSettingOriginErrorPagePassThrusUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOriginErrorPagePassThrusUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingOriginErrorPagePassThrusUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOriginErrorPagePassThrusUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON contains the JSON
@@ -134,9 +140,9 @@ type ZoneSettingOriginErrorPagePassThrusUpdateResponseResult struct {
 // [ZoneSettingOriginErrorPagePassThrusUpdateResponseResult]
 type zoneSettingOriginErrorPagePassThrusUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -152,14 +158,6 @@ const (
 	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultIDOriginErrorPagePassThru ZoneSettingOriginErrorPagePassThrusUpdateResponseResultID = "origin_error_page_pass_thru"
 )
 
-// Value of the zone setting.
-type ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue string
-
-const (
-	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValueOn  ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue = "on"
-	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValueOff ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingOriginErrorPagePassThrusUpdateResponseResultEditable bool
@@ -169,13 +167,24 @@ const (
 	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultEditableFalse ZoneSettingOriginErrorPagePassThrusUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue string
+
+const (
+	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValueOn  ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue = "on"
+	ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValueOff ZoneSettingOriginErrorPagePassThrusUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingOriginErrorPagePassThrusListResponse struct {
-	Errors   []ZoneSettingOriginErrorPagePassThrusListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingOriginErrorPagePassThrusListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingOriginErrorPagePassThrusListResponseError   `json:"errors"`
+	Messages []ZoneSettingOriginErrorPagePassThrusListResponseMessage `json:"messages"`
+	// Cloudflare will proxy customer error pages on any 502,504 errors on origin
+	// server instead of showing a default Cloudflare error page. This does not apply
+	// to 522 errors and is limited to Enterprise Zones.
+	Result ZoneSettingOriginErrorPagePassThrusListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                                  `json:"success,required"`
-	Result  ZoneSettingOriginErrorPagePassThrusListResponseResult `json:"result"`
-	JSON    zoneSettingOriginErrorPagePassThrusListResponseJSON   `json:"-"`
+	Success bool                                                `json:"success"`
+	JSON    zoneSettingOriginErrorPagePassThrusListResponseJSON `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseJSON contains the JSON metadata
@@ -183,8 +192,8 @@ type ZoneSettingOriginErrorPagePassThrusListResponse struct {
 type zoneSettingOriginErrorPagePassThrusListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -231,26 +240,29 @@ func (r *ZoneSettingOriginErrorPagePassThrusListResponseMessage) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Cloudflare will proxy customer error pages on any 502,504 errors on origin
+// server instead of showing a default Cloudflare error page. This does not apply
+// to 522 errors and is limited to Enterprise Zones.
 type ZoneSettingOriginErrorPagePassThrusListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingOriginErrorPagePassThrusListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingOriginErrorPagePassThrusListResponseResultValue `json:"value,required"`
+	ID ZoneSettingOriginErrorPagePassThrusListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingOriginErrorPagePassThrusListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingOriginErrorPagePassThrusListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingOriginErrorPagePassThrusListResponseResultValue `json:"value"`
+	JSON  zoneSettingOriginErrorPagePassThrusListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingOriginErrorPagePassThrusListResponseResultJSON contains the JSON
 // metadata for the struct [ZoneSettingOriginErrorPagePassThrusListResponseResult]
 type zoneSettingOriginErrorPagePassThrusListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -266,14 +278,6 @@ const (
 	ZoneSettingOriginErrorPagePassThrusListResponseResultIDOriginErrorPagePassThru ZoneSettingOriginErrorPagePassThrusListResponseResultID = "origin_error_page_pass_thru"
 )
 
-// Value of the zone setting.
-type ZoneSettingOriginErrorPagePassThrusListResponseResultValue string
-
-const (
-	ZoneSettingOriginErrorPagePassThrusListResponseResultValueOn  ZoneSettingOriginErrorPagePassThrusListResponseResultValue = "on"
-	ZoneSettingOriginErrorPagePassThrusListResponseResultValueOff ZoneSettingOriginErrorPagePassThrusListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingOriginErrorPagePassThrusListResponseResultEditable bool
@@ -281,6 +285,14 @@ type ZoneSettingOriginErrorPagePassThrusListResponseResultEditable bool
 const (
 	ZoneSettingOriginErrorPagePassThrusListResponseResultEditableTrue  ZoneSettingOriginErrorPagePassThrusListResponseResultEditable = true
 	ZoneSettingOriginErrorPagePassThrusListResponseResultEditableFalse ZoneSettingOriginErrorPagePassThrusListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingOriginErrorPagePassThrusListResponseResultValue string
+
+const (
+	ZoneSettingOriginErrorPagePassThrusListResponseResultValueOn  ZoneSettingOriginErrorPagePassThrusListResponseResultValue = "on"
+	ZoneSettingOriginErrorPagePassThrusListResponseResultValueOff ZoneSettingOriginErrorPagePassThrusListResponseResultValue = "off"
 )
 
 type ZoneSettingOriginErrorPagePassThrusUpdateParams struct {

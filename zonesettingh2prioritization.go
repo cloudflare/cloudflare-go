@@ -49,12 +49,15 @@ func (r *ZoneSettingH2PrioritizationService) List(ctx context.Context, zoneIdent
 }
 
 type ZoneSettingH2PrioritizationUpdateResponse struct {
-	Errors   []ZoneSettingH2PrioritizationUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingH2PrioritizationUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingH2PrioritizationUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingH2PrioritizationUpdateResponseMessage `json:"messages"`
+	// HTTP/2 Edge Prioritization optimises the delivery of resources served through
+	// HTTP/2 to improve page load performance. It also supports fine control of
+	// content delivery when used in conjunction with Workers.
+	Result ZoneSettingH2PrioritizationUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                            `json:"success,required"`
-	Result  ZoneSettingH2PrioritizationUpdateResponseResult `json:"result"`
-	JSON    zoneSettingH2PrioritizationUpdateResponseJSON   `json:"-"`
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingH2PrioritizationUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseJSON contains the JSON metadata for the
@@ -62,8 +65,8 @@ type ZoneSettingH2PrioritizationUpdateResponse struct {
 type zoneSettingH2PrioritizationUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,26 +113,29 @@ func (r *ZoneSettingH2PrioritizationUpdateResponseMessage) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// HTTP/2 Edge Prioritization optimises the delivery of resources served through
+// HTTP/2 to improve page load performance. It also supports fine control of
+// content delivery when used in conjunction with Workers.
 type ZoneSettingH2PrioritizationUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingH2PrioritizationUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingH2PrioritizationUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingH2PrioritizationUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingH2PrioritizationUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingH2PrioritizationUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingH2PrioritizationUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingH2PrioritizationUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingH2PrioritizationUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingH2PrioritizationUpdateResponseResult]
 type zoneSettingH2PrioritizationUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -145,15 +151,6 @@ const (
 	ZoneSettingH2PrioritizationUpdateResponseResultIDH2Prioritization ZoneSettingH2PrioritizationUpdateResponseResultID = "h2_prioritization"
 )
 
-// Value of the zone setting.
-type ZoneSettingH2PrioritizationUpdateResponseResultValue string
-
-const (
-	ZoneSettingH2PrioritizationUpdateResponseResultValueOn     ZoneSettingH2PrioritizationUpdateResponseResultValue = "on"
-	ZoneSettingH2PrioritizationUpdateResponseResultValueOff    ZoneSettingH2PrioritizationUpdateResponseResultValue = "off"
-	ZoneSettingH2PrioritizationUpdateResponseResultValueCustom ZoneSettingH2PrioritizationUpdateResponseResultValue = "custom"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingH2PrioritizationUpdateResponseResultEditable bool
@@ -163,13 +160,25 @@ const (
 	ZoneSettingH2PrioritizationUpdateResponseResultEditableFalse ZoneSettingH2PrioritizationUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingH2PrioritizationUpdateResponseResultValue string
+
+const (
+	ZoneSettingH2PrioritizationUpdateResponseResultValueOn     ZoneSettingH2PrioritizationUpdateResponseResultValue = "on"
+	ZoneSettingH2PrioritizationUpdateResponseResultValueOff    ZoneSettingH2PrioritizationUpdateResponseResultValue = "off"
+	ZoneSettingH2PrioritizationUpdateResponseResultValueCustom ZoneSettingH2PrioritizationUpdateResponseResultValue = "custom"
+)
+
 type ZoneSettingH2PrioritizationListResponse struct {
-	Errors   []ZoneSettingH2PrioritizationListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingH2PrioritizationListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingH2PrioritizationListResponseError   `json:"errors"`
+	Messages []ZoneSettingH2PrioritizationListResponseMessage `json:"messages"`
+	// HTTP/2 Edge Prioritization optimises the delivery of resources served through
+	// HTTP/2 to improve page load performance. It also supports fine control of
+	// content delivery when used in conjunction with Workers.
+	Result ZoneSettingH2PrioritizationListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                          `json:"success,required"`
-	Result  ZoneSettingH2PrioritizationListResponseResult `json:"result"`
-	JSON    zoneSettingH2PrioritizationListResponseJSON   `json:"-"`
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingH2PrioritizationListResponseJSON `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseJSON contains the JSON metadata for the
@@ -177,8 +186,8 @@ type ZoneSettingH2PrioritizationListResponse struct {
 type zoneSettingH2PrioritizationListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -225,26 +234,29 @@ func (r *ZoneSettingH2PrioritizationListResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// HTTP/2 Edge Prioritization optimises the delivery of resources served through
+// HTTP/2 to improve page load performance. It also supports fine control of
+// content delivery when used in conjunction with Workers.
 type ZoneSettingH2PrioritizationListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingH2PrioritizationListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingH2PrioritizationListResponseResultValue `json:"value,required"`
+	ID ZoneSettingH2PrioritizationListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingH2PrioritizationListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingH2PrioritizationListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingH2PrioritizationListResponseResultValue `json:"value"`
+	JSON  zoneSettingH2PrioritizationListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingH2PrioritizationListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingH2PrioritizationListResponseResult]
 type zoneSettingH2PrioritizationListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -260,15 +272,6 @@ const (
 	ZoneSettingH2PrioritizationListResponseResultIDH2Prioritization ZoneSettingH2PrioritizationListResponseResultID = "h2_prioritization"
 )
 
-// Value of the zone setting.
-type ZoneSettingH2PrioritizationListResponseResultValue string
-
-const (
-	ZoneSettingH2PrioritizationListResponseResultValueOn     ZoneSettingH2PrioritizationListResponseResultValue = "on"
-	ZoneSettingH2PrioritizationListResponseResultValueOff    ZoneSettingH2PrioritizationListResponseResultValue = "off"
-	ZoneSettingH2PrioritizationListResponseResultValueCustom ZoneSettingH2PrioritizationListResponseResultValue = "custom"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingH2PrioritizationListResponseResultEditable bool
@@ -276,6 +279,15 @@ type ZoneSettingH2PrioritizationListResponseResultEditable bool
 const (
 	ZoneSettingH2PrioritizationListResponseResultEditableTrue  ZoneSettingH2PrioritizationListResponseResultEditable = true
 	ZoneSettingH2PrioritizationListResponseResultEditableFalse ZoneSettingH2PrioritizationListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingH2PrioritizationListResponseResultValue string
+
+const (
+	ZoneSettingH2PrioritizationListResponseResultValueOn     ZoneSettingH2PrioritizationListResponseResultValue = "on"
+	ZoneSettingH2PrioritizationListResponseResultValueOff    ZoneSettingH2PrioritizationListResponseResultValue = "off"
+	ZoneSettingH2PrioritizationListResponseResultValueCustom ZoneSettingH2PrioritizationListResponseResultValue = "custom"
 )
 
 type ZoneSettingH2PrioritizationUpdateParams struct {
@@ -294,9 +306,9 @@ func (r ZoneSettingH2PrioritizationUpdateParams) MarshalJSON() (data []byte, err
 // content delivery when used in conjunction with Workers.
 type ZoneSettingH2PrioritizationUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingH2PrioritizationUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingH2PrioritizationUpdateParamsValueID] `json:"id"`
 	// Value of the zone setting.
-	Value param.Field[ZoneSettingH2PrioritizationUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[ZoneSettingH2PrioritizationUpdateParamsValueValue] `json:"value"`
 }
 
 func (r ZoneSettingH2PrioritizationUpdateParamsValue) MarshalJSON() (data []byte, err error) {
@@ -310,15 +322,6 @@ const (
 	ZoneSettingH2PrioritizationUpdateParamsValueIDH2Prioritization ZoneSettingH2PrioritizationUpdateParamsValueID = "h2_prioritization"
 )
 
-// Value of the zone setting.
-type ZoneSettingH2PrioritizationUpdateParamsValueValue string
-
-const (
-	ZoneSettingH2PrioritizationUpdateParamsValueValueOn     ZoneSettingH2PrioritizationUpdateParamsValueValue = "on"
-	ZoneSettingH2PrioritizationUpdateParamsValueValueOff    ZoneSettingH2PrioritizationUpdateParamsValueValue = "off"
-	ZoneSettingH2PrioritizationUpdateParamsValueValueCustom ZoneSettingH2PrioritizationUpdateParamsValueValue = "custom"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingH2PrioritizationUpdateParamsValueEditable bool
@@ -326,4 +329,13 @@ type ZoneSettingH2PrioritizationUpdateParamsValueEditable bool
 const (
 	ZoneSettingH2PrioritizationUpdateParamsValueEditableTrue  ZoneSettingH2PrioritizationUpdateParamsValueEditable = true
 	ZoneSettingH2PrioritizationUpdateParamsValueEditableFalse ZoneSettingH2PrioritizationUpdateParamsValueEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingH2PrioritizationUpdateParamsValueValue string
+
+const (
+	ZoneSettingH2PrioritizationUpdateParamsValueValueOn     ZoneSettingH2PrioritizationUpdateParamsValueValue = "on"
+	ZoneSettingH2PrioritizationUpdateParamsValueValueOff    ZoneSettingH2PrioritizationUpdateParamsValueValue = "off"
+	ZoneSettingH2PrioritizationUpdateParamsValueValueCustom ZoneSettingH2PrioritizationUpdateParamsValueValue = "custom"
 )

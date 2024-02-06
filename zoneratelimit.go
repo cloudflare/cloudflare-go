@@ -50,11 +50,11 @@ func (r *ZoneRateLimitService) List(ctx context.Context, zoneIdentifier string, 
 }
 
 type ZoneRateLimitGetResponse struct {
-	Errors   []ZoneRateLimitGetResponseError   `json:"errors,required"`
-	Messages []ZoneRateLimitGetResponseMessage `json:"messages,required"`
-	Result   interface{}                       `json:"result,required"`
+	Errors   []ZoneRateLimitGetResponseError   `json:"errors"`
+	Messages []ZoneRateLimitGetResponseMessage `json:"messages"`
+	Result   interface{}                       `json:"result"`
 	// Whether the API call was successful
-	Success ZoneRateLimitGetResponseSuccess `json:"success,required"`
+	Success ZoneRateLimitGetResponseSuccess `json:"success"`
 	JSON    zoneRateLimitGetResponseJSON    `json:"-"`
 }
 
@@ -119,11 +119,12 @@ const (
 )
 
 type ZoneRateLimitListResponse struct {
-	Errors   []ZoneRateLimitListResponseError   `json:"errors,required"`
-	Messages []ZoneRateLimitListResponseMessage `json:"messages,required"`
-	Result   []ZoneRateLimitListResponseResult  `json:"result,required"`
+	Errors     []ZoneRateLimitListResponseError    `json:"errors"`
+	Messages   []ZoneRateLimitListResponseMessage  `json:"messages"`
+	Result     []ZoneRateLimitListResponseResult   `json:"result"`
+	ResultInfo ZoneRateLimitListResponseResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success ZoneRateLimitListResponseSuccess `json:"success,required"`
+	Success ZoneRateLimitListResponseSuccess `json:"success"`
 	JSON    zoneRateLimitListResponseJSON    `json:"-"`
 }
 
@@ -133,6 +134,7 @@ type zoneRateLimitListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
+	ResultInfo  apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -442,6 +444,33 @@ type zoneRateLimitListResponseResultMatchResponseJSON struct {
 }
 
 func (r *ZoneRateLimitListResponseResultMatchResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneRateLimitListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                 `json:"total_count"`
+	JSON       zoneRateLimitListResponseResultInfoJSON `json:"-"`
+}
+
+// zoneRateLimitListResponseResultInfoJSON contains the JSON metadata for the
+// struct [ZoneRateLimitListResponseResultInfo]
+type zoneRateLimitListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneRateLimitListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

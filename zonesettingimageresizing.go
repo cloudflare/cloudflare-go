@@ -55,12 +55,16 @@ func (r *ZoneSettingImageResizingService) List(ctx context.Context, zoneIdentifi
 }
 
 type ZoneSettingImageResizingUpdateResponse struct {
-	Errors   []ZoneSettingImageResizingUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingImageResizingUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingImageResizingUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingImageResizingUpdateResponseMessage `json:"messages"`
+	// Image Resizing provides on-demand resizing, conversion and optimisation for
+	// images served through Cloudflare's network. Refer to the
+	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+	// more information.
+	Result ZoneSettingImageResizingUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                         `json:"success,required"`
-	Result  ZoneSettingImageResizingUpdateResponseResult `json:"result"`
-	JSON    zoneSettingImageResizingUpdateResponseJSON   `json:"-"`
+	Success bool                                       `json:"success"`
+	JSON    zoneSettingImageResizingUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseJSON contains the JSON metadata for the
@@ -68,8 +72,8 @@ type ZoneSettingImageResizingUpdateResponse struct {
 type zoneSettingImageResizingUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,26 +120,30 @@ func (r *ZoneSettingImageResizingUpdateResponseMessage) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Image Resizing provides on-demand resizing, conversion and optimisation for
+// images served through Cloudflare's network. Refer to the
+// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+// more information.
 type ZoneSettingImageResizingUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingImageResizingUpdateResponseResultID `json:"id,required"`
-	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-	Value ZoneSettingImageResizingUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingImageResizingUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingImageResizingUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingImageResizingUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
+	Value ZoneSettingImageResizingUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingImageResizingUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingImageResizingUpdateResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingImageResizingUpdateResponseResult]
 type zoneSettingImageResizingUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,15 +159,6 @@ const (
 	ZoneSettingImageResizingUpdateResponseResultIDImageResizing ZoneSettingImageResizingUpdateResponseResultID = "image_resizing"
 )
 
-// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-type ZoneSettingImageResizingUpdateResponseResultValue string
-
-const (
-	ZoneSettingImageResizingUpdateResponseResultValueOn   ZoneSettingImageResizingUpdateResponseResultValue = "on"
-	ZoneSettingImageResizingUpdateResponseResultValueOff  ZoneSettingImageResizingUpdateResponseResultValue = "off"
-	ZoneSettingImageResizingUpdateResponseResultValueOpen ZoneSettingImageResizingUpdateResponseResultValue = "open"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingImageResizingUpdateResponseResultEditable bool
@@ -169,13 +168,26 @@ const (
 	ZoneSettingImageResizingUpdateResponseResultEditableFalse ZoneSettingImageResizingUpdateResponseResultEditable = false
 )
 
+// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
+type ZoneSettingImageResizingUpdateResponseResultValue string
+
+const (
+	ZoneSettingImageResizingUpdateResponseResultValueOn   ZoneSettingImageResizingUpdateResponseResultValue = "on"
+	ZoneSettingImageResizingUpdateResponseResultValueOff  ZoneSettingImageResizingUpdateResponseResultValue = "off"
+	ZoneSettingImageResizingUpdateResponseResultValueOpen ZoneSettingImageResizingUpdateResponseResultValue = "open"
+)
+
 type ZoneSettingImageResizingListResponse struct {
-	Errors   []ZoneSettingImageResizingListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingImageResizingListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingImageResizingListResponseError   `json:"errors"`
+	Messages []ZoneSettingImageResizingListResponseMessage `json:"messages"`
+	// Image Resizing provides on-demand resizing, conversion and optimisation for
+	// images served through Cloudflare's network. Refer to the
+	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+	// more information.
+	Result ZoneSettingImageResizingListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                       `json:"success,required"`
-	Result  ZoneSettingImageResizingListResponseResult `json:"result"`
-	JSON    zoneSettingImageResizingListResponseJSON   `json:"-"`
+	Success bool                                     `json:"success"`
+	JSON    zoneSettingImageResizingListResponseJSON `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseJSON contains the JSON metadata for the
@@ -183,8 +195,8 @@ type ZoneSettingImageResizingListResponse struct {
 type zoneSettingImageResizingListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -231,26 +243,30 @@ func (r *ZoneSettingImageResizingListResponseMessage) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Image Resizing provides on-demand resizing, conversion and optimisation for
+// images served through Cloudflare's network. Refer to the
+// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+// more information.
 type ZoneSettingImageResizingListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingImageResizingListResponseResultID `json:"id,required"`
-	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-	Value ZoneSettingImageResizingListResponseResultValue `json:"value,required"`
+	ID ZoneSettingImageResizingListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingImageResizingListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingImageResizingListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
+	Value ZoneSettingImageResizingListResponseResultValue `json:"value"`
+	JSON  zoneSettingImageResizingListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingImageResizingListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingImageResizingListResponseResult]
 type zoneSettingImageResizingListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -266,15 +282,6 @@ const (
 	ZoneSettingImageResizingListResponseResultIDImageResizing ZoneSettingImageResizingListResponseResultID = "image_resizing"
 )
 
-// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-type ZoneSettingImageResizingListResponseResultValue string
-
-const (
-	ZoneSettingImageResizingListResponseResultValueOn   ZoneSettingImageResizingListResponseResultValue = "on"
-	ZoneSettingImageResizingListResponseResultValueOff  ZoneSettingImageResizingListResponseResultValue = "off"
-	ZoneSettingImageResizingListResponseResultValueOpen ZoneSettingImageResizingListResponseResultValue = "open"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingImageResizingListResponseResultEditable bool
@@ -282,6 +289,15 @@ type ZoneSettingImageResizingListResponseResultEditable bool
 const (
 	ZoneSettingImageResizingListResponseResultEditableTrue  ZoneSettingImageResizingListResponseResultEditable = true
 	ZoneSettingImageResizingListResponseResultEditableFalse ZoneSettingImageResizingListResponseResultEditable = false
+)
+
+// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
+type ZoneSettingImageResizingListResponseResultValue string
+
+const (
+	ZoneSettingImageResizingListResponseResultValueOn   ZoneSettingImageResizingListResponseResultValue = "on"
+	ZoneSettingImageResizingListResponseResultValueOff  ZoneSettingImageResizingListResponseResultValue = "off"
+	ZoneSettingImageResizingListResponseResultValueOpen ZoneSettingImageResizingListResponseResultValue = "open"
 )
 
 type ZoneSettingImageResizingUpdateParams struct {
@@ -302,9 +318,9 @@ func (r ZoneSettingImageResizingUpdateParams) MarshalJSON() (data []byte, err er
 // more information.
 type ZoneSettingImageResizingUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingImageResizingUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingImageResizingUpdateParamsValueID] `json:"id"`
 	// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-	Value param.Field[ZoneSettingImageResizingUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[ZoneSettingImageResizingUpdateParamsValueValue] `json:"value"`
 }
 
 func (r ZoneSettingImageResizingUpdateParamsValue) MarshalJSON() (data []byte, err error) {
@@ -318,15 +334,6 @@ const (
 	ZoneSettingImageResizingUpdateParamsValueIDImageResizing ZoneSettingImageResizingUpdateParamsValueID = "image_resizing"
 )
 
-// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
-type ZoneSettingImageResizingUpdateParamsValueValue string
-
-const (
-	ZoneSettingImageResizingUpdateParamsValueValueOn   ZoneSettingImageResizingUpdateParamsValueValue = "on"
-	ZoneSettingImageResizingUpdateParamsValueValueOff  ZoneSettingImageResizingUpdateParamsValueValue = "off"
-	ZoneSettingImageResizingUpdateParamsValueValueOpen ZoneSettingImageResizingUpdateParamsValueValue = "open"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingImageResizingUpdateParamsValueEditable bool
@@ -334,4 +341,13 @@ type ZoneSettingImageResizingUpdateParamsValueEditable bool
 const (
 	ZoneSettingImageResizingUpdateParamsValueEditableTrue  ZoneSettingImageResizingUpdateParamsValueEditable = true
 	ZoneSettingImageResizingUpdateParamsValueEditableFalse ZoneSettingImageResizingUpdateParamsValueEditable = false
+)
+
+// Whether the feature is enabled, disabled, or enabled in `open proxy` mode.
+type ZoneSettingImageResizingUpdateParamsValueValue string
+
+const (
+	ZoneSettingImageResizingUpdateParamsValueValueOn   ZoneSettingImageResizingUpdateParamsValueValue = "on"
+	ZoneSettingImageResizingUpdateParamsValueValueOff  ZoneSettingImageResizingUpdateParamsValueValue = "off"
+	ZoneSettingImageResizingUpdateParamsValueValueOpen ZoneSettingImageResizingUpdateParamsValueValue = "open"
 )

@@ -4,8 +4,9 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsZoneLoadBalancerNewResponseResult()    {}
-func (UnionString) ImplementsZoneLoadBalancerGetResponseResult()    {}
-func (UnionString) ImplementsZoneLoadBalancerUpdateResponseResult() {}
-func (UnionString) ImplementsZoneLoadBalancerListResponseResult()   {}
-func (UnionString) ImplementsZoneLoadBalancerDeleteResponseResult() {}
+func (UnionString) ImplementsAIBaaiBgeBaseEnV1_5ParamsText()          {}
+func (UnionString) ImplementsAIBaaiBgeLargeEnV1_5ParamsText()         {}
+func (UnionString) ImplementsAIBaaiBgeSmallEnV1_5ParamsText()         {}
+func (UnionString) ImplementsAIMetaLlama2_7bChatFp16Response()        {}
+func (UnionString) ImplementsAIMetaLlama2_7bChatInt8Response()        {}
+func (UnionString) ImplementsAIMistralMistral7bInstructV0_1Response() {}

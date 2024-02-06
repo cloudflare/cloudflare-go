@@ -3,6 +3,13 @@
 package cloudflare
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -22,4 +29,39 @@ func NewAIHuggingfaceService(opts ...option.RequestOption) (r *AIHuggingfaceServ
 	r = &AIHuggingfaceService{}
 	r.Options = opts
 	return
+}
+
+// Execute @cf/huggingface/distilbert-sst-2-int8 model.
+func (r *AIHuggingfaceService) DistilbertSst2Int8(ctx context.Context, accountIdentifier string, body AIHuggingfaceDistilbertSst2Int8Params, opts ...option.RequestOption) (res *[]AIHuggingfaceDistilbertSst2Int8Response, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("apiv4/accounts/%s/ai/run/@cf/huggingface/distilbert-sst-2-int8", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
+type AIHuggingfaceDistilbertSst2Int8Response struct {
+	Label string                                      `json:"label"`
+	Score float64                                     `json:"score"`
+	JSON  aiHuggingfaceDistilbertSst2Int8ResponseJSON `json:"-"`
+}
+
+// aiHuggingfaceDistilbertSst2Int8ResponseJSON contains the JSON metadata for the
+// struct [AIHuggingfaceDistilbertSst2Int8Response]
+type aiHuggingfaceDistilbertSst2Int8ResponseJSON struct {
+	Label       apijson.Field
+	Score       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIHuggingfaceDistilbertSst2Int8Response) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AIHuggingfaceDistilbertSst2Int8Params struct {
+	Text param.Field[string] `json:"text,required"`
+}
+
+func (r AIHuggingfaceDistilbertSst2Int8Params) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

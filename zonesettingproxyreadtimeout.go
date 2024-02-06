@@ -49,12 +49,13 @@ func (r *ZoneSettingProxyReadTimeoutService) List(ctx context.Context, zoneIdent
 }
 
 type ZoneSettingProxyReadTimeoutUpdateResponse struct {
-	Errors   []ZoneSettingProxyReadTimeoutUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingProxyReadTimeoutUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingProxyReadTimeoutUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingProxyReadTimeoutUpdateResponseMessage `json:"messages"`
+	// Maximum time between two read operations from origin.
+	Result ZoneSettingProxyReadTimeoutUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                            `json:"success,required"`
-	Result  ZoneSettingProxyReadTimeoutUpdateResponseResult `json:"result"`
-	JSON    zoneSettingProxyReadTimeoutUpdateResponseJSON   `json:"-"`
+	Success bool                                          `json:"success"`
+	JSON    zoneSettingProxyReadTimeoutUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseJSON contains the JSON metadata for the
@@ -62,8 +63,8 @@ type ZoneSettingProxyReadTimeoutUpdateResponse struct {
 type zoneSettingProxyReadTimeoutUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,26 +111,27 @@ func (r *ZoneSettingProxyReadTimeoutUpdateResponseMessage) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Maximum time between two read operations from origin.
 type ZoneSettingProxyReadTimeoutUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingProxyReadTimeoutUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value float64 `json:"value,required"`
+	ID ZoneSettingProxyReadTimeoutUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingProxyReadTimeoutUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingProxyReadTimeoutUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Value must be between 1 and 6000
+	Value float64                                             `json:"value"`
+	JSON  zoneSettingProxyReadTimeoutUpdateResponseResultJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingProxyReadTimeoutUpdateResponseResult]
 type zoneSettingProxyReadTimeoutUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -155,12 +157,13 @@ const (
 )
 
 type ZoneSettingProxyReadTimeoutListResponse struct {
-	Errors   []ZoneSettingProxyReadTimeoutListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingProxyReadTimeoutListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingProxyReadTimeoutListResponseError   `json:"errors"`
+	Messages []ZoneSettingProxyReadTimeoutListResponseMessage `json:"messages"`
+	// Maximum time between two read operations from origin.
+	Result ZoneSettingProxyReadTimeoutListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                          `json:"success,required"`
-	Result  ZoneSettingProxyReadTimeoutListResponseResult `json:"result"`
-	JSON    zoneSettingProxyReadTimeoutListResponseJSON   `json:"-"`
+	Success bool                                        `json:"success"`
+	JSON    zoneSettingProxyReadTimeoutListResponseJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseJSON contains the JSON metadata for the
@@ -168,8 +171,8 @@ type ZoneSettingProxyReadTimeoutListResponse struct {
 type zoneSettingProxyReadTimeoutListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -216,26 +219,27 @@ func (r *ZoneSettingProxyReadTimeoutListResponseMessage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Maximum time between two read operations from origin.
 type ZoneSettingProxyReadTimeoutListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingProxyReadTimeoutListResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value float64 `json:"value,required"`
+	ID ZoneSettingProxyReadTimeoutListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingProxyReadTimeoutListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingProxyReadTimeoutListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Value must be between 1 and 6000
+	Value float64                                           `json:"value"`
+	JSON  zoneSettingProxyReadTimeoutListResponseResultJSON `json:"-"`
 }
 
 // zoneSettingProxyReadTimeoutListResponseResultJSON contains the JSON metadata for
 // the struct [ZoneSettingProxyReadTimeoutListResponseResult]
 type zoneSettingProxyReadTimeoutListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -272,9 +276,9 @@ func (r ZoneSettingProxyReadTimeoutUpdateParams) MarshalJSON() (data []byte, err
 // Maximum time between two read operations from origin.
 type ZoneSettingProxyReadTimeoutUpdateParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[ZoneSettingProxyReadTimeoutUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[ZoneSettingProxyReadTimeoutUpdateParamsValueID] `json:"id"`
 	// Value of the zone setting. Notes: Value must be between 1 and 6000
-	Value param.Field[float64] `json:"value,required"`
+	Value param.Field[float64] `json:"value"`
 }
 
 func (r ZoneSettingProxyReadTimeoutUpdateParamsValue) MarshalJSON() (data []byte, err error) {

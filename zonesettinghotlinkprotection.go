@@ -61,12 +61,19 @@ func (r *ZoneSettingHotlinkProtectionService) List(ctx context.Context, zoneIden
 }
 
 type ZoneSettingHotlinkProtectionUpdateResponse struct {
-	Errors   []ZoneSettingHotlinkProtectionUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingHotlinkProtectionUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingHotlinkProtectionUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingHotlinkProtectionUpdateResponseMessage `json:"messages"`
+	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+	// up your bandwidth by building pages that use images hosted on your site. Anytime
+	// a request for an image on your site hits Cloudflare, we check to ensure that
+	// it's not another site requesting them. People will still be able to download and
+	// view images from your page, but other sites won't be able to steal them for use
+	// on their own pages.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
+	Result ZoneSettingHotlinkProtectionUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                             `json:"success,required"`
-	Result  ZoneSettingHotlinkProtectionUpdateResponseResult `json:"result"`
-	JSON    zoneSettingHotlinkProtectionUpdateResponseJSON   `json:"-"`
+	Success bool                                           `json:"success"`
+	JSON    zoneSettingHotlinkProtectionUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseJSON contains the JSON metadata for
@@ -74,8 +81,8 @@ type ZoneSettingHotlinkProtectionUpdateResponse struct {
 type zoneSettingHotlinkProtectionUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -122,26 +129,33 @@ func (r *ZoneSettingHotlinkProtectionUpdateResponseMessage) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+// up your bandwidth by building pages that use images hosted on your site. Anytime
+// a request for an image on your site hits Cloudflare, we check to ensure that
+// it's not another site requesting them. People will still be able to download and
+// view images from your page, but other sites won't be able to steal them for use
+// on their own pages.
+// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 type ZoneSettingHotlinkProtectionUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHotlinkProtectionUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingHotlinkProtectionUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingHotlinkProtectionUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHotlinkProtectionUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHotlinkProtectionUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingHotlinkProtectionUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingHotlinkProtectionUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionUpdateResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingHotlinkProtectionUpdateResponseResult]
 type zoneSettingHotlinkProtectionUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -157,14 +171,6 @@ const (
 	ZoneSettingHotlinkProtectionUpdateResponseResultIDHotlinkProtection ZoneSettingHotlinkProtectionUpdateResponseResultID = "hotlink_protection"
 )
 
-// Value of the zone setting.
-type ZoneSettingHotlinkProtectionUpdateResponseResultValue string
-
-const (
-	ZoneSettingHotlinkProtectionUpdateResponseResultValueOn  ZoneSettingHotlinkProtectionUpdateResponseResultValue = "on"
-	ZoneSettingHotlinkProtectionUpdateResponseResultValueOff ZoneSettingHotlinkProtectionUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHotlinkProtectionUpdateResponseResultEditable bool
@@ -174,13 +180,28 @@ const (
 	ZoneSettingHotlinkProtectionUpdateResponseResultEditableFalse ZoneSettingHotlinkProtectionUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingHotlinkProtectionUpdateResponseResultValue string
+
+const (
+	ZoneSettingHotlinkProtectionUpdateResponseResultValueOn  ZoneSettingHotlinkProtectionUpdateResponseResultValue = "on"
+	ZoneSettingHotlinkProtectionUpdateResponseResultValueOff ZoneSettingHotlinkProtectionUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingHotlinkProtectionListResponse struct {
-	Errors   []ZoneSettingHotlinkProtectionListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingHotlinkProtectionListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingHotlinkProtectionListResponseError   `json:"errors"`
+	Messages []ZoneSettingHotlinkProtectionListResponseMessage `json:"messages"`
+	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+	// up your bandwidth by building pages that use images hosted on your site. Anytime
+	// a request for an image on your site hits Cloudflare, we check to ensure that
+	// it's not another site requesting them. People will still be able to download and
+	// view images from your page, but other sites won't be able to steal them for use
+	// on their own pages.
+	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
+	Result ZoneSettingHotlinkProtectionListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                           `json:"success,required"`
-	Result  ZoneSettingHotlinkProtectionListResponseResult `json:"result"`
-	JSON    zoneSettingHotlinkProtectionListResponseJSON   `json:"-"`
+	Success bool                                         `json:"success"`
+	JSON    zoneSettingHotlinkProtectionListResponseJSON `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseJSON contains the JSON metadata for the
@@ -188,8 +209,8 @@ type ZoneSettingHotlinkProtectionListResponse struct {
 type zoneSettingHotlinkProtectionListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -236,26 +257,33 @@ func (r *ZoneSettingHotlinkProtectionListResponseMessage) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+// up your bandwidth by building pages that use images hosted on your site. Anytime
+// a request for an image on your site hits Cloudflare, we check to ensure that
+// it's not another site requesting them. People will still be able to download and
+// view images from your page, but other sites won't be able to steal them for use
+// on their own pages.
+// (https://support.cloudflare.com/hc/en-us/articles/200170026).
 type ZoneSettingHotlinkProtectionListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingHotlinkProtectionListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingHotlinkProtectionListResponseResultValue `json:"value,required"`
+	ID ZoneSettingHotlinkProtectionListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingHotlinkProtectionListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHotlinkProtectionListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingHotlinkProtectionListResponseResultValue `json:"value"`
+	JSON  zoneSettingHotlinkProtectionListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingHotlinkProtectionListResponseResultJSON contains the JSON metadata
 // for the struct [ZoneSettingHotlinkProtectionListResponseResult]
 type zoneSettingHotlinkProtectionListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -271,14 +299,6 @@ const (
 	ZoneSettingHotlinkProtectionListResponseResultIDHotlinkProtection ZoneSettingHotlinkProtectionListResponseResultID = "hotlink_protection"
 )
 
-// Value of the zone setting.
-type ZoneSettingHotlinkProtectionListResponseResultValue string
-
-const (
-	ZoneSettingHotlinkProtectionListResponseResultValueOn  ZoneSettingHotlinkProtectionListResponseResultValue = "on"
-	ZoneSettingHotlinkProtectionListResponseResultValueOff ZoneSettingHotlinkProtectionListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingHotlinkProtectionListResponseResultEditable bool
@@ -286,6 +306,14 @@ type ZoneSettingHotlinkProtectionListResponseResultEditable bool
 const (
 	ZoneSettingHotlinkProtectionListResponseResultEditableTrue  ZoneSettingHotlinkProtectionListResponseResultEditable = true
 	ZoneSettingHotlinkProtectionListResponseResultEditableFalse ZoneSettingHotlinkProtectionListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingHotlinkProtectionListResponseResultValue string
+
+const (
+	ZoneSettingHotlinkProtectionListResponseResultValueOn  ZoneSettingHotlinkProtectionListResponseResultValue = "on"
+	ZoneSettingHotlinkProtectionListResponseResultValueOff ZoneSettingHotlinkProtectionListResponseResultValue = "off"
 )
 
 type ZoneSettingHotlinkProtectionUpdateParams struct {

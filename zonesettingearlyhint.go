@@ -55,12 +55,16 @@ func (r *ZoneSettingEarlyHintService) List(ctx context.Context, zoneIdentifier s
 }
 
 type ZoneSettingEarlyHintUpdateResponse struct {
-	Errors   []ZoneSettingEarlyHintUpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingEarlyHintUpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingEarlyHintUpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingEarlyHintUpdateResponseMessage `json:"messages"`
+	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
+	// `103` responses with `Link` headers from the final response. Refer to
+	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
+	// more information.
+	Result ZoneSettingEarlyHintUpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                     `json:"success,required"`
-	Result  ZoneSettingEarlyHintUpdateResponseResult `json:"result"`
-	JSON    zoneSettingEarlyHintUpdateResponseJSON   `json:"-"`
+	Success bool                                   `json:"success"`
+	JSON    zoneSettingEarlyHintUpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseJSON contains the JSON metadata for the struct
@@ -68,8 +72,8 @@ type ZoneSettingEarlyHintUpdateResponse struct {
 type zoneSettingEarlyHintUpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -116,26 +120,30 @@ func (r *ZoneSettingEarlyHintUpdateResponseMessage) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// When enabled, Cloudflare will attempt to speed up overall page loads by serving
+// `103` responses with `Link` headers from the final response. Refer to
+// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
+// more information.
 type ZoneSettingEarlyHintUpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingEarlyHintUpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingEarlyHintUpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingEarlyHintUpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingEarlyHintUpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingEarlyHintUpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingEarlyHintUpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingEarlyHintUpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEarlyHintUpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingEarlyHintUpdateResponseResult]
 type zoneSettingEarlyHintUpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,14 +159,6 @@ const (
 	ZoneSettingEarlyHintUpdateResponseResultIDEarlyHints ZoneSettingEarlyHintUpdateResponseResultID = "early_hints"
 )
 
-// Value of the zone setting.
-type ZoneSettingEarlyHintUpdateResponseResultValue string
-
-const (
-	ZoneSettingEarlyHintUpdateResponseResultValueOn  ZoneSettingEarlyHintUpdateResponseResultValue = "on"
-	ZoneSettingEarlyHintUpdateResponseResultValueOff ZoneSettingEarlyHintUpdateResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingEarlyHintUpdateResponseResultEditable bool
@@ -168,13 +168,25 @@ const (
 	ZoneSettingEarlyHintUpdateResponseResultEditableFalse ZoneSettingEarlyHintUpdateResponseResultEditable = false
 )
 
+// Value of the zone setting.
+type ZoneSettingEarlyHintUpdateResponseResultValue string
+
+const (
+	ZoneSettingEarlyHintUpdateResponseResultValueOn  ZoneSettingEarlyHintUpdateResponseResultValue = "on"
+	ZoneSettingEarlyHintUpdateResponseResultValueOff ZoneSettingEarlyHintUpdateResponseResultValue = "off"
+)
+
 type ZoneSettingEarlyHintListResponse struct {
-	Errors   []ZoneSettingEarlyHintListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingEarlyHintListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingEarlyHintListResponseError   `json:"errors"`
+	Messages []ZoneSettingEarlyHintListResponseMessage `json:"messages"`
+	// When enabled, Cloudflare will attempt to speed up overall page loads by serving
+	// `103` responses with `Link` headers from the final response. Refer to
+	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
+	// more information.
+	Result ZoneSettingEarlyHintListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                   `json:"success,required"`
-	Result  ZoneSettingEarlyHintListResponseResult `json:"result"`
-	JSON    zoneSettingEarlyHintListResponseJSON   `json:"-"`
+	Success bool                                 `json:"success"`
+	JSON    zoneSettingEarlyHintListResponseJSON `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseJSON contains the JSON metadata for the struct
@@ -182,8 +194,8 @@ type ZoneSettingEarlyHintListResponse struct {
 type zoneSettingEarlyHintListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -230,26 +242,30 @@ func (r *ZoneSettingEarlyHintListResponseMessage) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// When enabled, Cloudflare will attempt to speed up overall page loads by serving
+// `103` responses with `Link` headers from the final response. Refer to
+// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
+// more information.
 type ZoneSettingEarlyHintListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingEarlyHintListResponseResultID `json:"id,required"`
-	// Value of the zone setting.
-	Value ZoneSettingEarlyHintListResponseResultValue `json:"value,required"`
+	ID ZoneSettingEarlyHintListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingEarlyHintListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingEarlyHintListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting.
+	Value ZoneSettingEarlyHintListResponseResultValue `json:"value"`
+	JSON  zoneSettingEarlyHintListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingEarlyHintListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingEarlyHintListResponseResult]
 type zoneSettingEarlyHintListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -265,14 +281,6 @@ const (
 	ZoneSettingEarlyHintListResponseResultIDEarlyHints ZoneSettingEarlyHintListResponseResultID = "early_hints"
 )
 
-// Value of the zone setting.
-type ZoneSettingEarlyHintListResponseResultValue string
-
-const (
-	ZoneSettingEarlyHintListResponseResultValueOn  ZoneSettingEarlyHintListResponseResultValue = "on"
-	ZoneSettingEarlyHintListResponseResultValueOff ZoneSettingEarlyHintListResponseResultValue = "off"
-)
-
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingEarlyHintListResponseResultEditable bool
@@ -280,6 +288,14 @@ type ZoneSettingEarlyHintListResponseResultEditable bool
 const (
 	ZoneSettingEarlyHintListResponseResultEditableTrue  ZoneSettingEarlyHintListResponseResultEditable = true
 	ZoneSettingEarlyHintListResponseResultEditableFalse ZoneSettingEarlyHintListResponseResultEditable = false
+)
+
+// Value of the zone setting.
+type ZoneSettingEarlyHintListResponseResultValue string
+
+const (
+	ZoneSettingEarlyHintListResponseResultValueOn  ZoneSettingEarlyHintListResponseResultValue = "on"
+	ZoneSettingEarlyHintListResponseResultValueOff ZoneSettingEarlyHintListResponseResultValue = "off"
 )
 
 type ZoneSettingEarlyHintUpdateParams struct {

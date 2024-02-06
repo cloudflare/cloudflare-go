@@ -49,12 +49,13 @@ func (r *ZoneSettingTLS1_3Service) List(ctx context.Context, zoneIdentifier stri
 }
 
 type ZoneSettingTls1_3UpdateResponse struct {
-	Errors   []ZoneSettingTls1_3UpdateResponseError   `json:"errors,required"`
-	Messages []ZoneSettingTls1_3UpdateResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingTls1_3UpdateResponseError   `json:"errors"`
+	Messages []ZoneSettingTls1_3UpdateResponseMessage `json:"messages"`
+	// Enables Crypto TLS 1.3 feature for a zone.
+	Result ZoneSettingTls1_3UpdateResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                  `json:"success,required"`
-	Result  ZoneSettingTls1_3UpdateResponseResult `json:"result"`
-	JSON    zoneSettingTls1_3UpdateResponseJSON   `json:"-"`
+	Success bool                                `json:"success"`
+	JSON    zoneSettingTls1_3UpdateResponseJSON `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseJSON contains the JSON metadata for the struct
@@ -62,8 +63,8 @@ type ZoneSettingTls1_3UpdateResponse struct {
 type zoneSettingTls1_3UpdateResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -110,27 +111,28 @@ func (r *ZoneSettingTls1_3UpdateResponseMessage) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enables Crypto TLS 1.3 feature for a zone.
 type ZoneSettingTls1_3UpdateResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingTls1_3UpdateResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingTls1_3UpdateResponseResultValue `json:"value,required"`
+	ID ZoneSettingTls1_3UpdateResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingTls1_3UpdateResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTls1_3UpdateResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingTls1_3UpdateResponseResultValue `json:"value"`
+	JSON  zoneSettingTls1_3UpdateResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTls1_3UpdateResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingTls1_3UpdateResponseResult]
 type zoneSettingTls1_3UpdateResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -146,6 +148,15 @@ const (
 	ZoneSettingTls1_3UpdateResponseResultIDTLS1_3 ZoneSettingTls1_3UpdateResponseResultID = "tls_1_3"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingTls1_3UpdateResponseResultEditable bool
+
+const (
+	ZoneSettingTls1_3UpdateResponseResultEditableTrue  ZoneSettingTls1_3UpdateResponseResultEditable = true
+	ZoneSettingTls1_3UpdateResponseResultEditableFalse ZoneSettingTls1_3UpdateResponseResultEditable = false
+)
+
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
 type ZoneSettingTls1_3UpdateResponseResultValue string
@@ -156,22 +167,14 @@ const (
 	ZoneSettingTls1_3UpdateResponseResultValueZrt ZoneSettingTls1_3UpdateResponseResultValue = "zrt"
 )
 
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingTls1_3UpdateResponseResultEditable bool
-
-const (
-	ZoneSettingTls1_3UpdateResponseResultEditableTrue  ZoneSettingTls1_3UpdateResponseResultEditable = true
-	ZoneSettingTls1_3UpdateResponseResultEditableFalse ZoneSettingTls1_3UpdateResponseResultEditable = false
-)
-
 type ZoneSettingTls1_3ListResponse struct {
-	Errors   []ZoneSettingTls1_3ListResponseError   `json:"errors,required"`
-	Messages []ZoneSettingTls1_3ListResponseMessage `json:"messages,required"`
+	Errors   []ZoneSettingTls1_3ListResponseError   `json:"errors"`
+	Messages []ZoneSettingTls1_3ListResponseMessage `json:"messages"`
+	// Enables Crypto TLS 1.3 feature for a zone.
+	Result ZoneSettingTls1_3ListResponseResult `json:"result"`
 	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  ZoneSettingTls1_3ListResponseResult `json:"result"`
-	JSON    zoneSettingTls1_3ListResponseJSON   `json:"-"`
+	Success bool                              `json:"success"`
+	JSON    zoneSettingTls1_3ListResponseJSON `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseJSON contains the JSON metadata for the struct
@@ -179,8 +182,8 @@ type ZoneSettingTls1_3ListResponse struct {
 type zoneSettingTls1_3ListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Success     apijson.Field
 	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -227,27 +230,28 @@ func (r *ZoneSettingTls1_3ListResponseMessage) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Enables Crypto TLS 1.3 feature for a zone.
 type ZoneSettingTls1_3ListResponseResult struct {
 	// ID of the zone setting.
-	ID ZoneSettingTls1_3ListResponseResultID `json:"id,required"`
-	// Value of the zone setting. Notes: Default value depends on the zone's plan
-	// level.
-	Value ZoneSettingTls1_3ListResponseResultValue `json:"value,required"`
+	ID ZoneSettingTls1_3ListResponseResultID `json:"id"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
 	Editable ZoneSettingTls1_3ListResponseResultEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTls1_3ListResponseResultJSON `json:"-"`
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: Default value depends on the zone's plan
+	// level.
+	Value ZoneSettingTls1_3ListResponseResultValue `json:"value"`
+	JSON  zoneSettingTls1_3ListResponseResultJSON  `json:"-"`
 }
 
 // zoneSettingTls1_3ListResponseResultJSON contains the JSON metadata for the
 // struct [ZoneSettingTls1_3ListResponseResult]
 type zoneSettingTls1_3ListResponseResultJSON struct {
 	ID          apijson.Field
-	Value       apijson.Field
 	Editable    apijson.Field
 	ModifiedOn  apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -263,6 +267,15 @@ const (
 	ZoneSettingTls1_3ListResponseResultIDTLS1_3 ZoneSettingTls1_3ListResponseResultID = "tls_1_3"
 )
 
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingTls1_3ListResponseResultEditable bool
+
+const (
+	ZoneSettingTls1_3ListResponseResultEditableTrue  ZoneSettingTls1_3ListResponseResultEditable = true
+	ZoneSettingTls1_3ListResponseResultEditableFalse ZoneSettingTls1_3ListResponseResultEditable = false
+)
+
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
 type ZoneSettingTls1_3ListResponseResultValue string
@@ -271,15 +284,6 @@ const (
 	ZoneSettingTls1_3ListResponseResultValueOn  ZoneSettingTls1_3ListResponseResultValue = "on"
 	ZoneSettingTls1_3ListResponseResultValueOff ZoneSettingTls1_3ListResponseResultValue = "off"
 	ZoneSettingTls1_3ListResponseResultValueZrt ZoneSettingTls1_3ListResponseResultValue = "zrt"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingTls1_3ListResponseResultEditable bool
-
-const (
-	ZoneSettingTls1_3ListResponseResultEditableTrue  ZoneSettingTls1_3ListResponseResultEditable = true
-	ZoneSettingTls1_3ListResponseResultEditableFalse ZoneSettingTls1_3ListResponseResultEditable = false
 )
 
 type ZoneSettingTLS1_3UpdateParams struct {
