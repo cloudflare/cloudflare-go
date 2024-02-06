@@ -33,24 +33,31 @@ func NewLoadBalancerPreviewService(opts ...option.RequestOption) (r *LoadBalance
 // Get the result of a previous preview operation using the provided preview_id.
 func (r *LoadBalancerPreviewService) Get(ctx context.Context, accountIdentifier string, previewID interface{}, opts ...option.RequestOption) (res *LoadBalancerPreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LoadBalancerPreviewGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", accountIdentifier, previewID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
-type LoadBalancerPreviewGetResponse struct {
-	Errors   []LoadBalancerPreviewGetResponseError   `json:"errors"`
-	Messages []LoadBalancerPreviewGetResponseMessage `json:"messages"`
+type LoadBalancerPreviewGetResponse = interface{}
+
+type LoadBalancerPreviewGetResponseEnvelope struct {
+	Errors   []LoadBalancerPreviewGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []LoadBalancerPreviewGetResponseEnvelopeMessages `json:"messages"`
 	// Resulting health data from a preview operation.
-	Result interface{} `json:"result"`
+	Result LoadBalancerPreviewGetResponse `json:"result"`
 	// Whether the API call was successful
-	Success LoadBalancerPreviewGetResponseSuccess `json:"success"`
-	JSON    loadBalancerPreviewGetResponseJSON    `json:"-"`
+	Success LoadBalancerPreviewGetResponseEnvelopeSuccess `json:"success"`
+	JSON    loadBalancerPreviewGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPreviewGetResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerPreviewGetResponse]
-type loadBalancerPreviewGetResponseJSON struct {
+// loadBalancerPreviewGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancerPreviewGetResponseEnvelope]
+type loadBalancerPreviewGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -59,51 +66,51 @@ type loadBalancerPreviewGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPreviewGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerPreviewGetResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    loadBalancerPreviewGetResponseErrorJSON `json:"-"`
+type LoadBalancerPreviewGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    loadBalancerPreviewGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// loadBalancerPreviewGetResponseErrorJSON contains the JSON metadata for the
-// struct [LoadBalancerPreviewGetResponseError]
-type loadBalancerPreviewGetResponseErrorJSON struct {
+// loadBalancerPreviewGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LoadBalancerPreviewGetResponseEnvelopeErrors]
+type loadBalancerPreviewGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPreviewGetResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerPreviewGetResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    loadBalancerPreviewGetResponseMessageJSON `json:"-"`
+type LoadBalancerPreviewGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    loadBalancerPreviewGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// loadBalancerPreviewGetResponseMessageJSON contains the JSON metadata for the
-// struct [LoadBalancerPreviewGetResponseMessage]
-type loadBalancerPreviewGetResponseMessageJSON struct {
+// loadBalancerPreviewGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LoadBalancerPreviewGetResponseEnvelopeMessages]
+type loadBalancerPreviewGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPreviewGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LoadBalancerPreviewGetResponseSuccess bool
+type LoadBalancerPreviewGetResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPreviewGetResponseSuccessTrue LoadBalancerPreviewGetResponseSuccess = true
+	LoadBalancerPreviewGetResponseEnvelopeSuccessTrue LoadBalancerPreviewGetResponseEnvelopeSuccess = true
 )

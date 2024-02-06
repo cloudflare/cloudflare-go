@@ -33,78 +33,19 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ZeroTrustUsersGetUsers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessUserZeroTrustUsersGetUsersResponse, err error) {
+func (r *AccessUserService) ZeroTrustUsersGetUsers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUserZeroTrustUsersGetUsersResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AccessUserZeroTrustUsersGetUsersResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type AccessUserZeroTrustUsersGetUsersResponse struct {
-	Errors     []AccessUserZeroTrustUsersGetUsersResponseError    `json:"errors"`
-	Messages   []AccessUserZeroTrustUsersGetUsersResponseMessage  `json:"messages"`
-	Result     []AccessUserZeroTrustUsersGetUsersResponseResult   `json:"result"`
-	ResultInfo AccessUserZeroTrustUsersGetUsersResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessUserZeroTrustUsersGetUsersResponseSuccess `json:"success"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseJSON    `json:"-"`
-}
-
-// accessUserZeroTrustUsersGetUsersResponseJSON contains the JSON metadata for the
-// struct [AccessUserZeroTrustUsersGetUsersResponse]
-type accessUserZeroTrustUsersGetUsersResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserZeroTrustUsersGetUsersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserZeroTrustUsersGetUsersResponseError struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseErrorJSON `json:"-"`
-}
-
-// accessUserZeroTrustUsersGetUsersResponseErrorJSON contains the JSON metadata for
-// the struct [AccessUserZeroTrustUsersGetUsersResponseError]
-type accessUserZeroTrustUsersGetUsersResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserZeroTrustUsersGetUsersResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserZeroTrustUsersGetUsersResponseMessage struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseMessageJSON `json:"-"`
-}
-
-// accessUserZeroTrustUsersGetUsersResponseMessageJSON contains the JSON metadata
-// for the struct [AccessUserZeroTrustUsersGetUsersResponseMessage]
-type accessUserZeroTrustUsersGetUsersResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserZeroTrustUsersGetUsersResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserZeroTrustUsersGetUsersResponseResult struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -123,14 +64,14 @@ type AccessUserZeroTrustUsersGetUsersResponseResult struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUid interface{} `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       interface{}                                        `json:"uid"`
-	UpdatedAt time.Time                                          `json:"updated_at" format:"date-time"`
-	JSON      accessUserZeroTrustUsersGetUsersResponseResultJSON `json:"-"`
+	Uid       interface{}                                  `json:"uid"`
+	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
+	JSON      accessUserZeroTrustUsersGetUsersResponseJSON `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseResultJSON contains the JSON metadata
-// for the struct [AccessUserZeroTrustUsersGetUsersResponseResult]
-type accessUserZeroTrustUsersGetUsersResponseResultJSON struct {
+// accessUserZeroTrustUsersGetUsersResponseJSON contains the JSON metadata for the
+// struct [AccessUserZeroTrustUsersGetUsersResponse]
+type accessUserZeroTrustUsersGetUsersResponseJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -146,21 +87,87 @@ type accessUserZeroTrustUsersGetUsersResponseResultJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserZeroTrustUsersGetUsersResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserZeroTrustUsersGetUsersResponseResultInfo struct {
-	Count      interface{}                                            `json:"count"`
-	Page       interface{}                                            `json:"page"`
-	PerPage    interface{}                                            `json:"per_page"`
-	TotalCount interface{}                                            `json:"total_count"`
-	JSON       accessUserZeroTrustUsersGetUsersResponseResultInfoJSON `json:"-"`
+type AccessUserZeroTrustUsersGetUsersResponseEnvelope struct {
+	Errors     []AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors   `json:"errors"`
+	Messages   []AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages `json:"messages"`
+	Result     []AccessUserZeroTrustUsersGetUsersResponse                 `json:"result"`
+	ResultInfo AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess `json:"success"`
+	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseResultInfoJSON contains the JSON
-// metadata for the struct [AccessUserZeroTrustUsersGetUsersResponseResultInfo]
-type accessUserZeroTrustUsersGetUsersResponseResultInfoJSON struct {
+// accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AccessUserZeroTrustUsersGetUsersResponseEnvelope]
+type accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors]
+type accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages]
+type accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo struct {
+	Count      interface{}                                                    `json:"count"`
+	Page       interface{}                                                    `json:"page"`
+	PerPage    interface{}                                                    `json:"per_page"`
+	TotalCount interface{}                                                    `json:"total_count"`
+	JSON       accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct
+// [AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo]
+type accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -169,13 +176,13 @@ type accessUserZeroTrustUsersGetUsersResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessUserZeroTrustUsersGetUsersResponseSuccess bool
+type AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess bool
 
 const (
-	AccessUserZeroTrustUsersGetUsersResponseSuccessTrue AccessUserZeroTrustUsersGetUsersResponseSuccess = true
+	AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccessTrue AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess = true
 )

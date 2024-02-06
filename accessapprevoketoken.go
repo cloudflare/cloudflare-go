@@ -33,37 +33,17 @@ func NewAccessAppRevokeTokenService(opts ...option.RequestOption) (r *AccessAppR
 // Revokes all tokens issued for an application.
 func (r *AccessAppRevokeTokenService) AccessApplicationsRevokeServiceTokens(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensParamsAppID, opts ...option.RequestOption) (res *AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%v/revoke_tokens", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
-type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse struct {
-	Result  interface{}                                                              `json:"result,nullable"`
-	Success AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccess `json:"success"`
-	JSON    accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseJSON    `json:"-"`
-}
-
-// accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseJSON contains
-// the JSON metadata for the struct
-// [AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse]
-type accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccess bool
-
-const (
-	AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccessTrue  AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccess = true
-	AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccessFalse AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseSuccess = false
-)
+type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse = interface{}
 
 // Identifier
 //
@@ -71,3 +51,30 @@ const (
 type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensParamsAppID interface {
 	ImplementsAccessAppRevokeTokenAccessApplicationsRevokeServiceTokensParamsAppID()
 }
+
+type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelope struct {
+	Result  AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponse                `json:"result,nullable"`
+	Success AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccess `json:"success"`
+	JSON    accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeJSON
+// contains the JSON metadata for the struct
+// [AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelope]
+type accessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccess bool
+
+const (
+	AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccessTrue  AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccess = true
+	AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccessFalse AccessAppRevokeTokenAccessApplicationsRevokeServiceTokensResponseEnvelopeSuccess = false
+)

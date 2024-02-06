@@ -37,30 +37,53 @@ func NewAccessKeyRotateService(opts ...option.RequestOption) (r *AccessKeyRotate
 // Perfoms a key rotation for an account.
 func (r *AccessKeyRotateService) AccessKeyConfigurationRotateAccessKeys(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/keys/rotate", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
-type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse struct {
+// Union satisfied by
+// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseUnknown] or
+// [shared.UnionString].
+type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse interface {
+	ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope struct {
 	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64                                                              `json:"days_until_next_rotation"`
-	Errors                []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseError `json:"errors"`
+	DaysUntilNextRotation float64                                                                       `json:"days_until_next_rotation"`
+	Errors                []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors `json:"errors"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                                                              `json:"last_key_rotation_at" format:"date-time"`
-	Messages          []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessage `json:"messages"`
-	Result            AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResult    `json:"result"`
+	LastKeyRotationAt time.Time                                                                       `json:"last_key_rotation_at" format:"date-time"`
+	Messages          []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages `json:"messages"`
+	Result            AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse                   `json:"result"`
 	// Whether the API call was successful
-	Success AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseSuccess `json:"success"`
-	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseJSON    `json:"-"`
+	Success AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccess `json:"success"`
+	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseJSON contains the
-// JSON metadata for the struct
-// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse]
-type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseJSON struct {
+// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON
+// contains the JSON metadata for the struct
+// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope]
+type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON struct {
 	DaysUntilNextRotation   apijson.Field
 	Errors                  apijson.Field
 	KeyRotationIntervalDays apijson.Field
@@ -72,71 +95,53 @@ type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseError struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseErrorJSON `json:"-"`
+type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseErrorJSON contains
-// the JSON metadata for the struct
-// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseError]
-type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessage struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessageJSON `json:"-"`
-}
-
-// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessageJSON
+// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrorsJSON
 // contains the JSON metadata for the struct
-// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessage]
-type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessageJSON struct {
+// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors]
+type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by
-// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResultUnknown] or
-// [shared.UnionString].
-type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResult interface {
-	ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResult()
+type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResult)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessagesJSON
+// contains the JSON metadata for the struct
+// [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages]
+type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseSuccess bool
+type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccess bool
 
 const (
-	AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseSuccessTrue AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseSuccess = true
+	AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccessTrue AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccess = true
 )

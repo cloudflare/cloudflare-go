@@ -49,21 +49,32 @@ func NewAIService(opts ...option.RequestOption) (r *AIService) {
 // model types, ensuring flexibility and adaptability for diverse use cases.
 func (r *AIService) Run(ctx context.Context, accountIdentifier string, modelName string, body AIRunParams, opts ...option.RequestOption) (res *AIRunResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AIRunResponseEnvelope
 	path := fmt.Sprintf("apiv4/accounts/%s/ai/run/%s", accountIdentifier, modelName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
-type AIRunResponse struct {
-	Errors   []AIRunResponseError `json:"errors,required"`
-	Messages []string             `json:"messages,required"`
-	Result   interface{}          `json:"result,required"`
-	Success  bool                 `json:"success,required"`
-	JSON     aiRunResponseJSON    `json:"-"`
+type AIRunResponse = interface{}
+
+type AIRunParams struct {
 }
 
-// aiRunResponseJSON contains the JSON metadata for the struct [AIRunResponse]
-type aiRunResponseJSON struct {
+type AIRunResponseEnvelope struct {
+	Errors   []AIRunResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                      `json:"messages,required"`
+	Result   AIRunResponse                 `json:"result,required"`
+	Success  bool                          `json:"success,required"`
+	JSON     aiRunResponseEnvelopeJSON     `json:"-"`
+}
+
+// aiRunResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AIRunResponseEnvelope]
+type aiRunResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -72,26 +83,23 @@ type aiRunResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIRunResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AIRunResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AIRunResponseError struct {
-	Message string                 `json:"message,required"`
-	JSON    aiRunResponseErrorJSON `json:"-"`
+type AIRunResponseEnvelopeErrors struct {
+	Message string                          `json:"message,required"`
+	JSON    aiRunResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// aiRunResponseErrorJSON contains the JSON metadata for the struct
-// [AIRunResponseError]
-type aiRunResponseErrorJSON struct {
+// aiRunResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AIRunResponseEnvelopeErrors]
+type aiRunResponseEnvelopeErrorsJSON struct {
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AIRunResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AIRunResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
-}
-
-type AIRunParams struct {
 }

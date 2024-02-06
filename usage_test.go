@@ -37,5 +37,5 @@ func TestUsage(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	t.Logf("%+v\n", zoneNewResponse.Result.ID)
+	t.Logf("%+v\n", zoneNewResponse.ID)
 }
