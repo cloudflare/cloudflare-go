@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
 
 ENV GOPATH=/go
 ENV PATH=$GOPATH/bin:$PATH
-RUN go install golang.org/x/tools/cmd/goimports@latest
 
 WORKDIR /workspace
 
