@@ -33,26 +33,33 @@ func NewLoadBalancerPoolHealthService(opts ...option.RequestOption) (r *LoadBala
 // Fetch the latest pool health status for a single pool.
 func (r *LoadBalancerPoolHealthService) AccountLoadBalancerPoolsPoolHealthDetails(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
-type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse struct {
-	Errors   []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError   `json:"errors"`
-	Messages []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage `json:"messages"`
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse = interface{}
+
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelope struct {
+	Errors   []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors   `json:"errors"`
+	Messages []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages `json:"messages"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result interface{} `json:"result"`
+	Result LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse `json:"result"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess `json:"success"`
-	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON    `json:"-"`
+	Success LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccess `json:"success"`
+	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON
+// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeJSON
 // contains the JSON metadata for the struct
-// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse]
-type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON struct {
+// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelope]
+type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -61,53 +68,53 @@ type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON `json:"-"`
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors struct {
+	Code    int64                                                                                     `json:"code,required"`
+	Message string                                                                                    `json:"message,required"`
+	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON
+// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrorsJSON
 // contains the JSON metadata for the struct
-// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError]
-type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseErrorJSON struct {
+// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors]
+type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON `json:"-"`
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages struct {
+	Code    int64                                                                                       `json:"code,required"`
+	Message string                                                                                      `json:"message,required"`
+	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON
+// loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessagesJSON
 // contains the JSON metadata for the struct
-// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage]
-type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessageJSON struct {
+// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages]
+type loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess bool
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccessTrue LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseSuccess = true
+	LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccessTrue LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccess = true
 )

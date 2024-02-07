@@ -34,29 +34,31 @@ func NewAddressingServiceService(opts ...option.RequestOption) (r *AddressingSer
 // service running on the Cloudflare network to enable a Cloudflare product on the
 // IP addresses. This endpoint can be used as a reference of available services on
 // the Cloudflare network, and their service IDs.
-func (r *AddressingServiceService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *AddressingServiceListResponse, err error) {
+func (r *AddressingServiceService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]AddressingServiceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AddressingServiceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/services", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type AddressingServiceListResponse struct {
-	Errors   []AddressingServiceListResponseError   `json:"errors"`
-	Messages []AddressingServiceListResponseMessage `json:"messages"`
-	Result   []AddressingServiceListResponseResult  `json:"result"`
-	// Whether the API call was successful
-	Success AddressingServiceListResponseSuccess `json:"success"`
-	JSON    addressingServiceListResponseJSON    `json:"-"`
+	// Identifier
+	ID string `json:"id"`
+	// Name of a service running on the Cloudflare network
+	Name string                            `json:"name"`
+	JSON addressingServiceListResponseJSON `json:"-"`
 }
 
 // addressingServiceListResponseJSON contains the JSON metadata for the struct
 // [AddressingServiceListResponse]
 type addressingServiceListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	ID          apijson.Field
+	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -65,68 +67,71 @@ func (r *AddressingServiceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingServiceListResponseError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    addressingServiceListResponseErrorJSON `json:"-"`
+type AddressingServiceListResponseEnvelope struct {
+	Errors   []AddressingServiceListResponseEnvelopeErrors   `json:"errors"`
+	Messages []AddressingServiceListResponseEnvelopeMessages `json:"messages"`
+	Result   []AddressingServiceListResponse                 `json:"result"`
+	// Whether the API call was successful
+	Success AddressingServiceListResponseEnvelopeSuccess `json:"success"`
+	JSON    addressingServiceListResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressingServiceListResponseErrorJSON contains the JSON metadata for the struct
-// [AddressingServiceListResponseError]
-type addressingServiceListResponseErrorJSON struct {
+// addressingServiceListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AddressingServiceListResponseEnvelope]
+type addressingServiceListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingServiceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingServiceListResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    addressingServiceListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// addressingServiceListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AddressingServiceListResponseEnvelopeErrors]
+type addressingServiceListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingServiceListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingServiceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingServiceListResponseMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    addressingServiceListResponseMessageJSON `json:"-"`
+type AddressingServiceListResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    addressingServiceListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressingServiceListResponseMessageJSON contains the JSON metadata for the
-// struct [AddressingServiceListResponseMessage]
-type addressingServiceListResponseMessageJSON struct {
+// addressingServiceListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AddressingServiceListResponseEnvelopeMessages]
+type addressingServiceListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingServiceListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingServiceListResponseResult struct {
-	// Identifier
-	ID string `json:"id"`
-	// Name of a service running on the Cloudflare network
-	Name string                                  `json:"name"`
-	JSON addressingServiceListResponseResultJSON `json:"-"`
-}
-
-// addressingServiceListResponseResultJSON contains the JSON metadata for the
-// struct [AddressingServiceListResponseResult]
-type addressingServiceListResponseResultJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingServiceListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingServiceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressingServiceListResponseSuccess bool
+type AddressingServiceListResponseEnvelopeSuccess bool
 
 const (
-	AddressingServiceListResponseSuccessTrue AddressingServiceListResponseSuccess = true
+	AddressingServiceListResponseEnvelopeSuccessTrue AddressingServiceListResponseEnvelopeSuccess = true
 )

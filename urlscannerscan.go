@@ -39,16 +39,26 @@ func NewURLScannerScanService(opts ...option.RequestOption) (r *URLScannerScanSe
 // per month. If you need more, please reach out.
 func (r *URLScannerScanService) New(ctx context.Context, accountID string, body URLScannerScanNewParams, opts ...option.RequestOption) (res *URLScannerScanNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env URLScannerScanNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Get URL scan by uuid
 func (r *URLScannerScanService) Get(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *URLScannerScanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env URLScannerScanGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s", accountID, scanID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -56,8 +66,13 @@ func (r *URLScannerScanService) Get(ctx context.Context, accountID string, scanI
 // http://www.softwareishard.com/blog/har-12-spec/.
 func (r *URLScannerScanService) Har(ctx context.Context, accountID string, scanID string, opts ...option.RequestOption) (res *URLScannerScanHarResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env URLScannerScanHarResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan/%s/har", accountID, scanID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -71,63 +86,6 @@ func (r *URLScannerScanService) Screenshot(ctx context.Context, accountID string
 }
 
 type URLScannerScanNewResponse struct {
-	Errors   []URLScannerScanNewResponseError   `json:"errors,required"`
-	Messages []URLScannerScanNewResponseMessage `json:"messages,required"`
-	Result   URLScannerScanNewResponseResult    `json:"result,required"`
-	Success  bool                               `json:"success,required"`
-	JSON     urlScannerScanNewResponseJSON      `json:"-"`
-}
-
-// urlScannerScanNewResponseJSON contains the JSON metadata for the struct
-// [URLScannerScanNewResponse]
-type urlScannerScanNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanNewResponseError struct {
-	Message string                             `json:"message,required"`
-	JSON    urlScannerScanNewResponseErrorJSON `json:"-"`
-}
-
-// urlScannerScanNewResponseErrorJSON contains the JSON metadata for the struct
-// [URLScannerScanNewResponseError]
-type urlScannerScanNewResponseErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanNewResponseMessage struct {
-	Message string                               `json:"message,required"`
-	JSON    urlScannerScanNewResponseMessageJSON `json:"-"`
-}
-
-// urlScannerScanNewResponseMessageJSON contains the JSON metadata for the struct
-// [URLScannerScanNewResponseMessage]
-type urlScannerScanNewResponseMessageJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanNewResponseResult struct {
 	// Time when url was submitted for scanning.
 	Time time.Time `json:"time,required" format:"date-time"`
 	// Canonical form of submitted URL. Use this if you want to later search by URL.
@@ -135,13 +93,13 @@ type URLScannerScanNewResponseResult struct {
 	// Scan ID.
 	Uuid string `json:"uuid,required" format:"uuid"`
 	// Submitted visibility status.
-	Visibility string                              `json:"visibility,required"`
-	JSON       urlScannerScanNewResponseResultJSON `json:"-"`
+	Visibility string                        `json:"visibility,required"`
+	JSON       urlScannerScanNewResponseJSON `json:"-"`
 }
 
-// urlScannerScanNewResponseResultJSON contains the JSON metadata for the struct
-// [URLScannerScanNewResponseResult]
-type urlScannerScanNewResponseResultJSON struct {
+// urlScannerScanNewResponseJSON contains the JSON metadata for the struct
+// [URLScannerScanNewResponse]
+type urlScannerScanNewResponseJSON struct {
 	Time        apijson.Field
 	URL         apijson.Field
 	Uuid        apijson.Field
@@ -150,26 +108,19 @@ type urlScannerScanNewResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanNewResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type URLScannerScanGetResponse struct {
-	Errors   []URLScannerScanGetResponseError   `json:"errors,required"`
-	Messages []URLScannerScanGetResponseMessage `json:"messages,required"`
-	Result   URLScannerScanGetResponseResult    `json:"result,required"`
-	// Whether request was successful or not
-	Success bool                          `json:"success,required"`
-	JSON    urlScannerScanGetResponseJSON `json:"-"`
+	Scan URLScannerScanGetResponseScan `json:"scan,required"`
+	JSON urlScannerScanGetResponseJSON `json:"-"`
 }
 
 // urlScannerScanGetResponseJSON contains the JSON metadata for the struct
 // [URLScannerScanGetResponse]
 type urlScannerScanGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Scan        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -178,76 +129,25 @@ func (r *URLScannerScanGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseError struct {
-	Message string                             `json:"message,required"`
-	JSON    urlScannerScanGetResponseErrorJSON `json:"-"`
-}
-
-// urlScannerScanGetResponseErrorJSON contains the JSON metadata for the struct
-// [URLScannerScanGetResponseError]
-type urlScannerScanGetResponseErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanGetResponseMessage struct {
-	Message string                               `json:"message,required"`
-	JSON    urlScannerScanGetResponseMessageJSON `json:"-"`
-}
-
-// urlScannerScanGetResponseMessageJSON contains the JSON metadata for the struct
-// [URLScannerScanGetResponseMessage]
-type urlScannerScanGetResponseMessageJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanGetResponseResult struct {
-	Scan URLScannerScanGetResponseResultScan `json:"scan,required"`
-	JSON urlScannerScanGetResponseResultJSON `json:"-"`
-}
-
-// urlScannerScanGetResponseResultJSON contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResult]
-type urlScannerScanGetResponseResultJSON struct {
-	Scan        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanGetResponseResultScan struct {
-	Certificates []URLScannerScanGetResponseResultScanCertificate `json:"certificates,required"`
-	Geo          URLScannerScanGetResponseResultScanGeo           `json:"geo,required"`
-	Meta         URLScannerScanGetResponseResultScanMeta          `json:"meta,required"`
-	Page         URLScannerScanGetResponseResultScanPage          `json:"page,required"`
-	Performance  []URLScannerScanGetResponseResultScanPerformance `json:"performance,required"`
-	Task         URLScannerScanGetResponseResultScanTask          `json:"task,required"`
-	Verdicts     URLScannerScanGetResponseResultScanVerdicts      `json:"verdicts,required"`
+type URLScannerScanGetResponseScan struct {
+	Certificates []URLScannerScanGetResponseScanCertificate `json:"certificates,required"`
+	Geo          URLScannerScanGetResponseScanGeo           `json:"geo,required"`
+	Meta         URLScannerScanGetResponseScanMeta          `json:"meta,required"`
+	Page         URLScannerScanGetResponseScanPage          `json:"page,required"`
+	Performance  []URLScannerScanGetResponseScanPerformance `json:"performance,required"`
+	Task         URLScannerScanGetResponseScanTask          `json:"task,required"`
+	Verdicts     URLScannerScanGetResponseScanVerdicts      `json:"verdicts,required"`
 	// Dictionary of Autonomous System Numbers where ASN's are the keys
-	Asns    URLScannerScanGetResponseResultScanAsns    `json:"asns"`
-	Domains URLScannerScanGetResponseResultScanDomains `json:"domains"`
-	IPs     URLScannerScanGetResponseResultScanIPs     `json:"ips"`
-	Links   URLScannerScanGetResponseResultScanLinks   `json:"links"`
-	JSON    urlScannerScanGetResponseResultScanJSON    `json:"-"`
+	Asns    URLScannerScanGetResponseScanAsns    `json:"asns"`
+	Domains URLScannerScanGetResponseScanDomains `json:"domains"`
+	IPs     URLScannerScanGetResponseScanIPs     `json:"ips"`
+	Links   URLScannerScanGetResponseScanLinks   `json:"links"`
+	JSON    urlScannerScanGetResponseScanJSON    `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScan]
-type urlScannerScanGetResponseResultScanJSON struct {
+// urlScannerScanGetResponseScanJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScan]
+type urlScannerScanGetResponseScanJSON struct {
 	Certificates apijson.Field
 	Geo          apijson.Field
 	Meta         apijson.Field
@@ -263,21 +163,21 @@ type urlScannerScanGetResponseResultScanJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScan) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScan) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanCertificate struct {
-	Issuer      string                                             `json:"issuer,required"`
-	SubjectName string                                             `json:"subjectName,required"`
-	ValidFrom   float64                                            `json:"validFrom,required"`
-	ValidTo     float64                                            `json:"validTo,required"`
-	JSON        urlScannerScanGetResponseResultScanCertificateJSON `json:"-"`
+type URLScannerScanGetResponseScanCertificate struct {
+	Issuer      string                                       `json:"issuer,required"`
+	SubjectName string                                       `json:"subjectName,required"`
+	ValidFrom   float64                                      `json:"validFrom,required"`
+	ValidTo     float64                                      `json:"validTo,required"`
+	JSON        urlScannerScanGetResponseScanCertificateJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanCertificateJSON contains the JSON metadata
-// for the struct [URLScannerScanGetResponseResultScanCertificate]
-type urlScannerScanGetResponseResultScanCertificateJSON struct {
+// urlScannerScanGetResponseScanCertificateJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanCertificate]
+type urlScannerScanGetResponseScanCertificateJSON struct {
 	Issuer      apijson.Field
 	SubjectName apijson.Field
 	ValidFrom   apijson.Field
@@ -286,60 +186,60 @@ type urlScannerScanGetResponseResultScanCertificateJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanGeo struct {
+type URLScannerScanGetResponseScanGeo struct {
 	// GeoIP continent location
 	Continents []string `json:"continents,required"`
 	// GeoIP country location
-	Locations []string                                   `json:"locations,required"`
-	JSON      urlScannerScanGetResponseResultScanGeoJSON `json:"-"`
+	Locations []string                             `json:"locations,required"`
+	JSON      urlScannerScanGetResponseScanGeoJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanGeoJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanGeo]
-type urlScannerScanGetResponseResultScanGeoJSON struct {
+// urlScannerScanGetResponseScanGeoJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanGeo]
+type urlScannerScanGetResponseScanGeoJSON struct {
 	Continents  apijson.Field
 	Locations   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMeta struct {
-	Processors URLScannerScanGetResponseResultScanMetaProcessors `json:"processors,required"`
-	JSON       urlScannerScanGetResponseResultScanMetaJSON       `json:"-"`
+type URLScannerScanGetResponseScanMeta struct {
+	Processors URLScannerScanGetResponseScanMetaProcessors `json:"processors,required"`
+	JSON       urlScannerScanGetResponseScanMetaJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanMeta]
-type urlScannerScanGetResponseResultScanMetaJSON struct {
+// urlScannerScanGetResponseScanMetaJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanMeta]
+type urlScannerScanGetResponseScanMetaJSON struct {
 	Processors  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessors struct {
-	Categories         URLScannerScanGetResponseResultScanMetaProcessorsCategories `json:"categories,required"`
-	GoogleSafeBrowsing []string                                                    `json:"google_safe_browsing,required"`
-	Phishing           []string                                                    `json:"phishing,required"`
-	Rank               URLScannerScanGetResponseResultScanMetaProcessorsRank       `json:"rank,required"`
-	Tech               []URLScannerScanGetResponseResultScanMetaProcessorsTech     `json:"tech,required"`
-	JSON               urlScannerScanGetResponseResultScanMetaProcessorsJSON       `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessors struct {
+	Categories         URLScannerScanGetResponseScanMetaProcessorsCategories `json:"categories,required"`
+	GoogleSafeBrowsing []string                                              `json:"google_safe_browsing,required"`
+	Phishing           []string                                              `json:"phishing,required"`
+	Rank               URLScannerScanGetResponseScanMetaProcessorsRank       `json:"rank,required"`
+	Tech               []URLScannerScanGetResponseScanMetaProcessorsTech     `json:"tech,required"`
+	JSON               urlScannerScanGetResponseScanMetaProcessorsJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsJSON contains the JSON metadata
-// for the struct [URLScannerScanGetResponseResultScanMetaProcessors]
-type urlScannerScanGetResponseResultScanMetaProcessorsJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsJSON contains the JSON metadata for
+// the struct [URLScannerScanGetResponseScanMetaProcessors]
+type urlScannerScanGetResponseScanMetaProcessorsJSON struct {
 	Categories         apijson.Field
 	GoogleSafeBrowsing apijson.Field
 	Phishing           apijson.Field
@@ -349,63 +249,40 @@ type urlScannerScanGetResponseResultScanMetaProcessorsJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessors) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsCategories struct {
-	Content []URLScannerScanGetResponseResultScanMetaProcessorsCategoriesContent `json:"content,required"`
-	Risks   []URLScannerScanGetResponseResultScanMetaProcessorsCategoriesRisk    `json:"risks,required"`
-	JSON    urlScannerScanGetResponseResultScanMetaProcessorsCategoriesJSON      `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessorsCategories struct {
+	Content []URLScannerScanGetResponseScanMetaProcessorsCategoriesContent `json:"content,required"`
+	Risks   []URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk    `json:"risks,required"`
+	JSON    urlScannerScanGetResponseScanMetaProcessorsCategoriesJSON      `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsCategoriesJSON contains the
-// JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsCategories]
-type urlScannerScanGetResponseResultScanMetaProcessorsCategoriesJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsCategoriesJSON contains the JSON
+// metadata for the struct [URLScannerScanGetResponseScanMetaProcessorsCategories]
+type urlScannerScanGetResponseScanMetaProcessorsCategoriesJSON struct {
 	Content     apijson.Field
 	Risks       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsCategories) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsCategories) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsCategoriesContent struct {
-	ID              int64                                                                  `json:"id,required"`
-	Name            string                                                                 `json:"name,required"`
-	SuperCategoryID int64                                                                  `json:"super_category_id"`
-	JSON            urlScannerScanGetResponseResultScanMetaProcessorsCategoriesContentJSON `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessorsCategoriesContent struct {
+	ID              int64                                                            `json:"id,required"`
+	Name            string                                                           `json:"name,required"`
+	SuperCategoryID int64                                                            `json:"super_category_id"`
+	JSON            urlScannerScanGetResponseScanMetaProcessorsCategoriesContentJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsCategoriesContentJSON contains
-// the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsCategoriesContent]
-type urlScannerScanGetResponseResultScanMetaProcessorsCategoriesContentJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsCategoriesContent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanGetResponseResultScanMetaProcessorsCategoriesRisk struct {
-	ID              int64                                                               `json:"id,required"`
-	Name            string                                                              `json:"name,required"`
-	SuperCategoryID int64                                                               `json:"super_category_id,required"`
-	JSON            urlScannerScanGetResponseResultScanMetaProcessorsCategoriesRiskJSON `json:"-"`
-}
-
-// urlScannerScanGetResponseResultScanMetaProcessorsCategoriesRiskJSON contains the
+// urlScannerScanGetResponseScanMetaProcessorsCategoriesContentJSON contains the
 // JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsCategoriesRisk]
-type urlScannerScanGetResponseResultScanMetaProcessorsCategoriesRiskJSON struct {
+// [URLScannerScanGetResponseScanMetaProcessorsCategoriesContent]
+type urlScannerScanGetResponseScanMetaProcessorsCategoriesContentJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -413,22 +290,44 @@ type urlScannerScanGetResponseResultScanMetaProcessorsCategoriesRiskJSON struct 
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsCategoriesContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsRank struct {
+type URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk struct {
+	ID              int64                                                         `json:"id,required"`
+	Name            string                                                        `json:"name,required"`
+	SuperCategoryID int64                                                         `json:"super_category_id,required"`
+	JSON            urlScannerScanGetResponseScanMetaProcessorsCategoriesRiskJSON `json:"-"`
+}
+
+// urlScannerScanGetResponseScanMetaProcessorsCategoriesRiskJSON contains the JSON
+// metadata for the struct
+// [URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk]
+type urlScannerScanGetResponseScanMetaProcessorsCategoriesRiskJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanGetResponseScanMetaProcessorsRank struct {
 	Bucket string `json:"bucket,required"`
 	Name   string `json:"name,required"`
 	// Rank in the Global Radar Rank, if set. See more at
 	// https://blog.cloudflare.com/radar-domain-rankings/
-	Rank int64                                                     `json:"rank"`
-	JSON urlScannerScanGetResponseResultScanMetaProcessorsRankJSON `json:"-"`
+	Rank int64                                               `json:"rank"`
+	JSON urlScannerScanGetResponseScanMetaProcessorsRankJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsRankJSON contains the JSON
-// metadata for the struct [URLScannerScanGetResponseResultScanMetaProcessorsRank]
-type urlScannerScanGetResponseResultScanMetaProcessorsRankJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsRankJSON contains the JSON metadata
+// for the struct [URLScannerScanGetResponseScanMetaProcessorsRank]
+type urlScannerScanGetResponseScanMetaProcessorsRankJSON struct {
 	Bucket      apijson.Field
 	Name        apijson.Field
 	Rank        apijson.Field
@@ -436,25 +335,25 @@ type urlScannerScanGetResponseResultScanMetaProcessorsRankJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsRank) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsRank) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsTech struct {
-	Categories  []URLScannerScanGetResponseResultScanMetaProcessorsTechCategory `json:"categories,required"`
-	Confidence  int64                                                           `json:"confidence,required"`
-	Evidence    URLScannerScanGetResponseResultScanMetaProcessorsTechEvidence   `json:"evidence,required"`
-	Icon        string                                                          `json:"icon,required"`
-	Name        string                                                          `json:"name,required"`
-	Slug        string                                                          `json:"slug,required"`
-	Website     string                                                          `json:"website,required"`
-	Description string                                                          `json:"description"`
-	JSON        urlScannerScanGetResponseResultScanMetaProcessorsTechJSON       `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessorsTech struct {
+	Categories  []URLScannerScanGetResponseScanMetaProcessorsTechCategory `json:"categories,required"`
+	Confidence  int64                                                     `json:"confidence,required"`
+	Evidence    URLScannerScanGetResponseScanMetaProcessorsTechEvidence   `json:"evidence,required"`
+	Icon        string                                                    `json:"icon,required"`
+	Name        string                                                    `json:"name,required"`
+	Slug        string                                                    `json:"slug,required"`
+	Website     string                                                    `json:"website,required"`
+	Description string                                                    `json:"description"`
+	JSON        urlScannerScanGetResponseScanMetaProcessorsTechJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsTechJSON contains the JSON
-// metadata for the struct [URLScannerScanGetResponseResultScanMetaProcessorsTech]
-type urlScannerScanGetResponseResultScanMetaProcessorsTechJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsTechJSON contains the JSON metadata
+// for the struct [URLScannerScanGetResponseScanMetaProcessorsTech]
+type urlScannerScanGetResponseScanMetaProcessorsTechJSON struct {
 	Categories  apijson.Field
 	Confidence  apijson.Field
 	Evidence    apijson.Field
@@ -467,23 +366,23 @@ type urlScannerScanGetResponseResultScanMetaProcessorsTechJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsTech) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsTech) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsTechCategory struct {
-	ID       int64                                                             `json:"id,required"`
-	Groups   []int64                                                           `json:"groups,required"`
-	Name     string                                                            `json:"name,required"`
-	Priority int64                                                             `json:"priority,required"`
-	Slug     string                                                            `json:"slug,required"`
-	JSON     urlScannerScanGetResponseResultScanMetaProcessorsTechCategoryJSON `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessorsTechCategory struct {
+	ID       int64                                                       `json:"id,required"`
+	Groups   []int64                                                     `json:"groups,required"`
+	Name     string                                                      `json:"name,required"`
+	Priority int64                                                       `json:"priority,required"`
+	Slug     string                                                      `json:"slug,required"`
+	JSON     urlScannerScanGetResponseScanMetaProcessorsTechCategoryJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsTechCategoryJSON contains the
-// JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsTechCategory]
-type urlScannerScanGetResponseResultScanMetaProcessorsTechCategoryJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsTechCategoryJSON contains the JSON
+// metadata for the struct
+// [URLScannerScanGetResponseScanMetaProcessorsTechCategory]
+type urlScannerScanGetResponseScanMetaProcessorsTechCategoryJSON struct {
 	ID          apijson.Field
 	Groups      apijson.Field
 	Name        apijson.Field
@@ -493,48 +392,48 @@ type urlScannerScanGetResponseResultScanMetaProcessorsTechCategoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsTechCategory) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsTechCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsTechEvidence struct {
-	ImpliedBy []string                                                               `json:"impliedBy,required"`
-	Patterns  []URLScannerScanGetResponseResultScanMetaProcessorsTechEvidencePattern `json:"patterns,required"`
-	JSON      urlScannerScanGetResponseResultScanMetaProcessorsTechEvidenceJSON      `json:"-"`
+type URLScannerScanGetResponseScanMetaProcessorsTechEvidence struct {
+	ImpliedBy []string                                                         `json:"impliedBy,required"`
+	Patterns  []URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern `json:"patterns,required"`
+	JSON      urlScannerScanGetResponseScanMetaProcessorsTechEvidenceJSON      `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsTechEvidenceJSON contains the
-// JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsTechEvidence]
-type urlScannerScanGetResponseResultScanMetaProcessorsTechEvidenceJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsTechEvidenceJSON contains the JSON
+// metadata for the struct
+// [URLScannerScanGetResponseScanMetaProcessorsTechEvidence]
+type urlScannerScanGetResponseScanMetaProcessorsTechEvidenceJSON struct {
 	ImpliedBy   apijson.Field
 	Patterns    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsTechEvidence) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsTechEvidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanMetaProcessorsTechEvidencePattern struct {
+type URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern struct {
 	Confidence int64    `json:"confidence,required"`
 	Excludes   []string `json:"excludes,required"`
 	Implies    []string `json:"implies,required"`
 	Match      string   `json:"match,required"`
 	// Header or Cookie name when set
-	Name    string                                                                   `json:"name,required"`
-	Regex   string                                                                   `json:"regex,required"`
-	Type    string                                                                   `json:"type,required"`
-	Value   string                                                                   `json:"value,required"`
-	Version string                                                                   `json:"version,required"`
-	JSON    urlScannerScanGetResponseResultScanMetaProcessorsTechEvidencePatternJSON `json:"-"`
+	Name    string                                                             `json:"name,required"`
+	Regex   string                                                             `json:"regex,required"`
+	Type    string                                                             `json:"type,required"`
+	Value   string                                                             `json:"value,required"`
+	Version string                                                             `json:"version,required"`
+	JSON    urlScannerScanGetResponseScanMetaProcessorsTechEvidencePatternJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanMetaProcessorsTechEvidencePatternJSON
-// contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanMetaProcessorsTechEvidencePattern]
-type urlScannerScanGetResponseResultScanMetaProcessorsTechEvidencePatternJSON struct {
+// urlScannerScanGetResponseScanMetaProcessorsTechEvidencePatternJSON contains the
+// JSON metadata for the struct
+// [URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern]
+type urlScannerScanGetResponseScanMetaProcessorsTechEvidencePatternJSON struct {
 	Confidence  apijson.Field
 	Excludes    apijson.Field
 	Implies     apijson.Field
@@ -548,33 +447,33 @@ type urlScannerScanGetResponseResultScanMetaProcessorsTechEvidencePatternJSON st
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanMetaProcessorsTechEvidencePattern) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPage struct {
-	Asn                   string                                                     `json:"asn,required"`
-	AsnLocationAlpha2     string                                                     `json:"asnLocationAlpha2,required"`
-	Asnname               string                                                     `json:"asnname,required"`
-	Console               []URLScannerScanGetResponseResultScanPageConsole           `json:"console,required"`
-	Cookies               []URLScannerScanGetResponseResultScanPageCooky             `json:"cookies,required"`
-	Country               string                                                     `json:"country,required"`
-	CountryLocationAlpha2 string                                                     `json:"countryLocationAlpha2,required"`
-	Domain                string                                                     `json:"domain,required"`
-	Headers               []URLScannerScanGetResponseResultScanPageHeader            `json:"headers,required"`
-	IP                    string                                                     `json:"ip,required"`
-	Js                    URLScannerScanGetResponseResultScanPageJs                  `json:"js,required"`
-	SecurityViolations    []URLScannerScanGetResponseResultScanPageSecurityViolation `json:"securityViolations,required"`
-	Status                float64                                                    `json:"status,required"`
-	Subdivision1Name      string                                                     `json:"subdivision1Name,required"`
-	Subdivision2name      string                                                     `json:"subdivision2name,required"`
-	URL                   string                                                     `json:"url,required"`
-	JSON                  urlScannerScanGetResponseResultScanPageJSON                `json:"-"`
+type URLScannerScanGetResponseScanPage struct {
+	Asn                   string                                               `json:"asn,required"`
+	AsnLocationAlpha2     string                                               `json:"asnLocationAlpha2,required"`
+	Asnname               string                                               `json:"asnname,required"`
+	Console               []URLScannerScanGetResponseScanPageConsole           `json:"console,required"`
+	Cookies               []URLScannerScanGetResponseScanPageCooky             `json:"cookies,required"`
+	Country               string                                               `json:"country,required"`
+	CountryLocationAlpha2 string                                               `json:"countryLocationAlpha2,required"`
+	Domain                string                                               `json:"domain,required"`
+	Headers               []URLScannerScanGetResponseScanPageHeader            `json:"headers,required"`
+	IP                    string                                               `json:"ip,required"`
+	Js                    URLScannerScanGetResponseScanPageJs                  `json:"js,required"`
+	SecurityViolations    []URLScannerScanGetResponseScanPageSecurityViolation `json:"securityViolations,required"`
+	Status                float64                                              `json:"status,required"`
+	Subdivision1Name      string                                               `json:"subdivision1Name,required"`
+	Subdivision2name      string                                               `json:"subdivision2name,required"`
+	URL                   string                                               `json:"url,required"`
+	JSON                  urlScannerScanGetResponseScanPageJSON                `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanPage]
-type urlScannerScanGetResponseResultScanPageJSON struct {
+// urlScannerScanGetResponseScanPageJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanPage]
+type urlScannerScanGetResponseScanPageJSON struct {
 	Asn                   apijson.Field
 	AsnLocationAlpha2     apijson.Field
 	Asnname               apijson.Field
@@ -595,21 +494,21 @@ type urlScannerScanGetResponseResultScanPageJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPage) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageConsole struct {
-	Category string                                             `json:"category,required"`
-	Text     string                                             `json:"text,required"`
-	Type     string                                             `json:"type,required"`
-	URL      string                                             `json:"url"`
-	JSON     urlScannerScanGetResponseResultScanPageConsoleJSON `json:"-"`
+type URLScannerScanGetResponseScanPageConsole struct {
+	Category string                                       `json:"category,required"`
+	Text     string                                       `json:"text,required"`
+	Type     string                                       `json:"type,required"`
+	URL      string                                       `json:"url"`
+	JSON     urlScannerScanGetResponseScanPageConsoleJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageConsoleJSON contains the JSON metadata
-// for the struct [URLScannerScanGetResponseResultScanPageConsole]
-type urlScannerScanGetResponseResultScanPageConsoleJSON struct {
+// urlScannerScanGetResponseScanPageConsoleJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanPageConsole]
+type urlScannerScanGetResponseScanPageConsoleJSON struct {
 	Category    apijson.Field
 	Text        apijson.Field
 	Type        apijson.Field
@@ -618,30 +517,30 @@ type urlScannerScanGetResponseResultScanPageConsoleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageConsole) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageConsole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageCooky struct {
-	Domain       string                                           `json:"domain,required"`
-	Expires      float64                                          `json:"expires,required"`
-	HTTPOnly     bool                                             `json:"httpOnly,required"`
-	Name         string                                           `json:"name,required"`
-	Path         string                                           `json:"path,required"`
-	SameParty    bool                                             `json:"sameParty,required"`
-	Secure       bool                                             `json:"secure,required"`
-	Session      bool                                             `json:"session,required"`
-	Size         float64                                          `json:"size,required"`
-	SourcePort   float64                                          `json:"sourcePort,required"`
-	SourceScheme string                                           `json:"sourceScheme,required"`
-	Value        string                                           `json:"value,required"`
-	Priority     string                                           `json:"priority"`
-	JSON         urlScannerScanGetResponseResultScanPageCookyJSON `json:"-"`
+type URLScannerScanGetResponseScanPageCooky struct {
+	Domain       string                                     `json:"domain,required"`
+	Expires      float64                                    `json:"expires,required"`
+	HTTPOnly     bool                                       `json:"httpOnly,required"`
+	Name         string                                     `json:"name,required"`
+	Path         string                                     `json:"path,required"`
+	SameParty    bool                                       `json:"sameParty,required"`
+	Secure       bool                                       `json:"secure,required"`
+	Session      bool                                       `json:"session,required"`
+	Size         float64                                    `json:"size,required"`
+	SourcePort   float64                                    `json:"sourcePort,required"`
+	SourceScheme string                                     `json:"sourceScheme,required"`
+	Value        string                                     `json:"value,required"`
+	Priority     string                                     `json:"priority"`
+	JSON         urlScannerScanGetResponseScanPageCookyJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageCookyJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanPageCooky]
-type urlScannerScanGetResponseResultScanPageCookyJSON struct {
+// urlScannerScanGetResponseScanPageCookyJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanPageCooky]
+type urlScannerScanGetResponseScanPageCookyJSON struct {
 	Domain       apijson.Field
 	Expires      apijson.Field
 	HTTPOnly     apijson.Field
@@ -659,76 +558,75 @@ type urlScannerScanGetResponseResultScanPageCookyJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageCooky) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageCooky) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageHeader struct {
-	Name  string                                            `json:"name,required"`
-	Value string                                            `json:"value,required"`
-	JSON  urlScannerScanGetResponseResultScanPageHeaderJSON `json:"-"`
+type URLScannerScanGetResponseScanPageHeader struct {
+	Name  string                                      `json:"name,required"`
+	Value string                                      `json:"value,required"`
+	JSON  urlScannerScanGetResponseScanPageHeaderJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageHeaderJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanPageHeader]
-type urlScannerScanGetResponseResultScanPageHeaderJSON struct {
+// urlScannerScanGetResponseScanPageHeaderJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanPageHeader]
+type urlScannerScanGetResponseScanPageHeaderJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageJs struct {
-	Variables []URLScannerScanGetResponseResultScanPageJsVariable `json:"variables,required"`
-	JSON      urlScannerScanGetResponseResultScanPageJsJSON       `json:"-"`
+type URLScannerScanGetResponseScanPageJs struct {
+	Variables []URLScannerScanGetResponseScanPageJsVariable `json:"variables,required"`
+	JSON      urlScannerScanGetResponseScanPageJsJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageJsJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanPageJs]
-type urlScannerScanGetResponseResultScanPageJsJSON struct {
+// urlScannerScanGetResponseScanPageJsJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanPageJs]
+type urlScannerScanGetResponseScanPageJsJSON struct {
 	Variables   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageJs) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageJs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageJsVariable struct {
-	Name string                                                `json:"name,required"`
-	Type string                                                `json:"type,required"`
-	JSON urlScannerScanGetResponseResultScanPageJsVariableJSON `json:"-"`
+type URLScannerScanGetResponseScanPageJsVariable struct {
+	Name string                                          `json:"name,required"`
+	Type string                                          `json:"type,required"`
+	JSON urlScannerScanGetResponseScanPageJsVariableJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageJsVariableJSON contains the JSON metadata
-// for the struct [URLScannerScanGetResponseResultScanPageJsVariable]
-type urlScannerScanGetResponseResultScanPageJsVariableJSON struct {
+// urlScannerScanGetResponseScanPageJsVariableJSON contains the JSON metadata for
+// the struct [URLScannerScanGetResponseScanPageJsVariable]
+type urlScannerScanGetResponseScanPageJsVariableJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageJsVariable) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageJsVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPageSecurityViolation struct {
-	Category string                                                       `json:"category,required"`
-	Text     string                                                       `json:"text,required"`
-	URL      string                                                       `json:"url,required"`
-	JSON     urlScannerScanGetResponseResultScanPageSecurityViolationJSON `json:"-"`
+type URLScannerScanGetResponseScanPageSecurityViolation struct {
+	Category string                                                 `json:"category,required"`
+	Text     string                                                 `json:"text,required"`
+	URL      string                                                 `json:"url,required"`
+	JSON     urlScannerScanGetResponseScanPageSecurityViolationJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPageSecurityViolationJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanGetResponseResultScanPageSecurityViolation]
-type urlScannerScanGetResponseResultScanPageSecurityViolationJSON struct {
+// urlScannerScanGetResponseScanPageSecurityViolationJSON contains the JSON
+// metadata for the struct [URLScannerScanGetResponseScanPageSecurityViolation]
+type urlScannerScanGetResponseScanPageSecurityViolationJSON struct {
 	Category    apijson.Field
 	Text        apijson.Field
 	URL         apijson.Field
@@ -736,48 +634,48 @@ type urlScannerScanGetResponseResultScanPageSecurityViolationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPageSecurityViolation) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPageSecurityViolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanPerformance struct {
-	ConnectEnd                 float64                                            `json:"connectEnd,required"`
-	ConnectStart               float64                                            `json:"connectStart,required"`
-	DecodedBodySize            float64                                            `json:"decodedBodySize,required"`
-	DomainLookupEnd            float64                                            `json:"domainLookupEnd,required"`
-	DomainLookupStart          float64                                            `json:"domainLookupStart,required"`
-	DomComplete                float64                                            `json:"domComplete,required"`
-	DomContentLoadedEventEnd   float64                                            `json:"domContentLoadedEventEnd,required"`
-	DomContentLoadedEventStart float64                                            `json:"domContentLoadedEventStart,required"`
-	DomInteractive             float64                                            `json:"domInteractive,required"`
-	Duration                   float64                                            `json:"duration,required"`
-	EncodedBodySize            float64                                            `json:"encodedBodySize,required"`
-	EntryType                  string                                             `json:"entryType,required"`
-	FetchStart                 float64                                            `json:"fetchStart,required"`
-	InitiatorType              string                                             `json:"initiatorType,required"`
-	LoadEventEnd               float64                                            `json:"loadEventEnd,required"`
-	LoadEventStart             float64                                            `json:"loadEventStart,required"`
-	Name                       string                                             `json:"name,required"`
-	NextHopProtocol            string                                             `json:"nextHopProtocol,required"`
-	RedirectCount              float64                                            `json:"redirectCount,required"`
-	RedirectEnd                float64                                            `json:"redirectEnd,required"`
-	RedirectStart              float64                                            `json:"redirectStart,required"`
-	RequestStart               float64                                            `json:"requestStart,required"`
-	ResponseEnd                float64                                            `json:"responseEnd,required"`
-	ResponseStart              float64                                            `json:"responseStart,required"`
-	SecureConnectionStart      float64                                            `json:"secureConnectionStart,required"`
-	StartTime                  float64                                            `json:"startTime,required"`
-	TransferSize               float64                                            `json:"transferSize,required"`
-	Type                       string                                             `json:"type,required"`
-	UnloadEventEnd             float64                                            `json:"unloadEventEnd,required"`
-	UnloadEventStart           float64                                            `json:"unloadEventStart,required"`
-	WorkerStart                float64                                            `json:"workerStart,required"`
-	JSON                       urlScannerScanGetResponseResultScanPerformanceJSON `json:"-"`
+type URLScannerScanGetResponseScanPerformance struct {
+	ConnectEnd                 float64                                      `json:"connectEnd,required"`
+	ConnectStart               float64                                      `json:"connectStart,required"`
+	DecodedBodySize            float64                                      `json:"decodedBodySize,required"`
+	DomainLookupEnd            float64                                      `json:"domainLookupEnd,required"`
+	DomainLookupStart          float64                                      `json:"domainLookupStart,required"`
+	DomComplete                float64                                      `json:"domComplete,required"`
+	DomContentLoadedEventEnd   float64                                      `json:"domContentLoadedEventEnd,required"`
+	DomContentLoadedEventStart float64                                      `json:"domContentLoadedEventStart,required"`
+	DomInteractive             float64                                      `json:"domInteractive,required"`
+	Duration                   float64                                      `json:"duration,required"`
+	EncodedBodySize            float64                                      `json:"encodedBodySize,required"`
+	EntryType                  string                                       `json:"entryType,required"`
+	FetchStart                 float64                                      `json:"fetchStart,required"`
+	InitiatorType              string                                       `json:"initiatorType,required"`
+	LoadEventEnd               float64                                      `json:"loadEventEnd,required"`
+	LoadEventStart             float64                                      `json:"loadEventStart,required"`
+	Name                       string                                       `json:"name,required"`
+	NextHopProtocol            string                                       `json:"nextHopProtocol,required"`
+	RedirectCount              float64                                      `json:"redirectCount,required"`
+	RedirectEnd                float64                                      `json:"redirectEnd,required"`
+	RedirectStart              float64                                      `json:"redirectStart,required"`
+	RequestStart               float64                                      `json:"requestStart,required"`
+	ResponseEnd                float64                                      `json:"responseEnd,required"`
+	ResponseStart              float64                                      `json:"responseStart,required"`
+	SecureConnectionStart      float64                                      `json:"secureConnectionStart,required"`
+	StartTime                  float64                                      `json:"startTime,required"`
+	TransferSize               float64                                      `json:"transferSize,required"`
+	Type                       string                                       `json:"type,required"`
+	UnloadEventEnd             float64                                      `json:"unloadEventEnd,required"`
+	UnloadEventStart           float64                                      `json:"unloadEventStart,required"`
+	WorkerStart                float64                                      `json:"workerStart,required"`
+	JSON                       urlScannerScanGetResponseScanPerformanceJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanPerformanceJSON contains the JSON metadata
-// for the struct [URLScannerScanGetResponseResultScanPerformance]
-type urlScannerScanGetResponseResultScanPerformanceJSON struct {
+// urlScannerScanGetResponseScanPerformanceJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanPerformance]
+type urlScannerScanGetResponseScanPerformanceJSON struct {
 	ConnectEnd                 apijson.Field
 	ConnectStart               apijson.Field
 	DecodedBodySize            apijson.Field
@@ -813,33 +711,33 @@ type urlScannerScanGetResponseResultScanPerformanceJSON struct {
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanPerformance) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanPerformance) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanTask struct {
+type URLScannerScanGetResponseScanTask struct {
 	// Submitter location
-	ClientLocation string                                            `json:"clientLocation,required"`
-	ClientType     URLScannerScanGetResponseResultScanTaskClientType `json:"clientType,required"`
+	ClientLocation string                                      `json:"clientLocation,required"`
+	ClientType     URLScannerScanGetResponseScanTaskClientType `json:"clientType,required"`
 	// URL of the primary request, after all HTTP redirects
-	EffectiveURL string                                             `json:"effectiveUrl,required"`
-	Errors       []URLScannerScanGetResponseResultScanTaskError     `json:"errors,required"`
-	ScannedFrom  URLScannerScanGetResponseResultScanTaskScannedFrom `json:"scannedFrom,required"`
-	Status       URLScannerScanGetResponseResultScanTaskStatus      `json:"status,required"`
-	Success      bool                                               `json:"success,required"`
-	Time         string                                             `json:"time,required"`
-	TimeEnd      string                                             `json:"timeEnd,required"`
+	EffectiveURL string                                       `json:"effectiveUrl,required"`
+	Errors       []URLScannerScanGetResponseScanTaskError     `json:"errors,required"`
+	ScannedFrom  URLScannerScanGetResponseScanTaskScannedFrom `json:"scannedFrom,required"`
+	Status       URLScannerScanGetResponseScanTaskStatus      `json:"status,required"`
+	Success      bool                                         `json:"success,required"`
+	Time         string                                       `json:"time,required"`
+	TimeEnd      string                                       `json:"timeEnd,required"`
 	// Submitted URL
 	URL string `json:"url,required"`
 	// Scan ID
-	Uuid       string                                            `json:"uuid,required"`
-	Visibility URLScannerScanGetResponseResultScanTaskVisibility `json:"visibility,required"`
-	JSON       urlScannerScanGetResponseResultScanTaskJSON       `json:"-"`
+	Uuid       string                                      `json:"uuid,required"`
+	Visibility URLScannerScanGetResponseScanTaskVisibility `json:"visibility,required"`
+	JSON       urlScannerScanGetResponseScanTaskJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanTaskJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanTask]
-type urlScannerScanGetResponseResultScanTaskJSON struct {
+// urlScannerScanGetResponseScanTaskJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanTask]
+type urlScannerScanGetResponseScanTaskJSON struct {
 	ClientLocation apijson.Field
 	ClientType     apijson.Field
 	EffectiveURL   apijson.Field
@@ -856,100 +754,100 @@ type urlScannerScanGetResponseResultScanTaskJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanTask) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanTask) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanTaskClientType string
+type URLScannerScanGetResponseScanTaskClientType string
 
 const (
-	URLScannerScanGetResponseResultScanTaskClientTypeSite      URLScannerScanGetResponseResultScanTaskClientType = "Site"
-	URLScannerScanGetResponseResultScanTaskClientTypeAutomatic URLScannerScanGetResponseResultScanTaskClientType = "Automatic"
-	URLScannerScanGetResponseResultScanTaskClientTypeAPI       URLScannerScanGetResponseResultScanTaskClientType = "Api"
+	URLScannerScanGetResponseScanTaskClientTypeSite      URLScannerScanGetResponseScanTaskClientType = "Site"
+	URLScannerScanGetResponseScanTaskClientTypeAutomatic URLScannerScanGetResponseScanTaskClientType = "Automatic"
+	URLScannerScanGetResponseScanTaskClientTypeAPI       URLScannerScanGetResponseScanTaskClientType = "Api"
 )
 
-type URLScannerScanGetResponseResultScanTaskError struct {
-	Message string                                           `json:"message,required"`
-	JSON    urlScannerScanGetResponseResultScanTaskErrorJSON `json:"-"`
+type URLScannerScanGetResponseScanTaskError struct {
+	Message string                                     `json:"message,required"`
+	JSON    urlScannerScanGetResponseScanTaskErrorJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanTaskErrorJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanTaskError]
-type urlScannerScanGetResponseResultScanTaskErrorJSON struct {
+// urlScannerScanGetResponseScanTaskErrorJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanTaskError]
+type urlScannerScanGetResponseScanTaskErrorJSON struct {
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanTaskError) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanTaskError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanTaskScannedFrom struct {
+type URLScannerScanGetResponseScanTaskScannedFrom struct {
 	// IATA code of Cloudflare datacenter
-	Colo string                                                 `json:"colo,required"`
-	JSON urlScannerScanGetResponseResultScanTaskScannedFromJSON `json:"-"`
+	Colo string                                           `json:"colo,required"`
+	JSON urlScannerScanGetResponseScanTaskScannedFromJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanTaskScannedFromJSON contains the JSON
-// metadata for the struct [URLScannerScanGetResponseResultScanTaskScannedFrom]
-type urlScannerScanGetResponseResultScanTaskScannedFromJSON struct {
+// urlScannerScanGetResponseScanTaskScannedFromJSON contains the JSON metadata for
+// the struct [URLScannerScanGetResponseScanTaskScannedFrom]
+type urlScannerScanGetResponseScanTaskScannedFromJSON struct {
 	Colo        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanTaskScannedFrom) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanTaskScannedFrom) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanTaskStatus string
+type URLScannerScanGetResponseScanTaskStatus string
 
 const (
-	URLScannerScanGetResponseResultScanTaskStatusQueued           URLScannerScanGetResponseResultScanTaskStatus = "Queued"
-	URLScannerScanGetResponseResultScanTaskStatusInProgress       URLScannerScanGetResponseResultScanTaskStatus = "InProgress"
-	URLScannerScanGetResponseResultScanTaskStatusInPostProcessing URLScannerScanGetResponseResultScanTaskStatus = "InPostProcessing"
-	URLScannerScanGetResponseResultScanTaskStatusFinished         URLScannerScanGetResponseResultScanTaskStatus = "Finished"
+	URLScannerScanGetResponseScanTaskStatusQueued           URLScannerScanGetResponseScanTaskStatus = "Queued"
+	URLScannerScanGetResponseScanTaskStatusInProgress       URLScannerScanGetResponseScanTaskStatus = "InProgress"
+	URLScannerScanGetResponseScanTaskStatusInPostProcessing URLScannerScanGetResponseScanTaskStatus = "InPostProcessing"
+	URLScannerScanGetResponseScanTaskStatusFinished         URLScannerScanGetResponseScanTaskStatus = "Finished"
 )
 
-type URLScannerScanGetResponseResultScanTaskVisibility string
+type URLScannerScanGetResponseScanTaskVisibility string
 
 const (
-	URLScannerScanGetResponseResultScanTaskVisibilityPublic   URLScannerScanGetResponseResultScanTaskVisibility = "Public"
-	URLScannerScanGetResponseResultScanTaskVisibilityUnlisted URLScannerScanGetResponseResultScanTaskVisibility = "Unlisted"
+	URLScannerScanGetResponseScanTaskVisibilityPublic   URLScannerScanGetResponseScanTaskVisibility = "Public"
+	URLScannerScanGetResponseScanTaskVisibilityUnlisted URLScannerScanGetResponseScanTaskVisibility = "Unlisted"
 )
 
-type URLScannerScanGetResponseResultScanVerdicts struct {
-	Overall URLScannerScanGetResponseResultScanVerdictsOverall `json:"overall,required"`
-	JSON    urlScannerScanGetResponseResultScanVerdictsJSON    `json:"-"`
+type URLScannerScanGetResponseScanVerdicts struct {
+	Overall URLScannerScanGetResponseScanVerdictsOverall `json:"overall,required"`
+	JSON    urlScannerScanGetResponseScanVerdictsJSON    `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanVerdictsJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanVerdicts]
-type urlScannerScanGetResponseResultScanVerdictsJSON struct {
+// urlScannerScanGetResponseScanVerdictsJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanVerdicts]
+type urlScannerScanGetResponseScanVerdictsJSON struct {
 	Overall     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanVerdicts) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanVerdicts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanVerdictsOverall struct {
-	Categories []URLScannerScanGetResponseResultScanVerdictsOverallCategory `json:"categories,required"`
+type URLScannerScanGetResponseScanVerdictsOverall struct {
+	Categories []URLScannerScanGetResponseScanVerdictsOverallCategory `json:"categories,required"`
 	// Please visit https://safebrowsing.google.com/ for more information.
 	GsbThreatTypes []string `json:"gsb_threat_types,required"`
 	// At least one of our subsystems marked the site as potentially malicious at the
 	// time of the scan.
-	Malicious bool                                                   `json:"malicious,required"`
-	Phishing  []string                                               `json:"phishing,required"`
-	JSON      urlScannerScanGetResponseResultScanVerdictsOverallJSON `json:"-"`
+	Malicious bool                                             `json:"malicious,required"`
+	Phishing  []string                                         `json:"phishing,required"`
+	JSON      urlScannerScanGetResponseScanVerdictsOverallJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanVerdictsOverallJSON contains the JSON
-// metadata for the struct [URLScannerScanGetResponseResultScanVerdictsOverall]
-type urlScannerScanGetResponseResultScanVerdictsOverallJSON struct {
+// urlScannerScanGetResponseScanVerdictsOverallJSON contains the JSON metadata for
+// the struct [URLScannerScanGetResponseScanVerdictsOverall]
+type urlScannerScanGetResponseScanVerdictsOverallJSON struct {
 	Categories     apijson.Field
 	GsbThreatTypes apijson.Field
 	Malicious      apijson.Field
@@ -958,21 +856,20 @@ type urlScannerScanGetResponseResultScanVerdictsOverallJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanVerdictsOverall) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanVerdictsOverall) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanVerdictsOverallCategory struct {
-	ID              float64                                                        `json:"id,required"`
-	Name            string                                                         `json:"name,required"`
-	SuperCategoryID float64                                                        `json:"super_category_id,required"`
-	JSON            urlScannerScanGetResponseResultScanVerdictsOverallCategoryJSON `json:"-"`
+type URLScannerScanGetResponseScanVerdictsOverallCategory struct {
+	ID              float64                                                  `json:"id,required"`
+	Name            string                                                   `json:"name,required"`
+	SuperCategoryID float64                                                  `json:"super_category_id,required"`
+	JSON            urlScannerScanGetResponseScanVerdictsOverallCategoryJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanVerdictsOverallCategoryJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanGetResponseResultScanVerdictsOverallCategory]
-type urlScannerScanGetResponseResultScanVerdictsOverallCategoryJSON struct {
+// urlScannerScanGetResponseScanVerdictsOverallCategoryJSON contains the JSON
+// metadata for the struct [URLScannerScanGetResponseScanVerdictsOverallCategory]
+type urlScannerScanGetResponseScanVerdictsOverallCategoryJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -980,42 +877,42 @@ type urlScannerScanGetResponseResultScanVerdictsOverallCategoryJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanVerdictsOverallCategory) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanVerdictsOverallCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Dictionary of Autonomous System Numbers where ASN's are the keys
-type URLScannerScanGetResponseResultScanAsns struct {
+type URLScannerScanGetResponseScanAsns struct {
 	// ASN's contacted
-	Asn  URLScannerScanGetResponseResultScanAsnsAsn  `json:"asn"`
-	JSON urlScannerScanGetResponseResultScanAsnsJSON `json:"-"`
+	Asn  URLScannerScanGetResponseScanAsnsAsn  `json:"asn"`
+	JSON urlScannerScanGetResponseScanAsnsJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanAsnsJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanAsns]
-type urlScannerScanGetResponseResultScanAsnsJSON struct {
+// urlScannerScanGetResponseScanAsnsJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanAsns]
+type urlScannerScanGetResponseScanAsnsJSON struct {
 	Asn         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanAsns) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanAsns) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ASN's contacted
-type URLScannerScanGetResponseResultScanAsnsAsn struct {
-	Asn            string                                         `json:"asn,required"`
-	Description    string                                         `json:"description,required"`
-	LocationAlpha2 string                                         `json:"location_alpha2,required"`
-	Name           string                                         `json:"name,required"`
-	OrgName        string                                         `json:"org_name,required"`
-	JSON           urlScannerScanGetResponseResultScanAsnsAsnJSON `json:"-"`
+type URLScannerScanGetResponseScanAsnsAsn struct {
+	Asn            string                                   `json:"asn,required"`
+	Description    string                                   `json:"description,required"`
+	LocationAlpha2 string                                   `json:"location_alpha2,required"`
+	Name           string                                   `json:"name,required"`
+	OrgName        string                                   `json:"org_name,required"`
+	JSON           urlScannerScanGetResponseScanAsnsAsnJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanAsnsAsnJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanAsnsAsn]
-type urlScannerScanGetResponseResultScanAsnsAsnJSON struct {
+// urlScannerScanGetResponseScanAsnsAsnJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanAsnsAsn]
+type urlScannerScanGetResponseScanAsnsAsnJSON struct {
 	Asn            apijson.Field
 	Description    apijson.Field
 	LocationAlpha2 apijson.Field
@@ -1025,39 +922,39 @@ type urlScannerScanGetResponseResultScanAsnsAsnJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanAsnsAsn) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanAsnsAsn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomains struct {
-	ExampleCom URLScannerScanGetResponseResultScanDomainsExampleCom `json:"example.com"`
-	JSON       urlScannerScanGetResponseResultScanDomainsJSON       `json:"-"`
+type URLScannerScanGetResponseScanDomains struct {
+	ExampleCom URLScannerScanGetResponseScanDomainsExampleCom `json:"example.com"`
+	JSON       urlScannerScanGetResponseScanDomainsJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanDomains]
-type urlScannerScanGetResponseResultScanDomainsJSON struct {
+// urlScannerScanGetResponseScanDomainsJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanDomains]
+type urlScannerScanGetResponseScanDomainsJSON struct {
 	ExampleCom  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomains) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomains) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleCom struct {
-	Categories URLScannerScanGetResponseResultScanDomainsExampleComCategories `json:"categories,required"`
-	DNS        []URLScannerScanGetResponseResultScanDomainsExampleComDNS      `json:"dns,required"`
-	Name       string                                                         `json:"name,required"`
-	Rank       URLScannerScanGetResponseResultScanDomainsExampleComRank       `json:"rank,required"`
-	Type       string                                                         `json:"type,required"`
-	JSON       urlScannerScanGetResponseResultScanDomainsExampleComJSON       `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleCom struct {
+	Categories URLScannerScanGetResponseScanDomainsExampleComCategories `json:"categories,required"`
+	DNS        []URLScannerScanGetResponseScanDomainsExampleComDNS      `json:"dns,required"`
+	Name       string                                                   `json:"name,required"`
+	Rank       URLScannerScanGetResponseScanDomainsExampleComRank       `json:"rank,required"`
+	Type       string                                                   `json:"type,required"`
+	JSON       urlScannerScanGetResponseScanDomainsExampleComJSON       `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComJSON contains the JSON
-// metadata for the struct [URLScannerScanGetResponseResultScanDomainsExampleCom]
-type urlScannerScanGetResponseResultScanDomainsExampleComJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComJSON contains the JSON metadata
+// for the struct [URLScannerScanGetResponseScanDomainsExampleCom]
+type urlScannerScanGetResponseScanDomainsExampleComJSON struct {
 	Categories  apijson.Field
 	DNS         apijson.Field
 	Name        apijson.Field
@@ -1067,21 +964,21 @@ type urlScannerScanGetResponseResultScanDomainsExampleComJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleCom) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleCom) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComCategories struct {
-	Inherited URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInherited `json:"inherited,required"`
-	Content   []URLScannerScanGetResponseResultScanDomainsExampleComCategoriesContent `json:"content"`
-	Risks     []URLScannerScanGetResponseResultScanDomainsExampleComCategoriesRisk    `json:"risks"`
-	JSON      urlScannerScanGetResponseResultScanDomainsExampleComCategoriesJSON      `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleComCategories struct {
+	Inherited URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited `json:"inherited,required"`
+	Content   []URLScannerScanGetResponseScanDomainsExampleComCategoriesContent `json:"content"`
+	Risks     []URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk    `json:"risks"`
+	JSON      urlScannerScanGetResponseScanDomainsExampleComCategoriesJSON      `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesJSON contains the
-// JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategories]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesJSON contains the JSON
+// metadata for the struct
+// [URLScannerScanGetResponseScanDomainsExampleComCategories]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesJSON struct {
 	Inherited   apijson.Field
 	Content     apijson.Field
 	Risks       apijson.Field
@@ -1089,21 +986,21 @@ type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategories) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategories) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInherited struct {
-	Content []URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContent `json:"content"`
-	From    string                                                                           `json:"from"`
-	Risks   []URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRisk    `json:"risks"`
-	JSON    urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedJSON      `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited struct {
+	Content []URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent `json:"content"`
+	From    string                                                                     `json:"from"`
+	Risks   []URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk    `json:"risks"`
+	JSON    urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedJSON      `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedJSON
-// contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInherited]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedJSON contains
+// the JSON metadata for the struct
+// [URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedJSON struct {
 	Content     apijson.Field
 	From        apijson.Field
 	Risks       apijson.Field
@@ -1111,21 +1008,21 @@ type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInherited) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContent struct {
-	ID              int64                                                                              `json:"id,required"`
-	Name            string                                                                             `json:"name,required"`
-	SuperCategoryID int64                                                                              `json:"super_category_id"`
-	JSON            urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContentJSON `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent struct {
+	ID              int64                                                                        `json:"id,required"`
+	Name            string                                                                       `json:"name,required"`
+	SuperCategoryID int64                                                                        `json:"super_category_id"`
+	JSON            urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContentJSON
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON
 // contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContent]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContentJSON struct {
+// [URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -1133,43 +1030,21 @@ type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedCont
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedContent) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRisk struct {
-	ID              int64                                                                           `json:"id,required"`
-	Name            string                                                                          `json:"name,required"`
-	SuperCategoryID int64                                                                           `json:"super_category_id"`
-	JSON            urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRiskJSON `json:"-"`
-}
-
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRiskJSON
-// contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRisk]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRiskJSON struct {
-	ID              apijson.Field
-	Name            apijson.Field
-	SuperCategoryID apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategoriesInheritedRisk) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanGetResponseResultScanDomainsExampleComCategoriesContent struct {
+type URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk struct {
 	ID              int64                                                                     `json:"id,required"`
 	Name            string                                                                    `json:"name,required"`
 	SuperCategoryID int64                                                                     `json:"super_category_id"`
-	JSON            urlScannerScanGetResponseResultScanDomainsExampleComCategoriesContentJSON `json:"-"`
+	JSON            urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesContentJSON
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON
 // contains the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategoriesContent]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesContentJSON struct {
+// [URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -1177,21 +1052,21 @@ type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesContentJSON s
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategoriesContent) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComCategoriesRisk struct {
-	ID              int64                                                                  `json:"id,required"`
-	Name            string                                                                 `json:"name,required"`
-	SuperCategoryID int64                                                                  `json:"super_category_id"`
-	JSON            urlScannerScanGetResponseResultScanDomainsExampleComCategoriesRiskJSON `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleComCategoriesContent struct {
+	ID              int64                                                               `json:"id,required"`
+	Name            string                                                              `json:"name,required"`
+	SuperCategoryID int64                                                               `json:"super_category_id"`
+	JSON            urlScannerScanGetResponseScanDomainsExampleComCategoriesContentJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComCategoriesRiskJSON contains
-// the JSON metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComCategoriesRisk]
-type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesRiskJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesContentJSON contains the
+// JSON metadata for the struct
+// [URLScannerScanGetResponseScanDomainsExampleComCategoriesContent]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesContentJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -1199,22 +1074,43 @@ type urlScannerScanGetResponseResultScanDomainsExampleComCategoriesRiskJSON stru
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComDNS struct {
-	Address     string                                                      `json:"address,required"`
-	DnssecValid bool                                                        `json:"dnssec_valid,required"`
-	Name        string                                                      `json:"name,required"`
-	Type        string                                                      `json:"type,required"`
-	JSON        urlScannerScanGetResponseResultScanDomainsExampleComDNSJSON `json:"-"`
+type URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk struct {
+	ID              int64                                                            `json:"id,required"`
+	Name            string                                                           `json:"name,required"`
+	SuperCategoryID int64                                                            `json:"super_category_id"`
+	JSON            urlScannerScanGetResponseScanDomainsExampleComCategoriesRiskJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComDNSJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComDNS]
-type urlScannerScanGetResponseResultScanDomainsExampleComDNSJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComCategoriesRiskJSON contains the
+// JSON metadata for the struct
+// [URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk]
+type urlScannerScanGetResponseScanDomainsExampleComCategoriesRiskJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanGetResponseScanDomainsExampleComDNS struct {
+	Address     string                                                `json:"address,required"`
+	DnssecValid bool                                                  `json:"dnssec_valid,required"`
+	Name        string                                                `json:"name,required"`
+	Type        string                                                `json:"type,required"`
+	JSON        urlScannerScanGetResponseScanDomainsExampleComDNSJSON `json:"-"`
+}
+
+// urlScannerScanGetResponseScanDomainsExampleComDNSJSON contains the JSON metadata
+// for the struct [URLScannerScanGetResponseScanDomainsExampleComDNS]
+type urlScannerScanGetResponseScanDomainsExampleComDNSJSON struct {
 	Address     apijson.Field
 	DnssecValid apijson.Field
 	Name        apijson.Field
@@ -1223,23 +1119,22 @@ type urlScannerScanGetResponseResultScanDomainsExampleComDNSJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComDNS) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComDNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanDomainsExampleComRank struct {
+type URLScannerScanGetResponseScanDomainsExampleComRank struct {
 	Bucket string `json:"bucket,required"`
 	Name   string `json:"name,required"`
 	// Rank in the Global Radar Rank, if set. See more at
 	// https://blog.cloudflare.com/radar-domain-rankings/
-	Rank int64                                                        `json:"rank"`
-	JSON urlScannerScanGetResponseResultScanDomainsExampleComRankJSON `json:"-"`
+	Rank int64                                                  `json:"rank"`
+	JSON urlScannerScanGetResponseScanDomainsExampleComRankJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanDomainsExampleComRankJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanGetResponseResultScanDomainsExampleComRank]
-type urlScannerScanGetResponseResultScanDomainsExampleComRankJSON struct {
+// urlScannerScanGetResponseScanDomainsExampleComRankJSON contains the JSON
+// metadata for the struct [URLScannerScanGetResponseScanDomainsExampleComRank]
+type urlScannerScanGetResponseScanDomainsExampleComRankJSON struct {
 	Bucket      apijson.Field
 	Name        apijson.Field
 	Rank        apijson.Field
@@ -1247,49 +1142,49 @@ type urlScannerScanGetResponseResultScanDomainsExampleComRankJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanDomainsExampleComRank) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanDomainsExampleComRank) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanIPs struct {
-	IP   URLScannerScanGetResponseResultScanIPsIP   `json:"ip"`
-	JSON urlScannerScanGetResponseResultScanIPsJSON `json:"-"`
+type URLScannerScanGetResponseScanIPs struct {
+	IP   URLScannerScanGetResponseScanIPsIP   `json:"ip"`
+	JSON urlScannerScanGetResponseScanIPsJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanIPsJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanIPs]
-type urlScannerScanGetResponseResultScanIPsJSON struct {
+// urlScannerScanGetResponseScanIPsJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanIPs]
+type urlScannerScanGetResponseScanIPsJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanIPs) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanIPsIP struct {
-	Asn               string                                       `json:"asn,required"`
-	AsnDescription    string                                       `json:"asnDescription,required"`
-	AsnLocationAlpha2 string                                       `json:"asnLocationAlpha2,required"`
-	AsnName           string                                       `json:"asnName,required"`
-	AsnOrgName        string                                       `json:"asnOrgName,required"`
-	Continent         string                                       `json:"continent,required"`
-	GeonameID         string                                       `json:"geonameId,required"`
-	IP                string                                       `json:"ip,required"`
-	IPVersion         string                                       `json:"ipVersion,required"`
-	Latitude          string                                       `json:"latitude,required"`
-	LocationAlpha2    string                                       `json:"locationAlpha2,required"`
-	LocationName      string                                       `json:"locationName,required"`
-	Longitude         string                                       `json:"longitude,required"`
-	Subdivision1Name  string                                       `json:"subdivision1Name,required"`
-	Subdivision2Name  string                                       `json:"subdivision2Name,required"`
-	JSON              urlScannerScanGetResponseResultScanIPsIPJSON `json:"-"`
+type URLScannerScanGetResponseScanIPsIP struct {
+	Asn               string                                 `json:"asn,required"`
+	AsnDescription    string                                 `json:"asnDescription,required"`
+	AsnLocationAlpha2 string                                 `json:"asnLocationAlpha2,required"`
+	AsnName           string                                 `json:"asnName,required"`
+	AsnOrgName        string                                 `json:"asnOrgName,required"`
+	Continent         string                                 `json:"continent,required"`
+	GeonameID         string                                 `json:"geonameId,required"`
+	IP                string                                 `json:"ip,required"`
+	IPVersion         string                                 `json:"ipVersion,required"`
+	Latitude          string                                 `json:"latitude,required"`
+	LocationAlpha2    string                                 `json:"locationAlpha2,required"`
+	LocationName      string                                 `json:"locationName,required"`
+	Longitude         string                                 `json:"longitude,required"`
+	Subdivision1Name  string                                 `json:"subdivision1Name,required"`
+	Subdivision2Name  string                                 `json:"subdivision2Name,required"`
+	JSON              urlScannerScanGetResponseScanIPsIPJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanIPsIPJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanIPsIP]
-type urlScannerScanGetResponseResultScanIPsIPJSON struct {
+// urlScannerScanGetResponseScanIPsIPJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanIPsIP]
+type urlScannerScanGetResponseScanIPsIPJSON struct {
 	Asn               apijson.Field
 	AsnDescription    apijson.Field
 	AsnLocationAlpha2 apijson.Field
@@ -1309,63 +1204,56 @@ type urlScannerScanGetResponseResultScanIPsIPJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanIPsIP) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanIPsIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanLinks struct {
-	Link URLScannerScanGetResponseResultScanLinksLink `json:"link"`
-	JSON urlScannerScanGetResponseResultScanLinksJSON `json:"-"`
+type URLScannerScanGetResponseScanLinks struct {
+	Link URLScannerScanGetResponseScanLinksLink `json:"link"`
+	JSON urlScannerScanGetResponseScanLinksJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanLinksJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseResultScanLinks]
-type urlScannerScanGetResponseResultScanLinksJSON struct {
+// urlScannerScanGetResponseScanLinksJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanLinks]
+type urlScannerScanGetResponseScanLinksJSON struct {
 	Link        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanLinks) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanLinks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanGetResponseResultScanLinksLink struct {
+type URLScannerScanGetResponseScanLinksLink struct {
 	// Outgoing link detected in the DOM
-	Href string                                           `json:"href,required"`
-	Text string                                           `json:"text,required"`
-	JSON urlScannerScanGetResponseResultScanLinksLinkJSON `json:"-"`
+	Href string                                     `json:"href,required"`
+	Text string                                     `json:"text,required"`
+	JSON urlScannerScanGetResponseScanLinksLinkJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseResultScanLinksLinkJSON contains the JSON metadata for
-// the struct [URLScannerScanGetResponseResultScanLinksLink]
-type urlScannerScanGetResponseResultScanLinksLinkJSON struct {
+// urlScannerScanGetResponseScanLinksLinkJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanLinksLink]
+type urlScannerScanGetResponseScanLinksLinkJSON struct {
 	Href        apijson.Field
 	Text        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseResultScanLinksLink) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanLinksLink) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type URLScannerScanHarResponse struct {
-	Errors   []URLScannerScanHarResponseError   `json:"errors,required"`
-	Messages []URLScannerScanHarResponseMessage `json:"messages,required"`
-	Result   URLScannerScanHarResponseResult    `json:"result,required"`
-	// Whether search request was successful or not
-	Success bool                          `json:"success,required"`
-	JSON    urlScannerScanHarResponseJSON `json:"-"`
+	Har  URLScannerScanHarResponseHar  `json:"har,required"`
+	JSON urlScannerScanHarResponseJSON `json:"-"`
 }
 
 // urlScannerScanHarResponseJSON contains the JSON metadata for the struct
 // [URLScannerScanHarResponse]
 type urlScannerScanHarResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Har         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1374,85 +1262,34 @@ func (r *URLScannerScanHarResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseError struct {
-	Message string                             `json:"message,required"`
-	JSON    urlScannerScanHarResponseErrorJSON `json:"-"`
+type URLScannerScanHarResponseHar struct {
+	Log  URLScannerScanHarResponseHarLog  `json:"log,required"`
+	JSON urlScannerScanHarResponseHarJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseErrorJSON contains the JSON metadata for the struct
-// [URLScannerScanHarResponseError]
-type urlScannerScanHarResponseErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanHarResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanHarResponseMessage struct {
-	Message string                               `json:"message,required"`
-	JSON    urlScannerScanHarResponseMessageJSON `json:"-"`
-}
-
-// urlScannerScanHarResponseMessageJSON contains the JSON metadata for the struct
-// [URLScannerScanHarResponseMessage]
-type urlScannerScanHarResponseMessageJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanHarResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanHarResponseResult struct {
-	Har  URLScannerScanHarResponseResultHar  `json:"har,required"`
-	JSON urlScannerScanHarResponseResultJSON `json:"-"`
-}
-
-// urlScannerScanHarResponseResultJSON contains the JSON metadata for the struct
-// [URLScannerScanHarResponseResult]
-type urlScannerScanHarResponseResultJSON struct {
-	Har         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanHarResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanHarResponseResultHar struct {
-	Log  URLScannerScanHarResponseResultHarLog  `json:"log,required"`
-	JSON urlScannerScanHarResponseResultHarJSON `json:"-"`
-}
-
-// urlScannerScanHarResponseResultHarJSON contains the JSON metadata for the struct
-// [URLScannerScanHarResponseResultHar]
-type urlScannerScanHarResponseResultHarJSON struct {
+// urlScannerScanHarResponseHarJSON contains the JSON metadata for the struct
+// [URLScannerScanHarResponseHar]
+type urlScannerScanHarResponseHarJSON struct {
 	Log         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHar) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHar) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLog struct {
-	Creator URLScannerScanHarResponseResultHarLogCreator `json:"creator,required"`
-	Entries []URLScannerScanHarResponseResultHarLogEntry `json:"entries,required"`
-	Pages   []URLScannerScanHarResponseResultHarLogPage  `json:"pages,required"`
-	Version string                                       `json:"version,required"`
-	JSON    urlScannerScanHarResponseResultHarLogJSON    `json:"-"`
+type URLScannerScanHarResponseHarLog struct {
+	Creator URLScannerScanHarResponseHarLogCreator `json:"creator,required"`
+	Entries []URLScannerScanHarResponseHarLogEntry `json:"entries,required"`
+	Pages   []URLScannerScanHarResponseHarLogPage  `json:"pages,required"`
+	Version string                                 `json:"version,required"`
+	JSON    urlScannerScanHarResponseHarLogJSON    `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogJSON contains the JSON metadata for the
-// struct [URLScannerScanHarResponseResultHarLog]
-type urlScannerScanHarResponseResultHarLogJSON struct {
+// urlScannerScanHarResponseHarLogJSON contains the JSON metadata for the struct
+// [URLScannerScanHarResponseHarLog]
+type urlScannerScanHarResponseHarLogJSON struct {
 	Creator     apijson.Field
 	Entries     apijson.Field
 	Pages       apijson.Field
@@ -1461,20 +1298,20 @@ type urlScannerScanHarResponseResultHarLogJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLog) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogCreator struct {
-	Comment string                                           `json:"comment,required"`
-	Name    string                                           `json:"name,required"`
-	Version string                                           `json:"version,required"`
-	JSON    urlScannerScanHarResponseResultHarLogCreatorJSON `json:"-"`
+type URLScannerScanHarResponseHarLogCreator struct {
+	Comment string                                     `json:"comment,required"`
+	Name    string                                     `json:"name,required"`
+	Version string                                     `json:"version,required"`
+	JSON    urlScannerScanHarResponseHarLogCreatorJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogCreatorJSON contains the JSON metadata for
-// the struct [URLScannerScanHarResponseResultHarLogCreator]
-type urlScannerScanHarResponseResultHarLogCreatorJSON struct {
+// urlScannerScanHarResponseHarLogCreatorJSON contains the JSON metadata for the
+// struct [URLScannerScanHarResponseHarLogCreator]
+type urlScannerScanHarResponseHarLogCreatorJSON struct {
 	Comment     apijson.Field
 	Name        apijson.Field
 	Version     apijson.Field
@@ -1482,31 +1319,31 @@ type urlScannerScanHarResponseResultHarLogCreatorJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogCreator) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogCreator) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntry struct {
-	InitialPriority string                                               `json:"_initialPriority,required"`
-	InitiatorType   string                                               `json:"_initiator_type,required"`
-	Priority        string                                               `json:"_priority,required"`
-	RequestID       string                                               `json:"_requestId,required"`
-	RequestTime     float64                                              `json:"_requestTime,required"`
-	ResourceType    string                                               `json:"_resourceType,required"`
-	Cache           interface{}                                          `json:"cache,required"`
-	Connection      string                                               `json:"connection,required"`
-	Pageref         string                                               `json:"pageref,required"`
-	Request         URLScannerScanHarResponseResultHarLogEntriesRequest  `json:"request,required"`
-	Response        URLScannerScanHarResponseResultHarLogEntriesResponse `json:"response,required"`
-	ServerIPAddress string                                               `json:"serverIPAddress,required"`
-	StartedDateTime string                                               `json:"startedDateTime,required"`
-	Time            float64                                              `json:"time,required"`
-	JSON            urlScannerScanHarResponseResultHarLogEntryJSON       `json:"-"`
+type URLScannerScanHarResponseHarLogEntry struct {
+	InitialPriority string                                         `json:"_initialPriority,required"`
+	InitiatorType   string                                         `json:"_initiator_type,required"`
+	Priority        string                                         `json:"_priority,required"`
+	RequestID       string                                         `json:"_requestId,required"`
+	RequestTime     float64                                        `json:"_requestTime,required"`
+	ResourceType    string                                         `json:"_resourceType,required"`
+	Cache           interface{}                                    `json:"cache,required"`
+	Connection      string                                         `json:"connection,required"`
+	Pageref         string                                         `json:"pageref,required"`
+	Request         URLScannerScanHarResponseHarLogEntriesRequest  `json:"request,required"`
+	Response        URLScannerScanHarResponseHarLogEntriesResponse `json:"response,required"`
+	ServerIPAddress string                                         `json:"serverIPAddress,required"`
+	StartedDateTime string                                         `json:"startedDateTime,required"`
+	Time            float64                                        `json:"time,required"`
+	JSON            urlScannerScanHarResponseHarLogEntryJSON       `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntryJSON contains the JSON metadata for
-// the struct [URLScannerScanHarResponseResultHarLogEntry]
-type urlScannerScanHarResponseResultHarLogEntryJSON struct {
+// urlScannerScanHarResponseHarLogEntryJSON contains the JSON metadata for the
+// struct [URLScannerScanHarResponseHarLogEntry]
+type urlScannerScanHarResponseHarLogEntryJSON struct {
 	InitialPriority apijson.Field
 	InitiatorType   apijson.Field
 	Priority        apijson.Field
@@ -1525,23 +1362,23 @@ type urlScannerScanHarResponseResultHarLogEntryJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntriesRequest struct {
-	BodySize    float64                                                     `json:"bodySize,required"`
-	Headers     []URLScannerScanHarResponseResultHarLogEntriesRequestHeader `json:"headers,required"`
-	HeadersSize float64                                                     `json:"headersSize,required"`
-	HTTPVersion string                                                      `json:"httpVersion,required"`
-	Method      string                                                      `json:"method,required"`
-	URL         string                                                      `json:"url,required"`
-	JSON        urlScannerScanHarResponseResultHarLogEntriesRequestJSON     `json:"-"`
+type URLScannerScanHarResponseHarLogEntriesRequest struct {
+	BodySize    float64                                               `json:"bodySize,required"`
+	Headers     []URLScannerScanHarResponseHarLogEntriesRequestHeader `json:"headers,required"`
+	HeadersSize float64                                               `json:"headersSize,required"`
+	HTTPVersion string                                                `json:"httpVersion,required"`
+	Method      string                                                `json:"method,required"`
+	URL         string                                                `json:"url,required"`
+	JSON        urlScannerScanHarResponseHarLogEntriesRequestJSON     `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntriesRequestJSON contains the JSON
-// metadata for the struct [URLScannerScanHarResponseResultHarLogEntriesRequest]
-type urlScannerScanHarResponseResultHarLogEntriesRequestJSON struct {
+// urlScannerScanHarResponseHarLogEntriesRequestJSON contains the JSON metadata for
+// the struct [URLScannerScanHarResponseHarLogEntriesRequest]
+type urlScannerScanHarResponseHarLogEntriesRequestJSON struct {
 	BodySize    apijson.Field
 	Headers     apijson.Field
 	HeadersSize apijson.Field
@@ -1552,46 +1389,45 @@ type urlScannerScanHarResponseResultHarLogEntriesRequestJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntriesRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntriesRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntriesRequestHeader struct {
-	Name  string                                                        `json:"name,required"`
-	Value string                                                        `json:"value,required"`
-	JSON  urlScannerScanHarResponseResultHarLogEntriesRequestHeaderJSON `json:"-"`
+type URLScannerScanHarResponseHarLogEntriesRequestHeader struct {
+	Name  string                                                  `json:"name,required"`
+	Value string                                                  `json:"value,required"`
+	JSON  urlScannerScanHarResponseHarLogEntriesRequestHeaderJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntriesRequestHeaderJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanHarResponseResultHarLogEntriesRequestHeader]
-type urlScannerScanHarResponseResultHarLogEntriesRequestHeaderJSON struct {
+// urlScannerScanHarResponseHarLogEntriesRequestHeaderJSON contains the JSON
+// metadata for the struct [URLScannerScanHarResponseHarLogEntriesRequestHeader]
+type urlScannerScanHarResponseHarLogEntriesRequestHeaderJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntriesResponse struct {
-	TransferSize float64                                                      `json:"_transferSize,required"`
-	BodySize     float64                                                      `json:"bodySize,required"`
-	Content      URLScannerScanHarResponseResultHarLogEntriesResponseContent  `json:"content,required"`
-	Headers      []URLScannerScanHarResponseResultHarLogEntriesResponseHeader `json:"headers,required"`
-	HeadersSize  float64                                                      `json:"headersSize,required"`
-	HTTPVersion  string                                                       `json:"httpVersion,required"`
-	RedirectURL  string                                                       `json:"redirectURL,required"`
-	Status       float64                                                      `json:"status,required"`
-	StatusText   string                                                       `json:"statusText,required"`
-	JSON         urlScannerScanHarResponseResultHarLogEntriesResponseJSON     `json:"-"`
+type URLScannerScanHarResponseHarLogEntriesResponse struct {
+	TransferSize float64                                                `json:"_transferSize,required"`
+	BodySize     float64                                                `json:"bodySize,required"`
+	Content      URLScannerScanHarResponseHarLogEntriesResponseContent  `json:"content,required"`
+	Headers      []URLScannerScanHarResponseHarLogEntriesResponseHeader `json:"headers,required"`
+	HeadersSize  float64                                                `json:"headersSize,required"`
+	HTTPVersion  string                                                 `json:"httpVersion,required"`
+	RedirectURL  string                                                 `json:"redirectURL,required"`
+	Status       float64                                                `json:"status,required"`
+	StatusText   string                                                 `json:"statusText,required"`
+	JSON         urlScannerScanHarResponseHarLogEntriesResponseJSON     `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntriesResponseJSON contains the JSON
-// metadata for the struct [URLScannerScanHarResponseResultHarLogEntriesResponse]
-type urlScannerScanHarResponseResultHarLogEntriesResponseJSON struct {
+// urlScannerScanHarResponseHarLogEntriesResponseJSON contains the JSON metadata
+// for the struct [URLScannerScanHarResponseHarLogEntriesResponse]
+type urlScannerScanHarResponseHarLogEntriesResponseJSON struct {
 	TransferSize apijson.Field
 	BodySize     apijson.Field
 	Content      apijson.Field
@@ -1605,21 +1441,20 @@ type urlScannerScanHarResponseResultHarLogEntriesResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntriesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntriesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntriesResponseContent struct {
-	MimeType    string                                                          `json:"mimeType,required"`
-	Size        float64                                                         `json:"size,required"`
-	Compression int64                                                           `json:"compression"`
-	JSON        urlScannerScanHarResponseResultHarLogEntriesResponseContentJSON `json:"-"`
+type URLScannerScanHarResponseHarLogEntriesResponseContent struct {
+	MimeType    string                                                    `json:"mimeType,required"`
+	Size        float64                                                   `json:"size,required"`
+	Compression int64                                                     `json:"compression"`
+	JSON        urlScannerScanHarResponseHarLogEntriesResponseContentJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntriesResponseContentJSON contains the
-// JSON metadata for the struct
-// [URLScannerScanHarResponseResultHarLogEntriesResponseContent]
-type urlScannerScanHarResponseResultHarLogEntriesResponseContentJSON struct {
+// urlScannerScanHarResponseHarLogEntriesResponseContentJSON contains the JSON
+// metadata for the struct [URLScannerScanHarResponseHarLogEntriesResponseContent]
+type urlScannerScanHarResponseHarLogEntriesResponseContentJSON struct {
 	MimeType    apijson.Field
 	Size        apijson.Field
 	Compression apijson.Field
@@ -1627,41 +1462,40 @@ type urlScannerScanHarResponseResultHarLogEntriesResponseContentJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntriesResponseContent) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntriesResponseContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogEntriesResponseHeader struct {
-	Name  string                                                         `json:"name,required"`
-	Value string                                                         `json:"value,required"`
-	JSON  urlScannerScanHarResponseResultHarLogEntriesResponseHeaderJSON `json:"-"`
+type URLScannerScanHarResponseHarLogEntriesResponseHeader struct {
+	Name  string                                                   `json:"name,required"`
+	Value string                                                   `json:"value,required"`
+	JSON  urlScannerScanHarResponseHarLogEntriesResponseHeaderJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogEntriesResponseHeaderJSON contains the JSON
-// metadata for the struct
-// [URLScannerScanHarResponseResultHarLogEntriesResponseHeader]
-type urlScannerScanHarResponseResultHarLogEntriesResponseHeaderJSON struct {
+// urlScannerScanHarResponseHarLogEntriesResponseHeaderJSON contains the JSON
+// metadata for the struct [URLScannerScanHarResponseHarLogEntriesResponseHeader]
+type urlScannerScanHarResponseHarLogEntriesResponseHeaderJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogPage struct {
-	ID              string                                                `json:"id,required"`
-	PageTimings     URLScannerScanHarResponseResultHarLogPagesPageTimings `json:"pageTimings,required"`
-	StartedDateTime string                                                `json:"startedDateTime,required"`
-	Title           string                                                `json:"title,required"`
-	JSON            urlScannerScanHarResponseResultHarLogPageJSON         `json:"-"`
+type URLScannerScanHarResponseHarLogPage struct {
+	ID              string                                          `json:"id,required"`
+	PageTimings     URLScannerScanHarResponseHarLogPagesPageTimings `json:"pageTimings,required"`
+	StartedDateTime string                                          `json:"startedDateTime,required"`
+	Title           string                                          `json:"title,required"`
+	JSON            urlScannerScanHarResponseHarLogPageJSON         `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogPageJSON contains the JSON metadata for the
-// struct [URLScannerScanHarResponseResultHarLogPage]
-type urlScannerScanHarResponseResultHarLogPageJSON struct {
+// urlScannerScanHarResponseHarLogPageJSON contains the JSON metadata for the
+// struct [URLScannerScanHarResponseHarLogPage]
+type urlScannerScanHarResponseHarLogPageJSON struct {
 	ID              apijson.Field
 	PageTimings     apijson.Field
 	StartedDateTime apijson.Field
@@ -1670,26 +1504,26 @@ type urlScannerScanHarResponseResultHarLogPageJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogPage) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanHarResponseResultHarLogPagesPageTimings struct {
-	OnContentLoad float64                                                   `json:"onContentLoad,required"`
-	OnLoad        float64                                                   `json:"onLoad,required"`
-	JSON          urlScannerScanHarResponseResultHarLogPagesPageTimingsJSON `json:"-"`
+type URLScannerScanHarResponseHarLogPagesPageTimings struct {
+	OnContentLoad float64                                             `json:"onContentLoad,required"`
+	OnLoad        float64                                             `json:"onLoad,required"`
+	JSON          urlScannerScanHarResponseHarLogPagesPageTimingsJSON `json:"-"`
 }
 
-// urlScannerScanHarResponseResultHarLogPagesPageTimingsJSON contains the JSON
-// metadata for the struct [URLScannerScanHarResponseResultHarLogPagesPageTimings]
-type urlScannerScanHarResponseResultHarLogPagesPageTimingsJSON struct {
+// urlScannerScanHarResponseHarLogPagesPageTimingsJSON contains the JSON metadata
+// for the struct [URLScannerScanHarResponseHarLogPagesPageTimings]
+type urlScannerScanHarResponseHarLogPagesPageTimingsJSON struct {
 	OnContentLoad apijson.Field
 	OnLoad        apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *URLScannerScanHarResponseResultHarLogPagesPageTimings) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanHarResponseHarLogPagesPageTimings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1731,6 +1565,179 @@ const (
 	URLScannerScanNewParamsVisibilityPublic   URLScannerScanNewParamsVisibility = "Public"
 	URLScannerScanNewParamsVisibilityUnlisted URLScannerScanNewParamsVisibility = "Unlisted"
 )
+
+type URLScannerScanNewResponseEnvelope struct {
+	Errors   []URLScannerScanNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []URLScannerScanNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   URLScannerScanNewResponse                   `json:"result,required"`
+	Success  bool                                        `json:"success,required"`
+	JSON     urlScannerScanNewResponseEnvelopeJSON       `json:"-"`
+}
+
+// urlScannerScanNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [URLScannerScanNewResponseEnvelope]
+type urlScannerScanNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanNewResponseEnvelopeErrors struct {
+	Message string                                      `json:"message,required"`
+	JSON    urlScannerScanNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// urlScannerScanNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [URLScannerScanNewResponseEnvelopeErrors]
+type urlScannerScanNewResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanNewResponseEnvelopeMessages struct {
+	Message string                                        `json:"message,required"`
+	JSON    urlScannerScanNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// urlScannerScanNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [URLScannerScanNewResponseEnvelopeMessages]
+type urlScannerScanNewResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanGetResponseEnvelope struct {
+	Errors   []URLScannerScanGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []URLScannerScanGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   URLScannerScanGetResponse                   `json:"result,required"`
+	// Whether request was successful or not
+	Success bool                                  `json:"success,required"`
+	JSON    urlScannerScanGetResponseEnvelopeJSON `json:"-"`
+}
+
+// urlScannerScanGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseEnvelope]
+type urlScannerScanGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanGetResponseEnvelopeErrors struct {
+	Message string                                      `json:"message,required"`
+	JSON    urlScannerScanGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// urlScannerScanGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseEnvelopeErrors]
+type urlScannerScanGetResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanGetResponseEnvelopeMessages struct {
+	Message string                                        `json:"message,required"`
+	JSON    urlScannerScanGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// urlScannerScanGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseEnvelopeMessages]
+type urlScannerScanGetResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanHarResponseEnvelope struct {
+	Errors   []URLScannerScanHarResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []URLScannerScanHarResponseEnvelopeMessages `json:"messages,required"`
+	Result   URLScannerScanHarResponse                   `json:"result,required"`
+	// Whether search request was successful or not
+	Success bool                                  `json:"success,required"`
+	JSON    urlScannerScanHarResponseEnvelopeJSON `json:"-"`
+}
+
+// urlScannerScanHarResponseEnvelopeJSON contains the JSON metadata for the struct
+// [URLScannerScanHarResponseEnvelope]
+type urlScannerScanHarResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanHarResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanHarResponseEnvelopeErrors struct {
+	Message string                                      `json:"message,required"`
+	JSON    urlScannerScanHarResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// urlScannerScanHarResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [URLScannerScanHarResponseEnvelopeErrors]
+type urlScannerScanHarResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanHarResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanHarResponseEnvelopeMessages struct {
+	Message string                                        `json:"message,required"`
+	JSON    urlScannerScanHarResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// urlScannerScanHarResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [URLScannerScanHarResponseEnvelopeMessages]
+type urlScannerScanHarResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanHarResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type URLScannerScanScreenshotParams struct {
 	// Target device type

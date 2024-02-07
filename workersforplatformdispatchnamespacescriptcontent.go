@@ -50,77 +50,17 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx contex
 // Put script content for a script uploaded to a Workers for Platforms namespace.
 func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse struct {
-	Errors   []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseError   `json:"errors"`
-	Messages []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseMessage `json:"messages"`
-	Result   WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseSuccess `json:"success"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON    `json:"-"`
-}
-
-// workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON contains the
-// JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse]
-type workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseError struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseErrorJSON `json:"-"`
-}
-
-// workersForPlatformDispatchNamespaceScriptContentUpdateResponseErrorJSON contains
-// the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseError]
-type workersForPlatformDispatchNamespaceScriptContentUpdateResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseMessage struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseMessageJSON `json:"-"`
-}
-
-// workersForPlatformDispatchNamespaceScriptContentUpdateResponseMessageJSON
-// contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseMessage]
-type workersForPlatformDispatchNamespaceScriptContentUpdateResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResult struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -136,16 +76,16 @@ type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResult struct
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                                                   `json:"usage_model"`
-	JSON       workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultJSON `json:"-"`
+	UsageModel string                                                             `json:"usage_model"`
+	JSON       workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultJSON
-// contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResult]
-type workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultJSON struct {
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON contains the
+// JSON metadata for the struct
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
@@ -159,25 +99,25 @@ type workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultJSON st
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumer struct {
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                                               `json:"namespace"`
-	JSON      workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumerJSON `json:"-"`
+	Namespace string                                                                         `json:"namespace"`
+	JSON      workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumerJSON
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON
 // contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumer]
-type workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumerJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -185,16 +125,9 @@ type workersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailCon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseResultTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseSuccess bool
-
-const (
-	WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseSuccessTrue WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseSuccess = true
-)
 
 type WorkersForPlatformDispatchNamespaceScriptContentUpdateParams struct {
 	// A module comprising a Worker script, often a javascript file. Multiple modules
@@ -238,3 +171,75 @@ type WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata struct
 func (r WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope struct {
+	Errors   []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages"`
+	Result   WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON
+// contains the JSON metadata for the struct
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON
+// contains the JSON metadata for the struct
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON
+// contains the JSON metadata for the struct
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess bool
+
+const (
+	WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccessTrue WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess = true
+)

@@ -34,59 +34,81 @@ func NewHyperdriveConfigService(opts ...option.RequestOption) (r *HyperdriveConf
 // Creates and returns a new Hyperdrive configuration.
 func (r *HyperdriveConfigService) New(ctx context.Context, accountIdentifier string, body HyperdriveConfigNewParams, opts ...option.RequestOption) (res *HyperdriveConfigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Returns the specified Hyperdrive configuration.
 func (r *HyperdriveConfigService) Get(ctx context.Context, accountIdentifier string, hyperdriveIdentifier string, opts ...option.RequestOption) (res *HyperdriveConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountIdentifier, hyperdriveIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Updates and returns the specified Hyperdrive configuration.
 func (r *HyperdriveConfigService) Update(ctx context.Context, accountIdentifier string, hyperdriveIdentifier string, body HyperdriveConfigUpdateParams, opts ...option.RequestOption) (res *HyperdriveConfigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountIdentifier, hyperdriveIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Returns a list of Hyperdrives
-func (r *HyperdriveConfigService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *HyperdriveConfigListResponse, err error) {
+func (r *HyperdriveConfigService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]HyperdriveConfigListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Deletes the specified Hyperdrive.
 func (r *HyperdriveConfigService) Delete(ctx context.Context, accountIdentifier string, hyperdriveIdentifier string, opts ...option.RequestOption) (res *HyperdriveConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountIdentifier, hyperdriveIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type HyperdriveConfigNewResponse struct {
-	Errors   []HyperdriveConfigNewResponseError   `json:"errors"`
-	Messages []HyperdriveConfigNewResponseMessage `json:"messages"`
-	Result   HyperdriveConfigNewResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success HyperdriveConfigNewResponseSuccess `json:"success"`
+	Name    string                             `json:"name,required"`
+	Origin  HyperdriveConfigNewResponseOrigin  `json:"origin,required"`
+	Caching HyperdriveConfigNewResponseCaching `json:"caching"`
 	JSON    hyperdriveConfigNewResponseJSON    `json:"-"`
 }
 
 // hyperdriveConfigNewResponseJSON contains the JSON metadata for the struct
 // [HyperdriveConfigNewResponse]
 type hyperdriveConfigNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Name        apijson.Field
+	Origin      apijson.Field
+	Caching     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -95,66 +117,7 @@ func (r *HyperdriveConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HyperdriveConfigNewResponseError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    hyperdriveConfigNewResponseErrorJSON `json:"-"`
-}
-
-// hyperdriveConfigNewResponseErrorJSON contains the JSON metadata for the struct
-// [HyperdriveConfigNewResponseError]
-type hyperdriveConfigNewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigNewResponseMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    hyperdriveConfigNewResponseMessageJSON `json:"-"`
-}
-
-// hyperdriveConfigNewResponseMessageJSON contains the JSON metadata for the struct
-// [HyperdriveConfigNewResponseMessage]
-type hyperdriveConfigNewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigNewResponseResult struct {
-	Name    string                                   `json:"name,required"`
-	Origin  HyperdriveConfigNewResponseResultOrigin  `json:"origin,required"`
-	Caching HyperdriveConfigNewResponseResultCaching `json:"caching"`
-	JSON    hyperdriveConfigNewResponseResultJSON    `json:"-"`
-}
-
-// hyperdriveConfigNewResponseResultJSON contains the JSON metadata for the struct
-// [HyperdriveConfigNewResponseResult]
-type hyperdriveConfigNewResponseResultJSON struct {
-	Name        apijson.Field
-	Origin      apijson.Field
-	Caching     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigNewResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigNewResponseResultOrigin struct {
+type HyperdriveConfigNewResponseOrigin struct {
 	// The name of your origin database.
 	Database string `json:"database"`
 	// The host (hostname or IP) of your origin database.
@@ -162,15 +125,15 @@ type HyperdriveConfigNewResponseResultOrigin struct {
 	// The port (default: 5432 for Postgres) of your origin database.
 	Port int64 `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveConfigNewResponseResultOriginScheme `json:"scheme"`
+	Scheme HyperdriveConfigNewResponseOriginScheme `json:"scheme"`
 	// The user of your origin database.
-	User string                                      `json:"user"`
-	JSON hyperdriveConfigNewResponseResultOriginJSON `json:"-"`
+	User string                                `json:"user"`
+	JSON hyperdriveConfigNewResponseOriginJSON `json:"-"`
 }
 
-// hyperdriveConfigNewResponseResultOriginJSON contains the JSON metadata for the
-// struct [HyperdriveConfigNewResponseResultOrigin]
-type hyperdriveConfigNewResponseResultOriginJSON struct {
+// hyperdriveConfigNewResponseOriginJSON contains the JSON metadata for the struct
+// [HyperdriveConfigNewResponseOrigin]
+type hyperdriveConfigNewResponseOriginJSON struct {
 	Database    apijson.Field
 	Host        apijson.Field
 	Port        apijson.Field
@@ -180,19 +143,19 @@ type hyperdriveConfigNewResponseResultOriginJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigNewResponseResultOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigNewResponseOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the URL scheme used to connect to your origin database.
-type HyperdriveConfigNewResponseResultOriginScheme string
+type HyperdriveConfigNewResponseOriginScheme string
 
 const (
-	HyperdriveConfigNewResponseResultOriginSchemePostgres   HyperdriveConfigNewResponseResultOriginScheme = "postgres"
-	HyperdriveConfigNewResponseResultOriginSchemePostgresql HyperdriveConfigNewResponseResultOriginScheme = "postgresql"
+	HyperdriveConfigNewResponseOriginSchemePostgres   HyperdriveConfigNewResponseOriginScheme = "postgres"
+	HyperdriveConfigNewResponseOriginSchemePostgresql HyperdriveConfigNewResponseOriginScheme = "postgresql"
 )
 
-type HyperdriveConfigNewResponseResultCaching struct {
+type HyperdriveConfigNewResponseCaching struct {
 	// When set to true, disables the caching of SQL responses. (Default: false)
 	Disabled bool `json:"disabled"`
 	// When present, specifies max duration for which items should persist in the
@@ -200,13 +163,13 @@ type HyperdriveConfigNewResponseResultCaching struct {
 	MaxAge int64 `json:"max_age"`
 	// When present, indicates the number of seconds cache may serve the response after
 	// it becomes stale. (Default: 15)
-	StaleWhileRevalidate int64                                        `json:"stale_while_revalidate"`
-	JSON                 hyperdriveConfigNewResponseResultCachingJSON `json:"-"`
+	StaleWhileRevalidate int64                                  `json:"stale_while_revalidate"`
+	JSON                 hyperdriveConfigNewResponseCachingJSON `json:"-"`
 }
 
-// hyperdriveConfigNewResponseResultCachingJSON contains the JSON metadata for the
-// struct [HyperdriveConfigNewResponseResultCaching]
-type hyperdriveConfigNewResponseResultCachingJSON struct {
+// hyperdriveConfigNewResponseCachingJSON contains the JSON metadata for the struct
+// [HyperdriveConfigNewResponseCaching]
+type hyperdriveConfigNewResponseCachingJSON struct {
 	Disabled             apijson.Field
 	MaxAge               apijson.Field
 	StaleWhileRevalidate apijson.Field
@@ -214,33 +177,23 @@ type hyperdriveConfigNewResponseResultCachingJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigNewResponseResultCaching) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigNewResponseCaching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type HyperdriveConfigNewResponseSuccess bool
-
-const (
-	HyperdriveConfigNewResponseSuccessTrue HyperdriveConfigNewResponseSuccess = true
-)
-
 type HyperdriveConfigGetResponse struct {
-	Errors   []HyperdriveConfigGetResponseError   `json:"errors"`
-	Messages []HyperdriveConfigGetResponseMessage `json:"messages"`
-	Result   HyperdriveConfigGetResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success HyperdriveConfigGetResponseSuccess `json:"success"`
+	Name    string                             `json:"name,required"`
+	Origin  HyperdriveConfigGetResponseOrigin  `json:"origin,required"`
+	Caching HyperdriveConfigGetResponseCaching `json:"caching"`
 	JSON    hyperdriveConfigGetResponseJSON    `json:"-"`
 }
 
 // hyperdriveConfigGetResponseJSON contains the JSON metadata for the struct
 // [HyperdriveConfigGetResponse]
 type hyperdriveConfigGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Name        apijson.Field
+	Origin      apijson.Field
+	Caching     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -249,66 +202,7 @@ func (r *HyperdriveConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HyperdriveConfigGetResponseError struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    hyperdriveConfigGetResponseErrorJSON `json:"-"`
-}
-
-// hyperdriveConfigGetResponseErrorJSON contains the JSON metadata for the struct
-// [HyperdriveConfigGetResponseError]
-type hyperdriveConfigGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigGetResponseMessage struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    hyperdriveConfigGetResponseMessageJSON `json:"-"`
-}
-
-// hyperdriveConfigGetResponseMessageJSON contains the JSON metadata for the struct
-// [HyperdriveConfigGetResponseMessage]
-type hyperdriveConfigGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigGetResponseResult struct {
-	Name    string                                   `json:"name,required"`
-	Origin  HyperdriveConfigGetResponseResultOrigin  `json:"origin,required"`
-	Caching HyperdriveConfigGetResponseResultCaching `json:"caching"`
-	JSON    hyperdriveConfigGetResponseResultJSON    `json:"-"`
-}
-
-// hyperdriveConfigGetResponseResultJSON contains the JSON metadata for the struct
-// [HyperdriveConfigGetResponseResult]
-type hyperdriveConfigGetResponseResultJSON struct {
-	Name        apijson.Field
-	Origin      apijson.Field
-	Caching     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigGetResponseResultOrigin struct {
+type HyperdriveConfigGetResponseOrigin struct {
 	// The name of your origin database.
 	Database string `json:"database"`
 	// The host (hostname or IP) of your origin database.
@@ -316,15 +210,15 @@ type HyperdriveConfigGetResponseResultOrigin struct {
 	// The port (default: 5432 for Postgres) of your origin database.
 	Port int64 `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveConfigGetResponseResultOriginScheme `json:"scheme"`
+	Scheme HyperdriveConfigGetResponseOriginScheme `json:"scheme"`
 	// The user of your origin database.
-	User string                                      `json:"user"`
-	JSON hyperdriveConfigGetResponseResultOriginJSON `json:"-"`
+	User string                                `json:"user"`
+	JSON hyperdriveConfigGetResponseOriginJSON `json:"-"`
 }
 
-// hyperdriveConfigGetResponseResultOriginJSON contains the JSON metadata for the
-// struct [HyperdriveConfigGetResponseResultOrigin]
-type hyperdriveConfigGetResponseResultOriginJSON struct {
+// hyperdriveConfigGetResponseOriginJSON contains the JSON metadata for the struct
+// [HyperdriveConfigGetResponseOrigin]
+type hyperdriveConfigGetResponseOriginJSON struct {
 	Database    apijson.Field
 	Host        apijson.Field
 	Port        apijson.Field
@@ -334,19 +228,19 @@ type hyperdriveConfigGetResponseResultOriginJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigGetResponseResultOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigGetResponseOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the URL scheme used to connect to your origin database.
-type HyperdriveConfigGetResponseResultOriginScheme string
+type HyperdriveConfigGetResponseOriginScheme string
 
 const (
-	HyperdriveConfigGetResponseResultOriginSchemePostgres   HyperdriveConfigGetResponseResultOriginScheme = "postgres"
-	HyperdriveConfigGetResponseResultOriginSchemePostgresql HyperdriveConfigGetResponseResultOriginScheme = "postgresql"
+	HyperdriveConfigGetResponseOriginSchemePostgres   HyperdriveConfigGetResponseOriginScheme = "postgres"
+	HyperdriveConfigGetResponseOriginSchemePostgresql HyperdriveConfigGetResponseOriginScheme = "postgresql"
 )
 
-type HyperdriveConfigGetResponseResultCaching struct {
+type HyperdriveConfigGetResponseCaching struct {
 	// When set to true, disables the caching of SQL responses. (Default: false)
 	Disabled bool `json:"disabled"`
 	// When present, specifies max duration for which items should persist in the
@@ -354,13 +248,13 @@ type HyperdriveConfigGetResponseResultCaching struct {
 	MaxAge int64 `json:"max_age"`
 	// When present, indicates the number of seconds cache may serve the response after
 	// it becomes stale. (Default: 15)
-	StaleWhileRevalidate int64                                        `json:"stale_while_revalidate"`
-	JSON                 hyperdriveConfigGetResponseResultCachingJSON `json:"-"`
+	StaleWhileRevalidate int64                                  `json:"stale_while_revalidate"`
+	JSON                 hyperdriveConfigGetResponseCachingJSON `json:"-"`
 }
 
-// hyperdriveConfigGetResponseResultCachingJSON contains the JSON metadata for the
-// struct [HyperdriveConfigGetResponseResultCaching]
-type hyperdriveConfigGetResponseResultCachingJSON struct {
+// hyperdriveConfigGetResponseCachingJSON contains the JSON metadata for the struct
+// [HyperdriveConfigGetResponseCaching]
+type hyperdriveConfigGetResponseCachingJSON struct {
 	Disabled             apijson.Field
 	MaxAge               apijson.Field
 	StaleWhileRevalidate apijson.Field
@@ -368,33 +262,23 @@ type hyperdriveConfigGetResponseResultCachingJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigGetResponseResultCaching) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigGetResponseCaching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type HyperdriveConfigGetResponseSuccess bool
-
-const (
-	HyperdriveConfigGetResponseSuccessTrue HyperdriveConfigGetResponseSuccess = true
-)
-
 type HyperdriveConfigUpdateResponse struct {
-	Errors   []HyperdriveConfigUpdateResponseError   `json:"errors"`
-	Messages []HyperdriveConfigUpdateResponseMessage `json:"messages"`
-	Result   HyperdriveConfigUpdateResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success HyperdriveConfigUpdateResponseSuccess `json:"success"`
+	Name    string                                `json:"name,required"`
+	Origin  HyperdriveConfigUpdateResponseOrigin  `json:"origin,required"`
+	Caching HyperdriveConfigUpdateResponseCaching `json:"caching"`
 	JSON    hyperdriveConfigUpdateResponseJSON    `json:"-"`
 }
 
 // hyperdriveConfigUpdateResponseJSON contains the JSON metadata for the struct
 // [HyperdriveConfigUpdateResponse]
 type hyperdriveConfigUpdateResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Name        apijson.Field
+	Origin      apijson.Field
+	Caching     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -403,66 +287,7 @@ func (r *HyperdriveConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HyperdriveConfigUpdateResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hyperdriveConfigUpdateResponseErrorJSON `json:"-"`
-}
-
-// hyperdriveConfigUpdateResponseErrorJSON contains the JSON metadata for the
-// struct [HyperdriveConfigUpdateResponseError]
-type hyperdriveConfigUpdateResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigUpdateResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    hyperdriveConfigUpdateResponseMessageJSON `json:"-"`
-}
-
-// hyperdriveConfigUpdateResponseMessageJSON contains the JSON metadata for the
-// struct [HyperdriveConfigUpdateResponseMessage]
-type hyperdriveConfigUpdateResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigUpdateResponseResult struct {
-	Name    string                                      `json:"name,required"`
-	Origin  HyperdriveConfigUpdateResponseResultOrigin  `json:"origin,required"`
-	Caching HyperdriveConfigUpdateResponseResultCaching `json:"caching"`
-	JSON    hyperdriveConfigUpdateResponseResultJSON    `json:"-"`
-}
-
-// hyperdriveConfigUpdateResponseResultJSON contains the JSON metadata for the
-// struct [HyperdriveConfigUpdateResponseResult]
-type hyperdriveConfigUpdateResponseResultJSON struct {
-	Name        apijson.Field
-	Origin      apijson.Field
-	Caching     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigUpdateResponseResultOrigin struct {
+type HyperdriveConfigUpdateResponseOrigin struct {
 	// The name of your origin database.
 	Database string `json:"database"`
 	// The host (hostname or IP) of your origin database.
@@ -470,15 +295,15 @@ type HyperdriveConfigUpdateResponseResultOrigin struct {
 	// The port (default: 5432 for Postgres) of your origin database.
 	Port int64 `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveConfigUpdateResponseResultOriginScheme `json:"scheme"`
+	Scheme HyperdriveConfigUpdateResponseOriginScheme `json:"scheme"`
 	// The user of your origin database.
-	User string                                         `json:"user"`
-	JSON hyperdriveConfigUpdateResponseResultOriginJSON `json:"-"`
+	User string                                   `json:"user"`
+	JSON hyperdriveConfigUpdateResponseOriginJSON `json:"-"`
 }
 
-// hyperdriveConfigUpdateResponseResultOriginJSON contains the JSON metadata for
-// the struct [HyperdriveConfigUpdateResponseResultOrigin]
-type hyperdriveConfigUpdateResponseResultOriginJSON struct {
+// hyperdriveConfigUpdateResponseOriginJSON contains the JSON metadata for the
+// struct [HyperdriveConfigUpdateResponseOrigin]
+type hyperdriveConfigUpdateResponseOriginJSON struct {
 	Database    apijson.Field
 	Host        apijson.Field
 	Port        apijson.Field
@@ -488,19 +313,19 @@ type hyperdriveConfigUpdateResponseResultOriginJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigUpdateResponseResultOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigUpdateResponseOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the URL scheme used to connect to your origin database.
-type HyperdriveConfigUpdateResponseResultOriginScheme string
+type HyperdriveConfigUpdateResponseOriginScheme string
 
 const (
-	HyperdriveConfigUpdateResponseResultOriginSchemePostgres   HyperdriveConfigUpdateResponseResultOriginScheme = "postgres"
-	HyperdriveConfigUpdateResponseResultOriginSchemePostgresql HyperdriveConfigUpdateResponseResultOriginScheme = "postgresql"
+	HyperdriveConfigUpdateResponseOriginSchemePostgres   HyperdriveConfigUpdateResponseOriginScheme = "postgres"
+	HyperdriveConfigUpdateResponseOriginSchemePostgresql HyperdriveConfigUpdateResponseOriginScheme = "postgresql"
 )
 
-type HyperdriveConfigUpdateResponseResultCaching struct {
+type HyperdriveConfigUpdateResponseCaching struct {
 	// When set to true, disables the caching of SQL responses. (Default: false)
 	Disabled bool `json:"disabled"`
 	// When present, specifies max duration for which items should persist in the
@@ -508,13 +333,13 @@ type HyperdriveConfigUpdateResponseResultCaching struct {
 	MaxAge int64 `json:"max_age"`
 	// When present, indicates the number of seconds cache may serve the response after
 	// it becomes stale. (Default: 15)
-	StaleWhileRevalidate int64                                           `json:"stale_while_revalidate"`
-	JSON                 hyperdriveConfigUpdateResponseResultCachingJSON `json:"-"`
+	StaleWhileRevalidate int64                                     `json:"stale_while_revalidate"`
+	JSON                 hyperdriveConfigUpdateResponseCachingJSON `json:"-"`
 }
 
-// hyperdriveConfigUpdateResponseResultCachingJSON contains the JSON metadata for
-// the struct [HyperdriveConfigUpdateResponseResultCaching]
-type hyperdriveConfigUpdateResponseResultCachingJSON struct {
+// hyperdriveConfigUpdateResponseCachingJSON contains the JSON metadata for the
+// struct [HyperdriveConfigUpdateResponseCaching]
+type hyperdriveConfigUpdateResponseCachingJSON struct {
 	Disabled             apijson.Field
 	MaxAge               apijson.Field
 	StaleWhileRevalidate apijson.Field
@@ -522,33 +347,23 @@ type hyperdriveConfigUpdateResponseResultCachingJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigUpdateResponseResultCaching) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigUpdateResponseCaching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type HyperdriveConfigUpdateResponseSuccess bool
-
-const (
-	HyperdriveConfigUpdateResponseSuccessTrue HyperdriveConfigUpdateResponseSuccess = true
-)
-
 type HyperdriveConfigListResponse struct {
-	Errors   []HyperdriveConfigListResponseError   `json:"errors"`
-	Messages []HyperdriveConfigListResponseMessage `json:"messages"`
-	Result   []HyperdriveConfigListResponseResult  `json:"result"`
-	// Whether the API call was successful
-	Success HyperdriveConfigListResponseSuccess `json:"success"`
+	Name    string                              `json:"name,required"`
+	Origin  HyperdriveConfigListResponseOrigin  `json:"origin,required"`
+	Caching HyperdriveConfigListResponseCaching `json:"caching"`
 	JSON    hyperdriveConfigListResponseJSON    `json:"-"`
 }
 
 // hyperdriveConfigListResponseJSON contains the JSON metadata for the struct
 // [HyperdriveConfigListResponse]
 type hyperdriveConfigListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Name        apijson.Field
+	Origin      apijson.Field
+	Caching     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -557,66 +372,7 @@ func (r *HyperdriveConfigListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HyperdriveConfigListResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    hyperdriveConfigListResponseErrorJSON `json:"-"`
-}
-
-// hyperdriveConfigListResponseErrorJSON contains the JSON metadata for the struct
-// [HyperdriveConfigListResponseError]
-type hyperdriveConfigListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigListResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hyperdriveConfigListResponseMessageJSON `json:"-"`
-}
-
-// hyperdriveConfigListResponseMessageJSON contains the JSON metadata for the
-// struct [HyperdriveConfigListResponseMessage]
-type hyperdriveConfigListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigListResponseResult struct {
-	Name    string                                    `json:"name,required"`
-	Origin  HyperdriveConfigListResponseResultOrigin  `json:"origin,required"`
-	Caching HyperdriveConfigListResponseResultCaching `json:"caching"`
-	JSON    hyperdriveConfigListResponseResultJSON    `json:"-"`
-}
-
-// hyperdriveConfigListResponseResultJSON contains the JSON metadata for the struct
-// [HyperdriveConfigListResponseResult]
-type hyperdriveConfigListResponseResultJSON struct {
-	Name        apijson.Field
-	Origin      apijson.Field
-	Caching     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigListResponseResultOrigin struct {
+type HyperdriveConfigListResponseOrigin struct {
 	// The name of your origin database.
 	Database string `json:"database"`
 	// The host (hostname or IP) of your origin database.
@@ -624,15 +380,15 @@ type HyperdriveConfigListResponseResultOrigin struct {
 	// The port (default: 5432 for Postgres) of your origin database.
 	Port int64 `json:"port"`
 	// Specifies the URL scheme used to connect to your origin database.
-	Scheme HyperdriveConfigListResponseResultOriginScheme `json:"scheme"`
+	Scheme HyperdriveConfigListResponseOriginScheme `json:"scheme"`
 	// The user of your origin database.
-	User string                                       `json:"user"`
-	JSON hyperdriveConfigListResponseResultOriginJSON `json:"-"`
+	User string                                 `json:"user"`
+	JSON hyperdriveConfigListResponseOriginJSON `json:"-"`
 }
 
-// hyperdriveConfigListResponseResultOriginJSON contains the JSON metadata for the
-// struct [HyperdriveConfigListResponseResultOrigin]
-type hyperdriveConfigListResponseResultOriginJSON struct {
+// hyperdriveConfigListResponseOriginJSON contains the JSON metadata for the struct
+// [HyperdriveConfigListResponseOrigin]
+type hyperdriveConfigListResponseOriginJSON struct {
 	Database    apijson.Field
 	Host        apijson.Field
 	Port        apijson.Field
@@ -642,19 +398,19 @@ type hyperdriveConfigListResponseResultOriginJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigListResponseResultOrigin) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigListResponseOrigin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the URL scheme used to connect to your origin database.
-type HyperdriveConfigListResponseResultOriginScheme string
+type HyperdriveConfigListResponseOriginScheme string
 
 const (
-	HyperdriveConfigListResponseResultOriginSchemePostgres   HyperdriveConfigListResponseResultOriginScheme = "postgres"
-	HyperdriveConfigListResponseResultOriginSchemePostgresql HyperdriveConfigListResponseResultOriginScheme = "postgresql"
+	HyperdriveConfigListResponseOriginSchemePostgres   HyperdriveConfigListResponseOriginScheme = "postgres"
+	HyperdriveConfigListResponseOriginSchemePostgresql HyperdriveConfigListResponseOriginScheme = "postgresql"
 )
 
-type HyperdriveConfigListResponseResultCaching struct {
+type HyperdriveConfigListResponseCaching struct {
 	// When set to true, disables the caching of SQL responses. (Default: false)
 	Disabled bool `json:"disabled"`
 	// When present, specifies max duration for which items should persist in the
@@ -662,13 +418,13 @@ type HyperdriveConfigListResponseResultCaching struct {
 	MaxAge int64 `json:"max_age"`
 	// When present, indicates the number of seconds cache may serve the response after
 	// it becomes stale. (Default: 15)
-	StaleWhileRevalidate int64                                         `json:"stale_while_revalidate"`
-	JSON                 hyperdriveConfigListResponseResultCachingJSON `json:"-"`
+	StaleWhileRevalidate int64                                   `json:"stale_while_revalidate"`
+	JSON                 hyperdriveConfigListResponseCachingJSON `json:"-"`
 }
 
-// hyperdriveConfigListResponseResultCachingJSON contains the JSON metadata for the
-// struct [HyperdriveConfigListResponseResultCaching]
-type hyperdriveConfigListResponseResultCachingJSON struct {
+// hyperdriveConfigListResponseCachingJSON contains the JSON metadata for the
+// struct [HyperdriveConfigListResponseCaching]
+type hyperdriveConfigListResponseCachingJSON struct {
 	Disabled             apijson.Field
 	MaxAge               apijson.Field
 	StaleWhileRevalidate apijson.Field
@@ -676,85 +432,11 @@ type hyperdriveConfigListResponseResultCachingJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HyperdriveConfigListResponseResultCaching) UnmarshalJSON(data []byte) (err error) {
+func (r *HyperdriveConfigListResponseCaching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type HyperdriveConfigListResponseSuccess bool
-
-const (
-	HyperdriveConfigListResponseSuccessTrue HyperdriveConfigListResponseSuccess = true
-)
-
-type HyperdriveConfigDeleteResponse struct {
-	Errors   []HyperdriveConfigDeleteResponseError   `json:"errors"`
-	Messages []HyperdriveConfigDeleteResponseMessage `json:"messages"`
-	Result   interface{}                             `json:"result,nullable"`
-	// Whether the API call was successful
-	Success HyperdriveConfigDeleteResponseSuccess `json:"success"`
-	JSON    hyperdriveConfigDeleteResponseJSON    `json:"-"`
-}
-
-// hyperdriveConfigDeleteResponseJSON contains the JSON metadata for the struct
-// [HyperdriveConfigDeleteResponse]
-type hyperdriveConfigDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigDeleteResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    hyperdriveConfigDeleteResponseErrorJSON `json:"-"`
-}
-
-// hyperdriveConfigDeleteResponseErrorJSON contains the JSON metadata for the
-// struct [HyperdriveConfigDeleteResponseError]
-type hyperdriveConfigDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HyperdriveConfigDeleteResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    hyperdriveConfigDeleteResponseMessageJSON `json:"-"`
-}
-
-// hyperdriveConfigDeleteResponseMessageJSON contains the JSON metadata for the
-// struct [HyperdriveConfigDeleteResponseMessage]
-type hyperdriveConfigDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HyperdriveConfigDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HyperdriveConfigDeleteResponseSuccess bool
-
-const (
-	HyperdriveConfigDeleteResponseSuccessTrue HyperdriveConfigDeleteResponseSuccess = true
-)
+type HyperdriveConfigDeleteResponse = interface{}
 
 type HyperdriveConfigNewParams struct {
 	Name    param.Field[string]                           `json:"name,required"`
@@ -806,6 +488,144 @@ func (r HyperdriveConfigNewParamsCaching) MarshalJSON() (data []byte, err error)
 	return apijson.MarshalRoot(r)
 }
 
+type HyperdriveConfigNewResponseEnvelope struct {
+	Errors   []HyperdriveConfigNewResponseEnvelopeErrors   `json:"errors"`
+	Messages []HyperdriveConfigNewResponseEnvelopeMessages `json:"messages"`
+	Result   HyperdriveConfigNewResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success HyperdriveConfigNewResponseEnvelopeSuccess `json:"success"`
+	JSON    hyperdriveConfigNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigNewResponseEnvelope]
+type hyperdriveConfigNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigNewResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    hyperdriveConfigNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HyperdriveConfigNewResponseEnvelopeErrors]
+type hyperdriveConfigNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigNewResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    hyperdriveConfigNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [HyperdriveConfigNewResponseEnvelopeMessages]
+type hyperdriveConfigNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigNewResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigNewResponseEnvelopeSuccessTrue HyperdriveConfigNewResponseEnvelopeSuccess = true
+)
+
+type HyperdriveConfigGetResponseEnvelope struct {
+	Errors   []HyperdriveConfigGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []HyperdriveConfigGetResponseEnvelopeMessages `json:"messages"`
+	Result   HyperdriveConfigGetResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success HyperdriveConfigGetResponseEnvelopeSuccess `json:"success"`
+	JSON    hyperdriveConfigGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigGetResponseEnvelope]
+type hyperdriveConfigGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigGetResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    hyperdriveConfigGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HyperdriveConfigGetResponseEnvelopeErrors]
+type hyperdriveConfigGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigGetResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    hyperdriveConfigGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [HyperdriveConfigGetResponseEnvelopeMessages]
+type hyperdriveConfigGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigGetResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigGetResponseEnvelopeSuccessTrue HyperdriveConfigGetResponseEnvelopeSuccess = true
+)
+
 type HyperdriveConfigUpdateParams struct {
 	Name    param.Field[string]                              `json:"name,required"`
 	Origin  param.Field[HyperdriveConfigUpdateParamsOrigin]  `json:"origin,required"`
@@ -855,3 +675,210 @@ type HyperdriveConfigUpdateParamsCaching struct {
 func (r HyperdriveConfigUpdateParamsCaching) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type HyperdriveConfigUpdateResponseEnvelope struct {
+	Errors   []HyperdriveConfigUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []HyperdriveConfigUpdateResponseEnvelopeMessages `json:"messages"`
+	Result   HyperdriveConfigUpdateResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success HyperdriveConfigUpdateResponseEnvelopeSuccess `json:"success"`
+	JSON    hyperdriveConfigUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigUpdateResponseEnvelope]
+type hyperdriveConfigUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    hyperdriveConfigUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [HyperdriveConfigUpdateResponseEnvelopeErrors]
+type hyperdriveConfigUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    hyperdriveConfigUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [HyperdriveConfigUpdateResponseEnvelopeMessages]
+type hyperdriveConfigUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigUpdateResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigUpdateResponseEnvelopeSuccessTrue HyperdriveConfigUpdateResponseEnvelopeSuccess = true
+)
+
+type HyperdriveConfigListResponseEnvelope struct {
+	Errors   []HyperdriveConfigListResponseEnvelopeErrors   `json:"errors"`
+	Messages []HyperdriveConfigListResponseEnvelopeMessages `json:"messages"`
+	Result   []HyperdriveConfigListResponse                 `json:"result"`
+	// Whether the API call was successful
+	Success HyperdriveConfigListResponseEnvelopeSuccess `json:"success"`
+	JSON    hyperdriveConfigListResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigListResponseEnvelope]
+type hyperdriveConfigListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigListResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    hyperdriveConfigListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [HyperdriveConfigListResponseEnvelopeErrors]
+type hyperdriveConfigListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigListResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    hyperdriveConfigListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [HyperdriveConfigListResponseEnvelopeMessages]
+type hyperdriveConfigListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigListResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigListResponseEnvelopeSuccessTrue HyperdriveConfigListResponseEnvelopeSuccess = true
+)
+
+type HyperdriveConfigDeleteResponseEnvelope struct {
+	Errors   []HyperdriveConfigDeleteResponseEnvelopeErrors   `json:"errors"`
+	Messages []HyperdriveConfigDeleteResponseEnvelopeMessages `json:"messages"`
+	Result   HyperdriveConfigDeleteResponse                   `json:"result,nullable"`
+	// Whether the API call was successful
+	Success HyperdriveConfigDeleteResponseEnvelopeSuccess `json:"success"`
+	JSON    hyperdriveConfigDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigDeleteResponseEnvelope]
+type hyperdriveConfigDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigDeleteResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    hyperdriveConfigDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [HyperdriveConfigDeleteResponseEnvelopeErrors]
+type hyperdriveConfigDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigDeleteResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    hyperdriveConfigDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [HyperdriveConfigDeleteResponseEnvelopeMessages]
+type hyperdriveConfigDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigDeleteResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigDeleteResponseEnvelopeSuccessTrue HyperdriveConfigDeleteResponseEnvelopeSuccess = true
+)

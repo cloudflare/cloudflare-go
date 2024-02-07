@@ -37,22 +37,27 @@ func NewRadarAttackLayer3TimeseriesGroupIPVersionService(opts ...option.RequestO
 // Percentage distribution of attacks by ip version used over time.
 func (r *RadarAttackLayer3TimeseriesGroupIPVersionService) List(ctx context.Context, query RadarAttackLayer3TimeseriesGroupIPVersionListParams, opts ...option.RequestOption) (res *RadarAttackLayer3TimeseriesGroupIPVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelope
 	path := "radar/attacks/layer3/timeseries_groups/ip_version"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarAttackLayer3TimeseriesGroupIPVersionListResponse struct {
-	Result  RadarAttackLayer3TimeseriesGroupIPVersionListResponseResult `json:"result,required"`
-	Success bool                                                        `json:"success,required"`
-	JSON    radarAttackLayer3TimeseriesGroupIPVersionListResponseJSON   `json:"-"`
+	Meta   interface{}                                                 `json:"meta,required"`
+	Serie0 RadarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAttackLayer3TimeseriesGroupIPVersionListResponseJSON   `json:"-"`
 }
 
 // radarAttackLayer3TimeseriesGroupIPVersionListResponseJSON contains the JSON
 // metadata for the struct [RadarAttackLayer3TimeseriesGroupIPVersionListResponse]
 type radarAttackLayer3TimeseriesGroupIPVersionListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,37 +66,17 @@ func (r *RadarAttackLayer3TimeseriesGroupIPVersionListResponse) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TimeseriesGroupIPVersionListResponseResult struct {
-	Meta   interface{}                                                       `json:"meta,required"`
-	Serie0 RadarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarAttackLayer3TimeseriesGroupIPVersionListResponseResultJSON   `json:"-"`
+type RadarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0 struct {
+	IPv4       []string                                                        `json:"IPv4,required"`
+	IPv6       []string                                                        `json:"IPv6,required"`
+	Timestamps []string                                                        `json:"timestamps,required"`
+	JSON       radarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0JSON `json:"-"`
 }
 
-// radarAttackLayer3TimeseriesGroupIPVersionListResponseResultJSON contains the
+// radarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0JSON contains the
 // JSON metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupIPVersionListResponseResult]
-type radarAttackLayer3TimeseriesGroupIPVersionListResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseriesGroupIPVersionListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0 struct {
-	IPv4       []string                                                              `json:"IPv4,required"`
-	IPv6       []string                                                              `json:"IPv6,required"`
-	Timestamps []string                                                              `json:"timestamps,required"`
-	JSON       radarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0JSON `json:"-"`
-}
-
-// radarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0JSON contains
-// the JSON metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0]
-type radarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0JSON struct {
+// [RadarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0]
+type radarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0JSON struct {
 	IPv4        apijson.Field
 	IPv6        apijson.Field
 	Timestamps  apijson.Field
@@ -99,7 +84,7 @@ type radarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0JSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TimeseriesGroupIPVersionListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TimeseriesGroupIPVersionListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -209,3 +194,23 @@ const (
 	RadarAttackLayer3TimeseriesGroupIPVersionListParamsProtocolIcmp RadarAttackLayer3TimeseriesGroupIPVersionListParamsProtocol = "ICMP"
 	RadarAttackLayer3TimeseriesGroupIPVersionListParamsProtocolGre  RadarAttackLayer3TimeseriesGroupIPVersionListParamsProtocol = "GRE"
 )
+
+type RadarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelope struct {
+	Result  RadarAttackLayer3TimeseriesGroupIPVersionListResponse             `json:"result,required"`
+	Success bool                                                              `json:"success,required"`
+	JSON    radarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [RadarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelope]
+type radarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3TimeseriesGroupIPVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

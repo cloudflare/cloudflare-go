@@ -35,28 +35,29 @@ func NewLoadBalancerPoolPreviewService(opts ...option.RequestOption) (r *LoadBal
 // be used in the preview endpoint to retrieve the results.
 func (r *LoadBalancerPoolPreviewService) AccountLoadBalancerPoolsPreviewPool(ctx context.Context, accountIdentifier string, identifier string, body LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams, opts ...option.RequestOption) (res *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse struct {
-	Errors   []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError   `json:"errors"`
-	Messages []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage `json:"messages"`
-	Result   LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess `json:"success"`
-	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON    `json:"-"`
+	// Monitored pool IDs mapped to their respective names.
+	Pools     interface{}                                                            `json:"pools"`
+	PreviewID string                                                                 `json:"preview_id"`
+	JSON      loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON `json:"-"`
 }
 
 // loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON contains
 // the JSON metadata for the struct
 // [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse]
 type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Pools       apijson.Field
+	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -64,74 +65,6 @@ type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON stru
 func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON `json:"-"`
-}
-
-// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError]
-type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON `json:"-"`
-}
-
-// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage]
-type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult struct {
-	// Monitored pool IDs mapped to their respective names.
-	Pools     interface{}                                                                  `json:"pools"`
-	PreviewID string                                                                       `json:"preview_id"`
-	JSON      loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON `json:"-"`
-}
-
-// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult]
-type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResultJSON struct {
-	Pools       apijson.Field
-	PreviewID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess bool
-
-const (
-	LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccessTrue LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseSuccess = true
-)
 
 type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams struct {
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
@@ -200,4 +133,76 @@ const (
 	LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsTypeUdpIcmp  LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsType = "udp_icmp"
 	LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsTypeIcmpPing LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsType = "icmp_ping"
 	LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsTypeSmtp     LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsType = "smtp"
+)
+
+type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelope struct {
+	Errors   []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors   `json:"errors"`
+	Messages []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages `json:"messages"`
+	Result   LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess `json:"success"`
+	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON
+// contains the JSON metadata for the struct
+// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelope]
+type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors struct {
+	Code    int64                                                                                `json:"code,required"`
+	Message string                                                                               `json:"message,required"`
+	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON
+// contains the JSON metadata for the struct
+// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors]
+type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages struct {
+	Code    int64                                                                                  `json:"code,required"`
+	Message string                                                                                 `json:"message,required"`
+	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON
+// contains the JSON metadata for the struct
+// [LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages]
+type loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccessTrue LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess = true
 )

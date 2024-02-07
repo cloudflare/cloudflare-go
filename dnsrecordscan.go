@@ -35,24 +35,51 @@ func NewDNSRecordScanService(opts ...option.RequestOption) (r *DNSRecordScanServ
 // zone. Useful if you haven't updated your nameservers yet.
 func (r *DNSRecordScanService) DNSRecordsForAZoneScanDNSRecords(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/scan", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse struct {
-	Errors   []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseError   `json:"errors"`
-	Messages []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessage `json:"messages"`
-	Result   DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseSuccess `json:"success"`
-	Timing  DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTiming  `json:"timing"`
-	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseJSON    `json:"-"`
+	// Number of DNS records added.
+	RecsAdded float64 `json:"recs_added"`
+	// Total number of DNS records parsed.
+	TotalRecordsParsed float64                                                   `json:"total_records_parsed"`
+	JSON               dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseJSON `json:"-"`
 }
 
 // dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseJSON contains the JSON
 // metadata for the struct [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse]
 type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseJSON struct {
+	RecsAdded          apijson.Field
+	TotalRecordsParsed apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelope struct {
+	Errors   []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors   `json:"errors"`
+	Messages []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages `json:"messages"`
+	Result   DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccess `json:"success"`
+	Timing  DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTiming  `json:"timing"`
+	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelope]
+type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -62,93 +89,71 @@ type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseError struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseErrorJSON `json:"-"`
+type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseErrorJSON contains the JSON
-// metadata for the struct
-// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseError]
-type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseErrorJSON struct {
+// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrorsJSON contains
+// the JSON metadata for the struct
+// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors]
+type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessage struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessageJSON `json:"-"`
+type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessageJSON contains the
-// JSON metadata for the struct
-// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessage]
-type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessageJSON struct {
+// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessagesJSON
+// contains the JSON metadata for the struct
+// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages]
+type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResult struct {
-	// Number of DNS records added.
-	RecsAdded float64 `json:"recs_added"`
-	// Total number of DNS records parsed.
-	TotalRecordsParsed float64                                                         `json:"total_records_parsed"`
-	JSON               dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResultJSON `json:"-"`
-}
-
-// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResultJSON contains the
-// JSON metadata for the struct
-// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResult]
-type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResultJSON struct {
-	RecsAdded          apijson.Field
-	TotalRecordsParsed apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseSuccess bool
+type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccess bool
 
 const (
-	DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseSuccessTrue DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseSuccess = true
+	DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccessTrue DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccess = true
 )
 
-type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTiming struct {
+type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTiming struct {
 	// When the file parsing ended.
 	EndTime time.Time `json:"end_time" format:"date-time"`
 	// Processing time of the file in seconds.
 	ProcessTime float64 `json:"process_time"`
 	// When the file parsing started.
-	StartTime time.Time                                                       `json:"start_time" format:"date-time"`
-	JSON      dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTimingJSON `json:"-"`
+	StartTime time.Time                                                               `json:"start_time" format:"date-time"`
+	JSON      dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTimingJSON `json:"-"`
 }
 
-// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTimingJSON contains the
-// JSON metadata for the struct
-// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTiming]
-type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTimingJSON struct {
+// dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTimingJSON contains
+// the JSON metadata for the struct
+// [DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTiming]
+type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTimingJSON struct {
 	EndTime     apijson.Field
 	ProcessTime apijson.Field
 	StartTime   apijson.Field
@@ -156,6 +161,6 @@ type dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTimingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseTiming) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -34,78 +34,19 @@ func NewDexFleetStatusDeviceService(opts ...option.RequestOption) (r *DexFleetSt
 }
 
 // List details for devices using WARP
-func (r *DexFleetStatusDeviceService) List(ctx context.Context, accountID string, query DexFleetStatusDeviceListParams, opts ...option.RequestOption) (res *DexFleetStatusDeviceListResponse, err error) {
+func (r *DexFleetStatusDeviceService) List(ctx context.Context, accountID string, query DexFleetStatusDeviceListParams, opts ...option.RequestOption) (res *[]DexFleetStatusDeviceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DexFleetStatusDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/devices", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DexFleetStatusDeviceListResponse struct {
-	Errors     []DexFleetStatusDeviceListResponseError    `json:"errors"`
-	Messages   []DexFleetStatusDeviceListResponseMessage  `json:"messages"`
-	Result     []DexFleetStatusDeviceListResponseResult   `json:"result"`
-	ResultInfo DexFleetStatusDeviceListResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success DexFleetStatusDeviceListResponseSuccess `json:"success"`
-	JSON    dexFleetStatusDeviceListResponseJSON    `json:"-"`
-}
-
-// dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
-// [DexFleetStatusDeviceListResponse]
-type dexFleetStatusDeviceListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexFleetStatusDeviceListResponseError struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dexFleetStatusDeviceListResponseErrorJSON `json:"-"`
-}
-
-// dexFleetStatusDeviceListResponseErrorJSON contains the JSON metadata for the
-// struct [DexFleetStatusDeviceListResponseError]
-type dexFleetStatusDeviceListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexFleetStatusDeviceListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexFleetStatusDeviceListResponseMessage struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    dexFleetStatusDeviceListResponseMessageJSON `json:"-"`
-}
-
-// dexFleetStatusDeviceListResponseMessageJSON contains the JSON metadata for the
-// struct [DexFleetStatusDeviceListResponseMessage]
-type dexFleetStatusDeviceListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexFleetStatusDeviceListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexFleetStatusDeviceListResponseResult struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
@@ -119,13 +60,13 @@ type DexFleetStatusDeviceListResponseResult struct {
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
 	// User contact email address
-	PersonEmail string                                     `json:"personEmail"`
-	JSON        dexFleetStatusDeviceListResponseResultJSON `json:"-"`
+	PersonEmail string                               `json:"personEmail"`
+	JSON        dexFleetStatusDeviceListResponseJSON `json:"-"`
 }
 
-// dexFleetStatusDeviceListResponseResultJSON contains the JSON metadata for the
-// struct [DexFleetStatusDeviceListResponseResult]
-type dexFleetStatusDeviceListResponseResultJSON struct {
+// dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
+// [DexFleetStatusDeviceListResponse]
+type dexFleetStatusDeviceListResponseJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
 	Platform    apijson.Field
@@ -137,43 +78,9 @@ type dexFleetStatusDeviceListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *DexFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type DexFleetStatusDeviceListResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       dexFleetStatusDeviceListResponseResultInfoJSON `json:"-"`
-}
-
-// dexFleetStatusDeviceListResponseResultInfoJSON contains the JSON metadata for
-// the struct [DexFleetStatusDeviceListResponseResultInfo]
-type dexFleetStatusDeviceListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexFleetStatusDeviceListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DexFleetStatusDeviceListResponseSuccess bool
-
-const (
-	DexFleetStatusDeviceListResponseSuccessTrue DexFleetStatusDeviceListResponseSuccess = true
-)
 
 type DexFleetStatusDeviceListParams struct {
 	// Page number of paginated results
@@ -220,4 +127,102 @@ const (
 	DexFleetStatusDeviceListParamsSortByStatus    DexFleetStatusDeviceListParamsSortBy = "status"
 	DexFleetStatusDeviceListParamsSortByTimestamp DexFleetStatusDeviceListParamsSortBy = "timestamp"
 	DexFleetStatusDeviceListParamsSortByVersion   DexFleetStatusDeviceListParamsSortBy = "version"
+)
+
+type DexFleetStatusDeviceListResponseEnvelope struct {
+	Errors     []DexFleetStatusDeviceListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []DexFleetStatusDeviceListResponseEnvelopeMessages `json:"messages"`
+	Result     []DexFleetStatusDeviceListResponse                 `json:"result"`
+	ResultInfo DexFleetStatusDeviceListResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success DexFleetStatusDeviceListResponseEnvelopeSuccess `json:"success"`
+	JSON    dexFleetStatusDeviceListResponseEnvelopeJSON    `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DexFleetStatusDeviceListResponseEnvelope]
+type dexFleetStatusDeviceListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexFleetStatusDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexFleetStatusDeviceListResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    dexFleetStatusDeviceListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DexFleetStatusDeviceListResponseEnvelopeErrors]
+type dexFleetStatusDeviceListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexFleetStatusDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexFleetStatusDeviceListResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    dexFleetStatusDeviceListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DexFleetStatusDeviceListResponseEnvelopeMessages]
+type dexFleetStatusDeviceListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexFleetStatusDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexFleetStatusDeviceListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                `json:"total_count"`
+	JSON       dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [DexFleetStatusDeviceListResponseEnvelopeResultInfo]
+type dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexFleetStatusDeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DexFleetStatusDeviceListResponseEnvelopeSuccess bool
+
+const (
+	DexFleetStatusDeviceListResponseEnvelopeSuccessTrue DexFleetStatusDeviceListResponseEnvelopeSuccess = true
 )

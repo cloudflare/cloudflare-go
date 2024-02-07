@@ -36,29 +36,26 @@ func NewLoadBalancerSearchService(opts ...option.RequestOption) (r *LoadBalancer
 // Search for Load Balancing resources.
 func (r *LoadBalancerSearchService) List(ctx context.Context, accountIdentifier string, query LoadBalancerSearchListParams, opts ...option.RequestOption) (res *LoadBalancerSearchListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LoadBalancerSearchListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type LoadBalancerSearchListResponse struct {
-	Errors     []LoadBalancerSearchListResponseError    `json:"errors"`
-	Messages   []LoadBalancerSearchListResponseMessage  `json:"messages"`
-	Result     LoadBalancerSearchListResponseResult     `json:"result"`
-	ResultInfo LoadBalancerSearchListResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success LoadBalancerSearchListResponseSuccess `json:"success"`
-	JSON    loadBalancerSearchListResponseJSON    `json:"-"`
+	// A list of resources matching the search query.
+	Resources []LoadBalancerSearchListResponseResource `json:"resources"`
+	JSON      loadBalancerSearchListResponseJSON       `json:"-"`
 }
 
 // loadBalancerSearchListResponseJSON contains the JSON metadata for the struct
 // [LoadBalancerSearchListResponse]
 type loadBalancerSearchListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
+	Resources   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -67,79 +64,23 @@ func (r *LoadBalancerSearchListResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerSearchListResponseError struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    loadBalancerSearchListResponseErrorJSON `json:"-"`
-}
-
-// loadBalancerSearchListResponseErrorJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseError]
-type loadBalancerSearchListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerSearchListResponseMessage struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    loadBalancerSearchListResponseMessageJSON `json:"-"`
-}
-
-// loadBalancerSearchListResponseMessageJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseMessage]
-type loadBalancerSearchListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerSearchListResponseResult struct {
-	// A list of resources matching the search query.
-	Resources []LoadBalancerSearchListResponseResultResource `json:"resources"`
-	JSON      loadBalancerSearchListResponseResultJSON       `json:"-"`
-}
-
-// loadBalancerSearchListResponseResultJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseResult]
-type loadBalancerSearchListResponseResultJSON struct {
-	Resources   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // A reference to a load balancer resource.
-type LoadBalancerSearchListResponseResultResource struct {
+type LoadBalancerSearchListResponseResource struct {
 	// When listed as a reference, the type (direction) of the reference.
-	ReferenceType LoadBalancerSearchListResponseResultResourcesReferenceType `json:"reference_type"`
+	ReferenceType LoadBalancerSearchListResponseResourcesReferenceType `json:"reference_type"`
 	// A list of references to (referrer) or from (referral) this resource.
 	References []interface{} `json:"references"`
 	ResourceID interface{}   `json:"resource_id"`
 	// The human-identifiable name of the resource.
 	ResourceName string `json:"resource_name"`
 	// The type of the resource.
-	ResourceType LoadBalancerSearchListResponseResultResourcesResourceType `json:"resource_type"`
-	JSON         loadBalancerSearchListResponseResultResourceJSON          `json:"-"`
+	ResourceType LoadBalancerSearchListResponseResourcesResourceType `json:"resource_type"`
+	JSON         loadBalancerSearchListResponseResourceJSON          `json:"-"`
 }
 
-// loadBalancerSearchListResponseResultResourceJSON contains the JSON metadata for
-// the struct [LoadBalancerSearchListResponseResultResource]
-type loadBalancerSearchListResponseResultResourceJSON struct {
+// loadBalancerSearchListResponseResourceJSON contains the JSON metadata for the
+// struct [LoadBalancerSearchListResponseResource]
+type loadBalancerSearchListResponseResourceJSON struct {
 	ReferenceType apijson.Field
 	References    apijson.Field
 	ResourceID    apijson.Field
@@ -149,59 +90,25 @@ type loadBalancerSearchListResponseResultResourceJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerSearchListResponseResultResource) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerSearchListResponseResource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // When listed as a reference, the type (direction) of the reference.
-type LoadBalancerSearchListResponseResultResourcesReferenceType string
+type LoadBalancerSearchListResponseResourcesReferenceType string
 
 const (
-	LoadBalancerSearchListResponseResultResourcesReferenceTypeReferral LoadBalancerSearchListResponseResultResourcesReferenceType = "referral"
-	LoadBalancerSearchListResponseResultResourcesReferenceTypeReferrer LoadBalancerSearchListResponseResultResourcesReferenceType = "referrer"
+	LoadBalancerSearchListResponseResourcesReferenceTypeReferral LoadBalancerSearchListResponseResourcesReferenceType = "referral"
+	LoadBalancerSearchListResponseResourcesReferenceTypeReferrer LoadBalancerSearchListResponseResourcesReferenceType = "referrer"
 )
 
 // The type of the resource.
-type LoadBalancerSearchListResponseResultResourcesResourceType string
+type LoadBalancerSearchListResponseResourcesResourceType string
 
 const (
-	LoadBalancerSearchListResponseResultResourcesResourceTypeLoadBalancer LoadBalancerSearchListResponseResultResourcesResourceType = "load_balancer"
-	LoadBalancerSearchListResponseResultResourcesResourceTypeMonitor      LoadBalancerSearchListResponseResultResourcesResourceType = "monitor"
-	LoadBalancerSearchListResponseResultResourcesResourceTypePool         LoadBalancerSearchListResponseResultResourcesResourceType = "pool"
-)
-
-type LoadBalancerSearchListResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       loadBalancerSearchListResponseResultInfoJSON `json:"-"`
-}
-
-// loadBalancerSearchListResponseResultInfoJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseResultInfo]
-type loadBalancerSearchListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type LoadBalancerSearchListResponseSuccess bool
-
-const (
-	LoadBalancerSearchListResponseSuccessTrue LoadBalancerSearchListResponseSuccess = true
+	LoadBalancerSearchListResponseResourcesResourceTypeLoadBalancer LoadBalancerSearchListResponseResourcesResourceType = "load_balancer"
+	LoadBalancerSearchListResponseResourcesResourceTypeMonitor      LoadBalancerSearchListResponseResourcesResourceType = "monitor"
+	LoadBalancerSearchListResponseResourcesResourceTypePool         LoadBalancerSearchListResponseResourcesResourceType = "pool"
 )
 
 type LoadBalancerSearchListParams struct {
@@ -243,4 +150,102 @@ const (
 	LoadBalancerSearchListParamsSearchParamsReferencesStar     LoadBalancerSearchListParamsSearchParamsReferences = "*"
 	LoadBalancerSearchListParamsSearchParamsReferencesReferral LoadBalancerSearchListParamsSearchParamsReferences = "referral"
 	LoadBalancerSearchListParamsSearchParamsReferencesReferrer LoadBalancerSearchListParamsSearchParamsReferences = "referrer"
+)
+
+type LoadBalancerSearchListResponseEnvelope struct {
+	Errors     []LoadBalancerSearchListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []LoadBalancerSearchListResponseEnvelopeMessages `json:"messages"`
+	Result     LoadBalancerSearchListResponse                   `json:"result"`
+	ResultInfo LoadBalancerSearchListResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success LoadBalancerSearchListResponseEnvelopeSuccess `json:"success"`
+	JSON    loadBalancerSearchListResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancerSearchListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancerSearchListResponseEnvelope]
+type loadBalancerSearchListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerSearchListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerSearchListResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    loadBalancerSearchListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// loadBalancerSearchListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LoadBalancerSearchListResponseEnvelopeErrors]
+type loadBalancerSearchListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerSearchListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerSearchListResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    loadBalancerSearchListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// loadBalancerSearchListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LoadBalancerSearchListResponseEnvelopeMessages]
+type loadBalancerSearchListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerSearchListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerSearchListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                              `json:"total_count"`
+	JSON       loadBalancerSearchListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// loadBalancerSearchListResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [LoadBalancerSearchListResponseEnvelopeResultInfo]
+type loadBalancerSearchListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerSearchListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type LoadBalancerSearchListResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerSearchListResponseEnvelopeSuccessTrue LoadBalancerSearchListResponseEnvelopeSuccess = true
 )

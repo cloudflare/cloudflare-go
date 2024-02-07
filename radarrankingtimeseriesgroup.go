@@ -36,22 +36,27 @@ func NewRadarRankingTimeseriesGroupService(opts ...option.RequestOption) (r *Rad
 // Gets Domains Rank updates change over time. Raw values are returned.
 func (r *RadarRankingTimeseriesGroupService) List(ctx context.Context, query RadarRankingTimeseriesGroupListParams, opts ...option.RequestOption) (res *RadarRankingTimeseriesGroupListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarRankingTimeseriesGroupListResponseEnvelope
 	path := "radar/ranking/timeseries_groups"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarRankingTimeseriesGroupListResponse struct {
-	Result  RadarRankingTimeseriesGroupListResponseResult `json:"result,required"`
-	Success bool                                          `json:"success,required"`
-	JSON    radarRankingTimeseriesGroupListResponseJSON   `json:"-"`
+	Meta   RadarRankingTimeseriesGroupListResponseMeta   `json:"meta,required"`
+	Serie0 RadarRankingTimeseriesGroupListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarRankingTimeseriesGroupListResponseJSON   `json:"-"`
 }
 
 // radarRankingTimeseriesGroupListResponseJSON contains the JSON metadata for the
 // struct [RadarRankingTimeseriesGroupListResponse]
 type radarRankingTimeseriesGroupListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -60,78 +65,58 @@ func (r *RadarRankingTimeseriesGroupListResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarRankingTimeseriesGroupListResponseResult struct {
-	Meta   RadarRankingTimeseriesGroupListResponseResultMeta   `json:"meta,required"`
-	Serie0 RadarRankingTimeseriesGroupListResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarRankingTimeseriesGroupListResponseResultJSON   `json:"-"`
+type RadarRankingTimeseriesGroupListResponseMeta struct {
+	DateRange []RadarRankingTimeseriesGroupListResponseMetaDateRange `json:"dateRange,required"`
+	JSON      radarRankingTimeseriesGroupListResponseMetaJSON        `json:"-"`
 }
 
-// radarRankingTimeseriesGroupListResponseResultJSON contains the JSON metadata for
-// the struct [RadarRankingTimeseriesGroupListResponseResult]
-type radarRankingTimeseriesGroupListResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarRankingTimeseriesGroupListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarRankingTimeseriesGroupListResponseResultMeta struct {
-	DateRange []RadarRankingTimeseriesGroupListResponseResultMetaDateRange `json:"dateRange,required"`
-	JSON      radarRankingTimeseriesGroupListResponseResultMetaJSON        `json:"-"`
-}
-
-// radarRankingTimeseriesGroupListResponseResultMetaJSON contains the JSON metadata
-// for the struct [RadarRankingTimeseriesGroupListResponseResultMeta]
-type radarRankingTimeseriesGroupListResponseResultMetaJSON struct {
+// radarRankingTimeseriesGroupListResponseMetaJSON contains the JSON metadata for
+// the struct [RadarRankingTimeseriesGroupListResponseMeta]
+type radarRankingTimeseriesGroupListResponseMetaJSON struct {
 	DateRange   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarRankingTimeseriesGroupListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarRankingTimeseriesGroupListResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarRankingTimeseriesGroupListResponseResultMetaDateRange struct {
+type RadarRankingTimeseriesGroupListResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                      `json:"startTime,required" format:"date-time"`
-	JSON      radarRankingTimeseriesGroupListResponseResultMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
+	JSON      radarRankingTimeseriesGroupListResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarRankingTimeseriesGroupListResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct
-// [RadarRankingTimeseriesGroupListResponseResultMetaDateRange]
-type radarRankingTimeseriesGroupListResponseResultMetaDateRangeJSON struct {
+// radarRankingTimeseriesGroupListResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarRankingTimeseriesGroupListResponseMetaDateRange]
+type radarRankingTimeseriesGroupListResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarRankingTimeseriesGroupListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarRankingTimeseriesGroupListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarRankingTimeseriesGroupListResponseResultSerie0 struct {
-	Timestamps []string                                                `json:"timestamps,required"`
-	JSON       radarRankingTimeseriesGroupListResponseResultSerie0JSON `json:"-"`
+type RadarRankingTimeseriesGroupListResponseSerie0 struct {
+	Timestamps []string                                          `json:"timestamps,required"`
+	JSON       radarRankingTimeseriesGroupListResponseSerie0JSON `json:"-"`
 }
 
-// radarRankingTimeseriesGroupListResponseResultSerie0JSON contains the JSON
-// metadata for the struct [RadarRankingTimeseriesGroupListResponseResultSerie0]
-type radarRankingTimeseriesGroupListResponseResultSerie0JSON struct {
+// radarRankingTimeseriesGroupListResponseSerie0JSON contains the JSON metadata for
+// the struct [RadarRankingTimeseriesGroupListResponseSerie0]
+type radarRankingTimeseriesGroupListResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarRankingTimeseriesGroupListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarRankingTimeseriesGroupListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -203,3 +188,22 @@ const (
 	RadarRankingTimeseriesGroupListParamsRankingTypeTrendingRise   RadarRankingTimeseriesGroupListParamsRankingType = "TRENDING_RISE"
 	RadarRankingTimeseriesGroupListParamsRankingTypeTrendingSteady RadarRankingTimeseriesGroupListParamsRankingType = "TRENDING_STEADY"
 )
+
+type RadarRankingTimeseriesGroupListResponseEnvelope struct {
+	Result  RadarRankingTimeseriesGroupListResponse             `json:"result,required"`
+	Success bool                                                `json:"success,required"`
+	JSON    radarRankingTimeseriesGroupListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarRankingTimeseriesGroupListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarRankingTimeseriesGroupListResponseEnvelope]
+type radarRankingTimeseriesGroupListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarRankingTimeseriesGroupListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

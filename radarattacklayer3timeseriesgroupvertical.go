@@ -37,22 +37,27 @@ func NewRadarAttackLayer3TimeseriesGroupVerticalService(opts ...option.RequestOp
 // Percentage distribution of attacks by vertical used over time.
 func (r *RadarAttackLayer3TimeseriesGroupVerticalService) List(ctx context.Context, query RadarAttackLayer3TimeseriesGroupVerticalListParams, opts ...option.RequestOption) (res *RadarAttackLayer3TimeseriesGroupVerticalListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarAttackLayer3TimeseriesGroupVerticalListResponseEnvelope
 	path := "radar/attacks/layer3/timeseries_groups/vertical"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarAttackLayer3TimeseriesGroupVerticalListResponse struct {
-	Result  RadarAttackLayer3TimeseriesGroupVerticalListResponseResult `json:"result,required"`
-	Success bool                                                       `json:"success,required"`
-	JSON    radarAttackLayer3TimeseriesGroupVerticalListResponseJSON   `json:"-"`
+	Meta   interface{}                                                `json:"meta,required"`
+	Serie0 RadarAttackLayer3TimeseriesGroupVerticalListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAttackLayer3TimeseriesGroupVerticalListResponseJSON   `json:"-"`
 }
 
 // radarAttackLayer3TimeseriesGroupVerticalListResponseJSON contains the JSON
 // metadata for the struct [RadarAttackLayer3TimeseriesGroupVerticalListResponse]
 type radarAttackLayer3TimeseriesGroupVerticalListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,41 +66,21 @@ func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponse) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TimeseriesGroupVerticalListResponseResult struct {
-	Meta   interface{}                                                      `json:"meta,required"`
-	Serie0 RadarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarAttackLayer3TimeseriesGroupVerticalListResponseResultJSON   `json:"-"`
+type RadarAttackLayer3TimeseriesGroupVerticalListResponseSerie0 struct {
+	Timestamps []string                                                       `json:"timestamps,required"`
+	JSON       radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON `json:"-"`
 }
 
-// radarAttackLayer3TimeseriesGroupVerticalListResponseResultJSON contains the JSON
+// radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON contains the JSON
 // metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupVerticalListResponseResult]
-type radarAttackLayer3TimeseriesGroupVerticalListResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0 struct {
-	Timestamps []string                                                             `json:"timestamps,required"`
-	JSON       radarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0JSON `json:"-"`
-}
-
-// radarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0JSON contains
-// the JSON metadata for the struct
-// [RadarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0]
-type radarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0JSON struct {
+// [RadarAttackLayer3TimeseriesGroupVerticalListResponseSerie0]
+type radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -206,3 +191,23 @@ const (
 	RadarAttackLayer3TimeseriesGroupVerticalListParamsNormalizationPercentage RadarAttackLayer3TimeseriesGroupVerticalListParamsNormalization = "PERCENTAGE"
 	RadarAttackLayer3TimeseriesGroupVerticalListParamsNormalizationMin0Max    RadarAttackLayer3TimeseriesGroupVerticalListParamsNormalization = "MIN0_MAX"
 )
+
+type RadarAttackLayer3TimeseriesGroupVerticalListResponseEnvelope struct {
+	Result  RadarAttackLayer3TimeseriesGroupVerticalListResponse             `json:"result,required"`
+	Success bool                                                             `json:"success,required"`
+	JSON    radarAttackLayer3TimeseriesGroupVerticalListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarAttackLayer3TimeseriesGroupVerticalListResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [RadarAttackLayer3TimeseriesGroupVerticalListResponseEnvelope]
+type radarAttackLayer3TimeseriesGroupVerticalListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

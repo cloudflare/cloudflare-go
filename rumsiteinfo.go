@@ -37,59 +37,95 @@ func NewRumSiteInfoService(opts ...option.RequestOption) (r *RumSiteInfoService)
 // Creates a new Web Analytics site.
 func (r *RumSiteInfoService) New(ctx context.Context, accountIdentifier string, body RumSiteInfoNewParams, opts ...option.RequestOption) (res *RumSiteInfoNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RumSiteInfoNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Retrieves a Web Analytics site.
 func (r *RumSiteInfoService) Get(ctx context.Context, accountIdentifier string, siteIdentifier string, opts ...option.RequestOption) (res *RumSiteInfoGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RumSiteInfoGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Updates an existing Web Analytics site.
 func (r *RumSiteInfoService) Update(ctx context.Context, accountIdentifier string, siteIdentifier string, body RumSiteInfoUpdateParams, opts ...option.RequestOption) (res *RumSiteInfoUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RumSiteInfoUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RumSiteInfoService) List(ctx context.Context, accountIdentifier string, query RumSiteInfoListParams, opts ...option.RequestOption) (res *RumSiteInfoListResponse, err error) {
+func (r *RumSiteInfoService) List(ctx context.Context, accountIdentifier string, query RumSiteInfoListParams, opts ...option.RequestOption) (res *[]RumSiteInfoListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RumSiteInfoListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/list", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Deletes an existing Web Analytics site.
 func (r *RumSiteInfoService) Delete(ctx context.Context, accountIdentifier string, siteIdentifier string, opts ...option.RequestOption) (res *RumSiteInfoDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RumSiteInfoDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountIdentifier, siteIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RumSiteInfoNewResponse struct {
-	Errors   []RumSiteInfoNewResponseError   `json:"errors"`
-	Messages []RumSiteInfoNewResponseMessage `json:"messages"`
-	Result   RumSiteInfoNewResponseResult    `json:"result"`
-	// Whether the API call was successful.
-	Success bool                       `json:"success"`
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RumSiteInfoNewResponseRule  `json:"rules"`
+	Ruleset RumSiteInfoNewResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                     `json:"snippet"`
 	JSON    rumSiteInfoNewResponseJSON `json:"-"`
 }
 
 // rumSiteInfoNewResponseJSON contains the JSON metadata for the struct
 // [RumSiteInfoNewResponse]
 type rumSiteInfoNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -98,80 +134,7 @@ func (r *RumSiteInfoNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoNewResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    rumSiteInfoNewResponseErrorJSON `json:"-"`
-}
-
-// rumSiteInfoNewResponseErrorJSON contains the JSON metadata for the struct
-// [RumSiteInfoNewResponseError]
-type rumSiteInfoNewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoNewResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    rumSiteInfoNewResponseMessageJSON `json:"-"`
-}
-
-// rumSiteInfoNewResponseMessageJSON contains the JSON metadata for the struct
-// [RumSiteInfoNewResponseMessage]
-type rumSiteInfoNewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoNewResponseResult struct {
-	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
-	// sites.
-	AutoInstall bool      `json:"auto_install"`
-	Created     time.Time `json:"created" format:"date-time"`
-	// A list of rules.
-	Rules   []RumSiteInfoNewResponseResultRule  `json:"rules"`
-	Ruleset RumSiteInfoNewResponseResultRuleset `json:"ruleset"`
-	// The Web Analytics site identifier.
-	SiteTag string `json:"site_tag"`
-	// The Web Analytics site token.
-	SiteToken string `json:"site_token"`
-	// Encoded JavaScript snippet.
-	Snippet string                           `json:"snippet"`
-	JSON    rumSiteInfoNewResponseResultJSON `json:"-"`
-}
-
-// rumSiteInfoNewResponseResultJSON contains the JSON metadata for the struct
-// [RumSiteInfoNewResponseResult]
-type rumSiteInfoNewResponseResultJSON struct {
-	AutoInstall apijson.Field
-	Created     apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	SiteTag     apijson.Field
-	SiteToken   apijson.Field
-	Snippet     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoNewResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoNewResponseResultRule struct {
+type RumSiteInfoNewResponseRule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -182,14 +145,14 @@ type RumSiteInfoNewResponseResultRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string                             `json:"paths"`
-	Priority float64                              `json:"priority"`
-	JSON     rumSiteInfoNewResponseResultRuleJSON `json:"-"`
+	Paths    []string                       `json:"paths"`
+	Priority float64                        `json:"priority"`
+	JSON     rumSiteInfoNewResponseRuleJSON `json:"-"`
 }
 
-// rumSiteInfoNewResponseResultRuleJSON contains the JSON metadata for the struct
-// [RumSiteInfoNewResponseResultRule]
-type rumSiteInfoNewResponseResultRuleJSON struct {
+// rumSiteInfoNewResponseRuleJSON contains the JSON metadata for the struct
+// [RumSiteInfoNewResponseRule]
+type rumSiteInfoNewResponseRuleJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -201,24 +164,24 @@ type rumSiteInfoNewResponseResultRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoNewResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoNewResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoNewResponseResultRuleset struct {
+type RumSiteInfoNewResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string                                  `json:"zone_tag"`
-	JSON    rumSiteInfoNewResponseResultRulesetJSON `json:"-"`
+	ZoneTag string                            `json:"zone_tag"`
+	JSON    rumSiteInfoNewResponseRulesetJSON `json:"-"`
 }
 
-// rumSiteInfoNewResponseResultRulesetJSON contains the JSON metadata for the
-// struct [RumSiteInfoNewResponseResultRuleset]
-type rumSiteInfoNewResponseResultRulesetJSON struct {
+// rumSiteInfoNewResponseRulesetJSON contains the JSON metadata for the struct
+// [RumSiteInfoNewResponseRuleset]
+type rumSiteInfoNewResponseRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -227,26 +190,37 @@ type rumSiteInfoNewResponseResultRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoNewResponseResultRuleset) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoNewResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RumSiteInfoGetResponse struct {
-	Errors   []RumSiteInfoGetResponseError   `json:"errors"`
-	Messages []RumSiteInfoGetResponseMessage `json:"messages"`
-	Result   RumSiteInfoGetResponseResult    `json:"result"`
-	// Whether the API call was successful.
-	Success bool                       `json:"success"`
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RumSiteInfoGetResponseRule  `json:"rules"`
+	Ruleset RumSiteInfoGetResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                     `json:"snippet"`
 	JSON    rumSiteInfoGetResponseJSON `json:"-"`
 }
 
 // rumSiteInfoGetResponseJSON contains the JSON metadata for the struct
 // [RumSiteInfoGetResponse]
 type rumSiteInfoGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -255,80 +229,7 @@ func (r *RumSiteInfoGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoGetResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    rumSiteInfoGetResponseErrorJSON `json:"-"`
-}
-
-// rumSiteInfoGetResponseErrorJSON contains the JSON metadata for the struct
-// [RumSiteInfoGetResponseError]
-type rumSiteInfoGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoGetResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    rumSiteInfoGetResponseMessageJSON `json:"-"`
-}
-
-// rumSiteInfoGetResponseMessageJSON contains the JSON metadata for the struct
-// [RumSiteInfoGetResponseMessage]
-type rumSiteInfoGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoGetResponseResult struct {
-	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
-	// sites.
-	AutoInstall bool      `json:"auto_install"`
-	Created     time.Time `json:"created" format:"date-time"`
-	// A list of rules.
-	Rules   []RumSiteInfoGetResponseResultRule  `json:"rules"`
-	Ruleset RumSiteInfoGetResponseResultRuleset `json:"ruleset"`
-	// The Web Analytics site identifier.
-	SiteTag string `json:"site_tag"`
-	// The Web Analytics site token.
-	SiteToken string `json:"site_token"`
-	// Encoded JavaScript snippet.
-	Snippet string                           `json:"snippet"`
-	JSON    rumSiteInfoGetResponseResultJSON `json:"-"`
-}
-
-// rumSiteInfoGetResponseResultJSON contains the JSON metadata for the struct
-// [RumSiteInfoGetResponseResult]
-type rumSiteInfoGetResponseResultJSON struct {
-	AutoInstall apijson.Field
-	Created     apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	SiteTag     apijson.Field
-	SiteToken   apijson.Field
-	Snippet     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoGetResponseResultRule struct {
+type RumSiteInfoGetResponseRule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -339,14 +240,14 @@ type RumSiteInfoGetResponseResultRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string                             `json:"paths"`
-	Priority float64                              `json:"priority"`
-	JSON     rumSiteInfoGetResponseResultRuleJSON `json:"-"`
+	Paths    []string                       `json:"paths"`
+	Priority float64                        `json:"priority"`
+	JSON     rumSiteInfoGetResponseRuleJSON `json:"-"`
 }
 
-// rumSiteInfoGetResponseResultRuleJSON contains the JSON metadata for the struct
-// [RumSiteInfoGetResponseResultRule]
-type rumSiteInfoGetResponseResultRuleJSON struct {
+// rumSiteInfoGetResponseRuleJSON contains the JSON metadata for the struct
+// [RumSiteInfoGetResponseRule]
+type rumSiteInfoGetResponseRuleJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -358,24 +259,24 @@ type rumSiteInfoGetResponseResultRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoGetResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoGetResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoGetResponseResultRuleset struct {
+type RumSiteInfoGetResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string                                  `json:"zone_tag"`
-	JSON    rumSiteInfoGetResponseResultRulesetJSON `json:"-"`
+	ZoneTag string                            `json:"zone_tag"`
+	JSON    rumSiteInfoGetResponseRulesetJSON `json:"-"`
 }
 
-// rumSiteInfoGetResponseResultRulesetJSON contains the JSON metadata for the
-// struct [RumSiteInfoGetResponseResultRuleset]
-type rumSiteInfoGetResponseResultRulesetJSON struct {
+// rumSiteInfoGetResponseRulesetJSON contains the JSON metadata for the struct
+// [RumSiteInfoGetResponseRuleset]
+type rumSiteInfoGetResponseRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -384,26 +285,37 @@ type rumSiteInfoGetResponseResultRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoGetResponseResultRuleset) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoGetResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RumSiteInfoUpdateResponse struct {
-	Errors   []RumSiteInfoUpdateResponseError   `json:"errors"`
-	Messages []RumSiteInfoUpdateResponseMessage `json:"messages"`
-	Result   RumSiteInfoUpdateResponseResult    `json:"result"`
-	// Whether the API call was successful.
-	Success bool                          `json:"success"`
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RumSiteInfoUpdateResponseRule  `json:"rules"`
+	Ruleset RumSiteInfoUpdateResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                        `json:"snippet"`
 	JSON    rumSiteInfoUpdateResponseJSON `json:"-"`
 }
 
 // rumSiteInfoUpdateResponseJSON contains the JSON metadata for the struct
 // [RumSiteInfoUpdateResponse]
 type rumSiteInfoUpdateResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -412,80 +324,7 @@ func (r *RumSiteInfoUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoUpdateResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    rumSiteInfoUpdateResponseErrorJSON `json:"-"`
-}
-
-// rumSiteInfoUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [RumSiteInfoUpdateResponseError]
-type rumSiteInfoUpdateResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoUpdateResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    rumSiteInfoUpdateResponseMessageJSON `json:"-"`
-}
-
-// rumSiteInfoUpdateResponseMessageJSON contains the JSON metadata for the struct
-// [RumSiteInfoUpdateResponseMessage]
-type rumSiteInfoUpdateResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoUpdateResponseResult struct {
-	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
-	// sites.
-	AutoInstall bool      `json:"auto_install"`
-	Created     time.Time `json:"created" format:"date-time"`
-	// A list of rules.
-	Rules   []RumSiteInfoUpdateResponseResultRule  `json:"rules"`
-	Ruleset RumSiteInfoUpdateResponseResultRuleset `json:"ruleset"`
-	// The Web Analytics site identifier.
-	SiteTag string `json:"site_tag"`
-	// The Web Analytics site token.
-	SiteToken string `json:"site_token"`
-	// Encoded JavaScript snippet.
-	Snippet string                              `json:"snippet"`
-	JSON    rumSiteInfoUpdateResponseResultJSON `json:"-"`
-}
-
-// rumSiteInfoUpdateResponseResultJSON contains the JSON metadata for the struct
-// [RumSiteInfoUpdateResponseResult]
-type rumSiteInfoUpdateResponseResultJSON struct {
-	AutoInstall apijson.Field
-	Created     apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	SiteTag     apijson.Field
-	SiteToken   apijson.Field
-	Snippet     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoUpdateResponseResultRule struct {
+type RumSiteInfoUpdateResponseRule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -496,14 +335,14 @@ type RumSiteInfoUpdateResponseResultRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string                                `json:"paths"`
-	Priority float64                                 `json:"priority"`
-	JSON     rumSiteInfoUpdateResponseResultRuleJSON `json:"-"`
+	Paths    []string                          `json:"paths"`
+	Priority float64                           `json:"priority"`
+	JSON     rumSiteInfoUpdateResponseRuleJSON `json:"-"`
 }
 
-// rumSiteInfoUpdateResponseResultRuleJSON contains the JSON metadata for the
-// struct [RumSiteInfoUpdateResponseResultRule]
-type rumSiteInfoUpdateResponseResultRuleJSON struct {
+// rumSiteInfoUpdateResponseRuleJSON contains the JSON metadata for the struct
+// [RumSiteInfoUpdateResponseRule]
+type rumSiteInfoUpdateResponseRuleJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -515,24 +354,24 @@ type rumSiteInfoUpdateResponseResultRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoUpdateResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoUpdateResponseResultRuleset struct {
+type RumSiteInfoUpdateResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string                                     `json:"zone_tag"`
-	JSON    rumSiteInfoUpdateResponseResultRulesetJSON `json:"-"`
+	ZoneTag string                               `json:"zone_tag"`
+	JSON    rumSiteInfoUpdateResponseRulesetJSON `json:"-"`
 }
 
-// rumSiteInfoUpdateResponseResultRulesetJSON contains the JSON metadata for the
-// struct [RumSiteInfoUpdateResponseResultRuleset]
-type rumSiteInfoUpdateResponseResultRulesetJSON struct {
+// rumSiteInfoUpdateResponseRulesetJSON contains the JSON metadata for the struct
+// [RumSiteInfoUpdateResponseRuleset]
+type rumSiteInfoUpdateResponseRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -541,28 +380,37 @@ type rumSiteInfoUpdateResponseResultRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoUpdateResponseResultRuleset) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoUpdateResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RumSiteInfoListResponse struct {
-	Errors     []RumSiteInfoListResponseError    `json:"errors"`
-	Messages   []RumSiteInfoListResponseMessage  `json:"messages"`
-	Result     []RumSiteInfoListResponseResult   `json:"result"`
-	ResultInfo RumSiteInfoListResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful.
-	Success bool                        `json:"success"`
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RumSiteInfoListResponseRule  `json:"rules"`
+	Ruleset RumSiteInfoListResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                      `json:"snippet"`
 	JSON    rumSiteInfoListResponseJSON `json:"-"`
 }
 
 // rumSiteInfoListResponseJSON contains the JSON metadata for the struct
 // [RumSiteInfoListResponse]
 type rumSiteInfoListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -571,80 +419,7 @@ func (r *RumSiteInfoListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoListResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    rumSiteInfoListResponseErrorJSON `json:"-"`
-}
-
-// rumSiteInfoListResponseErrorJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseError]
-type rumSiteInfoListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoListResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    rumSiteInfoListResponseMessageJSON `json:"-"`
-}
-
-// rumSiteInfoListResponseMessageJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseMessage]
-type rumSiteInfoListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoListResponseResult struct {
-	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
-	// sites.
-	AutoInstall bool      `json:"auto_install"`
-	Created     time.Time `json:"created" format:"date-time"`
-	// A list of rules.
-	Rules   []RumSiteInfoListResponseResultRule  `json:"rules"`
-	Ruleset RumSiteInfoListResponseResultRuleset `json:"ruleset"`
-	// The Web Analytics site identifier.
-	SiteTag string `json:"site_tag"`
-	// The Web Analytics site token.
-	SiteToken string `json:"site_token"`
-	// Encoded JavaScript snippet.
-	Snippet string                            `json:"snippet"`
-	JSON    rumSiteInfoListResponseResultJSON `json:"-"`
-}
-
-// rumSiteInfoListResponseResultJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseResult]
-type rumSiteInfoListResponseResultJSON struct {
-	AutoInstall apijson.Field
-	Created     apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	SiteTag     apijson.Field
-	SiteToken   apijson.Field
-	Snippet     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoListResponseResultRule struct {
+type RumSiteInfoListResponseRule struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -655,14 +430,14 @@ type RumSiteInfoListResponseResultRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string                              `json:"paths"`
-	Priority float64                               `json:"priority"`
-	JSON     rumSiteInfoListResponseResultRuleJSON `json:"-"`
+	Paths    []string                        `json:"paths"`
+	Priority float64                         `json:"priority"`
+	JSON     rumSiteInfoListResponseRuleJSON `json:"-"`
 }
 
-// rumSiteInfoListResponseResultRuleJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseResultRule]
-type rumSiteInfoListResponseResultRuleJSON struct {
+// rumSiteInfoListResponseRuleJSON contains the JSON metadata for the struct
+// [RumSiteInfoListResponseRule]
+type rumSiteInfoListResponseRuleJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -674,24 +449,24 @@ type rumSiteInfoListResponseResultRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoListResponseResultRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoListResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumSiteInfoListResponseResultRuleset struct {
+type RumSiteInfoListResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string                                   `json:"zone_tag"`
-	JSON    rumSiteInfoListResponseResultRulesetJSON `json:"-"`
+	ZoneTag string                             `json:"zone_tag"`
+	JSON    rumSiteInfoListResponseRulesetJSON `json:"-"`
 }
 
-// rumSiteInfoListResponseResultRulesetJSON contains the JSON metadata for the
-// struct [RumSiteInfoListResponseResultRuleset]
-type rumSiteInfoListResponseResultRulesetJSON struct {
+// rumSiteInfoListResponseRulesetJSON contains the JSON metadata for the struct
+// [RumSiteInfoListResponseRuleset]
+type rumSiteInfoListResponseRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -700,117 +475,25 @@ type rumSiteInfoListResponseResultRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoListResponseResultRuleset) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoListResponseResultInfo struct {
-	// The total number of items on the current page.
-	Count int64 `json:"count"`
-	// Current page within the paginated list of results.
-	Page int64 `json:"page"`
-	// The maximum number of items to return per page of results.
-	PerPage int64 `json:"per_page"`
-	// The total number of items.
-	TotalCount int64 `json:"total_count"`
-	// The total number of pages.
-	TotalPages int64                                 `json:"total_pages,nullable"`
-	JSON       rumSiteInfoListResponseResultInfoJSON `json:"-"`
-}
-
-// rumSiteInfoListResponseResultInfoJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseResultInfo]
-type rumSiteInfoListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoListResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RumSiteInfoDeleteResponse struct {
-	Errors   []RumSiteInfoDeleteResponseError   `json:"errors"`
-	Messages []RumSiteInfoDeleteResponseMessage `json:"messages"`
-	Result   RumSiteInfoDeleteResponseResult    `json:"result"`
-	// Whether the API call was successful.
-	Success bool                          `json:"success"`
+	// The Web Analytics site identifier.
+	SiteTag string                        `json:"site_tag"`
 	JSON    rumSiteInfoDeleteResponseJSON `json:"-"`
 }
 
 // rumSiteInfoDeleteResponseJSON contains the JSON metadata for the struct
 // [RumSiteInfoDeleteResponse]
 type rumSiteInfoDeleteResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoDeleteResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    rumSiteInfoDeleteResponseErrorJSON `json:"-"`
-}
-
-// rumSiteInfoDeleteResponseErrorJSON contains the JSON metadata for the struct
-// [RumSiteInfoDeleteResponseError]
-type rumSiteInfoDeleteResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoDeleteResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    rumSiteInfoDeleteResponseMessageJSON `json:"-"`
-}
-
-// rumSiteInfoDeleteResponseMessageJSON contains the JSON metadata for the struct
-// [RumSiteInfoDeleteResponseMessage]
-type rumSiteInfoDeleteResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoDeleteResponseResult struct {
-	// The Web Analytics site identifier.
-	SiteTag string                              `json:"site_tag"`
-	JSON    rumSiteInfoDeleteResponseResultJSON `json:"-"`
-}
-
-// rumSiteInfoDeleteResponseResultJSON contains the JSON metadata for the struct
-// [RumSiteInfoDeleteResponseResult]
-type rumSiteInfoDeleteResponseResultJSON struct {
 	SiteTag     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RumSiteInfoDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *RumSiteInfoDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -828,6 +511,130 @@ func (r RumSiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type RumSiteInfoNewResponseEnvelope struct {
+	Errors   []RumSiteInfoNewResponseEnvelopeErrors   `json:"errors"`
+	Messages []RumSiteInfoNewResponseEnvelopeMessages `json:"messages"`
+	Result   RumSiteInfoNewResponse                   `json:"result"`
+	// Whether the API call was successful.
+	Success bool                               `json:"success"`
+	JSON    rumSiteInfoNewResponseEnvelopeJSON `json:"-"`
+}
+
+// rumSiteInfoNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumSiteInfoNewResponseEnvelope]
+type rumSiteInfoNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    rumSiteInfoNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rumSiteInfoNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RumSiteInfoNewResponseEnvelopeErrors]
+type rumSiteInfoNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    rumSiteInfoNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rumSiteInfoNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RumSiteInfoNewResponseEnvelopeMessages]
+type rumSiteInfoNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoGetResponseEnvelope struct {
+	Errors   []RumSiteInfoGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []RumSiteInfoGetResponseEnvelopeMessages `json:"messages"`
+	Result   RumSiteInfoGetResponse                   `json:"result"`
+	// Whether the API call was successful.
+	Success bool                               `json:"success"`
+	JSON    rumSiteInfoGetResponseEnvelopeJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumSiteInfoGetResponseEnvelope]
+type rumSiteInfoGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    rumSiteInfoGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RumSiteInfoGetResponseEnvelopeErrors]
+type rumSiteInfoGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    rumSiteInfoGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RumSiteInfoGetResponseEnvelopeMessages]
+type rumSiteInfoGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RumSiteInfoUpdateParams struct {
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
@@ -840,6 +647,68 @@ type RumSiteInfoUpdateParams struct {
 
 func (r RumSiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type RumSiteInfoUpdateResponseEnvelope struct {
+	Errors   []RumSiteInfoUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []RumSiteInfoUpdateResponseEnvelopeMessages `json:"messages"`
+	Result   RumSiteInfoUpdateResponse                   `json:"result"`
+	// Whether the API call was successful.
+	Success bool                                  `json:"success"`
+	JSON    rumSiteInfoUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumSiteInfoUpdateResponseEnvelope]
+type rumSiteInfoUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    rumSiteInfoUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RumSiteInfoUpdateResponseEnvelopeErrors]
+type rumSiteInfoUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    rumSiteInfoUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RumSiteInfoUpdateResponseEnvelopeMessages]
+type rumSiteInfoUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type RumSiteInfoListParams struct {
@@ -866,3 +735,159 @@ const (
 	RumSiteInfoListParamsOrderByHost    RumSiteInfoListParamsOrderBy = "host"
 	RumSiteInfoListParamsOrderByCreated RumSiteInfoListParamsOrderBy = "created"
 )
+
+type RumSiteInfoListResponseEnvelope struct {
+	Errors     []RumSiteInfoListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []RumSiteInfoListResponseEnvelopeMessages `json:"messages"`
+	Result     []RumSiteInfoListResponse                 `json:"result"`
+	ResultInfo RumSiteInfoListResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful.
+	Success bool                                `json:"success"`
+	JSON    rumSiteInfoListResponseEnvelopeJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumSiteInfoListResponseEnvelope]
+type rumSiteInfoListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    rumSiteInfoListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RumSiteInfoListResponseEnvelopeErrors]
+type rumSiteInfoListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    rumSiteInfoListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RumSiteInfoListResponseEnvelopeMessages]
+type rumSiteInfoListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoListResponseEnvelopeResultInfo struct {
+	// The total number of items on the current page.
+	Count int64 `json:"count"`
+	// Current page within the paginated list of results.
+	Page int64 `json:"page"`
+	// The maximum number of items to return per page of results.
+	PerPage int64 `json:"per_page"`
+	// The total number of items.
+	TotalCount int64 `json:"total_count"`
+	// The total number of pages.
+	TotalPages int64                                         `json:"total_pages,nullable"`
+	JSON       rumSiteInfoListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [RumSiteInfoListResponseEnvelopeResultInfo]
+type rumSiteInfoListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoDeleteResponseEnvelope struct {
+	Errors   []RumSiteInfoDeleteResponseEnvelopeErrors   `json:"errors"`
+	Messages []RumSiteInfoDeleteResponseEnvelopeMessages `json:"messages"`
+	Result   RumSiteInfoDeleteResponse                   `json:"result"`
+	// Whether the API call was successful.
+	Success bool                                  `json:"success"`
+	JSON    rumSiteInfoDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// rumSiteInfoDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumSiteInfoDeleteResponseEnvelope]
+type rumSiteInfoDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoDeleteResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    rumSiteInfoDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rumSiteInfoDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RumSiteInfoDeleteResponseEnvelopeErrors]
+type rumSiteInfoDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumSiteInfoDeleteResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    rumSiteInfoDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rumSiteInfoDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RumSiteInfoDeleteResponseEnvelopeMessages]
+type rumSiteInfoDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumSiteInfoDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

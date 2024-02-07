@@ -37,22 +37,27 @@ func NewRadarQualitySpeedSummaryService(opts ...option.RequestOption) (r *RadarQ
 // 90 days of Cloudflare Speed Test data.
 func (r *RadarQualitySpeedSummaryService) Get(ctx context.Context, query RadarQualitySpeedSummaryGetParams, opts ...option.RequestOption) (res *RadarQualitySpeedSummaryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarQualitySpeedSummaryGetResponseEnvelope
 	path := "radar/quality/speed/summary"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarQualitySpeedSummaryGetResponse struct {
-	Result  RadarQualitySpeedSummaryGetResponseResult `json:"result,required"`
-	Success bool                                      `json:"success,required"`
-	JSON    radarQualitySpeedSummaryGetResponseJSON   `json:"-"`
+	Meta     RadarQualitySpeedSummaryGetResponseMeta     `json:"meta,required"`
+	Summary0 RadarQualitySpeedSummaryGetResponseSummary0 `json:"summary_0,required"`
+	JSON     radarQualitySpeedSummaryGetResponseJSON     `json:"-"`
 }
 
 // radarQualitySpeedSummaryGetResponseJSON contains the JSON metadata for the
 // struct [RadarQualitySpeedSummaryGetResponse]
 type radarQualitySpeedSummaryGetResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Summary0    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,36 +66,17 @@ func (r *RadarQualitySpeedSummaryGetResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedSummaryGetResponseResult struct {
-	Meta     RadarQualitySpeedSummaryGetResponseResultMeta     `json:"meta,required"`
-	Summary0 RadarQualitySpeedSummaryGetResponseResultSummary0 `json:"summary_0,required"`
-	JSON     radarQualitySpeedSummaryGetResponseResultJSON     `json:"-"`
+type RadarQualitySpeedSummaryGetResponseMeta struct {
+	DateRange      []RadarQualitySpeedSummaryGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                `json:"lastUpdated,required"`
+	Normalization  string                                                `json:"normalization,required"`
+	ConfidenceInfo RadarQualitySpeedSummaryGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarQualitySpeedSummaryGetResponseMetaJSON           `json:"-"`
 }
 
-// radarQualitySpeedSummaryGetResponseResultJSON contains the JSON metadata for the
-// struct [RadarQualitySpeedSummaryGetResponseResult]
-type radarQualitySpeedSummaryGetResponseResultJSON struct {
-	Meta        apijson.Field
-	Summary0    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarQualitySpeedSummaryGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarQualitySpeedSummaryGetResponseResultMeta struct {
-	DateRange      []RadarQualitySpeedSummaryGetResponseResultMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                      `json:"lastUpdated,required"`
-	Normalization  string                                                      `json:"normalization,required"`
-	ConfidenceInfo RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarQualitySpeedSummaryGetResponseResultMetaJSON           `json:"-"`
-}
-
-// radarQualitySpeedSummaryGetResponseResultMetaJSON contains the JSON metadata for
-// the struct [RadarQualitySpeedSummaryGetResponseResultMeta]
-type radarQualitySpeedSummaryGetResponseResultMetaJSON struct {
+// radarQualitySpeedSummaryGetResponseMetaJSON contains the JSON metadata for the
+// struct [RadarQualitySpeedSummaryGetResponseMeta]
+type radarQualitySpeedSummaryGetResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
@@ -99,66 +85,65 @@ type radarQualitySpeedSummaryGetResponseResultMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedSummaryGetResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedSummaryGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedSummaryGetResponseResultMetaDateRange struct {
+type RadarQualitySpeedSummaryGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                  `json:"startTime,required" format:"date-time"`
-	JSON      radarQualitySpeedSummaryGetResponseResultMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      radarQualitySpeedSummaryGetResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarQualitySpeedSummaryGetResponseResultMetaDateRangeJSON contains the JSON
-// metadata for the struct [RadarQualitySpeedSummaryGetResponseResultMetaDateRange]
-type radarQualitySpeedSummaryGetResponseResultMetaDateRangeJSON struct {
+// radarQualitySpeedSummaryGetResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [RadarQualitySpeedSummaryGetResponseMetaDateRange]
+type radarQualitySpeedSummaryGetResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedSummaryGetResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedSummaryGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                   `json:"level"`
-	JSON        radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoJSON         `json:"-"`
+type RadarQualitySpeedSummaryGetResponseMetaConfidenceInfo struct {
+	Annotations []RadarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        radarQualitySpeedSummaryGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoJSON contains the
-// JSON metadata for the struct
-// [RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfo]
-type radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoJSON struct {
+// radarQualitySpeedSummaryGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RadarQualitySpeedSummaryGetResponseMetaConfidenceInfo]
+type radarQualitySpeedSummaryGetResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedSummaryGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                    `json:"dataSource,required"`
-	Description     string                                                                    `json:"description,required"`
-	EventType       string                                                                    `json:"eventType,required"`
-	IsInstantaneous interface{}                                                               `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                 `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                    `json:"linkedUrl"`
-	StartTime       time.Time                                                                 `json:"startTime" format:"date-time"`
-	JSON            radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            radarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotationJSON
-// contains the JSON metadata for the struct
-// [RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotation]
-type radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotationJSON struct {
+// radarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [RadarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotation]
+type radarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -170,24 +155,24 @@ type radarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotationJSON s
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedSummaryGetResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedSummaryGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedSummaryGetResponseResultSummary0 struct {
-	BandwidthDownload string                                                `json:"bandwidthDownload,required"`
-	BandwidthUpload   string                                                `json:"bandwidthUpload,required"`
-	JitterIdle        string                                                `json:"jitterIdle,required"`
-	JitterLoaded      string                                                `json:"jitterLoaded,required"`
-	LatencyIdle       string                                                `json:"latencyIdle,required"`
-	LatencyLoaded     string                                                `json:"latencyLoaded,required"`
-	PacketLoss        string                                                `json:"packetLoss,required"`
-	JSON              radarQualitySpeedSummaryGetResponseResultSummary0JSON `json:"-"`
+type RadarQualitySpeedSummaryGetResponseSummary0 struct {
+	BandwidthDownload string                                          `json:"bandwidthDownload,required"`
+	BandwidthUpload   string                                          `json:"bandwidthUpload,required"`
+	JitterIdle        string                                          `json:"jitterIdle,required"`
+	JitterLoaded      string                                          `json:"jitterLoaded,required"`
+	LatencyIdle       string                                          `json:"latencyIdle,required"`
+	LatencyLoaded     string                                          `json:"latencyLoaded,required"`
+	PacketLoss        string                                          `json:"packetLoss,required"`
+	JSON              radarQualitySpeedSummaryGetResponseSummary0JSON `json:"-"`
 }
 
-// radarQualitySpeedSummaryGetResponseResultSummary0JSON contains the JSON metadata
-// for the struct [RadarQualitySpeedSummaryGetResponseResultSummary0]
-type radarQualitySpeedSummaryGetResponseResultSummary0JSON struct {
+// radarQualitySpeedSummaryGetResponseSummary0JSON contains the JSON metadata for
+// the struct [RadarQualitySpeedSummaryGetResponseSummary0]
+type radarQualitySpeedSummaryGetResponseSummary0JSON struct {
 	BandwidthDownload apijson.Field
 	BandwidthUpload   apijson.Field
 	JitterIdle        apijson.Field
@@ -199,7 +184,7 @@ type radarQualitySpeedSummaryGetResponseResultSummary0JSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedSummaryGetResponseResultSummary0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedSummaryGetResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -236,3 +221,22 @@ const (
 	RadarQualitySpeedSummaryGetParamsFormatJson RadarQualitySpeedSummaryGetParamsFormat = "JSON"
 	RadarQualitySpeedSummaryGetParamsFormatCsv  RadarQualitySpeedSummaryGetParamsFormat = "CSV"
 )
+
+type RadarQualitySpeedSummaryGetResponseEnvelope struct {
+	Result  RadarQualitySpeedSummaryGetResponse             `json:"result,required"`
+	Success bool                                            `json:"success,required"`
+	JSON    radarQualitySpeedSummaryGetResponseEnvelopeJSON `json:"-"`
+}
+
+// radarQualitySpeedSummaryGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [RadarQualitySpeedSummaryGetResponseEnvelope]
+type radarQualitySpeedSummaryGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualitySpeedSummaryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

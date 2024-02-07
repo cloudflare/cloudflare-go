@@ -39,91 +39,34 @@ func NewDexHTTPTestService(opts ...option.RequestOption) (r *DexHTTPTestService)
 // time period between 1 hour and 7 days.
 func (r *DexHTTPTestService) Get(ctx context.Context, accountID string, testID string, query DexHTTPTestGetParams, opts ...option.RequestOption) (res *DexHTTPTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DexHTTPTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DexHTTPTestGetResponse struct {
-	Errors   []DexHTTPTestGetResponseError   `json:"errors"`
-	Messages []DexHTTPTestGetResponseMessage `json:"messages"`
-	Result   DexHTTPTestGetResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success DexHTTPTestGetResponseSuccess `json:"success"`
-	JSON    dexHTTPTestGetResponseJSON    `json:"-"`
+	// The url of the HTTP synthetic application test
+	Host            string                                  `json:"host"`
+	HTTPStats       DexHTTPTestGetResponseHTTPStats         `json:"httpStats,nullable"`
+	HTTPStatsByColo []DexHTTPTestGetResponseHTTPStatsByColo `json:"httpStatsByColo"`
+	// The interval at which the HTTP synthetic application test is set to run.
+	Interval string                     `json:"interval"`
+	Kind     DexHTTPTestGetResponseKind `json:"kind"`
+	// The HTTP method to use when running the test
+	Method string `json:"method"`
+	// The name of the HTTP synthetic application test
+	Name string                     `json:"name"`
+	JSON dexHTTPTestGetResponseJSON `json:"-"`
 }
 
 // dexHTTPTestGetResponseJSON contains the JSON metadata for the struct
 // [DexHTTPTestGetResponse]
 type dexHTTPTestGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexHTTPTestGetResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    dexHTTPTestGetResponseErrorJSON `json:"-"`
-}
-
-// dexHTTPTestGetResponseErrorJSON contains the JSON metadata for the struct
-// [DexHTTPTestGetResponseError]
-type dexHTTPTestGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexHTTPTestGetResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    dexHTTPTestGetResponseMessageJSON `json:"-"`
-}
-
-// dexHTTPTestGetResponseMessageJSON contains the JSON metadata for the struct
-// [DexHTTPTestGetResponseMessage]
-type dexHTTPTestGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexHTTPTestGetResponseResult struct {
-	// The url of the HTTP synthetic application test
-	Host            string                                        `json:"host"`
-	HTTPStats       DexHTTPTestGetResponseResultHTTPStats         `json:"httpStats,nullable"`
-	HTTPStatsByColo []DexHTTPTestGetResponseResultHTTPStatsByColo `json:"httpStatsByColo"`
-	// The interval at which the HTTP synthetic application test is set to run.
-	Interval string                           `json:"interval"`
-	Kind     DexHTTPTestGetResponseResultKind `json:"kind"`
-	// The HTTP method to use when running the test
-	Method string `json:"method"`
-	// The name of the HTTP synthetic application test
-	Name string                           `json:"name"`
-	JSON dexHTTPTestGetResponseResultJSON `json:"-"`
-}
-
-// dexHTTPTestGetResponseResultJSON contains the JSON metadata for the struct
-// [DexHTTPTestGetResponseResult]
-type dexHTTPTestGetResponseResultJSON struct {
 	Host            apijson.Field
 	HTTPStats       apijson.Field
 	HTTPStatsByColo apijson.Field
@@ -135,23 +78,23 @@ type dexHTTPTestGetResponseResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStats struct {
-	DNSResponseTimeMs    DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []DexHTTPTestGetResponseResultHTTPStatsHTTPStatusCode     `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMs `json:"serverResponseTimeMs,required"`
+type DexHTTPTestGetResponseHTTPStats struct {
+	DNSResponseTimeMs    DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
+	HTTPStatusCode       []DexHTTPTestGetResponseHTTPStatsHTTPStatusCode     `json:"httpStatusCode,required"`
+	ResourceFetchTimeMs  DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
+	ServerResponseTimeMs DexHTTPTestGetResponseHTTPStatsServerResponseTimeMs `json:"serverResponseTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                     `json:"uniqueDevicesTotal,required"`
-	JSON               dexHTTPTestGetResponseResultHTTPStatsJSON `json:"-"`
+	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal,required"`
+	JSON               dexHTTPTestGetResponseHTTPStatsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsJSON contains the JSON metadata for the
-// struct [DexHTTPTestGetResponseResultHTTPStats]
-type dexHTTPTestGetResponseResultHTTPStatsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsJSON contains the JSON metadata for the struct
+// [DexHTTPTestGetResponseHTTPStats]
+type dexHTTPTestGetResponseHTTPStatsJSON struct {
 	DNSResponseTimeMs    apijson.Field
 	HTTPStatusCode       apijson.Field
 	ResourceFetchTimeMs  apijson.Field
@@ -161,24 +104,24 @@ type dexHTTPTestGetResponseResultHTTPStatsJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStats) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                      `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsJSON `json:"-"`
+	Min  int64                                                `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsJSON contains the JSON
-// metadata for the struct [DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsJSON contains the JSON metadata
+// for the struct [DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMs]
+type dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -187,42 +130,41 @@ type dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlot struct {
-	Timestamp string                                                         `json:"timestamp,required"`
-	Value     int64                                                          `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlot struct {
+	Timestamp string                                                   `json:"timestamp,required"`
+	Value     int64                                                    `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlotJSON contains the JSON
-// metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlotJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsHTTPStatusCode struct {
-	Status200 int64                                                   `json:"status200,required"`
-	Status300 int64                                                   `json:"status300,required"`
-	Status400 int64                                                   `json:"status400,required"`
-	Status500 int64                                                   `json:"status500,required"`
-	Timestamp string                                                  `json:"timestamp,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsHTTPStatusCodeJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsHTTPStatusCode struct {
+	Status200 int64                                             `json:"status200,required"`
+	Status300 int64                                             `json:"status300,required"`
+	Status400 int64                                             `json:"status400,required"`
+	Status500 int64                                             `json:"status500,required"`
+	Timestamp string                                            `json:"timestamp,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsHTTPStatusCodeJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsHTTPStatusCodeJSON contains the JSON
-// metadata for the struct [DexHTTPTestGetResponseResultHTTPStatsHTTPStatusCode]
-type dexHTTPTestGetResponseResultHTTPStatsHTTPStatusCodeJSON struct {
+// dexHTTPTestGetResponseHTTPStatsHTTPStatusCodeJSON contains the JSON metadata for
+// the struct [DexHTTPTestGetResponseHTTPStatsHTTPStatusCode]
+type dexHTTPTestGetResponseHTTPStatsHTTPStatusCodeJSON struct {
 	Status200   apijson.Field
 	Status300   apijson.Field
 	Status400   apijson.Field
@@ -232,25 +174,24 @@ type dexHTTPTestGetResponseResultHTTPStatsHTTPStatusCodeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                        `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsJSON `json:"-"`
+	Min  int64                                                  `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsJSON contains the JSON
-// metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMs]
+type dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -259,45 +200,43 @@ type dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlot struct {
-	Timestamp string                                                           `json:"timestamp,required"`
-	Value     int64                                                            `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlot struct {
+	Timestamp string                                                     `json:"timestamp,required"`
+	Value     int64                                                      `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlotJSON contains the
-// JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlotJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsServerResponseTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                         `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsJSON `json:"-"`
+	Min  int64                                                   `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsJSON contains the JSON
-// metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsServerResponseTimeMs]
+type dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -306,44 +245,44 @@ type dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlot struct {
-	Timestamp string                                                            `json:"timestamp,required"`
-	Value     int64                                                             `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlot struct {
+	Timestamp string                                                      `json:"timestamp,required"`
+	Value     int64                                                       `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlotJSON contains the
-// JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlotJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColo struct {
-	Colo                 string                                                          `json:"colo,required"`
-	DNSResponseTimeMs    DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
-	HTTPStatusCode       []DexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCode     `json:"httpStatusCode,required"`
-	ResourceFetchTimeMs  DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
-	ServerResponseTimeMs DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMs `json:"serverResponseTimeMs,required"`
+type DexHTTPTestGetResponseHTTPStatsByColo struct {
+	Colo                 string                                                    `json:"colo,required"`
+	DNSResponseTimeMs    DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
+	HTTPStatusCode       []DexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCode     `json:"httpStatusCode,required"`
+	ResourceFetchTimeMs  DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMs  `json:"resourceFetchTimeMs,required"`
+	ServerResponseTimeMs DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMs `json:"serverResponseTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                           `json:"uniqueDevicesTotal,required"`
-	JSON               dexHTTPTestGetResponseResultHTTPStatsByColoJSON `json:"-"`
+	UniqueDevicesTotal int64                                     `json:"uniqueDevicesTotal,required"`
+	JSON               dexHTTPTestGetResponseHTTPStatsByColoJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoJSON contains the JSON metadata for
-// the struct [DexHTTPTestGetResponseResultHTTPStatsByColo]
-type dexHTTPTestGetResponseResultHTTPStatsByColoJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoJSON contains the JSON metadata for the
+// struct [DexHTTPTestGetResponseHTTPStatsByColo]
+type dexHTTPTestGetResponseHTTPStatsByColoJSON struct {
 	Colo                 apijson.Field
 	DNSResponseTimeMs    apijson.Field
 	HTTPStatusCode       apijson.Field
@@ -354,25 +293,24 @@ type dexHTTPTestGetResponseResultHTTPStatsByColoJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                            `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsJSON `json:"-"`
+	Min  int64                                                      `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsJSON contains the
-// JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMs]
+type dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -381,43 +319,42 @@ type dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlot struct {
-	Timestamp string                                                               `json:"timestamp,required"`
-	Value     int64                                                                `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot struct {
+	Timestamp string                                                         `json:"timestamp,required"`
+	Value     int64                                                          `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlotJSON contains
-// the JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlotJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCode struct {
-	Status200 int64                                                         `json:"status200,required"`
-	Status300 int64                                                         `json:"status300,required"`
-	Status400 int64                                                         `json:"status400,required"`
-	Status500 int64                                                         `json:"status500,required"`
-	Timestamp string                                                        `json:"timestamp,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCodeJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCode struct {
+	Status200 int64                                                   `json:"status200,required"`
+	Status300 int64                                                   `json:"status300,required"`
+	Status400 int64                                                   `json:"status400,required"`
+	Status500 int64                                                   `json:"status500,required"`
+	Timestamp string                                                  `json:"timestamp,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCodeJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCodeJSON contains the JSON
-// metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCode]
-type dexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCodeJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCodeJSON contains the JSON
+// metadata for the struct [DexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCode]
+type dexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCodeJSON struct {
 	Status200   apijson.Field
 	Status300   apijson.Field
 	Status400   apijson.Field
@@ -427,25 +364,25 @@ type dexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCodeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                              `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsJSON `json:"-"`
+	Min  int64                                                        `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsJSON contains the
-// JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMs]
+type dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -454,45 +391,45 @@ type dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlot struct {
-	Timestamp string                                                                 `json:"timestamp,required"`
-	Value     int64                                                                  `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot struct {
+	Timestamp string                                                           `json:"timestamp,required"`
+	Value     int64                                                            `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlotJSON contains
-// the JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlotJSON contains the
+// JSON metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMs struct {
-	Slots []DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlot `json:"slots,required"`
+type DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMs struct {
+	Slots []DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                               `json:"min,nullable"`
-	JSON dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsJSON `json:"-"`
+	Min  int64                                                         `json:"min,nullable"`
+	JSON dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsJSON contains the
-// JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMs]
-type dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMs]
+type dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -501,41 +438,34 @@ type dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsJSON struct 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlot struct {
-	Timestamp string                                                                  `json:"timestamp,required"`
-	Value     int64                                                                   `json:"value,required"`
-	JSON      dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlotJSON `json:"-"`
+type DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot struct {
+	Timestamp string                                                            `json:"timestamp,required"`
+	Value     int64                                                             `json:"value,required"`
+	JSON      dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlotJSON `json:"-"`
 }
 
-// dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlotJSON contains
-// the JSON metadata for the struct
-// [DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlot]
-type dexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlotJSON struct {
+// dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlotJSON contains the
+// JSON metadata for the struct
+// [DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot]
+type dexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestGetResponseResultHTTPStatsByColoServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestGetResponseResultKind string
+type DexHTTPTestGetResponseKind string
 
 const (
-	DexHTTPTestGetResponseResultKindHTTP DexHTTPTestGetResponseResultKind = "http"
-)
-
-// Whether the API call was successful
-type DexHTTPTestGetResponseSuccess bool
-
-const (
-	DexHTTPTestGetResponseSuccessTrue DexHTTPTestGetResponseSuccess = true
+	DexHTTPTestGetResponseKindHTTP DexHTTPTestGetResponseKind = "http"
 )
 
 type DexHTTPTestGetParams struct {
@@ -567,4 +497,73 @@ type DexHTTPTestGetParamsInterval string
 const (
 	DexHTTPTestGetParamsIntervalMinute DexHTTPTestGetParamsInterval = "minute"
 	DexHTTPTestGetParamsIntervalHour   DexHTTPTestGetParamsInterval = "hour"
+)
+
+type DexHTTPTestGetResponseEnvelope struct {
+	Errors   []DexHTTPTestGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []DexHTTPTestGetResponseEnvelopeMessages `json:"messages"`
+	Result   DexHTTPTestGetResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success DexHTTPTestGetResponseEnvelopeSuccess `json:"success"`
+	JSON    dexHTTPTestGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// dexHTTPTestGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DexHTTPTestGetResponseEnvelope]
+type dexHTTPTestGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexHTTPTestGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dexHTTPTestGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dexHTTPTestGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DexHTTPTestGetResponseEnvelopeErrors]
+type dexHTTPTestGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexHTTPTestGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dexHTTPTestGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dexHTTPTestGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DexHTTPTestGetResponseEnvelopeMessages]
+type dexHTTPTestGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DexHTTPTestGetResponseEnvelopeSuccess bool
+
+const (
+	DexHTTPTestGetResponseEnvelopeSuccessTrue DexHTTPTestGetResponseEnvelopeSuccess = true
 )

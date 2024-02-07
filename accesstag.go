@@ -31,26 +31,57 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessTagListResponse, err error) {
+func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessTagListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env AccessTagListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
+// A tag
 type AccessTagListResponse struct {
-	Errors     []AccessTagListResponseError    `json:"errors"`
-	Messages   []AccessTagListResponseMessage  `json:"messages"`
-	Result     []AccessTagListResponseResult   `json:"result"`
-	ResultInfo AccessTagListResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessTagListResponseSuccess `json:"success"`
-	JSON    accessTagListResponseJSON    `json:"-"`
+	// The name of the tag
+	Name string `json:"name,required"`
+	// The number of applications that have this tag
+	AppCount  int64                     `json:"app_count"`
+	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
+	JSON      accessTagListResponseJSON `json:"-"`
 }
 
 // accessTagListResponseJSON contains the JSON metadata for the struct
 // [AccessTagListResponse]
 type accessTagListResponseJSON struct {
+	Name        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessTagListResponseEnvelope struct {
+	Errors     []AccessTagListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []AccessTagListResponseEnvelopeMessages `json:"messages"`
+	Result     []AccessTagListResponse                 `json:"result"`
+	ResultInfo AccessTagListResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessTagListResponseEnvelopeSuccess `json:"success"`
+	JSON    accessTagListResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessTagListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessTagListResponseEnvelope]
+type accessTagListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -60,75 +91,49 @@ type accessTagListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessTagListResponseError struct {
-	Code    int64                          `json:"code,required"`
-	Message string                         `json:"message,required"`
-	JSON    accessTagListResponseErrorJSON `json:"-"`
+type AccessTagListResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accessTagListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessTagListResponseErrorJSON contains the JSON metadata for the struct
-// [AccessTagListResponseError]
-type accessTagListResponseErrorJSON struct {
+// accessTagListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessTagListResponseEnvelopeErrors]
+type accessTagListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessTagListResponseMessage struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    accessTagListResponseMessageJSON `json:"-"`
+type AccessTagListResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessTagListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessTagListResponseMessageJSON contains the JSON metadata for the struct
-// [AccessTagListResponseMessage]
-type accessTagListResponseMessageJSON struct {
+// accessTagListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagListResponseEnvelopeMessages]
+type accessTagListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A tag
-type AccessTagListResponseResult struct {
-	// The name of the tag
-	Name string `json:"name,required"`
-	// The number of applications that have this tag
-	AppCount  int64                           `json:"app_count"`
-	CreatedAt time.Time                       `json:"created_at" format:"date-time"`
-	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
-	JSON      accessTagListResponseResultJSON `json:"-"`
-}
-
-// accessTagListResponseResultJSON contains the JSON metadata for the struct
-// [AccessTagListResponseResult]
-type accessTagListResponseResultJSON struct {
-	Name        apijson.Field
-	AppCount    apijson.Field
-	CreatedAt   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessTagListResponseResultInfo struct {
+type AccessTagListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -136,13 +141,13 @@ type AccessTagListResponseResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                             `json:"total_count"`
-	JSON       accessTagListResponseResultInfoJSON `json:"-"`
+	TotalCount float64                                     `json:"total_count"`
+	JSON       accessTagListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// accessTagListResponseResultInfoJSON contains the JSON metadata for the struct
-// [AccessTagListResponseResultInfo]
-type accessTagListResponseResultInfoJSON struct {
+// accessTagListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [AccessTagListResponseEnvelopeResultInfo]
+type accessTagListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -151,13 +156,13 @@ type accessTagListResponseResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessTagListResponseSuccess bool
+type AccessTagListResponseEnvelopeSuccess bool
 
 const (
-	AccessTagListResponseSuccessTrue AccessTagListResponseSuccess = true
+	AccessTagListResponseEnvelopeSuccessTrue AccessTagListResponseEnvelopeSuccess = true
 )

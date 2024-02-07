@@ -37,22 +37,27 @@ func NewRadarEmailSecurityTopAseDmarcService(opts ...option.RequestOption) (r *R
 // Get the top autonomous systems (AS) by emails DMARC validation.
 func (r *RadarEmailSecurityTopAseDmarcService) Get(ctx context.Context, dmarc RadarEmailSecurityTopAseDmarcGetParamsDmarc, query RadarEmailSecurityTopAseDmarcGetParams, opts ...option.RequestOption) (res *RadarEmailSecurityTopAseDmarcGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecurityTopAseDmarcGetResponseEnvelope
 	path := fmt.Sprintf("radar/email/security/top/ases/dmarc/%v", dmarc)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarEmailSecurityTopAseDmarcGetResponse struct {
-	Result  RadarEmailSecurityTopAseDmarcGetResponseResult `json:"result,required"`
-	Success bool                                           `json:"success,required"`
-	JSON    radarEmailSecurityTopAseDmarcGetResponseJSON   `json:"-"`
+	Meta RadarEmailSecurityTopAseDmarcGetResponseMeta   `json:"meta,required"`
+	Top0 []RadarEmailSecurityTopAseDmarcGetResponseTop0 `json:"top_0,required"`
+	JSON radarEmailSecurityTopAseDmarcGetResponseJSON   `json:"-"`
 }
 
 // radarEmailSecurityTopAseDmarcGetResponseJSON contains the JSON metadata for the
 // struct [RadarEmailSecurityTopAseDmarcGetResponse]
 type radarEmailSecurityTopAseDmarcGetResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,35 +66,16 @@ func (r *RadarEmailSecurityTopAseDmarcGetResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTopAseDmarcGetResponseResult struct {
-	Meta RadarEmailSecurityTopAseDmarcGetResponseResultMeta   `json:"meta,required"`
-	Top0 []RadarEmailSecurityTopAseDmarcGetResponseResultTop0 `json:"top_0,required"`
-	JSON radarEmailSecurityTopAseDmarcGetResponseResultJSON   `json:"-"`
+type RadarEmailSecurityTopAseDmarcGetResponseMeta struct {
+	DateRange      []RadarEmailSecurityTopAseDmarcGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                     `json:"lastUpdated,required"`
+	ConfidenceInfo RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarEmailSecurityTopAseDmarcGetResponseMetaJSON           `json:"-"`
 }
 
-// radarEmailSecurityTopAseDmarcGetResponseResultJSON contains the JSON metadata
-// for the struct [RadarEmailSecurityTopAseDmarcGetResponseResult]
-type radarEmailSecurityTopAseDmarcGetResponseResultJSON struct {
-	Meta        apijson.Field
-	Top0        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarEmailSecurityTopAseDmarcGetResponseResultMeta struct {
-	DateRange      []RadarEmailSecurityTopAseDmarcGetResponseResultMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                           `json:"lastUpdated,required"`
-	ConfidenceInfo RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarEmailSecurityTopAseDmarcGetResponseResultMetaJSON           `json:"-"`
-}
-
-// radarEmailSecurityTopAseDmarcGetResponseResultMetaJSON contains the JSON
-// metadata for the struct [RadarEmailSecurityTopAseDmarcGetResponseResultMeta]
-type radarEmailSecurityTopAseDmarcGetResponseResultMetaJSON struct {
+// radarEmailSecurityTopAseDmarcGetResponseMetaJSON contains the JSON metadata for
+// the struct [RadarEmailSecurityTopAseDmarcGetResponseMeta]
+type radarEmailSecurityTopAseDmarcGetResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -97,67 +83,66 @@ type radarEmailSecurityTopAseDmarcGetResponseResultMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTopAseDmarcGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTopAseDmarcGetResponseResultMetaDateRange struct {
+type RadarEmailSecurityTopAseDmarcGetResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
-	JSON      radarEmailSecurityTopAseDmarcGetResponseResultMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
+	JSON      radarEmailSecurityTopAseDmarcGetResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarEmailSecurityTopAseDmarcGetResponseResultMetaDateRangeJSON contains the
-// JSON metadata for the struct
-// [RadarEmailSecurityTopAseDmarcGetResponseResultMetaDateRange]
-type radarEmailSecurityTopAseDmarcGetResponseResultMetaDateRangeJSON struct {
+// radarEmailSecurityTopAseDmarcGetResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTopAseDmarcGetResponseMetaDateRange]
+type radarEmailSecurityTopAseDmarcGetResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTopAseDmarcGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                        `json:"level"`
-	JSON        radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoJSON         `json:"-"`
+type RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfo struct {
+	Annotations []RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                  `json:"level"`
+	JSON        radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoJSON contains
-// the JSON metadata for the struct
-// [RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfo]
-type radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoJSON struct {
+// radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfo]
+type radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                         `json:"dataSource,required"`
-	Description     string                                                                         `json:"description,required"`
-	EventType       string                                                                         `json:"eventType,required"`
-	IsInstantaneous interface{}                                                                    `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                      `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                         `json:"linkedUrl"`
-	StartTime       time.Time                                                                      `json:"startTime" format:"date-time"`
-	JSON            radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                   `json:"dataSource,required"`
+	Description     string                                                                   `json:"description,required"`
+	EventType       string                                                                   `json:"eventType,required"`
+	IsInstantaneous interface{}                                                              `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                   `json:"linkedUrl"`
+	StartTime       time.Time                                                                `json:"startTime" format:"date-time"`
+	JSON            radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotationJSON
+// radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
-// [RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotation]
-type radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotationJSON struct {
+// [RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotation]
+type radarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -169,20 +154,20 @@ type radarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotationJ
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTopAseDmarcGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTopAseDmarcGetResponseResultTop0 struct {
-	ClientAsn    int64                                                  `json:"clientASN,required"`
-	ClientAsName string                                                 `json:"clientASName,required"`
-	Value        string                                                 `json:"value,required"`
-	JSON         radarEmailSecurityTopAseDmarcGetResponseResultTop0JSON `json:"-"`
+type RadarEmailSecurityTopAseDmarcGetResponseTop0 struct {
+	ClientAsn    int64                                            `json:"clientASN,required"`
+	ClientAsName string                                           `json:"clientASName,required"`
+	Value        string                                           `json:"value,required"`
+	JSON         radarEmailSecurityTopAseDmarcGetResponseTop0JSON `json:"-"`
 }
 
-// radarEmailSecurityTopAseDmarcGetResponseResultTop0JSON contains the JSON
-// metadata for the struct [RadarEmailSecurityTopAseDmarcGetResponseResultTop0]
-type radarEmailSecurityTopAseDmarcGetResponseResultTop0JSON struct {
+// radarEmailSecurityTopAseDmarcGetResponseTop0JSON contains the JSON metadata for
+// the struct [RadarEmailSecurityTopAseDmarcGetResponseTop0]
+type radarEmailSecurityTopAseDmarcGetResponseTop0JSON struct {
 	ClientAsn    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
@@ -190,7 +175,7 @@ type radarEmailSecurityTopAseDmarcGetResponseResultTop0JSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTopAseDmarcGetResponseResultTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTopAseDmarcGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -294,3 +279,22 @@ const (
 	RadarEmailSecurityTopAseDmarcGetParamsSpfNone RadarEmailSecurityTopAseDmarcGetParamsSpf = "NONE"
 	RadarEmailSecurityTopAseDmarcGetParamsSpfFail RadarEmailSecurityTopAseDmarcGetParamsSpf = "FAIL"
 )
+
+type RadarEmailSecurityTopAseDmarcGetResponseEnvelope struct {
+	Result  RadarEmailSecurityTopAseDmarcGetResponse             `json:"result,required"`
+	Success bool                                                 `json:"success,required"`
+	JSON    radarEmailSecurityTopAseDmarcGetResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecurityTopAseDmarcGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarEmailSecurityTopAseDmarcGetResponseEnvelope]
+type radarEmailSecurityTopAseDmarcGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTopAseDmarcGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

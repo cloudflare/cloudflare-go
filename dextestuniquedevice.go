@@ -37,97 +37,33 @@ func NewDexTestUniqueDeviceService(opts ...option.RequestOption) (r *DexTestUniq
 // tests in the past 7 days.
 func (r *DexTestUniqueDeviceService) List(ctx context.Context, accountID string, query DexTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DexTestUniqueDeviceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DexTestUniqueDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DexTestUniqueDeviceListResponse struct {
-	Errors   []DexTestUniqueDeviceListResponseError   `json:"errors"`
-	Messages []DexTestUniqueDeviceListResponseMessage `json:"messages"`
-	Result   DexTestUniqueDeviceListResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success DexTestUniqueDeviceListResponseSuccess `json:"success"`
-	JSON    dexTestUniqueDeviceListResponseJSON    `json:"-"`
+	// total number of unique devices
+	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal,required"`
+	JSON               dexTestUniqueDeviceListResponseJSON `json:"-"`
 }
 
 // dexTestUniqueDeviceListResponseJSON contains the JSON metadata for the struct
 // [DexTestUniqueDeviceListResponse]
 type dexTestUniqueDeviceListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexTestUniqueDeviceListResponseError struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dexTestUniqueDeviceListResponseErrorJSON `json:"-"`
-}
-
-// dexTestUniqueDeviceListResponseErrorJSON contains the JSON metadata for the
-// struct [DexTestUniqueDeviceListResponseError]
-type dexTestUniqueDeviceListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexTestUniqueDeviceListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexTestUniqueDeviceListResponseMessage struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    dexTestUniqueDeviceListResponseMessageJSON `json:"-"`
-}
-
-// dexTestUniqueDeviceListResponseMessageJSON contains the JSON metadata for the
-// struct [DexTestUniqueDeviceListResponseMessage]
-type dexTestUniqueDeviceListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexTestUniqueDeviceListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexTestUniqueDeviceListResponseResult struct {
-	// total number of unique devices
-	UniqueDevicesTotal int64                                     `json:"uniqueDevicesTotal,required"`
-	JSON               dexTestUniqueDeviceListResponseResultJSON `json:"-"`
-}
-
-// dexTestUniqueDeviceListResponseResultJSON contains the JSON metadata for the
-// struct [DexTestUniqueDeviceListResponseResult]
-type dexTestUniqueDeviceListResponseResultJSON struct {
 	UniqueDevicesTotal apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexTestUniqueDeviceListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *DexTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type DexTestUniqueDeviceListResponseSuccess bool
-
-const (
-	DexTestUniqueDeviceListResponseSuccessTrue DexTestUniqueDeviceListResponseSuccess = true
-)
 
 type DexTestUniqueDeviceListParams struct {
 	// Optionally filter result stats to a specific device(s). Cannot be used in
@@ -145,3 +81,72 @@ func (r DexTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+type DexTestUniqueDeviceListResponseEnvelope struct {
+	Errors   []DexTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors"`
+	Messages []DexTestUniqueDeviceListResponseEnvelopeMessages `json:"messages"`
+	Result   DexTestUniqueDeviceListResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success DexTestUniqueDeviceListResponseEnvelopeSuccess `json:"success"`
+	JSON    dexTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`
+}
+
+// dexTestUniqueDeviceListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DexTestUniqueDeviceListResponseEnvelope]
+type dexTestUniqueDeviceListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexTestUniqueDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexTestUniqueDeviceListResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    dexTestUniqueDeviceListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dexTestUniqueDeviceListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DexTestUniqueDeviceListResponseEnvelopeErrors]
+type dexTestUniqueDeviceListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexTestUniqueDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexTestUniqueDeviceListResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    dexTestUniqueDeviceListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dexTestUniqueDeviceListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DexTestUniqueDeviceListResponseEnvelopeMessages]
+type dexTestUniqueDeviceListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexTestUniqueDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DexTestUniqueDeviceListResponseEnvelopeSuccess bool
+
+const (
+	DexTestUniqueDeviceListResponseEnvelopeSuccessTrue DexTestUniqueDeviceListResponseEnvelopeSuccess = true
+)

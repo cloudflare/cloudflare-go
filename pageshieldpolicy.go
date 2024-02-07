@@ -56,10 +56,15 @@ func (r *PageShieldPolicyService) Update(ctx context.Context, zoneID string, pol
 }
 
 // Lists all Page Shield policies.
-func (r *PageShieldPolicyService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *PageShieldPolicyListResponse, err error) {
+func (r *PageShieldPolicyService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]PageShieldPolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env PageShieldPolicyListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/policies", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -199,74 +204,10 @@ const (
 )
 
 type PageShieldPolicyListResponse struct {
-	Errors     []PageShieldPolicyListResponseError    `json:"errors"`
-	Messages   []PageShieldPolicyListResponseMessage  `json:"messages"`
-	Result     []PageShieldPolicyListResponseResult   `json:"result"`
-	ResultInfo PageShieldPolicyListResponseResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success PageShieldPolicyListResponseSuccess `json:"success"`
-	JSON    pageShieldPolicyListResponseJSON    `json:"-"`
-}
-
-// pageShieldPolicyListResponseJSON contains the JSON metadata for the struct
-// [PageShieldPolicyListResponse]
-type pageShieldPolicyListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldPolicyListResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    pageShieldPolicyListResponseErrorJSON `json:"-"`
-}
-
-// pageShieldPolicyListResponseErrorJSON contains the JSON metadata for the struct
-// [PageShieldPolicyListResponseError]
-type pageShieldPolicyListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldPolicyListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldPolicyListResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    pageShieldPolicyListResponseMessageJSON `json:"-"`
-}
-
-// pageShieldPolicyListResponseMessageJSON contains the JSON metadata for the
-// struct [PageShieldPolicyListResponseMessage]
-type pageShieldPolicyListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldPolicyListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldPolicyListResponseResult struct {
 	// The ID of the policy
 	ID string `json:"id"`
 	// The action to take if the expression matches
-	Action PageShieldPolicyListResponseResultAction `json:"action"`
+	Action PageShieldPolicyListResponseAction `json:"action"`
 	// A description for the policy
 	Description string `json:"description"`
 	// Whether the policy is enabled
@@ -275,13 +216,13 @@ type PageShieldPolicyListResponseResult struct {
 	// Cloudflare Firewall rule expression syntax
 	Expression string `json:"expression"`
 	// The policy which will be applied
-	Value string                                 `json:"value"`
-	JSON  pageShieldPolicyListResponseResultJSON `json:"-"`
+	Value string                           `json:"value"`
+	JSON  pageShieldPolicyListResponseJSON `json:"-"`
 }
 
-// pageShieldPolicyListResponseResultJSON contains the JSON metadata for the struct
-// [PageShieldPolicyListResponseResult]
-type pageShieldPolicyListResponseResultJSON struct {
+// pageShieldPolicyListResponseJSON contains the JSON metadata for the struct
+// [PageShieldPolicyListResponse]
+type pageShieldPolicyListResponseJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -292,50 +233,16 @@ type pageShieldPolicyListResponseResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPolicyListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to take if the expression matches
-type PageShieldPolicyListResponseResultAction string
+type PageShieldPolicyListResponseAction string
 
 const (
-	PageShieldPolicyListResponseResultActionAllow PageShieldPolicyListResponseResultAction = "allow"
-	PageShieldPolicyListResponseResultActionLog   PageShieldPolicyListResponseResultAction = "log"
-)
-
-type PageShieldPolicyListResponseResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                    `json:"total_count"`
-	JSON       pageShieldPolicyListResponseResultInfoJSON `json:"-"`
-}
-
-// pageShieldPolicyListResponseResultInfoJSON contains the JSON metadata for the
-// struct [PageShieldPolicyListResponseResultInfo]
-type pageShieldPolicyListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldPolicyListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type PageShieldPolicyListResponseSuccess bool
-
-const (
-	PageShieldPolicyListResponseSuccessTrue PageShieldPolicyListResponseSuccess = true
+	PageShieldPolicyListResponseActionAllow PageShieldPolicyListResponseAction = "allow"
+	PageShieldPolicyListResponseActionLog   PageShieldPolicyListResponseAction = "log"
 )
 
 type PageShieldPolicyNewParams struct {
@@ -388,4 +295,102 @@ type PageShieldPolicyUpdateParamsAction string
 const (
 	PageShieldPolicyUpdateParamsActionAllow PageShieldPolicyUpdateParamsAction = "allow"
 	PageShieldPolicyUpdateParamsActionLog   PageShieldPolicyUpdateParamsAction = "log"
+)
+
+type PageShieldPolicyListResponseEnvelope struct {
+	Errors     []PageShieldPolicyListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []PageShieldPolicyListResponseEnvelopeMessages `json:"messages"`
+	Result     []PageShieldPolicyListResponse                 `json:"result"`
+	ResultInfo PageShieldPolicyListResponseEnvelopeResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success PageShieldPolicyListResponseEnvelopeSuccess `json:"success"`
+	JSON    pageShieldPolicyListResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageShieldPolicyListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PageShieldPolicyListResponseEnvelope]
+type pageShieldPolicyListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldPolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldPolicyListResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    pageShieldPolicyListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageShieldPolicyListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PageShieldPolicyListResponseEnvelopeErrors]
+type pageShieldPolicyListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldPolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldPolicyListResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    pageShieldPolicyListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageShieldPolicyListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PageShieldPolicyListResponseEnvelopeMessages]
+type pageShieldPolicyListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldPolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldPolicyListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                            `json:"total_count"`
+	JSON       pageShieldPolicyListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// pageShieldPolicyListResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [PageShieldPolicyListResponseEnvelopeResultInfo]
+type pageShieldPolicyListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageShieldPolicyListResponseEnvelopeSuccess bool
+
+const (
+	PageShieldPolicyListResponseEnvelopeSuccessTrue PageShieldPolicyListResponseEnvelopeSuccess = true
 )

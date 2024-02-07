@@ -37,22 +37,27 @@ func NewRadarQualityIqiTimeseriesGroupService(opts ...option.RequestOption) (r *
 // the Radar Internet Quality Index (IQI).
 func (r *RadarQualityIqiTimeseriesGroupService) List(ctx context.Context, query RadarQualityIqiTimeseriesGroupListParams, opts ...option.RequestOption) (res *RadarQualityIqiTimeseriesGroupListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarQualityIqiTimeseriesGroupListResponseEnvelope
 	path := "radar/quality/iqi/timeseries_groups"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarQualityIqiTimeseriesGroupListResponse struct {
-	Result  RadarQualityIqiTimeseriesGroupListResponseResult `json:"result,required"`
-	Success bool                                             `json:"success,required"`
-	JSON    radarQualityIqiTimeseriesGroupListResponseJSON   `json:"-"`
+	Meta   interface{}                                      `json:"meta,required"`
+	Serie0 RadarQualityIqiTimeseriesGroupListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarQualityIqiTimeseriesGroupListResponseJSON   `json:"-"`
 }
 
 // radarQualityIqiTimeseriesGroupListResponseJSON contains the JSON metadata for
 // the struct [RadarQualityIqiTimeseriesGroupListResponse]
 type radarQualityIqiTimeseriesGroupListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,36 +66,17 @@ func (r *RadarQualityIqiTimeseriesGroupListResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiTimeseriesGroupListResponseResult struct {
-	Meta   interface{}                                            `json:"meta,required"`
-	Serie0 RadarQualityIqiTimeseriesGroupListResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarQualityIqiTimeseriesGroupListResponseResultJSON   `json:"-"`
+type RadarQualityIqiTimeseriesGroupListResponseSerie0 struct {
+	P25        []string                                             `json:"p25,required"`
+	P50        []string                                             `json:"p50,required"`
+	P75        []string                                             `json:"p75,required"`
+	Timestamps []string                                             `json:"timestamps,required"`
+	JSON       radarQualityIqiTimeseriesGroupListResponseSerie0JSON `json:"-"`
 }
 
-// radarQualityIqiTimeseriesGroupListResponseResultJSON contains the JSON metadata
-// for the struct [RadarQualityIqiTimeseriesGroupListResponseResult]
-type radarQualityIqiTimeseriesGroupListResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarQualityIqiTimeseriesGroupListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarQualityIqiTimeseriesGroupListResponseResultSerie0 struct {
-	P25        []string                                                   `json:"p25,required"`
-	P50        []string                                                   `json:"p50,required"`
-	P75        []string                                                   `json:"p75,required"`
-	Timestamps []string                                                   `json:"timestamps,required"`
-	JSON       radarQualityIqiTimeseriesGroupListResponseResultSerie0JSON `json:"-"`
-}
-
-// radarQualityIqiTimeseriesGroupListResponseResultSerie0JSON contains the JSON
-// metadata for the struct [RadarQualityIqiTimeseriesGroupListResponseResultSerie0]
-type radarQualityIqiTimeseriesGroupListResponseResultSerie0JSON struct {
+// radarQualityIqiTimeseriesGroupListResponseSerie0JSON contains the JSON metadata
+// for the struct [RadarQualityIqiTimeseriesGroupListResponseSerie0]
+type radarQualityIqiTimeseriesGroupListResponseSerie0JSON struct {
 	P25         apijson.Field
 	P50         apijson.Field
 	P75         apijson.Field
@@ -99,7 +85,7 @@ type radarQualityIqiTimeseriesGroupListResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiTimeseriesGroupListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiTimeseriesGroupListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -195,3 +181,22 @@ const (
 	RadarQualityIqiTimeseriesGroupListParamsFormatJson RadarQualityIqiTimeseriesGroupListParamsFormat = "JSON"
 	RadarQualityIqiTimeseriesGroupListParamsFormatCsv  RadarQualityIqiTimeseriesGroupListParamsFormat = "CSV"
 )
+
+type RadarQualityIqiTimeseriesGroupListResponseEnvelope struct {
+	Result  RadarQualityIqiTimeseriesGroupListResponse             `json:"result,required"`
+	Success bool                                                   `json:"success,required"`
+	JSON    radarQualityIqiTimeseriesGroupListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarQualityIqiTimeseriesGroupListResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarQualityIqiTimeseriesGroupListResponseEnvelope]
+type radarQualityIqiTimeseriesGroupListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualityIqiTimeseriesGroupListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

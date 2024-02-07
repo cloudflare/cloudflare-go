@@ -36,22 +36,27 @@ func NewRadarEmailSecurityMaliciousService(opts ...option.RequestOption) (r *Rad
 // Percentage distribution of emails classified as MALICIOUS over time.
 func (r *RadarEmailSecurityMaliciousService) List(ctx context.Context, query RadarEmailSecurityMaliciousListParams, opts ...option.RequestOption) (res *RadarEmailSecurityMaliciousListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecurityMaliciousListResponseEnvelope
 	path := "radar/email/security/timeseries_groups/malicious"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarEmailSecurityMaliciousListResponse struct {
-	Result  RadarEmailSecurityMaliciousListResponseResult `json:"result,required"`
-	Success bool                                          `json:"success,required"`
-	JSON    radarEmailSecurityMaliciousListResponseJSON   `json:"-"`
+	Meta   interface{}                                   `json:"meta,required"`
+	Serie0 RadarEmailSecurityMaliciousListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecurityMaliciousListResponseJSON   `json:"-"`
 }
 
 // radarEmailSecurityMaliciousListResponseJSON contains the JSON metadata for the
 // struct [RadarEmailSecurityMaliciousListResponse]
 type radarEmailSecurityMaliciousListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -60,41 +65,22 @@ func (r *RadarEmailSecurityMaliciousListResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityMaliciousListResponseResult struct {
-	Meta   interface{}                                         `json:"meta,required"`
-	Serie0 RadarEmailSecurityMaliciousListResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarEmailSecurityMaliciousListResponseResultJSON   `json:"-"`
+type RadarEmailSecurityMaliciousListResponseSerie0 struct {
+	Malicious    []string                                          `json:"MALICIOUS,required"`
+	NotMalicious []string                                          `json:"NOT_MALICIOUS,required"`
+	JSON         radarEmailSecurityMaliciousListResponseSerie0JSON `json:"-"`
 }
 
-// radarEmailSecurityMaliciousListResponseResultJSON contains the JSON metadata for
-// the struct [RadarEmailSecurityMaliciousListResponseResult]
-type radarEmailSecurityMaliciousListResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEmailSecurityMaliciousListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarEmailSecurityMaliciousListResponseResultSerie0 struct {
-	Malicious    []string                                                `json:"MALICIOUS,required"`
-	NotMalicious []string                                                `json:"NOT_MALICIOUS,required"`
-	JSON         radarEmailSecurityMaliciousListResponseResultSerie0JSON `json:"-"`
-}
-
-// radarEmailSecurityMaliciousListResponseResultSerie0JSON contains the JSON
-// metadata for the struct [RadarEmailSecurityMaliciousListResponseResultSerie0]
-type radarEmailSecurityMaliciousListResponseResultSerie0JSON struct {
+// radarEmailSecurityMaliciousListResponseSerie0JSON contains the JSON metadata for
+// the struct [RadarEmailSecurityMaliciousListResponseSerie0]
+type radarEmailSecurityMaliciousListResponseSerie0JSON struct {
 	Malicious    apijson.Field
 	NotMalicious apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityMaliciousListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityMaliciousListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -213,3 +199,22 @@ const (
 	RadarEmailSecurityMaliciousListParamsSpfNone RadarEmailSecurityMaliciousListParamsSpf = "NONE"
 	RadarEmailSecurityMaliciousListParamsSpfFail RadarEmailSecurityMaliciousListParamsSpf = "FAIL"
 )
+
+type RadarEmailSecurityMaliciousListResponseEnvelope struct {
+	Result  RadarEmailSecurityMaliciousListResponse             `json:"result,required"`
+	Success bool                                                `json:"success,required"`
+	JSON    radarEmailSecurityMaliciousListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecurityMaliciousListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarEmailSecurityMaliciousListResponseEnvelope]
+type radarEmailSecurityMaliciousListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityMaliciousListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

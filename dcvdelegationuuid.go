@@ -34,27 +34,26 @@ func NewDcvDelegationUuidService(opts ...option.RequestOption) (r *DcvDelegation
 // CNAME target for DCV Delegation.
 func (r *DcvDelegationUuidService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DcvDelegationUuidGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env DcvDelegationUuidGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type DcvDelegationUuidGetResponse struct {
-	Errors   []DcvDelegationUuidGetResponseError   `json:"errors"`
-	Messages []DcvDelegationUuidGetResponseMessage `json:"messages"`
-	Result   DcvDelegationUuidGetResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success DcvDelegationUuidGetResponseSuccess `json:"success"`
-	JSON    dcvDelegationUuidGetResponseJSON    `json:"-"`
+	// The DCV Delegation unique identifier.
+	Uuid string                           `json:"uuid"`
+	JSON dcvDelegationUuidGetResponseJSON `json:"-"`
 }
 
 // dcvDelegationUuidGetResponseJSON contains the JSON metadata for the struct
 // [DcvDelegationUuidGetResponse]
 type dcvDelegationUuidGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	Uuid        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -63,65 +62,71 @@ func (r *DcvDelegationUuidGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DcvDelegationUuidGetResponseError struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    dcvDelegationUuidGetResponseErrorJSON `json:"-"`
+type DcvDelegationUuidGetResponseEnvelope struct {
+	Errors   []DcvDelegationUuidGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []DcvDelegationUuidGetResponseEnvelopeMessages `json:"messages"`
+	Result   DcvDelegationUuidGetResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success DcvDelegationUuidGetResponseEnvelopeSuccess `json:"success"`
+	JSON    dcvDelegationUuidGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseErrorJSON contains the JSON metadata for the struct
-// [DcvDelegationUuidGetResponseError]
-type dcvDelegationUuidGetResponseErrorJSON struct {
+// dcvDelegationUuidGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DcvDelegationUuidGetResponseEnvelope]
+type dcvDelegationUuidGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DcvDelegationUuidGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DcvDelegationUuidGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    dcvDelegationUuidGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dcvDelegationUuidGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DcvDelegationUuidGetResponseEnvelopeErrors]
+type dcvDelegationUuidGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUuidGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DcvDelegationUuidGetResponseMessage struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dcvDelegationUuidGetResponseMessageJSON `json:"-"`
+type DcvDelegationUuidGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    dcvDelegationUuidGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseMessageJSON contains the JSON metadata for the
-// struct [DcvDelegationUuidGetResponseMessage]
-type dcvDelegationUuidGetResponseMessageJSON struct {
+// dcvDelegationUuidGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DcvDelegationUuidGetResponseEnvelopeMessages]
+type dcvDelegationUuidGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DcvDelegationUuidGetResponseResult struct {
-	// The DCV Delegation unique identifier.
-	Uuid string                                 `json:"uuid"`
-	JSON dcvDelegationUuidGetResponseResultJSON `json:"-"`
-}
-
-// dcvDelegationUuidGetResponseResultJSON contains the JSON metadata for the struct
-// [DcvDelegationUuidGetResponseResult]
-type dcvDelegationUuidGetResponseResultJSON struct {
-	Uuid        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DcvDelegationUuidGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUuidGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DcvDelegationUuidGetResponseSuccess bool
+type DcvDelegationUuidGetResponseEnvelopeSuccess bool
 
 const (
-	DcvDelegationUuidGetResponseSuccessTrue DcvDelegationUuidGetResponseSuccess = true
+	DcvDelegationUuidGetResponseEnvelopeSuccessTrue DcvDelegationUuidGetResponseEnvelopeSuccess = true
 )

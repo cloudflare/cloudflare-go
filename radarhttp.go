@@ -40,8 +40,13 @@ func NewRadarHTTPService(opts ...option.RequestOption) (r *RadarHTTPService) {
 // information.
 func (r *RadarHTTPService) BotClasses(ctx context.Context, query RadarHTTPBotClassesParams, opts ...option.RequestOption) (res *RadarHTTPBotClassesResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHTTPBotClassesResponseEnvelope
 	path := "radar/http/timeseries_groups/bot_class"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -49,8 +54,13 @@ func (r *RadarHTTPService) BotClasses(ctx context.Context, query RadarHTTPBotCla
 // agents aggregated in families.
 func (r *RadarHTTPService) BrowserFamilies(ctx context.Context, query RadarHTTPBrowserFamiliesParams, opts ...option.RequestOption) (res *RadarHTTPBrowserFamiliesResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHTTPBrowserFamiliesResponseEnvelope
 	path := "radar/http/timeseries_groups/browser_family"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -58,24 +68,39 @@ func (r *RadarHTTPService) BrowserFamilies(ctx context.Context, query RadarHTTPB
 // agents.
 func (r *RadarHTTPService) Browsers(ctx context.Context, query RadarHTTPBrowsersParams, opts ...option.RequestOption) (res *RadarHTTPBrowsersResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHTTPBrowsersResponseEnvelope
 	path := "radar/http/timeseries_groups/browser"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Get a time series of the percentage distribution of traffic per device type.
 func (r *RadarHTTPService) DeviceTypes(ctx context.Context, query RadarHTTPDeviceTypesParams, opts ...option.RequestOption) (res *RadarHTTPDeviceTypesResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHTTPDeviceTypesResponseEnvelope
 	path := "radar/http/timeseries_groups/device_type"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Get a time series of the percentage distribution of traffic per HTTP protocol.
 func (r *RadarHTTPService) HTTPProtocols(ctx context.Context, query RadarHTTPHTTPProtocolsParams, opts ...option.RequestOption) (res *RadarHttphttpProtocolsResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHttphttpProtocolsResponseEnvelope
 	path := "radar/http/timeseries_groups/http_protocol"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -83,8 +108,13 @@ func (r *RadarHTTPService) HTTPProtocols(ctx context.Context, query RadarHTTPHTT
 // version.
 func (r *RadarHTTPService) HTTPVersions(ctx context.Context, query RadarHTTPHTTPVersionsParams, opts ...option.RequestOption) (res *RadarHttphttpVersionsResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHttphttpVersionsResponseEnvelope
 	path := "radar/http/timeseries_groups/http_version"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -92,8 +122,13 @@ func (r *RadarHTTPService) HTTPVersions(ctx context.Context, query RadarHTTPHTTP
 // version.
 func (r *RadarHTTPService) IPVersions(ctx context.Context, query RadarHTTPIPVersionsParams, opts ...option.RequestOption) (res *RadarHttpipVersionsResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHttpipVersionsResponseEnvelope
 	path := "radar/http/timeseries_groups/ip_version"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -101,22 +136,27 @@ func (r *RadarHTTPService) IPVersions(ctx context.Context, query RadarHTTPIPVers
 // systems.
 func (r *RadarHTTPService) Oss(ctx context.Context, query RadarHTTPOssParams, opts ...option.RequestOption) (res *RadarHTTPOssResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarHTTPOssResponseEnvelope
 	path := "radar/http/timeseries_groups/os"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarHTTPBotClassesResponse struct {
-	Result  RadarHTTPBotClassesResponseResult `json:"result,required"`
-	Success bool                              `json:"success,required"`
-	JSON    radarHTTPBotClassesResponseJSON   `json:"-"`
+	Meta   interface{}                       `json:"meta,required"`
+	Serie0 RadarHTTPBotClassesResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPBotClassesResponseJSON   `json:"-"`
 }
 
 // radarHTTPBotClassesResponseJSON contains the JSON metadata for the struct
 // [RadarHTTPBotClassesResponse]
 type radarHTTPBotClassesResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -125,35 +165,16 @@ func (r *RadarHTTPBotClassesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPBotClassesResponseResult struct {
-	Meta   interface{}                             `json:"meta,required"`
-	Serie0 RadarHTTPBotClassesResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPBotClassesResponseResultJSON   `json:"-"`
+type RadarHTTPBotClassesResponseSerie0 struct {
+	Bot        []string                              `json:"bot,required"`
+	Human      []string                              `json:"human,required"`
+	Timestamps []string                              `json:"timestamps,required"`
+	JSON       radarHTTPBotClassesResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPBotClassesResponseResultJSON contains the JSON metadata for the struct
-// [RadarHTTPBotClassesResponseResult]
-type radarHTTPBotClassesResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPBotClassesResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPBotClassesResponseResultSerie0 struct {
-	Bot        []string                                    `json:"bot,required"`
-	Human      []string                                    `json:"human,required"`
-	Timestamps []string                                    `json:"timestamps,required"`
-	JSON       radarHTTPBotClassesResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHTTPBotClassesResponseResultSerie0JSON contains the JSON metadata for the
-// struct [RadarHTTPBotClassesResponseResultSerie0]
-type radarHTTPBotClassesResponseResultSerie0JSON struct {
+// radarHTTPBotClassesResponseSerie0JSON contains the JSON metadata for the struct
+// [RadarHTTPBotClassesResponseSerie0]
+type radarHTTPBotClassesResponseSerie0JSON struct {
 	Bot         apijson.Field
 	Human       apijson.Field
 	Timestamps  apijson.Field
@@ -161,21 +182,21 @@ type radarHTTPBotClassesResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPBotClassesResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPBotClassesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHTTPBrowserFamiliesResponse struct {
-	Result  RadarHTTPBrowserFamiliesResponseResult `json:"result,required"`
-	Success bool                                   `json:"success,required"`
-	JSON    radarHTTPBrowserFamiliesResponseJSON   `json:"-"`
+	Meta   interface{}                            `json:"meta,required"`
+	Serie0 RadarHTTPBrowserFamiliesResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPBrowserFamiliesResponseJSON   `json:"-"`
 }
 
 // radarHTTPBrowserFamiliesResponseJSON contains the JSON metadata for the struct
 // [RadarHTTPBrowserFamiliesResponse]
 type radarHTTPBrowserFamiliesResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -184,53 +205,34 @@ func (r *RadarHTTPBrowserFamiliesResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPBrowserFamiliesResponseResult struct {
-	Meta   interface{}                                  `json:"meta,required"`
-	Serie0 RadarHTTPBrowserFamiliesResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPBrowserFamiliesResponseResultJSON   `json:"-"`
+type RadarHTTPBrowserFamiliesResponseSerie0 struct {
+	Timestamps []string                                   `json:"timestamps,required"`
+	JSON       radarHTTPBrowserFamiliesResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPBrowserFamiliesResponseResultJSON contains the JSON metadata for the
-// struct [RadarHTTPBrowserFamiliesResponseResult]
-type radarHTTPBrowserFamiliesResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPBrowserFamiliesResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPBrowserFamiliesResponseResultSerie0 struct {
-	Timestamps []string                                         `json:"timestamps,required"`
-	JSON       radarHTTPBrowserFamiliesResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHTTPBrowserFamiliesResponseResultSerie0JSON contains the JSON metadata for
-// the struct [RadarHTTPBrowserFamiliesResponseResultSerie0]
-type radarHTTPBrowserFamiliesResponseResultSerie0JSON struct {
+// radarHTTPBrowserFamiliesResponseSerie0JSON contains the JSON metadata for the
+// struct [RadarHTTPBrowserFamiliesResponseSerie0]
+type radarHTTPBrowserFamiliesResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPBrowserFamiliesResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPBrowserFamiliesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHTTPBrowsersResponse struct {
-	Result  RadarHTTPBrowsersResponseResult `json:"result,required"`
-	Success bool                            `json:"success,required"`
-	JSON    radarHTTPBrowsersResponseJSON   `json:"-"`
+	Meta   interface{}                     `json:"meta,required"`
+	Serie0 RadarHTTPBrowsersResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPBrowsersResponseJSON   `json:"-"`
 }
 
 // radarHTTPBrowsersResponseJSON contains the JSON metadata for the struct
 // [RadarHTTPBrowsersResponse]
 type radarHTTPBrowsersResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -239,53 +241,34 @@ func (r *RadarHTTPBrowsersResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPBrowsersResponseResult struct {
-	Meta   interface{}                           `json:"meta,required"`
-	Serie0 RadarHTTPBrowsersResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPBrowsersResponseResultJSON   `json:"-"`
+type RadarHTTPBrowsersResponseSerie0 struct {
+	Timestamps []string                            `json:"timestamps,required"`
+	JSON       radarHTTPBrowsersResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPBrowsersResponseResultJSON contains the JSON metadata for the struct
-// [RadarHTTPBrowsersResponseResult]
-type radarHTTPBrowsersResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPBrowsersResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPBrowsersResponseResultSerie0 struct {
-	Timestamps []string                                  `json:"timestamps,required"`
-	JSON       radarHTTPBrowsersResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHTTPBrowsersResponseResultSerie0JSON contains the JSON metadata for the
-// struct [RadarHTTPBrowsersResponseResultSerie0]
-type radarHTTPBrowsersResponseResultSerie0JSON struct {
+// radarHTTPBrowsersResponseSerie0JSON contains the JSON metadata for the struct
+// [RadarHTTPBrowsersResponseSerie0]
+type radarHTTPBrowsersResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPBrowsersResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPBrowsersResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHTTPDeviceTypesResponse struct {
-	Result  RadarHTTPDeviceTypesResponseResult `json:"result,required"`
-	Success bool                               `json:"success,required"`
-	JSON    radarHTTPDeviceTypesResponseJSON   `json:"-"`
+	Meta   interface{}                        `json:"meta,required"`
+	Serie0 RadarHTTPDeviceTypesResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPDeviceTypesResponseJSON   `json:"-"`
 }
 
 // radarHTTPDeviceTypesResponseJSON contains the JSON metadata for the struct
 // [RadarHTTPDeviceTypesResponse]
 type radarHTTPDeviceTypesResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -294,36 +277,17 @@ func (r *RadarHTTPDeviceTypesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPDeviceTypesResponseResult struct {
-	Meta   interface{}                              `json:"meta,required"`
-	Serie0 RadarHTTPDeviceTypesResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPDeviceTypesResponseResultJSON   `json:"-"`
+type RadarHTTPDeviceTypesResponseSerie0 struct {
+	Desktop    []string                               `json:"desktop,required"`
+	Mobile     []string                               `json:"mobile,required"`
+	Other      []string                               `json:"other,required"`
+	Timestamps []string                               `json:"timestamps,required"`
+	JSON       radarHTTPDeviceTypesResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPDeviceTypesResponseResultJSON contains the JSON metadata for the struct
-// [RadarHTTPDeviceTypesResponseResult]
-type radarHTTPDeviceTypesResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPDeviceTypesResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPDeviceTypesResponseResultSerie0 struct {
-	Desktop    []string                                     `json:"desktop,required"`
-	Mobile     []string                                     `json:"mobile,required"`
-	Other      []string                                     `json:"other,required"`
-	Timestamps []string                                     `json:"timestamps,required"`
-	JSON       radarHTTPDeviceTypesResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHTTPDeviceTypesResponseResultSerie0JSON contains the JSON metadata for the
-// struct [RadarHTTPDeviceTypesResponseResultSerie0]
-type radarHTTPDeviceTypesResponseResultSerie0JSON struct {
+// radarHTTPDeviceTypesResponseSerie0JSON contains the JSON metadata for the struct
+// [RadarHTTPDeviceTypesResponseSerie0]
+type radarHTTPDeviceTypesResponseSerie0JSON struct {
 	Desktop     apijson.Field
 	Mobile      apijson.Field
 	Other       apijson.Field
@@ -332,21 +296,21 @@ type radarHTTPDeviceTypesResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPDeviceTypesResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPDeviceTypesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHttphttpProtocolsResponse struct {
-	Result  RadarHttphttpProtocolsResponseResult `json:"result,required"`
-	Success bool                                 `json:"success,required"`
-	JSON    radarHttphttpProtocolsResponseJSON   `json:"-"`
+	Meta   interface{}                          `json:"meta,required"`
+	Serie0 RadarHttphttpProtocolsResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHttphttpProtocolsResponseJSON   `json:"-"`
 }
 
 // radarHttphttpProtocolsResponseJSON contains the JSON metadata for the struct
 // [RadarHttphttpProtocolsResponse]
 type radarHttphttpProtocolsResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -355,35 +319,16 @@ func (r *RadarHttphttpProtocolsResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHttphttpProtocolsResponseResult struct {
-	Meta   interface{}                                `json:"meta,required"`
-	Serie0 RadarHttphttpProtocolsResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHttphttpProtocolsResponseResultJSON   `json:"-"`
+type RadarHttphttpProtocolsResponseSerie0 struct {
+	HTTP       []string                                 `json:"http,required"`
+	HTTPs      []string                                 `json:"https,required"`
+	Timestamps []string                                 `json:"timestamps,required"`
+	JSON       radarHttphttpProtocolsResponseSerie0JSON `json:"-"`
 }
 
-// radarHttphttpProtocolsResponseResultJSON contains the JSON metadata for the
-// struct [RadarHttphttpProtocolsResponseResult]
-type radarHttphttpProtocolsResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHttphttpProtocolsResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHttphttpProtocolsResponseResultSerie0 struct {
-	HTTP       []string                                       `json:"http,required"`
-	HTTPs      []string                                       `json:"https,required"`
-	Timestamps []string                                       `json:"timestamps,required"`
-	JSON       radarHttphttpProtocolsResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHttphttpProtocolsResponseResultSerie0JSON contains the JSON metadata for
-// the struct [RadarHttphttpProtocolsResponseResultSerie0]
-type radarHttphttpProtocolsResponseResultSerie0JSON struct {
+// radarHttphttpProtocolsResponseSerie0JSON contains the JSON metadata for the
+// struct [RadarHttphttpProtocolsResponseSerie0]
+type radarHttphttpProtocolsResponseSerie0JSON struct {
 	HTTP        apijson.Field
 	HTTPs       apijson.Field
 	Timestamps  apijson.Field
@@ -391,21 +336,21 @@ type radarHttphttpProtocolsResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHttphttpProtocolsResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHttphttpProtocolsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHttphttpVersionsResponse struct {
-	Result  RadarHttphttpVersionsResponseResult `json:"result,required"`
-	Success bool                                `json:"success,required"`
-	JSON    radarHttphttpVersionsResponseJSON   `json:"-"`
+	Meta   interface{}                         `json:"meta,required"`
+	Serie0 RadarHttphttpVersionsResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHttphttpVersionsResponseJSON   `json:"-"`
 }
 
 // radarHttphttpVersionsResponseJSON contains the JSON metadata for the struct
 // [RadarHttphttpVersionsResponse]
 type radarHttphttpVersionsResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -414,36 +359,17 @@ func (r *RadarHttphttpVersionsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHttphttpVersionsResponseResult struct {
-	Meta   interface{}                               `json:"meta,required"`
-	Serie0 RadarHttphttpVersionsResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHttphttpVersionsResponseResultJSON   `json:"-"`
+type RadarHttphttpVersionsResponseSerie0 struct {
+	HTTP1X     []string                                `json:"HTTP/1.x,required"`
+	HTTP2      []string                                `json:"HTTP/2,required"`
+	HTTP3      []string                                `json:"HTTP/3,required"`
+	Timestamps []string                                `json:"timestamps,required"`
+	JSON       radarHttphttpVersionsResponseSerie0JSON `json:"-"`
 }
 
-// radarHttphttpVersionsResponseResultJSON contains the JSON metadata for the
-// struct [RadarHttphttpVersionsResponseResult]
-type radarHttphttpVersionsResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHttphttpVersionsResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHttphttpVersionsResponseResultSerie0 struct {
-	HTTP1X     []string                                      `json:"HTTP/1.x,required"`
-	HTTP2      []string                                      `json:"HTTP/2,required"`
-	HTTP3      []string                                      `json:"HTTP/3,required"`
-	Timestamps []string                                      `json:"timestamps,required"`
-	JSON       radarHttphttpVersionsResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHttphttpVersionsResponseResultSerie0JSON contains the JSON metadata for the
-// struct [RadarHttphttpVersionsResponseResultSerie0]
-type radarHttphttpVersionsResponseResultSerie0JSON struct {
+// radarHttphttpVersionsResponseSerie0JSON contains the JSON metadata for the
+// struct [RadarHttphttpVersionsResponseSerie0]
+type radarHttphttpVersionsResponseSerie0JSON struct {
 	HTTP1X      apijson.Field
 	HTTP2       apijson.Field
 	HTTP3       apijson.Field
@@ -452,21 +378,21 @@ type radarHttphttpVersionsResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHttphttpVersionsResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHttphttpVersionsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHttpipVersionsResponse struct {
-	Result  RadarHttpipVersionsResponseResult `json:"result,required"`
-	Success bool                              `json:"success,required"`
-	JSON    radarHttpipVersionsResponseJSON   `json:"-"`
+	Meta   interface{}                       `json:"meta,required"`
+	Serie0 RadarHttpipVersionsResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHttpipVersionsResponseJSON   `json:"-"`
 }
 
 // radarHttpipVersionsResponseJSON contains the JSON metadata for the struct
 // [RadarHttpipVersionsResponse]
 type radarHttpipVersionsResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -475,35 +401,16 @@ func (r *RadarHttpipVersionsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHttpipVersionsResponseResult struct {
-	Meta   interface{}                             `json:"meta,required"`
-	Serie0 RadarHttpipVersionsResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHttpipVersionsResponseResultJSON   `json:"-"`
+type RadarHttpipVersionsResponseSerie0 struct {
+	IPv4       []string                              `json:"IPv4,required"`
+	IPv6       []string                              `json:"IPv6,required"`
+	Timestamps []string                              `json:"timestamps,required"`
+	JSON       radarHttpipVersionsResponseSerie0JSON `json:"-"`
 }
 
-// radarHttpipVersionsResponseResultJSON contains the JSON metadata for the struct
-// [RadarHttpipVersionsResponseResult]
-type radarHttpipVersionsResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHttpipVersionsResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHttpipVersionsResponseResultSerie0 struct {
-	IPv4       []string                                    `json:"IPv4,required"`
-	IPv6       []string                                    `json:"IPv6,required"`
-	Timestamps []string                                    `json:"timestamps,required"`
-	JSON       radarHttpipVersionsResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHttpipVersionsResponseResultSerie0JSON contains the JSON metadata for the
-// struct [RadarHttpipVersionsResponseResultSerie0]
-type radarHttpipVersionsResponseResultSerie0JSON struct {
+// radarHttpipVersionsResponseSerie0JSON contains the JSON metadata for the struct
+// [RadarHttpipVersionsResponseSerie0]
+type radarHttpipVersionsResponseSerie0JSON struct {
 	IPv4        apijson.Field
 	IPv6        apijson.Field
 	Timestamps  apijson.Field
@@ -511,21 +418,21 @@ type radarHttpipVersionsResponseResultSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHttpipVersionsResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHttpipVersionsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RadarHTTPOssResponse struct {
-	Result  RadarHTTPOssResponseResult `json:"result,required"`
-	Success bool                       `json:"success,required"`
-	JSON    radarHTTPOssResponseJSON   `json:"-"`
+	Meta   interface{}                `json:"meta,required"`
+	Serie0 RadarHTTPOssResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPOssResponseJSON   `json:"-"`
 }
 
 // radarHTTPOssResponseJSON contains the JSON metadata for the struct
 // [RadarHTTPOssResponse]
 type radarHTTPOssResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -534,39 +441,20 @@ func (r *RadarHTTPOssResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPOssResponseResult struct {
-	Meta   interface{}                      `json:"meta,required"`
-	Serie0 RadarHTTPOssResponseResultSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPOssResponseResultJSON   `json:"-"`
+type RadarHTTPOssResponseSerie0 struct {
+	Timestamps []string                       `json:"timestamps,required"`
+	JSON       radarHTTPOssResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPOssResponseResultJSON contains the JSON metadata for the struct
-// [RadarHTTPOssResponseResult]
-type radarHTTPOssResponseResultJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarHTTPOssResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarHTTPOssResponseResultSerie0 struct {
-	Timestamps []string                             `json:"timestamps,required"`
-	JSON       radarHTTPOssResponseResultSerie0JSON `json:"-"`
-}
-
-// radarHTTPOssResponseResultSerie0JSON contains the JSON metadata for the struct
-// [RadarHTTPOssResponseResultSerie0]
-type radarHTTPOssResponseResultSerie0JSON struct {
+// radarHTTPOssResponseSerie0JSON contains the JSON metadata for the struct
+// [RadarHTTPOssResponseSerie0]
+type radarHTTPOssResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPOssResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPOssResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -709,6 +597,25 @@ const (
 	RadarHTTPBotClassesParamsTLSVersionTlSv1_3  RadarHTTPBotClassesParamsTLSVersion = "TLSv1_3"
 	RadarHTTPBotClassesParamsTLSVersionTlSvQuic RadarHTTPBotClassesParamsTLSVersion = "TLSvQUIC"
 )
+
+type RadarHTTPBotClassesResponseEnvelope struct {
+	Result  RadarHTTPBotClassesResponse             `json:"result,required"`
+	Success bool                                    `json:"success,required"`
+	JSON    radarHTTPBotClassesResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHTTPBotClassesResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHTTPBotClassesResponseEnvelope]
+type radarHTTPBotClassesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPBotClassesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type RadarHTTPBrowserFamiliesParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
@@ -859,6 +766,25 @@ const (
 	RadarHTTPBrowserFamiliesParamsTLSVersionTlSv1_3  RadarHTTPBrowserFamiliesParamsTLSVersion = "TLSv1_3"
 	RadarHTTPBrowserFamiliesParamsTLSVersionTlSvQuic RadarHTTPBrowserFamiliesParamsTLSVersion = "TLSvQUIC"
 )
+
+type RadarHTTPBrowserFamiliesResponseEnvelope struct {
+	Result  RadarHTTPBrowserFamiliesResponse             `json:"result,required"`
+	Success bool                                         `json:"success,required"`
+	JSON    radarHTTPBrowserFamiliesResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHTTPBrowserFamiliesResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHTTPBrowserFamiliesResponseEnvelope]
+type radarHTTPBrowserFamiliesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPBrowserFamiliesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type RadarHTTPBrowsersParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
@@ -1013,6 +939,25 @@ const (
 	RadarHTTPBrowsersParamsTLSVersionTlSvQuic RadarHTTPBrowsersParamsTLSVersion = "TLSvQUIC"
 )
 
+type RadarHTTPBrowsersResponseEnvelope struct {
+	Result  RadarHTTPBrowsersResponse             `json:"result,required"`
+	Success bool                                  `json:"success,required"`
+	JSON    radarHTTPBrowsersResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHTTPBrowsersResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RadarHTTPBrowsersResponseEnvelope]
+type radarHTTPBrowsersResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPBrowsersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarHTTPDeviceTypesParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1152,6 +1097,25 @@ const (
 	RadarHTTPDeviceTypesParamsTLSVersionTlSv1_3  RadarHTTPDeviceTypesParamsTLSVersion = "TLSv1_3"
 	RadarHTTPDeviceTypesParamsTLSVersionTlSvQuic RadarHTTPDeviceTypesParamsTLSVersion = "TLSvQUIC"
 )
+
+type RadarHTTPDeviceTypesResponseEnvelope struct {
+	Result  RadarHTTPDeviceTypesResponse             `json:"result,required"`
+	Success bool                                     `json:"success,required"`
+	JSON    radarHTTPDeviceTypesResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHTTPDeviceTypesResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHTTPDeviceTypesResponseEnvelope]
+type radarHTTPDeviceTypesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPDeviceTypesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type RadarHTTPHTTPProtocolsParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
@@ -1294,6 +1258,25 @@ const (
 	RadarHttphttpProtocolsParamsTLSVersionTlSvQuic RadarHttphttpProtocolsParamsTLSVersion = "TLSvQUIC"
 )
 
+type RadarHttphttpProtocolsResponseEnvelope struct {
+	Result  RadarHttphttpProtocolsResponse             `json:"result,required"`
+	Success bool                                       `json:"success,required"`
+	JSON    radarHttphttpProtocolsResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHttphttpProtocolsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHttphttpProtocolsResponseEnvelope]
+type radarHttphttpProtocolsResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHttphttpProtocolsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarHTTPHTTPVersionsParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1433,6 +1416,25 @@ const (
 	RadarHttphttpVersionsParamsTLSVersionTlSv1_3  RadarHttphttpVersionsParamsTLSVersion = "TLSv1_3"
 	RadarHttphttpVersionsParamsTLSVersionTlSvQuic RadarHttphttpVersionsParamsTLSVersion = "TLSvQUIC"
 )
+
+type RadarHttphttpVersionsResponseEnvelope struct {
+	Result  RadarHttphttpVersionsResponse             `json:"result,required"`
+	Success bool                                      `json:"success,required"`
+	JSON    radarHttphttpVersionsResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHttphttpVersionsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHttphttpVersionsResponseEnvelope]
+type radarHttphttpVersionsResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHttphttpVersionsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type RadarHTTPIPVersionsParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
@@ -1575,6 +1577,25 @@ const (
 	RadarHttpipVersionsParamsTLSVersionTlSvQuic RadarHttpipVersionsParamsTLSVersion = "TLSvQUIC"
 )
 
+type RadarHttpipVersionsResponseEnvelope struct {
+	Result  RadarHttpipVersionsResponse             `json:"result,required"`
+	Success bool                                    `json:"success,required"`
+	JSON    radarHttpipVersionsResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHttpipVersionsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarHttpipVersionsResponseEnvelope]
+type radarHttpipVersionsResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHttpipVersionsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarHTTPOssParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1709,3 +1730,22 @@ const (
 	RadarHTTPOssParamsTLSVersionTlSv1_3  RadarHTTPOssParamsTLSVersion = "TLSv1_3"
 	RadarHTTPOssParamsTLSVersionTlSvQuic RadarHTTPOssParamsTLSVersion = "TLSvQUIC"
 )
+
+type RadarHTTPOssResponseEnvelope struct {
+	Result  RadarHTTPOssResponse             `json:"result,required"`
+	Success bool                             `json:"success,required"`
+	JSON    radarHTTPOssResponseEnvelopeJSON `json:"-"`
+}
+
+// radarHTTPOssResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RadarHTTPOssResponseEnvelope]
+type radarHTTPOssResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarHTTPOssResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

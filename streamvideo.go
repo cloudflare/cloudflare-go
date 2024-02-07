@@ -36,74 +36,17 @@ func NewStreamVideoService(opts ...option.RequestOption) (r *StreamVideoService)
 // Returns information about an account's storage use.
 func (r *StreamVideoService) StorageUsage(ctx context.Context, accountID string, query StreamVideoStorageUsageParams, opts ...option.RequestOption) (res *StreamVideoStorageUsageResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env StreamVideoStorageUsageResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/storage-usage", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type StreamVideoStorageUsageResponse struct {
-	Errors   []StreamVideoStorageUsageResponseError   `json:"errors"`
-	Messages []StreamVideoStorageUsageResponseMessage `json:"messages"`
-	Result   StreamVideoStorageUsageResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success StreamVideoStorageUsageResponseSuccess `json:"success"`
-	JSON    streamVideoStorageUsageResponseJSON    `json:"-"`
-}
-
-// streamVideoStorageUsageResponseJSON contains the JSON metadata for the struct
-// [StreamVideoStorageUsageResponse]
-type streamVideoStorageUsageResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamVideoStorageUsageResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamVideoStorageUsageResponseError struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    streamVideoStorageUsageResponseErrorJSON `json:"-"`
-}
-
-// streamVideoStorageUsageResponseErrorJSON contains the JSON metadata for the
-// struct [StreamVideoStorageUsageResponseError]
-type streamVideoStorageUsageResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamVideoStorageUsageResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamVideoStorageUsageResponseMessage struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    streamVideoStorageUsageResponseMessageJSON `json:"-"`
-}
-
-// streamVideoStorageUsageResponseMessageJSON contains the JSON metadata for the
-// struct [StreamVideoStorageUsageResponseMessage]
-type streamVideoStorageUsageResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamVideoStorageUsageResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamVideoStorageUsageResponseResult struct {
 	// A user-defined identifier for the media creator.
 	Creator string `json:"creator"`
 	// The total minutes of video content stored in the account.
@@ -111,13 +54,13 @@ type StreamVideoStorageUsageResponseResult struct {
 	// The storage capacity alloted for the account.
 	TotalStorageMinutesLimit int64 `json:"totalStorageMinutesLimit"`
 	// The total count of videos associated with the account.
-	VideoCount int64                                     `json:"videoCount"`
-	JSON       streamVideoStorageUsageResponseResultJSON `json:"-"`
+	VideoCount int64                               `json:"videoCount"`
+	JSON       streamVideoStorageUsageResponseJSON `json:"-"`
 }
 
-// streamVideoStorageUsageResponseResultJSON contains the JSON metadata for the
-// struct [StreamVideoStorageUsageResponseResult]
-type streamVideoStorageUsageResponseResultJSON struct {
+// streamVideoStorageUsageResponseJSON contains the JSON metadata for the struct
+// [StreamVideoStorageUsageResponse]
+type streamVideoStorageUsageResponseJSON struct {
 	Creator                  apijson.Field
 	TotalStorageMinutes      apijson.Field
 	TotalStorageMinutesLimit apijson.Field
@@ -126,16 +69,9 @@ type streamVideoStorageUsageResponseResultJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *StreamVideoStorageUsageResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamVideoStorageUsageResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type StreamVideoStorageUsageResponseSuccess bool
-
-const (
-	StreamVideoStorageUsageResponseSuccessTrue StreamVideoStorageUsageResponseSuccess = true
-)
 
 type StreamVideoStorageUsageParams struct {
 	// A user-defined identifier for the media creator.
@@ -150,3 +86,72 @@ func (r StreamVideoStorageUsageParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+type StreamVideoStorageUsageResponseEnvelope struct {
+	Errors   []StreamVideoStorageUsageResponseEnvelopeErrors   `json:"errors"`
+	Messages []StreamVideoStorageUsageResponseEnvelopeMessages `json:"messages"`
+	Result   StreamVideoStorageUsageResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success StreamVideoStorageUsageResponseEnvelopeSuccess `json:"success"`
+	JSON    streamVideoStorageUsageResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamVideoStorageUsageResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StreamVideoStorageUsageResponseEnvelope]
+type streamVideoStorageUsageResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamVideoStorageUsageResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamVideoStorageUsageResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    streamVideoStorageUsageResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamVideoStorageUsageResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [StreamVideoStorageUsageResponseEnvelopeErrors]
+type streamVideoStorageUsageResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamVideoStorageUsageResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamVideoStorageUsageResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    streamVideoStorageUsageResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamVideoStorageUsageResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [StreamVideoStorageUsageResponseEnvelopeMessages]
+type streamVideoStorageUsageResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamVideoStorageUsageResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamVideoStorageUsageResponseEnvelopeSuccess bool
+
+const (
+	StreamVideoStorageUsageResponseEnvelopeSuccessTrue StreamVideoStorageUsageResponseEnvelopeSuccess = true
+)

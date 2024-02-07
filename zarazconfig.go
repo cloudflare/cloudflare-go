@@ -36,135 +36,83 @@ func NewZarazConfigService(opts ...option.RequestOption) (r *ZarazConfigService)
 // be included.
 func (r *ZarazConfigService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZarazConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env ZarazConfigGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/zaraz/config", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Updates Zaraz configuration for a zone.
 func (r *ZarazConfigService) Update(ctx context.Context, zoneID string, body ZarazConfigUpdateParams, opts ...option.RequestOption) (res *ZarazConfigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env ZarazConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/zaraz/config", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type ZarazConfigGetResponse struct {
-	Errors   []ZarazConfigGetResponseError   `json:"errors"`
-	Messages []ZarazConfigGetResponseMessage `json:"messages"`
-	Result   ZarazConfigGetResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success bool                       `json:"success"`
-	JSON    zarazConfigGetResponseJSON `json:"-"`
+	// Consent management configuration.
+	Consent ZarazConfigGetResponseConsent `json:"consent"`
+	// Data layer compatibility mode enabled.
+	DataLayer bool `json:"dataLayer"`
+	// The key for Zaraz debug mode.
+	DebugKey string `json:"debugKey"`
+	// Single Page Application support enabled.
+	HistoryChange bool `json:"historyChange"`
+	// General Zaraz settings.
+	Settings ZarazConfigGetResponseSettings `json:"settings"`
+	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
+	// and value is the tool configuration object.
+	Tools interface{} `json:"tools"`
+	// Triggers set up under Zaraz configuration, where key is the trigger
+	// alpha-numeric ID and value is the trigger configuration.
+	Triggers interface{} `json:"triggers"`
+	// Variables set up under Zaraz configuration, where key is the variable
+	// alpha-numeric ID and value is the variable configuration. Values of variables of
+	// type secret are not included.
+	Variables interface{} `json:"variables"`
+	// Zaraz internal version of the config.
+	ZarazVersion int64                      `json:"zarazVersion"`
+	JSON         zarazConfigGetResponseJSON `json:"-"`
 }
 
 // zarazConfigGetResponseJSON contains the JSON metadata for the struct
 // [ZarazConfigGetResponse]
 type zarazConfigGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Consent       apijson.Field
+	DataLayer     apijson.Field
+	DebugKey      apijson.Field
+	HistoryChange apijson.Field
+	Settings      apijson.Field
+	Tools         apijson.Field
+	Triggers      apijson.Field
+	Variables     apijson.Field
+	ZarazVersion  apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
 func (r *ZarazConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazConfigGetResponseError struct {
-	Code    int64                           `json:"code,required"`
-	Message string                          `json:"message,required"`
-	JSON    zarazConfigGetResponseErrorJSON `json:"-"`
-}
-
-// zarazConfigGetResponseErrorJSON contains the JSON metadata for the struct
-// [ZarazConfigGetResponseError]
-type zarazConfigGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazConfigGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazConfigGetResponseMessage struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    zarazConfigGetResponseMessageJSON `json:"-"`
-}
-
-// zarazConfigGetResponseMessageJSON contains the JSON metadata for the struct
-// [ZarazConfigGetResponseMessage]
-type zarazConfigGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazConfigGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazConfigGetResponseResult struct {
-	// Consent management configuration.
-	Consent ZarazConfigGetResponseResultConsent `json:"consent"`
-	// Data layer compatibility mode enabled.
-	DataLayer bool `json:"dataLayer"`
-	// The key for Zaraz debug mode.
-	DebugKey string `json:"debugKey"`
-	// Single Page Application support enabled.
-	HistoryChange bool `json:"historyChange"`
-	// General Zaraz settings.
-	Settings ZarazConfigGetResponseResultSettings `json:"settings"`
-	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
-	// and value is the tool configuration object.
-	Tools interface{} `json:"tools"`
-	// Triggers set up under Zaraz configuration, where key is the trigger
-	// alpha-numeric ID and value is the trigger configuration.
-	Triggers interface{} `json:"triggers"`
-	// Variables set up under Zaraz configuration, where key is the variable
-	// alpha-numeric ID and value is the variable configuration. Values of variables of
-	// type secret are not included.
-	Variables interface{} `json:"variables"`
-	// Zaraz internal version of the config.
-	ZarazVersion int64                            `json:"zarazVersion"`
-	JSON         zarazConfigGetResponseResultJSON `json:"-"`
-}
-
-// zarazConfigGetResponseResultJSON contains the JSON metadata for the struct
-// [ZarazConfigGetResponseResult]
-type zarazConfigGetResponseResultJSON struct {
-	Consent       apijson.Field
-	DataLayer     apijson.Field
-	DebugKey      apijson.Field
-	HistoryChange apijson.Field
-	Settings      apijson.Field
-	Tools         apijson.Field
-	Triggers      apijson.Field
-	Variables     apijson.Field
-	ZarazVersion  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ZarazConfigGetResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Consent management configuration.
-type ZarazConfigGetResponseResultConsent struct {
-	Enabled                bool                                                      `json:"enabled,required"`
-	ButtonTextTranslations ZarazConfigGetResponseResultConsentButtonTextTranslations `json:"buttonTextTranslations"`
-	CompanyEmail           string                                                    `json:"companyEmail"`
-	CompanyName            string                                                    `json:"companyName"`
-	CompanyStreetAddress   string                                                    `json:"companyStreetAddress"`
-	ConsentModalIntroHTML  string                                                    `json:"consentModalIntroHTML"`
+type ZarazConfigGetResponseConsent struct {
+	Enabled                bool                                                `json:"enabled,required"`
+	ButtonTextTranslations ZarazConfigGetResponseConsentButtonTextTranslations `json:"buttonTextTranslations"`
+	CompanyEmail           string                                              `json:"companyEmail"`
+	CompanyName            string                                              `json:"companyName"`
+	CompanyStreetAddress   string                                              `json:"companyStreetAddress"`
+	ConsentModalIntroHTML  string                                              `json:"consentModalIntroHTML"`
 	// Object where keys are language codes
 	ConsentModalIntroHTMLWithTranslations interface{} `json:"consentModalIntroHTMLWithTranslations"`
 	CookieName                            string      `json:"cookieName"`
@@ -175,13 +123,13 @@ type ZarazConfigGetResponseResultConsent struct {
 	// Object where keys are purpose alpha-numeric IDs
 	Purposes interface{} `json:"purposes"`
 	// Object where keys are purpose alpha-numeric IDs
-	PurposesWithTranslations interface{}                             `json:"purposesWithTranslations"`
-	JSON                     zarazConfigGetResponseResultConsentJSON `json:"-"`
+	PurposesWithTranslations interface{}                       `json:"purposesWithTranslations"`
+	JSON                     zarazConfigGetResponseConsentJSON `json:"-"`
 }
 
-// zarazConfigGetResponseResultConsentJSON contains the JSON metadata for the
-// struct [ZarazConfigGetResponseResultConsent]
-type zarazConfigGetResponseResultConsentJSON struct {
+// zarazConfigGetResponseConsentJSON contains the JSON metadata for the struct
+// [ZarazConfigGetResponseConsent]
+type zarazConfigGetResponseConsentJSON struct {
 	Enabled                               apijson.Field
 	ButtonTextTranslations                apijson.Field
 	CompanyEmail                          apijson.Field
@@ -200,24 +148,23 @@ type zarazConfigGetResponseResultConsentJSON struct {
 	ExtraFields                           map[string]apijson.Field
 }
 
-func (r *ZarazConfigGetResponseResultConsent) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseConsent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazConfigGetResponseResultConsentButtonTextTranslations struct {
+type ZarazConfigGetResponseConsentButtonTextTranslations struct {
 	// Object where keys are language codes
 	AcceptAll interface{} `json:"accept_all,required"`
 	// Object where keys are language codes
 	ConfirmMyChoices interface{} `json:"confirm_my_choices,required"`
 	// Object where keys are language codes
-	RejectAll interface{}                                                   `json:"reject_all,required"`
-	JSON      zarazConfigGetResponseResultConsentButtonTextTranslationsJSON `json:"-"`
+	RejectAll interface{}                                             `json:"reject_all,required"`
+	JSON      zarazConfigGetResponseConsentButtonTextTranslationsJSON `json:"-"`
 }
 
-// zarazConfigGetResponseResultConsentButtonTextTranslationsJSON contains the JSON
-// metadata for the struct
-// [ZarazConfigGetResponseResultConsentButtonTextTranslations]
-type zarazConfigGetResponseResultConsentButtonTextTranslationsJSON struct {
+// zarazConfigGetResponseConsentButtonTextTranslationsJSON contains the JSON
+// metadata for the struct [ZarazConfigGetResponseConsentButtonTextTranslations]
+type zarazConfigGetResponseConsentButtonTextTranslationsJSON struct {
 	AcceptAll        apijson.Field
 	ConfirmMyChoices apijson.Field
 	RejectAll        apijson.Field
@@ -225,16 +172,16 @@ type zarazConfigGetResponseResultConsentButtonTextTranslationsJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZarazConfigGetResponseResultConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // General Zaraz settings.
-type ZarazConfigGetResponseResultSettings struct {
+type ZarazConfigGetResponseSettings struct {
 	// Automatic injection of Zaraz scripts enabled.
 	AutoInjectScript bool `json:"autoInjectScript,required"`
 	// Details of the worker that receives and edits Zaraz Context object.
-	ContextEnricher ZarazConfigGetResponseResultSettingsContextEnricher `json:"contextEnricher"`
+	ContextEnricher ZarazConfigGetResponseSettingsContextEnricher `json:"contextEnricher"`
 	// The domain Zaraz will use for writing and reading its cookies.
 	CookieDomain string `json:"cookieDomain"`
 	// Ecommerce API enabled.
@@ -258,13 +205,13 @@ type ZarazConfigGetResponseResultSettings struct {
 	// Custom endpoint for Zaraz main script.
 	ScriptPath string `json:"scriptPath"`
 	// Custom endpoint for Zaraz tracking requests.
-	TrackPath string                                   `json:"trackPath"`
-	JSON      zarazConfigGetResponseResultSettingsJSON `json:"-"`
+	TrackPath string                             `json:"trackPath"`
+	JSON      zarazConfigGetResponseSettingsJSON `json:"-"`
 }
 
-// zarazConfigGetResponseResultSettingsJSON contains the JSON metadata for the
-// struct [ZarazConfigGetResponseResultSettings]
-type zarazConfigGetResponseResultSettingsJSON struct {
+// zarazConfigGetResponseSettingsJSON contains the JSON metadata for the struct
+// [ZarazConfigGetResponseSettings]
+type zarazConfigGetResponseSettingsJSON struct {
 	AutoInjectScript    apijson.Field
 	ContextEnricher     apijson.Field
 	CookieDomain        apijson.Field
@@ -283,42 +230,237 @@ type zarazConfigGetResponseResultSettingsJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZarazConfigGetResponseResultSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Details of the worker that receives and edits Zaraz Context object.
-type ZarazConfigGetResponseResultSettingsContextEnricher struct {
-	EscapedWorkerName string                                                  `json:"escapedWorkerName,required"`
-	WorkerTag         string                                                  `json:"workerTag,required"`
-	JSON              zarazConfigGetResponseResultSettingsContextEnricherJSON `json:"-"`
+type ZarazConfigGetResponseSettingsContextEnricher struct {
+	EscapedWorkerName string                                            `json:"escapedWorkerName,required"`
+	WorkerTag         string                                            `json:"workerTag,required"`
+	JSON              zarazConfigGetResponseSettingsContextEnricherJSON `json:"-"`
 }
 
-// zarazConfigGetResponseResultSettingsContextEnricherJSON contains the JSON
-// metadata for the struct [ZarazConfigGetResponseResultSettingsContextEnricher]
-type zarazConfigGetResponseResultSettingsContextEnricherJSON struct {
+// zarazConfigGetResponseSettingsContextEnricherJSON contains the JSON metadata for
+// the struct [ZarazConfigGetResponseSettingsContextEnricher]
+type zarazConfigGetResponseSettingsContextEnricherJSON struct {
 	EscapedWorkerName apijson.Field
 	WorkerTag         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZarazConfigGetResponseResultSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZarazConfigUpdateResponse struct {
-	Errors   []ZarazConfigUpdateResponseError   `json:"errors"`
-	Messages []ZarazConfigUpdateResponseMessage `json:"messages"`
-	Result   ZarazConfigUpdateResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success bool                          `json:"success"`
-	JSON    zarazConfigUpdateResponseJSON `json:"-"`
+	// Consent management configuration.
+	Consent ZarazConfigUpdateResponseConsent `json:"consent"`
+	// Data layer compatibility mode enabled.
+	DataLayer bool `json:"dataLayer"`
+	// The key for Zaraz debug mode.
+	DebugKey string `json:"debugKey"`
+	// Single Page Application support enabled.
+	HistoryChange bool `json:"historyChange"`
+	// General Zaraz settings.
+	Settings ZarazConfigUpdateResponseSettings `json:"settings"`
+	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
+	// and value is the tool configuration object.
+	Tools interface{} `json:"tools"`
+	// Triggers set up under Zaraz configuration, where key is the trigger
+	// alpha-numeric ID and value is the trigger configuration.
+	Triggers interface{} `json:"triggers"`
+	// Variables set up under Zaraz configuration, where key is the variable
+	// alpha-numeric ID and value is the variable configuration. Values of variables of
+	// type secret are not included.
+	Variables interface{} `json:"variables"`
+	// Zaraz internal version of the config.
+	ZarazVersion int64                         `json:"zarazVersion"`
+	JSON         zarazConfigUpdateResponseJSON `json:"-"`
 }
 
 // zarazConfigUpdateResponseJSON contains the JSON metadata for the struct
 // [ZarazConfigUpdateResponse]
 type zarazConfigUpdateResponseJSON struct {
+	Consent       apijson.Field
+	DataLayer     apijson.Field
+	DebugKey      apijson.Field
+	HistoryChange apijson.Field
+	Settings      apijson.Field
+	Tools         apijson.Field
+	Triggers      apijson.Field
+	Variables     apijson.Field
+	ZarazVersion  apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Consent management configuration.
+type ZarazConfigUpdateResponseConsent struct {
+	Enabled                bool                                                   `json:"enabled,required"`
+	ButtonTextTranslations ZarazConfigUpdateResponseConsentButtonTextTranslations `json:"buttonTextTranslations"`
+	CompanyEmail           string                                                 `json:"companyEmail"`
+	CompanyName            string                                                 `json:"companyName"`
+	CompanyStreetAddress   string                                                 `json:"companyStreetAddress"`
+	ConsentModalIntroHTML  string                                                 `json:"consentModalIntroHTML"`
+	// Object where keys are language codes
+	ConsentModalIntroHTMLWithTranslations interface{} `json:"consentModalIntroHTMLWithTranslations"`
+	CookieName                            string      `json:"cookieName"`
+	CustomCss                             string      `json:"customCSS"`
+	CustomIntroDisclaimerDismissed        bool        `json:"customIntroDisclaimerDismissed"`
+	DefaultLanguage                       string      `json:"defaultLanguage"`
+	HideModal                             bool        `json:"hideModal"`
+	// Object where keys are purpose alpha-numeric IDs
+	Purposes interface{} `json:"purposes"`
+	// Object where keys are purpose alpha-numeric IDs
+	PurposesWithTranslations interface{}                          `json:"purposesWithTranslations"`
+	JSON                     zarazConfigUpdateResponseConsentJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseConsentJSON contains the JSON metadata for the struct
+// [ZarazConfigUpdateResponseConsent]
+type zarazConfigUpdateResponseConsentJSON struct {
+	Enabled                               apijson.Field
+	ButtonTextTranslations                apijson.Field
+	CompanyEmail                          apijson.Field
+	CompanyName                           apijson.Field
+	CompanyStreetAddress                  apijson.Field
+	ConsentModalIntroHTML                 apijson.Field
+	ConsentModalIntroHTMLWithTranslations apijson.Field
+	CookieName                            apijson.Field
+	CustomCss                             apijson.Field
+	CustomIntroDisclaimerDismissed        apijson.Field
+	DefaultLanguage                       apijson.Field
+	HideModal                             apijson.Field
+	Purposes                              apijson.Field
+	PurposesWithTranslations              apijson.Field
+	raw                                   string
+	ExtraFields                           map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseConsent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazConfigUpdateResponseConsentButtonTextTranslations struct {
+	// Object where keys are language codes
+	AcceptAll interface{} `json:"accept_all,required"`
+	// Object where keys are language codes
+	ConfirmMyChoices interface{} `json:"confirm_my_choices,required"`
+	// Object where keys are language codes
+	RejectAll interface{}                                                `json:"reject_all,required"`
+	JSON      zarazConfigUpdateResponseConsentButtonTextTranslationsJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseConsentButtonTextTranslationsJSON contains the JSON
+// metadata for the struct [ZarazConfigUpdateResponseConsentButtonTextTranslations]
+type zarazConfigUpdateResponseConsentButtonTextTranslationsJSON struct {
+	AcceptAll        apijson.Field
+	ConfirmMyChoices apijson.Field
+	RejectAll        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// General Zaraz settings.
+type ZarazConfigUpdateResponseSettings struct {
+	// Automatic injection of Zaraz scripts enabled.
+	AutoInjectScript bool `json:"autoInjectScript,required"`
+	// Details of the worker that receives and edits Zaraz Context object.
+	ContextEnricher ZarazConfigUpdateResponseSettingsContextEnricher `json:"contextEnricher"`
+	// The domain Zaraz will use for writing and reading its cookies.
+	CookieDomain string `json:"cookieDomain"`
+	// Ecommerce API enabled.
+	Ecommerce bool `json:"ecommerce"`
+	// Custom endpoint for server-side track events.
+	EventsAPIPath string `json:"eventsApiPath"`
+	// Hiding external referrer URL enabled.
+	HideExternalReferer bool `json:"hideExternalReferer"`
+	// Trimming IP address enabled.
+	HideIPAddress bool `json:"hideIPAddress"`
+	// Removing URL query params enabled.
+	HideQueryParams bool `json:"hideQueryParams"`
+	// Removing sensitive data from User Aagent string enabled.
+	HideUserAgent bool `json:"hideUserAgent"`
+	// Custom endpoint for Zaraz init script.
+	InitPath string `json:"initPath"`
+	// Injection of Zaraz scripts into iframes enabled.
+	InjectIframes bool `json:"injectIframes"`
+	// Custom path for Managed Components server functionalities.
+	McRootPath string `json:"mcRootPath"`
+	// Custom endpoint for Zaraz main script.
+	ScriptPath string `json:"scriptPath"`
+	// Custom endpoint for Zaraz tracking requests.
+	TrackPath string                                `json:"trackPath"`
+	JSON      zarazConfigUpdateResponseSettingsJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseSettingsJSON contains the JSON metadata for the struct
+// [ZarazConfigUpdateResponseSettings]
+type zarazConfigUpdateResponseSettingsJSON struct {
+	AutoInjectScript    apijson.Field
+	ContextEnricher     apijson.Field
+	CookieDomain        apijson.Field
+	Ecommerce           apijson.Field
+	EventsAPIPath       apijson.Field
+	HideExternalReferer apijson.Field
+	HideIPAddress       apijson.Field
+	HideQueryParams     apijson.Field
+	HideUserAgent       apijson.Field
+	InitPath            apijson.Field
+	InjectIframes       apijson.Field
+	McRootPath          apijson.Field
+	ScriptPath          apijson.Field
+	TrackPath           apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Details of the worker that receives and edits Zaraz Context object.
+type ZarazConfigUpdateResponseSettingsContextEnricher struct {
+	EscapedWorkerName string                                               `json:"escapedWorkerName,required"`
+	WorkerTag         string                                               `json:"workerTag,required"`
+	JSON              zarazConfigUpdateResponseSettingsContextEnricherJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseSettingsContextEnricherJSON contains the JSON metadata
+// for the struct [ZarazConfigUpdateResponseSettingsContextEnricher]
+type zarazConfigUpdateResponseSettingsContextEnricherJSON struct {
+	EscapedWorkerName apijson.Field
+	WorkerTag         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazConfigGetResponseEnvelope struct {
+	Errors   []ZarazConfigGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []ZarazConfigGetResponseEnvelopeMessages `json:"messages"`
+	Result   ZarazConfigGetResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success bool                               `json:"success"`
+	JSON    zarazConfigGetResponseEnvelopeJSON `json:"-"`
+}
+
+// zarazConfigGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZarazConfigGetResponseEnvelope]
+type zarazConfigGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -327,241 +469,45 @@ type zarazConfigUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazConfigUpdateResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    zarazConfigUpdateResponseErrorJSON `json:"-"`
+type ZarazConfigGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zarazConfigGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zarazConfigUpdateResponseErrorJSON contains the JSON metadata for the struct
-// [ZarazConfigUpdateResponseError]
-type zarazConfigUpdateResponseErrorJSON struct {
+// zarazConfigGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZarazConfigGetResponseEnvelopeErrors]
+type zarazConfigGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazConfigUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazConfigUpdateResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    zarazConfigUpdateResponseMessageJSON `json:"-"`
+type ZarazConfigGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zarazConfigGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zarazConfigUpdateResponseMessageJSON contains the JSON metadata for the struct
-// [ZarazConfigUpdateResponseMessage]
-type zarazConfigUpdateResponseMessageJSON struct {
+// zarazConfigGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZarazConfigGetResponseEnvelopeMessages]
+type zarazConfigGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazConfigUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazConfigUpdateResponseResult struct {
-	// Consent management configuration.
-	Consent ZarazConfigUpdateResponseResultConsent `json:"consent"`
-	// Data layer compatibility mode enabled.
-	DataLayer bool `json:"dataLayer"`
-	// The key for Zaraz debug mode.
-	DebugKey string `json:"debugKey"`
-	// Single Page Application support enabled.
-	HistoryChange bool `json:"historyChange"`
-	// General Zaraz settings.
-	Settings ZarazConfigUpdateResponseResultSettings `json:"settings"`
-	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
-	// and value is the tool configuration object.
-	Tools interface{} `json:"tools"`
-	// Triggers set up under Zaraz configuration, where key is the trigger
-	// alpha-numeric ID and value is the trigger configuration.
-	Triggers interface{} `json:"triggers"`
-	// Variables set up under Zaraz configuration, where key is the variable
-	// alpha-numeric ID and value is the variable configuration. Values of variables of
-	// type secret are not included.
-	Variables interface{} `json:"variables"`
-	// Zaraz internal version of the config.
-	ZarazVersion int64                               `json:"zarazVersion"`
-	JSON         zarazConfigUpdateResponseResultJSON `json:"-"`
-}
-
-// zarazConfigUpdateResponseResultJSON contains the JSON metadata for the struct
-// [ZarazConfigUpdateResponseResult]
-type zarazConfigUpdateResponseResultJSON struct {
-	Consent       apijson.Field
-	DataLayer     apijson.Field
-	DebugKey      apijson.Field
-	HistoryChange apijson.Field
-	Settings      apijson.Field
-	Tools         apijson.Field
-	Triggers      apijson.Field
-	Variables     apijson.Field
-	ZarazVersion  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ZarazConfigUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Consent management configuration.
-type ZarazConfigUpdateResponseResultConsent struct {
-	Enabled                bool                                                         `json:"enabled,required"`
-	ButtonTextTranslations ZarazConfigUpdateResponseResultConsentButtonTextTranslations `json:"buttonTextTranslations"`
-	CompanyEmail           string                                                       `json:"companyEmail"`
-	CompanyName            string                                                       `json:"companyName"`
-	CompanyStreetAddress   string                                                       `json:"companyStreetAddress"`
-	ConsentModalIntroHTML  string                                                       `json:"consentModalIntroHTML"`
-	// Object where keys are language codes
-	ConsentModalIntroHTMLWithTranslations interface{} `json:"consentModalIntroHTMLWithTranslations"`
-	CookieName                            string      `json:"cookieName"`
-	CustomCss                             string      `json:"customCSS"`
-	CustomIntroDisclaimerDismissed        bool        `json:"customIntroDisclaimerDismissed"`
-	DefaultLanguage                       string      `json:"defaultLanguage"`
-	HideModal                             bool        `json:"hideModal"`
-	// Object where keys are purpose alpha-numeric IDs
-	Purposes interface{} `json:"purposes"`
-	// Object where keys are purpose alpha-numeric IDs
-	PurposesWithTranslations interface{}                                `json:"purposesWithTranslations"`
-	JSON                     zarazConfigUpdateResponseResultConsentJSON `json:"-"`
-}
-
-// zarazConfigUpdateResponseResultConsentJSON contains the JSON metadata for the
-// struct [ZarazConfigUpdateResponseResultConsent]
-type zarazConfigUpdateResponseResultConsentJSON struct {
-	Enabled                               apijson.Field
-	ButtonTextTranslations                apijson.Field
-	CompanyEmail                          apijson.Field
-	CompanyName                           apijson.Field
-	CompanyStreetAddress                  apijson.Field
-	ConsentModalIntroHTML                 apijson.Field
-	ConsentModalIntroHTMLWithTranslations apijson.Field
-	CookieName                            apijson.Field
-	CustomCss                             apijson.Field
-	CustomIntroDisclaimerDismissed        apijson.Field
-	DefaultLanguage                       apijson.Field
-	HideModal                             apijson.Field
-	Purposes                              apijson.Field
-	PurposesWithTranslations              apijson.Field
-	raw                                   string
-	ExtraFields                           map[string]apijson.Field
-}
-
-func (r *ZarazConfigUpdateResponseResultConsent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazConfigUpdateResponseResultConsentButtonTextTranslations struct {
-	// Object where keys are language codes
-	AcceptAll interface{} `json:"accept_all,required"`
-	// Object where keys are language codes
-	ConfirmMyChoices interface{} `json:"confirm_my_choices,required"`
-	// Object where keys are language codes
-	RejectAll interface{}                                                      `json:"reject_all,required"`
-	JSON      zarazConfigUpdateResponseResultConsentButtonTextTranslationsJSON `json:"-"`
-}
-
-// zarazConfigUpdateResponseResultConsentButtonTextTranslationsJSON contains the
-// JSON metadata for the struct
-// [ZarazConfigUpdateResponseResultConsentButtonTextTranslations]
-type zarazConfigUpdateResponseResultConsentButtonTextTranslationsJSON struct {
-	AcceptAll        apijson.Field
-	ConfirmMyChoices apijson.Field
-	RejectAll        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazConfigUpdateResponseResultConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// General Zaraz settings.
-type ZarazConfigUpdateResponseResultSettings struct {
-	// Automatic injection of Zaraz scripts enabled.
-	AutoInjectScript bool `json:"autoInjectScript,required"`
-	// Details of the worker that receives and edits Zaraz Context object.
-	ContextEnricher ZarazConfigUpdateResponseResultSettingsContextEnricher `json:"contextEnricher"`
-	// The domain Zaraz will use for writing and reading its cookies.
-	CookieDomain string `json:"cookieDomain"`
-	// Ecommerce API enabled.
-	Ecommerce bool `json:"ecommerce"`
-	// Custom endpoint for server-side track events.
-	EventsAPIPath string `json:"eventsApiPath"`
-	// Hiding external referrer URL enabled.
-	HideExternalReferer bool `json:"hideExternalReferer"`
-	// Trimming IP address enabled.
-	HideIPAddress bool `json:"hideIPAddress"`
-	// Removing URL query params enabled.
-	HideQueryParams bool `json:"hideQueryParams"`
-	// Removing sensitive data from User Aagent string enabled.
-	HideUserAgent bool `json:"hideUserAgent"`
-	// Custom endpoint for Zaraz init script.
-	InitPath string `json:"initPath"`
-	// Injection of Zaraz scripts into iframes enabled.
-	InjectIframes bool `json:"injectIframes"`
-	// Custom path for Managed Components server functionalities.
-	McRootPath string `json:"mcRootPath"`
-	// Custom endpoint for Zaraz main script.
-	ScriptPath string `json:"scriptPath"`
-	// Custom endpoint for Zaraz tracking requests.
-	TrackPath string                                      `json:"trackPath"`
-	JSON      zarazConfigUpdateResponseResultSettingsJSON `json:"-"`
-}
-
-// zarazConfigUpdateResponseResultSettingsJSON contains the JSON metadata for the
-// struct [ZarazConfigUpdateResponseResultSettings]
-type zarazConfigUpdateResponseResultSettingsJSON struct {
-	AutoInjectScript    apijson.Field
-	ContextEnricher     apijson.Field
-	CookieDomain        apijson.Field
-	Ecommerce           apijson.Field
-	EventsAPIPath       apijson.Field
-	HideExternalReferer apijson.Field
-	HideIPAddress       apijson.Field
-	HideQueryParams     apijson.Field
-	HideUserAgent       apijson.Field
-	InitPath            apijson.Field
-	InjectIframes       apijson.Field
-	McRootPath          apijson.Field
-	ScriptPath          apijson.Field
-	TrackPath           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZarazConfigUpdateResponseResultSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Details of the worker that receives and edits Zaraz Context object.
-type ZarazConfigUpdateResponseResultSettingsContextEnricher struct {
-	EscapedWorkerName string                                                     `json:"escapedWorkerName,required"`
-	WorkerTag         string                                                     `json:"workerTag,required"`
-	JSON              zarazConfigUpdateResponseResultSettingsContextEnricherJSON `json:"-"`
-}
-
-// zarazConfigUpdateResponseResultSettingsContextEnricherJSON contains the JSON
-// metadata for the struct [ZarazConfigUpdateResponseResultSettingsContextEnricher]
-type zarazConfigUpdateResponseResultSettingsContextEnricherJSON struct {
-	EscapedWorkerName apijson.Field
-	WorkerTag         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZarazConfigUpdateResponseResultSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -676,4 +622,66 @@ type ZarazConfigUpdateParamsSettingsContextEnricher struct {
 
 func (r ZarazConfigUpdateParamsSettingsContextEnricher) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type ZarazConfigUpdateResponseEnvelope struct {
+	Errors   []ZarazConfigUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []ZarazConfigUpdateResponseEnvelopeMessages `json:"messages"`
+	Result   ZarazConfigUpdateResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success bool                                  `json:"success"`
+	JSON    zarazConfigUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZarazConfigUpdateResponseEnvelope]
+type zarazConfigUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazConfigUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    zarazConfigUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZarazConfigUpdateResponseEnvelopeErrors]
+type zarazConfigUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazConfigUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zarazConfigUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// zarazConfigUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZarazConfigUpdateResponseEnvelopeMessages]
+type zarazConfigUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }

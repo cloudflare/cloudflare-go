@@ -34,121 +34,83 @@ func NewZerotrustConnectivitySettingService(opts ...option.RequestOption) (r *Ze
 // Gets the Zero Trust Connectivity Settings for the given account.
 func (r *ZerotrustConnectivitySettingService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env ZerotrustConnectivitySettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 // Updates the Zero Trust Connectivity Settings for the given account.
 func (r *ZerotrustConnectivitySettingService) Update(ctx context.Context, accountID string, body ZerotrustConnectivitySettingUpdateParams, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env ZerotrustConnectivitySettingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type ZerotrustConnectivitySettingGetResponse struct {
-	Errors   []ZerotrustConnectivitySettingGetResponseError   `json:"errors"`
-	Messages []ZerotrustConnectivitySettingGetResponseMessage `json:"messages"`
-	Result   ZerotrustConnectivitySettingGetResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success ZerotrustConnectivitySettingGetResponseSuccess `json:"success"`
-	JSON    zerotrustConnectivitySettingGetResponseJSON    `json:"-"`
+	// A flag to enable the ICMP proxy for the account network.
+	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
+	// A flag to enable WARP to WARP traffic.
+	OfframpWarpEnabled bool                                        `json:"offramp_warp_enabled"`
+	JSON               zerotrustConnectivitySettingGetResponseJSON `json:"-"`
 }
 
 // zerotrustConnectivitySettingGetResponseJSON contains the JSON metadata for the
 // struct [ZerotrustConnectivitySettingGetResponse]
 type zerotrustConnectivitySettingGetResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	IcmpProxyEnabled   apijson.Field
+	OfframpWarpEnabled apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *ZerotrustConnectivitySettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZerotrustConnectivitySettingGetResponseError struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    zerotrustConnectivitySettingGetResponseErrorJSON `json:"-"`
-}
-
-// zerotrustConnectivitySettingGetResponseErrorJSON contains the JSON metadata for
-// the struct [ZerotrustConnectivitySettingGetResponseError]
-type zerotrustConnectivitySettingGetResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZerotrustConnectivitySettingGetResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZerotrustConnectivitySettingGetResponseMessage struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    zerotrustConnectivitySettingGetResponseMessageJSON `json:"-"`
-}
-
-// zerotrustConnectivitySettingGetResponseMessageJSON contains the JSON metadata
-// for the struct [ZerotrustConnectivitySettingGetResponseMessage]
-type zerotrustConnectivitySettingGetResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZerotrustConnectivitySettingGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZerotrustConnectivitySettingGetResponseResult struct {
+type ZerotrustConnectivitySettingUpdateResponse struct {
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
-	OfframpWarpEnabled bool                                              `json:"offramp_warp_enabled"`
-	JSON               zerotrustConnectivitySettingGetResponseResultJSON `json:"-"`
+	OfframpWarpEnabled bool                                           `json:"offramp_warp_enabled"`
+	JSON               zerotrustConnectivitySettingUpdateResponseJSON `json:"-"`
 }
 
-// zerotrustConnectivitySettingGetResponseResultJSON contains the JSON metadata for
-// the struct [ZerotrustConnectivitySettingGetResponseResult]
-type zerotrustConnectivitySettingGetResponseResultJSON struct {
+// zerotrustConnectivitySettingUpdateResponseJSON contains the JSON metadata for
+// the struct [ZerotrustConnectivitySettingUpdateResponse]
+type zerotrustConnectivitySettingUpdateResponseJSON struct {
 	IcmpProxyEnabled   apijson.Field
 	OfframpWarpEnabled apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *ZerotrustConnectivitySettingGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZerotrustConnectivitySettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type ZerotrustConnectivitySettingGetResponseSuccess bool
-
-const (
-	ZerotrustConnectivitySettingGetResponseSuccessTrue ZerotrustConnectivitySettingGetResponseSuccess = true
-)
-
-type ZerotrustConnectivitySettingUpdateResponse struct {
-	Errors   []ZerotrustConnectivitySettingUpdateResponseError   `json:"errors"`
-	Messages []ZerotrustConnectivitySettingUpdateResponseMessage `json:"messages"`
-	Result   ZerotrustConnectivitySettingUpdateResponseResult    `json:"result"`
+type ZerotrustConnectivitySettingGetResponseEnvelope struct {
+	Errors   []ZerotrustConnectivitySettingGetResponseEnvelopeErrors   `json:"errors"`
+	Messages []ZerotrustConnectivitySettingGetResponseEnvelopeMessages `json:"messages"`
+	Result   ZerotrustConnectivitySettingGetResponse                   `json:"result"`
 	// Whether the API call was successful
-	Success ZerotrustConnectivitySettingUpdateResponseSuccess `json:"success"`
-	JSON    zerotrustConnectivitySettingUpdateResponseJSON    `json:"-"`
+	Success ZerotrustConnectivitySettingGetResponseEnvelopeSuccess `json:"success"`
+	JSON    zerotrustConnectivitySettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// zerotrustConnectivitySettingUpdateResponseJSON contains the JSON metadata for
-// the struct [ZerotrustConnectivitySettingUpdateResponse]
-type zerotrustConnectivitySettingUpdateResponseJSON struct {
+// zerotrustConnectivitySettingGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [ZerotrustConnectivitySettingGetResponseEnvelope]
+type zerotrustConnectivitySettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -157,74 +119,54 @@ type zerotrustConnectivitySettingUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZerotrustConnectivitySettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZerotrustConnectivitySettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZerotrustConnectivitySettingUpdateResponseError struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    zerotrustConnectivitySettingUpdateResponseErrorJSON `json:"-"`
+type ZerotrustConnectivitySettingGetResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zerotrustConnectivitySettingGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zerotrustConnectivitySettingUpdateResponseErrorJSON contains the JSON metadata
-// for the struct [ZerotrustConnectivitySettingUpdateResponseError]
-type zerotrustConnectivitySettingUpdateResponseErrorJSON struct {
+// zerotrustConnectivitySettingGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [ZerotrustConnectivitySettingGetResponseEnvelopeErrors]
+type zerotrustConnectivitySettingGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZerotrustConnectivitySettingUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+func (r *ZerotrustConnectivitySettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZerotrustConnectivitySettingUpdateResponseMessage struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    zerotrustConnectivitySettingUpdateResponseMessageJSON `json:"-"`
+type ZerotrustConnectivitySettingGetResponseEnvelopeMessages struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    zerotrustConnectivitySettingGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zerotrustConnectivitySettingUpdateResponseMessageJSON contains the JSON metadata
-// for the struct [ZerotrustConnectivitySettingUpdateResponseMessage]
-type zerotrustConnectivitySettingUpdateResponseMessageJSON struct {
+// zerotrustConnectivitySettingGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [ZerotrustConnectivitySettingGetResponseEnvelopeMessages]
+type zerotrustConnectivitySettingGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZerotrustConnectivitySettingUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZerotrustConnectivitySettingUpdateResponseResult struct {
-	// A flag to enable the ICMP proxy for the account network.
-	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
-	// A flag to enable WARP to WARP traffic.
-	OfframpWarpEnabled bool                                                 `json:"offramp_warp_enabled"`
-	JSON               zerotrustConnectivitySettingUpdateResponseResultJSON `json:"-"`
-}
-
-// zerotrustConnectivitySettingUpdateResponseResultJSON contains the JSON metadata
-// for the struct [ZerotrustConnectivitySettingUpdateResponseResult]
-type zerotrustConnectivitySettingUpdateResponseResultJSON struct {
-	IcmpProxyEnabled   apijson.Field
-	OfframpWarpEnabled apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *ZerotrustConnectivitySettingUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *ZerotrustConnectivitySettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZerotrustConnectivitySettingUpdateResponseSuccess bool
+type ZerotrustConnectivitySettingGetResponseEnvelopeSuccess bool
 
 const (
-	ZerotrustConnectivitySettingUpdateResponseSuccessTrue ZerotrustConnectivitySettingUpdateResponseSuccess = true
+	ZerotrustConnectivitySettingGetResponseEnvelopeSuccessTrue ZerotrustConnectivitySettingGetResponseEnvelopeSuccess = true
 )
 
 type ZerotrustConnectivitySettingUpdateParams struct {
@@ -237,3 +179,74 @@ type ZerotrustConnectivitySettingUpdateParams struct {
 func (r ZerotrustConnectivitySettingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+type ZerotrustConnectivitySettingUpdateResponseEnvelope struct {
+	Errors   []ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors   `json:"errors"`
+	Messages []ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages `json:"messages"`
+	Result   ZerotrustConnectivitySettingUpdateResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccess `json:"success"`
+	JSON    zerotrustConnectivitySettingUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// zerotrustConnectivitySettingUpdateResponseEnvelopeJSON contains the JSON
+// metadata for the struct [ZerotrustConnectivitySettingUpdateResponseEnvelope]
+type zerotrustConnectivitySettingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZerotrustConnectivitySettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    zerotrustConnectivitySettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// zerotrustConnectivitySettingUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors]
+type zerotrustConnectivitySettingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    zerotrustConnectivitySettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// zerotrustConnectivitySettingUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages]
+type zerotrustConnectivitySettingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccess bool
+
+const (
+	ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccessTrue ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccess = true
+)

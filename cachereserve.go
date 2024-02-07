@@ -37,8 +37,13 @@ func NewCacheReserveService(opts ...option.RequestOption) (r *CacheReserveServic
 // that you cannot undo or cancel this operation.
 func (r *CacheReserveService) New(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheReserveNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env CacheReserveNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -48,27 +53,38 @@ func (r *CacheReserveService) New(ctx context.Context, zoneID string, opts ...op
 // that you cannot undo or cancel this operation.
 func (r *CacheReserveService) Clear(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheReserveClearResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env CacheReserveClearResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type CacheReserveNewResponse struct {
-	Errors   []CacheReserveNewResponseError   `json:"errors"`
-	Messages []CacheReserveNewResponseMessage `json:"messages"`
-	Result   CacheReserveNewResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success CacheReserveNewResponseSuccess `json:"success"`
-	JSON    cacheReserveNewResponseJSON    `json:"-"`
+	// ID of the zone setting.
+	ID CacheReserveNewResponseID `json:"id"`
+	// The time that the latest Cache Reserve Clear operation completed.
+	EndTs time.Time `json:"end_ts" format:"date-time"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// The time that the latest Cache Reserve Clear operation started.
+	StartTs time.Time `json:"start_ts" format:"date-time"`
+	// The current state of the Cache Reserve Clear operation.
+	State CacheReserveNewResponseState `json:"state"`
+	JSON  cacheReserveNewResponseJSON  `json:"-"`
 }
 
 // cacheReserveNewResponseJSON contains the JSON metadata for the struct
 // [CacheReserveNewResponse]
 type cacheReserveNewResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	ID          apijson.Field
+	EndTs       apijson.Field
+	ModifiedOn  apijson.Field
+	StartTs     apijson.Field
+	State       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -77,47 +93,24 @@ func (r *CacheReserveNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CacheReserveNewResponseError struct {
-	Code    int64                            `json:"code,required"`
-	Message string                           `json:"message,required"`
-	JSON    cacheReserveNewResponseErrorJSON `json:"-"`
-}
+// ID of the zone setting.
+type CacheReserveNewResponseID string
 
-// cacheReserveNewResponseErrorJSON contains the JSON metadata for the struct
-// [CacheReserveNewResponseError]
-type cacheReserveNewResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
+const (
+	CacheReserveNewResponseIDCacheReserveClear CacheReserveNewResponseID = "cache_reserve_clear"
+)
 
-func (r *CacheReserveNewResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+// The current state of the Cache Reserve Clear operation.
+type CacheReserveNewResponseState string
 
-type CacheReserveNewResponseMessage struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    cacheReserveNewResponseMessageJSON `json:"-"`
-}
+const (
+	CacheReserveNewResponseStateInProgress CacheReserveNewResponseState = "In-progress"
+	CacheReserveNewResponseStateCompleted  CacheReserveNewResponseState = "Completed"
+)
 
-// cacheReserveNewResponseMessageJSON contains the JSON metadata for the struct
-// [CacheReserveNewResponseMessage]
-type cacheReserveNewResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheReserveNewResponseResult struct {
+type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveNewResponseResultID `json:"id"`
+	ID CacheReserveClearResponseID `json:"id"`
 	// The time that the latest Cache Reserve Clear operation completed.
 	EndTs time.Time `json:"end_ts" format:"date-time"`
 	// last time this setting was modified.
@@ -125,64 +118,18 @@ type CacheReserveNewResponseResult struct {
 	// The time that the latest Cache Reserve Clear operation started.
 	StartTs time.Time `json:"start_ts" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveNewResponseResultState `json:"state"`
-	JSON  cacheReserveNewResponseResultJSON  `json:"-"`
-}
-
-// cacheReserveNewResponseResultJSON contains the JSON metadata for the struct
-// [CacheReserveNewResponseResult]
-type cacheReserveNewResponseResultJSON struct {
-	ID          apijson.Field
-	EndTs       apijson.Field
-	ModifiedOn  apijson.Field
-	StartTs     apijson.Field
-	State       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveNewResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type CacheReserveNewResponseResultID string
-
-const (
-	CacheReserveNewResponseResultIDCacheReserveClear CacheReserveNewResponseResultID = "cache_reserve_clear"
-)
-
-// The current state of the Cache Reserve Clear operation.
-type CacheReserveNewResponseResultState string
-
-const (
-	CacheReserveNewResponseResultStateInProgress CacheReserveNewResponseResultState = "In-progress"
-	CacheReserveNewResponseResultStateCompleted  CacheReserveNewResponseResultState = "Completed"
-)
-
-// Whether the API call was successful
-type CacheReserveNewResponseSuccess bool
-
-const (
-	CacheReserveNewResponseSuccessTrue CacheReserveNewResponseSuccess = true
-)
-
-type CacheReserveClearResponse struct {
-	Errors   []CacheReserveClearResponseError   `json:"errors"`
-	Messages []CacheReserveClearResponseMessage `json:"messages"`
-	Result   CacheReserveClearResponseResult    `json:"result"`
-	// Whether the API call was successful
-	Success CacheReserveClearResponseSuccess `json:"success"`
-	JSON    cacheReserveClearResponseJSON    `json:"-"`
+	State CacheReserveClearResponseState `json:"state"`
+	JSON  cacheReserveClearResponseJSON  `json:"-"`
 }
 
 // cacheReserveClearResponseJSON contains the JSON metadata for the struct
 // [CacheReserveClearResponse]
 type cacheReserveClearResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+	ID          apijson.Field
+	EndTs       apijson.Field
+	ModifiedOn  apijson.Field
+	StartTs     apijson.Field
+	State       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -191,92 +138,155 @@ func (r *CacheReserveClearResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CacheReserveClearResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    cacheReserveClearResponseErrorJSON `json:"-"`
-}
-
-// cacheReserveClearResponseErrorJSON contains the JSON metadata for the struct
-// [CacheReserveClearResponseError]
-type cacheReserveClearResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveClearResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheReserveClearResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    cacheReserveClearResponseMessageJSON `json:"-"`
-}
-
-// cacheReserveClearResponseMessageJSON contains the JSON metadata for the struct
-// [CacheReserveClearResponseMessage]
-type cacheReserveClearResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveClearResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheReserveClearResponseResult struct {
-	// ID of the zone setting.
-	ID CacheReserveClearResponseResultID `json:"id"`
-	// The time that the latest Cache Reserve Clear operation completed.
-	EndTs time.Time `json:"end_ts" format:"date-time"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// The time that the latest Cache Reserve Clear operation started.
-	StartTs time.Time `json:"start_ts" format:"date-time"`
-	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveClearResponseResultState `json:"state"`
-	JSON  cacheReserveClearResponseResultJSON  `json:"-"`
-}
-
-// cacheReserveClearResponseResultJSON contains the JSON metadata for the struct
-// [CacheReserveClearResponseResult]
-type cacheReserveClearResponseResultJSON struct {
-	ID          apijson.Field
-	EndTs       apijson.Field
-	ModifiedOn  apijson.Field
-	StartTs     apijson.Field
-	State       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheReserveClearResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // ID of the zone setting.
-type CacheReserveClearResponseResultID string
+type CacheReserveClearResponseID string
 
 const (
-	CacheReserveClearResponseResultIDCacheReserveClear CacheReserveClearResponseResultID = "cache_reserve_clear"
+	CacheReserveClearResponseIDCacheReserveClear CacheReserveClearResponseID = "cache_reserve_clear"
 )
 
 // The current state of the Cache Reserve Clear operation.
-type CacheReserveClearResponseResultState string
+type CacheReserveClearResponseState string
 
 const (
-	CacheReserveClearResponseResultStateInProgress CacheReserveClearResponseResultState = "In-progress"
-	CacheReserveClearResponseResultStateCompleted  CacheReserveClearResponseResultState = "Completed"
+	CacheReserveClearResponseStateInProgress CacheReserveClearResponseState = "In-progress"
+	CacheReserveClearResponseStateCompleted  CacheReserveClearResponseState = "Completed"
 )
 
+type CacheReserveNewResponseEnvelope struct {
+	Errors   []CacheReserveNewResponseEnvelopeErrors   `json:"errors"`
+	Messages []CacheReserveNewResponseEnvelopeMessages `json:"messages"`
+	Result   CacheReserveNewResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success CacheReserveNewResponseEnvelopeSuccess `json:"success"`
+	JSON    cacheReserveNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// cacheReserveNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CacheReserveNewResponseEnvelope]
+type cacheReserveNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheReserveNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    cacheReserveNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveNewResponseEnvelopeErrors]
+type cacheReserveNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheReserveNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    cacheReserveNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CacheReserveNewResponseEnvelopeMessages]
+type cacheReserveNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Whether the API call was successful
-type CacheReserveClearResponseSuccess bool
+type CacheReserveNewResponseEnvelopeSuccess bool
 
 const (
-	CacheReserveClearResponseSuccessTrue CacheReserveClearResponseSuccess = true
+	CacheReserveNewResponseEnvelopeSuccessTrue CacheReserveNewResponseEnvelopeSuccess = true
+)
+
+type CacheReserveClearResponseEnvelope struct {
+	Errors   []CacheReserveClearResponseEnvelopeErrors   `json:"errors"`
+	Messages []CacheReserveClearResponseEnvelopeMessages `json:"messages"`
+	Result   CacheReserveClearResponse                   `json:"result"`
+	// Whether the API call was successful
+	Success CacheReserveClearResponseEnvelopeSuccess `json:"success"`
+	JSON    cacheReserveClearResponseEnvelopeJSON    `json:"-"`
+}
+
+// cacheReserveClearResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CacheReserveClearResponseEnvelope]
+type cacheReserveClearResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveClearResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheReserveClearResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    cacheReserveClearResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheReserveClearResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CacheReserveClearResponseEnvelopeErrors]
+type cacheReserveClearResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveClearResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheReserveClearResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    cacheReserveClearResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheReserveClearResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CacheReserveClearResponseEnvelopeMessages]
+type cacheReserveClearResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheReserveClearResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CacheReserveClearResponseEnvelopeSuccess bool
+
+const (
+	CacheReserveClearResponseEnvelopeSuccessTrue CacheReserveClearResponseEnvelopeSuccess = true
 )

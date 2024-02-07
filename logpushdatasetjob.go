@@ -32,76 +32,19 @@ func NewLogpushDatasetJobService(opts ...option.RequestOption) (r *LogpushDatase
 }
 
 // Lists Logpush jobs for an account or zone for a dataset.
-func (r *LogpushDatasetJobService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, datasetID string, opts ...option.RequestOption) (res *LogpushDatasetJobListResponse, err error) {
+func (r *LogpushDatasetJobService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, datasetID string, opts ...option.RequestOption) (res *[]LogpushDatasetJobListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env LogpushDatasetJobListResponseEnvelope
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/jobs", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type LogpushDatasetJobListResponse struct {
-	Errors   []LogpushDatasetJobListResponseError   `json:"errors"`
-	Messages []LogpushDatasetJobListResponseMessage `json:"messages"`
-	Result   []LogpushDatasetJobListResponseResult  `json:"result"`
-	// Whether the API call was successful
-	Success LogpushDatasetJobListResponseSuccess `json:"success"`
-	JSON    logpushDatasetJobListResponseJSON    `json:"-"`
-}
-
-// logpushDatasetJobListResponseJSON contains the JSON metadata for the struct
-// [LogpushDatasetJobListResponse]
-type logpushDatasetJobListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogpushDatasetJobListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LogpushDatasetJobListResponseError struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    logpushDatasetJobListResponseErrorJSON `json:"-"`
-}
-
-// logpushDatasetJobListResponseErrorJSON contains the JSON metadata for the struct
-// [LogpushDatasetJobListResponseError]
-type logpushDatasetJobListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogpushDatasetJobListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LogpushDatasetJobListResponseMessage struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    logpushDatasetJobListResponseMessageJSON `json:"-"`
-}
-
-// logpushDatasetJobListResponseMessageJSON contains the JSON metadata for the
-// struct [LogpushDatasetJobListResponseMessage]
-type logpushDatasetJobListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LogpushDatasetJobListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LogpushDatasetJobListResponseResult struct {
 	// Unique id of the job.
 	ID int64 `json:"id"`
 	// Name of the dataset.
@@ -120,7 +63,7 @@ type LogpushDatasetJobListResponseResult struct {
 	// The frequency at which Cloudflare sends batches of logs to your destination.
 	// Setting frequency to high sends your logs in larger quantities of smaller files.
 	// Setting frequency to low sends logs in smaller quantities of larger files.
-	Frequency LogpushDatasetJobListResponseResultFrequency `json:"frequency,nullable"`
+	Frequency LogpushDatasetJobListResponseFrequency `json:"frequency,nullable"`
 	// Records the last time for which logs have been successfully pushed. If the last
 	// successful push was for logs range 2018-07-23T10:00:00Z to 2018-07-23T10:01:00Z
 	// then the value of this field will be 2018-07-23T10:01:00Z. If the job has never
@@ -142,13 +85,13 @@ type LogpushDatasetJobListResponseResult struct {
 	Name string `json:"name,nullable"`
 	// The structured replacement for `logpull_options`. When including this field, the
 	// `logpull_option` field will be ignored.
-	OutputOptions LogpushDatasetJobListResponseResultOutputOptions `json:"output_options,nullable"`
-	JSON          logpushDatasetJobListResponseResultJSON          `json:"-"`
+	OutputOptions LogpushDatasetJobListResponseOutputOptions `json:"output_options,nullable"`
+	JSON          logpushDatasetJobListResponseJSON          `json:"-"`
 }
 
-// logpushDatasetJobListResponseResultJSON contains the JSON metadata for the
-// struct [LogpushDatasetJobListResponseResult]
-type logpushDatasetJobListResponseResultJSON struct {
+// logpushDatasetJobListResponseJSON contains the JSON metadata for the struct
+// [LogpushDatasetJobListResponse]
+type logpushDatasetJobListResponseJSON struct {
 	ID              apijson.Field
 	Dataset         apijson.Field
 	DestinationConf apijson.Field
@@ -164,23 +107,23 @@ type logpushDatasetJobListResponseResultJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LogpushDatasetJobListResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushDatasetJobListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
-type LogpushDatasetJobListResponseResultFrequency string
+type LogpushDatasetJobListResponseFrequency string
 
 const (
-	LogpushDatasetJobListResponseResultFrequencyHigh LogpushDatasetJobListResponseResultFrequency = "high"
-	LogpushDatasetJobListResponseResultFrequencyLow  LogpushDatasetJobListResponseResultFrequency = "low"
+	LogpushDatasetJobListResponseFrequencyHigh LogpushDatasetJobListResponseFrequency = "high"
+	LogpushDatasetJobListResponseFrequencyLow  LogpushDatasetJobListResponseFrequency = "low"
 )
 
 // The structured replacement for `logpull_options`. When including this field, the
 // `logpull_option` field will be ignored.
-type LogpushDatasetJobListResponseResultOutputOptions struct {
+type LogpushDatasetJobListResponseOutputOptions struct {
 	// String to be prepended before each batch.
 	BatchPrefix string `json:"batch_prefix,nullable"`
 	// String to be appended after each batch.
@@ -197,7 +140,7 @@ type LogpushDatasetJobListResponseResultOutputOptions struct {
 	// Specifies the output type, such as `ndjson` or `csv`. This sets default values
 	// for the rest of the settings, depending on the chosen output type. Some
 	// formatting rules, like string quoting, are different between output types.
-	OutputType LogpushDatasetJobListResponseResultOutputOptionsOutputType `json:"output_type"`
+	OutputType LogpushDatasetJobListResponseOutputOptionsOutputType `json:"output_type"`
 	// String to be inserted in-between the records as separator.
 	RecordDelimiter string `json:"record_delimiter,nullable"`
 	// String to be prepended before each record.
@@ -214,13 +157,13 @@ type LogpushDatasetJobListResponseResultOutputOptions struct {
 	SampleRate float64 `json:"sample_rate,nullable"`
 	// String to specify the format for timestamps, such as `unixnano`, `unix`, or
 	// `rfc3339`.
-	TimestampFormat LogpushDatasetJobListResponseResultOutputOptionsTimestampFormat `json:"timestamp_format"`
-	JSON            logpushDatasetJobListResponseResultOutputOptionsJSON            `json:"-"`
+	TimestampFormat LogpushDatasetJobListResponseOutputOptionsTimestampFormat `json:"timestamp_format"`
+	JSON            logpushDatasetJobListResponseOutputOptionsJSON            `json:"-"`
 }
 
-// logpushDatasetJobListResponseResultOutputOptionsJSON contains the JSON metadata
-// for the struct [LogpushDatasetJobListResponseResultOutputOptions]
-type logpushDatasetJobListResponseResultOutputOptionsJSON struct {
+// logpushDatasetJobListResponseOutputOptionsJSON contains the JSON metadata for
+// the struct [LogpushDatasetJobListResponseOutputOptions]
+type logpushDatasetJobListResponseOutputOptionsJSON struct {
 	BatchPrefix     apijson.Field
 	BatchSuffix     apijson.Field
 	Cve2021_4428    apijson.Field
@@ -237,33 +180,95 @@ type logpushDatasetJobListResponseResultOutputOptionsJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LogpushDatasetJobListResponseResultOutputOptions) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushDatasetJobListResponseOutputOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
 // for the rest of the settings, depending on the chosen output type. Some
 // formatting rules, like string quoting, are different between output types.
-type LogpushDatasetJobListResponseResultOutputOptionsOutputType string
+type LogpushDatasetJobListResponseOutputOptionsOutputType string
 
 const (
-	LogpushDatasetJobListResponseResultOutputOptionsOutputTypeNdjson LogpushDatasetJobListResponseResultOutputOptionsOutputType = "ndjson"
-	LogpushDatasetJobListResponseResultOutputOptionsOutputTypeCsv    LogpushDatasetJobListResponseResultOutputOptionsOutputType = "csv"
+	LogpushDatasetJobListResponseOutputOptionsOutputTypeNdjson LogpushDatasetJobListResponseOutputOptionsOutputType = "ndjson"
+	LogpushDatasetJobListResponseOutputOptionsOutputTypeCsv    LogpushDatasetJobListResponseOutputOptionsOutputType = "csv"
 )
 
 // String to specify the format for timestamps, such as `unixnano`, `unix`, or
 // `rfc3339`.
-type LogpushDatasetJobListResponseResultOutputOptionsTimestampFormat string
+type LogpushDatasetJobListResponseOutputOptionsTimestampFormat string
 
 const (
-	LogpushDatasetJobListResponseResultOutputOptionsTimestampFormatUnixnano LogpushDatasetJobListResponseResultOutputOptionsTimestampFormat = "unixnano"
-	LogpushDatasetJobListResponseResultOutputOptionsTimestampFormatUnix     LogpushDatasetJobListResponseResultOutputOptionsTimestampFormat = "unix"
-	LogpushDatasetJobListResponseResultOutputOptionsTimestampFormatRfc3339  LogpushDatasetJobListResponseResultOutputOptionsTimestampFormat = "rfc3339"
+	LogpushDatasetJobListResponseOutputOptionsTimestampFormatUnixnano LogpushDatasetJobListResponseOutputOptionsTimestampFormat = "unixnano"
+	LogpushDatasetJobListResponseOutputOptionsTimestampFormatUnix     LogpushDatasetJobListResponseOutputOptionsTimestampFormat = "unix"
+	LogpushDatasetJobListResponseOutputOptionsTimestampFormatRfc3339  LogpushDatasetJobListResponseOutputOptionsTimestampFormat = "rfc3339"
 )
 
+type LogpushDatasetJobListResponseEnvelope struct {
+	Errors   []LogpushDatasetJobListResponseEnvelopeErrors   `json:"errors"`
+	Messages []LogpushDatasetJobListResponseEnvelopeMessages `json:"messages"`
+	Result   []LogpushDatasetJobListResponse                 `json:"result"`
+	// Whether the API call was successful
+	Success LogpushDatasetJobListResponseEnvelopeSuccess `json:"success"`
+	JSON    logpushDatasetJobListResponseEnvelopeJSON    `json:"-"`
+}
+
+// logpushDatasetJobListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LogpushDatasetJobListResponseEnvelope]
+type logpushDatasetJobListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogpushDatasetJobListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LogpushDatasetJobListResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    logpushDatasetJobListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// logpushDatasetJobListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LogpushDatasetJobListResponseEnvelopeErrors]
+type logpushDatasetJobListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogpushDatasetJobListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LogpushDatasetJobListResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    logpushDatasetJobListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// logpushDatasetJobListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [LogpushDatasetJobListResponseEnvelopeMessages]
+type logpushDatasetJobListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogpushDatasetJobListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Whether the API call was successful
-type LogpushDatasetJobListResponseSuccess bool
+type LogpushDatasetJobListResponseEnvelopeSuccess bool
 
 const (
-	LogpushDatasetJobListResponseSuccessTrue LogpushDatasetJobListResponseSuccess = true
+	LogpushDatasetJobListResponseEnvelopeSuccessTrue LogpushDatasetJobListResponseEnvelopeSuccess = true
 )

@@ -37,22 +37,27 @@ func NewRadarAttackLayer3TopLocationTargetService(opts ...option.RequestOption) 
 // Get the target locations of attacks.
 func (r *RadarAttackLayer3TopLocationTargetService) List(ctx context.Context, query RadarAttackLayer3TopLocationTargetListParams, opts ...option.RequestOption) (res *RadarAttackLayer3TopLocationTargetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
+	var env RadarAttackLayer3TopLocationTargetListResponseEnvelope
 	path := "radar/attacks/layer3/top/locations/target"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
 type RadarAttackLayer3TopLocationTargetListResponse struct {
-	Result  RadarAttackLayer3TopLocationTargetListResponseResult `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
-	JSON    radarAttackLayer3TopLocationTargetListResponseJSON   `json:"-"`
+	Meta RadarAttackLayer3TopLocationTargetListResponseMeta   `json:"meta,required"`
+	Top0 []RadarAttackLayer3TopLocationTargetListResponseTop0 `json:"top_0,required"`
+	JSON radarAttackLayer3TopLocationTargetListResponseJSON   `json:"-"`
 }
 
 // radarAttackLayer3TopLocationTargetListResponseJSON contains the JSON metadata
 // for the struct [RadarAttackLayer3TopLocationTargetListResponse]
 type radarAttackLayer3TopLocationTargetListResponseJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
+	Meta        apijson.Field
+	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -61,36 +66,16 @@ func (r *RadarAttackLayer3TopLocationTargetListResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TopLocationTargetListResponseResult struct {
-	Meta RadarAttackLayer3TopLocationTargetListResponseResultMeta   `json:"meta,required"`
-	Top0 []RadarAttackLayer3TopLocationTargetListResponseResultTop0 `json:"top_0,required"`
-	JSON radarAttackLayer3TopLocationTargetListResponseResultJSON   `json:"-"`
+type RadarAttackLayer3TopLocationTargetListResponseMeta struct {
+	DateRange      []RadarAttackLayer3TopLocationTargetListResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                           `json:"lastUpdated,required"`
+	ConfidenceInfo RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAttackLayer3TopLocationTargetListResponseMetaJSON           `json:"-"`
 }
 
-// radarAttackLayer3TopLocationTargetListResponseResultJSON contains the JSON
-// metadata for the struct [RadarAttackLayer3TopLocationTargetListResponseResult]
-type radarAttackLayer3TopLocationTargetListResponseResultJSON struct {
-	Meta        apijson.Field
-	Top0        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarAttackLayer3TopLocationTargetListResponseResult) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarAttackLayer3TopLocationTargetListResponseResultMeta struct {
-	DateRange      []RadarAttackLayer3TopLocationTargetListResponseResultMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                                 `json:"lastUpdated,required"`
-	ConfidenceInfo RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarAttackLayer3TopLocationTargetListResponseResultMetaJSON           `json:"-"`
-}
-
-// radarAttackLayer3TopLocationTargetListResponseResultMetaJSON contains the JSON
-// metadata for the struct
-// [RadarAttackLayer3TopLocationTargetListResponseResultMeta]
-type radarAttackLayer3TopLocationTargetListResponseResultMetaJSON struct {
+// radarAttackLayer3TopLocationTargetListResponseMetaJSON contains the JSON
+// metadata for the struct [RadarAttackLayer3TopLocationTargetListResponseMeta]
+type radarAttackLayer3TopLocationTargetListResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -98,67 +83,67 @@ type radarAttackLayer3TopLocationTargetListResponseResultMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TopLocationTargetListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TopLocationTargetListResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TopLocationTargetListResponseResultMetaDateRange struct {
+type RadarAttackLayer3TopLocationTargetListResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                             `json:"startTime,required" format:"date-time"`
-	JSON      radarAttackLayer3TopLocationTargetListResponseResultMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON      radarAttackLayer3TopLocationTargetListResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarAttackLayer3TopLocationTargetListResponseResultMetaDateRangeJSON contains
-// the JSON metadata for the struct
-// [RadarAttackLayer3TopLocationTargetListResponseResultMetaDateRange]
-type radarAttackLayer3TopLocationTargetListResponseResultMetaDateRangeJSON struct {
+// radarAttackLayer3TopLocationTargetListResponseMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [RadarAttackLayer3TopLocationTargetListResponseMetaDateRange]
+type radarAttackLayer3TopLocationTargetListResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TopLocationTargetListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TopLocationTargetListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfo struct {
-	Annotations []RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                              `json:"level"`
-	JSON        radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoJSON         `json:"-"`
+type RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfo struct {
+	Annotations []RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                        `json:"level"`
+	JSON        radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoJSON
-// contains the JSON metadata for the struct
-// [RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfo]
-type radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoJSON struct {
+// radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfo]
+type radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                               `json:"dataSource,required"`
-	Description     string                                                                               `json:"description,required"`
-	EventType       string                                                                               `json:"eventType,required"`
-	IsInstantaneous interface{}                                                                          `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                            `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                               `json:"linkedUrl"`
-	StartTime       time.Time                                                                            `json:"startTime" format:"date-time"`
-	JSON            radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                         `json:"dataSource,required"`
+	Description     string                                                                         `json:"description,required"`
+	EventType       string                                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                                      `json:"startTime" format:"date-time"`
+	JSON            radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotationJSON
+// radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
-// [RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotation]
-type radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotationJSON struct {
+// [RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotation]
+type radarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -170,22 +155,21 @@ type radarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnot
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TopLocationTargetListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TopLocationTargetListResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAttackLayer3TopLocationTargetListResponseResultTop0 struct {
-	Rank                float64                                                      `json:"rank,required"`
-	TargetCountryAlpha2 string                                                       `json:"targetCountryAlpha2,required"`
-	TargetCountryName   string                                                       `json:"targetCountryName,required"`
-	Value               string                                                       `json:"value,required"`
-	JSON                radarAttackLayer3TopLocationTargetListResponseResultTop0JSON `json:"-"`
+type RadarAttackLayer3TopLocationTargetListResponseTop0 struct {
+	Rank                float64                                                `json:"rank,required"`
+	TargetCountryAlpha2 string                                                 `json:"targetCountryAlpha2,required"`
+	TargetCountryName   string                                                 `json:"targetCountryName,required"`
+	Value               string                                                 `json:"value,required"`
+	JSON                radarAttackLayer3TopLocationTargetListResponseTop0JSON `json:"-"`
 }
 
-// radarAttackLayer3TopLocationTargetListResponseResultTop0JSON contains the JSON
-// metadata for the struct
-// [RadarAttackLayer3TopLocationTargetListResponseResultTop0]
-type radarAttackLayer3TopLocationTargetListResponseResultTop0JSON struct {
+// radarAttackLayer3TopLocationTargetListResponseTop0JSON contains the JSON
+// metadata for the struct [RadarAttackLayer3TopLocationTargetListResponseTop0]
+type radarAttackLayer3TopLocationTargetListResponseTop0JSON struct {
 	Rank                apijson.Field
 	TargetCountryAlpha2 apijson.Field
 	TargetCountryName   apijson.Field
@@ -194,7 +178,7 @@ type radarAttackLayer3TopLocationTargetListResponseResultTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarAttackLayer3TopLocationTargetListResponseResultTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAttackLayer3TopLocationTargetListResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -275,3 +259,22 @@ const (
 	RadarAttackLayer3TopLocationTargetListParamsProtocolIcmp RadarAttackLayer3TopLocationTargetListParamsProtocol = "ICMP"
 	RadarAttackLayer3TopLocationTargetListParamsProtocolGre  RadarAttackLayer3TopLocationTargetListParamsProtocol = "GRE"
 )
+
+type RadarAttackLayer3TopLocationTargetListResponseEnvelope struct {
+	Result  RadarAttackLayer3TopLocationTargetListResponse             `json:"result,required"`
+	Success bool                                                       `json:"success,required"`
+	JSON    radarAttackLayer3TopLocationTargetListResponseEnvelopeJSON `json:"-"`
+}
+
+// radarAttackLayer3TopLocationTargetListResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarAttackLayer3TopLocationTargetListResponseEnvelope]
+type radarAttackLayer3TopLocationTargetListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer3TopLocationTargetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
