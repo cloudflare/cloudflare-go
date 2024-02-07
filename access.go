@@ -23,6 +23,8 @@ type AccessService struct {
 	Logs              *AccessLogService
 	Seats             *AccessSeatService
 	Users             *AccessUserService
+	CustomPages       *AccessCustomPageService
+	Tags              *AccessTagService
 }
 
 // NewAccessService generates a new service that applies the given options to each
@@ -42,5 +44,7 @@ func NewAccessService(opts ...option.RequestOption) (r *AccessService) {
 	r.Logs = NewAccessLogService(opts...)
 	r.Seats = NewAccessSeatService(opts...)
 	r.Users = NewAccessUserService(opts...)
+	r.CustomPages = NewAccessCustomPageService(opts...)
+	r.Tags = NewAccessTagService(opts...)
 	return
 }

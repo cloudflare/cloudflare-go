@@ -18,8 +18,10 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewAccessUserService] method instead.
 type AccessUserService struct {
-	Options      []option.RequestOption
-	FailedLogins *AccessUserFailedLoginService
+	Options          []option.RequestOption
+	ActiveSessions   *AccessUserActiveSessionService
+	LastSeenIdentity *AccessUserLastSeenIdentityService
+	FailedLogins     *AccessUserFailedLoginService
 }
 
 // NewAccessUserService generates a new service that applies the given options to
@@ -28,14 +30,16 @@ type AccessUserService struct {
 func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 	r = &AccessUserService{}
 	r.Options = opts
+	r.ActiveSessions = NewAccessUserActiveSessionService(opts...)
+	r.LastSeenIdentity = NewAccessUserLastSeenIdentityService(opts...)
 	r.FailedLogins = NewAccessUserFailedLoginService(opts...)
 	return
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) ZeroTrustUsersGetUsers(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUserZeroTrustUsersGetUsersResponse, err error) {
+func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUserListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessUserZeroTrustUsersGetUsersResponseEnvelope
+	var env AccessUserListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,7 +49,7 @@ func (r *AccessUserService) ZeroTrustUsersGetUsers(ctx context.Context, identifi
 	return
 }
 
-type AccessUserZeroTrustUsersGetUsersResponse struct {
+type AccessUserListResponse struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -64,14 +68,14 @@ type AccessUserZeroTrustUsersGetUsersResponse struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUid interface{} `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       interface{}                                  `json:"uid"`
-	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON      accessUserZeroTrustUsersGetUsersResponseJSON `json:"-"`
+	Uid       interface{}                `json:"uid"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessUserListResponseJSON `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseJSON contains the JSON metadata for the
-// struct [AccessUserZeroTrustUsersGetUsersResponse]
-type accessUserZeroTrustUsersGetUsersResponseJSON struct {
+// accessUserListResponseJSON contains the JSON metadata for the struct
+// [AccessUserListResponse]
+type accessUserListResponseJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -87,23 +91,23 @@ type accessUserZeroTrustUsersGetUsersResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserZeroTrustUsersGetUsersResponseEnvelope struct {
-	Errors     []AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessUserZeroTrustUsersGetUsersResponse                 `json:"result"`
-	ResultInfo AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo `json:"result_info"`
+type AccessUserListResponseEnvelope struct {
+	Errors     []AccessUserListResponseEnvelopeErrors   `json:"errors"`
+	Messages   []AccessUserListResponseEnvelopeMessages `json:"messages"`
+	Result     []AccessUserListResponse                 `json:"result"`
+	ResultInfo AccessUserListResponseEnvelopeResultInfo `json:"result_info"`
 	// Whether the API call was successful
-	Success AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess `json:"success"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON    `json:"-"`
+	Success AccessUserListResponseEnvelopeSuccess `json:"success"`
+	JSON    accessUserListResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON contains the JSON metadata
-// for the struct [AccessUserZeroTrustUsersGetUsersResponseEnvelope]
-type accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON struct {
+// accessUserListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessUserListResponseEnvelope]
+type accessUserListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -113,61 +117,59 @@ type accessUserZeroTrustUsersGetUsersResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON `json:"-"`
+type AccessUserListResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessUserListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors]
-type accessUserZeroTrustUsersGetUsersResponseEnvelopeErrorsJSON struct {
+// accessUserListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessUserListResponseEnvelopeErrors]
+type accessUserListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON `json:"-"`
+type AccessUserListResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accessUserListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages]
-type accessUserZeroTrustUsersGetUsersResponseEnvelopeMessagesJSON struct {
+// accessUserListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessUserListResponseEnvelopeMessages]
+type accessUserListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo struct {
-	Count      interface{}                                                    `json:"count"`
-	Page       interface{}                                                    `json:"page"`
-	PerPage    interface{}                                                    `json:"per_page"`
-	TotalCount interface{}                                                    `json:"total_count"`
-	JSON       accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON `json:"-"`
+type AccessUserListResponseEnvelopeResultInfo struct {
+	Count      interface{}                                  `json:"count"`
+	Page       interface{}                                  `json:"page"`
+	PerPage    interface{}                                  `json:"per_page"`
+	TotalCount interface{}                                  `json:"total_count"`
+	JSON       accessUserListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo]
-type accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON struct {
+// accessUserListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [AccessUserListResponseEnvelopeResultInfo]
+type accessUserListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -176,13 +178,13 @@ type accessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserZeroTrustUsersGetUsersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess bool
+type AccessUserListResponseEnvelopeSuccess bool
 
 const (
-	AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccessTrue AccessUserZeroTrustUsersGetUsersResponseEnvelopeSuccess = true
+	AccessUserListResponseEnvelopeSuccessTrue AccessUserListResponseEnvelopeSuccess = true
 )

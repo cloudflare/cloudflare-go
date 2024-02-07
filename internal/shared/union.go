@@ -27,6 +27,11 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
+func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                         {}
+func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()                            {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue()                         {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                           {}
+func (UnionString) ImplementsSnippetDeleteResponse()                                         {}
 
 type UnionFloat float64
 
@@ -182,3 +187,6 @@ func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSReco
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsTxtRecordTTL()   {}
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsUriRecordTTL()   {}
 func (UnionFloat) ImplementsEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseTTL() {}
+func (UnionFloat) ImplementsHostnameSettingTLSGetResponseValue()                                    {}
+func (UnionFloat) ImplementsHostnameSettingTLSUpdateResponseValue()                                 {}
+func (UnionFloat) ImplementsHostnameSettingTLSUpdateParamsValue()                                   {}

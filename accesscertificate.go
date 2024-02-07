@@ -20,7 +20,8 @@ import (
 // this service directly, and instead use the [NewAccessCertificateService] method
 // instead.
 type AccessCertificateService struct {
-	Options []option.RequestOption
+	Options  []option.RequestOption
+	Settings *AccessCertificateSettingService
 }
 
 // NewAccessCertificateService generates a new service that applies the given
@@ -29,6 +30,7 @@ type AccessCertificateService struct {
 func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertificateService) {
 	r = &AccessCertificateService{}
 	r.Options = opts
+	r.Settings = NewAccessCertificateSettingService(opts...)
 	return
 }
 
