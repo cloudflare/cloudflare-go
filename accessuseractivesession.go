@@ -33,55 +33,107 @@ func NewAccessUserActiveSessionService(opts ...option.RequestOption) (r *AccessU
 // Get an active session for a single user.
 func (r *AccessUserActiveSessionService) Get(ctx context.Context, identifier string, id string, nonce string, opts ...option.RequestOption) (res *AccessUserActiveSessionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessUserActiveSessionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions/%s", identifier, id, nonce)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Get active sessions for a single user.
-func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *[]AccessUserActiveSessionListResponse, err error) {
+func (r *AccessUserActiveSessionService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *AccessUserActiveSessionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessUserActiveSessionListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users/%s/active_sessions", identifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 type AccessUserActiveSessionGetResponse struct {
-	AccountID          string                                     `json:"account_id"`
-	AuthStatus         string                                     `json:"auth_status"`
-	CommonName         string                                     `json:"common_name"`
-	DeviceID           string                                     `json:"device_id"`
-	DeviceSessions     interface{}                                `json:"device_sessions"`
-	DevicePosture      interface{}                                `json:"devicePosture"`
-	Email              string                                     `json:"email"`
-	Geo                AccessUserActiveSessionGetResponseGeo      `json:"geo"`
-	Iat                float64                                    `json:"iat"`
-	Idp                AccessUserActiveSessionGetResponseIdp      `json:"idp"`
-	IP                 string                                     `json:"ip"`
-	IsGateway          bool                                       `json:"is_gateway"`
-	IsWarp             bool                                       `json:"is_warp"`
-	IsActive           bool                                       `json:"isActive"`
-	MtlsAuth           AccessUserActiveSessionGetResponseMtlsAuth `json:"mtls_auth"`
-	ServiceTokenID     string                                     `json:"service_token_id"`
-	ServiceTokenStatus bool                                       `json:"service_token_status"`
-	UserUuid           string                                     `json:"user_uuid"`
-	Version            float64                                    `json:"version"`
-	JSON               accessUserActiveSessionGetResponseJSON     `json:"-"`
+	Errors   []AccessUserActiveSessionGetResponseError   `json:"errors"`
+	Messages []AccessUserActiveSessionGetResponseMessage `json:"messages"`
+	Result   AccessUserActiveSessionGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessUserActiveSessionGetResponseSuccess `json:"success"`
+	JSON    accessUserActiveSessionGetResponseJSON    `json:"-"`
 }
 
 // accessUserActiveSessionGetResponseJSON contains the JSON metadata for the struct
 // [AccessUserActiveSessionGetResponse]
 type accessUserActiveSessionGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserActiveSessionGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessUserActiveSessionGetResponseErrorJSON `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseErrorJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionGetResponseError]
+type accessUserActiveSessionGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserActiveSessionGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accessUserActiveSessionGetResponseMessageJSON `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseMessageJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionGetResponseMessage]
+type accessUserActiveSessionGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserActiveSessionGetResponseResult struct {
+	AccountID          string                                           `json:"account_id"`
+	AuthStatus         string                                           `json:"auth_status"`
+	CommonName         string                                           `json:"common_name"`
+	DeviceID           string                                           `json:"device_id"`
+	DeviceSessions     interface{}                                      `json:"device_sessions"`
+	DevicePosture      interface{}                                      `json:"devicePosture"`
+	Email              string                                           `json:"email"`
+	Geo                AccessUserActiveSessionGetResponseResultGeo      `json:"geo"`
+	Iat                float64                                          `json:"iat"`
+	Idp                AccessUserActiveSessionGetResponseResultIdp      `json:"idp"`
+	IP                 string                                           `json:"ip"`
+	IsGateway          bool                                             `json:"is_gateway"`
+	IsWarp             bool                                             `json:"is_warp"`
+	IsActive           bool                                             `json:"isActive"`
+	MtlsAuth           AccessUserActiveSessionGetResponseResultMtlsAuth `json:"mtls_auth"`
+	ServiceTokenID     string                                           `json:"service_token_id"`
+	ServiceTokenStatus bool                                             `json:"service_token_status"`
+	UserUuid           string                                           `json:"user_uuid"`
+	Version            float64                                          `json:"version"`
+	JSON               accessUserActiveSessionGetResponseResultJSON     `json:"-"`
+}
+
+// accessUserActiveSessionGetResponseResultJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionGetResponseResult]
+type accessUserActiveSessionGetResponseResultJSON struct {
 	AccountID          apijson.Field
 	AuthStatus         apijson.Field
 	CommonName         apijson.Field
@@ -105,58 +157,58 @@ type accessUserActiveSessionGetResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionGetResponseGeo struct {
-	Country string                                    `json:"country"`
-	JSON    accessUserActiveSessionGetResponseGeoJSON `json:"-"`
+type AccessUserActiveSessionGetResponseResultGeo struct {
+	Country string                                          `json:"country"`
+	JSON    accessUserActiveSessionGetResponseResultGeoJSON `json:"-"`
 }
 
-// accessUserActiveSessionGetResponseGeoJSON contains the JSON metadata for the
-// struct [AccessUserActiveSessionGetResponseGeo]
-type accessUserActiveSessionGetResponseGeoJSON struct {
+// accessUserActiveSessionGetResponseResultGeoJSON contains the JSON metadata for
+// the struct [AccessUserActiveSessionGetResponseResultGeo]
+type accessUserActiveSessionGetResponseResultGeoJSON struct {
 	Country     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponseGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseResultGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionGetResponseIdp struct {
-	ID   string                                    `json:"id"`
-	Type string                                    `json:"type"`
-	JSON accessUserActiveSessionGetResponseIdpJSON `json:"-"`
+type AccessUserActiveSessionGetResponseResultIdp struct {
+	ID   string                                          `json:"id"`
+	Type string                                          `json:"type"`
+	JSON accessUserActiveSessionGetResponseResultIdpJSON `json:"-"`
 }
 
-// accessUserActiveSessionGetResponseIdpJSON contains the JSON metadata for the
-// struct [AccessUserActiveSessionGetResponseIdp]
-type accessUserActiveSessionGetResponseIdpJSON struct {
+// accessUserActiveSessionGetResponseResultIdpJSON contains the JSON metadata for
+// the struct [AccessUserActiveSessionGetResponseResultIdp]
+type accessUserActiveSessionGetResponseResultIdpJSON struct {
 	ID          apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponseIdp) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseResultIdp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionGetResponseMtlsAuth struct {
-	AuthStatus    string                                         `json:"auth_status"`
-	CertIssuerDn  string                                         `json:"cert_issuer_dn"`
-	CertIssuerSki string                                         `json:"cert_issuer_ski"`
-	CertPresented bool                                           `json:"cert_presented"`
-	CertSerial    string                                         `json:"cert_serial"`
-	JSON          accessUserActiveSessionGetResponseMtlsAuthJSON `json:"-"`
+type AccessUserActiveSessionGetResponseResultMtlsAuth struct {
+	AuthStatus    string                                               `json:"auth_status"`
+	CertIssuerDn  string                                               `json:"cert_issuer_dn"`
+	CertIssuerSki string                                               `json:"cert_issuer_ski"`
+	CertPresented bool                                                 `json:"cert_presented"`
+	CertSerial    string                                               `json:"cert_serial"`
+	JSON          accessUserActiveSessionGetResponseResultMtlsAuthJSON `json:"-"`
 }
 
-// accessUserActiveSessionGetResponseMtlsAuthJSON contains the JSON metadata for
-// the struct [AccessUserActiveSessionGetResponseMtlsAuth]
-type accessUserActiveSessionGetResponseMtlsAuthJSON struct {
+// accessUserActiveSessionGetResponseResultMtlsAuthJSON contains the JSON metadata
+// for the struct [AccessUserActiveSessionGetResponseResultMtlsAuth]
+type accessUserActiveSessionGetResponseResultMtlsAuthJSON struct {
 	AuthStatus    apijson.Field
 	CertIssuerDn  apijson.Field
 	CertIssuerSki apijson.Field
@@ -166,138 +218,30 @@ type accessUserActiveSessionGetResponseMtlsAuthJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponseMtlsAuth) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseResultMtlsAuth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessUserActiveSessionGetResponseSuccess bool
+
+const (
+	AccessUserActiveSessionGetResponseSuccessTrue AccessUserActiveSessionGetResponseSuccess = true
+)
+
 type AccessUserActiveSessionListResponse struct {
-	Expiration int64                                       `json:"expiration"`
-	Metadata   AccessUserActiveSessionListResponseMetadata `json:"metadata"`
-	Name       string                                      `json:"name"`
-	JSON       accessUserActiveSessionListResponseJSON     `json:"-"`
+	Errors     []AccessUserActiveSessionListResponseError    `json:"errors"`
+	Messages   []AccessUserActiveSessionListResponseMessage  `json:"messages"`
+	Result     []AccessUserActiveSessionListResponseResult   `json:"result"`
+	ResultInfo AccessUserActiveSessionListResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessUserActiveSessionListResponseSuccess `json:"success"`
+	JSON    accessUserActiveSessionListResponseJSON    `json:"-"`
 }
 
 // accessUserActiveSessionListResponseJSON contains the JSON metadata for the
 // struct [AccessUserActiveSessionListResponse]
 type accessUserActiveSessionListResponseJSON struct {
-	Expiration  apijson.Field
-	Metadata    apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserActiveSessionListResponseMetadata struct {
-	Apps    interface{}                                     `json:"apps"`
-	Expires int64                                           `json:"expires"`
-	Iat     int64                                           `json:"iat"`
-	Nonce   string                                          `json:"nonce"`
-	TTL     int64                                           `json:"ttl"`
-	JSON    accessUserActiveSessionListResponseMetadataJSON `json:"-"`
-}
-
-// accessUserActiveSessionListResponseMetadataJSON contains the JSON metadata for
-// the struct [AccessUserActiveSessionListResponseMetadata]
-type accessUserActiveSessionListResponseMetadataJSON struct {
-	Apps        apijson.Field
-	Expires     apijson.Field
-	Iat         apijson.Field
-	Nonce       apijson.Field
-	TTL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionListResponseMetadata) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserActiveSessionGetResponseEnvelope struct {
-	Errors   []AccessUserActiveSessionGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessUserActiveSessionGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessUserActiveSessionGetResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessUserActiveSessionGetResponseEnvelopeSuccess `json:"success"`
-	JSON    accessUserActiveSessionGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessUserActiveSessionGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessUserActiveSessionGetResponseEnvelope]
-type accessUserActiveSessionGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserActiveSessionGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessUserActiveSessionGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessUserActiveSessionGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessUserActiveSessionGetResponseEnvelopeErrors]
-type accessUserActiveSessionGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessUserActiveSessionGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    accessUserActiveSessionGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessUserActiveSessionGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessUserActiveSessionGetResponseEnvelopeMessages]
-type accessUserActiveSessionGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessUserActiveSessionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessUserActiveSessionGetResponseEnvelopeSuccess bool
-
-const (
-	AccessUserActiveSessionGetResponseEnvelopeSuccessTrue AccessUserActiveSessionGetResponseEnvelopeSuccess = true
-)
-
-type AccessUserActiveSessionListResponseEnvelope struct {
-	Errors     []AccessUserActiveSessionListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessUserActiveSessionListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessUserActiveSessionListResponse                 `json:"result"`
-	ResultInfo AccessUserActiveSessionListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessUserActiveSessionListResponseEnvelopeSuccess `json:"success"`
-	JSON    accessUserActiveSessionListResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessUserActiveSessionListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessUserActiveSessionListResponseEnvelope]
-type accessUserActiveSessionListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -307,49 +251,95 @@ type accessUserActiveSessionListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionListResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessUserActiveSessionListResponseEnvelopeErrorsJSON `json:"-"`
+type AccessUserActiveSessionListResponseError struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    accessUserActiveSessionListResponseErrorJSON `json:"-"`
 }
 
-// accessUserActiveSessionListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessUserActiveSessionListResponseEnvelopeErrors]
-type accessUserActiveSessionListResponseEnvelopeErrorsJSON struct {
+// accessUserActiveSessionListResponseErrorJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionListResponseError]
+type accessUserActiveSessionListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionListResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessUserActiveSessionListResponseEnvelopeMessagesJSON `json:"-"`
+type AccessUserActiveSessionListResponseMessage struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    accessUserActiveSessionListResponseMessageJSON `json:"-"`
 }
 
-// accessUserActiveSessionListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessUserActiveSessionListResponseEnvelopeMessages]
-type accessUserActiveSessionListResponseEnvelopeMessagesJSON struct {
+// accessUserActiveSessionListResponseMessageJSON contains the JSON metadata for
+// the struct [AccessUserActiveSessionListResponseMessage]
+type accessUserActiveSessionListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionListResponseEnvelopeResultInfo struct {
+type AccessUserActiveSessionListResponseResult struct {
+	Expiration int64                                             `json:"expiration"`
+	Metadata   AccessUserActiveSessionListResponseResultMetadata `json:"metadata"`
+	Name       string                                            `json:"name"`
+	JSON       accessUserActiveSessionListResponseResultJSON     `json:"-"`
+}
+
+// accessUserActiveSessionListResponseResultJSON contains the JSON metadata for the
+// struct [AccessUserActiveSessionListResponseResult]
+type accessUserActiveSessionListResponseResultJSON struct {
+	Expiration  apijson.Field
+	Metadata    apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserActiveSessionListResponseResultMetadata struct {
+	Apps    interface{}                                           `json:"apps"`
+	Expires int64                                                 `json:"expires"`
+	Iat     int64                                                 `json:"iat"`
+	Nonce   string                                                `json:"nonce"`
+	TTL     int64                                                 `json:"ttl"`
+	JSON    accessUserActiveSessionListResponseResultMetadataJSON `json:"-"`
+}
+
+// accessUserActiveSessionListResponseResultMetadataJSON contains the JSON metadata
+// for the struct [AccessUserActiveSessionListResponseResultMetadata]
+type accessUserActiveSessionListResponseResultMetadataJSON struct {
+	Apps        apijson.Field
+	Expires     apijson.Field
+	Iat         apijson.Field
+	Nonce       apijson.Field
+	TTL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessUserActiveSessionListResponseResultMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessUserActiveSessionListResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -357,13 +347,13 @@ type AccessUserActiveSessionListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                   `json:"total_count"`
-	JSON       accessUserActiveSessionListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                           `json:"total_count"`
+	JSON       accessUserActiveSessionListResponseResultInfoJSON `json:"-"`
 }
 
-// accessUserActiveSessionListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [AccessUserActiveSessionListResponseEnvelopeResultInfo]
-type accessUserActiveSessionListResponseEnvelopeResultInfoJSON struct {
+// accessUserActiveSessionListResponseResultInfoJSON contains the JSON metadata for
+// the struct [AccessUserActiveSessionListResponseResultInfo]
+type accessUserActiveSessionListResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -372,13 +362,13 @@ type accessUserActiveSessionListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessUserActiveSessionListResponseEnvelopeSuccess bool
+type AccessUserActiveSessionListResponseSuccess bool
 
 const (
-	AccessUserActiveSessionListResponseEnvelopeSuccessTrue AccessUserActiveSessionListResponseEnvelopeSuccess = true
+	AccessUserActiveSessionListResponseSuccessTrue AccessUserActiveSessionListResponseSuccess = true
 )

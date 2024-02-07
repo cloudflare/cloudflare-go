@@ -34,30 +34,23 @@ func NewLogpushDatasetFieldService(opts ...option.RequestOption) (r *LogpushData
 // key-value pairs, where keys are field names, and values are descriptions.
 func (r *LogpushDatasetFieldService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, datasetID string, opts ...option.RequestOption) (res *LogpushDatasetFieldListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LogpushDatasetFieldListResponseEnvelope
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/fields", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type LogpushDatasetFieldListResponse = interface{}
-
-type LogpushDatasetFieldListResponseEnvelope struct {
-	Errors   []LogpushDatasetFieldListResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushDatasetFieldListResponseEnvelopeMessages `json:"messages"`
-	Result   LogpushDatasetFieldListResponse                   `json:"result"`
+type LogpushDatasetFieldListResponse struct {
+	Errors   []LogpushDatasetFieldListResponseError   `json:"errors"`
+	Messages []LogpushDatasetFieldListResponseMessage `json:"messages"`
+	Result   interface{}                              `json:"result"`
 	// Whether the API call was successful
-	Success LogpushDatasetFieldListResponseEnvelopeSuccess `json:"success"`
-	JSON    logpushDatasetFieldListResponseEnvelopeJSON    `json:"-"`
+	Success LogpushDatasetFieldListResponseSuccess `json:"success"`
+	JSON    logpushDatasetFieldListResponseJSON    `json:"-"`
 }
 
-// logpushDatasetFieldListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LogpushDatasetFieldListResponseEnvelope]
-type logpushDatasetFieldListResponseEnvelopeJSON struct {
+// logpushDatasetFieldListResponseJSON contains the JSON metadata for the struct
+// [LogpushDatasetFieldListResponse]
+type logpushDatasetFieldListResponseJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -66,51 +59,51 @@ type logpushDatasetFieldListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushDatasetFieldListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushDatasetFieldListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushDatasetFieldListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    logpushDatasetFieldListResponseEnvelopeErrorsJSON `json:"-"`
+type LogpushDatasetFieldListResponseError struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    logpushDatasetFieldListResponseErrorJSON `json:"-"`
 }
 
-// logpushDatasetFieldListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LogpushDatasetFieldListResponseEnvelopeErrors]
-type logpushDatasetFieldListResponseEnvelopeErrorsJSON struct {
+// logpushDatasetFieldListResponseErrorJSON contains the JSON metadata for the
+// struct [LogpushDatasetFieldListResponseError]
+type logpushDatasetFieldListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushDatasetFieldListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushDatasetFieldListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushDatasetFieldListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    logpushDatasetFieldListResponseEnvelopeMessagesJSON `json:"-"`
+type LogpushDatasetFieldListResponseMessage struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    logpushDatasetFieldListResponseMessageJSON `json:"-"`
 }
 
-// logpushDatasetFieldListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LogpushDatasetFieldListResponseEnvelopeMessages]
-type logpushDatasetFieldListResponseEnvelopeMessagesJSON struct {
+// logpushDatasetFieldListResponseMessageJSON contains the JSON metadata for the
+// struct [LogpushDatasetFieldListResponseMessage]
+type logpushDatasetFieldListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushDatasetFieldListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushDatasetFieldListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LogpushDatasetFieldListResponseEnvelopeSuccess bool
+type LogpushDatasetFieldListResponseSuccess bool
 
 const (
-	LogpushDatasetFieldListResponseEnvelopeSuccessTrue LogpushDatasetFieldListResponseEnvelopeSuccess = true
+	LogpushDatasetFieldListResponseSuccessTrue LogpushDatasetFieldListResponseSuccess = true
 )

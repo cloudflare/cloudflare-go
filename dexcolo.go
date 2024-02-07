@@ -35,34 +35,32 @@ func NewDexColoService(opts ...option.RequestOption) (r *DexColoService) {
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DexColoService) List(ctx context.Context, accountID string, query DexColoListParams, opts ...option.RequestOption) (res *[]DexColoListResponse, err error) {
+func (r *DexColoService) List(ctx context.Context, accountID string, query DexColoListParams, opts ...option.RequestOption) (res *DexColoListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexColoListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/colos", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type DexColoListResponse struct {
-	// Airport code
-	AirportCode string `json:"airportCode,required"`
-	// City
-	City string `json:"city,required"`
-	// Country code
-	CountryCode string                  `json:"countryCode,required"`
-	JSON        dexColoListResponseJSON `json:"-"`
+	Errors   []DexColoListResponseError   `json:"errors"`
+	Messages []DexColoListResponseMessage `json:"messages"`
+	// array of colos.
+	Result     []DexColoListResponseResult   `json:"result"`
+	ResultInfo DexColoListResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success DexColoListResponseSuccess `json:"success"`
+	JSON    dexColoListResponseJSON    `json:"-"`
 }
 
 // dexColoListResponseJSON contains the JSON metadata for the struct
 // [DexColoListResponse]
 type dexColoListResponseJSON struct {
-	AirportCode apijson.Field
-	City        apijson.Field
-	CountryCode apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -70,6 +68,102 @@ type dexColoListResponseJSON struct {
 func (r *DexColoListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type DexColoListResponseError struct {
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    dexColoListResponseErrorJSON `json:"-"`
+}
+
+// dexColoListResponseErrorJSON contains the JSON metadata for the struct
+// [DexColoListResponseError]
+type dexColoListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexColoListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexColoListResponseMessage struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    dexColoListResponseMessageJSON `json:"-"`
+}
+
+// dexColoListResponseMessageJSON contains the JSON metadata for the struct
+// [DexColoListResponseMessage]
+type dexColoListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexColoListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexColoListResponseResult struct {
+	// Airport code
+	AirportCode string `json:"airportCode,required"`
+	// City
+	City string `json:"city,required"`
+	// Country code
+	CountryCode string                        `json:"countryCode,required"`
+	JSON        dexColoListResponseResultJSON `json:"-"`
+}
+
+// dexColoListResponseResultJSON contains the JSON metadata for the struct
+// [DexColoListResponseResult]
+type dexColoListResponseResultJSON struct {
+	AirportCode apijson.Field
+	City        apijson.Field
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexColoListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexColoListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                           `json:"total_count"`
+	JSON       dexColoListResponseResultInfoJSON `json:"-"`
+}
+
+// dexColoListResponseResultInfoJSON contains the JSON metadata for the struct
+// [DexColoListResponseResultInfo]
+type dexColoListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexColoListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DexColoListResponseSuccess bool
+
+const (
+	DexColoListResponseSuccessTrue DexColoListResponseSuccess = true
+)
 
 type DexColoListParams struct {
 	// End time for connection period in RFC3339 (ISO 8601) format.
@@ -96,103 +190,4 @@ type DexColoListParamsSortBy string
 const (
 	DexColoListParamsSortByFleetStatusUsage      DexColoListParamsSortBy = "fleet-status-usage"
 	DexColoListParamsSortByApplicationTestsUsage DexColoListParamsSortBy = "application-tests-usage"
-)
-
-type DexColoListResponseEnvelope struct {
-	Errors   []DexColoListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexColoListResponseEnvelopeMessages `json:"messages"`
-	// array of colos.
-	Result     []DexColoListResponse                 `json:"result"`
-	ResultInfo DexColoListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success DexColoListResponseEnvelopeSuccess `json:"success"`
-	JSON    dexColoListResponseEnvelopeJSON    `json:"-"`
-}
-
-// dexColoListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DexColoListResponseEnvelope]
-type dexColoListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexColoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexColoListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    dexColoListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DexColoListResponseEnvelopeErrors]
-type dexColoListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexColoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexColoListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dexColoListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DexColoListResponseEnvelopeMessages]
-type dexColoListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexColoListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       dexColoListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dexColoListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DexColoListResponseEnvelopeResultInfo]
-type dexColoListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DexColoListResponseEnvelopeSuccess bool
-
-const (
-	DexColoListResponseEnvelopeSuccessTrue DexColoListResponseEnvelopeSuccess = true
 )

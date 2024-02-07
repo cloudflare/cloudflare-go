@@ -36,77 +36,53 @@ func NewStreamAudioTrackService(opts ...option.RequestOption) (r *StreamAudioTra
 // `false`.
 func (r *StreamAudioTrackService) Update(ctx context.Context, accountID string, identifier string, audioIdentifier string, body StreamAudioTrackUpdateParams, opts ...option.RequestOption) (res *StreamAudioTrackUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamAudioTrackUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", accountID, identifier, audioIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
-func (r *StreamAudioTrackService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *[]StreamAudioTrackListResponse, err error) {
+func (r *StreamAudioTrackService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamAudioTrackListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamAudioTrackListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
-func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, identifier string, audioIdentifier string, opts ...option.RequestOption) (res *string, err error) {
+func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, identifier string, audioIdentifier string, opts ...option.RequestOption) (res *StreamAudioTrackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamAudioTrackDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", accountID, identifier, audioIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Adds an additional audio track to a video using the provided audio track URL.
 func (r *StreamAudioTrackService) Copy(ctx context.Context, accountID string, identifier string, body StreamAudioTrackCopyParams, opts ...option.RequestOption) (res *StreamAudioTrackCopyResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamAudioTrackCopyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/copy", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 type StreamAudioTrackUpdateResponse struct {
-	// Denotes whether the audio track will be played by default in a player.
-	Default bool `json:"default"`
-	// A string to uniquely identify the track amongst other audio track labels for the
-	// specified video.
-	Label string `json:"label"`
-	// Specifies the processing status of the video.
-	Status StreamAudioTrackUpdateResponseStatus `json:"status"`
-	// A Cloudflare-generated unique identifier for a media item.
-	Uid  string                             `json:"uid"`
-	JSON streamAudioTrackUpdateResponseJSON `json:"-"`
+	Errors   []StreamAudioTrackUpdateResponseError   `json:"errors"`
+	Messages []StreamAudioTrackUpdateResponseMessage `json:"messages"`
+	Result   StreamAudioTrackUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success StreamAudioTrackUpdateResponseSuccess `json:"success"`
+	JSON    streamAudioTrackUpdateResponseJSON    `json:"-"`
 }
 
 // streamAudioTrackUpdateResponseJSON contains the JSON metadata for the struct
 // [StreamAudioTrackUpdateResponse]
 type streamAudioTrackUpdateResponseJSON struct {
-	Default     apijson.Field
-	Label       apijson.Field
-	Status      apijson.Field
-	Uid         apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -115,35 +91,104 @@ func (r *StreamAudioTrackUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the processing status of the video.
-type StreamAudioTrackUpdateResponseStatus string
+type StreamAudioTrackUpdateResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    streamAudioTrackUpdateResponseErrorJSON `json:"-"`
+}
 
-const (
-	StreamAudioTrackUpdateResponseStatusQueued StreamAudioTrackUpdateResponseStatus = "queued"
-	StreamAudioTrackUpdateResponseStatusReady  StreamAudioTrackUpdateResponseStatus = "ready"
-	StreamAudioTrackUpdateResponseStatusError  StreamAudioTrackUpdateResponseStatus = "error"
-)
+// streamAudioTrackUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [StreamAudioTrackUpdateResponseError]
+type streamAudioTrackUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-type StreamAudioTrackListResponse struct {
+func (r *StreamAudioTrackUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackUpdateResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    streamAudioTrackUpdateResponseMessageJSON `json:"-"`
+}
+
+// streamAudioTrackUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [StreamAudioTrackUpdateResponseMessage]
+type streamAudioTrackUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackUpdateResponseResult struct {
 	// Denotes whether the audio track will be played by default in a player.
 	Default bool `json:"default"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
 	Label string `json:"label"`
 	// Specifies the processing status of the video.
-	Status StreamAudioTrackListResponseStatus `json:"status"`
+	Status StreamAudioTrackUpdateResponseResultStatus `json:"status"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid  string                           `json:"uid"`
-	JSON streamAudioTrackListResponseJSON `json:"-"`
+	Uid  string                                   `json:"uid"`
+	JSON streamAudioTrackUpdateResponseResultJSON `json:"-"`
+}
+
+// streamAudioTrackUpdateResponseResultJSON contains the JSON metadata for the
+// struct [StreamAudioTrackUpdateResponseResult]
+type streamAudioTrackUpdateResponseResultJSON struct {
+	Default     apijson.Field
+	Label       apijson.Field
+	Status      apijson.Field
+	Uid         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies the processing status of the video.
+type StreamAudioTrackUpdateResponseResultStatus string
+
+const (
+	StreamAudioTrackUpdateResponseResultStatusQueued StreamAudioTrackUpdateResponseResultStatus = "queued"
+	StreamAudioTrackUpdateResponseResultStatusReady  StreamAudioTrackUpdateResponseResultStatus = "ready"
+	StreamAudioTrackUpdateResponseResultStatusError  StreamAudioTrackUpdateResponseResultStatus = "error"
+)
+
+// Whether the API call was successful
+type StreamAudioTrackUpdateResponseSuccess bool
+
+const (
+	StreamAudioTrackUpdateResponseSuccessTrue StreamAudioTrackUpdateResponseSuccess = true
+)
+
+type StreamAudioTrackListResponse struct {
+	Errors   []StreamAudioTrackListResponseError   `json:"errors"`
+	Messages []StreamAudioTrackListResponseMessage `json:"messages"`
+	Result   []StreamAudioTrackListResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success StreamAudioTrackListResponseSuccess `json:"success"`
+	JSON    streamAudioTrackListResponseJSON    `json:"-"`
 }
 
 // streamAudioTrackListResponseJSON contains the JSON metadata for the struct
 // [StreamAudioTrackListResponse]
 type streamAudioTrackListResponseJSON struct {
-	Default     apijson.Field
-	Label       apijson.Field
-	Status      apijson.Field
-	Uid         apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -152,31 +197,60 @@ func (r *StreamAudioTrackListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the processing status of the video.
-type StreamAudioTrackListResponseStatus string
+type StreamAudioTrackListResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    streamAudioTrackListResponseErrorJSON `json:"-"`
+}
 
-const (
-	StreamAudioTrackListResponseStatusQueued StreamAudioTrackListResponseStatus = "queued"
-	StreamAudioTrackListResponseStatusReady  StreamAudioTrackListResponseStatus = "ready"
-	StreamAudioTrackListResponseStatusError  StreamAudioTrackListResponseStatus = "error"
-)
+// streamAudioTrackListResponseErrorJSON contains the JSON metadata for the struct
+// [StreamAudioTrackListResponseError]
+type streamAudioTrackListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-type StreamAudioTrackCopyResponse struct {
+func (r *StreamAudioTrackListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackListResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    streamAudioTrackListResponseMessageJSON `json:"-"`
+}
+
+// streamAudioTrackListResponseMessageJSON contains the JSON metadata for the
+// struct [StreamAudioTrackListResponseMessage]
+type streamAudioTrackListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackListResponseResult struct {
 	// Denotes whether the audio track will be played by default in a player.
 	Default bool `json:"default"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
 	Label string `json:"label"`
 	// Specifies the processing status of the video.
-	Status StreamAudioTrackCopyResponseStatus `json:"status"`
+	Status StreamAudioTrackListResponseResultStatus `json:"status"`
 	// A Cloudflare-generated unique identifier for a media item.
-	Uid  string                           `json:"uid"`
-	JSON streamAudioTrackCopyResponseJSON `json:"-"`
+	Uid  string                                 `json:"uid"`
+	JSON streamAudioTrackListResponseResultJSON `json:"-"`
 }
 
-// streamAudioTrackCopyResponseJSON contains the JSON metadata for the struct
-// [StreamAudioTrackCopyResponse]
-type streamAudioTrackCopyResponseJSON struct {
+// streamAudioTrackListResponseResultJSON contains the JSON metadata for the struct
+// [StreamAudioTrackListResponseResult]
+type streamAudioTrackListResponseResultJSON struct {
 	Default     apijson.Field
 	Label       apijson.Field
 	Status      apijson.Field
@@ -185,17 +259,199 @@ type streamAudioTrackCopyResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamAudioTrackCopyResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamAudioTrackListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the processing status of the video.
-type StreamAudioTrackCopyResponseStatus string
+type StreamAudioTrackListResponseResultStatus string
 
 const (
-	StreamAudioTrackCopyResponseStatusQueued StreamAudioTrackCopyResponseStatus = "queued"
-	StreamAudioTrackCopyResponseStatusReady  StreamAudioTrackCopyResponseStatus = "ready"
-	StreamAudioTrackCopyResponseStatusError  StreamAudioTrackCopyResponseStatus = "error"
+	StreamAudioTrackListResponseResultStatusQueued StreamAudioTrackListResponseResultStatus = "queued"
+	StreamAudioTrackListResponseResultStatusReady  StreamAudioTrackListResponseResultStatus = "ready"
+	StreamAudioTrackListResponseResultStatusError  StreamAudioTrackListResponseResultStatus = "error"
+)
+
+// Whether the API call was successful
+type StreamAudioTrackListResponseSuccess bool
+
+const (
+	StreamAudioTrackListResponseSuccessTrue StreamAudioTrackListResponseSuccess = true
+)
+
+type StreamAudioTrackDeleteResponse struct {
+	Errors   []StreamAudioTrackDeleteResponseError   `json:"errors"`
+	Messages []StreamAudioTrackDeleteResponseMessage `json:"messages"`
+	Result   string                                  `json:"result"`
+	// Whether the API call was successful
+	Success StreamAudioTrackDeleteResponseSuccess `json:"success"`
+	JSON    streamAudioTrackDeleteResponseJSON    `json:"-"`
+}
+
+// streamAudioTrackDeleteResponseJSON contains the JSON metadata for the struct
+// [StreamAudioTrackDeleteResponse]
+type streamAudioTrackDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackDeleteResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    streamAudioTrackDeleteResponseErrorJSON `json:"-"`
+}
+
+// streamAudioTrackDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [StreamAudioTrackDeleteResponseError]
+type streamAudioTrackDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackDeleteResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    streamAudioTrackDeleteResponseMessageJSON `json:"-"`
+}
+
+// streamAudioTrackDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [StreamAudioTrackDeleteResponseMessage]
+type streamAudioTrackDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamAudioTrackDeleteResponseSuccess bool
+
+const (
+	StreamAudioTrackDeleteResponseSuccessTrue StreamAudioTrackDeleteResponseSuccess = true
+)
+
+type StreamAudioTrackCopyResponse struct {
+	Errors   []StreamAudioTrackCopyResponseError   `json:"errors"`
+	Messages []StreamAudioTrackCopyResponseMessage `json:"messages"`
+	Result   StreamAudioTrackCopyResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success StreamAudioTrackCopyResponseSuccess `json:"success"`
+	JSON    streamAudioTrackCopyResponseJSON    `json:"-"`
+}
+
+// streamAudioTrackCopyResponseJSON contains the JSON metadata for the struct
+// [StreamAudioTrackCopyResponse]
+type streamAudioTrackCopyResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackCopyResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackCopyResponseError struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    streamAudioTrackCopyResponseErrorJSON `json:"-"`
+}
+
+// streamAudioTrackCopyResponseErrorJSON contains the JSON metadata for the struct
+// [StreamAudioTrackCopyResponseError]
+type streamAudioTrackCopyResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackCopyResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackCopyResponseMessage struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    streamAudioTrackCopyResponseMessageJSON `json:"-"`
+}
+
+// streamAudioTrackCopyResponseMessageJSON contains the JSON metadata for the
+// struct [StreamAudioTrackCopyResponseMessage]
+type streamAudioTrackCopyResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackCopyResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamAudioTrackCopyResponseResult struct {
+	// Denotes whether the audio track will be played by default in a player.
+	Default bool `json:"default"`
+	// A string to uniquely identify the track amongst other audio track labels for the
+	// specified video.
+	Label string `json:"label"`
+	// Specifies the processing status of the video.
+	Status StreamAudioTrackCopyResponseResultStatus `json:"status"`
+	// A Cloudflare-generated unique identifier for a media item.
+	Uid  string                                 `json:"uid"`
+	JSON streamAudioTrackCopyResponseResultJSON `json:"-"`
+}
+
+// streamAudioTrackCopyResponseResultJSON contains the JSON metadata for the struct
+// [StreamAudioTrackCopyResponseResult]
+type streamAudioTrackCopyResponseResultJSON struct {
+	Default     apijson.Field
+	Label       apijson.Field
+	Status      apijson.Field
+	Uid         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamAudioTrackCopyResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies the processing status of the video.
+type StreamAudioTrackCopyResponseResultStatus string
+
+const (
+	StreamAudioTrackCopyResponseResultStatusQueued StreamAudioTrackCopyResponseResultStatus = "queued"
+	StreamAudioTrackCopyResponseResultStatusReady  StreamAudioTrackCopyResponseResultStatus = "ready"
+	StreamAudioTrackCopyResponseResultStatusError  StreamAudioTrackCopyResponseResultStatus = "error"
+)
+
+// Whether the API call was successful
+type StreamAudioTrackCopyResponseSuccess bool
+
+const (
+	StreamAudioTrackCopyResponseSuccessTrue StreamAudioTrackCopyResponseSuccess = true
 )
 
 type StreamAudioTrackUpdateParams struct {
@@ -210,213 +466,6 @@ func (r StreamAudioTrackUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StreamAudioTrackUpdateResponseEnvelope struct {
-	Errors   []StreamAudioTrackUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   StreamAudioTrackUpdateResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success StreamAudioTrackUpdateResponseEnvelopeSuccess `json:"success"`
-	JSON    streamAudioTrackUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamAudioTrackUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StreamAudioTrackUpdateResponseEnvelope]
-type streamAudioTrackUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackUpdateResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    streamAudioTrackUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamAudioTrackUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StreamAudioTrackUpdateResponseEnvelopeErrors]
-type streamAudioTrackUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    streamAudioTrackUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamAudioTrackUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [StreamAudioTrackUpdateResponseEnvelopeMessages]
-type streamAudioTrackUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamAudioTrackUpdateResponseEnvelopeSuccess bool
-
-const (
-	StreamAudioTrackUpdateResponseEnvelopeSuccessTrue StreamAudioTrackUpdateResponseEnvelopeSuccess = true
-)
-
-type StreamAudioTrackListResponseEnvelope struct {
-	Errors   []StreamAudioTrackListResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackListResponseEnvelopeMessages `json:"messages"`
-	Result   []StreamAudioTrackListResponse                 `json:"result"`
-	// Whether the API call was successful
-	Success StreamAudioTrackListResponseEnvelopeSuccess `json:"success"`
-	JSON    streamAudioTrackListResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamAudioTrackListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StreamAudioTrackListResponseEnvelope]
-type streamAudioTrackListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    streamAudioTrackListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamAudioTrackListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StreamAudioTrackListResponseEnvelopeErrors]
-type streamAudioTrackListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    streamAudioTrackListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamAudioTrackListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [StreamAudioTrackListResponseEnvelopeMessages]
-type streamAudioTrackListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamAudioTrackListResponseEnvelopeSuccess bool
-
-const (
-	StreamAudioTrackListResponseEnvelopeSuccessTrue StreamAudioTrackListResponseEnvelopeSuccess = true
-)
-
-type StreamAudioTrackDeleteResponseEnvelope struct {
-	Errors   []StreamAudioTrackDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   string                                           `json:"result"`
-	// Whether the API call was successful
-	Success StreamAudioTrackDeleteResponseEnvelopeSuccess `json:"success"`
-	JSON    streamAudioTrackDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamAudioTrackDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StreamAudioTrackDeleteResponseEnvelope]
-type streamAudioTrackDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    streamAudioTrackDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamAudioTrackDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StreamAudioTrackDeleteResponseEnvelopeErrors]
-type streamAudioTrackDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    streamAudioTrackDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamAudioTrackDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [StreamAudioTrackDeleteResponseEnvelopeMessages]
-type streamAudioTrackDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamAudioTrackDeleteResponseEnvelopeSuccess bool
-
-const (
-	StreamAudioTrackDeleteResponseEnvelopeSuccessTrue StreamAudioTrackDeleteResponseEnvelopeSuccess = true
-)
-
 type StreamAudioTrackCopyParams struct {
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
@@ -430,72 +479,3 @@ type StreamAudioTrackCopyParams struct {
 func (r StreamAudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type StreamAudioTrackCopyResponseEnvelope struct {
-	Errors   []StreamAudioTrackCopyResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackCopyResponseEnvelopeMessages `json:"messages"`
-	Result   StreamAudioTrackCopyResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success StreamAudioTrackCopyResponseEnvelopeSuccess `json:"success"`
-	JSON    streamAudioTrackCopyResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamAudioTrackCopyResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StreamAudioTrackCopyResponseEnvelope]
-type streamAudioTrackCopyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackCopyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackCopyResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    streamAudioTrackCopyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamAudioTrackCopyResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StreamAudioTrackCopyResponseEnvelopeErrors]
-type streamAudioTrackCopyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackCopyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamAudioTrackCopyResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    streamAudioTrackCopyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamAudioTrackCopyResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [StreamAudioTrackCopyResponseEnvelopeMessages]
-type streamAudioTrackCopyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamAudioTrackCopyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamAudioTrackCopyResponseEnvelopeSuccess bool
-
-const (
-	StreamAudioTrackCopyResponseEnvelopeSuccessTrue StreamAudioTrackCopyResponseEnvelopeSuccess = true
-)

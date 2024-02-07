@@ -43,25 +43,27 @@ func NewURLScannerService(opts ...option.RequestOption) (r *URLScannerService) {
 // may be removed from the search index at an unspecified time.
 func (r *URLScannerService) Scan(ctx context.Context, accountID string, query URLScannerScanParams, opts ...option.RequestOption) (res *URLScannerScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env URLScannerScanResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/urlscanner/scan", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type URLScannerScanResponse struct {
-	Tasks []URLScannerScanResponseTask `json:"tasks,required"`
-	JSON  urlScannerScanResponseJSON   `json:"-"`
+	Errors   []URLScannerScanResponseError   `json:"errors,required"`
+	Messages []URLScannerScanResponseMessage `json:"messages,required"`
+	Result   URLScannerScanResponseResult    `json:"result,required"`
+	// Whether search request was successful or not
+	Success bool                       `json:"success,required"`
+	JSON    urlScannerScanResponseJSON `json:"-"`
 }
 
 // urlScannerScanResponseJSON contains the JSON metadata for the struct
 // [URLScannerScanResponse]
 type urlScannerScanResponseJSON struct {
-	Tasks       apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -70,7 +72,58 @@ func (r *URLScannerScanResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLScannerScanResponseTask struct {
+type URLScannerScanResponseError struct {
+	Message string                          `json:"message,required"`
+	JSON    urlScannerScanResponseErrorJSON `json:"-"`
+}
+
+// urlScannerScanResponseErrorJSON contains the JSON metadata for the struct
+// [URLScannerScanResponseError]
+type urlScannerScanResponseErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanResponseMessage struct {
+	Message string                            `json:"message,required"`
+	JSON    urlScannerScanResponseMessageJSON `json:"-"`
+}
+
+// urlScannerScanResponseMessageJSON contains the JSON metadata for the struct
+// [URLScannerScanResponseMessage]
+type urlScannerScanResponseMessageJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanResponseResult struct {
+	Tasks []URLScannerScanResponseResultTask `json:"tasks,required"`
+	JSON  urlScannerScanResponseResultJSON   `json:"-"`
+}
+
+// urlScannerScanResponseResultJSON contains the JSON metadata for the struct
+// [URLScannerScanResponseResult]
+type urlScannerScanResponseResultJSON struct {
+	Tasks       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLScannerScanResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type URLScannerScanResponseResultTask struct {
 	// Whether scan was successful or not
 	Success bool `json:"success,required"`
 	// When scan was submitted (UTC)
@@ -78,13 +131,13 @@ type URLScannerScanResponseTask struct {
 	// Scan url (after redirects)
 	URL string `json:"url,required"`
 	// Scan id
-	Uuid string                         `json:"uuid,required" format:"uuid"`
-	JSON urlScannerScanResponseTaskJSON `json:"-"`
+	Uuid string                               `json:"uuid,required" format:"uuid"`
+	JSON urlScannerScanResponseResultTaskJSON `json:"-"`
 }
 
-// urlScannerScanResponseTaskJSON contains the JSON metadata for the struct
-// [URLScannerScanResponseTask]
-type urlScannerScanResponseTaskJSON struct {
+// urlScannerScanResponseResultTaskJSON contains the JSON metadata for the struct
+// [URLScannerScanResponseResultTask]
+type urlScannerScanResponseResultTaskJSON struct {
 	Success     apijson.Field
 	Time        apijson.Field
 	URL         apijson.Field
@@ -93,7 +146,7 @@ type urlScannerScanResponseTaskJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanResponseTask) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanResponseResultTask) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -130,62 +183,4 @@ func (r URLScannerScanParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type URLScannerScanResponseEnvelope struct {
-	Errors   []URLScannerScanResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []URLScannerScanResponseEnvelopeMessages `json:"messages,required"`
-	Result   URLScannerScanResponse                   `json:"result,required"`
-	// Whether search request was successful or not
-	Success bool                               `json:"success,required"`
-	JSON    urlScannerScanResponseEnvelopeJSON `json:"-"`
-}
-
-// urlScannerScanResponseEnvelopeJSON contains the JSON metadata for the struct
-// [URLScannerScanResponseEnvelope]
-type urlScannerScanResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanResponseEnvelopeErrors struct {
-	Message string                                   `json:"message,required"`
-	JSON    urlScannerScanResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// urlScannerScanResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [URLScannerScanResponseEnvelopeErrors]
-type urlScannerScanResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLScannerScanResponseEnvelopeMessages struct {
-	Message string                                     `json:"message,required"`
-	JSON    urlScannerScanResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// urlScannerScanResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [URLScannerScanResponseEnvelopeMessages]
-type urlScannerScanResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLScannerScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }

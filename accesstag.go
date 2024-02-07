@@ -31,57 +31,26 @@ func NewAccessTagService(opts ...option.RequestOption) (r *AccessTagService) {
 }
 
 // List tags
-func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessTagListResponse, err error) {
+func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *AccessTagListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessTagListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/tags", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// A tag
 type AccessTagListResponse struct {
-	// The name of the tag
-	Name string `json:"name,required"`
-	// The number of applications that have this tag
-	AppCount  int64                     `json:"app_count"`
-	CreatedAt time.Time                 `json:"created_at" format:"date-time"`
-	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
-	JSON      accessTagListResponseJSON `json:"-"`
+	Errors     []AccessTagListResponseError    `json:"errors"`
+	Messages   []AccessTagListResponseMessage  `json:"messages"`
+	Result     []AccessTagListResponseResult   `json:"result"`
+	ResultInfo AccessTagListResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessTagListResponseSuccess `json:"success"`
+	JSON    accessTagListResponseJSON    `json:"-"`
 }
 
 // accessTagListResponseJSON contains the JSON metadata for the struct
 // [AccessTagListResponse]
 type accessTagListResponseJSON struct {
-	Name        apijson.Field
-	AppCount    apijson.Field
-	CreatedAt   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessTagListResponseEnvelope struct {
-	Errors     []AccessTagListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessTagListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessTagListResponse                 `json:"result"`
-	ResultInfo AccessTagListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessTagListResponseEnvelopeSuccess `json:"success"`
-	JSON    accessTagListResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessTagListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessTagListResponseEnvelope]
-type accessTagListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -91,49 +60,75 @@ type accessTagListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessTagListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accessTagListResponseEnvelopeErrorsJSON `json:"-"`
+type AccessTagListResponseError struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    accessTagListResponseErrorJSON `json:"-"`
 }
 
-// accessTagListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessTagListResponseEnvelopeErrors]
-type accessTagListResponseEnvelopeErrorsJSON struct {
+// accessTagListResponseErrorJSON contains the JSON metadata for the struct
+// [AccessTagListResponseError]
+type accessTagListResponseErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessTagListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessTagListResponseEnvelopeMessagesJSON `json:"-"`
+type AccessTagListResponseMessage struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    accessTagListResponseMessageJSON `json:"-"`
 }
 
-// accessTagListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessTagListResponseEnvelopeMessages]
-type accessTagListResponseEnvelopeMessagesJSON struct {
+// accessTagListResponseMessageJSON contains the JSON metadata for the struct
+// [AccessTagListResponseMessage]
+type accessTagListResponseMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessTagListResponseEnvelopeResultInfo struct {
+// A tag
+type AccessTagListResponseResult struct {
+	// The name of the tag
+	Name string `json:"name,required"`
+	// The number of applications that have this tag
+	AppCount  int64                           `json:"app_count"`
+	CreatedAt time.Time                       `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
+	JSON      accessTagListResponseResultJSON `json:"-"`
+}
+
+// accessTagListResponseResultJSON contains the JSON metadata for the struct
+// [AccessTagListResponseResult]
+type accessTagListResponseResultJSON struct {
+	Name        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessTagListResponseResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -141,13 +136,13 @@ type AccessTagListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       accessTagListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                             `json:"total_count"`
+	JSON       accessTagListResponseResultInfoJSON `json:"-"`
 }
 
-// accessTagListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [AccessTagListResponseEnvelopeResultInfo]
-type accessTagListResponseEnvelopeResultInfoJSON struct {
+// accessTagListResponseResultInfoJSON contains the JSON metadata for the struct
+// [AccessTagListResponseResultInfo]
+type accessTagListResponseResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -156,13 +151,13 @@ type accessTagListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessTagListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessTagListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessTagListResponseEnvelopeSuccess bool
+type AccessTagListResponseSuccess bool
 
 const (
-	AccessTagListResponseEnvelopeSuccessTrue AccessTagListResponseEnvelopeSuccess = true
+	AccessTagListResponseSuccessTrue AccessTagListResponseSuccess = true
 )

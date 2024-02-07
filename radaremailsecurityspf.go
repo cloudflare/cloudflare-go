@@ -36,27 +36,22 @@ func NewRadarEmailSecuritySpfService(opts ...option.RequestOption) (r *RadarEmai
 // Percentage distribution of emails classified per SPF validation over time.
 func (r *RadarEmailSecuritySpfService) List(ctx context.Context, query RadarEmailSecuritySpfListParams, opts ...option.RequestOption) (res *RadarEmailSecuritySpfListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEmailSecuritySpfListResponseEnvelope
 	path := "radar/email/security/timeseries_groups/spf"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarEmailSecuritySpfListResponse struct {
-	Meta   interface{}                             `json:"meta,required"`
-	Serie0 RadarEmailSecuritySpfListResponseSerie0 `json:"serie_0,required"`
-	JSON   radarEmailSecuritySpfListResponseJSON   `json:"-"`
+	Result  RadarEmailSecuritySpfListResponseResult `json:"result,required"`
+	Success bool                                    `json:"success,required"`
+	JSON    radarEmailSecuritySpfListResponseJSON   `json:"-"`
 }
 
 // radarEmailSecuritySpfListResponseJSON contains the JSON metadata for the struct
 // [RadarEmailSecuritySpfListResponse]
 type radarEmailSecuritySpfListResponseJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -65,16 +60,35 @@ func (r *RadarEmailSecuritySpfListResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySpfListResponseSerie0 struct {
-	Fail []string                                    `json:"FAIL,required"`
-	None []string                                    `json:"NONE,required"`
-	Pass []string                                    `json:"PASS,required"`
-	JSON radarEmailSecuritySpfListResponseSerie0JSON `json:"-"`
+type RadarEmailSecuritySpfListResponseResult struct {
+	Meta   interface{}                                   `json:"meta,required"`
+	Serie0 RadarEmailSecuritySpfListResponseResultSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecuritySpfListResponseResultJSON   `json:"-"`
 }
 
-// radarEmailSecuritySpfListResponseSerie0JSON contains the JSON metadata for the
-// struct [RadarEmailSecuritySpfListResponseSerie0]
-type radarEmailSecuritySpfListResponseSerie0JSON struct {
+// radarEmailSecuritySpfListResponseResultJSON contains the JSON metadata for the
+// struct [RadarEmailSecuritySpfListResponseResult]
+type radarEmailSecuritySpfListResponseResultJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySpfListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySpfListResponseResultSerie0 struct {
+	Fail []string                                          `json:"FAIL,required"`
+	None []string                                          `json:"NONE,required"`
+	Pass []string                                          `json:"PASS,required"`
+	JSON radarEmailSecuritySpfListResponseResultSerie0JSON `json:"-"`
+}
+
+// radarEmailSecuritySpfListResponseResultSerie0JSON contains the JSON metadata for
+// the struct [RadarEmailSecuritySpfListResponseResultSerie0]
+type radarEmailSecuritySpfListResponseResultSerie0JSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -82,7 +96,7 @@ type radarEmailSecuritySpfListResponseSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySpfListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySpfListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -191,22 +205,3 @@ const (
 	RadarEmailSecuritySpfListParamsFormatJson RadarEmailSecuritySpfListParamsFormat = "JSON"
 	RadarEmailSecuritySpfListParamsFormatCsv  RadarEmailSecuritySpfListParamsFormat = "CSV"
 )
-
-type RadarEmailSecuritySpfListResponseEnvelope struct {
-	Result  RadarEmailSecuritySpfListResponse             `json:"result,required"`
-	Success bool                                          `json:"success,required"`
-	JSON    radarEmailSecuritySpfListResponseEnvelopeJSON `json:"-"`
-}
-
-// radarEmailSecuritySpfListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarEmailSecuritySpfListResponseEnvelope]
-type radarEmailSecuritySpfListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEmailSecuritySpfListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

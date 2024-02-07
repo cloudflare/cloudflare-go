@@ -36,13 +36,8 @@ func NewHoldService(opts ...option.RequestOption) (r *HoldService) {
 // hold.
 func (r *HoldService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *HoldGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env HoldGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -50,13 +45,8 @@ func (r *HoldService) Get(ctx context.Context, zoneID string, opts ...option.Req
 // with this zone's hostname.
 func (r *HoldService) Enforce(ctx context.Context, zoneID string, body HoldEnforceParams, opts ...option.RequestOption) (res *HoldEnforceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env HoldEnforceResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
@@ -75,35 +65,76 @@ func (r *HoldService) Remove(ctx context.Context, zoneID string, body HoldRemove
 }
 
 type HoldGetResponse struct {
-	Hold              bool                `json:"hold"`
-	HoldAfter         string              `json:"hold_after"`
-	IncludeSubdomains string              `json:"include_subdomains"`
-	JSON              holdGetResponseJSON `json:"-"`
+	Errors   []HoldGetResponseError   `json:"errors"`
+	Messages []HoldGetResponseMessage `json:"messages"`
+	Result   HoldGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success HoldGetResponseSuccess `json:"success"`
+	JSON    holdGetResponseJSON    `json:"-"`
 }
 
 // holdGetResponseJSON contains the JSON metadata for the struct [HoldGetResponse]
 type holdGetResponseJSON struct {
-	Hold              apijson.Field
-	HoldAfter         apijson.Field
-	IncludeSubdomains apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *HoldGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HoldEnforceResponse struct {
-	Hold              bool                    `json:"hold"`
-	HoldAfter         string                  `json:"hold_after"`
-	IncludeSubdomains string                  `json:"include_subdomains"`
-	JSON              holdEnforceResponseJSON `json:"-"`
+type HoldGetResponseError struct {
+	Code    int64                    `json:"code,required"`
+	Message string                   `json:"message,required"`
+	JSON    holdGetResponseErrorJSON `json:"-"`
 }
 
-// holdEnforceResponseJSON contains the JSON metadata for the struct
-// [HoldEnforceResponse]
-type holdEnforceResponseJSON struct {
+// holdGetResponseErrorJSON contains the JSON metadata for the struct
+// [HoldGetResponseError]
+type holdGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HoldGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HoldGetResponseMessage struct {
+	Code    int64                      `json:"code,required"`
+	Message string                     `json:"message,required"`
+	JSON    holdGetResponseMessageJSON `json:"-"`
+}
+
+// holdGetResponseMessageJSON contains the JSON metadata for the struct
+// [HoldGetResponseMessage]
+type holdGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HoldGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HoldGetResponseResult struct {
+	Hold              bool                      `json:"hold"`
+	HoldAfter         string                    `json:"hold_after"`
+	IncludeSubdomains string                    `json:"include_subdomains"`
+	JSON              holdGetResponseResultJSON `json:"-"`
+}
+
+// holdGetResponseResultJSON contains the JSON metadata for the struct
+// [HoldGetResponseResult]
+type holdGetResponseResultJSON struct {
 	Hold              apijson.Field
 	HoldAfter         apijson.Field
 	IncludeSubdomains apijson.Field
@@ -111,9 +142,106 @@ type holdEnforceResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
+func (r *HoldGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HoldGetResponseSuccess bool
+
+const (
+	HoldGetResponseSuccessTrue HoldGetResponseSuccess = true
+)
+
+type HoldEnforceResponse struct {
+	Errors   []HoldEnforceResponseError   `json:"errors"`
+	Messages []HoldEnforceResponseMessage `json:"messages"`
+	Result   HoldEnforceResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success HoldEnforceResponseSuccess `json:"success"`
+	JSON    holdEnforceResponseJSON    `json:"-"`
+}
+
+// holdEnforceResponseJSON contains the JSON metadata for the struct
+// [HoldEnforceResponse]
+type holdEnforceResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
 func (r *HoldEnforceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type HoldEnforceResponseError struct {
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    holdEnforceResponseErrorJSON `json:"-"`
+}
+
+// holdEnforceResponseErrorJSON contains the JSON metadata for the struct
+// [HoldEnforceResponseError]
+type holdEnforceResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HoldEnforceResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HoldEnforceResponseMessage struct {
+	Code    int64                          `json:"code,required"`
+	Message string                         `json:"message,required"`
+	JSON    holdEnforceResponseMessageJSON `json:"-"`
+}
+
+// holdEnforceResponseMessageJSON contains the JSON metadata for the struct
+// [HoldEnforceResponseMessage]
+type holdEnforceResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HoldEnforceResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HoldEnforceResponseResult struct {
+	Hold              bool                          `json:"hold"`
+	HoldAfter         string                        `json:"hold_after"`
+	IncludeSubdomains string                        `json:"include_subdomains"`
+	JSON              holdEnforceResponseResultJSON `json:"-"`
+}
+
+// holdEnforceResponseResultJSON contains the JSON metadata for the struct
+// [HoldEnforceResponseResult]
+type holdEnforceResponseResultJSON struct {
+	Hold              apijson.Field
+	HoldAfter         apijson.Field
+	IncludeSubdomains apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *HoldEnforceResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HoldEnforceResponseSuccess bool
+
+const (
+	HoldEnforceResponseSuccessTrue HoldEnforceResponseSuccess = true
+)
 
 type HoldRemoveResponse struct {
 	Hold              bool                   `json:"hold"`
@@ -136,75 +264,6 @@ func (r *HoldRemoveResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HoldGetResponseEnvelope struct {
-	Errors   []HoldGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []HoldGetResponseEnvelopeMessages `json:"messages"`
-	Result   HoldGetResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success HoldGetResponseEnvelopeSuccess `json:"success"`
-	JSON    holdGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// holdGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HoldGetResponseEnvelope]
-type holdGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HoldGetResponseEnvelopeErrors struct {
-	Code    int64                             `json:"code,required"`
-	Message string                            `json:"message,required"`
-	JSON    holdGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// holdGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HoldGetResponseEnvelopeErrors]
-type holdGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HoldGetResponseEnvelopeMessages struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    holdGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// holdGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [HoldGetResponseEnvelopeMessages]
-type holdGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HoldGetResponseEnvelopeSuccess bool
-
-const (
-	HoldGetResponseEnvelopeSuccessTrue HoldGetResponseEnvelopeSuccess = true
-)
-
 type HoldEnforceParams struct {
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
@@ -220,75 +279,6 @@ func (r HoldEnforceParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
-
-type HoldEnforceResponseEnvelope struct {
-	Errors   []HoldEnforceResponseEnvelopeErrors   `json:"errors"`
-	Messages []HoldEnforceResponseEnvelopeMessages `json:"messages"`
-	Result   HoldEnforceResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success HoldEnforceResponseEnvelopeSuccess `json:"success"`
-	JSON    holdEnforceResponseEnvelopeJSON    `json:"-"`
-}
-
-// holdEnforceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HoldEnforceResponseEnvelope]
-type holdEnforceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldEnforceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HoldEnforceResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    holdEnforceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// holdEnforceResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [HoldEnforceResponseEnvelopeErrors]
-type holdEnforceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldEnforceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HoldEnforceResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    holdEnforceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// holdEnforceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HoldEnforceResponseEnvelopeMessages]
-type holdEnforceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HoldEnforceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HoldEnforceResponseEnvelopeSuccess bool
-
-const (
-	HoldEnforceResponseEnvelopeSuccessTrue HoldEnforceResponseEnvelopeSuccess = true
-)
 
 type HoldRemoveParams struct {
 	// If `hold_after` is provided, the hold will be temporarily disabled, then

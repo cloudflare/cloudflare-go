@@ -33,51 +33,111 @@ func NewAccessAppUserPolicyCheckService(opts ...option.RequestOption) (r *Access
 // Tests if a specific user has permission to access an application.
 func (r *AccessAppUserPolicyCheckService) AccessApplicationsTestAccessPolicies(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID, opts ...option.RequestOption) (res *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%v/user_policy_checks", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse struct {
-	AppState     AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppState     `json:"app_state"`
-	UserIdentity AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentity `json:"user_identity"`
-	JSON         accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseJSON         `json:"-"`
+	Errors   []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseError   `json:"errors"`
+	Messages []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessage `json:"messages"`
+	Result   AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseSuccess `json:"success"`
+	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseJSON    `json:"-"`
 }
 
 // accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseJSON
 // contains the JSON metadata for the struct
 // [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse]
 type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseJSON struct {
-	AppState     apijson.Field
-	UserIdentity apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppState struct {
-	// UUID
-	AppUid   string                                                                           `json:"app_uid"`
-	Aud      string                                                                           `json:"aud"`
-	Hostname string                                                                           `json:"hostname"`
-	Name     string                                                                           `json:"name"`
-	Policies []interface{}                                                                    `json:"policies"`
-	Status   string                                                                           `json:"status"`
-	JSON     accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppStateJSON `json:"-"`
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseError struct {
+	Code    int64                                                                         `json:"code,required"`
+	Message string                                                                        `json:"message,required"`
+	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseErrorJSON `json:"-"`
 }
 
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppStateJSON
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseErrorJSON
 // contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppState]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppStateJSON struct {
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseError]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessage struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessageJSON `json:"-"`
+}
+
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessage]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResult struct {
+	AppState     AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppState     `json:"app_state"`
+	UserIdentity AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentity `json:"user_identity"`
+	JSON         accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultJSON         `json:"-"`
+}
+
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResult]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultJSON struct {
+	AppState     apijson.Field
+	UserIdentity apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppState struct {
+	// UUID
+	AppUid   string                                                                                 `json:"app_uid"`
+	Aud      string                                                                                 `json:"aud"`
+	Hostname string                                                                                 `json:"hostname"`
+	Name     string                                                                                 `json:"name"`
+	Policies []interface{}                                                                          `json:"policies"`
+	Status   string                                                                                 `json:"status"`
+	JSON     accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppStateJSON `json:"-"`
+}
+
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppStateJSON
+// contains the JSON metadata for the struct
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppState]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppStateJSON struct {
 	AppUid      apijson.Field
 	Aud         apijson.Field
 	Hostname    apijson.Field
@@ -88,30 +148,30 @@ type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppStat
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseAppState) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultAppState) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentity struct {
-	ID             string                                                                              `json:"id"`
-	AccountID      string                                                                              `json:"account_id"`
-	DeviceSessions interface{}                                                                         `json:"device_sessions"`
-	Email          string                                                                              `json:"email"`
-	Geo            AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeo `json:"geo"`
-	Iat            int64                                                                               `json:"iat"`
-	IsGateway      bool                                                                                `json:"is_gateway"`
-	IsWarp         bool                                                                                `json:"is_warp"`
-	Name           string                                                                              `json:"name"`
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentity struct {
+	ID             string                                                                                    `json:"id"`
+	AccountID      string                                                                                    `json:"account_id"`
+	DeviceSessions interface{}                                                                               `json:"device_sessions"`
+	Email          string                                                                                    `json:"email"`
+	Geo            AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeo `json:"geo"`
+	Iat            int64                                                                                     `json:"iat"`
+	IsGateway      bool                                                                                      `json:"is_gateway"`
+	IsWarp         bool                                                                                      `json:"is_warp"`
+	Name           string                                                                                    `json:"name"`
 	// UUID
-	UserUuid string                                                                               `json:"user_uuid"`
-	Version  int64                                                                                `json:"version"`
-	JSON     accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityJSON `json:"-"`
+	UserUuid string                                                                                     `json:"user_uuid"`
+	Version  int64                                                                                      `json:"version"`
+	JSON     accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityJSON `json:"-"`
 }
 
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityJSON
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityJSON
 // contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentity]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityJSON struct {
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentity]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityJSON struct {
 	ID             apijson.Field
 	AccountID      apijson.Field
 	DeviceSessions apijson.Field
@@ -127,27 +187,34 @@ type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIde
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentity) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeo struct {
-	Country string                                                                                  `json:"country"`
-	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeoJSON `json:"-"`
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeo struct {
+	Country string                                                                                        `json:"country"`
+	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeoJSON `json:"-"`
 }
 
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeoJSON
+// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeoJSON
 // contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeo]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeoJSON struct {
+// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeo]
+type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeoJSON struct {
 	Country     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseResultUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Whether the API call was successful
+type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseSuccess bool
+
+const (
+	AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseSuccessTrue AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseSuccess = true
+)
 
 // Identifier
 //
@@ -155,75 +222,3 @@ func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseUse
 type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID interface {
 	ImplementsAccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID()
 }
-
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelope struct {
-	Errors   []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelope]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors struct {
-	Code    int64                                                                                  `json:"code,required"`
-	Message string                                                                                 `json:"message,required"`
-	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages struct {
-	Code    int64                                                                                    `json:"code,required"`
-	Message string                                                                                   `json:"message,required"`
-	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages]
-type accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccess bool
-
-const (
-	AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccessTrue AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccess = true
-)

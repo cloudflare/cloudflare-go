@@ -37,27 +37,22 @@ func NewRadarQualitySpeedHistogramService(opts ...option.RequestOption) (r *Rada
 // into fixed bandwidth (Mbps), latency (ms) or jitter (ms) buckets.
 func (r *RadarQualitySpeedHistogramService) Get(ctx context.Context, query RadarQualitySpeedHistogramGetParams, opts ...option.RequestOption) (res *RadarQualitySpeedHistogramGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarQualitySpeedHistogramGetResponseEnvelope
 	path := "radar/quality/speed/histogram"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarQualitySpeedHistogramGetResponse struct {
-	Histogram0 RadarQualitySpeedHistogramGetResponseHistogram0 `json:"histogram_0,required"`
-	Meta       interface{}                                     `json:"meta,required"`
-	JSON       radarQualitySpeedHistogramGetResponseJSON       `json:"-"`
+	Result  RadarQualitySpeedHistogramGetResponseResult `json:"result,required"`
+	Success bool                                        `json:"success,required"`
+	JSON    radarQualitySpeedHistogramGetResponseJSON   `json:"-"`
 }
 
 // radarQualitySpeedHistogramGetResponseJSON contains the JSON metadata for the
 // struct [RadarQualitySpeedHistogramGetResponse]
 type radarQualitySpeedHistogramGetResponseJSON struct {
-	Histogram0  apijson.Field
-	Meta        apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -66,16 +61,35 @@ func (r *RadarQualitySpeedHistogramGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedHistogramGetResponseHistogram0 struct {
-	BandwidthDownload []string                                            `json:"bandwidthDownload,required"`
-	BandwidthUpload   []string                                            `json:"bandwidthUpload,required"`
-	BucketMin         []string                                            `json:"bucketMin,required"`
-	JSON              radarQualitySpeedHistogramGetResponseHistogram0JSON `json:"-"`
+type RadarQualitySpeedHistogramGetResponseResult struct {
+	Histogram0 RadarQualitySpeedHistogramGetResponseResultHistogram0 `json:"histogram_0,required"`
+	Meta       interface{}                                           `json:"meta,required"`
+	JSON       radarQualitySpeedHistogramGetResponseResultJSON       `json:"-"`
 }
 
-// radarQualitySpeedHistogramGetResponseHistogram0JSON contains the JSON metadata
-// for the struct [RadarQualitySpeedHistogramGetResponseHistogram0]
-type radarQualitySpeedHistogramGetResponseHistogram0JSON struct {
+// radarQualitySpeedHistogramGetResponseResultJSON contains the JSON metadata for
+// the struct [RadarQualitySpeedHistogramGetResponseResult]
+type radarQualitySpeedHistogramGetResponseResultJSON struct {
+	Histogram0  apijson.Field
+	Meta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualitySpeedHistogramGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarQualitySpeedHistogramGetResponseResultHistogram0 struct {
+	BandwidthDownload []string                                                  `json:"bandwidthDownload,required"`
+	BandwidthUpload   []string                                                  `json:"bandwidthUpload,required"`
+	BucketMin         []string                                                  `json:"bucketMin,required"`
+	JSON              radarQualitySpeedHistogramGetResponseResultHistogram0JSON `json:"-"`
+}
+
+// radarQualitySpeedHistogramGetResponseResultHistogram0JSON contains the JSON
+// metadata for the struct [RadarQualitySpeedHistogramGetResponseResultHistogram0]
+type radarQualitySpeedHistogramGetResponseResultHistogram0JSON struct {
 	BandwidthDownload apijson.Field
 	BandwidthUpload   apijson.Field
 	BucketMin         apijson.Field
@@ -83,7 +97,7 @@ type radarQualitySpeedHistogramGetResponseHistogram0JSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedHistogramGetResponseHistogram0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedHistogramGetResponseResultHistogram0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -133,22 +147,3 @@ const (
 	RadarQualitySpeedHistogramGetParamsMetricGroupLatency   RadarQualitySpeedHistogramGetParamsMetricGroup = "LATENCY"
 	RadarQualitySpeedHistogramGetParamsMetricGroupJitter    RadarQualitySpeedHistogramGetParamsMetricGroup = "JITTER"
 )
-
-type RadarQualitySpeedHistogramGetResponseEnvelope struct {
-	Result  RadarQualitySpeedHistogramGetResponse             `json:"result,required"`
-	Success bool                                              `json:"success,required"`
-	JSON    radarQualitySpeedHistogramGetResponseEnvelopeJSON `json:"-"`
-}
-
-// radarQualitySpeedHistogramGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RadarQualitySpeedHistogramGetResponseEnvelope]
-type radarQualitySpeedHistogramGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarQualitySpeedHistogramGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

@@ -38,43 +38,58 @@ func NewRadarTrafficAnomalyLocationService(opts ...option.RequestOption) (r *Rad
 // team. This endpoint returns the sum of alerts grouped by location.
 func (r *RadarTrafficAnomalyLocationService) List(ctx context.Context, query RadarTrafficAnomalyLocationListParams, opts ...option.RequestOption) (res *RadarTrafficAnomalyLocationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarTrafficAnomalyLocationListResponseEnvelope
 	path := "radar/traffic_anomalies/locations"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarTrafficAnomalyLocationListResponse struct {
-	TrafficAnomalies []RadarTrafficAnomalyLocationListResponseTrafficAnomaly `json:"trafficAnomalies,required"`
-	JSON             radarTrafficAnomalyLocationListResponseJSON             `json:"-"`
+	Result  RadarTrafficAnomalyLocationListResponseResult `json:"result,required"`
+	Success bool                                          `json:"success,required"`
+	JSON    radarTrafficAnomalyLocationListResponseJSON   `json:"-"`
 }
 
 // radarTrafficAnomalyLocationListResponseJSON contains the JSON metadata for the
 // struct [RadarTrafficAnomalyLocationListResponse]
 type radarTrafficAnomalyLocationListResponseJSON struct {
-	TrafficAnomalies apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *RadarTrafficAnomalyLocationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarTrafficAnomalyLocationListResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string                                                    `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                                    `json:"clientCountryName,required"`
-	Value               string                                                    `json:"value,required"`
-	JSON                radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON `json:"-"`
+type RadarTrafficAnomalyLocationListResponseResult struct {
+	TrafficAnomalies []RadarTrafficAnomalyLocationListResponseResultTrafficAnomaly `json:"trafficAnomalies,required"`
+	JSON             radarTrafficAnomalyLocationListResponseResultJSON             `json:"-"`
 }
 
-// radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON contains the JSON
-// metadata for the struct [RadarTrafficAnomalyLocationListResponseTrafficAnomaly]
-type radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON struct {
+// radarTrafficAnomalyLocationListResponseResultJSON contains the JSON metadata for
+// the struct [RadarTrafficAnomalyLocationListResponseResult]
+type radarTrafficAnomalyLocationListResponseResultJSON struct {
+	TrafficAnomalies apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RadarTrafficAnomalyLocationListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarTrafficAnomalyLocationListResponseResultTrafficAnomaly struct {
+	ClientCountryAlpha2 string                                                          `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string                                                          `json:"clientCountryName,required"`
+	Value               string                                                          `json:"value,required"`
+	JSON                radarTrafficAnomalyLocationListResponseResultTrafficAnomalyJSON `json:"-"`
+}
+
+// radarTrafficAnomalyLocationListResponseResultTrafficAnomalyJSON contains the
+// JSON metadata for the struct
+// [RadarTrafficAnomalyLocationListResponseResultTrafficAnomaly]
+type radarTrafficAnomalyLocationListResponseResultTrafficAnomalyJSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -82,7 +97,7 @@ type radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyLocationListResponseTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyLocationListResponseResultTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -146,22 +161,3 @@ const (
 	RadarTrafficAnomalyLocationListParamsStatusVerified   RadarTrafficAnomalyLocationListParamsStatus = "VERIFIED"
 	RadarTrafficAnomalyLocationListParamsStatusUnverified RadarTrafficAnomalyLocationListParamsStatus = "UNVERIFIED"
 )
-
-type RadarTrafficAnomalyLocationListResponseEnvelope struct {
-	Result  RadarTrafficAnomalyLocationListResponse             `json:"result,required"`
-	Success bool                                                `json:"success,required"`
-	JSON    radarTrafficAnomalyLocationListResponseEnvelopeJSON `json:"-"`
-}
-
-// radarTrafficAnomalyLocationListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarTrafficAnomalyLocationListResponseEnvelope]
-type radarTrafficAnomalyLocationListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarTrafficAnomalyLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

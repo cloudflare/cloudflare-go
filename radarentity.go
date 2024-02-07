@@ -37,25 +37,22 @@ func NewRadarEntityService(opts ...option.RequestOption) (r *RadarEntityService)
 // Get IP address information.
 func (r *RadarEntityService) IPs(ctx context.Context, query RadarEntityIPsParams, opts ...option.RequestOption) (res *RadarEntityIPsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEntityIPsResponseEnvelope
 	path := "radar/entities/ip"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarEntityIPsResponse struct {
-	IP   RadarEntityIPsResponseIP   `json:"ip,required"`
-	JSON radarEntityIPsResponseJSON `json:"-"`
+	Result  RadarEntityIPsResponseResult `json:"result,required"`
+	Success bool                         `json:"success,required"`
+	JSON    radarEntityIPsResponseJSON   `json:"-"`
 }
 
 // radarEntityIPsResponseJSON contains the JSON metadata for the struct
 // [RadarEntityIPsResponse]
 type radarEntityIPsResponseJSON struct {
-	IP          apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -64,21 +61,38 @@ func (r *RadarEntityIPsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEntityIPsResponseIP struct {
-	Asn          string                       `json:"asn,required"`
-	AsnLocation  string                       `json:"asnLocation,required"`
-	AsnName      string                       `json:"asnName,required"`
-	AsnOrgName   string                       `json:"asnOrgName,required"`
-	IP           string                       `json:"ip,required"`
-	IPVersion    string                       `json:"ipVersion,required"`
-	Location     string                       `json:"location,required"`
-	LocationName string                       `json:"locationName,required"`
-	JSON         radarEntityIPsResponseIPJSON `json:"-"`
+type RadarEntityIPsResponseResult struct {
+	IP   RadarEntityIPsResponseResultIP   `json:"ip,required"`
+	JSON radarEntityIPsResponseResultJSON `json:"-"`
 }
 
-// radarEntityIPsResponseIPJSON contains the JSON metadata for the struct
-// [RadarEntityIPsResponseIP]
-type radarEntityIPsResponseIPJSON struct {
+// radarEntityIPsResponseResultJSON contains the JSON metadata for the struct
+// [RadarEntityIPsResponseResult]
+type radarEntityIPsResponseResultJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEntityIPsResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEntityIPsResponseResultIP struct {
+	Asn          string                             `json:"asn,required"`
+	AsnLocation  string                             `json:"asnLocation,required"`
+	AsnName      string                             `json:"asnName,required"`
+	AsnOrgName   string                             `json:"asnOrgName,required"`
+	IP           string                             `json:"ip,required"`
+	IPVersion    string                             `json:"ipVersion,required"`
+	Location     string                             `json:"location,required"`
+	LocationName string                             `json:"locationName,required"`
+	JSON         radarEntityIPsResponseResultIPJSON `json:"-"`
+}
+
+// radarEntityIPsResponseResultIPJSON contains the JSON metadata for the struct
+// [RadarEntityIPsResponseResultIP]
+type radarEntityIPsResponseResultIPJSON struct {
 	Asn          apijson.Field
 	AsnLocation  apijson.Field
 	AsnName      apijson.Field
@@ -91,7 +105,7 @@ type radarEntityIPsResponseIPJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarEntityIPsResponseIP) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityIPsResponseResultIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -117,22 +131,3 @@ const (
 	RadarEntityIPsParamsFormatJson RadarEntityIPsParamsFormat = "JSON"
 	RadarEntityIPsParamsFormatCsv  RadarEntityIPsParamsFormat = "CSV"
 )
-
-type RadarEntityIPsResponseEnvelope struct {
-	Result  RadarEntityIPsResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
-	JSON    radarEntityIPsResponseEnvelopeJSON `json:"-"`
-}
-
-// radarEntityIPsResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RadarEntityIPsResponseEnvelope]
-type radarEntityIPsResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEntityIPsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

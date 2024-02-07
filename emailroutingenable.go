@@ -34,41 +34,101 @@ func NewEmailRoutingEnableService(opts ...option.RequestOption) (r *EmailRouting
 // Enable you Email Routing zone. Add and lock the necessary MX and SPF records.
 func (r *EmailRoutingEnableService) EmailRoutingSettingsEnableEmailRouting(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/enable", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
 
 type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse struct {
-	// Email Routing settings identifier.
-	ID string `json:"id"`
-	// The date and time the settings have been created.
-	Created time.Time `json:"created" format:"date-time"`
-	// State of the zone settings for Email Routing.
-	Enabled EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabled `json:"enabled"`
-	// The date and time the settings have been modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// Domain of your zone.
-	Name string `json:"name"`
-	// Flag to check if the user skipped the configuration wizard.
-	SkipWizard EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizard `json:"skip_wizard"`
-	// Show the state of your account, and the type or configuration error.
-	Status EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus `json:"status"`
-	// Email Routing settings tag. (Deprecated, replaced by Email Routing settings
-	// identifier)
-	Tag  string                                                               `json:"tag"`
-	JSON emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseJSON `json:"-"`
+	Errors   []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseError   `json:"errors"`
+	Messages []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessage `json:"messages"`
+	Result   EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSuccess `json:"success"`
+	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseJSON    `json:"-"`
 }
 
 // emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseJSON contains
 // the JSON metadata for the struct
 // [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse]
 type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseError struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseErrorJSON `json:"-"`
+}
+
+// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseErrorJSON
+// contains the JSON metadata for the struct
+// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseError]
+type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessage struct {
+	Code    int64                                                                       `json:"code,required"`
+	Message string                                                                      `json:"message,required"`
+	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessageJSON `json:"-"`
+}
+
+// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessageJSON
+// contains the JSON metadata for the struct
+// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessage]
+type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResult struct {
+	// Email Routing settings identifier.
+	ID string `json:"id"`
+	// The date and time the settings have been created.
+	Created time.Time `json:"created" format:"date-time"`
+	// State of the zone settings for Email Routing.
+	Enabled EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabled `json:"enabled"`
+	// The date and time the settings have been modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// Domain of your zone.
+	Name string `json:"name"`
+	// Flag to check if the user skipped the configuration wizard.
+	SkipWizard EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizard `json:"skip_wizard"`
+	// Show the state of your account, and the type or configuration error.
+	Status EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus `json:"status"`
+	// Email Routing settings tag. (Deprecated, replaced by Email Routing settings
+	// identifier)
+	Tag  string                                                                     `json:"tag"`
+	JSON emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultJSON `json:"-"`
+}
+
+// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultJSON
+// contains the JSON metadata for the struct
+// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResult]
+type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Enabled     apijson.Field
@@ -81,105 +141,40 @@ type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // State of the zone settings for Email Routing.
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabled bool
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabled bool
 
 const (
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabledTrue  EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabled = true
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabledFalse EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnabled = false
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabledTrue  EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabled = true
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabledFalse EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultEnabled = false
 )
 
 // Flag to check if the user skipped the configuration wizard.
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizard bool
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizard bool
 
 const (
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizardTrue  EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizard = true
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizardFalse EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSkipWizard = false
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizardTrue  EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizard = true
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizardFalse EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultSkipWizard = false
 )
 
 // Show the state of your account, and the type or configuration error.
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus string
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus string
 
 const (
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatusReady               EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus = "ready"
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatusUnconfigured        EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus = "unconfigured"
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatusMisconfigured       EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus = "misconfigured"
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatusMisconfiguredLocked EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus = "misconfigured/locked"
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatusUnlocked            EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseStatus = "unlocked"
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatusReady               EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus = "ready"
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatusUnconfigured        EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus = "unconfigured"
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatusMisconfigured       EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus = "misconfigured"
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatusMisconfiguredLocked EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus = "misconfigured/locked"
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatusUnlocked            EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseResultStatus = "unlocked"
 )
 
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelope struct {
-	Errors   []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccess `json:"success"`
-	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeJSON    `json:"-"`
-}
-
-// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelope]
-type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors]
-type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages struct {
-	Code    int64                                                                                `json:"code,required"`
-	Message string                                                                               `json:"message,required"`
-	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages]
-type emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Whether the API call was successful
-type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccess bool
+type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSuccess bool
 
 const (
-	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccessTrue EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccess = true
+	EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSuccessTrue EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseSuccess = true
 )

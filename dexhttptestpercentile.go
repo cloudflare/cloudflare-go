@@ -37,26 +37,83 @@ func NewDexHTTPTestPercentileService(opts ...option.RequestOption) (r *DexHTTPTe
 // days.
 func (r *DexHTTPTestPercentileService) List(ctx context.Context, accountID string, testID string, query DexHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DexHTTPTestPercentileListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexHTTPTestPercentileListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type DexHTTPTestPercentileListResponse struct {
-	DNSResponseTimeMs    DexHTTPTestPercentileListResponseDNSResponseTimeMs    `json:"dnsResponseTimeMs"`
-	ResourceFetchTimeMs  DexHTTPTestPercentileListResponseResourceFetchTimeMs  `json:"resourceFetchTimeMs"`
-	ServerResponseTimeMs DexHTTPTestPercentileListResponseServerResponseTimeMs `json:"serverResponseTimeMs"`
-	JSON                 dexHTTPTestPercentileListResponseJSON                 `json:"-"`
+	Errors   []DexHTTPTestPercentileListResponseError   `json:"errors"`
+	Messages []DexHTTPTestPercentileListResponseMessage `json:"messages"`
+	Result   DexHTTPTestPercentileListResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success DexHTTPTestPercentileListResponseSuccess `json:"success"`
+	JSON    dexHTTPTestPercentileListResponseJSON    `json:"-"`
 }
 
 // dexHTTPTestPercentileListResponseJSON contains the JSON metadata for the struct
 // [DexHTTPTestPercentileListResponse]
 type dexHTTPTestPercentileListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestPercentileListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexHTTPTestPercentileListResponseError struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dexHTTPTestPercentileListResponseErrorJSON `json:"-"`
+}
+
+// dexHTTPTestPercentileListResponseErrorJSON contains the JSON metadata for the
+// struct [DexHTTPTestPercentileListResponseError]
+type dexHTTPTestPercentileListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestPercentileListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexHTTPTestPercentileListResponseMessage struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    dexHTTPTestPercentileListResponseMessageJSON `json:"-"`
+}
+
+// dexHTTPTestPercentileListResponseMessageJSON contains the JSON metadata for the
+// struct [DexHTTPTestPercentileListResponseMessage]
+type dexHTTPTestPercentileListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DexHTTPTestPercentileListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DexHTTPTestPercentileListResponseResult struct {
+	DNSResponseTimeMs    DexHTTPTestPercentileListResponseResultDNSResponseTimeMs    `json:"dnsResponseTimeMs"`
+	ResourceFetchTimeMs  DexHTTPTestPercentileListResponseResultResourceFetchTimeMs  `json:"resourceFetchTimeMs"`
+	ServerResponseTimeMs DexHTTPTestPercentileListResponseResultServerResponseTimeMs `json:"serverResponseTimeMs"`
+	JSON                 dexHTTPTestPercentileListResponseResultJSON                 `json:"-"`
+}
+
+// dexHTTPTestPercentileListResponseResultJSON contains the JSON metadata for the
+// struct [DexHTTPTestPercentileListResponseResult]
+type dexHTTPTestPercentileListResponseResultJSON struct {
 	DNSResponseTimeMs    apijson.Field
 	ResourceFetchTimeMs  apijson.Field
 	ServerResponseTimeMs apijson.Field
@@ -64,11 +121,11 @@ type dexHTTPTestPercentileListResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DexHTTPTestPercentileListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestPercentileListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestPercentileListResponseDNSResponseTimeMs struct {
+type DexHTTPTestPercentileListResponseResultDNSResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -76,13 +133,14 @@ type DexHTTPTestPercentileListResponseDNSResponseTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                `json:"p99,nullable"`
-	JSON dexHTTPTestPercentileListResponseDNSResponseTimeMsJSON `json:"-"`
+	P99  float64                                                      `json:"p99,nullable"`
+	JSON dexHTTPTestPercentileListResponseResultDNSResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestPercentileListResponseDNSResponseTimeMsJSON contains the JSON
-// metadata for the struct [DexHTTPTestPercentileListResponseDNSResponseTimeMs]
-type dexHTTPTestPercentileListResponseDNSResponseTimeMsJSON struct {
+// dexHTTPTestPercentileListResponseResultDNSResponseTimeMsJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestPercentileListResponseResultDNSResponseTimeMs]
+type dexHTTPTestPercentileListResponseResultDNSResponseTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -91,11 +149,11 @@ type dexHTTPTestPercentileListResponseDNSResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestPercentileListResponseDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestPercentileListResponseResultDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestPercentileListResponseResourceFetchTimeMs struct {
+type DexHTTPTestPercentileListResponseResultResourceFetchTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -103,13 +161,14 @@ type DexHTTPTestPercentileListResponseResourceFetchTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                  `json:"p99,nullable"`
-	JSON dexHTTPTestPercentileListResponseResourceFetchTimeMsJSON `json:"-"`
+	P99  float64                                                        `json:"p99,nullable"`
+	JSON dexHTTPTestPercentileListResponseResultResourceFetchTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestPercentileListResponseResourceFetchTimeMsJSON contains the JSON
-// metadata for the struct [DexHTTPTestPercentileListResponseResourceFetchTimeMs]
-type dexHTTPTestPercentileListResponseResourceFetchTimeMsJSON struct {
+// dexHTTPTestPercentileListResponseResultResourceFetchTimeMsJSON contains the JSON
+// metadata for the struct
+// [DexHTTPTestPercentileListResponseResultResourceFetchTimeMs]
+type dexHTTPTestPercentileListResponseResultResourceFetchTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -118,11 +177,11 @@ type dexHTTPTestPercentileListResponseResourceFetchTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestPercentileListResponseResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestPercentileListResponseResultResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexHTTPTestPercentileListResponseServerResponseTimeMs struct {
+type DexHTTPTestPercentileListResponseResultServerResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -130,13 +189,14 @@ type DexHTTPTestPercentileListResponseServerResponseTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                   `json:"p99,nullable"`
-	JSON dexHTTPTestPercentileListResponseServerResponseTimeMsJSON `json:"-"`
+	P99  float64                                                         `json:"p99,nullable"`
+	JSON dexHTTPTestPercentileListResponseResultServerResponseTimeMsJSON `json:"-"`
 }
 
-// dexHTTPTestPercentileListResponseServerResponseTimeMsJSON contains the JSON
-// metadata for the struct [DexHTTPTestPercentileListResponseServerResponseTimeMs]
-type dexHTTPTestPercentileListResponseServerResponseTimeMsJSON struct {
+// dexHTTPTestPercentileListResponseResultServerResponseTimeMsJSON contains the
+// JSON metadata for the struct
+// [DexHTTPTestPercentileListResponseResultServerResponseTimeMs]
+type dexHTTPTestPercentileListResponseResultServerResponseTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -145,9 +205,16 @@ type dexHTTPTestPercentileListResponseServerResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexHTTPTestPercentileListResponseServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DexHTTPTestPercentileListResponseResultServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Whether the API call was successful
+type DexHTTPTestPercentileListResponseSuccess bool
+
+const (
+	DexHTTPTestPercentileListResponseSuccessTrue DexHTTPTestPercentileListResponseSuccess = true
+)
 
 type DexHTTPTestPercentileListParams struct {
 	// End time for aggregate metrics in ISO format
@@ -170,72 +237,3 @@ func (r DexHTTPTestPercentileListParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
-
-type DexHTTPTestPercentileListResponseEnvelope struct {
-	Errors   []DexHTTPTestPercentileListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexHTTPTestPercentileListResponseEnvelopeMessages `json:"messages"`
-	Result   DexHTTPTestPercentileListResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success DexHTTPTestPercentileListResponseEnvelopeSuccess `json:"success"`
-	JSON    dexHTTPTestPercentileListResponseEnvelopeJSON    `json:"-"`
-}
-
-// dexHTTPTestPercentileListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DexHTTPTestPercentileListResponseEnvelope]
-type dexHTTPTestPercentileListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestPercentileListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexHTTPTestPercentileListResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    dexHTTPTestPercentileListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dexHTTPTestPercentileListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DexHTTPTestPercentileListResponseEnvelopeErrors]
-type dexHTTPTestPercentileListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestPercentileListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DexHTTPTestPercentileListResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    dexHTTPTestPercentileListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dexHTTPTestPercentileListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DexHTTPTestPercentileListResponseEnvelopeMessages]
-type dexHTTPTestPercentileListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexHTTPTestPercentileListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DexHTTPTestPercentileListResponseEnvelopeSuccess bool
-
-const (
-	DexHTTPTestPercentileListResponseEnvelopeSuccessTrue DexHTTPTestPercentileListResponseEnvelopeSuccess = true
-)

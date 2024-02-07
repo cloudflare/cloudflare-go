@@ -32,19 +32,76 @@ func NewIntelSinkholeService(opts ...option.RequestOption) (r *IntelSinkholeServ
 }
 
 // List sinkholes owned by this account
-func (r *IntelSinkholeService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]IntelSinkholeListResponse, err error) {
+func (r *IntelSinkholeService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *IntelSinkholeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelSinkholeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 type IntelSinkholeListResponse struct {
+	Errors   []IntelSinkholeListResponseError   `json:"errors"`
+	Messages []IntelSinkholeListResponseMessage `json:"messages"`
+	Result   []IntelSinkholeListResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success IntelSinkholeListResponseSuccess `json:"success"`
+	JSON    intelSinkholeListResponseJSON    `json:"-"`
+}
+
+// intelSinkholeListResponseJSON contains the JSON metadata for the struct
+// [IntelSinkholeListResponse]
+type intelSinkholeListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IntelSinkholeListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelSinkholeListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    intelSinkholeListResponseErrorJSON `json:"-"`
+}
+
+// intelSinkholeListResponseErrorJSON contains the JSON metadata for the struct
+// [IntelSinkholeListResponseError]
+type intelSinkholeListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IntelSinkholeListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelSinkholeListResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    intelSinkholeListResponseMessageJSON `json:"-"`
+}
+
+// intelSinkholeListResponseMessageJSON contains the JSON metadata for the struct
+// [IntelSinkholeListResponseMessage]
+type intelSinkholeListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IntelSinkholeListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelSinkholeListResponseResult struct {
 	// The unique identifier for the sinkhole
 	ID int64 `json:"id"`
 	// The account tag that owns this sinkhole
@@ -58,13 +115,13 @@ type IntelSinkholeListResponse struct {
 	// The name of the R2 bucket to store results
 	R2Bucket string `json:"r2_bucket"`
 	// The id of the R2 instance
-	R2ID string                        `json:"r2_id"`
-	JSON intelSinkholeListResponseJSON `json:"-"`
+	R2ID string                              `json:"r2_id"`
+	JSON intelSinkholeListResponseResultJSON `json:"-"`
 }
 
-// intelSinkholeListResponseJSON contains the JSON metadata for the struct
-// [IntelSinkholeListResponse]
-type intelSinkholeListResponseJSON struct {
+// intelSinkholeListResponseResultJSON contains the JSON metadata for the struct
+// [IntelSinkholeListResponseResult]
+type intelSinkholeListResponseResultJSON struct {
 	ID          apijson.Field
 	AccountTag  apijson.Field
 	CreatedOn   apijson.Field
@@ -76,75 +133,13 @@ type intelSinkholeListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelSinkholeListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type IntelSinkholeListResponseEnvelope struct {
-	Errors   []IntelSinkholeListResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelSinkholeListResponseEnvelopeMessages `json:"messages"`
-	Result   []IntelSinkholeListResponse                 `json:"result"`
-	// Whether the API call was successful
-	Success IntelSinkholeListResponseEnvelopeSuccess `json:"success"`
-	JSON    intelSinkholeListResponseEnvelopeJSON    `json:"-"`
-}
-
-// intelSinkholeListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IntelSinkholeListResponseEnvelope]
-type intelSinkholeListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelSinkholeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type IntelSinkholeListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    intelSinkholeListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// intelSinkholeListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [IntelSinkholeListResponseEnvelopeErrors]
-type intelSinkholeListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelSinkholeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type IntelSinkholeListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    intelSinkholeListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// intelSinkholeListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IntelSinkholeListResponseEnvelopeMessages]
-type intelSinkholeListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelSinkholeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelSinkholeListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelSinkholeListResponseEnvelopeSuccess bool
+type IntelSinkholeListResponseSuccess bool
 
 const (
-	IntelSinkholeListResponseEnvelopeSuccessTrue IntelSinkholeListResponseEnvelopeSuccess = true
+	IntelSinkholeListResponseSuccessTrue IntelSinkholeListResponseSuccess = true
 )

@@ -37,27 +37,22 @@ func NewRadarQualitySpeedTopLocationService(opts ...option.RequestOption) (r *Ra
 // previous 90 days of Cloudflare Speed Test data.
 func (r *RadarQualitySpeedTopLocationService) List(ctx context.Context, query RadarQualitySpeedTopLocationListParams, opts ...option.RequestOption) (res *RadarQualitySpeedTopLocationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarQualitySpeedTopLocationListResponseEnvelope
 	path := "radar/quality/speed/top/locations"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarQualitySpeedTopLocationListResponse struct {
-	Meta RadarQualitySpeedTopLocationListResponseMeta   `json:"meta,required"`
-	Top0 []RadarQualitySpeedTopLocationListResponseTop0 `json:"top_0,required"`
-	JSON radarQualitySpeedTopLocationListResponseJSON   `json:"-"`
+	Result  RadarQualitySpeedTopLocationListResponseResult `json:"result,required"`
+	Success bool                                           `json:"success,required"`
+	JSON    radarQualitySpeedTopLocationListResponseJSON   `json:"-"`
 }
 
 // radarQualitySpeedTopLocationListResponseJSON contains the JSON metadata for the
 // struct [RadarQualitySpeedTopLocationListResponse]
 type radarQualitySpeedTopLocationListResponseJSON struct {
-	Meta        apijson.Field
-	Top0        apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -66,16 +61,35 @@ func (r *RadarQualitySpeedTopLocationListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedTopLocationListResponseMeta struct {
-	DateRange      []RadarQualitySpeedTopLocationListResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                     `json:"lastUpdated,required"`
-	ConfidenceInfo RadarQualitySpeedTopLocationListResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarQualitySpeedTopLocationListResponseMetaJSON           `json:"-"`
+type RadarQualitySpeedTopLocationListResponseResult struct {
+	Meta RadarQualitySpeedTopLocationListResponseResultMeta   `json:"meta,required"`
+	Top0 []RadarQualitySpeedTopLocationListResponseResultTop0 `json:"top_0,required"`
+	JSON radarQualitySpeedTopLocationListResponseResultJSON   `json:"-"`
 }
 
-// radarQualitySpeedTopLocationListResponseMetaJSON contains the JSON metadata for
-// the struct [RadarQualitySpeedTopLocationListResponseMeta]
-type radarQualitySpeedTopLocationListResponseMetaJSON struct {
+// radarQualitySpeedTopLocationListResponseResultJSON contains the JSON metadata
+// for the struct [RadarQualitySpeedTopLocationListResponseResult]
+type radarQualitySpeedTopLocationListResponseResultJSON struct {
+	Meta        apijson.Field
+	Top0        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualitySpeedTopLocationListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarQualitySpeedTopLocationListResponseResultMeta struct {
+	DateRange      []RadarQualitySpeedTopLocationListResponseResultMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                           `json:"lastUpdated,required"`
+	ConfidenceInfo RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarQualitySpeedTopLocationListResponseResultMetaJSON           `json:"-"`
+}
+
+// radarQualitySpeedTopLocationListResponseResultMetaJSON contains the JSON
+// metadata for the struct [RadarQualitySpeedTopLocationListResponseResultMeta]
+type radarQualitySpeedTopLocationListResponseResultMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -83,66 +97,67 @@ type radarQualitySpeedTopLocationListResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedTopLocationListResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedTopLocationListResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedTopLocationListResponseMetaDateRange struct {
+type RadarQualitySpeedTopLocationListResponseResultMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
-	JSON      radarQualitySpeedTopLocationListResponseMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                                       `json:"startTime,required" format:"date-time"`
+	JSON      radarQualitySpeedTopLocationListResponseResultMetaDateRangeJSON `json:"-"`
 }
 
-// radarQualitySpeedTopLocationListResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [RadarQualitySpeedTopLocationListResponseMetaDateRange]
-type radarQualitySpeedTopLocationListResponseMetaDateRangeJSON struct {
+// radarQualitySpeedTopLocationListResponseResultMetaDateRangeJSON contains the
+// JSON metadata for the struct
+// [RadarQualitySpeedTopLocationListResponseResultMetaDateRange]
+type radarQualitySpeedTopLocationListResponseResultMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedTopLocationListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedTopLocationListResponseResultMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedTopLocationListResponseMetaConfidenceInfo struct {
-	Annotations []RadarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                  `json:"level"`
-	JSON        radarQualitySpeedTopLocationListResponseMetaConfidenceInfoJSON         `json:"-"`
+type RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfo struct {
+	Annotations []RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                        `json:"level"`
+	JSON        radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarQualitySpeedTopLocationListResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [RadarQualitySpeedTopLocationListResponseMetaConfidenceInfo]
-type radarQualitySpeedTopLocationListResponseMetaConfidenceInfoJSON struct {
+// radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoJSON contains
+// the JSON metadata for the struct
+// [RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfo]
+type radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedTopLocationListResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                   `json:"dataSource,required"`
-	Description     string                                                                   `json:"description,required"`
-	EventType       string                                                                   `json:"eventType,required"`
-	IsInstantaneous interface{}                                                              `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                   `json:"linkedUrl"`
-	StartTime       time.Time                                                                `json:"startTime" format:"date-time"`
-	JSON            radarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                         `json:"dataSource,required"`
+	Description     string                                                                         `json:"description,required"`
+	EventType       string                                                                         `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                    `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                      `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                         `json:"linkedUrl"`
+	StartTime       time.Time                                                                      `json:"startTime" format:"date-time"`
+	JSON            radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotationJSON
+// radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
-// [RadarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotation]
-type radarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotation]
+type radarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -154,27 +169,27 @@ type radarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotationJSON st
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedTopLocationListResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedTopLocationListResponseResultMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualitySpeedTopLocationListResponseTop0 struct {
-	BandwidthDownload   string                                           `json:"bandwidthDownload,required"`
-	BandwidthUpload     string                                           `json:"bandwidthUpload,required"`
-	ClientCountryAlpha2 string                                           `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                           `json:"clientCountryName,required"`
-	JitterIdle          string                                           `json:"jitterIdle,required"`
-	JitterLoaded        string                                           `json:"jitterLoaded,required"`
-	LatencyIdle         string                                           `json:"latencyIdle,required"`
-	LatencyLoaded       string                                           `json:"latencyLoaded,required"`
-	NumTests            float64                                          `json:"numTests,required"`
-	RankPower           float64                                          `json:"rankPower,required"`
-	JSON                radarQualitySpeedTopLocationListResponseTop0JSON `json:"-"`
+type RadarQualitySpeedTopLocationListResponseResultTop0 struct {
+	BandwidthDownload   string                                                 `json:"bandwidthDownload,required"`
+	BandwidthUpload     string                                                 `json:"bandwidthUpload,required"`
+	ClientCountryAlpha2 string                                                 `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string                                                 `json:"clientCountryName,required"`
+	JitterIdle          string                                                 `json:"jitterIdle,required"`
+	JitterLoaded        string                                                 `json:"jitterLoaded,required"`
+	LatencyIdle         string                                                 `json:"latencyIdle,required"`
+	LatencyLoaded       string                                                 `json:"latencyLoaded,required"`
+	NumTests            float64                                                `json:"numTests,required"`
+	RankPower           float64                                                `json:"rankPower,required"`
+	JSON                radarQualitySpeedTopLocationListResponseResultTop0JSON `json:"-"`
 }
 
-// radarQualitySpeedTopLocationListResponseTop0JSON contains the JSON metadata for
-// the struct [RadarQualitySpeedTopLocationListResponseTop0]
-type radarQualitySpeedTopLocationListResponseTop0JSON struct {
+// radarQualitySpeedTopLocationListResponseResultTop0JSON contains the JSON
+// metadata for the struct [RadarQualitySpeedTopLocationListResponseResultTop0]
+type radarQualitySpeedTopLocationListResponseResultTop0JSON struct {
 	BandwidthDownload   apijson.Field
 	BandwidthUpload     apijson.Field
 	ClientCountryAlpha2 apijson.Field
@@ -189,7 +204,7 @@ type radarQualitySpeedTopLocationListResponseTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarQualitySpeedTopLocationListResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualitySpeedTopLocationListResponseResultTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -244,22 +259,3 @@ const (
 	RadarQualitySpeedTopLocationListParamsOrderByJitterIdle        RadarQualitySpeedTopLocationListParamsOrderBy = "JITTER_IDLE"
 	RadarQualitySpeedTopLocationListParamsOrderByJitterLoaded      RadarQualitySpeedTopLocationListParamsOrderBy = "JITTER_LOADED"
 )
-
-type RadarQualitySpeedTopLocationListResponseEnvelope struct {
-	Result  RadarQualitySpeedTopLocationListResponse             `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
-	JSON    radarQualitySpeedTopLocationListResponseEnvelopeJSON `json:"-"`
-}
-
-// radarQualitySpeedTopLocationListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarQualitySpeedTopLocationListResponseEnvelope]
-type radarQualitySpeedTopLocationListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarQualitySpeedTopLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

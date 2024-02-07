@@ -36,27 +36,22 @@ func NewRadarEmailSecurityDmarcService(opts ...option.RequestOption) (r *RadarEm
 // Percentage distribution of emails classified per DMARC validation over time.
 func (r *RadarEmailSecurityDmarcService) List(ctx context.Context, query RadarEmailSecurityDmarcListParams, opts ...option.RequestOption) (res *RadarEmailSecurityDmarcListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEmailSecurityDmarcListResponseEnvelope
 	path := "radar/email/security/timeseries_groups/dmarc"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarEmailSecurityDmarcListResponse struct {
-	Meta   interface{}                               `json:"meta,required"`
-	Serie0 RadarEmailSecurityDmarcListResponseSerie0 `json:"serie_0,required"`
-	JSON   radarEmailSecurityDmarcListResponseJSON   `json:"-"`
+	Result  RadarEmailSecurityDmarcListResponseResult `json:"result,required"`
+	Success bool                                      `json:"success,required"`
+	JSON    radarEmailSecurityDmarcListResponseJSON   `json:"-"`
 }
 
 // radarEmailSecurityDmarcListResponseJSON contains the JSON metadata for the
 // struct [RadarEmailSecurityDmarcListResponse]
 type radarEmailSecurityDmarcListResponseJSON struct {
-	Meta        apijson.Field
-	Serie0      apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -65,16 +60,35 @@ func (r *RadarEmailSecurityDmarcListResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityDmarcListResponseSerie0 struct {
-	Fail []string                                      `json:"FAIL,required"`
-	None []string                                      `json:"NONE,required"`
-	Pass []string                                      `json:"PASS,required"`
-	JSON radarEmailSecurityDmarcListResponseSerie0JSON `json:"-"`
+type RadarEmailSecurityDmarcListResponseResult struct {
+	Meta   interface{}                                     `json:"meta,required"`
+	Serie0 RadarEmailSecurityDmarcListResponseResultSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecurityDmarcListResponseResultJSON   `json:"-"`
 }
 
-// radarEmailSecurityDmarcListResponseSerie0JSON contains the JSON metadata for the
-// struct [RadarEmailSecurityDmarcListResponseSerie0]
-type radarEmailSecurityDmarcListResponseSerie0JSON struct {
+// radarEmailSecurityDmarcListResponseResultJSON contains the JSON metadata for the
+// struct [RadarEmailSecurityDmarcListResponseResult]
+type radarEmailSecurityDmarcListResponseResultJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityDmarcListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecurityDmarcListResponseResultSerie0 struct {
+	Fail []string                                            `json:"FAIL,required"`
+	None []string                                            `json:"NONE,required"`
+	Pass []string                                            `json:"PASS,required"`
+	JSON radarEmailSecurityDmarcListResponseResultSerie0JSON `json:"-"`
+}
+
+// radarEmailSecurityDmarcListResponseResultSerie0JSON contains the JSON metadata
+// for the struct [RadarEmailSecurityDmarcListResponseResultSerie0]
+type radarEmailSecurityDmarcListResponseResultSerie0JSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -82,7 +96,7 @@ type radarEmailSecurityDmarcListResponseSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityDmarcListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityDmarcListResponseResultSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -191,22 +205,3 @@ const (
 	RadarEmailSecurityDmarcListParamsSpfNone RadarEmailSecurityDmarcListParamsSpf = "NONE"
 	RadarEmailSecurityDmarcListParamsSpfFail RadarEmailSecurityDmarcListParamsSpf = "FAIL"
 )
-
-type RadarEmailSecurityDmarcListResponseEnvelope struct {
-	Result  RadarEmailSecurityDmarcListResponse             `json:"result,required"`
-	Success bool                                            `json:"success,required"`
-	JSON    radarEmailSecurityDmarcListResponseEnvelopeJSON `json:"-"`
-}
-
-// radarEmailSecurityDmarcListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RadarEmailSecurityDmarcListResponseEnvelope]
-type radarEmailSecurityDmarcListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEmailSecurityDmarcListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

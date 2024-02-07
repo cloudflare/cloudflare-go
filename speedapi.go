@@ -38,65 +38,40 @@ func NewSpeedAPIService(opts ...option.RequestOption) (r *SpeedAPIService) {
 // Retrieves quota for all plans, as well as the current zone quota.
 func (r *SpeedAPIService) AvailabilitiesList(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SpeedAPIAvailabilitiesListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPIAvailabilitiesListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Lists all webpages which have been tested.
-func (r *SpeedAPIService) PagesList(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]SpeedAPIPagesListResponse, err error) {
+func (r *SpeedAPIService) PagesList(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SpeedAPIPagesListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPIPagesListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Deletes a scheduled test for a page.
 func (r *SpeedAPIService) ScheduleDelete(ctx context.Context, zoneID string, url string, body SpeedAPIScheduleDeleteParams, opts ...option.RequestOption) (res *SpeedAPIScheduleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPIScheduleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Retrieves the test schedule for a page in a specific region.
 func (r *SpeedAPIService) ScheduleGet(ctx context.Context, zoneID string, url string, query SpeedAPIScheduleGetParams, opts ...option.RequestOption) (res *SpeedAPIScheduleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPIScheduleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // Starts a test for a specific webpage, in a specific region.
 func (r *SpeedAPIService) TestsNew(ctx context.Context, zoneID string, url string, body SpeedAPITestsNewParams, opts ...option.RequestOption) (res *SpeedAPITestsNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPITestsNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
@@ -104,65 +79,107 @@ func (r *SpeedAPIService) TestsNew(ctx context.Context, zoneID string, url strin
 // are still counted as part of the quota.
 func (r *SpeedAPIService) TestsDelete(ctx context.Context, zoneID string, url string, body SpeedAPITestsDeleteParams, opts ...option.RequestOption) (res *SpeedAPITestsDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPITestsDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Test history (list of tests) for a specific webpage.
-func (r *SpeedAPIService) TestsList(ctx context.Context, zoneID string, url string, query SpeedAPITestsListParams, opts ...option.RequestOption) (res *[]SpeedAPITestsListResponse, err error) {
+func (r *SpeedAPIService) TestsList(ctx context.Context, zoneID string, url string, query SpeedAPITestsListParams, opts ...option.RequestOption) (res *SpeedAPITestsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPITestsListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // Retrieves the result of a specific test.
 func (r *SpeedAPIService) TestsGet(ctx context.Context, zoneID string, url string, testID string, opts ...option.RequestOption) (res *SpeedAPITestsGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPITestsGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", zoneID, url, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Lists the core web vital metrics trend over time for a specific page.
 func (r *SpeedAPIService) TrendsList(ctx context.Context, zoneID string, url string, query SpeedAPITrendsListParams, opts ...option.RequestOption) (res *SpeedAPITrendsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpeedAPITrendsListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type SpeedAPIAvailabilitiesListResponse struct {
-	Quota          SpeedAPIAvailabilitiesListResponseQuota    `json:"quota"`
-	Regions        []SpeedAPIAvailabilitiesListResponseRegion `json:"regions"`
-	RegionsPerPlan interface{}                                `json:"regionsPerPlan"`
-	JSON           speedAPIAvailabilitiesListResponseJSON     `json:"-"`
+	Errors   []SpeedAPIAvailabilitiesListResponseError   `json:"errors"`
+	Messages []SpeedAPIAvailabilitiesListResponseMessage `json:"messages"`
+	Result   SpeedAPIAvailabilitiesListResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                                   `json:"success"`
+	JSON    speedAPIAvailabilitiesListResponseJSON `json:"-"`
 }
 
 // speedAPIAvailabilitiesListResponseJSON contains the JSON metadata for the struct
 // [SpeedAPIAvailabilitiesListResponse]
 type speedAPIAvailabilitiesListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIAvailabilitiesListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIAvailabilitiesListResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    speedAPIAvailabilitiesListResponseErrorJSON `json:"-"`
+}
+
+// speedAPIAvailabilitiesListResponseErrorJSON contains the JSON metadata for the
+// struct [SpeedAPIAvailabilitiesListResponseError]
+type speedAPIAvailabilitiesListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIAvailabilitiesListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIAvailabilitiesListResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    speedAPIAvailabilitiesListResponseMessageJSON `json:"-"`
+}
+
+// speedAPIAvailabilitiesListResponseMessageJSON contains the JSON metadata for the
+// struct [SpeedAPIAvailabilitiesListResponseMessage]
+type speedAPIAvailabilitiesListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIAvailabilitiesListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIAvailabilitiesListResponseResult struct {
+	Quota          SpeedAPIAvailabilitiesListResponseResultQuota    `json:"quota"`
+	Regions        []SpeedAPIAvailabilitiesListResponseResultRegion `json:"regions"`
+	RegionsPerPlan interface{}                                      `json:"regionsPerPlan"`
+	JSON           speedAPIAvailabilitiesListResponseResultJSON     `json:"-"`
+}
+
+// speedAPIAvailabilitiesListResponseResultJSON contains the JSON metadata for the
+// struct [SpeedAPIAvailabilitiesListResponseResult]
+type speedAPIAvailabilitiesListResponseResultJSON struct {
 	Quota          apijson.Field
 	Regions        apijson.Field
 	RegionsPerPlan apijson.Field
@@ -170,11 +187,11 @@ type speedAPIAvailabilitiesListResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *SpeedAPIAvailabilitiesListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIAvailabilitiesListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpeedAPIAvailabilitiesListResponseQuota struct {
+type SpeedAPIAvailabilitiesListResponseResultQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
 	// The number of tests available per plan.
@@ -184,13 +201,13 @@ type SpeedAPIAvailabilitiesListResponseQuota struct {
 	// The number of remaining tests available.
 	RemainingTests float64 `json:"remainingTests"`
 	// The number of schedules available per plan.
-	ScheduleQuotasPerPlan interface{}                                 `json:"scheduleQuotasPerPlan"`
-	JSON                  speedAPIAvailabilitiesListResponseQuotaJSON `json:"-"`
+	ScheduleQuotasPerPlan interface{}                                       `json:"scheduleQuotasPerPlan"`
+	JSON                  speedAPIAvailabilitiesListResponseResultQuotaJSON `json:"-"`
 }
 
-// speedAPIAvailabilitiesListResponseQuotaJSON contains the JSON metadata for the
-// struct [SpeedAPIAvailabilitiesListResponseQuota]
-type speedAPIAvailabilitiesListResponseQuotaJSON struct {
+// speedAPIAvailabilitiesListResponseResultQuotaJSON contains the JSON metadata for
+// the struct [SpeedAPIAvailabilitiesListResponseResultQuota]
+type speedAPIAvailabilitiesListResponseResultQuotaJSON struct {
 	Plan                  apijson.Field
 	QuotasPerPlan         apijson.Field
 	RemainingSchedules    apijson.Field
@@ -200,72 +217,134 @@ type speedAPIAvailabilitiesListResponseQuotaJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *SpeedAPIAvailabilitiesListResponseQuota) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIAvailabilitiesListResponseResultQuota) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region with a label.
-type SpeedAPIAvailabilitiesListResponseRegion struct {
+type SpeedAPIAvailabilitiesListResponseResultRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAPIAvailabilitiesListResponseRegionsValue `json:"value"`
-	JSON  speedAPIAvailabilitiesListResponseRegionJSON   `json:"-"`
+	Value SpeedAPIAvailabilitiesListResponseResultRegionsValue `json:"value"`
+	JSON  speedAPIAvailabilitiesListResponseResultRegionJSON   `json:"-"`
 }
 
-// speedAPIAvailabilitiesListResponseRegionJSON contains the JSON metadata for the
-// struct [SpeedAPIAvailabilitiesListResponseRegion]
-type speedAPIAvailabilitiesListResponseRegionJSON struct {
+// speedAPIAvailabilitiesListResponseResultRegionJSON contains the JSON metadata
+// for the struct [SpeedAPIAvailabilitiesListResponseResultRegion]
+type speedAPIAvailabilitiesListResponseResultRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPIAvailabilitiesListResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIAvailabilitiesListResponseResultRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAPIAvailabilitiesListResponseRegionsValue string
+type SpeedAPIAvailabilitiesListResponseResultRegionsValue string
 
 const (
-	SpeedAPIAvailabilitiesListResponseRegionsValueAsiaEast1           SpeedAPIAvailabilitiesListResponseRegionsValue = "asia-east1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueAsiaNortheast1      SpeedAPIAvailabilitiesListResponseRegionsValue = "asia-northeast1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueAsiaNortheast2      SpeedAPIAvailabilitiesListResponseRegionsValue = "asia-northeast2"
-	SpeedAPIAvailabilitiesListResponseRegionsValueAsiaSouth1          SpeedAPIAvailabilitiesListResponseRegionsValue = "asia-south1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueAsiaSoutheast1      SpeedAPIAvailabilitiesListResponseRegionsValue = "asia-southeast1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueAustraliaSoutheast1 SpeedAPIAvailabilitiesListResponseRegionsValue = "australia-southeast1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeNorth1        SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-north1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeSouthwest1    SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-southwest1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest1         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest2         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west2"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest3         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west3"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest4         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west4"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest8         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west8"
-	SpeedAPIAvailabilitiesListResponseRegionsValueEuropeWest9         SpeedAPIAvailabilitiesListResponseRegionsValue = "europe-west9"
-	SpeedAPIAvailabilitiesListResponseRegionsValueMeWest1             SpeedAPIAvailabilitiesListResponseRegionsValue = "me-west1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueSouthamericaEast1   SpeedAPIAvailabilitiesListResponseRegionsValue = "southamerica-east1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueUsCentral1          SpeedAPIAvailabilitiesListResponseRegionsValue = "us-central1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueUsEast1             SpeedAPIAvailabilitiesListResponseRegionsValue = "us-east1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueUsEast4             SpeedAPIAvailabilitiesListResponseRegionsValue = "us-east4"
-	SpeedAPIAvailabilitiesListResponseRegionsValueUsSouth1            SpeedAPIAvailabilitiesListResponseRegionsValue = "us-south1"
-	SpeedAPIAvailabilitiesListResponseRegionsValueUsWest1             SpeedAPIAvailabilitiesListResponseRegionsValue = "us-west1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAsiaEast1           SpeedAPIAvailabilitiesListResponseResultRegionsValue = "asia-east1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAsiaNortheast1      SpeedAPIAvailabilitiesListResponseResultRegionsValue = "asia-northeast1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAsiaNortheast2      SpeedAPIAvailabilitiesListResponseResultRegionsValue = "asia-northeast2"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAsiaSouth1          SpeedAPIAvailabilitiesListResponseResultRegionsValue = "asia-south1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAsiaSoutheast1      SpeedAPIAvailabilitiesListResponseResultRegionsValue = "asia-southeast1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueAustraliaSoutheast1 SpeedAPIAvailabilitiesListResponseResultRegionsValue = "australia-southeast1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeNorth1        SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-north1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeSouthwest1    SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-southwest1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest1         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest2         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west2"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest3         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west3"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest4         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west4"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest8         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west8"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueEuropeWest9         SpeedAPIAvailabilitiesListResponseResultRegionsValue = "europe-west9"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueMeWest1             SpeedAPIAvailabilitiesListResponseResultRegionsValue = "me-west1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueSouthamericaEast1   SpeedAPIAvailabilitiesListResponseResultRegionsValue = "southamerica-east1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueUsCentral1          SpeedAPIAvailabilitiesListResponseResultRegionsValue = "us-central1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueUsEast1             SpeedAPIAvailabilitiesListResponseResultRegionsValue = "us-east1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueUsEast4             SpeedAPIAvailabilitiesListResponseResultRegionsValue = "us-east4"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueUsSouth1            SpeedAPIAvailabilitiesListResponseResultRegionsValue = "us-south1"
+	SpeedAPIAvailabilitiesListResponseResultRegionsValueUsWest1             SpeedAPIAvailabilitiesListResponseResultRegionsValue = "us-west1"
 )
 
 type SpeedAPIPagesListResponse struct {
-	// A test region with a label.
-	Region SpeedAPIPagesListResponseRegion `json:"region"`
-	// The frequency of the test.
-	ScheduleFrequency SpeedAPIPagesListResponseScheduleFrequency `json:"scheduleFrequency"`
-	Tests             []SpeedAPIPagesListResponseTest            `json:"tests"`
-	// A URL.
-	URL  string                        `json:"url"`
-	JSON speedAPIPagesListResponseJSON `json:"-"`
+	Errors   []SpeedAPIPagesListResponseError   `json:"errors"`
+	Messages []SpeedAPIPagesListResponseMessage `json:"messages"`
+	Result   []SpeedAPIPagesListResponseResult  `json:"result"`
+	// Whether the API call was successful.
+	Success bool                          `json:"success"`
+	JSON    speedAPIPagesListResponseJSON `json:"-"`
 }
 
 // speedAPIPagesListResponseJSON contains the JSON metadata for the struct
 // [SpeedAPIPagesListResponse]
 type speedAPIPagesListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIPagesListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIPagesListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    speedAPIPagesListResponseErrorJSON `json:"-"`
+}
+
+// speedAPIPagesListResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPIPagesListResponseError]
+type speedAPIPagesListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIPagesListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIPagesListResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    speedAPIPagesListResponseMessageJSON `json:"-"`
+}
+
+// speedAPIPagesListResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPIPagesListResponseMessage]
+type speedAPIPagesListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIPagesListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIPagesListResponseResult struct {
+	// A test region with a label.
+	Region SpeedAPIPagesListResponseResultRegion `json:"region"`
+	// The frequency of the test.
+	ScheduleFrequency SpeedAPIPagesListResponseResultScheduleFrequency `json:"scheduleFrequency"`
+	Tests             []SpeedAPIPagesListResponseResultTest            `json:"tests"`
+	// A URL.
+	URL  string                              `json:"url"`
+	JSON speedAPIPagesListResponseResultJSON `json:"-"`
+}
+
+// speedAPIPagesListResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPIPagesListResponseResult]
+type speedAPIPagesListResponseResultJSON struct {
 	Region            apijson.Field
 	ScheduleFrequency apijson.Field
 	Tests             apijson.Field
@@ -274,86 +353,86 @@ type speedAPIPagesListResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region with a label.
-type SpeedAPIPagesListResponseRegion struct {
+type SpeedAPIPagesListResponseResultRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAPIPagesListResponseRegionValue `json:"value"`
-	JSON  speedAPIPagesListResponseRegionJSON  `json:"-"`
+	Value SpeedAPIPagesListResponseResultRegionValue `json:"value"`
+	JSON  speedAPIPagesListResponseResultRegionJSON  `json:"-"`
 }
 
-// speedAPIPagesListResponseRegionJSON contains the JSON metadata for the struct
-// [SpeedAPIPagesListResponseRegion]
-type speedAPIPagesListResponseRegionJSON struct {
+// speedAPIPagesListResponseResultRegionJSON contains the JSON metadata for the
+// struct [SpeedAPIPagesListResponseResultRegion]
+type speedAPIPagesListResponseResultRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAPIPagesListResponseRegionValue string
+type SpeedAPIPagesListResponseResultRegionValue string
 
 const (
-	SpeedAPIPagesListResponseRegionValueAsiaEast1           SpeedAPIPagesListResponseRegionValue = "asia-east1"
-	SpeedAPIPagesListResponseRegionValueAsiaNortheast1      SpeedAPIPagesListResponseRegionValue = "asia-northeast1"
-	SpeedAPIPagesListResponseRegionValueAsiaNortheast2      SpeedAPIPagesListResponseRegionValue = "asia-northeast2"
-	SpeedAPIPagesListResponseRegionValueAsiaSouth1          SpeedAPIPagesListResponseRegionValue = "asia-south1"
-	SpeedAPIPagesListResponseRegionValueAsiaSoutheast1      SpeedAPIPagesListResponseRegionValue = "asia-southeast1"
-	SpeedAPIPagesListResponseRegionValueAustraliaSoutheast1 SpeedAPIPagesListResponseRegionValue = "australia-southeast1"
-	SpeedAPIPagesListResponseRegionValueEuropeNorth1        SpeedAPIPagesListResponseRegionValue = "europe-north1"
-	SpeedAPIPagesListResponseRegionValueEuropeSouthwest1    SpeedAPIPagesListResponseRegionValue = "europe-southwest1"
-	SpeedAPIPagesListResponseRegionValueEuropeWest1         SpeedAPIPagesListResponseRegionValue = "europe-west1"
-	SpeedAPIPagesListResponseRegionValueEuropeWest2         SpeedAPIPagesListResponseRegionValue = "europe-west2"
-	SpeedAPIPagesListResponseRegionValueEuropeWest3         SpeedAPIPagesListResponseRegionValue = "europe-west3"
-	SpeedAPIPagesListResponseRegionValueEuropeWest4         SpeedAPIPagesListResponseRegionValue = "europe-west4"
-	SpeedAPIPagesListResponseRegionValueEuropeWest8         SpeedAPIPagesListResponseRegionValue = "europe-west8"
-	SpeedAPIPagesListResponseRegionValueEuropeWest9         SpeedAPIPagesListResponseRegionValue = "europe-west9"
-	SpeedAPIPagesListResponseRegionValueMeWest1             SpeedAPIPagesListResponseRegionValue = "me-west1"
-	SpeedAPIPagesListResponseRegionValueSouthamericaEast1   SpeedAPIPagesListResponseRegionValue = "southamerica-east1"
-	SpeedAPIPagesListResponseRegionValueUsCentral1          SpeedAPIPagesListResponseRegionValue = "us-central1"
-	SpeedAPIPagesListResponseRegionValueUsEast1             SpeedAPIPagesListResponseRegionValue = "us-east1"
-	SpeedAPIPagesListResponseRegionValueUsEast4             SpeedAPIPagesListResponseRegionValue = "us-east4"
-	SpeedAPIPagesListResponseRegionValueUsSouth1            SpeedAPIPagesListResponseRegionValue = "us-south1"
-	SpeedAPIPagesListResponseRegionValueUsWest1             SpeedAPIPagesListResponseRegionValue = "us-west1"
+	SpeedAPIPagesListResponseResultRegionValueAsiaEast1           SpeedAPIPagesListResponseResultRegionValue = "asia-east1"
+	SpeedAPIPagesListResponseResultRegionValueAsiaNortheast1      SpeedAPIPagesListResponseResultRegionValue = "asia-northeast1"
+	SpeedAPIPagesListResponseResultRegionValueAsiaNortheast2      SpeedAPIPagesListResponseResultRegionValue = "asia-northeast2"
+	SpeedAPIPagesListResponseResultRegionValueAsiaSouth1          SpeedAPIPagesListResponseResultRegionValue = "asia-south1"
+	SpeedAPIPagesListResponseResultRegionValueAsiaSoutheast1      SpeedAPIPagesListResponseResultRegionValue = "asia-southeast1"
+	SpeedAPIPagesListResponseResultRegionValueAustraliaSoutheast1 SpeedAPIPagesListResponseResultRegionValue = "australia-southeast1"
+	SpeedAPIPagesListResponseResultRegionValueEuropeNorth1        SpeedAPIPagesListResponseResultRegionValue = "europe-north1"
+	SpeedAPIPagesListResponseResultRegionValueEuropeSouthwest1    SpeedAPIPagesListResponseResultRegionValue = "europe-southwest1"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest1         SpeedAPIPagesListResponseResultRegionValue = "europe-west1"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest2         SpeedAPIPagesListResponseResultRegionValue = "europe-west2"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest3         SpeedAPIPagesListResponseResultRegionValue = "europe-west3"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest4         SpeedAPIPagesListResponseResultRegionValue = "europe-west4"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest8         SpeedAPIPagesListResponseResultRegionValue = "europe-west8"
+	SpeedAPIPagesListResponseResultRegionValueEuropeWest9         SpeedAPIPagesListResponseResultRegionValue = "europe-west9"
+	SpeedAPIPagesListResponseResultRegionValueMeWest1             SpeedAPIPagesListResponseResultRegionValue = "me-west1"
+	SpeedAPIPagesListResponseResultRegionValueSouthamericaEast1   SpeedAPIPagesListResponseResultRegionValue = "southamerica-east1"
+	SpeedAPIPagesListResponseResultRegionValueUsCentral1          SpeedAPIPagesListResponseResultRegionValue = "us-central1"
+	SpeedAPIPagesListResponseResultRegionValueUsEast1             SpeedAPIPagesListResponseResultRegionValue = "us-east1"
+	SpeedAPIPagesListResponseResultRegionValueUsEast4             SpeedAPIPagesListResponseResultRegionValue = "us-east4"
+	SpeedAPIPagesListResponseResultRegionValueUsSouth1            SpeedAPIPagesListResponseResultRegionValue = "us-south1"
+	SpeedAPIPagesListResponseResultRegionValueUsWest1             SpeedAPIPagesListResponseResultRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type SpeedAPIPagesListResponseScheduleFrequency string
+type SpeedAPIPagesListResponseResultScheduleFrequency string
 
 const (
-	SpeedAPIPagesListResponseScheduleFrequencyDaily  SpeedAPIPagesListResponseScheduleFrequency = "DAILY"
-	SpeedAPIPagesListResponseScheduleFrequencyWeekly SpeedAPIPagesListResponseScheduleFrequency = "WEEKLY"
+	SpeedAPIPagesListResponseResultScheduleFrequencyDaily  SpeedAPIPagesListResponseResultScheduleFrequency = "DAILY"
+	SpeedAPIPagesListResponseResultScheduleFrequencyWeekly SpeedAPIPagesListResponseResultScheduleFrequency = "WEEKLY"
 )
 
-type SpeedAPIPagesListResponseTest struct {
+type SpeedAPIPagesListResponseResultTest struct {
 	// UUID
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
 	// The Lighthouse report.
-	DesktopReport SpeedAPIPagesListResponseTestsDesktopReport `json:"desktopReport"`
+	DesktopReport SpeedAPIPagesListResponseResultTestsDesktopReport `json:"desktopReport"`
 	// The Lighthouse report.
-	MobileReport SpeedAPIPagesListResponseTestsMobileReport `json:"mobileReport"`
+	MobileReport SpeedAPIPagesListResponseResultTestsMobileReport `json:"mobileReport"`
 	// A test region with a label.
-	Region SpeedAPIPagesListResponseTestsRegion `json:"region"`
+	Region SpeedAPIPagesListResponseResultTestsRegion `json:"region"`
 	// The frequency of the test.
-	ScheduleFrequency SpeedAPIPagesListResponseTestsScheduleFrequency `json:"scheduleFrequency"`
+	ScheduleFrequency SpeedAPIPagesListResponseResultTestsScheduleFrequency `json:"scheduleFrequency"`
 	// A URL.
-	URL  string                            `json:"url"`
-	JSON speedAPIPagesListResponseTestJSON `json:"-"`
+	URL  string                                  `json:"url"`
+	JSON speedAPIPagesListResponseResultTestJSON `json:"-"`
 }
 
-// speedAPIPagesListResponseTestJSON contains the JSON metadata for the struct
-// [SpeedAPIPagesListResponseTest]
-type speedAPIPagesListResponseTestJSON struct {
+// speedAPIPagesListResponseResultTestJSON contains the JSON metadata for the
+// struct [SpeedAPIPagesListResponseResultTest]
+type speedAPIPagesListResponseResultTestJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -365,17 +444,17 @@ type speedAPIPagesListResponseTestJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTest) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Lighthouse report.
-type SpeedAPIPagesListResponseTestsDesktopReport struct {
+type SpeedAPIPagesListResponseResultTestsDesktopReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPIPagesListResponseTestsDesktopReportDeviceType `json:"deviceType"`
-	Error      SpeedAPIPagesListResponseTestsDesktopReportError      `json:"error"`
+	DeviceType SpeedAPIPagesListResponseResultTestsDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedAPIPagesListResponseResultTestsDesktopReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -387,19 +466,19 @@ type SpeedAPIPagesListResponseTestsDesktopReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPIPagesListResponseTestsDesktopReportState `json:"state"`
+	State SpeedAPIPagesListResponseResultTestsDesktopReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                         `json:"tti"`
-	JSON speedAPIPagesListResponseTestsDesktopReportJSON `json:"-"`
+	Tti  float64                                               `json:"tti"`
+	JSON speedAPIPagesListResponseResultTestsDesktopReportJSON `json:"-"`
 }
 
-// speedAPIPagesListResponseTestsDesktopReportJSON contains the JSON metadata for
-// the struct [SpeedAPIPagesListResponseTestsDesktopReport]
-type speedAPIPagesListResponseTestsDesktopReportJSON struct {
+// speedAPIPagesListResponseResultTestsDesktopReportJSON contains the JSON metadata
+// for the struct [SpeedAPIPagesListResponseResultTestsDesktopReport]
+type speedAPIPagesListResponseResultTestsDesktopReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -416,31 +495,31 @@ type speedAPIPagesListResponseTestsDesktopReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTestsDesktopReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTestsDesktopReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPIPagesListResponseTestsDesktopReportDeviceType string
+type SpeedAPIPagesListResponseResultTestsDesktopReportDeviceType string
 
 const (
-	SpeedAPIPagesListResponseTestsDesktopReportDeviceTypeDesktop SpeedAPIPagesListResponseTestsDesktopReportDeviceType = "DESKTOP"
-	SpeedAPIPagesListResponseTestsDesktopReportDeviceTypeMobile  SpeedAPIPagesListResponseTestsDesktopReportDeviceType = "MOBILE"
+	SpeedAPIPagesListResponseResultTestsDesktopReportDeviceTypeDesktop SpeedAPIPagesListResponseResultTestsDesktopReportDeviceType = "DESKTOP"
+	SpeedAPIPagesListResponseResultTestsDesktopReportDeviceTypeMobile  SpeedAPIPagesListResponseResultTestsDesktopReportDeviceType = "MOBILE"
 )
 
-type SpeedAPIPagesListResponseTestsDesktopReportError struct {
+type SpeedAPIPagesListResponseResultTestsDesktopReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPIPagesListResponseTestsDesktopReportErrorCode `json:"code"`
+	Code SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                               `json:"finalDisplayedUrl"`
-	JSON              speedAPIPagesListResponseTestsDesktopReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                                     `json:"finalDisplayedUrl"`
+	JSON              speedAPIPagesListResponseResultTestsDesktopReportErrorJSON `json:"-"`
 }
 
-// speedAPIPagesListResponseTestsDesktopReportErrorJSON contains the JSON metadata
-// for the struct [SpeedAPIPagesListResponseTestsDesktopReportError]
-type speedAPIPagesListResponseTestsDesktopReportErrorJSON struct {
+// speedAPIPagesListResponseResultTestsDesktopReportErrorJSON contains the JSON
+// metadata for the struct [SpeedAPIPagesListResponseResultTestsDesktopReportError]
+type speedAPIPagesListResponseResultTestsDesktopReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -448,37 +527,37 @@ type speedAPIPagesListResponseTestsDesktopReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTestsDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTestsDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPIPagesListResponseTestsDesktopReportErrorCode string
+type SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode string
 
 const (
-	SpeedAPIPagesListResponseTestsDesktopReportErrorCodeNotReachable      SpeedAPIPagesListResponseTestsDesktopReportErrorCode = "NOT_REACHABLE"
-	SpeedAPIPagesListResponseTestsDesktopReportErrorCodeDNSFailure        SpeedAPIPagesListResponseTestsDesktopReportErrorCode = "DNS_FAILURE"
-	SpeedAPIPagesListResponseTestsDesktopReportErrorCodeNotHTML           SpeedAPIPagesListResponseTestsDesktopReportErrorCode = "NOT_HTML"
-	SpeedAPIPagesListResponseTestsDesktopReportErrorCodeLighthouseTimeout SpeedAPIPagesListResponseTestsDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPIPagesListResponseTestsDesktopReportErrorCodeUnknown           SpeedAPIPagesListResponseTestsDesktopReportErrorCode = "UNKNOWN"
+	SpeedAPIPagesListResponseResultTestsDesktopReportErrorCodeNotReachable      SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedAPIPagesListResponseResultTestsDesktopReportErrorCodeDNSFailure        SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedAPIPagesListResponseResultTestsDesktopReportErrorCodeNotHTML           SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode = "NOT_HTML"
+	SpeedAPIPagesListResponseResultTestsDesktopReportErrorCodeLighthouseTimeout SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPIPagesListResponseResultTestsDesktopReportErrorCodeUnknown           SpeedAPIPagesListResponseResultTestsDesktopReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPIPagesListResponseTestsDesktopReportState string
+type SpeedAPIPagesListResponseResultTestsDesktopReportState string
 
 const (
-	SpeedAPIPagesListResponseTestsDesktopReportStateRunning  SpeedAPIPagesListResponseTestsDesktopReportState = "RUNNING"
-	SpeedAPIPagesListResponseTestsDesktopReportStateComplete SpeedAPIPagesListResponseTestsDesktopReportState = "COMPLETE"
-	SpeedAPIPagesListResponseTestsDesktopReportStateFailed   SpeedAPIPagesListResponseTestsDesktopReportState = "FAILED"
+	SpeedAPIPagesListResponseResultTestsDesktopReportStateRunning  SpeedAPIPagesListResponseResultTestsDesktopReportState = "RUNNING"
+	SpeedAPIPagesListResponseResultTestsDesktopReportStateComplete SpeedAPIPagesListResponseResultTestsDesktopReportState = "COMPLETE"
+	SpeedAPIPagesListResponseResultTestsDesktopReportStateFailed   SpeedAPIPagesListResponseResultTestsDesktopReportState = "FAILED"
 )
 
 // The Lighthouse report.
-type SpeedAPIPagesListResponseTestsMobileReport struct {
+type SpeedAPIPagesListResponseResultTestsMobileReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPIPagesListResponseTestsMobileReportDeviceType `json:"deviceType"`
-	Error      SpeedAPIPagesListResponseTestsMobileReportError      `json:"error"`
+	DeviceType SpeedAPIPagesListResponseResultTestsMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedAPIPagesListResponseResultTestsMobileReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -490,19 +569,19 @@ type SpeedAPIPagesListResponseTestsMobileReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPIPagesListResponseTestsMobileReportState `json:"state"`
+	State SpeedAPIPagesListResponseResultTestsMobileReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                        `json:"tti"`
-	JSON speedAPIPagesListResponseTestsMobileReportJSON `json:"-"`
+	Tti  float64                                              `json:"tti"`
+	JSON speedAPIPagesListResponseResultTestsMobileReportJSON `json:"-"`
 }
 
-// speedAPIPagesListResponseTestsMobileReportJSON contains the JSON metadata for
-// the struct [SpeedAPIPagesListResponseTestsMobileReport]
-type speedAPIPagesListResponseTestsMobileReportJSON struct {
+// speedAPIPagesListResponseResultTestsMobileReportJSON contains the JSON metadata
+// for the struct [SpeedAPIPagesListResponseResultTestsMobileReport]
+type speedAPIPagesListResponseResultTestsMobileReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -519,31 +598,31 @@ type speedAPIPagesListResponseTestsMobileReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTestsMobileReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTestsMobileReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPIPagesListResponseTestsMobileReportDeviceType string
+type SpeedAPIPagesListResponseResultTestsMobileReportDeviceType string
 
 const (
-	SpeedAPIPagesListResponseTestsMobileReportDeviceTypeDesktop SpeedAPIPagesListResponseTestsMobileReportDeviceType = "DESKTOP"
-	SpeedAPIPagesListResponseTestsMobileReportDeviceTypeMobile  SpeedAPIPagesListResponseTestsMobileReportDeviceType = "MOBILE"
+	SpeedAPIPagesListResponseResultTestsMobileReportDeviceTypeDesktop SpeedAPIPagesListResponseResultTestsMobileReportDeviceType = "DESKTOP"
+	SpeedAPIPagesListResponseResultTestsMobileReportDeviceTypeMobile  SpeedAPIPagesListResponseResultTestsMobileReportDeviceType = "MOBILE"
 )
 
-type SpeedAPIPagesListResponseTestsMobileReportError struct {
+type SpeedAPIPagesListResponseResultTestsMobileReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPIPagesListResponseTestsMobileReportErrorCode `json:"code"`
+	Code SpeedAPIPagesListResponseResultTestsMobileReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                              `json:"finalDisplayedUrl"`
-	JSON              speedAPIPagesListResponseTestsMobileReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                                    `json:"finalDisplayedUrl"`
+	JSON              speedAPIPagesListResponseResultTestsMobileReportErrorJSON `json:"-"`
 }
 
-// speedAPIPagesListResponseTestsMobileReportErrorJSON contains the JSON metadata
-// for the struct [SpeedAPIPagesListResponseTestsMobileReportError]
-type speedAPIPagesListResponseTestsMobileReportErrorJSON struct {
+// speedAPIPagesListResponseResultTestsMobileReportErrorJSON contains the JSON
+// metadata for the struct [SpeedAPIPagesListResponseResultTestsMobileReportError]
+type speedAPIPagesListResponseResultTestsMobileReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -551,96 +630,102 @@ type speedAPIPagesListResponseTestsMobileReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTestsMobileReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTestsMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPIPagesListResponseTestsMobileReportErrorCode string
+type SpeedAPIPagesListResponseResultTestsMobileReportErrorCode string
 
 const (
-	SpeedAPIPagesListResponseTestsMobileReportErrorCodeNotReachable      SpeedAPIPagesListResponseTestsMobileReportErrorCode = "NOT_REACHABLE"
-	SpeedAPIPagesListResponseTestsMobileReportErrorCodeDNSFailure        SpeedAPIPagesListResponseTestsMobileReportErrorCode = "DNS_FAILURE"
-	SpeedAPIPagesListResponseTestsMobileReportErrorCodeNotHTML           SpeedAPIPagesListResponseTestsMobileReportErrorCode = "NOT_HTML"
-	SpeedAPIPagesListResponseTestsMobileReportErrorCodeLighthouseTimeout SpeedAPIPagesListResponseTestsMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPIPagesListResponseTestsMobileReportErrorCodeUnknown           SpeedAPIPagesListResponseTestsMobileReportErrorCode = "UNKNOWN"
+	SpeedAPIPagesListResponseResultTestsMobileReportErrorCodeNotReachable      SpeedAPIPagesListResponseResultTestsMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedAPIPagesListResponseResultTestsMobileReportErrorCodeDNSFailure        SpeedAPIPagesListResponseResultTestsMobileReportErrorCode = "DNS_FAILURE"
+	SpeedAPIPagesListResponseResultTestsMobileReportErrorCodeNotHTML           SpeedAPIPagesListResponseResultTestsMobileReportErrorCode = "NOT_HTML"
+	SpeedAPIPagesListResponseResultTestsMobileReportErrorCodeLighthouseTimeout SpeedAPIPagesListResponseResultTestsMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPIPagesListResponseResultTestsMobileReportErrorCodeUnknown           SpeedAPIPagesListResponseResultTestsMobileReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPIPagesListResponseTestsMobileReportState string
+type SpeedAPIPagesListResponseResultTestsMobileReportState string
 
 const (
-	SpeedAPIPagesListResponseTestsMobileReportStateRunning  SpeedAPIPagesListResponseTestsMobileReportState = "RUNNING"
-	SpeedAPIPagesListResponseTestsMobileReportStateComplete SpeedAPIPagesListResponseTestsMobileReportState = "COMPLETE"
-	SpeedAPIPagesListResponseTestsMobileReportStateFailed   SpeedAPIPagesListResponseTestsMobileReportState = "FAILED"
+	SpeedAPIPagesListResponseResultTestsMobileReportStateRunning  SpeedAPIPagesListResponseResultTestsMobileReportState = "RUNNING"
+	SpeedAPIPagesListResponseResultTestsMobileReportStateComplete SpeedAPIPagesListResponseResultTestsMobileReportState = "COMPLETE"
+	SpeedAPIPagesListResponseResultTestsMobileReportStateFailed   SpeedAPIPagesListResponseResultTestsMobileReportState = "FAILED"
 )
 
 // A test region with a label.
-type SpeedAPIPagesListResponseTestsRegion struct {
+type SpeedAPIPagesListResponseResultTestsRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAPIPagesListResponseTestsRegionValue `json:"value"`
-	JSON  speedAPIPagesListResponseTestsRegionJSON  `json:"-"`
+	Value SpeedAPIPagesListResponseResultTestsRegionValue `json:"value"`
+	JSON  speedAPIPagesListResponseResultTestsRegionJSON  `json:"-"`
 }
 
-// speedAPIPagesListResponseTestsRegionJSON contains the JSON metadata for the
-// struct [SpeedAPIPagesListResponseTestsRegion]
-type speedAPIPagesListResponseTestsRegionJSON struct {
+// speedAPIPagesListResponseResultTestsRegionJSON contains the JSON metadata for
+// the struct [SpeedAPIPagesListResponseResultTestsRegion]
+type speedAPIPagesListResponseResultTestsRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPIPagesListResponseTestsRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPIPagesListResponseResultTestsRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAPIPagesListResponseTestsRegionValue string
+type SpeedAPIPagesListResponseResultTestsRegionValue string
 
 const (
-	SpeedAPIPagesListResponseTestsRegionValueAsiaEast1           SpeedAPIPagesListResponseTestsRegionValue = "asia-east1"
-	SpeedAPIPagesListResponseTestsRegionValueAsiaNortheast1      SpeedAPIPagesListResponseTestsRegionValue = "asia-northeast1"
-	SpeedAPIPagesListResponseTestsRegionValueAsiaNortheast2      SpeedAPIPagesListResponseTestsRegionValue = "asia-northeast2"
-	SpeedAPIPagesListResponseTestsRegionValueAsiaSouth1          SpeedAPIPagesListResponseTestsRegionValue = "asia-south1"
-	SpeedAPIPagesListResponseTestsRegionValueAsiaSoutheast1      SpeedAPIPagesListResponseTestsRegionValue = "asia-southeast1"
-	SpeedAPIPagesListResponseTestsRegionValueAustraliaSoutheast1 SpeedAPIPagesListResponseTestsRegionValue = "australia-southeast1"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeNorth1        SpeedAPIPagesListResponseTestsRegionValue = "europe-north1"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeSouthwest1    SpeedAPIPagesListResponseTestsRegionValue = "europe-southwest1"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest1         SpeedAPIPagesListResponseTestsRegionValue = "europe-west1"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest2         SpeedAPIPagesListResponseTestsRegionValue = "europe-west2"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest3         SpeedAPIPagesListResponseTestsRegionValue = "europe-west3"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest4         SpeedAPIPagesListResponseTestsRegionValue = "europe-west4"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest8         SpeedAPIPagesListResponseTestsRegionValue = "europe-west8"
-	SpeedAPIPagesListResponseTestsRegionValueEuropeWest9         SpeedAPIPagesListResponseTestsRegionValue = "europe-west9"
-	SpeedAPIPagesListResponseTestsRegionValueMeWest1             SpeedAPIPagesListResponseTestsRegionValue = "me-west1"
-	SpeedAPIPagesListResponseTestsRegionValueSouthamericaEast1   SpeedAPIPagesListResponseTestsRegionValue = "southamerica-east1"
-	SpeedAPIPagesListResponseTestsRegionValueUsCentral1          SpeedAPIPagesListResponseTestsRegionValue = "us-central1"
-	SpeedAPIPagesListResponseTestsRegionValueUsEast1             SpeedAPIPagesListResponseTestsRegionValue = "us-east1"
-	SpeedAPIPagesListResponseTestsRegionValueUsEast4             SpeedAPIPagesListResponseTestsRegionValue = "us-east4"
-	SpeedAPIPagesListResponseTestsRegionValueUsSouth1            SpeedAPIPagesListResponseTestsRegionValue = "us-south1"
-	SpeedAPIPagesListResponseTestsRegionValueUsWest1             SpeedAPIPagesListResponseTestsRegionValue = "us-west1"
+	SpeedAPIPagesListResponseResultTestsRegionValueAsiaEast1           SpeedAPIPagesListResponseResultTestsRegionValue = "asia-east1"
+	SpeedAPIPagesListResponseResultTestsRegionValueAsiaNortheast1      SpeedAPIPagesListResponseResultTestsRegionValue = "asia-northeast1"
+	SpeedAPIPagesListResponseResultTestsRegionValueAsiaNortheast2      SpeedAPIPagesListResponseResultTestsRegionValue = "asia-northeast2"
+	SpeedAPIPagesListResponseResultTestsRegionValueAsiaSouth1          SpeedAPIPagesListResponseResultTestsRegionValue = "asia-south1"
+	SpeedAPIPagesListResponseResultTestsRegionValueAsiaSoutheast1      SpeedAPIPagesListResponseResultTestsRegionValue = "asia-southeast1"
+	SpeedAPIPagesListResponseResultTestsRegionValueAustraliaSoutheast1 SpeedAPIPagesListResponseResultTestsRegionValue = "australia-southeast1"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeNorth1        SpeedAPIPagesListResponseResultTestsRegionValue = "europe-north1"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeSouthwest1    SpeedAPIPagesListResponseResultTestsRegionValue = "europe-southwest1"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest1         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west1"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest2         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west2"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest3         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west3"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest4         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west4"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest8         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west8"
+	SpeedAPIPagesListResponseResultTestsRegionValueEuropeWest9         SpeedAPIPagesListResponseResultTestsRegionValue = "europe-west9"
+	SpeedAPIPagesListResponseResultTestsRegionValueMeWest1             SpeedAPIPagesListResponseResultTestsRegionValue = "me-west1"
+	SpeedAPIPagesListResponseResultTestsRegionValueSouthamericaEast1   SpeedAPIPagesListResponseResultTestsRegionValue = "southamerica-east1"
+	SpeedAPIPagesListResponseResultTestsRegionValueUsCentral1          SpeedAPIPagesListResponseResultTestsRegionValue = "us-central1"
+	SpeedAPIPagesListResponseResultTestsRegionValueUsEast1             SpeedAPIPagesListResponseResultTestsRegionValue = "us-east1"
+	SpeedAPIPagesListResponseResultTestsRegionValueUsEast4             SpeedAPIPagesListResponseResultTestsRegionValue = "us-east4"
+	SpeedAPIPagesListResponseResultTestsRegionValueUsSouth1            SpeedAPIPagesListResponseResultTestsRegionValue = "us-south1"
+	SpeedAPIPagesListResponseResultTestsRegionValueUsWest1             SpeedAPIPagesListResponseResultTestsRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type SpeedAPIPagesListResponseTestsScheduleFrequency string
+type SpeedAPIPagesListResponseResultTestsScheduleFrequency string
 
 const (
-	SpeedAPIPagesListResponseTestsScheduleFrequencyDaily  SpeedAPIPagesListResponseTestsScheduleFrequency = "DAILY"
-	SpeedAPIPagesListResponseTestsScheduleFrequencyWeekly SpeedAPIPagesListResponseTestsScheduleFrequency = "WEEKLY"
+	SpeedAPIPagesListResponseResultTestsScheduleFrequencyDaily  SpeedAPIPagesListResponseResultTestsScheduleFrequency = "DAILY"
+	SpeedAPIPagesListResponseResultTestsScheduleFrequencyWeekly SpeedAPIPagesListResponseResultTestsScheduleFrequency = "WEEKLY"
 )
 
 type SpeedAPIScheduleDeleteResponse struct {
-	// Number of items affected.
-	Count float64                            `json:"count"`
-	JSON  speedAPIScheduleDeleteResponseJSON `json:"-"`
+	Errors   []SpeedAPIScheduleDeleteResponseError   `json:"errors"`
+	Messages []SpeedAPIScheduleDeleteResponseMessage `json:"messages"`
+	Result   SpeedAPIScheduleDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                               `json:"success"`
+	JSON    speedAPIScheduleDeleteResponseJSON `json:"-"`
 }
 
 // speedAPIScheduleDeleteResponseJSON contains the JSON metadata for the struct
 // [SpeedAPIScheduleDeleteResponse]
 type speedAPIScheduleDeleteResponseJSON struct {
-	Count       apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -649,23 +734,79 @@ func (r *SpeedAPIScheduleDeleteResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The test schedule.
+type SpeedAPIScheduleDeleteResponseError struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    speedAPIScheduleDeleteResponseErrorJSON `json:"-"`
+}
+
+// speedAPIScheduleDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [SpeedAPIScheduleDeleteResponseError]
+type speedAPIScheduleDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIScheduleDeleteResponseMessage struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    speedAPIScheduleDeleteResponseMessageJSON `json:"-"`
+}
+
+// speedAPIScheduleDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [SpeedAPIScheduleDeleteResponseMessage]
+type speedAPIScheduleDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIScheduleDeleteResponseResult struct {
+	// Number of items affected.
+	Count float64                                  `json:"count"`
+	JSON  speedAPIScheduleDeleteResponseResultJSON `json:"-"`
+}
+
+// speedAPIScheduleDeleteResponseResultJSON contains the JSON metadata for the
+// struct [SpeedAPIScheduleDeleteResponseResult]
+type speedAPIScheduleDeleteResponseResultJSON struct {
+	Count       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SpeedAPIScheduleGetResponse struct {
-	// The frequency of the test.
-	Frequency SpeedAPIScheduleGetResponseFrequency `json:"frequency"`
-	// A test region.
-	Region SpeedAPIScheduleGetResponseRegion `json:"region"`
-	// A URL.
-	URL  string                          `json:"url"`
-	JSON speedAPIScheduleGetResponseJSON `json:"-"`
+	Errors   []SpeedAPIScheduleGetResponseError   `json:"errors"`
+	Messages []SpeedAPIScheduleGetResponseMessage `json:"messages"`
+	// The test schedule.
+	Result SpeedAPIScheduleGetResponseResult `json:"result"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success"`
+	JSON    speedAPIScheduleGetResponseJSON `json:"-"`
 }
 
 // speedAPIScheduleGetResponseJSON contains the JSON metadata for the struct
 // [SpeedAPIScheduleGetResponse]
 type speedAPIScheduleGetResponseJSON struct {
-	Frequency   apijson.Field
-	Region      apijson.Field
-	URL         apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -674,61 +815,186 @@ func (r *SpeedAPIScheduleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SpeedAPIScheduleGetResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    speedAPIScheduleGetResponseErrorJSON `json:"-"`
+}
+
+// speedAPIScheduleGetResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPIScheduleGetResponseError]
+type speedAPIScheduleGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPIScheduleGetResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    speedAPIScheduleGetResponseMessageJSON `json:"-"`
+}
+
+// speedAPIScheduleGetResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPIScheduleGetResponseMessage]
+type speedAPIScheduleGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The test schedule.
+type SpeedAPIScheduleGetResponseResult struct {
+	// The frequency of the test.
+	Frequency SpeedAPIScheduleGetResponseResultFrequency `json:"frequency"`
+	// A test region.
+	Region SpeedAPIScheduleGetResponseResultRegion `json:"region"`
+	// A URL.
+	URL  string                                `json:"url"`
+	JSON speedAPIScheduleGetResponseResultJSON `json:"-"`
+}
+
+// speedAPIScheduleGetResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPIScheduleGetResponseResult]
+type speedAPIScheduleGetResponseResultJSON struct {
+	Frequency   apijson.Field
+	Region      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPIScheduleGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // The frequency of the test.
-type SpeedAPIScheduleGetResponseFrequency string
+type SpeedAPIScheduleGetResponseResultFrequency string
 
 const (
-	SpeedAPIScheduleGetResponseFrequencyDaily  SpeedAPIScheduleGetResponseFrequency = "DAILY"
-	SpeedAPIScheduleGetResponseFrequencyWeekly SpeedAPIScheduleGetResponseFrequency = "WEEKLY"
+	SpeedAPIScheduleGetResponseResultFrequencyDaily  SpeedAPIScheduleGetResponseResultFrequency = "DAILY"
+	SpeedAPIScheduleGetResponseResultFrequencyWeekly SpeedAPIScheduleGetResponseResultFrequency = "WEEKLY"
 )
 
 // A test region.
-type SpeedAPIScheduleGetResponseRegion string
+type SpeedAPIScheduleGetResponseResultRegion string
 
 const (
-	SpeedAPIScheduleGetResponseRegionAsiaEast1           SpeedAPIScheduleGetResponseRegion = "asia-east1"
-	SpeedAPIScheduleGetResponseRegionAsiaNortheast1      SpeedAPIScheduleGetResponseRegion = "asia-northeast1"
-	SpeedAPIScheduleGetResponseRegionAsiaNortheast2      SpeedAPIScheduleGetResponseRegion = "asia-northeast2"
-	SpeedAPIScheduleGetResponseRegionAsiaSouth1          SpeedAPIScheduleGetResponseRegion = "asia-south1"
-	SpeedAPIScheduleGetResponseRegionAsiaSoutheast1      SpeedAPIScheduleGetResponseRegion = "asia-southeast1"
-	SpeedAPIScheduleGetResponseRegionAustraliaSoutheast1 SpeedAPIScheduleGetResponseRegion = "australia-southeast1"
-	SpeedAPIScheduleGetResponseRegionEuropeNorth1        SpeedAPIScheduleGetResponseRegion = "europe-north1"
-	SpeedAPIScheduleGetResponseRegionEuropeSouthwest1    SpeedAPIScheduleGetResponseRegion = "europe-southwest1"
-	SpeedAPIScheduleGetResponseRegionEuropeWest1         SpeedAPIScheduleGetResponseRegion = "europe-west1"
-	SpeedAPIScheduleGetResponseRegionEuropeWest2         SpeedAPIScheduleGetResponseRegion = "europe-west2"
-	SpeedAPIScheduleGetResponseRegionEuropeWest3         SpeedAPIScheduleGetResponseRegion = "europe-west3"
-	SpeedAPIScheduleGetResponseRegionEuropeWest4         SpeedAPIScheduleGetResponseRegion = "europe-west4"
-	SpeedAPIScheduleGetResponseRegionEuropeWest8         SpeedAPIScheduleGetResponseRegion = "europe-west8"
-	SpeedAPIScheduleGetResponseRegionEuropeWest9         SpeedAPIScheduleGetResponseRegion = "europe-west9"
-	SpeedAPIScheduleGetResponseRegionMeWest1             SpeedAPIScheduleGetResponseRegion = "me-west1"
-	SpeedAPIScheduleGetResponseRegionSouthamericaEast1   SpeedAPIScheduleGetResponseRegion = "southamerica-east1"
-	SpeedAPIScheduleGetResponseRegionUsCentral1          SpeedAPIScheduleGetResponseRegion = "us-central1"
-	SpeedAPIScheduleGetResponseRegionUsEast1             SpeedAPIScheduleGetResponseRegion = "us-east1"
-	SpeedAPIScheduleGetResponseRegionUsEast4             SpeedAPIScheduleGetResponseRegion = "us-east4"
-	SpeedAPIScheduleGetResponseRegionUsSouth1            SpeedAPIScheduleGetResponseRegion = "us-south1"
-	SpeedAPIScheduleGetResponseRegionUsWest1             SpeedAPIScheduleGetResponseRegion = "us-west1"
+	SpeedAPIScheduleGetResponseResultRegionAsiaEast1           SpeedAPIScheduleGetResponseResultRegion = "asia-east1"
+	SpeedAPIScheduleGetResponseResultRegionAsiaNortheast1      SpeedAPIScheduleGetResponseResultRegion = "asia-northeast1"
+	SpeedAPIScheduleGetResponseResultRegionAsiaNortheast2      SpeedAPIScheduleGetResponseResultRegion = "asia-northeast2"
+	SpeedAPIScheduleGetResponseResultRegionAsiaSouth1          SpeedAPIScheduleGetResponseResultRegion = "asia-south1"
+	SpeedAPIScheduleGetResponseResultRegionAsiaSoutheast1      SpeedAPIScheduleGetResponseResultRegion = "asia-southeast1"
+	SpeedAPIScheduleGetResponseResultRegionAustraliaSoutheast1 SpeedAPIScheduleGetResponseResultRegion = "australia-southeast1"
+	SpeedAPIScheduleGetResponseResultRegionEuropeNorth1        SpeedAPIScheduleGetResponseResultRegion = "europe-north1"
+	SpeedAPIScheduleGetResponseResultRegionEuropeSouthwest1    SpeedAPIScheduleGetResponseResultRegion = "europe-southwest1"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest1         SpeedAPIScheduleGetResponseResultRegion = "europe-west1"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest2         SpeedAPIScheduleGetResponseResultRegion = "europe-west2"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest3         SpeedAPIScheduleGetResponseResultRegion = "europe-west3"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest4         SpeedAPIScheduleGetResponseResultRegion = "europe-west4"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest8         SpeedAPIScheduleGetResponseResultRegion = "europe-west8"
+	SpeedAPIScheduleGetResponseResultRegionEuropeWest9         SpeedAPIScheduleGetResponseResultRegion = "europe-west9"
+	SpeedAPIScheduleGetResponseResultRegionMeWest1             SpeedAPIScheduleGetResponseResultRegion = "me-west1"
+	SpeedAPIScheduleGetResponseResultRegionSouthamericaEast1   SpeedAPIScheduleGetResponseResultRegion = "southamerica-east1"
+	SpeedAPIScheduleGetResponseResultRegionUsCentral1          SpeedAPIScheduleGetResponseResultRegion = "us-central1"
+	SpeedAPIScheduleGetResponseResultRegionUsEast1             SpeedAPIScheduleGetResponseResultRegion = "us-east1"
+	SpeedAPIScheduleGetResponseResultRegionUsEast4             SpeedAPIScheduleGetResponseResultRegion = "us-east4"
+	SpeedAPIScheduleGetResponseResultRegionUsSouth1            SpeedAPIScheduleGetResponseResultRegion = "us-south1"
+	SpeedAPIScheduleGetResponseResultRegionUsWest1             SpeedAPIScheduleGetResponseResultRegion = "us-west1"
 )
 
 type SpeedAPITestsNewResponse struct {
-	// UUID
-	ID   string    `json:"id"`
-	Date time.Time `json:"date" format:"date-time"`
-	// The Lighthouse report.
-	DesktopReport SpeedAPITestsNewResponseDesktopReport `json:"desktopReport"`
-	// The Lighthouse report.
-	MobileReport SpeedAPITestsNewResponseMobileReport `json:"mobileReport"`
-	// A test region with a label.
-	Region SpeedAPITestsNewResponseRegion `json:"region"`
-	// The frequency of the test.
-	ScheduleFrequency SpeedAPITestsNewResponseScheduleFrequency `json:"scheduleFrequency"`
-	// A URL.
-	URL  string                       `json:"url"`
-	JSON speedAPITestsNewResponseJSON `json:"-"`
+	Errors   []SpeedAPITestsNewResponseError   `json:"errors"`
+	Messages []SpeedAPITestsNewResponseMessage `json:"messages"`
+	Result   SpeedAPITestsNewResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                         `json:"success"`
+	JSON    speedAPITestsNewResponseJSON `json:"-"`
 }
 
 // speedAPITestsNewResponseJSON contains the JSON metadata for the struct
 // [SpeedAPITestsNewResponse]
 type speedAPITestsNewResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsNewResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    speedAPITestsNewResponseErrorJSON `json:"-"`
+}
+
+// speedAPITestsNewResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITestsNewResponseError]
+type speedAPITestsNewResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsNewResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    speedAPITestsNewResponseMessageJSON `json:"-"`
+}
+
+// speedAPITestsNewResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITestsNewResponseMessage]
+type speedAPITestsNewResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsNewResponseResult struct {
+	// UUID
+	ID   string    `json:"id"`
+	Date time.Time `json:"date" format:"date-time"`
+	// The Lighthouse report.
+	DesktopReport SpeedAPITestsNewResponseResultDesktopReport `json:"desktopReport"`
+	// The Lighthouse report.
+	MobileReport SpeedAPITestsNewResponseResultMobileReport `json:"mobileReport"`
+	// A test region with a label.
+	Region SpeedAPITestsNewResponseResultRegion `json:"region"`
+	// The frequency of the test.
+	ScheduleFrequency SpeedAPITestsNewResponseResultScheduleFrequency `json:"scheduleFrequency"`
+	// A URL.
+	URL  string                             `json:"url"`
+	JSON speedAPITestsNewResponseResultJSON `json:"-"`
+}
+
+// speedAPITestsNewResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPITestsNewResponseResult]
+type speedAPITestsNewResponseResultJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -740,17 +1006,17 @@ type speedAPITestsNewResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Lighthouse report.
-type SpeedAPITestsNewResponseDesktopReport struct {
+type SpeedAPITestsNewResponseResultDesktopReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPITestsNewResponseDesktopReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsNewResponseDesktopReportError      `json:"error"`
+	DeviceType SpeedAPITestsNewResponseResultDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsNewResponseResultDesktopReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -762,19 +1028,19 @@ type SpeedAPITestsNewResponseDesktopReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPITestsNewResponseDesktopReportState `json:"state"`
+	State SpeedAPITestsNewResponseResultDesktopReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                   `json:"tti"`
-	JSON speedAPITestsNewResponseDesktopReportJSON `json:"-"`
+	Tti  float64                                         `json:"tti"`
+	JSON speedAPITestsNewResponseResultDesktopReportJSON `json:"-"`
 }
 
-// speedAPITestsNewResponseDesktopReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsNewResponseDesktopReport]
-type speedAPITestsNewResponseDesktopReportJSON struct {
+// speedAPITestsNewResponseResultDesktopReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsNewResponseResultDesktopReport]
+type speedAPITestsNewResponseResultDesktopReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -791,31 +1057,31 @@ type speedAPITestsNewResponseDesktopReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResultDesktopReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPITestsNewResponseDesktopReportDeviceType string
+type SpeedAPITestsNewResponseResultDesktopReportDeviceType string
 
 const (
-	SpeedAPITestsNewResponseDesktopReportDeviceTypeDesktop SpeedAPITestsNewResponseDesktopReportDeviceType = "DESKTOP"
-	SpeedAPITestsNewResponseDesktopReportDeviceTypeMobile  SpeedAPITestsNewResponseDesktopReportDeviceType = "MOBILE"
+	SpeedAPITestsNewResponseResultDesktopReportDeviceTypeDesktop SpeedAPITestsNewResponseResultDesktopReportDeviceType = "DESKTOP"
+	SpeedAPITestsNewResponseResultDesktopReportDeviceTypeMobile  SpeedAPITestsNewResponseResultDesktopReportDeviceType = "MOBILE"
 )
 
-type SpeedAPITestsNewResponseDesktopReportError struct {
+type SpeedAPITestsNewResponseResultDesktopReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPITestsNewResponseDesktopReportErrorCode `json:"code"`
+	Code SpeedAPITestsNewResponseResultDesktopReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                         `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsNewResponseDesktopReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                               `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsNewResponseResultDesktopReportErrorJSON `json:"-"`
 }
 
-// speedAPITestsNewResponseDesktopReportErrorJSON contains the JSON metadata for
-// the struct [SpeedAPITestsNewResponseDesktopReportError]
-type speedAPITestsNewResponseDesktopReportErrorJSON struct {
+// speedAPITestsNewResponseResultDesktopReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsNewResponseResultDesktopReportError]
+type speedAPITestsNewResponseResultDesktopReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -823,37 +1089,37 @@ type speedAPITestsNewResponseDesktopReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResultDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPITestsNewResponseDesktopReportErrorCode string
+type SpeedAPITestsNewResponseResultDesktopReportErrorCode string
 
 const (
-	SpeedAPITestsNewResponseDesktopReportErrorCodeNotReachable      SpeedAPITestsNewResponseDesktopReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsNewResponseDesktopReportErrorCodeDNSFailure        SpeedAPITestsNewResponseDesktopReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsNewResponseDesktopReportErrorCodeNotHTML           SpeedAPITestsNewResponseDesktopReportErrorCode = "NOT_HTML"
-	SpeedAPITestsNewResponseDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsNewResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsNewResponseDesktopReportErrorCodeUnknown           SpeedAPITestsNewResponseDesktopReportErrorCode = "UNKNOWN"
+	SpeedAPITestsNewResponseResultDesktopReportErrorCodeNotReachable      SpeedAPITestsNewResponseResultDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsNewResponseResultDesktopReportErrorCodeDNSFailure        SpeedAPITestsNewResponseResultDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsNewResponseResultDesktopReportErrorCodeNotHTML           SpeedAPITestsNewResponseResultDesktopReportErrorCode = "NOT_HTML"
+	SpeedAPITestsNewResponseResultDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsNewResponseResultDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsNewResponseResultDesktopReportErrorCodeUnknown           SpeedAPITestsNewResponseResultDesktopReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPITestsNewResponseDesktopReportState string
+type SpeedAPITestsNewResponseResultDesktopReportState string
 
 const (
-	SpeedAPITestsNewResponseDesktopReportStateRunning  SpeedAPITestsNewResponseDesktopReportState = "RUNNING"
-	SpeedAPITestsNewResponseDesktopReportStateComplete SpeedAPITestsNewResponseDesktopReportState = "COMPLETE"
-	SpeedAPITestsNewResponseDesktopReportStateFailed   SpeedAPITestsNewResponseDesktopReportState = "FAILED"
+	SpeedAPITestsNewResponseResultDesktopReportStateRunning  SpeedAPITestsNewResponseResultDesktopReportState = "RUNNING"
+	SpeedAPITestsNewResponseResultDesktopReportStateComplete SpeedAPITestsNewResponseResultDesktopReportState = "COMPLETE"
+	SpeedAPITestsNewResponseResultDesktopReportStateFailed   SpeedAPITestsNewResponseResultDesktopReportState = "FAILED"
 )
 
 // The Lighthouse report.
-type SpeedAPITestsNewResponseMobileReport struct {
+type SpeedAPITestsNewResponseResultMobileReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPITestsNewResponseMobileReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsNewResponseMobileReportError      `json:"error"`
+	DeviceType SpeedAPITestsNewResponseResultMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsNewResponseResultMobileReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -865,19 +1131,19 @@ type SpeedAPITestsNewResponseMobileReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPITestsNewResponseMobileReportState `json:"state"`
+	State SpeedAPITestsNewResponseResultMobileReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                  `json:"tti"`
-	JSON speedAPITestsNewResponseMobileReportJSON `json:"-"`
+	Tti  float64                                        `json:"tti"`
+	JSON speedAPITestsNewResponseResultMobileReportJSON `json:"-"`
 }
 
-// speedAPITestsNewResponseMobileReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsNewResponseMobileReport]
-type speedAPITestsNewResponseMobileReportJSON struct {
+// speedAPITestsNewResponseResultMobileReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsNewResponseResultMobileReport]
+type speedAPITestsNewResponseResultMobileReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -894,31 +1160,31 @@ type speedAPITestsNewResponseMobileReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResultMobileReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPITestsNewResponseMobileReportDeviceType string
+type SpeedAPITestsNewResponseResultMobileReportDeviceType string
 
 const (
-	SpeedAPITestsNewResponseMobileReportDeviceTypeDesktop SpeedAPITestsNewResponseMobileReportDeviceType = "DESKTOP"
-	SpeedAPITestsNewResponseMobileReportDeviceTypeMobile  SpeedAPITestsNewResponseMobileReportDeviceType = "MOBILE"
+	SpeedAPITestsNewResponseResultMobileReportDeviceTypeDesktop SpeedAPITestsNewResponseResultMobileReportDeviceType = "DESKTOP"
+	SpeedAPITestsNewResponseResultMobileReportDeviceTypeMobile  SpeedAPITestsNewResponseResultMobileReportDeviceType = "MOBILE"
 )
 
-type SpeedAPITestsNewResponseMobileReportError struct {
+type SpeedAPITestsNewResponseResultMobileReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPITestsNewResponseMobileReportErrorCode `json:"code"`
+	Code SpeedAPITestsNewResponseResultMobileReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                        `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsNewResponseMobileReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                              `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsNewResponseResultMobileReportErrorJSON `json:"-"`
 }
 
-// speedAPITestsNewResponseMobileReportErrorJSON contains the JSON metadata for the
-// struct [SpeedAPITestsNewResponseMobileReportError]
-type speedAPITestsNewResponseMobileReportErrorJSON struct {
+// speedAPITestsNewResponseResultMobileReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsNewResponseResultMobileReportError]
+type speedAPITestsNewResponseResultMobileReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -926,96 +1192,102 @@ type speedAPITestsNewResponseMobileReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResultMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPITestsNewResponseMobileReportErrorCode string
+type SpeedAPITestsNewResponseResultMobileReportErrorCode string
 
 const (
-	SpeedAPITestsNewResponseMobileReportErrorCodeNotReachable      SpeedAPITestsNewResponseMobileReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsNewResponseMobileReportErrorCodeDNSFailure        SpeedAPITestsNewResponseMobileReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsNewResponseMobileReportErrorCodeNotHTML           SpeedAPITestsNewResponseMobileReportErrorCode = "NOT_HTML"
-	SpeedAPITestsNewResponseMobileReportErrorCodeLighthouseTimeout SpeedAPITestsNewResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsNewResponseMobileReportErrorCodeUnknown           SpeedAPITestsNewResponseMobileReportErrorCode = "UNKNOWN"
+	SpeedAPITestsNewResponseResultMobileReportErrorCodeNotReachable      SpeedAPITestsNewResponseResultMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsNewResponseResultMobileReportErrorCodeDNSFailure        SpeedAPITestsNewResponseResultMobileReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsNewResponseResultMobileReportErrorCodeNotHTML           SpeedAPITestsNewResponseResultMobileReportErrorCode = "NOT_HTML"
+	SpeedAPITestsNewResponseResultMobileReportErrorCodeLighthouseTimeout SpeedAPITestsNewResponseResultMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsNewResponseResultMobileReportErrorCodeUnknown           SpeedAPITestsNewResponseResultMobileReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPITestsNewResponseMobileReportState string
+type SpeedAPITestsNewResponseResultMobileReportState string
 
 const (
-	SpeedAPITestsNewResponseMobileReportStateRunning  SpeedAPITestsNewResponseMobileReportState = "RUNNING"
-	SpeedAPITestsNewResponseMobileReportStateComplete SpeedAPITestsNewResponseMobileReportState = "COMPLETE"
-	SpeedAPITestsNewResponseMobileReportStateFailed   SpeedAPITestsNewResponseMobileReportState = "FAILED"
+	SpeedAPITestsNewResponseResultMobileReportStateRunning  SpeedAPITestsNewResponseResultMobileReportState = "RUNNING"
+	SpeedAPITestsNewResponseResultMobileReportStateComplete SpeedAPITestsNewResponseResultMobileReportState = "COMPLETE"
+	SpeedAPITestsNewResponseResultMobileReportStateFailed   SpeedAPITestsNewResponseResultMobileReportState = "FAILED"
 )
 
 // A test region with a label.
-type SpeedAPITestsNewResponseRegion struct {
+type SpeedAPITestsNewResponseResultRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAPITestsNewResponseRegionValue `json:"value"`
-	JSON  speedAPITestsNewResponseRegionJSON  `json:"-"`
+	Value SpeedAPITestsNewResponseResultRegionValue `json:"value"`
+	JSON  speedAPITestsNewResponseResultRegionJSON  `json:"-"`
 }
 
-// speedAPITestsNewResponseRegionJSON contains the JSON metadata for the struct
-// [SpeedAPITestsNewResponseRegion]
-type speedAPITestsNewResponseRegionJSON struct {
+// speedAPITestsNewResponseResultRegionJSON contains the JSON metadata for the
+// struct [SpeedAPITestsNewResponseResultRegion]
+type speedAPITestsNewResponseResultRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsNewResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsNewResponseResultRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAPITestsNewResponseRegionValue string
+type SpeedAPITestsNewResponseResultRegionValue string
 
 const (
-	SpeedAPITestsNewResponseRegionValueAsiaEast1           SpeedAPITestsNewResponseRegionValue = "asia-east1"
-	SpeedAPITestsNewResponseRegionValueAsiaNortheast1      SpeedAPITestsNewResponseRegionValue = "asia-northeast1"
-	SpeedAPITestsNewResponseRegionValueAsiaNortheast2      SpeedAPITestsNewResponseRegionValue = "asia-northeast2"
-	SpeedAPITestsNewResponseRegionValueAsiaSouth1          SpeedAPITestsNewResponseRegionValue = "asia-south1"
-	SpeedAPITestsNewResponseRegionValueAsiaSoutheast1      SpeedAPITestsNewResponseRegionValue = "asia-southeast1"
-	SpeedAPITestsNewResponseRegionValueAustraliaSoutheast1 SpeedAPITestsNewResponseRegionValue = "australia-southeast1"
-	SpeedAPITestsNewResponseRegionValueEuropeNorth1        SpeedAPITestsNewResponseRegionValue = "europe-north1"
-	SpeedAPITestsNewResponseRegionValueEuropeSouthwest1    SpeedAPITestsNewResponseRegionValue = "europe-southwest1"
-	SpeedAPITestsNewResponseRegionValueEuropeWest1         SpeedAPITestsNewResponseRegionValue = "europe-west1"
-	SpeedAPITestsNewResponseRegionValueEuropeWest2         SpeedAPITestsNewResponseRegionValue = "europe-west2"
-	SpeedAPITestsNewResponseRegionValueEuropeWest3         SpeedAPITestsNewResponseRegionValue = "europe-west3"
-	SpeedAPITestsNewResponseRegionValueEuropeWest4         SpeedAPITestsNewResponseRegionValue = "europe-west4"
-	SpeedAPITestsNewResponseRegionValueEuropeWest8         SpeedAPITestsNewResponseRegionValue = "europe-west8"
-	SpeedAPITestsNewResponseRegionValueEuropeWest9         SpeedAPITestsNewResponseRegionValue = "europe-west9"
-	SpeedAPITestsNewResponseRegionValueMeWest1             SpeedAPITestsNewResponseRegionValue = "me-west1"
-	SpeedAPITestsNewResponseRegionValueSouthamericaEast1   SpeedAPITestsNewResponseRegionValue = "southamerica-east1"
-	SpeedAPITestsNewResponseRegionValueUsCentral1          SpeedAPITestsNewResponseRegionValue = "us-central1"
-	SpeedAPITestsNewResponseRegionValueUsEast1             SpeedAPITestsNewResponseRegionValue = "us-east1"
-	SpeedAPITestsNewResponseRegionValueUsEast4             SpeedAPITestsNewResponseRegionValue = "us-east4"
-	SpeedAPITestsNewResponseRegionValueUsSouth1            SpeedAPITestsNewResponseRegionValue = "us-south1"
-	SpeedAPITestsNewResponseRegionValueUsWest1             SpeedAPITestsNewResponseRegionValue = "us-west1"
+	SpeedAPITestsNewResponseResultRegionValueAsiaEast1           SpeedAPITestsNewResponseResultRegionValue = "asia-east1"
+	SpeedAPITestsNewResponseResultRegionValueAsiaNortheast1      SpeedAPITestsNewResponseResultRegionValue = "asia-northeast1"
+	SpeedAPITestsNewResponseResultRegionValueAsiaNortheast2      SpeedAPITestsNewResponseResultRegionValue = "asia-northeast2"
+	SpeedAPITestsNewResponseResultRegionValueAsiaSouth1          SpeedAPITestsNewResponseResultRegionValue = "asia-south1"
+	SpeedAPITestsNewResponseResultRegionValueAsiaSoutheast1      SpeedAPITestsNewResponseResultRegionValue = "asia-southeast1"
+	SpeedAPITestsNewResponseResultRegionValueAustraliaSoutheast1 SpeedAPITestsNewResponseResultRegionValue = "australia-southeast1"
+	SpeedAPITestsNewResponseResultRegionValueEuropeNorth1        SpeedAPITestsNewResponseResultRegionValue = "europe-north1"
+	SpeedAPITestsNewResponseResultRegionValueEuropeSouthwest1    SpeedAPITestsNewResponseResultRegionValue = "europe-southwest1"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest1         SpeedAPITestsNewResponseResultRegionValue = "europe-west1"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest2         SpeedAPITestsNewResponseResultRegionValue = "europe-west2"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest3         SpeedAPITestsNewResponseResultRegionValue = "europe-west3"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest4         SpeedAPITestsNewResponseResultRegionValue = "europe-west4"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest8         SpeedAPITestsNewResponseResultRegionValue = "europe-west8"
+	SpeedAPITestsNewResponseResultRegionValueEuropeWest9         SpeedAPITestsNewResponseResultRegionValue = "europe-west9"
+	SpeedAPITestsNewResponseResultRegionValueMeWest1             SpeedAPITestsNewResponseResultRegionValue = "me-west1"
+	SpeedAPITestsNewResponseResultRegionValueSouthamericaEast1   SpeedAPITestsNewResponseResultRegionValue = "southamerica-east1"
+	SpeedAPITestsNewResponseResultRegionValueUsCentral1          SpeedAPITestsNewResponseResultRegionValue = "us-central1"
+	SpeedAPITestsNewResponseResultRegionValueUsEast1             SpeedAPITestsNewResponseResultRegionValue = "us-east1"
+	SpeedAPITestsNewResponseResultRegionValueUsEast4             SpeedAPITestsNewResponseResultRegionValue = "us-east4"
+	SpeedAPITestsNewResponseResultRegionValueUsSouth1            SpeedAPITestsNewResponseResultRegionValue = "us-south1"
+	SpeedAPITestsNewResponseResultRegionValueUsWest1             SpeedAPITestsNewResponseResultRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type SpeedAPITestsNewResponseScheduleFrequency string
+type SpeedAPITestsNewResponseResultScheduleFrequency string
 
 const (
-	SpeedAPITestsNewResponseScheduleFrequencyDaily  SpeedAPITestsNewResponseScheduleFrequency = "DAILY"
-	SpeedAPITestsNewResponseScheduleFrequencyWeekly SpeedAPITestsNewResponseScheduleFrequency = "WEEKLY"
+	SpeedAPITestsNewResponseResultScheduleFrequencyDaily  SpeedAPITestsNewResponseResultScheduleFrequency = "DAILY"
+	SpeedAPITestsNewResponseResultScheduleFrequencyWeekly SpeedAPITestsNewResponseResultScheduleFrequency = "WEEKLY"
 )
 
 type SpeedAPITestsDeleteResponse struct {
-	// Number of items affected.
-	Count float64                         `json:"count"`
-	JSON  speedAPITestsDeleteResponseJSON `json:"-"`
+	Errors   []SpeedAPITestsDeleteResponseError   `json:"errors"`
+	Messages []SpeedAPITestsDeleteResponseMessage `json:"messages"`
+	Result   SpeedAPITestsDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                            `json:"success"`
+	JSON    speedAPITestsDeleteResponseJSON `json:"-"`
 }
 
 // speedAPITestsDeleteResponseJSON contains the JSON metadata for the struct
 // [SpeedAPITestsDeleteResponse]
 type speedAPITestsDeleteResponseJSON struct {
-	Count       apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1024,323 +1296,146 @@ func (r *SpeedAPITestsDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SpeedAPITestsDeleteResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    speedAPITestsDeleteResponseErrorJSON `json:"-"`
+}
+
+// speedAPITestsDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITestsDeleteResponseError]
+type speedAPITestsDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsDeleteResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    speedAPITestsDeleteResponseMessageJSON `json:"-"`
+}
+
+// speedAPITestsDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITestsDeleteResponseMessage]
+type speedAPITestsDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsDeleteResponseResult struct {
+	// Number of items affected.
+	Count float64                               `json:"count"`
+	JSON  speedAPITestsDeleteResponseResultJSON `json:"-"`
+}
+
+// speedAPITestsDeleteResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPITestsDeleteResponseResult]
+type speedAPITestsDeleteResponseResultJSON struct {
+	Count       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SpeedAPITestsListResponse struct {
-	// UUID
-	ID   string    `json:"id"`
-	Date time.Time `json:"date" format:"date-time"`
-	// The Lighthouse report.
-	DesktopReport SpeedAPITestsListResponseDesktopReport `json:"desktopReport"`
-	// The Lighthouse report.
-	MobileReport SpeedAPITestsListResponseMobileReport `json:"mobileReport"`
-	// A test region with a label.
-	Region SpeedAPITestsListResponseRegion `json:"region"`
-	// The frequency of the test.
-	ScheduleFrequency SpeedAPITestsListResponseScheduleFrequency `json:"scheduleFrequency"`
-	// A URL.
-	URL  string                        `json:"url"`
-	JSON speedAPITestsListResponseJSON `json:"-"`
+	Errors     []SpeedAPITestsListResponseError    `json:"errors"`
+	Messages   []SpeedAPITestsListResponseMessage  `json:"messages"`
+	Result     []SpeedAPITestsListResponseResult   `json:"result"`
+	ResultInfo SpeedAPITestsListResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful.
+	Success bool                          `json:"success"`
+	JSON    speedAPITestsListResponseJSON `json:"-"`
 }
 
 // speedAPITestsListResponseJSON contains the JSON metadata for the struct
 // [SpeedAPITestsListResponse]
 type speedAPITestsListResponseJSON struct {
-	ID                apijson.Field
-	Date              apijson.Field
-	DesktopReport     apijson.Field
-	MobileReport      apijson.Field
-	Region            apijson.Field
-	ScheduleFrequency apijson.Field
-	URL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *SpeedAPITestsListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The Lighthouse report.
-type SpeedAPITestsListResponseDesktopReport struct {
-	// Cumulative Layout Shift.
-	Cls float64 `json:"cls"`
-	// The type of device.
-	DeviceType SpeedAPITestsListResponseDesktopReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsListResponseDesktopReportError      `json:"error"`
-	// First Contentful Paint.
-	Fcp float64 `json:"fcp"`
-	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
-	// Largest Contentful Paint.
-	Lcp float64 `json:"lcp"`
-	// The Lighthouse performance score.
-	PerformanceScore float64 `json:"performanceScore"`
-	// Speed Index.
-	Si float64 `json:"si"`
-	// The state of the Lighthouse report.
-	State SpeedAPITestsListResponseDesktopReportState `json:"state"`
-	// Total Blocking Time.
-	Tbt float64 `json:"tbt"`
-	// Time To First Byte.
-	Ttfb float64 `json:"ttfb"`
-	// Time To Interactive.
-	Tti  float64                                    `json:"tti"`
-	JSON speedAPITestsListResponseDesktopReportJSON `json:"-"`
+type SpeedAPITestsListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    speedAPITestsListResponseErrorJSON `json:"-"`
 }
 
-// speedAPITestsListResponseDesktopReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsListResponseDesktopReport]
-type speedAPITestsListResponseDesktopReportJSON struct {
-	Cls              apijson.Field
-	DeviceType       apijson.Field
-	Error            apijson.Field
-	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	State            apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device.
-type SpeedAPITestsListResponseDesktopReportDeviceType string
-
-const (
-	SpeedAPITestsListResponseDesktopReportDeviceTypeDesktop SpeedAPITestsListResponseDesktopReportDeviceType = "DESKTOP"
-	SpeedAPITestsListResponseDesktopReportDeviceTypeMobile  SpeedAPITestsListResponseDesktopReportDeviceType = "MOBILE"
-)
-
-type SpeedAPITestsListResponseDesktopReportError struct {
-	// The error code of the Lighthouse result.
-	Code SpeedAPITestsListResponseDesktopReportErrorCode `json:"code"`
-	// Detailed error message.
-	Detail string `json:"detail"`
-	// The final URL displayed to the user.
-	FinalDisplayedURL string                                          `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsListResponseDesktopReportErrorJSON `json:"-"`
-}
-
-// speedAPITestsListResponseDesktopReportErrorJSON contains the JSON metadata for
-// the struct [SpeedAPITestsListResponseDesktopReportError]
-type speedAPITestsListResponseDesktopReportErrorJSON struct {
-	Code              apijson.Field
-	Detail            apijson.Field
-	FinalDisplayedURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The error code of the Lighthouse result.
-type SpeedAPITestsListResponseDesktopReportErrorCode string
-
-const (
-	SpeedAPITestsListResponseDesktopReportErrorCodeNotReachable      SpeedAPITestsListResponseDesktopReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsListResponseDesktopReportErrorCodeDNSFailure        SpeedAPITestsListResponseDesktopReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsListResponseDesktopReportErrorCodeNotHTML           SpeedAPITestsListResponseDesktopReportErrorCode = "NOT_HTML"
-	SpeedAPITestsListResponseDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsListResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsListResponseDesktopReportErrorCodeUnknown           SpeedAPITestsListResponseDesktopReportErrorCode = "UNKNOWN"
-)
-
-// The state of the Lighthouse report.
-type SpeedAPITestsListResponseDesktopReportState string
-
-const (
-	SpeedAPITestsListResponseDesktopReportStateRunning  SpeedAPITestsListResponseDesktopReportState = "RUNNING"
-	SpeedAPITestsListResponseDesktopReportStateComplete SpeedAPITestsListResponseDesktopReportState = "COMPLETE"
-	SpeedAPITestsListResponseDesktopReportStateFailed   SpeedAPITestsListResponseDesktopReportState = "FAILED"
-)
-
-// The Lighthouse report.
-type SpeedAPITestsListResponseMobileReport struct {
-	// Cumulative Layout Shift.
-	Cls float64 `json:"cls"`
-	// The type of device.
-	DeviceType SpeedAPITestsListResponseMobileReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsListResponseMobileReportError      `json:"error"`
-	// First Contentful Paint.
-	Fcp float64 `json:"fcp"`
-	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
-	// Largest Contentful Paint.
-	Lcp float64 `json:"lcp"`
-	// The Lighthouse performance score.
-	PerformanceScore float64 `json:"performanceScore"`
-	// Speed Index.
-	Si float64 `json:"si"`
-	// The state of the Lighthouse report.
-	State SpeedAPITestsListResponseMobileReportState `json:"state"`
-	// Total Blocking Time.
-	Tbt float64 `json:"tbt"`
-	// Time To First Byte.
-	Ttfb float64 `json:"ttfb"`
-	// Time To Interactive.
-	Tti  float64                                   `json:"tti"`
-	JSON speedAPITestsListResponseMobileReportJSON `json:"-"`
-}
-
-// speedAPITestsListResponseMobileReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsListResponseMobileReport]
-type speedAPITestsListResponseMobileReportJSON struct {
-	Cls              apijson.Field
-	DeviceType       apijson.Field
-	Error            apijson.Field
-	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	State            apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device.
-type SpeedAPITestsListResponseMobileReportDeviceType string
-
-const (
-	SpeedAPITestsListResponseMobileReportDeviceTypeDesktop SpeedAPITestsListResponseMobileReportDeviceType = "DESKTOP"
-	SpeedAPITestsListResponseMobileReportDeviceTypeMobile  SpeedAPITestsListResponseMobileReportDeviceType = "MOBILE"
-)
-
-type SpeedAPITestsListResponseMobileReportError struct {
-	// The error code of the Lighthouse result.
-	Code SpeedAPITestsListResponseMobileReportErrorCode `json:"code"`
-	// Detailed error message.
-	Detail string `json:"detail"`
-	// The final URL displayed to the user.
-	FinalDisplayedURL string                                         `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsListResponseMobileReportErrorJSON `json:"-"`
-}
-
-// speedAPITestsListResponseMobileReportErrorJSON contains the JSON metadata for
-// the struct [SpeedAPITestsListResponseMobileReportError]
-type speedAPITestsListResponseMobileReportErrorJSON struct {
-	Code              apijson.Field
-	Detail            apijson.Field
-	FinalDisplayedURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The error code of the Lighthouse result.
-type SpeedAPITestsListResponseMobileReportErrorCode string
-
-const (
-	SpeedAPITestsListResponseMobileReportErrorCodeNotReachable      SpeedAPITestsListResponseMobileReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsListResponseMobileReportErrorCodeDNSFailure        SpeedAPITestsListResponseMobileReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsListResponseMobileReportErrorCodeNotHTML           SpeedAPITestsListResponseMobileReportErrorCode = "NOT_HTML"
-	SpeedAPITestsListResponseMobileReportErrorCodeLighthouseTimeout SpeedAPITestsListResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsListResponseMobileReportErrorCodeUnknown           SpeedAPITestsListResponseMobileReportErrorCode = "UNKNOWN"
-)
-
-// The state of the Lighthouse report.
-type SpeedAPITestsListResponseMobileReportState string
-
-const (
-	SpeedAPITestsListResponseMobileReportStateRunning  SpeedAPITestsListResponseMobileReportState = "RUNNING"
-	SpeedAPITestsListResponseMobileReportStateComplete SpeedAPITestsListResponseMobileReportState = "COMPLETE"
-	SpeedAPITestsListResponseMobileReportStateFailed   SpeedAPITestsListResponseMobileReportState = "FAILED"
-)
-
-// A test region with a label.
-type SpeedAPITestsListResponseRegion struct {
-	Label string `json:"label"`
-	// A test region.
-	Value SpeedAPITestsListResponseRegionValue `json:"value"`
-	JSON  speedAPITestsListResponseRegionJSON  `json:"-"`
-}
-
-// speedAPITestsListResponseRegionJSON contains the JSON metadata for the struct
-// [SpeedAPITestsListResponseRegion]
-type speedAPITestsListResponseRegionJSON struct {
-	Label       apijson.Field
-	Value       apijson.Field
+// speedAPITestsListResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponseError]
+type speedAPITestsListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsListResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A test region.
-type SpeedAPITestsListResponseRegionValue string
+type SpeedAPITestsListResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    speedAPITestsListResponseMessageJSON `json:"-"`
+}
 
-const (
-	SpeedAPITestsListResponseRegionValueAsiaEast1           SpeedAPITestsListResponseRegionValue = "asia-east1"
-	SpeedAPITestsListResponseRegionValueAsiaNortheast1      SpeedAPITestsListResponseRegionValue = "asia-northeast1"
-	SpeedAPITestsListResponseRegionValueAsiaNortheast2      SpeedAPITestsListResponseRegionValue = "asia-northeast2"
-	SpeedAPITestsListResponseRegionValueAsiaSouth1          SpeedAPITestsListResponseRegionValue = "asia-south1"
-	SpeedAPITestsListResponseRegionValueAsiaSoutheast1      SpeedAPITestsListResponseRegionValue = "asia-southeast1"
-	SpeedAPITestsListResponseRegionValueAustraliaSoutheast1 SpeedAPITestsListResponseRegionValue = "australia-southeast1"
-	SpeedAPITestsListResponseRegionValueEuropeNorth1        SpeedAPITestsListResponseRegionValue = "europe-north1"
-	SpeedAPITestsListResponseRegionValueEuropeSouthwest1    SpeedAPITestsListResponseRegionValue = "europe-southwest1"
-	SpeedAPITestsListResponseRegionValueEuropeWest1         SpeedAPITestsListResponseRegionValue = "europe-west1"
-	SpeedAPITestsListResponseRegionValueEuropeWest2         SpeedAPITestsListResponseRegionValue = "europe-west2"
-	SpeedAPITestsListResponseRegionValueEuropeWest3         SpeedAPITestsListResponseRegionValue = "europe-west3"
-	SpeedAPITestsListResponseRegionValueEuropeWest4         SpeedAPITestsListResponseRegionValue = "europe-west4"
-	SpeedAPITestsListResponseRegionValueEuropeWest8         SpeedAPITestsListResponseRegionValue = "europe-west8"
-	SpeedAPITestsListResponseRegionValueEuropeWest9         SpeedAPITestsListResponseRegionValue = "europe-west9"
-	SpeedAPITestsListResponseRegionValueMeWest1             SpeedAPITestsListResponseRegionValue = "me-west1"
-	SpeedAPITestsListResponseRegionValueSouthamericaEast1   SpeedAPITestsListResponseRegionValue = "southamerica-east1"
-	SpeedAPITestsListResponseRegionValueUsCentral1          SpeedAPITestsListResponseRegionValue = "us-central1"
-	SpeedAPITestsListResponseRegionValueUsEast1             SpeedAPITestsListResponseRegionValue = "us-east1"
-	SpeedAPITestsListResponseRegionValueUsEast4             SpeedAPITestsListResponseRegionValue = "us-east4"
-	SpeedAPITestsListResponseRegionValueUsSouth1            SpeedAPITestsListResponseRegionValue = "us-south1"
-	SpeedAPITestsListResponseRegionValueUsWest1             SpeedAPITestsListResponseRegionValue = "us-west1"
-)
+// speedAPITestsListResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponseMessage]
+type speedAPITestsListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-// The frequency of the test.
-type SpeedAPITestsListResponseScheduleFrequency string
+func (r *SpeedAPITestsListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
-const (
-	SpeedAPITestsListResponseScheduleFrequencyDaily  SpeedAPITestsListResponseScheduleFrequency = "DAILY"
-	SpeedAPITestsListResponseScheduleFrequencyWeekly SpeedAPITestsListResponseScheduleFrequency = "WEEKLY"
-)
-
-type SpeedAPITestsGetResponse struct {
+type SpeedAPITestsListResponseResult struct {
 	// UUID
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
 	// The Lighthouse report.
-	DesktopReport SpeedAPITestsGetResponseDesktopReport `json:"desktopReport"`
+	DesktopReport SpeedAPITestsListResponseResultDesktopReport `json:"desktopReport"`
 	// The Lighthouse report.
-	MobileReport SpeedAPITestsGetResponseMobileReport `json:"mobileReport"`
+	MobileReport SpeedAPITestsListResponseResultMobileReport `json:"mobileReport"`
 	// A test region with a label.
-	Region SpeedAPITestsGetResponseRegion `json:"region"`
+	Region SpeedAPITestsListResponseResultRegion `json:"region"`
 	// The frequency of the test.
-	ScheduleFrequency SpeedAPITestsGetResponseScheduleFrequency `json:"scheduleFrequency"`
+	ScheduleFrequency SpeedAPITestsListResponseResultScheduleFrequency `json:"scheduleFrequency"`
 	// A URL.
-	URL  string                       `json:"url"`
-	JSON speedAPITestsGetResponseJSON `json:"-"`
+	URL  string                              `json:"url"`
+	JSON speedAPITestsListResponseResultJSON `json:"-"`
 }
 
-// speedAPITestsGetResponseJSON contains the JSON metadata for the struct
-// [SpeedAPITestsGetResponse]
-type speedAPITestsGetResponseJSON struct {
+// speedAPITestsListResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponseResult]
+type speedAPITestsListResponseResultJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -1352,17 +1447,17 @@ type speedAPITestsGetResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Lighthouse report.
-type SpeedAPITestsGetResponseDesktopReport struct {
+type SpeedAPITestsListResponseResultDesktopReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPITestsGetResponseDesktopReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsGetResponseDesktopReportError      `json:"error"`
+	DeviceType SpeedAPITestsListResponseResultDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsListResponseResultDesktopReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -1374,19 +1469,19 @@ type SpeedAPITestsGetResponseDesktopReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPITestsGetResponseDesktopReportState `json:"state"`
+	State SpeedAPITestsListResponseResultDesktopReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                   `json:"tti"`
-	JSON speedAPITestsGetResponseDesktopReportJSON `json:"-"`
+	Tti  float64                                          `json:"tti"`
+	JSON speedAPITestsListResponseResultDesktopReportJSON `json:"-"`
 }
 
-// speedAPITestsGetResponseDesktopReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsGetResponseDesktopReport]
-type speedAPITestsGetResponseDesktopReportJSON struct {
+// speedAPITestsListResponseResultDesktopReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsListResponseResultDesktopReport]
+type speedAPITestsListResponseResultDesktopReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -1403,31 +1498,31 @@ type speedAPITestsGetResponseDesktopReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResultDesktopReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPITestsGetResponseDesktopReportDeviceType string
+type SpeedAPITestsListResponseResultDesktopReportDeviceType string
 
 const (
-	SpeedAPITestsGetResponseDesktopReportDeviceTypeDesktop SpeedAPITestsGetResponseDesktopReportDeviceType = "DESKTOP"
-	SpeedAPITestsGetResponseDesktopReportDeviceTypeMobile  SpeedAPITestsGetResponseDesktopReportDeviceType = "MOBILE"
+	SpeedAPITestsListResponseResultDesktopReportDeviceTypeDesktop SpeedAPITestsListResponseResultDesktopReportDeviceType = "DESKTOP"
+	SpeedAPITestsListResponseResultDesktopReportDeviceTypeMobile  SpeedAPITestsListResponseResultDesktopReportDeviceType = "MOBILE"
 )
 
-type SpeedAPITestsGetResponseDesktopReportError struct {
+type SpeedAPITestsListResponseResultDesktopReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPITestsGetResponseDesktopReportErrorCode `json:"code"`
+	Code SpeedAPITestsListResponseResultDesktopReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                         `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsGetResponseDesktopReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                                `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsListResponseResultDesktopReportErrorJSON `json:"-"`
 }
 
-// speedAPITestsGetResponseDesktopReportErrorJSON contains the JSON metadata for
-// the struct [SpeedAPITestsGetResponseDesktopReportError]
-type speedAPITestsGetResponseDesktopReportErrorJSON struct {
+// speedAPITestsListResponseResultDesktopReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsListResponseResultDesktopReportError]
+type speedAPITestsListResponseResultDesktopReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -1435,37 +1530,37 @@ type speedAPITestsGetResponseDesktopReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResultDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPITestsGetResponseDesktopReportErrorCode string
+type SpeedAPITestsListResponseResultDesktopReportErrorCode string
 
 const (
-	SpeedAPITestsGetResponseDesktopReportErrorCodeNotReachable      SpeedAPITestsGetResponseDesktopReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsGetResponseDesktopReportErrorCodeDNSFailure        SpeedAPITestsGetResponseDesktopReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsGetResponseDesktopReportErrorCodeNotHTML           SpeedAPITestsGetResponseDesktopReportErrorCode = "NOT_HTML"
-	SpeedAPITestsGetResponseDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsGetResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsGetResponseDesktopReportErrorCodeUnknown           SpeedAPITestsGetResponseDesktopReportErrorCode = "UNKNOWN"
+	SpeedAPITestsListResponseResultDesktopReportErrorCodeNotReachable      SpeedAPITestsListResponseResultDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsListResponseResultDesktopReportErrorCodeDNSFailure        SpeedAPITestsListResponseResultDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsListResponseResultDesktopReportErrorCodeNotHTML           SpeedAPITestsListResponseResultDesktopReportErrorCode = "NOT_HTML"
+	SpeedAPITestsListResponseResultDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsListResponseResultDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsListResponseResultDesktopReportErrorCodeUnknown           SpeedAPITestsListResponseResultDesktopReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPITestsGetResponseDesktopReportState string
+type SpeedAPITestsListResponseResultDesktopReportState string
 
 const (
-	SpeedAPITestsGetResponseDesktopReportStateRunning  SpeedAPITestsGetResponseDesktopReportState = "RUNNING"
-	SpeedAPITestsGetResponseDesktopReportStateComplete SpeedAPITestsGetResponseDesktopReportState = "COMPLETE"
-	SpeedAPITestsGetResponseDesktopReportStateFailed   SpeedAPITestsGetResponseDesktopReportState = "FAILED"
+	SpeedAPITestsListResponseResultDesktopReportStateRunning  SpeedAPITestsListResponseResultDesktopReportState = "RUNNING"
+	SpeedAPITestsListResponseResultDesktopReportStateComplete SpeedAPITestsListResponseResultDesktopReportState = "COMPLETE"
+	SpeedAPITestsListResponseResultDesktopReportStateFailed   SpeedAPITestsListResponseResultDesktopReportState = "FAILED"
 )
 
 // The Lighthouse report.
-type SpeedAPITestsGetResponseMobileReport struct {
+type SpeedAPITestsListResponseResultMobileReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType SpeedAPITestsGetResponseMobileReportDeviceType `json:"deviceType"`
-	Error      SpeedAPITestsGetResponseMobileReportError      `json:"error"`
+	DeviceType SpeedAPITestsListResponseResultMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsListResponseResultMobileReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -1477,19 +1572,19 @@ type SpeedAPITestsGetResponseMobileReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State SpeedAPITestsGetResponseMobileReportState `json:"state"`
+	State SpeedAPITestsListResponseResultMobileReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                                  `json:"tti"`
-	JSON speedAPITestsGetResponseMobileReportJSON `json:"-"`
+	Tti  float64                                         `json:"tti"`
+	JSON speedAPITestsListResponseResultMobileReportJSON `json:"-"`
 }
 
-// speedAPITestsGetResponseMobileReportJSON contains the JSON metadata for the
-// struct [SpeedAPITestsGetResponseMobileReport]
-type speedAPITestsGetResponseMobileReportJSON struct {
+// speedAPITestsListResponseResultMobileReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsListResponseResultMobileReport]
+type speedAPITestsListResponseResultMobileReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -1506,31 +1601,31 @@ type speedAPITestsGetResponseMobileReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResultMobileReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type SpeedAPITestsGetResponseMobileReportDeviceType string
+type SpeedAPITestsListResponseResultMobileReportDeviceType string
 
 const (
-	SpeedAPITestsGetResponseMobileReportDeviceTypeDesktop SpeedAPITestsGetResponseMobileReportDeviceType = "DESKTOP"
-	SpeedAPITestsGetResponseMobileReportDeviceTypeMobile  SpeedAPITestsGetResponseMobileReportDeviceType = "MOBILE"
+	SpeedAPITestsListResponseResultMobileReportDeviceTypeDesktop SpeedAPITestsListResponseResultMobileReportDeviceType = "DESKTOP"
+	SpeedAPITestsListResponseResultMobileReportDeviceTypeMobile  SpeedAPITestsListResponseResultMobileReportDeviceType = "MOBILE"
 )
 
-type SpeedAPITestsGetResponseMobileReportError struct {
+type SpeedAPITestsListResponseResultMobileReportError struct {
 	// The error code of the Lighthouse result.
-	Code SpeedAPITestsGetResponseMobileReportErrorCode `json:"code"`
+	Code SpeedAPITestsListResponseResultMobileReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                        `json:"finalDisplayedUrl"`
-	JSON              speedAPITestsGetResponseMobileReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                               `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsListResponseResultMobileReportErrorJSON `json:"-"`
 }
 
-// speedAPITestsGetResponseMobileReportErrorJSON contains the JSON metadata for the
-// struct [SpeedAPITestsGetResponseMobileReportError]
-type speedAPITestsGetResponseMobileReportErrorJSON struct {
+// speedAPITestsListResponseResultMobileReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsListResponseResultMobileReportError]
+type speedAPITestsListResponseResultMobileReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -1538,87 +1633,531 @@ type speedAPITestsGetResponseMobileReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResultMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type SpeedAPITestsGetResponseMobileReportErrorCode string
+type SpeedAPITestsListResponseResultMobileReportErrorCode string
 
 const (
-	SpeedAPITestsGetResponseMobileReportErrorCodeNotReachable      SpeedAPITestsGetResponseMobileReportErrorCode = "NOT_REACHABLE"
-	SpeedAPITestsGetResponseMobileReportErrorCodeDNSFailure        SpeedAPITestsGetResponseMobileReportErrorCode = "DNS_FAILURE"
-	SpeedAPITestsGetResponseMobileReportErrorCodeNotHTML           SpeedAPITestsGetResponseMobileReportErrorCode = "NOT_HTML"
-	SpeedAPITestsGetResponseMobileReportErrorCodeLighthouseTimeout SpeedAPITestsGetResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	SpeedAPITestsGetResponseMobileReportErrorCodeUnknown           SpeedAPITestsGetResponseMobileReportErrorCode = "UNKNOWN"
+	SpeedAPITestsListResponseResultMobileReportErrorCodeNotReachable      SpeedAPITestsListResponseResultMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsListResponseResultMobileReportErrorCodeDNSFailure        SpeedAPITestsListResponseResultMobileReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsListResponseResultMobileReportErrorCodeNotHTML           SpeedAPITestsListResponseResultMobileReportErrorCode = "NOT_HTML"
+	SpeedAPITestsListResponseResultMobileReportErrorCodeLighthouseTimeout SpeedAPITestsListResponseResultMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsListResponseResultMobileReportErrorCodeUnknown           SpeedAPITestsListResponseResultMobileReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type SpeedAPITestsGetResponseMobileReportState string
+type SpeedAPITestsListResponseResultMobileReportState string
 
 const (
-	SpeedAPITestsGetResponseMobileReportStateRunning  SpeedAPITestsGetResponseMobileReportState = "RUNNING"
-	SpeedAPITestsGetResponseMobileReportStateComplete SpeedAPITestsGetResponseMobileReportState = "COMPLETE"
-	SpeedAPITestsGetResponseMobileReportStateFailed   SpeedAPITestsGetResponseMobileReportState = "FAILED"
+	SpeedAPITestsListResponseResultMobileReportStateRunning  SpeedAPITestsListResponseResultMobileReportState = "RUNNING"
+	SpeedAPITestsListResponseResultMobileReportStateComplete SpeedAPITestsListResponseResultMobileReportState = "COMPLETE"
+	SpeedAPITestsListResponseResultMobileReportStateFailed   SpeedAPITestsListResponseResultMobileReportState = "FAILED"
 )
 
 // A test region with a label.
-type SpeedAPITestsGetResponseRegion struct {
+type SpeedAPITestsListResponseResultRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAPITestsGetResponseRegionValue `json:"value"`
-	JSON  speedAPITestsGetResponseRegionJSON  `json:"-"`
+	Value SpeedAPITestsListResponseResultRegionValue `json:"value"`
+	JSON  speedAPITestsListResponseResultRegionJSON  `json:"-"`
 }
 
-// speedAPITestsGetResponseRegionJSON contains the JSON metadata for the struct
-// [SpeedAPITestsGetResponseRegion]
-type speedAPITestsGetResponseRegionJSON struct {
+// speedAPITestsListResponseResultRegionJSON contains the JSON metadata for the
+// struct [SpeedAPITestsListResponseResultRegion]
+type speedAPITestsListResponseResultRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAPITestsGetResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITestsListResponseResultRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAPITestsGetResponseRegionValue string
+type SpeedAPITestsListResponseResultRegionValue string
 
 const (
-	SpeedAPITestsGetResponseRegionValueAsiaEast1           SpeedAPITestsGetResponseRegionValue = "asia-east1"
-	SpeedAPITestsGetResponseRegionValueAsiaNortheast1      SpeedAPITestsGetResponseRegionValue = "asia-northeast1"
-	SpeedAPITestsGetResponseRegionValueAsiaNortheast2      SpeedAPITestsGetResponseRegionValue = "asia-northeast2"
-	SpeedAPITestsGetResponseRegionValueAsiaSouth1          SpeedAPITestsGetResponseRegionValue = "asia-south1"
-	SpeedAPITestsGetResponseRegionValueAsiaSoutheast1      SpeedAPITestsGetResponseRegionValue = "asia-southeast1"
-	SpeedAPITestsGetResponseRegionValueAustraliaSoutheast1 SpeedAPITestsGetResponseRegionValue = "australia-southeast1"
-	SpeedAPITestsGetResponseRegionValueEuropeNorth1        SpeedAPITestsGetResponseRegionValue = "europe-north1"
-	SpeedAPITestsGetResponseRegionValueEuropeSouthwest1    SpeedAPITestsGetResponseRegionValue = "europe-southwest1"
-	SpeedAPITestsGetResponseRegionValueEuropeWest1         SpeedAPITestsGetResponseRegionValue = "europe-west1"
-	SpeedAPITestsGetResponseRegionValueEuropeWest2         SpeedAPITestsGetResponseRegionValue = "europe-west2"
-	SpeedAPITestsGetResponseRegionValueEuropeWest3         SpeedAPITestsGetResponseRegionValue = "europe-west3"
-	SpeedAPITestsGetResponseRegionValueEuropeWest4         SpeedAPITestsGetResponseRegionValue = "europe-west4"
-	SpeedAPITestsGetResponseRegionValueEuropeWest8         SpeedAPITestsGetResponseRegionValue = "europe-west8"
-	SpeedAPITestsGetResponseRegionValueEuropeWest9         SpeedAPITestsGetResponseRegionValue = "europe-west9"
-	SpeedAPITestsGetResponseRegionValueMeWest1             SpeedAPITestsGetResponseRegionValue = "me-west1"
-	SpeedAPITestsGetResponseRegionValueSouthamericaEast1   SpeedAPITestsGetResponseRegionValue = "southamerica-east1"
-	SpeedAPITestsGetResponseRegionValueUsCentral1          SpeedAPITestsGetResponseRegionValue = "us-central1"
-	SpeedAPITestsGetResponseRegionValueUsEast1             SpeedAPITestsGetResponseRegionValue = "us-east1"
-	SpeedAPITestsGetResponseRegionValueUsEast4             SpeedAPITestsGetResponseRegionValue = "us-east4"
-	SpeedAPITestsGetResponseRegionValueUsSouth1            SpeedAPITestsGetResponseRegionValue = "us-south1"
-	SpeedAPITestsGetResponseRegionValueUsWest1             SpeedAPITestsGetResponseRegionValue = "us-west1"
+	SpeedAPITestsListResponseResultRegionValueAsiaEast1           SpeedAPITestsListResponseResultRegionValue = "asia-east1"
+	SpeedAPITestsListResponseResultRegionValueAsiaNortheast1      SpeedAPITestsListResponseResultRegionValue = "asia-northeast1"
+	SpeedAPITestsListResponseResultRegionValueAsiaNortheast2      SpeedAPITestsListResponseResultRegionValue = "asia-northeast2"
+	SpeedAPITestsListResponseResultRegionValueAsiaSouth1          SpeedAPITestsListResponseResultRegionValue = "asia-south1"
+	SpeedAPITestsListResponseResultRegionValueAsiaSoutheast1      SpeedAPITestsListResponseResultRegionValue = "asia-southeast1"
+	SpeedAPITestsListResponseResultRegionValueAustraliaSoutheast1 SpeedAPITestsListResponseResultRegionValue = "australia-southeast1"
+	SpeedAPITestsListResponseResultRegionValueEuropeNorth1        SpeedAPITestsListResponseResultRegionValue = "europe-north1"
+	SpeedAPITestsListResponseResultRegionValueEuropeSouthwest1    SpeedAPITestsListResponseResultRegionValue = "europe-southwest1"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest1         SpeedAPITestsListResponseResultRegionValue = "europe-west1"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest2         SpeedAPITestsListResponseResultRegionValue = "europe-west2"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest3         SpeedAPITestsListResponseResultRegionValue = "europe-west3"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest4         SpeedAPITestsListResponseResultRegionValue = "europe-west4"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest8         SpeedAPITestsListResponseResultRegionValue = "europe-west8"
+	SpeedAPITestsListResponseResultRegionValueEuropeWest9         SpeedAPITestsListResponseResultRegionValue = "europe-west9"
+	SpeedAPITestsListResponseResultRegionValueMeWest1             SpeedAPITestsListResponseResultRegionValue = "me-west1"
+	SpeedAPITestsListResponseResultRegionValueSouthamericaEast1   SpeedAPITestsListResponseResultRegionValue = "southamerica-east1"
+	SpeedAPITestsListResponseResultRegionValueUsCentral1          SpeedAPITestsListResponseResultRegionValue = "us-central1"
+	SpeedAPITestsListResponseResultRegionValueUsEast1             SpeedAPITestsListResponseResultRegionValue = "us-east1"
+	SpeedAPITestsListResponseResultRegionValueUsEast4             SpeedAPITestsListResponseResultRegionValue = "us-east4"
+	SpeedAPITestsListResponseResultRegionValueUsSouth1            SpeedAPITestsListResponseResultRegionValue = "us-south1"
+	SpeedAPITestsListResponseResultRegionValueUsWest1             SpeedAPITestsListResponseResultRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type SpeedAPITestsGetResponseScheduleFrequency string
+type SpeedAPITestsListResponseResultScheduleFrequency string
 
 const (
-	SpeedAPITestsGetResponseScheduleFrequencyDaily  SpeedAPITestsGetResponseScheduleFrequency = "DAILY"
-	SpeedAPITestsGetResponseScheduleFrequencyWeekly SpeedAPITestsGetResponseScheduleFrequency = "WEEKLY"
+	SpeedAPITestsListResponseResultScheduleFrequencyDaily  SpeedAPITestsListResponseResultScheduleFrequency = "DAILY"
+	SpeedAPITestsListResponseResultScheduleFrequencyWeekly SpeedAPITestsListResponseResultScheduleFrequency = "WEEKLY"
+)
+
+type SpeedAPITestsListResponseResultInfo struct {
+	Count      int64                                   `json:"count"`
+	Page       int64                                   `json:"page"`
+	PerPage    int64                                   `json:"per_page"`
+	TotalCount int64                                   `json:"total_count"`
+	JSON       speedAPITestsListResponseResultInfoJSON `json:"-"`
+}
+
+// speedAPITestsListResponseResultInfoJSON contains the JSON metadata for the
+// struct [SpeedAPITestsListResponseResultInfo]
+type speedAPITestsListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsGetResponse struct {
+	Errors   []SpeedAPITestsGetResponseError   `json:"errors"`
+	Messages []SpeedAPITestsGetResponseMessage `json:"messages"`
+	Result   SpeedAPITestsGetResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                         `json:"success"`
+	JSON    speedAPITestsGetResponseJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseJSON contains the JSON metadata for the struct
+// [SpeedAPITestsGetResponse]
+type speedAPITestsGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsGetResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    speedAPITestsGetResponseErrorJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITestsGetResponseError]
+type speedAPITestsGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsGetResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    speedAPITestsGetResponseMessageJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITestsGetResponseMessage]
+type speedAPITestsGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsGetResponseResult struct {
+	// UUID
+	ID   string    `json:"id"`
+	Date time.Time `json:"date" format:"date-time"`
+	// The Lighthouse report.
+	DesktopReport SpeedAPITestsGetResponseResultDesktopReport `json:"desktopReport"`
+	// The Lighthouse report.
+	MobileReport SpeedAPITestsGetResponseResultMobileReport `json:"mobileReport"`
+	// A test region with a label.
+	Region SpeedAPITestsGetResponseResultRegion `json:"region"`
+	// The frequency of the test.
+	ScheduleFrequency SpeedAPITestsGetResponseResultScheduleFrequency `json:"scheduleFrequency"`
+	// A URL.
+	URL  string                             `json:"url"`
+	JSON speedAPITestsGetResponseResultJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPITestsGetResponseResult]
+type speedAPITestsGetResponseResultJSON struct {
+	ID                apijson.Field
+	Date              apijson.Field
+	DesktopReport     apijson.Field
+	MobileReport      apijson.Field
+	Region            apijson.Field
+	ScheduleFrequency apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The Lighthouse report.
+type SpeedAPITestsGetResponseResultDesktopReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType SpeedAPITestsGetResponseResultDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsGetResponseResultDesktopReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State SpeedAPITestsGetResponseResultDesktopReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64                                         `json:"tti"`
+	JSON speedAPITestsGetResponseResultDesktopReportJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseResultDesktopReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsGetResponseResultDesktopReport]
+type speedAPITestsGetResponseResultDesktopReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResultDesktopReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device.
+type SpeedAPITestsGetResponseResultDesktopReportDeviceType string
+
+const (
+	SpeedAPITestsGetResponseResultDesktopReportDeviceTypeDesktop SpeedAPITestsGetResponseResultDesktopReportDeviceType = "DESKTOP"
+	SpeedAPITestsGetResponseResultDesktopReportDeviceTypeMobile  SpeedAPITestsGetResponseResultDesktopReportDeviceType = "MOBILE"
+)
+
+type SpeedAPITestsGetResponseResultDesktopReportError struct {
+	// The error code of the Lighthouse result.
+	Code SpeedAPITestsGetResponseResultDesktopReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                                               `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsGetResponseResultDesktopReportErrorJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseResultDesktopReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsGetResponseResultDesktopReportError]
+type speedAPITestsGetResponseResultDesktopReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResultDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The error code of the Lighthouse result.
+type SpeedAPITestsGetResponseResultDesktopReportErrorCode string
+
+const (
+	SpeedAPITestsGetResponseResultDesktopReportErrorCodeNotReachable      SpeedAPITestsGetResponseResultDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsGetResponseResultDesktopReportErrorCodeDNSFailure        SpeedAPITestsGetResponseResultDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsGetResponseResultDesktopReportErrorCodeNotHTML           SpeedAPITestsGetResponseResultDesktopReportErrorCode = "NOT_HTML"
+	SpeedAPITestsGetResponseResultDesktopReportErrorCodeLighthouseTimeout SpeedAPITestsGetResponseResultDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsGetResponseResultDesktopReportErrorCodeUnknown           SpeedAPITestsGetResponseResultDesktopReportErrorCode = "UNKNOWN"
+)
+
+// The state of the Lighthouse report.
+type SpeedAPITestsGetResponseResultDesktopReportState string
+
+const (
+	SpeedAPITestsGetResponseResultDesktopReportStateRunning  SpeedAPITestsGetResponseResultDesktopReportState = "RUNNING"
+	SpeedAPITestsGetResponseResultDesktopReportStateComplete SpeedAPITestsGetResponseResultDesktopReportState = "COMPLETE"
+	SpeedAPITestsGetResponseResultDesktopReportStateFailed   SpeedAPITestsGetResponseResultDesktopReportState = "FAILED"
+)
+
+// The Lighthouse report.
+type SpeedAPITestsGetResponseResultMobileReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType SpeedAPITestsGetResponseResultMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedAPITestsGetResponseResultMobileReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State SpeedAPITestsGetResponseResultMobileReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64                                        `json:"tti"`
+	JSON speedAPITestsGetResponseResultMobileReportJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseResultMobileReportJSON contains the JSON metadata for
+// the struct [SpeedAPITestsGetResponseResultMobileReport]
+type speedAPITestsGetResponseResultMobileReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResultMobileReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device.
+type SpeedAPITestsGetResponseResultMobileReportDeviceType string
+
+const (
+	SpeedAPITestsGetResponseResultMobileReportDeviceTypeDesktop SpeedAPITestsGetResponseResultMobileReportDeviceType = "DESKTOP"
+	SpeedAPITestsGetResponseResultMobileReportDeviceTypeMobile  SpeedAPITestsGetResponseResultMobileReportDeviceType = "MOBILE"
+)
+
+type SpeedAPITestsGetResponseResultMobileReportError struct {
+	// The error code of the Lighthouse result.
+	Code SpeedAPITestsGetResponseResultMobileReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                                              `json:"finalDisplayedUrl"`
+	JSON              speedAPITestsGetResponseResultMobileReportErrorJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseResultMobileReportErrorJSON contains the JSON metadata
+// for the struct [SpeedAPITestsGetResponseResultMobileReportError]
+type speedAPITestsGetResponseResultMobileReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResultMobileReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The error code of the Lighthouse result.
+type SpeedAPITestsGetResponseResultMobileReportErrorCode string
+
+const (
+	SpeedAPITestsGetResponseResultMobileReportErrorCodeNotReachable      SpeedAPITestsGetResponseResultMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedAPITestsGetResponseResultMobileReportErrorCodeDNSFailure        SpeedAPITestsGetResponseResultMobileReportErrorCode = "DNS_FAILURE"
+	SpeedAPITestsGetResponseResultMobileReportErrorCodeNotHTML           SpeedAPITestsGetResponseResultMobileReportErrorCode = "NOT_HTML"
+	SpeedAPITestsGetResponseResultMobileReportErrorCodeLighthouseTimeout SpeedAPITestsGetResponseResultMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedAPITestsGetResponseResultMobileReportErrorCodeUnknown           SpeedAPITestsGetResponseResultMobileReportErrorCode = "UNKNOWN"
+)
+
+// The state of the Lighthouse report.
+type SpeedAPITestsGetResponseResultMobileReportState string
+
+const (
+	SpeedAPITestsGetResponseResultMobileReportStateRunning  SpeedAPITestsGetResponseResultMobileReportState = "RUNNING"
+	SpeedAPITestsGetResponseResultMobileReportStateComplete SpeedAPITestsGetResponseResultMobileReportState = "COMPLETE"
+	SpeedAPITestsGetResponseResultMobileReportStateFailed   SpeedAPITestsGetResponseResultMobileReportState = "FAILED"
+)
+
+// A test region with a label.
+type SpeedAPITestsGetResponseResultRegion struct {
+	Label string `json:"label"`
+	// A test region.
+	Value SpeedAPITestsGetResponseResultRegionValue `json:"value"`
+	JSON  speedAPITestsGetResponseResultRegionJSON  `json:"-"`
+}
+
+// speedAPITestsGetResponseResultRegionJSON contains the JSON metadata for the
+// struct [SpeedAPITestsGetResponseResultRegion]
+type speedAPITestsGetResponseResultRegionJSON struct {
+	Label       apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseResultRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A test region.
+type SpeedAPITestsGetResponseResultRegionValue string
+
+const (
+	SpeedAPITestsGetResponseResultRegionValueAsiaEast1           SpeedAPITestsGetResponseResultRegionValue = "asia-east1"
+	SpeedAPITestsGetResponseResultRegionValueAsiaNortheast1      SpeedAPITestsGetResponseResultRegionValue = "asia-northeast1"
+	SpeedAPITestsGetResponseResultRegionValueAsiaNortheast2      SpeedAPITestsGetResponseResultRegionValue = "asia-northeast2"
+	SpeedAPITestsGetResponseResultRegionValueAsiaSouth1          SpeedAPITestsGetResponseResultRegionValue = "asia-south1"
+	SpeedAPITestsGetResponseResultRegionValueAsiaSoutheast1      SpeedAPITestsGetResponseResultRegionValue = "asia-southeast1"
+	SpeedAPITestsGetResponseResultRegionValueAustraliaSoutheast1 SpeedAPITestsGetResponseResultRegionValue = "australia-southeast1"
+	SpeedAPITestsGetResponseResultRegionValueEuropeNorth1        SpeedAPITestsGetResponseResultRegionValue = "europe-north1"
+	SpeedAPITestsGetResponseResultRegionValueEuropeSouthwest1    SpeedAPITestsGetResponseResultRegionValue = "europe-southwest1"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest1         SpeedAPITestsGetResponseResultRegionValue = "europe-west1"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest2         SpeedAPITestsGetResponseResultRegionValue = "europe-west2"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest3         SpeedAPITestsGetResponseResultRegionValue = "europe-west3"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest4         SpeedAPITestsGetResponseResultRegionValue = "europe-west4"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest8         SpeedAPITestsGetResponseResultRegionValue = "europe-west8"
+	SpeedAPITestsGetResponseResultRegionValueEuropeWest9         SpeedAPITestsGetResponseResultRegionValue = "europe-west9"
+	SpeedAPITestsGetResponseResultRegionValueMeWest1             SpeedAPITestsGetResponseResultRegionValue = "me-west1"
+	SpeedAPITestsGetResponseResultRegionValueSouthamericaEast1   SpeedAPITestsGetResponseResultRegionValue = "southamerica-east1"
+	SpeedAPITestsGetResponseResultRegionValueUsCentral1          SpeedAPITestsGetResponseResultRegionValue = "us-central1"
+	SpeedAPITestsGetResponseResultRegionValueUsEast1             SpeedAPITestsGetResponseResultRegionValue = "us-east1"
+	SpeedAPITestsGetResponseResultRegionValueUsEast4             SpeedAPITestsGetResponseResultRegionValue = "us-east4"
+	SpeedAPITestsGetResponseResultRegionValueUsSouth1            SpeedAPITestsGetResponseResultRegionValue = "us-south1"
+	SpeedAPITestsGetResponseResultRegionValueUsWest1             SpeedAPITestsGetResponseResultRegionValue = "us-west1"
+)
+
+// The frequency of the test.
+type SpeedAPITestsGetResponseResultScheduleFrequency string
+
+const (
+	SpeedAPITestsGetResponseResultScheduleFrequencyDaily  SpeedAPITestsGetResponseResultScheduleFrequency = "DAILY"
+	SpeedAPITestsGetResponseResultScheduleFrequencyWeekly SpeedAPITestsGetResponseResultScheduleFrequency = "WEEKLY"
 )
 
 type SpeedAPITrendsListResponse struct {
+	Errors   []SpeedAPITrendsListResponseError   `json:"errors"`
+	Messages []SpeedAPITrendsListResponseMessage `json:"messages"`
+	Result   SpeedAPITrendsListResponseResult    `json:"result"`
+	// Whether the API call was successful.
+	Success bool                           `json:"success"`
+	JSON    speedAPITrendsListResponseJSON `json:"-"`
+}
+
+// speedAPITrendsListResponseJSON contains the JSON metadata for the struct
+// [SpeedAPITrendsListResponse]
+type speedAPITrendsListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITrendsListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITrendsListResponseError struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    speedAPITrendsListResponseErrorJSON `json:"-"`
+}
+
+// speedAPITrendsListResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITrendsListResponseError]
+type speedAPITrendsListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITrendsListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITrendsListResponseMessage struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    speedAPITrendsListResponseMessageJSON `json:"-"`
+}
+
+// speedAPITrendsListResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITrendsListResponseMessage]
+type speedAPITrendsListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITrendsListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITrendsListResponseResult struct {
 	// Cumulative Layout Shift trend.
 	Cls []float64 `json:"cls"`
 	// First Contentful Paint trend.
@@ -1634,13 +2173,13 @@ type SpeedAPITrendsListResponse struct {
 	// Time To First Byte trend.
 	Ttfb []float64 `json:"ttfb"`
 	// Time To Interactive trend.
-	Tti  []float64                      `json:"tti"`
-	JSON speedAPITrendsListResponseJSON `json:"-"`
+	Tti  []float64                            `json:"tti"`
+	JSON speedAPITrendsListResponseResultJSON `json:"-"`
 }
 
-// speedAPITrendsListResponseJSON contains the JSON metadata for the struct
-// [SpeedAPITrendsListResponse]
-type speedAPITrendsListResponseJSON struct {
+// speedAPITrendsListResponseResultJSON contains the JSON metadata for the struct
+// [SpeedAPITrendsListResponseResult]
+type speedAPITrendsListResponseResultJSON struct {
 	Cls              apijson.Field
 	Fcp              apijson.Field
 	Lcp              apijson.Field
@@ -1653,131 +2192,7 @@ type speedAPITrendsListResponseJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *SpeedAPITrendsListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIAvailabilitiesListResponseEnvelope struct {
-	Errors   []SpeedAPIAvailabilitiesListResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPIAvailabilitiesListResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPIAvailabilitiesListResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                           `json:"success"`
-	JSON    speedAPIAvailabilitiesListResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPIAvailabilitiesListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SpeedAPIAvailabilitiesListResponseEnvelope]
-type speedAPIAvailabilitiesListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIAvailabilitiesListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIAvailabilitiesListResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    speedAPIAvailabilitiesListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPIAvailabilitiesListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SpeedAPIAvailabilitiesListResponseEnvelopeErrors]
-type speedAPIAvailabilitiesListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIAvailabilitiesListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIAvailabilitiesListResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    speedAPIAvailabilitiesListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPIAvailabilitiesListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SpeedAPIAvailabilitiesListResponseEnvelopeMessages]
-type speedAPIAvailabilitiesListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIAvailabilitiesListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIPagesListResponseEnvelope struct {
-	Errors   []SpeedAPIPagesListResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPIPagesListResponseEnvelopeMessages `json:"messages"`
-	Result   []SpeedAPIPagesListResponse                 `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                  `json:"success"`
-	JSON    speedAPIPagesListResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPIPagesListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPIPagesListResponseEnvelope]
-type speedAPIPagesListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIPagesListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIPagesListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    speedAPIPagesListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPIPagesListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPIPagesListResponseEnvelopeErrors]
-type speedAPIPagesListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIPagesListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIPagesListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    speedAPIPagesListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPIPagesListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SpeedAPIPagesListResponseEnvelopeMessages]
-type speedAPIPagesListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIPagesListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedAPITrendsListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1822,68 +2237,6 @@ const (
 	SpeedAPIScheduleDeleteParamsRegionUsWest1             SpeedAPIScheduleDeleteParamsRegion = "us-west1"
 )
 
-type SpeedAPIScheduleDeleteResponseEnvelope struct {
-	Errors   []SpeedAPIScheduleDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPIScheduleDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPIScheduleDeleteResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                       `json:"success"`
-	JSON    speedAPIScheduleDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPIScheduleDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SpeedAPIScheduleDeleteResponseEnvelope]
-type speedAPIScheduleDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    speedAPIScheduleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPIScheduleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SpeedAPIScheduleDeleteResponseEnvelopeErrors]
-type speedAPIScheduleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    speedAPIScheduleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPIScheduleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SpeedAPIScheduleDeleteResponseEnvelopeMessages]
-type speedAPIScheduleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type SpeedAPIScheduleGetParams struct {
 	// A test region.
 	Region param.Field[SpeedAPIScheduleGetParamsRegion] `query:"region"`
@@ -1925,69 +2278,6 @@ const (
 	SpeedAPIScheduleGetParamsRegionUsWest1             SpeedAPIScheduleGetParamsRegion = "us-west1"
 )
 
-type SpeedAPIScheduleGetResponseEnvelope struct {
-	Errors   []SpeedAPIScheduleGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPIScheduleGetResponseEnvelopeMessages `json:"messages"`
-	// The test schedule.
-	Result SpeedAPIScheduleGetResponse `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                    `json:"success"`
-	JSON    speedAPIScheduleGetResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPIScheduleGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SpeedAPIScheduleGetResponseEnvelope]
-type speedAPIScheduleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    speedAPIScheduleGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPIScheduleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPIScheduleGetResponseEnvelopeErrors]
-type speedAPIScheduleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    speedAPIScheduleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPIScheduleGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SpeedAPIScheduleGetResponseEnvelopeMessages]
-type speedAPIScheduleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type SpeedAPITestsNewParams struct {
 	// A test region.
 	Region param.Field[SpeedAPITestsNewParamsRegion] `json:"region"`
@@ -2023,68 +2313,6 @@ const (
 	SpeedAPITestsNewParamsRegionUsSouth1            SpeedAPITestsNewParamsRegion = "us-south1"
 	SpeedAPITestsNewParamsRegionUsWest1             SpeedAPITestsNewParamsRegion = "us-west1"
 )
-
-type SpeedAPITestsNewResponseEnvelope struct {
-	Errors   []SpeedAPITestsNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPITestsNewResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPITestsNewResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                 `json:"success"`
-	JSON    speedAPITestsNewResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITestsNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPITestsNewResponseEnvelope]
-type speedAPITestsNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    speedAPITestsNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPITestsNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPITestsNewResponseEnvelopeErrors]
-type speedAPITestsNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    speedAPITestsNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPITestsNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SpeedAPITestsNewResponseEnvelopeMessages]
-type speedAPITestsNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type SpeedAPITestsDeleteParams struct {
 	// A test region.
@@ -2126,68 +2354,6 @@ const (
 	SpeedAPITestsDeleteParamsRegionUsSouth1            SpeedAPITestsDeleteParamsRegion = "us-south1"
 	SpeedAPITestsDeleteParamsRegionUsWest1             SpeedAPITestsDeleteParamsRegion = "us-west1"
 )
-
-type SpeedAPITestsDeleteResponseEnvelope struct {
-	Errors   []SpeedAPITestsDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPITestsDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPITestsDeleteResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                    `json:"success"`
-	JSON    speedAPITestsDeleteResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITestsDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SpeedAPITestsDeleteResponseEnvelope]
-type speedAPITestsDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsDeleteResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    speedAPITestsDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPITestsDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPITestsDeleteResponseEnvelopeErrors]
-type speedAPITestsDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsDeleteResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    speedAPITestsDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPITestsDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SpeedAPITestsDeleteResponseEnvelopeMessages]
-type speedAPITestsDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type SpeedAPITestsListParams struct {
 	Page    param.Field[int64] `query:"page"`
@@ -2231,155 +2397,6 @@ const (
 	SpeedAPITestsListParamsRegionUsSouth1            SpeedAPITestsListParamsRegion = "us-south1"
 	SpeedAPITestsListParamsRegionUsWest1             SpeedAPITestsListParamsRegion = "us-west1"
 )
-
-type SpeedAPITestsListResponseEnvelope struct {
-	Errors     []SpeedAPITestsListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []SpeedAPITestsListResponseEnvelopeMessages `json:"messages"`
-	Result     []SpeedAPITestsListResponse                 `json:"result"`
-	ResultInfo SpeedAPITestsListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful.
-	Success bool                                  `json:"success"`
-	JSON    speedAPITestsListResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITestsListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPITestsListResponseEnvelope]
-type speedAPITestsListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    speedAPITestsListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPITestsListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPITestsListResponseEnvelopeErrors]
-type speedAPITestsListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    speedAPITestsListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPITestsListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SpeedAPITestsListResponseEnvelopeMessages]
-type speedAPITestsListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseEnvelopeResultInfo struct {
-	Count      int64                                           `json:"count"`
-	Page       int64                                           `json:"page"`
-	PerPage    int64                                           `json:"per_page"`
-	TotalCount int64                                           `json:"total_count"`
-	JSON       speedAPITestsListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// speedAPITestsListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [SpeedAPITestsListResponseEnvelopeResultInfo]
-type speedAPITestsListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsGetResponseEnvelope struct {
-	Errors   []SpeedAPITestsGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPITestsGetResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPITestsGetResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                 `json:"success"`
-	JSON    speedAPITestsGetResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITestsGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPITestsGetResponseEnvelope]
-type speedAPITestsGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    speedAPITestsGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPITestsGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPITestsGetResponseEnvelopeErrors]
-type speedAPITestsGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    speedAPITestsGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPITestsGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SpeedAPITestsGetResponseEnvelopeMessages]
-type speedAPITestsGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type SpeedAPITrendsListParams struct {
 	// The type of device.
@@ -2435,65 +2452,3 @@ const (
 	SpeedAPITrendsListParamsRegionUsSouth1            SpeedAPITrendsListParamsRegion = "us-south1"
 	SpeedAPITrendsListParamsRegionUsWest1             SpeedAPITrendsListParamsRegion = "us-west1"
 )
-
-type SpeedAPITrendsListResponseEnvelope struct {
-	Errors   []SpeedAPITrendsListResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPITrendsListResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPITrendsListResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                   `json:"success"`
-	JSON    speedAPITrendsListResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITrendsListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPITrendsListResponseEnvelope]
-type speedAPITrendsListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITrendsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITrendsListResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    speedAPITrendsListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPITrendsListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPITrendsListResponseEnvelopeErrors]
-type speedAPITrendsListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITrendsListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITrendsListResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    speedAPITrendsListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPITrendsListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SpeedAPITrendsListResponseEnvelopeMessages]
-type speedAPITrendsListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITrendsListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

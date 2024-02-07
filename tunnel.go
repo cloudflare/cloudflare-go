@@ -39,78 +39,51 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 // Fetches a single Argo Tunnel.
 func (r *TunnelService) Get(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Deletes an Argo Tunnel from an account.
 func (r *TunnelService) Delete(ctx context.Context, accountID string, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TunnelDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Creates a new Argo Tunnel in an account.
 func (r *TunnelService) ArgoTunnelNewAnArgoTunnel(ctx context.Context, accountID string, body TunnelArgoTunnelNewAnArgoTunnelParams, opts ...option.RequestOption) (res *TunnelArgoTunnelNewAnArgoTunnelResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TunnelArgoTunnelNewAnArgoTunnelResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) ArgoTunnelListArgoTunnels(ctx context.Context, accountID string, query TunnelArgoTunnelListArgoTunnelsParams, opts ...option.RequestOption) (res *[]TunnelArgoTunnelListArgoTunnelsResponse, err error) {
+func (r *TunnelService) ArgoTunnelListArgoTunnels(ctx context.Context, accountID string, query TunnelArgoTunnelListArgoTunnelsParams, opts ...option.RequestOption) (res *TunnelArgoTunnelListArgoTunnelsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TunnelArgoTunnelListArgoTunnelsResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type TunnelGetResponse struct {
-	// UUID of the tunnel.
-	ID string `json:"id,required"`
-	// The tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelGetResponseConnection `json:"connections,required"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name,required"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time             `json:"deleted_at,nullable" format:"date-time"`
-	JSON      tunnelGetResponseJSON `json:"-"`
+	Errors   []TunnelGetResponseError   `json:"errors"`
+	Messages []TunnelGetResponseMessage `json:"messages"`
+	Result   TunnelGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success TunnelGetResponseSuccess `json:"success"`
+	JSON    tunnelGetResponseJSON    `json:"-"`
 }
 
 // tunnelGetResponseJSON contains the JSON metadata for the struct
 // [TunnelGetResponse]
 type tunnelGetResponseJSON struct {
-	ID          apijson.Field
-	Connections apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	DeletedAt   apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -119,7 +92,76 @@ func (r *TunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelGetResponseConnection struct {
+type TunnelGetResponseError struct {
+	Code    int64                      `json:"code,required"`
+	Message string                     `json:"message,required"`
+	JSON    tunnelGetResponseErrorJSON `json:"-"`
+}
+
+// tunnelGetResponseErrorJSON contains the JSON metadata for the struct
+// [TunnelGetResponseError]
+type tunnelGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelGetResponseMessage struct {
+	Code    int64                        `json:"code,required"`
+	Message string                       `json:"message,required"`
+	JSON    tunnelGetResponseMessageJSON `json:"-"`
+}
+
+// tunnelGetResponseMessageJSON contains the JSON metadata for the struct
+// [TunnelGetResponseMessage]
+type tunnelGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelGetResponseResult struct {
+	// UUID of the tunnel.
+	ID string `json:"id,required"`
+	// The tunnel connections between your origin and Cloudflare's edge.
+	Connections []TunnelGetResponseResultConnection `json:"connections,required"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name,required"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time                   `json:"deleted_at,nullable" format:"date-time"`
+	JSON      tunnelGetResponseResultJSON `json:"-"`
+}
+
+// tunnelGetResponseResultJSON contains the JSON metadata for the struct
+// [TunnelGetResponseResult]
+type tunnelGetResponseResultJSON struct {
+	ID          apijson.Field
+	Connections apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	DeletedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelGetResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelGetResponseResultConnection struct {
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
 	// Cloudflare continues to track connections for several minutes after they
@@ -128,13 +170,13 @@ type TunnelGetResponseConnection struct {
 	// tracked. If `false`, the connection is actively serving traffic.
 	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                          `json:"uuid"`
-	JSON tunnelGetResponseConnectionJSON `json:"-"`
+	Uuid string                                `json:"uuid"`
+	JSON tunnelGetResponseResultConnectionJSON `json:"-"`
 }
 
-// tunnelGetResponseConnectionJSON contains the JSON metadata for the struct
-// [TunnelGetResponseConnection]
-type tunnelGetResponseConnectionJSON struct {
+// tunnelGetResponseResultConnectionJSON contains the JSON metadata for the struct
+// [TunnelGetResponseResultConnection]
+type tunnelGetResponseResultConnectionJSON struct {
 	ColoName           apijson.Field
 	IsPendingReconnect apijson.Field
 	Uuid               apijson.Field
@@ -142,33 +184,33 @@ type tunnelGetResponseConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelGetResponseConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelGetResponseResultConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type TunnelGetResponseSuccess bool
+
+const (
+	TunnelGetResponseSuccessTrue TunnelGetResponseSuccess = true
+)
+
 type TunnelDeleteResponse struct {
-	// UUID of the tunnel.
-	ID string `json:"id,required"`
-	// The tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelDeleteResponseConnection `json:"connections,required"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name,required"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time                `json:"deleted_at,nullable" format:"date-time"`
-	JSON      tunnelDeleteResponseJSON `json:"-"`
+	Errors   []TunnelDeleteResponseError   `json:"errors"`
+	Messages []TunnelDeleteResponseMessage `json:"messages"`
+	Result   TunnelDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success TunnelDeleteResponseSuccess `json:"success"`
+	JSON    tunnelDeleteResponseJSON    `json:"-"`
 }
 
 // tunnelDeleteResponseJSON contains the JSON metadata for the struct
 // [TunnelDeleteResponse]
 type tunnelDeleteResponseJSON struct {
-	ID          apijson.Field
-	Connections apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	DeletedAt   apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -177,51 +219,62 @@ func (r *TunnelDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelDeleteResponseConnection struct {
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                             `json:"uuid"`
-	JSON tunnelDeleteResponseConnectionJSON `json:"-"`
+type TunnelDeleteResponseError struct {
+	Code    int64                         `json:"code,required"`
+	Message string                        `json:"message,required"`
+	JSON    tunnelDeleteResponseErrorJSON `json:"-"`
 }
 
-// tunnelDeleteResponseConnectionJSON contains the JSON metadata for the struct
-// [TunnelDeleteResponseConnection]
-type tunnelDeleteResponseConnectionJSON struct {
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+// tunnelDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [TunnelDeleteResponseError]
+type tunnelDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelDeleteResponseConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelArgoTunnelNewAnArgoTunnelResponse struct {
+type TunnelDeleteResponseMessage struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    tunnelDeleteResponseMessageJSON `json:"-"`
+}
+
+// tunnelDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [TunnelDeleteResponseMessage]
+type tunnelDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelDeleteResponseResult struct {
 	// UUID of the tunnel.
 	ID string `json:"id,required"`
 	// The tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelArgoTunnelNewAnArgoTunnelResponseConnection `json:"connections,required"`
+	Connections []TunnelDeleteResponseResultConnection `json:"connections,required"`
 	// Timestamp of when the tunnel was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// A user-friendly name for the tunnel.
 	Name string `json:"name,required"`
 	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
 	// deleted.
-	DeletedAt time.Time                                   `json:"deleted_at,nullable" format:"date-time"`
-	JSON      tunnelArgoTunnelNewAnArgoTunnelResponseJSON `json:"-"`
+	DeletedAt time.Time                      `json:"deleted_at,nullable" format:"date-time"`
+	JSON      tunnelDeleteResponseResultJSON `json:"-"`
 }
 
-// tunnelArgoTunnelNewAnArgoTunnelResponseJSON contains the JSON metadata for the
-// struct [TunnelArgoTunnelNewAnArgoTunnelResponse]
-type tunnelArgoTunnelNewAnArgoTunnelResponseJSON struct {
+// tunnelDeleteResponseResultJSON contains the JSON metadata for the struct
+// [TunnelDeleteResponseResult]
+type tunnelDeleteResponseResultJSON struct {
 	ID          apijson.Field
 	Connections apijson.Field
 	CreatedAt   apijson.Field
@@ -231,11 +284,11 @@ type tunnelArgoTunnelNewAnArgoTunnelResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelNewAnArgoTunnelResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelArgoTunnelNewAnArgoTunnelResponseConnection struct {
+type TunnelDeleteResponseResultConnection struct {
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
 	// Cloudflare continues to track connections for several minutes after they
@@ -244,13 +297,13 @@ type TunnelArgoTunnelNewAnArgoTunnelResponseConnection struct {
 	// tracked. If `false`, the connection is actively serving traffic.
 	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                `json:"uuid"`
-	JSON tunnelArgoTunnelNewAnArgoTunnelResponseConnectionJSON `json:"-"`
+	Uuid string                                   `json:"uuid"`
+	JSON tunnelDeleteResponseResultConnectionJSON `json:"-"`
 }
 
-// tunnelArgoTunnelNewAnArgoTunnelResponseConnectionJSON contains the JSON metadata
-// for the struct [TunnelArgoTunnelNewAnArgoTunnelResponseConnection]
-type tunnelArgoTunnelNewAnArgoTunnelResponseConnectionJSON struct {
+// tunnelDeleteResponseResultConnectionJSON contains the JSON metadata for the
+// struct [TunnelDeleteResponseResultConnection]
+type tunnelDeleteResponseResultConnectionJSON struct {
 	ColoName           apijson.Field
 	IsPendingReconnect apijson.Field
 	Uuid               apijson.Field
@@ -258,30 +311,230 @@ type tunnelArgoTunnelNewAnArgoTunnelResponseConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelNewAnArgoTunnelResponseConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelDeleteResponseResultConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type TunnelDeleteResponseSuccess bool
+
+const (
+	TunnelDeleteResponseSuccessTrue TunnelDeleteResponseSuccess = true
+)
+
+type TunnelArgoTunnelNewAnArgoTunnelResponse struct {
+	Errors   []TunnelArgoTunnelNewAnArgoTunnelResponseError   `json:"errors"`
+	Messages []TunnelArgoTunnelNewAnArgoTunnelResponseMessage `json:"messages"`
+	Result   TunnelArgoTunnelNewAnArgoTunnelResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success TunnelArgoTunnelNewAnArgoTunnelResponseSuccess `json:"success"`
+	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseJSON    `json:"-"`
+}
+
+// tunnelArgoTunnelNewAnArgoTunnelResponseJSON contains the JSON metadata for the
+// struct [TunnelArgoTunnelNewAnArgoTunnelResponse]
+type tunnelArgoTunnelNewAnArgoTunnelResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelNewAnArgoTunnelResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelNewAnArgoTunnelResponseError struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseErrorJSON `json:"-"`
+}
+
+// tunnelArgoTunnelNewAnArgoTunnelResponseErrorJSON contains the JSON metadata for
+// the struct [TunnelArgoTunnelNewAnArgoTunnelResponseError]
+type tunnelArgoTunnelNewAnArgoTunnelResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelNewAnArgoTunnelResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelNewAnArgoTunnelResponseMessage struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseMessageJSON `json:"-"`
+}
+
+// tunnelArgoTunnelNewAnArgoTunnelResponseMessageJSON contains the JSON metadata
+// for the struct [TunnelArgoTunnelNewAnArgoTunnelResponseMessage]
+type tunnelArgoTunnelNewAnArgoTunnelResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelNewAnArgoTunnelResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelNewAnArgoTunnelResponseResult struct {
+	// UUID of the tunnel.
+	ID string `json:"id,required"`
+	// The tunnel connections between your origin and Cloudflare's edge.
+	Connections []TunnelArgoTunnelNewAnArgoTunnelResponseResultConnection `json:"connections,required"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name,required"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time                                         `json:"deleted_at,nullable" format:"date-time"`
+	JSON      tunnelArgoTunnelNewAnArgoTunnelResponseResultJSON `json:"-"`
+}
+
+// tunnelArgoTunnelNewAnArgoTunnelResponseResultJSON contains the JSON metadata for
+// the struct [TunnelArgoTunnelNewAnArgoTunnelResponseResult]
+type tunnelArgoTunnelNewAnArgoTunnelResponseResultJSON struct {
+	ID          apijson.Field
+	Connections apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	DeletedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelNewAnArgoTunnelResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelNewAnArgoTunnelResponseResultConnection struct {
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                      `json:"uuid"`
+	JSON tunnelArgoTunnelNewAnArgoTunnelResponseResultConnectionJSON `json:"-"`
+}
+
+// tunnelArgoTunnelNewAnArgoTunnelResponseResultConnectionJSON contains the JSON
+// metadata for the struct
+// [TunnelArgoTunnelNewAnArgoTunnelResponseResultConnection]
+type tunnelArgoTunnelNewAnArgoTunnelResponseResultConnectionJSON struct {
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelNewAnArgoTunnelResponseResultConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type TunnelArgoTunnelNewAnArgoTunnelResponseSuccess bool
+
+const (
+	TunnelArgoTunnelNewAnArgoTunnelResponseSuccessTrue TunnelArgoTunnelNewAnArgoTunnelResponseSuccess = true
+)
+
+type TunnelArgoTunnelListArgoTunnelsResponse struct {
+	Errors     []TunnelArgoTunnelListArgoTunnelsResponseError    `json:"errors"`
+	Messages   []TunnelArgoTunnelListArgoTunnelsResponseMessage  `json:"messages"`
+	Result     []TunnelArgoTunnelListArgoTunnelsResponseResult   `json:"result"`
+	ResultInfo TunnelArgoTunnelListArgoTunnelsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success TunnelArgoTunnelListArgoTunnelsResponseSuccess `json:"success"`
+	JSON    tunnelArgoTunnelListArgoTunnelsResponseJSON    `json:"-"`
+}
+
+// tunnelArgoTunnelListArgoTunnelsResponseJSON contains the JSON metadata for the
+// struct [TunnelArgoTunnelListArgoTunnelsResponse]
+type tunnelArgoTunnelListArgoTunnelsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelListArgoTunnelsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelListArgoTunnelsResponseError struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    tunnelArgoTunnelListArgoTunnelsResponseErrorJSON `json:"-"`
+}
+
+// tunnelArgoTunnelListArgoTunnelsResponseErrorJSON contains the JSON metadata for
+// the struct [TunnelArgoTunnelListArgoTunnelsResponseError]
+type tunnelArgoTunnelListArgoTunnelsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelListArgoTunnelsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelArgoTunnelListArgoTunnelsResponseMessage struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    tunnelArgoTunnelListArgoTunnelsResponseMessageJSON `json:"-"`
+}
+
+// tunnelArgoTunnelListArgoTunnelsResponseMessageJSON contains the JSON metadata
+// for the struct [TunnelArgoTunnelListArgoTunnelsResponseMessage]
+type tunnelArgoTunnelListArgoTunnelsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelArgoTunnelListArgoTunnelsResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel] or
-// [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel].
-type TunnelArgoTunnelListArgoTunnelsResponse interface {
-	implementsTunnelArgoTunnelListArgoTunnelsResponse()
+// Union satisfied by
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnel] or
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnel].
+type TunnelArgoTunnelListArgoTunnelsResponseResult interface {
+	implementsTunnelArgoTunnelListArgoTunnelsResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*TunnelArgoTunnelListArgoTunnelsResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*TunnelArgoTunnelListArgoTunnelsResponseResult)(nil)).Elem(), "")
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel struct {
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnection `json:"connections"`
+	Connections []TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -306,14 +559,14 @@ type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelJSON    `json:"-"`
+	TunType TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
 }
 
-// tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelJSON contains the JSON
-// metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel]
-type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelJSON struct {
+// tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelJSON contains the
+// JSON metadata for the struct
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnel]
+type tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -330,14 +583,14 @@ type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnel) implementsTunnelArgoTunnelListArgoTunnelsResponse() {
+func (r TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnel) implementsTunnelArgoTunnelListArgoTunnelsResponseResult() {
 }
 
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnection struct {
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -356,14 +609,14 @@ type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                                 `json:"uuid"`
-	JSON tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+	Uuid string                                                                       `json:"uuid"`
+	JSON tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
 }
 
-// tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnectionJSON contains
-// the JSON metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnection]
-type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnectionJSON struct {
+// tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnectionJSON
+// contains the JSON metadata for the struct
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnection]
+type tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -376,29 +629,29 @@ type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnectionJSON stru
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType string
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType string
 
 const (
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunTypeWarpConnector TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunTypeIPSec         TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunTypeGre           TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType = "gre"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunTypeCni           TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkCfdTunnelTunType = "cni"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunTypeIPSec         TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunTypeGre           TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunTypeCni           TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkCfdTunnelTunType = "cni"
 )
 
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel struct {
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	Connections []TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -420,14 +673,14 @@ type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+	TunType TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
 }
 
-// tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelJSON contains
-// the JSON metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel]
-type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelJSON struct {
+// tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelJSON
+// contains the JSON metadata for the struct
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnel]
+type tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -443,14 +696,14 @@ type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelJSON stru
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnel) implementsTunnelArgoTunnelListArgoTunnelsResponse() {
+func (r TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnel) implementsTunnelArgoTunnelListArgoTunnelsResponseResult() {
 }
 
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnection struct {
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -469,14 +722,14 @@ type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnectio
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                                           `json:"uuid"`
-	JSON tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+	Uuid string                                                                                 `json:"uuid"`
+	JSON tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
 }
 
-// tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnectionJSON
+// tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON
 // contains the JSON metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnection]
-type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+// [TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type tunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -489,88 +742,53 @@ type tunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnectio
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType string
+type TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType string
 
 const (
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunTypeGre           TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunTypeCni           TunnelArgoTunnelListArgoTunnelsResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           TunnelArgoTunnelListArgoTunnelsResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
 )
 
-type TunnelGetResponseEnvelope struct {
-	Errors   []TunnelGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []TunnelGetResponseEnvelopeMessages `json:"messages"`
-	Result   TunnelGetResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success TunnelGetResponseEnvelopeSuccess `json:"success"`
-	JSON    tunnelGetResponseEnvelopeJSON    `json:"-"`
+type TunnelArgoTunnelListArgoTunnelsResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                               `json:"total_count"`
+	JSON       tunnelArgoTunnelListArgoTunnelsResponseResultInfoJSON `json:"-"`
 }
 
-// tunnelGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TunnelGetResponseEnvelope]
-type tunnelGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// tunnelArgoTunnelListArgoTunnelsResponseResultInfoJSON contains the JSON metadata
+// for the struct [TunnelArgoTunnelListArgoTunnelsResponseResultInfo]
+type tunnelArgoTunnelListArgoTunnelsResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelGetResponseEnvelopeErrors struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    tunnelGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TunnelGetResponseEnvelopeErrors]
-type tunnelGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelGetResponseEnvelopeMessages struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    tunnelGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [TunnelGetResponseEnvelopeMessages]
-type tunnelGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelArgoTunnelListArgoTunnelsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type TunnelGetResponseEnvelopeSuccess bool
+type TunnelArgoTunnelListArgoTunnelsResponseSuccess bool
 
 const (
-	TunnelGetResponseEnvelopeSuccessTrue TunnelGetResponseEnvelopeSuccess = true
+	TunnelArgoTunnelListArgoTunnelsResponseSuccessTrue TunnelArgoTunnelListArgoTunnelsResponseSuccess = true
 )
 
 type TunnelDeleteParams struct {
@@ -580,75 +798,6 @@ type TunnelDeleteParams struct {
 func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
-
-type TunnelDeleteResponseEnvelope struct {
-	Errors   []TunnelDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []TunnelDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   TunnelDeleteResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success TunnelDeleteResponseEnvelopeSuccess `json:"success"`
-	JSON    tunnelDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TunnelDeleteResponseEnvelope]
-type tunnelDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelDeleteResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TunnelDeleteResponseEnvelopeErrors]
-type tunnelDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelDeleteResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    tunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TunnelDeleteResponseEnvelopeMessages]
-type tunnelDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TunnelDeleteResponseEnvelopeSuccess bool
-
-const (
-	TunnelDeleteResponseEnvelopeSuccessTrue TunnelDeleteResponseEnvelopeSuccess = true
-)
 
 type TunnelArgoTunnelNewAnArgoTunnelParams struct {
 	// A user-friendly name for the tunnel.
@@ -661,76 +810,6 @@ type TunnelArgoTunnelNewAnArgoTunnelParams struct {
 func (r TunnelArgoTunnelNewAnArgoTunnelParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type TunnelArgoTunnelNewAnArgoTunnelResponseEnvelope struct {
-	Errors   []TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrors   `json:"errors"`
-	Messages []TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessages `json:"messages"`
-	Result   TunnelArgoTunnelNewAnArgoTunnelResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeSuccess `json:"success"`
-	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeJSON contains the JSON metadata
-// for the struct [TunnelArgoTunnelNewAnArgoTunnelResponseEnvelope]
-type tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelNewAnArgoTunnelResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrors]
-type tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessages]
-type tunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeSuccess bool
-
-const (
-	TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeSuccessTrue TunnelArgoTunnelNewAnArgoTunnelResponseEnvelopeSuccess = true
-)
 
 type TunnelArgoTunnelListArgoTunnelsParams struct {
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
@@ -761,103 +840,3 @@ func (r TunnelArgoTunnelListArgoTunnelsParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
-
-type TunnelArgoTunnelListArgoTunnelsResponseEnvelope struct {
-	Errors     []TunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []TunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessages `json:"messages"`
-	Result     []TunnelArgoTunnelListArgoTunnelsResponse                 `json:"result"`
-	ResultInfo TunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success TunnelArgoTunnelListArgoTunnelsResponseEnvelopeSuccess `json:"success"`
-	JSON    tunnelArgoTunnelListArgoTunnelsResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelArgoTunnelListArgoTunnelsResponseEnvelopeJSON contains the JSON metadata
-// for the struct [TunnelArgoTunnelListArgoTunnelsResponseEnvelope]
-type tunnelArgoTunnelListArgoTunnelsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelListArgoTunnelsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    tunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [TunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrors]
-type tunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelListArgoTunnelsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    tunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessages]
-type tunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelListArgoTunnelsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                       `json:"total_count"`
-	JSON       tunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// tunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [TunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfo]
-type tunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelArgoTunnelListArgoTunnelsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TunnelArgoTunnelListArgoTunnelsResponseEnvelopeSuccess bool
-
-const (
-	TunnelArgoTunnelListArgoTunnelsResponseEnvelopeSuccessTrue TunnelArgoTunnelListArgoTunnelsResponseEnvelopeSuccess = true
-)

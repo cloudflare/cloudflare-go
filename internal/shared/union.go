@@ -23,126 +23,138 @@ func (UnionString) ImplementsAccessAppDeleteParamsAppID()                       
 func (UnionString) ImplementsAccessAppRevokeTokenAccessApplicationsRevokeServiceTokensParamsAppID() {}
 func (UnionString) ImplementsAccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID() {
 }
-func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse() {}
-func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
+func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseResult() {
 }
-func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                         {}
-func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()                            {}
-func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue()                         {}
-func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                           {}
-func (UnionString) ImplementsSnippetDeleteResponse()                                         {}
+func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseResult() {
+}
+func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseResult() {}
+func (UnionString) ImplementsAddressingPrefixBindingDeleteResponseResult()                         {}
+func (UnionString) ImplementsHostnameSettingTLSGetResponseResultValue()                            {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateResponseResultValue()                         {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                                 {}
+func (UnionString) ImplementsSnippetDeleteResponseResult()                                         {}
 
 type UnionFloat float64
 
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsARecordTTL()                            {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsAaaaRecordTTL()                         {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCaaRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCertRecordTTL()                         {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCnameRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsDnskeyRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsDsRecordTTL()                           {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsHTTPsRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsLocRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsMxRecordTTL()                           {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsNaptrRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsNsRecordTTL()                           {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsPtrRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsSmimeaRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsSrvRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsSshfpRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsSvcbRecordTTL()                         {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsTlsaRecordTTL()                         {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsTxtRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsUriRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsARecordTTL()                         {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsAaaaRecordTTL()                      {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsCaaRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsCertRecordTTL()                      {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsCnameRecordTTL()                     {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsDnskeyRecordTTL()                    {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsDsRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsHTTPsRecordTTL()                     {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsLocRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsMxRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsNaptrRecordTTL()                     {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsNsRecordTTL()                        {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsPtrRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsSmimeaRecordTTL()                    {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsSrvRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsSshfpRecordTTL()                     {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsSvcbRecordTTL()                      {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsTlsaRecordTTL()                      {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsTxtRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsUriRecordTTL()                       {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsARecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsAaaaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsARecordTTL()         {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsAaaaRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsCaaRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsCertRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsCnameRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsDnskeyRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsDsRecordTTL()        {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsHTTPsRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsLocRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsMxRecordTTL()        {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsNaptrRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsNsRecordTTL()        {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsPtrRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsSmimeaRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsSrvRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsSshfpRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsSvcbRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsTlsaRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsTxtRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordGetResponseResultDNSRecordsUriRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsARecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsAaaaRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsCaaRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsCertRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsCnameRecordTTL()  {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsDnskeyRecordTTL() {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsDsRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsHTTPsRecordTTL()  {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsLocRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsMxRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsNaptrRecordTTL()  {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsNsRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsPtrRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsSmimeaRecordTTL() {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsSrvRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsSshfpRecordTTL()  {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsSvcbRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsTlsaRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsTxtRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseResultDNSRecordsUriRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsARecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsCaaRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsCertRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsAaaaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsCnameRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsCaaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsDnskeyRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsCertRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsDsRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsHTTPsRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsCnameRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsLocRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsMxRecordTTL()  {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsNaptrRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsDnskeyRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsNsRecordTTL()  {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsPtrRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsSmimeaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsDsRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsSrvRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsSshfpRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsHTTPsRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsSvcbRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsLocRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsTlsaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsMxRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsTxtRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseDNSRecordsUriRecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsARecordTTL() {}
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsAaaaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsNaptrRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsCaaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsNsRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsCertRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsPtrRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsCnameRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsSmimeaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsDnskeyRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsSrvRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsDsRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsSshfpRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsHTTPsRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsSvcbRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsLocRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsTlsaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsMxRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsTxtRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsNaptrRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordResponseResultDNSRecordsUriRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsNsRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsARecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsPtrRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsAaaaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsSmimeaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsCaaRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsSrvRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsCertRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsSshfpRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsCnameRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsSvcbRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsDnskeyRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsTlsaRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsDsRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsTxtRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsHTTPsRecordTTL() {
 }
-func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseDNSRecordsUriRecordTTL() {
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsLocRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsMxRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsNaptrRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsNsRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsPtrRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsSmimeaRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsSrvRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsSshfpRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsSvcbRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsTlsaRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsTxtRecordTTL() {
+}
+func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneListDNSRecordsResponseResultDNSRecordsUriRecordTTL() {
 }
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsARecordTTL()                             {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsAaaaRecordTTL()                          {}
@@ -186,7 +198,8 @@ func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSReco
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsTlsaRecordTTL()  {}
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsTxtRecordTTL()   {}
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsUriRecordTTL()   {}
-func (UnionFloat) ImplementsEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseTTL() {}
-func (UnionFloat) ImplementsHostnameSettingTLSGetResponseValue()                                    {}
-func (UnionFloat) ImplementsHostnameSettingTLSUpdateResponseValue()                                 {}
-func (UnionFloat) ImplementsHostnameSettingTLSUpdateParamsValue()                                   {}
+func (UnionFloat) ImplementsEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseResultTTL() {
+}
+func (UnionFloat) ImplementsHostnameSettingTLSGetResponseResultValue()    {}
+func (UnionFloat) ImplementsHostnameSettingTLSUpdateResponseResultValue() {}
+func (UnionFloat) ImplementsHostnameSettingTLSUpdateParamsValue()         {}

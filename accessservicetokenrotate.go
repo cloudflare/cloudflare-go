@@ -34,17 +34,77 @@ func NewAccessServiceTokenRotateService(opts ...option.RequestOption) (r *Access
 // Generates a new Client Secret for a service token and revokes the old one.
 func (r *AccessServiceTokenRotateService) AccessServiceTokensRotateAServiceToken(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/rotate", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
 
 type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse struct {
+	Errors   []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseError   `json:"errors"`
+	Messages []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessage `json:"messages"`
+	Result   AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseSuccess `json:"success"`
+	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON    `json:"-"`
+}
+
+// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse]
+type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseError struct {
+	Code    int64                                                                           `json:"code,required"`
+	Message string                                                                          `json:"message,required"`
+	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseErrorJSON `json:"-"`
+}
+
+// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseErrorJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseError]
+type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessage struct {
+	Code    int64                                                                             `json:"code,required"`
+	Message string                                                                            `json:"message,required"`
+	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessageJSON `json:"-"`
+}
+
+// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessage]
+type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResult struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -59,15 +119,15 @@ type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse stru
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                                                                     `json:"name"`
-	UpdatedAt time.Time                                                                  `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON `json:"-"`
+	Name      string                                                                           `json:"name"`
+	UpdatedAt time.Time                                                                        `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResultJSON `json:"-"`
 }
 
-// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON
+// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResultJSON
 // contains the JSON metadata for the struct
-// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse]
-type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON struct {
+// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResult]
+type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResultJSON struct {
 	ID           apijson.Field
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
@@ -79,78 +139,13 @@ type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseJSON 
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelope struct {
-	Errors   []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelope]
-type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors struct {
-	Code    int64                                                                                    `json:"code,required"`
-	Message string                                                                                   `json:"message,required"`
-	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors]
-type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages struct {
-	Code    int64                                                                                      `json:"code,required"`
-	Message string                                                                                     `json:"message,required"`
-	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages]
-type accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccess bool
+type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseSuccess bool
 
 const (
-	AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccessTrue AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccess = true
+	AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseSuccessTrue AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseSuccess = true
 )

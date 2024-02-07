@@ -36,17 +36,73 @@ func NewZarazHistoryConfigService(opts ...option.RequestOption) (r *ZarazHistory
 // Gets a history of published Zaraz configurations by ID(s) for a zone.
 func (r *ZarazHistoryConfigService) Get(ctx context.Context, zoneID string, query ZarazHistoryConfigGetParams, opts ...option.RequestOption) (res *ZarazHistoryConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZarazHistoryConfigGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/zaraz/history/configs", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type ZarazHistoryConfigGetResponse = interface{}
+type ZarazHistoryConfigGetResponse struct {
+	Errors   []ZarazHistoryConfigGetResponseError   `json:"errors"`
+	Messages []ZarazHistoryConfigGetResponseMessage `json:"messages"`
+	// Object where keys are numericc onfiguration IDs
+	Result interface{} `json:"result"`
+	// Whether the API call was successful
+	Success bool                              `json:"success"`
+	JSON    zarazHistoryConfigGetResponseJSON `json:"-"`
+}
+
+// zarazHistoryConfigGetResponseJSON contains the JSON metadata for the struct
+// [ZarazHistoryConfigGetResponse]
+type zarazHistoryConfigGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryConfigGetResponseError struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    zarazHistoryConfigGetResponseErrorJSON `json:"-"`
+}
+
+// zarazHistoryConfigGetResponseErrorJSON contains the JSON metadata for the struct
+// [ZarazHistoryConfigGetResponseError]
+type zarazHistoryConfigGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryConfigGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryConfigGetResponseMessage struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zarazHistoryConfigGetResponseMessageJSON `json:"-"`
+}
+
+// zarazHistoryConfigGetResponseMessageJSON contains the JSON metadata for the
+// struct [ZarazHistoryConfigGetResponseMessage]
+type zarazHistoryConfigGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryConfigGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ZarazHistoryConfigGetParams struct {
 	// Comma separated list of Zaraz configuration IDs
@@ -60,67 +116,4 @@ func (r ZarazHistoryConfigGetParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type ZarazHistoryConfigGetResponseEnvelope struct {
-	Errors   []ZarazHistoryConfigGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZarazHistoryConfigGetResponseEnvelopeMessages `json:"messages"`
-	// Object where keys are numericc onfiguration IDs
-	Result ZarazHistoryConfigGetResponse `json:"result"`
-	// Whether the API call was successful
-	Success bool                                      `json:"success"`
-	JSON    zarazHistoryConfigGetResponseEnvelopeJSON `json:"-"`
-}
-
-// zarazHistoryConfigGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ZarazHistoryConfigGetResponseEnvelope]
-type zarazHistoryConfigGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryConfigGetResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    zarazHistoryConfigGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zarazHistoryConfigGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ZarazHistoryConfigGetResponseEnvelopeErrors]
-type zarazHistoryConfigGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryConfigGetResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    zarazHistoryConfigGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zarazHistoryConfigGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZarazHistoryConfigGetResponseEnvelopeMessages]
-type zarazHistoryConfigGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }

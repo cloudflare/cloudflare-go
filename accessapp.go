@@ -43,81 +43,119 @@ func NewAccessAppService(opts ...option.RequestOption) (r *AccessAppService) {
 // Fetches information about an Access application.
 func (r *AccessAppService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppGetParamsAppID, opts ...option.RequestOption) (res *AccessAppGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppGetResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Updates an Access application.
 func (r *AccessAppService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppUpdateParamsVariant0AppID, body AccessAppUpdateParams, opts ...option.RequestOption) (res *AccessAppUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppUpdateResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 // Deletes an application from Access.
 func (r *AccessAppService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppDeleteParamsAppID, opts ...option.RequestOption) (res *AccessAppDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppDeleteResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 // Adds a new application to Access.
 func (r *AccessAppService) AccessApplicationsAddAnApplication(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessAppAccessApplicationsAddAnApplicationParams, opts ...option.RequestOption) (res *AccessAppAccessApplicationsAddAnApplicationResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppAccessApplicationsAddAnApplicationResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Lists all Access applications in an account or zone.
-func (r *AccessAppService) AccessApplicationsListAccessApplications(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessAppAccessApplicationsListAccessApplicationsResponse, err error) {
+func (r *AccessAppService) AccessApplicationsListAccessApplications(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *AccessAppAccessApplicationsListAccessApplicationsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Union satisfied by [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject] or [AccessAppGetResponseObject].
-type AccessAppGetResponse interface {
-	implementsAccessAppGetResponse()
+type AccessAppGetResponse struct {
+	Errors   []AccessAppGetResponseError   `json:"errors"`
+	Messages []AccessAppGetResponseMessage `json:"messages"`
+	Result   AccessAppGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessAppGetResponseSuccess `json:"success"`
+	JSON    accessAppGetResponseJSON    `json:"-"`
+}
+
+// accessAppGetResponseJSON contains the JSON metadata for the struct
+// [AccessAppGetResponse]
+type accessAppGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppGetResponseError struct {
+	Code    int64                         `json:"code,required"`
+	Message string                        `json:"message,required"`
+	JSON    accessAppGetResponseErrorJSON `json:"-"`
+}
+
+// accessAppGetResponseErrorJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseError]
+type accessAppGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppGetResponseMessage struct {
+	Code    int64                           `json:"code,required"`
+	Message string                          `json:"message,required"`
+	JSON    accessAppGetResponseMessageJSON `json:"-"`
+}
+
+// accessAppGetResponseMessageJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseMessage]
+type accessAppGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [AccessAppGetResponseResultObject],
+// [AccessAppGetResponseResultObject], [AccessAppGetResponseResultObject],
+// [AccessAppGetResponseResultObject], [AccessAppGetResponseResultObject],
+// [AccessAppGetResponseResultObject], [AccessAppGetResponseResultObject] or
+// [AccessAppGetResponseResultObject].
+type AccessAppGetResponseResult interface {
+	implementsAccessAppGetResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppGetResponseResult)(nil)).Elem(), "")
 }
 
-type AccessAppGetResponseObject struct {
+type AccessAppGetResponseResultObject struct {
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -134,9 +172,9 @@ type AccessAppGetResponseObject struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                  `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppGetResponseObjectCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                             `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                        `json:"auto_redirect_to_identity"`
+	CorsHeaders            AccessAppGetResponseResultObjectCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                   `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -181,14 +219,14 @@ type AccessAppGetResponseObject struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                         `json:"type"`
-	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
-	JSON      accessAppGetResponseObjectJSON `json:"-"`
+	Type      string                               `json:"type"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      accessAppGetResponseResultObjectJSON `json:"-"`
 }
 
-// accessAppGetResponseObjectJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseObject]
-type accessAppGetResponseObjectJSON struct {
+// accessAppGetResponseResultObjectJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseResultObject]
+type accessAppGetResponseResultObjectJSON struct {
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -219,13 +257,13 @@ type accessAppGetResponseObjectJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseResultObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppGetResponseObject) implementsAccessAppGetResponse() {}
+func (r AccessAppGetResponseResultObject) implementsAccessAppGetResponseResult() {}
 
-type AccessAppGetResponseObjectCorsHeaders struct {
+type AccessAppGetResponseResultObjectCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -238,17 +276,17 @@ type AccessAppGetResponseObjectCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppGetResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []AccessAppGetResponseResultObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                   `json:"max_age"`
-	JSON   accessAppGetResponseObjectCorsHeadersJSON `json:"-"`
+	MaxAge float64                                         `json:"max_age"`
+	JSON   accessAppGetResponseResultObjectCorsHeadersJSON `json:"-"`
 }
 
-// accessAppGetResponseObjectCorsHeadersJSON contains the JSON metadata for the
-// struct [AccessAppGetResponseObjectCorsHeaders]
-type accessAppGetResponseObjectCorsHeadersJSON struct {
+// accessAppGetResponseResultObjectCorsHeadersJSON contains the JSON metadata for
+// the struct [AccessAppGetResponseResultObjectCorsHeaders]
+type accessAppGetResponseResultObjectCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -261,38 +299,107 @@ type accessAppGetResponseObjectCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseResultObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppGetResponseObjectCorsHeadersAllowedMethod string
+type AccessAppGetResponseResultObjectCorsHeadersAllowedMethod string
 
 const (
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodGet     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPost    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodHead    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPut     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodDelete  AccessAppGetResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodConnect AccessAppGetResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodOptions AccessAppGetResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodTrace   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPatch   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodGet     AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodPost    AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodHead    AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodPut     AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodDelete  AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodConnect AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodOptions AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodTrace   AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppGetResponseResultObjectCorsHeadersAllowedMethodPatch   AccessAppGetResponseResultObjectCorsHeadersAllowedMethod = "PATCH"
 )
 
-// Union satisfied by [AccessAppUpdateResponseObject],
-// [AccessAppUpdateResponseObject], [AccessAppUpdateResponseObject],
-// [AccessAppUpdateResponseObject], [AccessAppUpdateResponseObject],
-// [AccessAppUpdateResponseObject], [AccessAppUpdateResponseObject] or
-// [AccessAppUpdateResponseObject].
-type AccessAppUpdateResponse interface {
-	implementsAccessAppUpdateResponse()
+// Whether the API call was successful
+type AccessAppGetResponseSuccess bool
+
+const (
+	AccessAppGetResponseSuccessTrue AccessAppGetResponseSuccess = true
+)
+
+type AccessAppUpdateResponse struct {
+	Errors   []AccessAppUpdateResponseError   `json:"errors"`
+	Messages []AccessAppUpdateResponseMessage `json:"messages"`
+	Result   AccessAppUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessAppUpdateResponseSuccess `json:"success"`
+	JSON    accessAppUpdateResponseJSON    `json:"-"`
+}
+
+// accessAppUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessAppUpdateResponse]
+type accessAppUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppUpdateResponseError struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    accessAppUpdateResponseErrorJSON `json:"-"`
+}
+
+// accessAppUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [AccessAppUpdateResponseError]
+type accessAppUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppUpdateResponseMessage struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    accessAppUpdateResponseMessageJSON `json:"-"`
+}
+
+// accessAppUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [AccessAppUpdateResponseMessage]
+type accessAppUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [AccessAppUpdateResponseResultObject],
+// [AccessAppUpdateResponseResultObject], [AccessAppUpdateResponseResultObject],
+// [AccessAppUpdateResponseResultObject], [AccessAppUpdateResponseResultObject],
+// [AccessAppUpdateResponseResultObject], [AccessAppUpdateResponseResultObject] or
+// [AccessAppUpdateResponseResultObject].
+type AccessAppUpdateResponseResult interface {
+	implementsAccessAppUpdateResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppUpdateResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppUpdateResponseResult)(nil)).Elem(), "")
 }
 
-type AccessAppUpdateResponseObject struct {
+type AccessAppUpdateResponseResultObject struct {
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -309,9 +416,9 @@ type AccessAppUpdateResponseObject struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                     `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppUpdateResponseObjectCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                           `json:"auto_redirect_to_identity"`
+	CorsHeaders            AccessAppUpdateResponseResultObjectCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                      `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -356,14 +463,14 @@ type AccessAppUpdateResponseObject struct {
 	// applications in the App Launcher dashboard.
 	Tags []string `json:"tags"`
 	// The application type.
-	Type      string                            `json:"type"`
-	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
-	JSON      accessAppUpdateResponseObjectJSON `json:"-"`
+	Type      string                                  `json:"type"`
+	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
+	JSON      accessAppUpdateResponseResultObjectJSON `json:"-"`
 }
 
-// accessAppUpdateResponseObjectJSON contains the JSON metadata for the struct
-// [AccessAppUpdateResponseObject]
-type accessAppUpdateResponseObjectJSON struct {
+// accessAppUpdateResponseResultObjectJSON contains the JSON metadata for the
+// struct [AccessAppUpdateResponseResultObject]
+type accessAppUpdateResponseResultObjectJSON struct {
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -394,13 +501,13 @@ type accessAppUpdateResponseObjectJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppUpdateResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppUpdateResponseResultObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppUpdateResponseObject) implementsAccessAppUpdateResponse() {}
+func (r AccessAppUpdateResponseResultObject) implementsAccessAppUpdateResponseResult() {}
 
-type AccessAppUpdateResponseObjectCorsHeaders struct {
+type AccessAppUpdateResponseResultObjectCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -413,17 +520,17 @@ type AccessAppUpdateResponseObjectCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppUpdateResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                      `json:"max_age"`
-	JSON   accessAppUpdateResponseObjectCorsHeadersJSON `json:"-"`
+	MaxAge float64                                            `json:"max_age"`
+	JSON   accessAppUpdateResponseResultObjectCorsHeadersJSON `json:"-"`
 }
 
-// accessAppUpdateResponseObjectCorsHeadersJSON contains the JSON metadata for the
-// struct [AccessAppUpdateResponseObjectCorsHeaders]
-type accessAppUpdateResponseObjectCorsHeadersJSON struct {
+// accessAppUpdateResponseResultObjectCorsHeadersJSON contains the JSON metadata
+// for the struct [AccessAppUpdateResponseResultObjectCorsHeaders]
+type accessAppUpdateResponseResultObjectCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -436,34 +543,47 @@ type accessAppUpdateResponseObjectCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppUpdateResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppUpdateResponseResultObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppUpdateResponseObjectCorsHeadersAllowedMethod string
+type AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod string
 
 const (
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodGet     AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodPost    AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodHead    AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodPut     AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodDelete  AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodConnect AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodOptions AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodTrace   AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodPatch   AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodGet     AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodPost    AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodHead    AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodPut     AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodDelete  AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodConnect AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodOptions AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodTrace   AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethodPatch   AccessAppUpdateResponseResultObjectCorsHeadersAllowedMethod = "PATCH"
+)
+
+// Whether the API call was successful
+type AccessAppUpdateResponseSuccess bool
+
+const (
+	AccessAppUpdateResponseSuccessTrue AccessAppUpdateResponseSuccess = true
 )
 
 type AccessAppDeleteResponse struct {
-	// UUID
-	ID   string                      `json:"id"`
-	JSON accessAppDeleteResponseJSON `json:"-"`
+	Errors   []AccessAppDeleteResponseError   `json:"errors"`
+	Messages []AccessAppDeleteResponseMessage `json:"messages"`
+	Result   AccessAppDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessAppDeleteResponseSuccess `json:"success"`
+	JSON    accessAppDeleteResponseJSON    `json:"-"`
 }
 
 // accessAppDeleteResponseJSON contains the JSON metadata for the struct
 // [AccessAppDeleteResponse]
 type accessAppDeleteResponseJSON struct {
-	ID          apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -472,205 +592,151 @@ func (r *AccessAppDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject] or
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject].
-type AccessAppAccessApplicationsAddAnApplicationResponse interface {
-	implementsAccessAppAccessApplicationsAddAnApplicationResponse()
+type AccessAppDeleteResponseError struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    accessAppDeleteResponseErrorJSON `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsAddAnApplicationResponse)(nil)).Elem(), "")
+// accessAppDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [AccessAppDeleteResponseError]
+type accessAppDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
+func (r *AccessAppDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppDeleteResponseMessage struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    accessAppDeleteResponseMessageJSON `json:"-"`
+}
+
+// accessAppDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [AccessAppDeleteResponseMessage]
+type accessAppDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppDeleteResponseResult struct {
 	// UUID
-	ID string `json:"id"`
-	// When set to true, users can authenticate to this application using their WARP
-	// session. When set to false this application will always require direct IdP
-	// authentication. This setting always overrides the organization setting for WARP
-	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible bool `json:"app_launcher_visible"`
-	// Audience tag.
-	Aud string `json:"aud"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                                 `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                            `json:"created_at" format:"date-time"`
-	// The custom error message shown to a user when they are denied access to the
-	// application.
-	CustomDenyMessage string `json:"custom_deny_message"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing identity-based rules.
-	CustomDenyURL string `json:"custom_deny_url"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
-	// The custom pages that will be displayed when applicable for this application
-	CustomPages []string `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain"`
-	// Enables the binding cookie, which increases security against compromised
-	// authorization tokens and CSRF attacks.
-	EnableBindingCookie bool `json:"enable_binding_cookie"`
-	// Enables the HttpOnly cookie attribute, which increases security against XSS
-	// attacks.
-	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL string `json:"logo_url"`
-	// The name of the application.
-	Name string `json:"name"`
-	// Enables cookie paths to scope an application's JWT to the application path. If
-	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool `json:"path_cookie_attribute"`
-	// Sets the SameSite cookie setting, which provides increased security against CSRF
-	// attacks.
-	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
-	// List of domains that Access will secure.
-	SelfHostedDomains []string `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy.
-	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration string `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool `json:"skip_interstitial"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags []string `json:"tags"`
-	// The application type.
-	Type      string                                                        `json:"type"`
-	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
-	JSON      accessAppAccessApplicationsAddAnApplicationResponseObjectJSON `json:"-"`
+	ID   string                            `json:"id"`
+	JSON accessAppDeleteResponseResultJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseObjectJSON contains the JSON
-// metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject]
-type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
-	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
-	AllowedIdps              apijson.Field
-	AppLauncherVisible       apijson.Field
-	Aud                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	Domain                   apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	PathCookieAttribute      apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	Type                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+// accessAppDeleteResponseResultJSON contains the JSON metadata for the struct
+// [AccessAppDeleteResponseResult]
+type accessAppDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppAccessApplicationsAddAnApplicationResponseObject) implementsAccessAppAccessApplicationsAddAnApplicationResponse() {
-}
-
-type AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders []interface{} `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins []interface{} `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                                  `json:"max_age"`
-	JSON   accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders]
-type accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod string
+// Whether the API call was successful
+type AccessAppDeleteResponseSuccess bool
 
 const (
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppDeleteResponseSuccessTrue AccessAppDeleteResponseSuccess = true
 )
 
+type AccessAppAccessApplicationsAddAnApplicationResponse struct {
+	Errors   []AccessAppAccessApplicationsAddAnApplicationResponseError   `json:"errors"`
+	Messages []AccessAppAccessApplicationsAddAnApplicationResponseMessage `json:"messages"`
+	Result   AccessAppAccessApplicationsAddAnApplicationResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessAppAccessApplicationsAddAnApplicationResponseSuccess `json:"success"`
+	JSON    accessAppAccessApplicationsAddAnApplicationResponseJSON    `json:"-"`
+}
+
+// accessAppAccessApplicationsAddAnApplicationResponseJSON contains the JSON
+// metadata for the struct [AccessAppAccessApplicationsAddAnApplicationResponse]
+type accessAppAccessApplicationsAddAnApplicationResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsAddAnApplicationResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppAccessApplicationsAddAnApplicationResponseError struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    accessAppAccessApplicationsAddAnApplicationResponseErrorJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsAddAnApplicationResponseErrorJSON contains the JSON
+// metadata for the struct
+// [AccessAppAccessApplicationsAddAnApplicationResponseError]
+type accessAppAccessApplicationsAddAnApplicationResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsAddAnApplicationResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppAccessApplicationsAddAnApplicationResponseMessage struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    accessAppAccessApplicationsAddAnApplicationResponseMessageJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsAddAnApplicationResponseMessageJSON contains the JSON
+// metadata for the struct
+// [AccessAppAccessApplicationsAddAnApplicationResponseMessage]
+type accessAppAccessApplicationsAddAnApplicationResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsAddAnApplicationResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Union satisfied by
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject] or
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject].
-type AccessAppAccessApplicationsListAccessApplicationsResponse interface {
-	implementsAccessAppAccessApplicationsListAccessApplicationsResponse()
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject],
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject] or
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject].
+type AccessAppAccessApplicationsAddAnApplicationResponseResult interface {
+	implementsAccessAppAccessApplicationsAddAnApplicationResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsListAccessApplicationsResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsAddAnApplicationResponseResult)(nil)).Elem(), "")
 }
 
-type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
+type AccessAppAccessApplicationsAddAnApplicationResponseResultObject struct {
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -688,7 +754,7 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool                                                                       `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders `json:"cors_headers"`
+	CorsHeaders            AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeaders `json:"cors_headers"`
 	CreatedAt              time.Time                                                                  `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
@@ -736,13 +802,13 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
 	// The application type.
 	Type      string                                                              `json:"type"`
 	UpdatedAt time.Time                                                           `json:"updated_at" format:"date-time"`
-	JSON      accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON `json:"-"`
+	JSON      accessAppAccessApplicationsAddAnApplicationResponseResultObjectJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON contains the
+// accessAppAccessApplicationsAddAnApplicationResponseResultObjectJSON contains the
 // JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject]
-type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct {
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObject]
+type accessAppAccessApplicationsAddAnApplicationResponseResultObjectJSON struct {
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -773,14 +839,14 @@ type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct 
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppAccessApplicationsAddAnApplicationResponseResultObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppAccessApplicationsListAccessApplicationsResponseObject) implementsAccessAppAccessApplicationsListAccessApplicationsResponse() {
+func (r AccessAppAccessApplicationsAddAnApplicationResponseResultObject) implementsAccessAppAccessApplicationsAddAnApplicationResponseResult() {
 }
 
-type AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders struct {
+type AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -793,18 +859,18 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders 
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64                                                                        `json:"max_age"`
-	JSON   accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON `json:"-"`
+	JSON   accessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON
+// accessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersJSON
 // contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders]
-type accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON struct {
+// [AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeaders]
+type accessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -817,22 +883,313 @@ type accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJ
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod string
+type AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod string
 
 const (
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationResponseResultObjectCorsHeadersAllowedMethod = "PATCH"
+)
+
+// Whether the API call was successful
+type AccessAppAccessApplicationsAddAnApplicationResponseSuccess bool
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationResponseSuccessTrue AccessAppAccessApplicationsAddAnApplicationResponseSuccess = true
+)
+
+type AccessAppAccessApplicationsListAccessApplicationsResponse struct {
+	Errors     []AccessAppAccessApplicationsListAccessApplicationsResponseError    `json:"errors"`
+	Messages   []AccessAppAccessApplicationsListAccessApplicationsResponseMessage  `json:"messages"`
+	Result     []AccessAppAccessApplicationsListAccessApplicationsResponseResult   `json:"result"`
+	ResultInfo AccessAppAccessApplicationsListAccessApplicationsResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessAppAccessApplicationsListAccessApplicationsResponseSuccess `json:"success"`
+	JSON    accessAppAccessApplicationsListAccessApplicationsResponseJSON    `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseJSON contains the JSON
+// metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponse]
+type accessAppAccessApplicationsListAccessApplicationsResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseError struct {
+	Code    int64                                                              `json:"code,required"`
+	Message string                                                             `json:"message,required"`
+	JSON    accessAppAccessApplicationsListAccessApplicationsResponseErrorJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseErrorJSON contains the
+// JSON metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponseError]
+type accessAppAccessApplicationsListAccessApplicationsResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseMessage struct {
+	Code    int64                                                                `json:"code,required"`
+	Message string                                                               `json:"message,required"`
+	JSON    accessAppAccessApplicationsListAccessApplicationsResponseMessageJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseMessageJSON contains
+// the JSON metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponseMessage]
+type accessAppAccessApplicationsListAccessApplicationsResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject],
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject] or
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject].
+type AccessAppAccessApplicationsListAccessApplicationsResponseResult interface {
+	implementsAccessAppAccessApplicationsListAccessApplicationsResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsListAccessApplicationsResponseResult)(nil)).Elem(), "")
+}
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseResultObject struct {
+	// UUID
+	ID string `json:"id"`
+	// When set to true, users can authenticate to this application using their WARP
+	// session. When set to false this application will always require direct IdP
+	// authentication. This setting always overrides the organization setting for WARP
+	// authentication.
+	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps []string `json:"allowed_idps"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	Aud string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool                                                                             `json:"auto_redirect_to_identity"`
+	CorsHeaders            AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                                                                        `json:"created_at" format:"date-time"`
+	// The custom error message shown to a user when they are denied access to the
+	// application.
+	CustomDenyMessage string `json:"custom_deny_message"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain"`
+	// Enables the binding cookie, which increases security against compromised
+	// authorization tokens and CSRF attacks.
+	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// Enables the HttpOnly cookie attribute, which increases security against XSS
+	// attacks.
+	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the application.
+	Name string `json:"name"`
+	// Enables cookie paths to scope an application's JWT to the application path. If
+	// disabled, the JWT will scope to the hostname by default
+	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// Sets the SameSite cookie setting, which provides increased security against CSRF
+	// attacks.
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// List of domains that Access will secure.
+	SelfHostedDomains []string `json:"self_hosted_domains"`
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
+	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration string `json:"session_duration"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags []string `json:"tags"`
+	// The application type.
+	Type      string                                                                    `json:"type"`
+	UpdatedAt time.Time                                                                 `json:"updated_at" format:"date-time"`
+	JSON      accessAppAccessApplicationsListAccessApplicationsResponseResultObjectJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseResultObjectJSON
+// contains the JSON metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObject]
+type accessAppAccessApplicationsListAccessApplicationsResponseResultObjectJSON struct {
+	ID                       apijson.Field
+	AllowAuthenticateViaWarp apijson.Field
+	AllowedIdps              apijson.Field
+	AppLauncherVisible       apijson.Field
+	Aud                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CorsHeaders              apijson.Field
+	CreatedAt                apijson.Field
+	CustomDenyMessage        apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	Domain                   apijson.Field
+	EnableBindingCookie      apijson.Field
+	HTTPOnlyCookieAttribute  apijson.Field
+	LogoURL                  apijson.Field
+	Name                     apijson.Field
+	PathCookieAttribute      apijson.Field
+	SameSiteCookieAttribute  apijson.Field
+	SelfHostedDomains        apijson.Field
+	ServiceAuth401Redirect   apijson.Field
+	SessionDuration          apijson.Field
+	SkipInterstitial         apijson.Field
+	Tags                     apijson.Field
+	Type                     apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponseResultObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessAppAccessApplicationsListAccessApplicationsResponseResultObject) implementsAccessAppAccessApplicationsListAccessApplicationsResponseResult() {
+}
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeaders struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders bool `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods bool `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins bool `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials bool `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders []interface{} `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods []AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins []interface{} `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge float64                                                                              `json:"max_age"`
+	JSON   accessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersJSON
+// contains the JSON metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeaders]
+type accessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersJSON struct {
+	AllowAllHeaders  apijson.Field
+	AllowAllMethods  apijson.Field
+	AllowAllOrigins  apijson.Field
+	AllowCredentials apijson.Field
+	AllowedHeaders   apijson.Field
+	AllowedMethods   apijson.Field
+	AllowedOrigins   apijson.Field
+	MaxAge           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod string
+
+const (
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsListAccessApplicationsResponseResultObjectCorsHeadersAllowedMethod = "PATCH"
+)
+
+type AccessAppAccessApplicationsListAccessApplicationsResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                 `json:"total_count"`
+	JSON       accessAppAccessApplicationsListAccessApplicationsResponseResultInfoJSON `json:"-"`
+}
+
+// accessAppAccessApplicationsListAccessApplicationsResponseResultInfoJSON contains
+// the JSON metadata for the struct
+// [AccessAppAccessApplicationsListAccessApplicationsResponseResultInfo]
+type accessAppAccessApplicationsListAccessApplicationsResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppAccessApplicationsListAccessApplicationsResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessAppAccessApplicationsListAccessApplicationsResponseSuccess bool
+
+const (
+	AccessAppAccessApplicationsListAccessApplicationsResponseSuccessTrue AccessAppAccessApplicationsListAccessApplicationsResponseSuccess = true
 )
 
 // Identifier
@@ -841,75 +1198,6 @@ const (
 type AccessAppGetParamsAppID interface {
 	ImplementsAccessAppGetParamsAppID()
 }
-
-type AccessAppGetResponseEnvelope struct {
-	Errors   []AccessAppGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppGetResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessAppGetResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseEnvelope]
-type accessAppGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppGetResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    accessAppGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseEnvelopeErrors]
-type accessAppGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppGetResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    accessAppGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessAppGetResponseEnvelopeMessages]
-type accessAppGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppGetResponseEnvelopeSuccess bool
-
-const (
-	AccessAppGetResponseEnvelopeSuccessTrue AccessAppGetResponseEnvelopeSuccess = true
-)
 
 // This interface is a union satisfied by one of the following:
 // [AccessAppUpdateParamsVariant0], [AccessAppUpdateParamsVariant1],
@@ -1485,150 +1773,12 @@ type AccessAppUpdateParamsVariant7AppID interface {
 	ImplementsAccessAppUpdateParamsVariant7AppID()
 }
 
-type AccessAppUpdateResponseEnvelope struct {
-	Errors   []AccessAppUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppUpdateResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessAppUpdateResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessAppUpdateResponseEnvelope]
-type accessAppUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppUpdateResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessAppUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessAppUpdateResponseEnvelopeErrors]
-type accessAppUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppUpdateResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    accessAppUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessAppUpdateResponseEnvelopeMessages]
-type accessAppUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppUpdateResponseEnvelopeSuccess bool
-
-const (
-	AccessAppUpdateResponseEnvelopeSuccessTrue AccessAppUpdateResponseEnvelopeSuccess = true
-)
-
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
 type AccessAppDeleteParamsAppID interface {
 	ImplementsAccessAppDeleteParamsAppID()
 }
-
-type AccessAppDeleteResponseEnvelope struct {
-	Errors   []AccessAppDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppDeleteResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessAppDeleteResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessAppDeleteResponseEnvelope]
-type accessAppDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppDeleteResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    accessAppDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessAppDeleteResponseEnvelopeErrors]
-type accessAppDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppDeleteResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    accessAppDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessAppDeleteResponseEnvelopeMessages]
-type accessAppDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppDeleteResponseEnvelopeSuccess bool
-
-const (
-	AccessAppDeleteResponseEnvelopeSuccessTrue AccessAppDeleteResponseEnvelopeSuccess = true
-)
 
 // This interface is a union satisfied by one of the following:
 // [AccessAppAccessApplicationsAddAnApplicationParamsVariant0],
@@ -2151,177 +2301,3 @@ func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant7) MarshalJSON()
 func (AccessAppAccessApplicationsAddAnApplicationParamsVariant7) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
 
 }
-
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelope struct {
-	Errors   []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppAccessApplicationsAddAnApplicationResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelope]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess bool
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccessTrue AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess = true
-)
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope struct {
-	Errors     []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessAppAccessApplicationsListAccessApplicationsResponse                 `json:"result"`
-	ResultInfo AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                         `json:"total_count"`
-	JSON       accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess bool
-
-const (
-	AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccessTrue AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess = true
-)

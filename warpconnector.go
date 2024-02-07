@@ -38,88 +38,126 @@ func NewWarpConnectorService(opts ...option.RequestOption) (r *WarpConnectorServ
 // Creates a new Warp Connector Tunnel in an account.
 func (r *WarpConnectorService) New(ctx context.Context, accountID string, body WarpConnectorNewParams, opts ...option.RequestOption) (res *WarpConnectorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WarpConnectorNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Fetches a single Warp Connector Tunnel.
 func (r *WarpConnectorService) Get(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *WarpConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WarpConnectorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Updates an existing Warp Connector Tunnel.
 func (r *WarpConnectorService) Update(ctx context.Context, accountID string, tunnelID string, body WarpConnectorUpdateParams, opts ...option.RequestOption) (res *WarpConnectorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WarpConnectorUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
 	return
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WarpConnectorService) List(ctx context.Context, accountID string, query WarpConnectorListParams, opts ...option.RequestOption) (res *[]WarpConnectorListResponse, err error) {
+func (r *WarpConnectorService) List(ctx context.Context, accountID string, query WarpConnectorListParams, opts ...option.RequestOption) (res *WarpConnectorListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WarpConnectorListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // Deletes a Warp Connector Tunnel from an account.
 func (r *WarpConnectorService) Delete(ctx context.Context, accountID string, tunnelID string, body WarpConnectorDeleteParams, opts ...option.RequestOption) (res *WarpConnectorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WarpConnectorDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
+type WarpConnectorNewResponse struct {
+	Errors   []WarpConnectorNewResponseError   `json:"errors"`
+	Messages []WarpConnectorNewResponseMessage `json:"messages"`
+	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+	Result WarpConnectorNewResponseResult `json:"result"`
+	// Whether the API call was successful
+	Success WarpConnectorNewResponseSuccess `json:"success"`
+	JSON    warpConnectorNewResponseJSON    `json:"-"`
+}
+
+// warpConnectorNewResponseJSON contains the JSON metadata for the struct
+// [WarpConnectorNewResponse]
+type warpConnectorNewResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorNewResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    warpConnectorNewResponseErrorJSON `json:"-"`
+}
+
+// warpConnectorNewResponseErrorJSON contains the JSON metadata for the struct
+// [WarpConnectorNewResponseError]
+type warpConnectorNewResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorNewResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    warpConnectorNewResponseMessageJSON `json:"-"`
+}
+
+// warpConnectorNewResponseMessageJSON contains the JSON metadata for the struct
+// [WarpConnectorNewResponseMessage]
+type warpConnectorNewResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [WarpConnectorNewResponseXlFXheKkCfdTunnel] or
-// [WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel].
-type WarpConnectorNewResponse interface {
-	implementsWarpConnectorNewResponse()
+// Union satisfied by [WarpConnectorNewResponseResultXlFXheKkCfdTunnel] or
+// [WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnel].
+type WarpConnectorNewResponseResult interface {
+	implementsWarpConnectorNewResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorNewResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorNewResponseResult)(nil)).Elem(), "")
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorNewResponseXlFXheKkCfdTunnel struct {
+type WarpConnectorNewResponseResultXlFXheKkCfdTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorNewResponseXlFXheKkCfdTunnelConnection `json:"connections"`
+	Connections []WarpConnectorNewResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -144,13 +182,13 @@ type WarpConnectorNewResponseXlFXheKkCfdTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType WarpConnectorNewResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorNewResponseXlFXheKkCfdTunnelJSON    `json:"-"`
+	TunType WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorNewResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
 }
 
-// warpConnectorNewResponseXlFXheKkCfdTunnelJSON contains the JSON metadata for the
-// struct [WarpConnectorNewResponseXlFXheKkCfdTunnel]
-type warpConnectorNewResponseXlFXheKkCfdTunnelJSON struct {
+// warpConnectorNewResponseResultXlFXheKkCfdTunnelJSON contains the JSON metadata
+// for the struct [WarpConnectorNewResponseResultXlFXheKkCfdTunnel]
+type warpConnectorNewResponseResultXlFXheKkCfdTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -167,13 +205,13 @@ type warpConnectorNewResponseXlFXheKkCfdTunnelJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WarpConnectorNewResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorNewResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WarpConnectorNewResponseXlFXheKkCfdTunnel) implementsWarpConnectorNewResponse() {}
+func (r WarpConnectorNewResponseResultXlFXheKkCfdTunnel) implementsWarpConnectorNewResponseResult() {}
 
-type WarpConnectorNewResponseXlFXheKkCfdTunnelConnection struct {
+type WarpConnectorNewResponseResultXlFXheKkCfdTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -192,13 +230,14 @@ type WarpConnectorNewResponseXlFXheKkCfdTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                  `json:"uuid"`
-	JSON warpConnectorNewResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+	Uuid string                                                        `json:"uuid"`
+	JSON warpConnectorNewResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
 }
 
-// warpConnectorNewResponseXlFXheKkCfdTunnelConnectionJSON contains the JSON
-// metadata for the struct [WarpConnectorNewResponseXlFXheKkCfdTunnelConnection]
-type warpConnectorNewResponseXlFXheKkCfdTunnelConnectionJSON struct {
+// warpConnectorNewResponseResultXlFXheKkCfdTunnelConnectionJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorNewResponseResultXlFXheKkCfdTunnelConnection]
+type warpConnectorNewResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -211,29 +250,29 @@ type warpConnectorNewResponseXlFXheKkCfdTunnelConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WarpConnectorNewResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorNewResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type WarpConnectorNewResponseXlFXheKkCfdTunnelTunType string
+type WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType string
 
 const (
-	WarpConnectorNewResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorNewResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	WarpConnectorNewResponseXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorNewResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	WarpConnectorNewResponseXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorNewResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	WarpConnectorNewResponseXlFXheKkCfdTunnelTunTypeGre           WarpConnectorNewResponseXlFXheKkCfdTunnelTunType = "gre"
-	WarpConnectorNewResponseXlFXheKkCfdTunnelTunTypeCni           WarpConnectorNewResponseXlFXheKkCfdTunnelTunType = "cni"
+	WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunTypeGre           WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunTypeCni           WarpConnectorNewResponseResultXlFXheKkCfdTunnelTunType = "cni"
 )
 
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel struct {
+type WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	Connections []WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -255,13 +294,14 @@ type WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorNewResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+	TunType WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
 }
 
-// warpConnectorNewResponseXlFXheKkWarpConnectorTunnelJSON contains the JSON
-// metadata for the struct [WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel]
-type warpConnectorNewResponseXlFXheKkWarpConnectorTunnelJSON struct {
+// warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnel]
+type warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -277,13 +317,14 @@ type warpConnectorNewResponseXlFXheKkWarpConnectorTunnelJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WarpConnectorNewResponseXlFXheKkWarpConnectorTunnel) implementsWarpConnectorNewResponse() {}
+func (r WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnel) implementsWarpConnectorNewResponseResult() {
+}
 
-type WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnection struct {
+type WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -302,489 +343,14 @@ type WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                            `json:"uuid"`
-	JSON warpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+	Uuid string                                                                  `json:"uuid"`
+	JSON warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
 }
 
-// warpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnectionJSON contains the
-// JSON metadata for the struct
-// [WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnection]
-type warpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType string
-
-const (
-	WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorNewResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
-)
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// Union satisfied by [WarpConnectorGetResponseXlFXheKkCfdTunnel] or
-// [WarpConnectorGetResponseXlFXheKkWarpConnectorTunnel].
-type WarpConnectorGetResponse interface {
-	implementsWarpConnectorGetResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorGetResponse)(nil)).Elem(), "")
-}
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorGetResponseXlFXheKkCfdTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorGetResponseXlFXheKkCfdTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
-	// If `false`, the tunnel must be configured locally on the origin machine.
-	RemoteConfig bool `json:"remote_config"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorGetResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorGetResponseXlFXheKkCfdTunnelJSON    `json:"-"`
-}
-
-// warpConnectorGetResponseXlFXheKkCfdTunnelJSON contains the JSON metadata for the
-// struct [WarpConnectorGetResponseXlFXheKkCfdTunnel]
-type warpConnectorGetResponseXlFXheKkCfdTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	RemoteConfig    apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorGetResponseXlFXheKkCfdTunnel) implementsWarpConnectorGetResponse() {}
-
-type WarpConnectorGetResponseXlFXheKkCfdTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                  `json:"uuid"`
-	JSON warpConnectorGetResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorGetResponseXlFXheKkCfdTunnelConnectionJSON contains the JSON
-// metadata for the struct [WarpConnectorGetResponseXlFXheKkCfdTunnelConnection]
-type warpConnectorGetResponseXlFXheKkCfdTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorGetResponseXlFXheKkCfdTunnelTunType string
-
-const (
-	WarpConnectorGetResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorGetResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	WarpConnectorGetResponseXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorGetResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	WarpConnectorGetResponseXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorGetResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	WarpConnectorGetResponseXlFXheKkCfdTunnelTunTypeGre           WarpConnectorGetResponseXlFXheKkCfdTunnelTunType = "gre"
-	WarpConnectorGetResponseXlFXheKkCfdTunnelTunTypeCni           WarpConnectorGetResponseXlFXheKkCfdTunnelTunType = "cni"
-)
-
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorGetResponseXlFXheKkWarpConnectorTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorGetResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
-}
-
-// warpConnectorGetResponseXlFXheKkWarpConnectorTunnelJSON contains the JSON
-// metadata for the struct [WarpConnectorGetResponseXlFXheKkWarpConnectorTunnel]
-type warpConnectorGetResponseXlFXheKkWarpConnectorTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorGetResponseXlFXheKkWarpConnectorTunnel) implementsWarpConnectorGetResponse() {}
-
-type WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                            `json:"uuid"`
-	JSON warpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnectionJSON contains the
-// JSON metadata for the struct
-// [WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnection]
-type warpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType string
-
-const (
-	WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorGetResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
-)
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// Union satisfied by [WarpConnectorUpdateResponseXlFXheKkCfdTunnel] or
-// [WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnel].
-type WarpConnectorUpdateResponse interface {
-	implementsWarpConnectorUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorUpdateResponse)(nil)).Elem(), "")
-}
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorUpdateResponseXlFXheKkCfdTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorUpdateResponseXlFXheKkCfdTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
-	// If `false`, the tunnel must be configured locally on the origin machine.
-	RemoteConfig bool `json:"remote_config"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorUpdateResponseXlFXheKkCfdTunnelJSON    `json:"-"`
-}
-
-// warpConnectorUpdateResponseXlFXheKkCfdTunnelJSON contains the JSON metadata for
-// the struct [WarpConnectorUpdateResponseXlFXheKkCfdTunnel]
-type warpConnectorUpdateResponseXlFXheKkCfdTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	RemoteConfig    apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorUpdateResponseXlFXheKkCfdTunnel) implementsWarpConnectorUpdateResponse() {}
-
-type WarpConnectorUpdateResponseXlFXheKkCfdTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                     `json:"uuid"`
-	JSON warpConnectorUpdateResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorUpdateResponseXlFXheKkCfdTunnelConnectionJSON contains the JSON
-// metadata for the struct [WarpConnectorUpdateResponseXlFXheKkCfdTunnelConnection]
-type warpConnectorUpdateResponseXlFXheKkCfdTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType string
-
-const (
-	WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunTypeGre           WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType = "gre"
-	WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunTypeCni           WarpConnectorUpdateResponseXlFXheKkCfdTunnelTunType = "cni"
-)
-
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
-}
-
-// warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelJSON contains the JSON
-// metadata for the struct [WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnel]
-type warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnel) implementsWarpConnectorUpdateResponse() {
-}
-
-type WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                               `json:"uuid"`
-	JSON warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnectionJSON contains
+// warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON contains
 // the JSON metadata for the struct
-// [WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnection]
-type warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+// [WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type warpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -797,41 +363,111 @@ type warpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType string
+type WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType string
 
 const (
-	WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorUpdateResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
+	WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorNewResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
 )
+
+// Whether the API call was successful
+type WarpConnectorNewResponseSuccess bool
+
+const (
+	WarpConnectorNewResponseSuccessTrue WarpConnectorNewResponseSuccess = true
+)
+
+type WarpConnectorGetResponse struct {
+	Errors   []WarpConnectorGetResponseError   `json:"errors"`
+	Messages []WarpConnectorGetResponseMessage `json:"messages"`
+	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+	Result WarpConnectorGetResponseResult `json:"result"`
+	// Whether the API call was successful
+	Success WarpConnectorGetResponseSuccess `json:"success"`
+	JSON    warpConnectorGetResponseJSON    `json:"-"`
+}
+
+// warpConnectorGetResponseJSON contains the JSON metadata for the struct
+// [WarpConnectorGetResponse]
+type warpConnectorGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorGetResponseError struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    warpConnectorGetResponseErrorJSON `json:"-"`
+}
+
+// warpConnectorGetResponseErrorJSON contains the JSON metadata for the struct
+// [WarpConnectorGetResponseError]
+type warpConnectorGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorGetResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorGetResponseMessage struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    warpConnectorGetResponseMessageJSON `json:"-"`
+}
+
+// warpConnectorGetResponseMessageJSON contains the JSON metadata for the struct
+// [WarpConnectorGetResponseMessage]
+type warpConnectorGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
-// Union satisfied by [WarpConnectorListResponseXlFXheKkCfdTunnel] or
-// [WarpConnectorListResponseXlFXheKkWarpConnectorTunnel].
-type WarpConnectorListResponse interface {
-	implementsWarpConnectorListResponse()
+// Union satisfied by [WarpConnectorGetResponseResultXlFXheKkCfdTunnel] or
+// [WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnel].
+type WarpConnectorGetResponseResult interface {
+	implementsWarpConnectorGetResponseResult()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorGetResponseResult)(nil)).Elem(), "")
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorListResponseXlFXheKkCfdTunnel struct {
+type WarpConnectorGetResponseResultXlFXheKkCfdTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorListResponseXlFXheKkCfdTunnelConnection `json:"connections"`
+	Connections []WarpConnectorGetResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -856,13 +492,13 @@ type WarpConnectorListResponseXlFXheKkCfdTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType WarpConnectorListResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorListResponseXlFXheKkCfdTunnelJSON    `json:"-"`
+	TunType WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorGetResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
 }
 
-// warpConnectorListResponseXlFXheKkCfdTunnelJSON contains the JSON metadata for
-// the struct [WarpConnectorListResponseXlFXheKkCfdTunnel]
-type warpConnectorListResponseXlFXheKkCfdTunnelJSON struct {
+// warpConnectorGetResponseResultXlFXheKkCfdTunnelJSON contains the JSON metadata
+// for the struct [WarpConnectorGetResponseResultXlFXheKkCfdTunnel]
+type warpConnectorGetResponseResultXlFXheKkCfdTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -879,13 +515,13 @@ type warpConnectorListResponseXlFXheKkCfdTunnelJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WarpConnectorListResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorGetResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WarpConnectorListResponseXlFXheKkCfdTunnel) implementsWarpConnectorListResponse() {}
+func (r WarpConnectorGetResponseResultXlFXheKkCfdTunnel) implementsWarpConnectorGetResponseResult() {}
 
-type WarpConnectorListResponseXlFXheKkCfdTunnelConnection struct {
+type WarpConnectorGetResponseResultXlFXheKkCfdTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -904,13 +540,14 @@ type WarpConnectorListResponseXlFXheKkCfdTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                   `json:"uuid"`
-	JSON warpConnectorListResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+	Uuid string                                                        `json:"uuid"`
+	JSON warpConnectorGetResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
 }
 
-// warpConnectorListResponseXlFXheKkCfdTunnelConnectionJSON contains the JSON
-// metadata for the struct [WarpConnectorListResponseXlFXheKkCfdTunnelConnection]
-type warpConnectorListResponseXlFXheKkCfdTunnelConnectionJSON struct {
+// warpConnectorGetResponseResultXlFXheKkCfdTunnelConnectionJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorGetResponseResultXlFXheKkCfdTunnelConnection]
+type warpConnectorGetResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -923,29 +560,29 @@ type warpConnectorListResponseXlFXheKkCfdTunnelConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WarpConnectorListResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorGetResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type WarpConnectorListResponseXlFXheKkCfdTunnelTunType string
+type WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType string
 
 const (
-	WarpConnectorListResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorListResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	WarpConnectorListResponseXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorListResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	WarpConnectorListResponseXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorListResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	WarpConnectorListResponseXlFXheKkCfdTunnelTunTypeGre           WarpConnectorListResponseXlFXheKkCfdTunnelTunType = "gre"
-	WarpConnectorListResponseXlFXheKkCfdTunnelTunTypeCni           WarpConnectorListResponseXlFXheKkCfdTunnelTunType = "cni"
+	WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunTypeGre           WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunTypeCni           WarpConnectorGetResponseResultXlFXheKkCfdTunnelTunType = "cni"
 )
 
 // A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorListResponseXlFXheKkWarpConnectorTunnel struct {
+type WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnel struct {
 	// UUID of the tunnel.
 	ID string `json:"id"`
 	// Cloudflare account ID
 	AccountTag string `json:"account_tag"`
 	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorListResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	Connections []WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
 	// Timestamp of when the tunnel established at least one connection to Cloudflare's
 	// edge. If `null`, the tunnel is inactive.
 	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
@@ -967,13 +604,14 @@ type WarpConnectorListResponseXlFXheKkWarpConnectorTunnel struct {
 	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
 	Status string `json:"status"`
 	// The type of tunnel.
-	TunType WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorListResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+	TunType WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
 }
 
-// warpConnectorListResponseXlFXheKkWarpConnectorTunnelJSON contains the JSON
-// metadata for the struct [WarpConnectorListResponseXlFXheKkWarpConnectorTunnel]
-type warpConnectorListResponseXlFXheKkWarpConnectorTunnelJSON struct {
+// warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnel]
+type warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
 	ID              apijson.Field
 	AccountTag      apijson.Field
 	Connections     apijson.Field
@@ -989,13 +627,14 @@ type warpConnectorListResponseXlFXheKkWarpConnectorTunnelJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *WarpConnectorListResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WarpConnectorListResponseXlFXheKkWarpConnectorTunnel) implementsWarpConnectorListResponse() {}
+func (r WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnel) implementsWarpConnectorGetResponseResult() {
+}
 
-type WarpConnectorListResponseXlFXheKkWarpConnectorTunnelConnection struct {
+type WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
 	// UUID of the cloudflared instance.
@@ -1014,252 +653,14 @@ type WarpConnectorListResponseXlFXheKkWarpConnectorTunnelConnection struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                             `json:"uuid"`
-	JSON warpConnectorListResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+	Uuid string                                                                  `json:"uuid"`
+	JSON warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
 }
 
-// warpConnectorListResponseXlFXheKkWarpConnectorTunnelConnectionJSON contains the
-// JSON metadata for the struct
-// [WarpConnectorListResponseXlFXheKkWarpConnectorTunnelConnection]
-type warpConnectorListResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType string
-
-const (
-	WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorListResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
-)
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// Union satisfied by [WarpConnectorDeleteResponseXlFXheKkCfdTunnel] or
-// [WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnel].
-type WarpConnectorDeleteResponse interface {
-	implementsWarpConnectorDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorDeleteResponse)(nil)).Elem(), "")
-}
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorDeleteResponseXlFXheKkCfdTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorDeleteResponseXlFXheKkCfdTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
-	// If `false`, the tunnel must be configured locally on the origin machine.
-	RemoteConfig bool `json:"remote_config"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorDeleteResponseXlFXheKkCfdTunnelJSON    `json:"-"`
-}
-
-// warpConnectorDeleteResponseXlFXheKkCfdTunnelJSON contains the JSON metadata for
-// the struct [WarpConnectorDeleteResponseXlFXheKkCfdTunnel]
-type warpConnectorDeleteResponseXlFXheKkCfdTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	RemoteConfig    apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorDeleteResponseXlFXheKkCfdTunnel) implementsWarpConnectorDeleteResponse() {}
-
-type WarpConnectorDeleteResponseXlFXheKkCfdTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                     `json:"uuid"`
-	JSON warpConnectorDeleteResponseXlFXheKkCfdTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorDeleteResponseXlFXheKkCfdTunnelConnectionJSON contains the JSON
-// metadata for the struct [WarpConnectorDeleteResponseXlFXheKkCfdTunnelConnection]
-type warpConnectorDeleteResponseXlFXheKkCfdTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType string
-
-const (
-	WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType = "cfd_tunnel"
-	WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType = "warp_connector"
-	WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType = "ip_sec"
-	WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunTypeGre           WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType = "gre"
-	WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunTypeCni           WarpConnectorDeleteResponseXlFXheKkCfdTunnelTunType = "cni"
-)
-
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
-}
-
-// warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelJSON contains the JSON
-// metadata for the struct [WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnel]
-type warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnel) implementsWarpConnectorDeleteResponse() {
-}
-
-type WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                               `json:"uuid"`
-	JSON warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
-}
-
-// warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnectionJSON contains
+// warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON contains
 // the JSON metadata for the struct
-// [WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnection]
-type warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+// [WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type warpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
 	ID                 apijson.Field
 	ClientID           apijson.Field
 	ClientVersion      apijson.Field
@@ -1272,19 +673,987 @@ type warpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnectionJSON struct
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType string
+type WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType string
 
 const (
-	WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
-	WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
-	WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
-	WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType = "gre"
-	WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorDeleteResponseXlFXheKkWarpConnectorTunnelTunType = "cni"
+	WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorGetResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
+)
+
+// Whether the API call was successful
+type WarpConnectorGetResponseSuccess bool
+
+const (
+	WarpConnectorGetResponseSuccessTrue WarpConnectorGetResponseSuccess = true
+)
+
+type WarpConnectorUpdateResponse struct {
+	Errors   []WarpConnectorUpdateResponseError   `json:"errors"`
+	Messages []WarpConnectorUpdateResponseMessage `json:"messages"`
+	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+	Result WarpConnectorUpdateResponseResult `json:"result"`
+	// Whether the API call was successful
+	Success WarpConnectorUpdateResponseSuccess `json:"success"`
+	JSON    warpConnectorUpdateResponseJSON    `json:"-"`
+}
+
+// warpConnectorUpdateResponseJSON contains the JSON metadata for the struct
+// [WarpConnectorUpdateResponse]
+type warpConnectorUpdateResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorUpdateResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    warpConnectorUpdateResponseErrorJSON `json:"-"`
+}
+
+// warpConnectorUpdateResponseErrorJSON contains the JSON metadata for the struct
+// [WarpConnectorUpdateResponseError]
+type warpConnectorUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorUpdateResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    warpConnectorUpdateResponseMessageJSON `json:"-"`
+}
+
+// warpConnectorUpdateResponseMessageJSON contains the JSON metadata for the struct
+// [WarpConnectorUpdateResponseMessage]
+type warpConnectorUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// Union satisfied by [WarpConnectorUpdateResponseResultXlFXheKkCfdTunnel] or
+// [WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnel].
+type WarpConnectorUpdateResponseResult interface {
+	implementsWarpConnectorUpdateResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorUpdateResponseResult)(nil)).Elem(), "")
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorUpdateResponseResultXlFXheKkCfdTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
+	// If `false`, the tunnel must be configured locally on the origin machine.
+	RemoteConfig bool `json:"remote_config"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorUpdateResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
+}
+
+// warpConnectorUpdateResponseResultXlFXheKkCfdTunnelJSON contains the JSON
+// metadata for the struct [WarpConnectorUpdateResponseResultXlFXheKkCfdTunnel]
+type warpConnectorUpdateResponseResultXlFXheKkCfdTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	RemoteConfig    apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorUpdateResponseResultXlFXheKkCfdTunnel) implementsWarpConnectorUpdateResponseResult() {
+}
+
+type WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                           `json:"uuid"`
+	JSON warpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnectionJSON contains the
+// JSON metadata for the struct
+// [WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnection]
+type warpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType string
+
+const (
+	WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunTypeGre           WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunTypeCni           WarpConnectorUpdateResponseResultXlFXheKkCfdTunnelTunType = "cni"
+)
+
+// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+}
+
+// warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelJSON contains the
+// JSON metadata for the struct
+// [WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnel]
+type warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnel) implementsWarpConnectorUpdateResponseResult() {
+}
+
+type WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                                     `json:"uuid"`
+	JSON warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON
+// contains the JSON metadata for the struct
+// [WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type warpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType string
+
+const (
+	WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorUpdateResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
+)
+
+// Whether the API call was successful
+type WarpConnectorUpdateResponseSuccess bool
+
+const (
+	WarpConnectorUpdateResponseSuccessTrue WarpConnectorUpdateResponseSuccess = true
+)
+
+type WarpConnectorListResponse struct {
+	Errors     []WarpConnectorListResponseError    `json:"errors"`
+	Messages   []WarpConnectorListResponseMessage  `json:"messages"`
+	Result     []WarpConnectorListResponseResult   `json:"result"`
+	ResultInfo WarpConnectorListResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success WarpConnectorListResponseSuccess `json:"success"`
+	JSON    warpConnectorListResponseJSON    `json:"-"`
+}
+
+// warpConnectorListResponseJSON contains the JSON metadata for the struct
+// [WarpConnectorListResponse]
+type warpConnectorListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    warpConnectorListResponseErrorJSON `json:"-"`
+}
+
+// warpConnectorListResponseErrorJSON contains the JSON metadata for the struct
+// [WarpConnectorListResponseError]
+type warpConnectorListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorListResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    warpConnectorListResponseMessageJSON `json:"-"`
+}
+
+// warpConnectorListResponseMessageJSON contains the JSON metadata for the struct
+// [WarpConnectorListResponseMessage]
+type warpConnectorListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// Union satisfied by [WarpConnectorListResponseResultXlFXheKkCfdTunnel] or
+// [WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnel].
+type WarpConnectorListResponseResult interface {
+	implementsWarpConnectorListResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorListResponseResult)(nil)).Elem(), "")
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorListResponseResultXlFXheKkCfdTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorListResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
+	// If `false`, the tunnel must be configured locally on the origin machine.
+	RemoteConfig bool `json:"remote_config"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorListResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
+}
+
+// warpConnectorListResponseResultXlFXheKkCfdTunnelJSON contains the JSON metadata
+// for the struct [WarpConnectorListResponseResultXlFXheKkCfdTunnel]
+type warpConnectorListResponseResultXlFXheKkCfdTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	RemoteConfig    apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorListResponseResultXlFXheKkCfdTunnel) implementsWarpConnectorListResponseResult() {
+}
+
+type WarpConnectorListResponseResultXlFXheKkCfdTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                         `json:"uuid"`
+	JSON warpConnectorListResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorListResponseResultXlFXheKkCfdTunnelConnectionJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorListResponseResultXlFXheKkCfdTunnelConnection]
+type warpConnectorListResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType string
+
+const (
+	WarpConnectorListResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	WarpConnectorListResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	WarpConnectorListResponseResultXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	WarpConnectorListResponseResultXlFXheKkCfdTunnelTunTypeGre           WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	WarpConnectorListResponseResultXlFXheKkCfdTunnelTunTypeCni           WarpConnectorListResponseResultXlFXheKkCfdTunnelTunType = "cni"
+)
+
+// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+}
+
+// warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelJSON contains the JSON
+// metadata for the struct
+// [WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnel]
+type warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnel) implementsWarpConnectorListResponseResult() {
+}
+
+type WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                                   `json:"uuid"`
+	JSON warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON
+// contains the JSON metadata for the struct
+// [WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type warpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType string
+
+const (
+	WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorListResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
+)
+
+type WarpConnectorListResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                 `json:"total_count"`
+	JSON       warpConnectorListResponseResultInfoJSON `json:"-"`
+}
+
+// warpConnectorListResponseResultInfoJSON contains the JSON metadata for the
+// struct [WarpConnectorListResponseResultInfo]
+type warpConnectorListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WarpConnectorListResponseSuccess bool
+
+const (
+	WarpConnectorListResponseSuccessTrue WarpConnectorListResponseSuccess = true
+)
+
+type WarpConnectorDeleteResponse struct {
+	Errors   []WarpConnectorDeleteResponseError   `json:"errors"`
+	Messages []WarpConnectorDeleteResponseMessage `json:"messages"`
+	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+	Result WarpConnectorDeleteResponseResult `json:"result"`
+	// Whether the API call was successful
+	Success WarpConnectorDeleteResponseSuccess `json:"success"`
+	JSON    warpConnectorDeleteResponseJSON    `json:"-"`
+}
+
+// warpConnectorDeleteResponseJSON contains the JSON metadata for the struct
+// [WarpConnectorDeleteResponse]
+type warpConnectorDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorDeleteResponseError struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    warpConnectorDeleteResponseErrorJSON `json:"-"`
+}
+
+// warpConnectorDeleteResponseErrorJSON contains the JSON metadata for the struct
+// [WarpConnectorDeleteResponseError]
+type warpConnectorDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WarpConnectorDeleteResponseMessage struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    warpConnectorDeleteResponseMessageJSON `json:"-"`
+}
+
+// warpConnectorDeleteResponseMessageJSON contains the JSON metadata for the struct
+// [WarpConnectorDeleteResponseMessage]
+type warpConnectorDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// Union satisfied by [WarpConnectorDeleteResponseResultXlFXheKkCfdTunnel] or
+// [WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnel].
+type WarpConnectorDeleteResponseResult interface {
+	implementsWarpConnectorDeleteResponseResult()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*WarpConnectorDeleteResponseResult)(nil)).Elem(), "")
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorDeleteResponseResultXlFXheKkCfdTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
+	// If `false`, the tunnel must be configured locally on the origin machine.
+	RemoteConfig bool `json:"remote_config"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorDeleteResponseResultXlFXheKkCfdTunnelJSON    `json:"-"`
+}
+
+// warpConnectorDeleteResponseResultXlFXheKkCfdTunnelJSON contains the JSON
+// metadata for the struct [WarpConnectorDeleteResponseResultXlFXheKkCfdTunnel]
+type warpConnectorDeleteResponseResultXlFXheKkCfdTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	RemoteConfig    apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseResultXlFXheKkCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorDeleteResponseResultXlFXheKkCfdTunnel) implementsWarpConnectorDeleteResponseResult() {
+}
+
+type WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                           `json:"uuid"`
+	JSON warpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnectionJSON contains the
+// JSON metadata for the struct
+// [WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnection]
+type warpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType string
+
+const (
+	WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunTypeCfdTunnel     WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType = "cfd_tunnel"
+	WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunTypeWarpConnector WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType = "warp_connector"
+	WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunTypeIPSec         WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType = "ip_sec"
+	WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunTypeGre           WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType = "gre"
+	WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunTypeCni           WarpConnectorDeleteResponseResultXlFXheKkCfdTunnelTunType = "cni"
+)
+
+// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+type WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelJSON    `json:"-"`
+}
+
+// warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelJSON contains the
+// JSON metadata for the struct
+// [WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnel]
+type warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnel) implementsWarpConnectorDeleteResponseResult() {
+}
+
+type WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                                     `json:"uuid"`
+	JSON warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON `json:"-"`
+}
+
+// warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON
+// contains the JSON metadata for the struct
+// [WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnection]
+type warpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType string
+
+const (
+	WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunTypeCfdTunnel     WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType = "cfd_tunnel"
+	WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunTypeWarpConnector WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType = "warp_connector"
+	WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunTypeIPSec         WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType = "ip_sec"
+	WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunTypeGre           WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType = "gre"
+	WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunTypeCni           WarpConnectorDeleteResponseResultXlFXheKkWarpConnectorTunnelTunType = "cni"
+)
+
+// Whether the API call was successful
+type WarpConnectorDeleteResponseSuccess bool
+
+const (
+	WarpConnectorDeleteResponseSuccessTrue WarpConnectorDeleteResponseSuccess = true
 )
 
 type WarpConnectorNewParams struct {
@@ -1295,146 +1664,6 @@ type WarpConnectorNewParams struct {
 func (r WarpConnectorNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type WarpConnectorNewResponseEnvelope struct {
-	Errors   []WarpConnectorNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []WarpConnectorNewResponseEnvelopeMessages `json:"messages"`
-	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result WarpConnectorNewResponse `json:"result"`
-	// Whether the API call was successful
-	Success WarpConnectorNewResponseEnvelopeSuccess `json:"success"`
-	JSON    warpConnectorNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// warpConnectorNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WarpConnectorNewResponseEnvelope]
-type warpConnectorNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorNewResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    warpConnectorNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorNewResponseEnvelopeErrors]
-type warpConnectorNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorNewResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    warpConnectorNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WarpConnectorNewResponseEnvelopeMessages]
-type warpConnectorNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorNewResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorNewResponseEnvelopeSuccessTrue WarpConnectorNewResponseEnvelopeSuccess = true
-)
-
-type WarpConnectorGetResponseEnvelope struct {
-	Errors   []WarpConnectorGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []WarpConnectorGetResponseEnvelopeMessages `json:"messages"`
-	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result WarpConnectorGetResponse `json:"result"`
-	// Whether the API call was successful
-	Success WarpConnectorGetResponseEnvelopeSuccess `json:"success"`
-	JSON    warpConnectorGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// warpConnectorGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WarpConnectorGetResponseEnvelope]
-type warpConnectorGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorGetResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    warpConnectorGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorGetResponseEnvelopeErrors]
-type warpConnectorGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorGetResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    warpConnectorGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WarpConnectorGetResponseEnvelopeMessages]
-type warpConnectorGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorGetResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorGetResponseEnvelopeSuccessTrue WarpConnectorGetResponseEnvelopeSuccess = true
-)
 
 type WarpConnectorUpdateParams struct {
 	// A user-friendly name for the tunnel.
@@ -1447,76 +1676,6 @@ type WarpConnectorUpdateParams struct {
 func (r WarpConnectorUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type WarpConnectorUpdateResponseEnvelope struct {
-	Errors   []WarpConnectorUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []WarpConnectorUpdateResponseEnvelopeMessages `json:"messages"`
-	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result WarpConnectorUpdateResponse `json:"result"`
-	// Whether the API call was successful
-	Success WarpConnectorUpdateResponseEnvelopeSuccess `json:"success"`
-	JSON    warpConnectorUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// warpConnectorUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WarpConnectorUpdateResponseEnvelope]
-type warpConnectorUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    warpConnectorUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorUpdateResponseEnvelopeErrors]
-type warpConnectorUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    warpConnectorUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WarpConnectorUpdateResponseEnvelopeMessages]
-type warpConnectorUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorUpdateResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorUpdateResponseEnvelopeSuccessTrue WarpConnectorUpdateResponseEnvelopeSuccess = true
-)
 
 type WarpConnectorListParams struct {
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
@@ -1546,104 +1705,6 @@ func (r WarpConnectorListParams) URLQuery() (v url.Values) {
 	})
 }
 
-type WarpConnectorListResponseEnvelope struct {
-	Errors     []WarpConnectorListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []WarpConnectorListResponseEnvelopeMessages `json:"messages"`
-	Result     []WarpConnectorListResponse                 `json:"result"`
-	ResultInfo WarpConnectorListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success WarpConnectorListResponseEnvelopeSuccess `json:"success"`
-	JSON    warpConnectorListResponseEnvelopeJSON    `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WarpConnectorListResponseEnvelope]
-type warpConnectorListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    warpConnectorListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorListResponseEnvelopeErrors]
-type warpConnectorListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    warpConnectorListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WarpConnectorListResponseEnvelopeMessages]
-type warpConnectorListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       warpConnectorListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [WarpConnectorListResponseEnvelopeResultInfo]
-type warpConnectorListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorListResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorListResponseEnvelopeSuccessTrue WarpConnectorListResponseEnvelopeSuccess = true
-)
-
 type WarpConnectorDeleteParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -1651,73 +1712,3 @@ type WarpConnectorDeleteParams struct {
 func (r WarpConnectorDeleteParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
-
-type WarpConnectorDeleteResponseEnvelope struct {
-	Errors   []WarpConnectorDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []WarpConnectorDeleteResponseEnvelopeMessages `json:"messages"`
-	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result WarpConnectorDeleteResponse `json:"result"`
-	// Whether the API call was successful
-	Success WarpConnectorDeleteResponseEnvelopeSuccess `json:"success"`
-	JSON    warpConnectorDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// warpConnectorDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WarpConnectorDeleteResponseEnvelope]
-type warpConnectorDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorDeleteResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    warpConnectorDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorDeleteResponseEnvelopeErrors]
-type warpConnectorDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorDeleteResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    warpConnectorDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WarpConnectorDeleteResponseEnvelopeMessages]
-type warpConnectorDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorDeleteResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorDeleteResponseEnvelopeSuccessTrue WarpConnectorDeleteResponseEnvelopeSuccess = true
-)

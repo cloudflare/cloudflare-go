@@ -39,26 +39,16 @@ func NewAccessServiceTokenService(opts ...option.RequestOption) (r *AccessServic
 // Updates a configured service token.
 func (r *AccessServiceTokenService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokenUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenUpdateResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 // Deletes a service token.
 func (r *AccessServiceTokenService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokenDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenDeleteResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -67,55 +57,35 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, accountOrZone st
 // Secret or create a new service token.
 func (r *AccessServiceTokenService) AccessServiceTokensNewAServiceToken(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessServiceTokenAccessServiceTokensNewAServiceTokenParams, opts ...option.RequestOption) (res *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/service_tokens", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) AccessServiceTokensListServiceTokens(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessServiceTokenAccessServiceTokensListServiceTokensResponse, err error) {
+func (r *AccessServiceTokenService) AccessServiceTokensListServiceTokens(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *AccessServiceTokenAccessServiceTokensListServiceTokensResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/service_tokens", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 type AccessServiceTokenUpdateResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                               `json:"name"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenUpdateResponseJSON `json:"-"`
+	Errors   []AccessServiceTokenUpdateResponseError   `json:"errors"`
+	Messages []AccessServiceTokenUpdateResponseMessage `json:"messages"`
+	Result   AccessServiceTokenUpdateResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessServiceTokenUpdateResponseSuccess `json:"success"`
+	JSON    accessServiceTokenUpdateResponseJSON    `json:"-"`
 }
 
 // accessServiceTokenUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessServiceTokenUpdateResponse]
 type accessServiceTokenUpdateResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -124,7 +94,45 @@ func (r *AccessServiceTokenUpdateResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessServiceTokenDeleteResponse struct {
+type AccessServiceTokenUpdateResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessServiceTokenUpdateResponseErrorJSON `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseErrorJSON contains the JSON metadata for the
+// struct [AccessServiceTokenUpdateResponseError]
+type accessServiceTokenUpdateResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenUpdateResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessServiceTokenUpdateResponseMessageJSON `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseMessageJSON contains the JSON metadata for the
+// struct [AccessServiceTokenUpdateResponseMessage]
+type accessServiceTokenUpdateResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenUpdateResponseResult struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -136,14 +144,14 @@ type AccessServiceTokenDeleteResponse struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                               `json:"name"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenDeleteResponseJSON `json:"-"`
+	Name      string                                     `json:"name"`
+	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenUpdateResponseResultJSON `json:"-"`
 }
 
-// accessServiceTokenDeleteResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenDeleteResponse]
-type accessServiceTokenDeleteResponseJSON struct {
+// accessServiceTokenUpdateResponseResultJSON contains the JSON metadata for the
+// struct [AccessServiceTokenUpdateResponseResult]
+type accessServiceTokenUpdateResponseResultJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
@@ -154,11 +162,186 @@ type accessServiceTokenDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
+func (r *AccessServiceTokenUpdateResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessServiceTokenUpdateResponseSuccess bool
+
+const (
+	AccessServiceTokenUpdateResponseSuccessTrue AccessServiceTokenUpdateResponseSuccess = true
+)
+
+type AccessServiceTokenDeleteResponse struct {
+	Errors   []AccessServiceTokenDeleteResponseError   `json:"errors"`
+	Messages []AccessServiceTokenDeleteResponseMessage `json:"messages"`
+	Result   AccessServiceTokenDeleteResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessServiceTokenDeleteResponseSuccess `json:"success"`
+	JSON    accessServiceTokenDeleteResponseJSON    `json:"-"`
+}
+
+// accessServiceTokenDeleteResponseJSON contains the JSON metadata for the struct
+// [AccessServiceTokenDeleteResponse]
+type accessServiceTokenDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
 func (r *AccessServiceTokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccessServiceTokenDeleteResponseError struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessServiceTokenDeleteResponseErrorJSON `json:"-"`
+}
+
+// accessServiceTokenDeleteResponseErrorJSON contains the JSON metadata for the
+// struct [AccessServiceTokenDeleteResponseError]
+type accessServiceTokenDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenDeleteResponseMessage struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessServiceTokenDeleteResponseMessageJSON `json:"-"`
+}
+
+// accessServiceTokenDeleteResponseMessageJSON contains the JSON metadata for the
+// struct [AccessServiceTokenDeleteResponseMessage]
+type accessServiceTokenDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenDeleteResponseResult struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                                     `json:"name"`
+	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenDeleteResponseResultJSON `json:"-"`
+}
+
+// accessServiceTokenDeleteResponseResultJSON contains the JSON metadata for the
+// struct [AccessServiceTokenDeleteResponseResult]
+type accessServiceTokenDeleteResponseResultJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenDeleteResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessServiceTokenDeleteResponseSuccess bool
+
+const (
+	AccessServiceTokenDeleteResponseSuccessTrue AccessServiceTokenDeleteResponseSuccess = true
+)
+
 type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse struct {
+	Errors   []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseError   `json:"errors"`
+	Messages []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessage `json:"messages"`
+	Result   AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseSuccess `json:"success"`
+	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON    `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON contains the
+// JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse]
+type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseError struct {
+	Code    int64                                                                  `json:"code,required"`
+	Message string                                                                 `json:"message,required"`
+	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseErrorJSON `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseErrorJSON contains
+// the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseError]
+type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessage struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessageJSON `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessage]
+type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseResult struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -173,15 +356,15 @@ type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                                                            `json:"name"`
-	UpdatedAt time.Time                                                         `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON `json:"-"`
+	Name      string                                                                  `json:"name"`
+	UpdatedAt time.Time                                                               `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenAccessServiceTokensNewAServiceTokenResponseResultJSON `json:"-"`
 }
 
-// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON contains the
-// JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse]
-type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON struct {
+// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseResultJSON contains
+// the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseResult]
+type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseResultJSON struct {
 	ID           apijson.Field
 	ClientID     apijson.Field
 	ClientSecret apijson.Field
@@ -193,11 +376,85 @@ type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseSuccess bool
+
+const (
+	AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseSuccessTrue AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseSuccess = true
+)
+
 type AccessServiceTokenAccessServiceTokensListServiceTokensResponse struct {
+	Errors     []AccessServiceTokenAccessServiceTokensListServiceTokensResponseError    `json:"errors"`
+	Messages   []AccessServiceTokenAccessServiceTokensListServiceTokensResponseMessage  `json:"messages"`
+	Result     []AccessServiceTokenAccessServiceTokensListServiceTokensResponseResult   `json:"result"`
+	ResultInfo AccessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfo `json:"result_info"`
+	// Whether the API call was successful
+	Success AccessServiceTokenAccessServiceTokensListServiceTokensResponseSuccess `json:"success"`
+	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON    `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON contains the
+// JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensListServiceTokensResponse]
+type accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseError struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseErrorJSON `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensListServiceTokensResponseErrorJSON contains
+// the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseError]
+type accessServiceTokenAccessServiceTokensListServiceTokensResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseMessage struct {
+	Code    int64                                                                     `json:"code,required"`
+	Message string                                                                    `json:"message,required"`
+	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseMessageJSON `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensListServiceTokensResponseMessageJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseMessage]
+type accessServiceTokenAccessServiceTokensListServiceTokensResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseResult struct {
 	// The ID of the service token.
 	ID interface{} `json:"id"`
 	// The Client ID for the service token. Access will check for this value in the
@@ -209,15 +466,15 @@ type AccessServiceTokenAccessServiceTokensListServiceTokensResponse struct {
 	// default is 1 year in hours (8760h).
 	Duration string `json:"duration"`
 	// The name of the service token.
-	Name      string                                                             `json:"name"`
-	UpdatedAt time.Time                                                          `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON `json:"-"`
+	Name      string                                                                   `json:"name"`
+	UpdatedAt time.Time                                                                `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenAccessServiceTokensListServiceTokensResponseResultJSON `json:"-"`
 }
 
-// accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON contains the
-// JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensListServiceTokensResponse]
-type accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON struct {
+// accessServiceTokenAccessServiceTokensListServiceTokensResponseResultJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseResult]
+type accessServiceTokenAccessServiceTokensListServiceTokensResponseResultJSON struct {
 	ID          apijson.Field
 	ClientID    apijson.Field
 	CreatedAt   apijson.Field
@@ -228,9 +485,44 @@ type accessServiceTokenAccessServiceTokensListServiceTokensResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                      `json:"total_count"`
+	JSON       accessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfoJSON `json:"-"`
+}
+
+// accessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfoJSON
+// contains the JSON metadata for the struct
+// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfo]
+type accessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseSuccess bool
+
+const (
+	AccessServiceTokenAccessServiceTokensListServiceTokensResponseSuccessTrue AccessServiceTokenAccessServiceTokensListServiceTokensResponseSuccess = true
+)
 
 type AccessServiceTokenUpdateParams struct {
 	// The duration for how long the service token will be valid. Must be in the format
@@ -245,144 +537,6 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessServiceTokenUpdateResponseEnvelope struct {
-	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenUpdateResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessServiceTokenUpdateResponseEnvelope]
-type accessServiceTokenUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenUpdateResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessServiceTokenUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessServiceTokenUpdateResponseEnvelopeErrors]
-type accessServiceTokenUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessServiceTokenUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessServiceTokenUpdateResponseEnvelopeMessages]
-type accessServiceTokenUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessServiceTokenUpdateResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenUpdateResponseEnvelopeSuccessTrue AccessServiceTokenUpdateResponseEnvelopeSuccess = true
-)
-
-type AccessServiceTokenDeleteResponseEnvelope struct {
-	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenDeleteResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessServiceTokenDeleteResponseEnvelope]
-type accessServiceTokenDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenDeleteResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessServiceTokenDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessServiceTokenDeleteResponseEnvelopeErrors]
-type accessServiceTokenDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessServiceTokenDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessServiceTokenDeleteResponseEnvelopeMessages]
-type accessServiceTokenDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessServiceTokenDeleteResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenDeleteResponseEnvelopeSuccessTrue AccessServiceTokenDeleteResponseEnvelopeSuccess = true
-)
-
 type AccessServiceTokenAccessServiceTokensNewAServiceTokenParams struct {
 	// The name of the service token.
 	Name param.Field[string] `json:"name,required"`
@@ -395,177 +549,3 @@ type AccessServiceTokenAccessServiceTokensNewAServiceTokenParams struct {
 func (r AccessServiceTokenAccessServiceTokensNewAServiceTokenParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelope struct {
-	Errors   []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelope]
-type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors struct {
-	Code    int64                                                                           `json:"code,required"`
-	Message string                                                                          `json:"message,required"`
-	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors]
-type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages]
-type accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccessTrue AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccess = true
-)
-
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelope struct {
-	Errors     []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessServiceTokenAccessServiceTokensListServiceTokensResponse                 `json:"result"`
-	ResultInfo AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelope]
-type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors]
-type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages]
-type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                              `json:"total_count"`
-	JSON       accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo]
-type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccessTrue AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess = true
-)

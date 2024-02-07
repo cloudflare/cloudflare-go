@@ -40,26 +40,16 @@ func NewAddressingPrefixBindingService(opts ...option.RequestOption) (r *Address
 // allows creating service bindings for the Cloudflare CDN or Cloudflare Spectrum.
 func (r *AddressingPrefixBindingService) New(ctx context.Context, accountIdentifier string, prefixIdentifier string, body AddressingPrefixBindingNewParams, opts ...option.RequestOption) (res *AddressingPrefixBindingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBindingNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", accountIdentifier, prefixIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Fetch a single Service Binding
 func (r *AddressingPrefixBindingService) Get(ctx context.Context, accountIdentifier string, prefixIdentifier string, bindingIdentifier string, opts ...option.RequestOption) (res *AddressingPrefixBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBindingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", accountIdentifier, prefixIdentifier, bindingIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -69,107 +59,100 @@ func (r *AddressingPrefixBindingService) Get(ctx context.Context, accountIdentif
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *AddressingPrefixBindingService) List(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *[]AddressingPrefixBindingListResponse, err error) {
+func (r *AddressingPrefixBindingService) List(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *AddressingPrefixBindingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBindingListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", accountIdentifier, prefixIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Delete a Service Binding
 func (r *AddressingPrefixBindingService) Delete(ctx context.Context, accountIdentifier string, prefixIdentifier string, bindingIdentifier string, opts ...option.RequestOption) (res *AddressingPrefixBindingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", accountIdentifier, prefixIdentifier, bindingIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
 type AddressingPrefixBindingNewResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr string `json:"cidr"`
-	// Status of a Service Binding's deployment to the Cloudflare network
-	Provisioning AddressingPrefixBindingNewResponseProvisioning `json:"provisioning"`
-	// Identifier
-	ServiceID string `json:"service_id"`
-	// Name of a service running on the Cloudflare network
-	ServiceName string                                 `json:"service_name"`
-	JSON        addressingPrefixBindingNewResponseJSON `json:"-"`
+	Errors   []AddressingPrefixBindingNewResponseError   `json:"errors"`
+	Messages []AddressingPrefixBindingNewResponseMessage `json:"messages"`
+	Result   AddressingPrefixBindingNewResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AddressingPrefixBindingNewResponseSuccess `json:"success"`
+	JSON    addressingPrefixBindingNewResponseJSON    `json:"-"`
 }
 
 // addressingPrefixBindingNewResponseJSON contains the JSON metadata for the struct
 // [AddressingPrefixBindingNewResponse]
 type addressingPrefixBindingNewResponseJSON struct {
-	ID           apijson.Field
-	Cidr         apijson.Field
-	Provisioning apijson.Field
-	ServiceID    apijson.Field
-	ServiceName  apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AddressingPrefixBindingNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Status of a Service Binding's deployment to the Cloudflare network
-type AddressingPrefixBindingNewResponseProvisioning struct {
-	// When a binding has been deployed to a majority of Cloudflare datacenters, the
-	// binding will become active and can be used with its associated service.
-	State AddressingPrefixBindingNewResponseProvisioningState `json:"state"`
-	JSON  addressingPrefixBindingNewResponseProvisioningJSON  `json:"-"`
+type AddressingPrefixBindingNewResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    addressingPrefixBindingNewResponseErrorJSON `json:"-"`
 }
 
-// addressingPrefixBindingNewResponseProvisioningJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingNewResponseProvisioning]
-type addressingPrefixBindingNewResponseProvisioningJSON struct {
-	State       apijson.Field
+// addressingPrefixBindingNewResponseErrorJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingNewResponseError]
+type addressingPrefixBindingNewResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBindingNewResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBindingNewResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// When a binding has been deployed to a majority of Cloudflare datacenters, the
-// binding will become active and can be used with its associated service.
-type AddressingPrefixBindingNewResponseProvisioningState string
+type AddressingPrefixBindingNewResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    addressingPrefixBindingNewResponseMessageJSON `json:"-"`
+}
 
-const (
-	AddressingPrefixBindingNewResponseProvisioningStateProvisioning AddressingPrefixBindingNewResponseProvisioningState = "provisioning"
-	AddressingPrefixBindingNewResponseProvisioningStateActive       AddressingPrefixBindingNewResponseProvisioningState = "active"
-)
+// addressingPrefixBindingNewResponseMessageJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingNewResponseMessage]
+type addressingPrefixBindingNewResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-type AddressingPrefixBindingGetResponse struct {
+func (r *AddressingPrefixBindingNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingNewResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr string `json:"cidr"`
 	// Status of a Service Binding's deployment to the Cloudflare network
-	Provisioning AddressingPrefixBindingGetResponseProvisioning `json:"provisioning"`
+	Provisioning AddressingPrefixBindingNewResponseResultProvisioning `json:"provisioning"`
 	// Identifier
 	ServiceID string `json:"service_id"`
 	// Name of a service running on the Cloudflare network
-	ServiceName string                                 `json:"service_name"`
-	JSON        addressingPrefixBindingGetResponseJSON `json:"-"`
+	ServiceName string                                       `json:"service_name"`
+	JSON        addressingPrefixBindingNewResponseResultJSON `json:"-"`
 }
 
-// addressingPrefixBindingGetResponseJSON contains the JSON metadata for the struct
-// [AddressingPrefixBindingGetResponse]
-type addressingPrefixBindingGetResponseJSON struct {
+// addressingPrefixBindingNewResponseResultJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingNewResponseResult]
+type addressingPrefixBindingNewResponseResultJSON struct {
 	ID           apijson.Field
 	Cidr         apijson.Field
 	Provisioning apijson.Field
@@ -177,58 +160,127 @@ type addressingPrefixBindingGetResponseJSON struct {
 	ServiceName  apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingNewResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of a Service Binding's deployment to the Cloudflare network
+type AddressingPrefixBindingNewResponseResultProvisioning struct {
+	// When a binding has been deployed to a majority of Cloudflare datacenters, the
+	// binding will become active and can be used with its associated service.
+	State AddressingPrefixBindingNewResponseResultProvisioningState `json:"state"`
+	JSON  addressingPrefixBindingNewResponseResultProvisioningJSON  `json:"-"`
+}
+
+// addressingPrefixBindingNewResponseResultProvisioningJSON contains the JSON
+// metadata for the struct [AddressingPrefixBindingNewResponseResultProvisioning]
+type addressingPrefixBindingNewResponseResultProvisioningJSON struct {
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingNewResponseResultProvisioning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// When a binding has been deployed to a majority of Cloudflare datacenters, the
+// binding will become active and can be used with its associated service.
+type AddressingPrefixBindingNewResponseResultProvisioningState string
+
+const (
+	AddressingPrefixBindingNewResponseResultProvisioningStateProvisioning AddressingPrefixBindingNewResponseResultProvisioningState = "provisioning"
+	AddressingPrefixBindingNewResponseResultProvisioningStateActive       AddressingPrefixBindingNewResponseResultProvisioningState = "active"
+)
+
+// Whether the API call was successful
+type AddressingPrefixBindingNewResponseSuccess bool
+
+const (
+	AddressingPrefixBindingNewResponseSuccessTrue AddressingPrefixBindingNewResponseSuccess = true
+)
+
+type AddressingPrefixBindingGetResponse struct {
+	Errors   []AddressingPrefixBindingGetResponseError   `json:"errors"`
+	Messages []AddressingPrefixBindingGetResponseMessage `json:"messages"`
+	Result   AddressingPrefixBindingGetResponseResult    `json:"result"`
+	// Whether the API call was successful
+	Success AddressingPrefixBindingGetResponseSuccess `json:"success"`
+	JSON    addressingPrefixBindingGetResponseJSON    `json:"-"`
+}
+
+// addressingPrefixBindingGetResponseJSON contains the JSON metadata for the struct
+// [AddressingPrefixBindingGetResponse]
+type addressingPrefixBindingGetResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *AddressingPrefixBindingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Status of a Service Binding's deployment to the Cloudflare network
-type AddressingPrefixBindingGetResponseProvisioning struct {
-	// When a binding has been deployed to a majority of Cloudflare datacenters, the
-	// binding will become active and can be used with its associated service.
-	State AddressingPrefixBindingGetResponseProvisioningState `json:"state"`
-	JSON  addressingPrefixBindingGetResponseProvisioningJSON  `json:"-"`
+type AddressingPrefixBindingGetResponseError struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    addressingPrefixBindingGetResponseErrorJSON `json:"-"`
 }
 
-// addressingPrefixBindingGetResponseProvisioningJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingGetResponseProvisioning]
-type addressingPrefixBindingGetResponseProvisioningJSON struct {
-	State       apijson.Field
+// addressingPrefixBindingGetResponseErrorJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingGetResponseError]
+type addressingPrefixBindingGetResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBindingGetResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBindingGetResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// When a binding has been deployed to a majority of Cloudflare datacenters, the
-// binding will become active and can be used with its associated service.
-type AddressingPrefixBindingGetResponseProvisioningState string
+type AddressingPrefixBindingGetResponseMessage struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    addressingPrefixBindingGetResponseMessageJSON `json:"-"`
+}
 
-const (
-	AddressingPrefixBindingGetResponseProvisioningStateProvisioning AddressingPrefixBindingGetResponseProvisioningState = "provisioning"
-	AddressingPrefixBindingGetResponseProvisioningStateActive       AddressingPrefixBindingGetResponseProvisioningState = "active"
-)
+// addressingPrefixBindingGetResponseMessageJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingGetResponseMessage]
+type addressingPrefixBindingGetResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
 
-type AddressingPrefixBindingListResponse struct {
+func (r *AddressingPrefixBindingGetResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingGetResponseResult struct {
 	// Identifier
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr string `json:"cidr"`
 	// Status of a Service Binding's deployment to the Cloudflare network
-	Provisioning AddressingPrefixBindingListResponseProvisioning `json:"provisioning"`
+	Provisioning AddressingPrefixBindingGetResponseResultProvisioning `json:"provisioning"`
 	// Identifier
 	ServiceID string `json:"service_id"`
 	// Name of a service running on the Cloudflare network
-	ServiceName string                                  `json:"service_name"`
-	JSON        addressingPrefixBindingListResponseJSON `json:"-"`
+	ServiceName string                                       `json:"service_name"`
+	JSON        addressingPrefixBindingGetResponseResultJSON `json:"-"`
 }
 
-// addressingPrefixBindingListResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBindingListResponse]
-type addressingPrefixBindingListResponseJSON struct {
+// addressingPrefixBindingGetResponseResultJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingGetResponseResult]
+type addressingPrefixBindingGetResponseResultJSON struct {
 	ID           apijson.Field
 	Cidr         apijson.Field
 	Provisioning apijson.Field
@@ -238,48 +290,245 @@ type addressingPrefixBindingListResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBindingListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBindingGetResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of a Service Binding's deployment to the Cloudflare network
-type AddressingPrefixBindingListResponseProvisioning struct {
+type AddressingPrefixBindingGetResponseResultProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
 	// binding will become active and can be used with its associated service.
-	State AddressingPrefixBindingListResponseProvisioningState `json:"state"`
-	JSON  addressingPrefixBindingListResponseProvisioningJSON  `json:"-"`
+	State AddressingPrefixBindingGetResponseResultProvisioningState `json:"state"`
+	JSON  addressingPrefixBindingGetResponseResultProvisioningJSON  `json:"-"`
 }
 
-// addressingPrefixBindingListResponseProvisioningJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingListResponseProvisioning]
-type addressingPrefixBindingListResponseProvisioningJSON struct {
+// addressingPrefixBindingGetResponseResultProvisioningJSON contains the JSON
+// metadata for the struct [AddressingPrefixBindingGetResponseResultProvisioning]
+type addressingPrefixBindingGetResponseResultProvisioningJSON struct {
 	State       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBindingListResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBindingGetResponseResultProvisioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // When a binding has been deployed to a majority of Cloudflare datacenters, the
 // binding will become active and can be used with its associated service.
-type AddressingPrefixBindingListResponseProvisioningState string
+type AddressingPrefixBindingGetResponseResultProvisioningState string
 
 const (
-	AddressingPrefixBindingListResponseProvisioningStateProvisioning AddressingPrefixBindingListResponseProvisioningState = "provisioning"
-	AddressingPrefixBindingListResponseProvisioningStateActive       AddressingPrefixBindingListResponseProvisioningState = "active"
+	AddressingPrefixBindingGetResponseResultProvisioningStateProvisioning AddressingPrefixBindingGetResponseResultProvisioningState = "provisioning"
+	AddressingPrefixBindingGetResponseResultProvisioningStateActive       AddressingPrefixBindingGetResponseResultProvisioningState = "active"
 )
 
-// Union satisfied by [AddressingPrefixBindingDeleteResponseUnknown],
-// [AddressingPrefixBindingDeleteResponseArray] or [shared.UnionString].
-type AddressingPrefixBindingDeleteResponse interface {
-	ImplementsAddressingPrefixBindingDeleteResponse()
+// Whether the API call was successful
+type AddressingPrefixBindingGetResponseSuccess bool
+
+const (
+	AddressingPrefixBindingGetResponseSuccessTrue AddressingPrefixBindingGetResponseSuccess = true
+)
+
+type AddressingPrefixBindingListResponse struct {
+	Errors   []AddressingPrefixBindingListResponseError   `json:"errors"`
+	Messages []AddressingPrefixBindingListResponseMessage `json:"messages"`
+	Result   []AddressingPrefixBindingListResponseResult  `json:"result"`
+	// Whether the API call was successful
+	Success AddressingPrefixBindingListResponseSuccess `json:"success"`
+	JSON    addressingPrefixBindingListResponseJSON    `json:"-"`
+}
+
+// addressingPrefixBindingListResponseJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingListResponse]
+type addressingPrefixBindingListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingListResponseError struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    addressingPrefixBindingListResponseErrorJSON `json:"-"`
+}
+
+// addressingPrefixBindingListResponseErrorJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingListResponseError]
+type addressingPrefixBindingListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingListResponseMessage struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    addressingPrefixBindingListResponseMessageJSON `json:"-"`
+}
+
+// addressingPrefixBindingListResponseMessageJSON contains the JSON metadata for
+// the struct [AddressingPrefixBindingListResponseMessage]
+type addressingPrefixBindingListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingListResponseResult struct {
+	// Identifier
+	ID string `json:"id"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr string `json:"cidr"`
+	// Status of a Service Binding's deployment to the Cloudflare network
+	Provisioning AddressingPrefixBindingListResponseResultProvisioning `json:"provisioning"`
+	// Identifier
+	ServiceID string `json:"service_id"`
+	// Name of a service running on the Cloudflare network
+	ServiceName string                                        `json:"service_name"`
+	JSON        addressingPrefixBindingListResponseResultJSON `json:"-"`
+}
+
+// addressingPrefixBindingListResponseResultJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingListResponseResult]
+type addressingPrefixBindingListResponseResultJSON struct {
+	ID           apijson.Field
+	Cidr         apijson.Field
+	Provisioning apijson.Field
+	ServiceID    apijson.Field
+	ServiceName  apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of a Service Binding's deployment to the Cloudflare network
+type AddressingPrefixBindingListResponseResultProvisioning struct {
+	// When a binding has been deployed to a majority of Cloudflare datacenters, the
+	// binding will become active and can be used with its associated service.
+	State AddressingPrefixBindingListResponseResultProvisioningState `json:"state"`
+	JSON  addressingPrefixBindingListResponseResultProvisioningJSON  `json:"-"`
+}
+
+// addressingPrefixBindingListResponseResultProvisioningJSON contains the JSON
+// metadata for the struct [AddressingPrefixBindingListResponseResultProvisioning]
+type addressingPrefixBindingListResponseResultProvisioningJSON struct {
+	State       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingListResponseResultProvisioning) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// When a binding has been deployed to a majority of Cloudflare datacenters, the
+// binding will become active and can be used with its associated service.
+type AddressingPrefixBindingListResponseResultProvisioningState string
+
+const (
+	AddressingPrefixBindingListResponseResultProvisioningStateProvisioning AddressingPrefixBindingListResponseResultProvisioningState = "provisioning"
+	AddressingPrefixBindingListResponseResultProvisioningStateActive       AddressingPrefixBindingListResponseResultProvisioningState = "active"
+)
+
+// Whether the API call was successful
+type AddressingPrefixBindingListResponseSuccess bool
+
+const (
+	AddressingPrefixBindingListResponseSuccessTrue AddressingPrefixBindingListResponseSuccess = true
+)
+
+type AddressingPrefixBindingDeleteResponse struct {
+	Errors   []AddressingPrefixBindingDeleteResponseError   `json:"errors,required"`
+	Messages []AddressingPrefixBindingDeleteResponseMessage `json:"messages,required"`
+	Result   AddressingPrefixBindingDeleteResponseResult    `json:"result,required"`
+	// Whether the API call was successful
+	Success AddressingPrefixBindingDeleteResponseSuccess `json:"success,required"`
+	JSON    addressingPrefixBindingDeleteResponseJSON    `json:"-"`
+}
+
+// addressingPrefixBindingDeleteResponseJSON contains the JSON metadata for the
+// struct [AddressingPrefixBindingDeleteResponse]
+type addressingPrefixBindingDeleteResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingDeleteResponseError struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    addressingPrefixBindingDeleteResponseErrorJSON `json:"-"`
+}
+
+// addressingPrefixBindingDeleteResponseErrorJSON contains the JSON metadata for
+// the struct [AddressingPrefixBindingDeleteResponseError]
+type addressingPrefixBindingDeleteResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingDeleteResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBindingDeleteResponseMessage struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    addressingPrefixBindingDeleteResponseMessageJSON `json:"-"`
+}
+
+// addressingPrefixBindingDeleteResponseMessageJSON contains the JSON metadata for
+// the struct [AddressingPrefixBindingDeleteResponseMessage]
+type addressingPrefixBindingDeleteResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBindingDeleteResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [AddressingPrefixBindingDeleteResponseResultUnknown],
+// [AddressingPrefixBindingDeleteResponseResultArray] or [shared.UnionString].
+type AddressingPrefixBindingDeleteResponseResult interface {
+	ImplementsAddressingPrefixBindingDeleteResponseResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AddressingPrefixBindingDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*AddressingPrefixBindingDeleteResponseResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -288,10 +537,17 @@ func init() {
 	)
 }
 
-type AddressingPrefixBindingDeleteResponseArray []interface{}
+type AddressingPrefixBindingDeleteResponseResultArray []interface{}
 
-func (r AddressingPrefixBindingDeleteResponseArray) ImplementsAddressingPrefixBindingDeleteResponse() {
+func (r AddressingPrefixBindingDeleteResponseResultArray) ImplementsAddressingPrefixBindingDeleteResponseResult() {
 }
+
+// Whether the API call was successful
+type AddressingPrefixBindingDeleteResponseSuccess bool
+
+const (
+	AddressingPrefixBindingDeleteResponseSuccessTrue AddressingPrefixBindingDeleteResponseSuccess = true
+)
 
 type AddressingPrefixBindingNewParams struct {
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -303,279 +559,3 @@ type AddressingPrefixBindingNewParams struct {
 func (r AddressingPrefixBindingNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type AddressingPrefixBindingNewResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingNewResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBindingNewResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AddressingPrefixBindingNewResponseEnvelopeSuccess `json:"success"`
-	JSON    addressingPrefixBindingNewResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressingPrefixBindingNewResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBindingNewResponseEnvelope]
-type addressingPrefixBindingNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingNewResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    addressingPrefixBindingNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressingPrefixBindingNewResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingNewResponseEnvelopeErrors]
-type addressingPrefixBindingNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingNewResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    addressingPrefixBindingNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressingPrefixBindingNewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBindingNewResponseEnvelopeMessages]
-type addressingPrefixBindingNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressingPrefixBindingNewResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBindingNewResponseEnvelopeSuccessTrue AddressingPrefixBindingNewResponseEnvelopeSuccess = true
-)
-
-type AddressingPrefixBindingGetResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingGetResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBindingGetResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AddressingPrefixBindingGetResponseEnvelopeSuccess `json:"success"`
-	JSON    addressingPrefixBindingGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressingPrefixBindingGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBindingGetResponseEnvelope]
-type addressingPrefixBindingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingGetResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    addressingPrefixBindingGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressingPrefixBindingGetResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingGetResponseEnvelopeErrors]
-type addressingPrefixBindingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingGetResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    addressingPrefixBindingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressingPrefixBindingGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBindingGetResponseEnvelopeMessages]
-type addressingPrefixBindingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressingPrefixBindingGetResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBindingGetResponseEnvelopeSuccessTrue AddressingPrefixBindingGetResponseEnvelopeSuccess = true
-)
-
-type AddressingPrefixBindingListResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingListResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingListResponseEnvelopeMessages `json:"messages"`
-	Result   []AddressingPrefixBindingListResponse                 `json:"result"`
-	// Whether the API call was successful
-	Success AddressingPrefixBindingListResponseEnvelopeSuccess `json:"success"`
-	JSON    addressingPrefixBindingListResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressingPrefixBindingListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBindingListResponseEnvelope]
-type addressingPrefixBindingListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingListResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    addressingPrefixBindingListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressingPrefixBindingListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AddressingPrefixBindingListResponseEnvelopeErrors]
-type addressingPrefixBindingListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingListResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    addressingPrefixBindingListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressingPrefixBindingListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBindingListResponseEnvelopeMessages]
-type addressingPrefixBindingListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressingPrefixBindingListResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBindingListResponseEnvelopeSuccessTrue AddressingPrefixBindingListResponseEnvelopeSuccess = true
-)
-
-type AddressingPrefixBindingDeleteResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressingPrefixBindingDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixBindingDeleteResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AddressingPrefixBindingDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressingPrefixBindingDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressingPrefixBindingDeleteResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBindingDeleteResponseEnvelope]
-type addressingPrefixBindingDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingDeleteResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    addressingPrefixBindingDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressingPrefixBindingDeleteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBindingDeleteResponseEnvelopeErrors]
-type addressingPrefixBindingDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBindingDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    addressingPrefixBindingDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressingPrefixBindingDeleteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBindingDeleteResponseEnvelopeMessages]
-type addressingPrefixBindingDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBindingDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressingPrefixBindingDeleteResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBindingDeleteResponseEnvelopeSuccessTrue AddressingPrefixBindingDeleteResponseEnvelopeSuccess = true
-)

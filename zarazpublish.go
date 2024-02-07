@@ -32,16 +32,73 @@ func NewZarazPublishService(opts ...option.RequestOption) (r *ZarazPublishServic
 }
 
 // Publish current Zaraz preview configuration for a zone.
-func (r *ZarazPublishService) New(ctx context.Context, zoneID string, body ZarazPublishNewParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *ZarazPublishService) New(ctx context.Context, zoneID string, body ZarazPublishNewParams, opts ...option.RequestOption) (res *ZarazPublishNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZarazPublishNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/zaraz/publish", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
+}
+
+type ZarazPublishNewResponse struct {
+	Errors   []ZarazPublishNewResponseError   `json:"errors"`
+	Messages []ZarazPublishNewResponseMessage `json:"messages"`
+	Result   string                           `json:"result"`
+	// Whether the API call was successful
+	Success bool                        `json:"success"`
+	JSON    zarazPublishNewResponseJSON `json:"-"`
+}
+
+// zarazPublishNewResponseJSON contains the JSON metadata for the struct
+// [ZarazPublishNewResponse]
+type zarazPublishNewResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazPublishNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazPublishNewResponseError struct {
+	Code    int64                            `json:"code,required"`
+	Message string                           `json:"message,required"`
+	JSON    zarazPublishNewResponseErrorJSON `json:"-"`
+}
+
+// zarazPublishNewResponseErrorJSON contains the JSON metadata for the struct
+// [ZarazPublishNewResponseError]
+type zarazPublishNewResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazPublishNewResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazPublishNewResponseMessage struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    zarazPublishNewResponseMessageJSON `json:"-"`
+}
+
+// zarazPublishNewResponseMessageJSON contains the JSON metadata for the struct
+// [ZarazPublishNewResponseMessage]
+type zarazPublishNewResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazPublishNewResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZarazPublishNewParams struct {
@@ -51,66 +108,4 @@ type ZarazPublishNewParams struct {
 
 func (r ZarazPublishNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
-}
-
-type ZarazPublishNewResponseEnvelope struct {
-	Errors   []ZarazPublishNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZarazPublishNewResponseEnvelopeMessages `json:"messages"`
-	Result   string                                    `json:"result"`
-	// Whether the API call was successful
-	Success bool                                `json:"success"`
-	JSON    zarazPublishNewResponseEnvelopeJSON `json:"-"`
-}
-
-// zarazPublishNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZarazPublishNewResponseEnvelope]
-type zarazPublishNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazPublishNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazPublishNewResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    zarazPublishNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zarazPublishNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZarazPublishNewResponseEnvelopeErrors]
-type zarazPublishNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazPublishNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazPublishNewResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    zarazPublishNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zarazPublishNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ZarazPublishNewResponseEnvelopeMessages]
-type zarazPublishNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazPublishNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }

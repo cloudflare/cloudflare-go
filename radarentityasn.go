@@ -36,27 +36,22 @@ func NewRadarEntityAsnService(opts ...option.RequestOption) (r *RadarEntityAsnSe
 // Get AS-level relationship for given networks.
 func (r *RadarEntityAsnService) Rel(ctx context.Context, asn int64, query RadarEntityAsnRelParams, opts ...option.RequestOption) (res *RadarEntityAsnRelResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEntityAsnRelResponseEnvelope
 	path := fmt.Sprintf("radar/entities/asns/%v/rel", asn)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type RadarEntityAsnRelResponse struct {
-	Meta RadarEntityAsnRelResponseMeta  `json:"meta,required"`
-	Rels []RadarEntityAsnRelResponseRel `json:"rels,required"`
-	JSON radarEntityAsnRelResponseJSON  `json:"-"`
+	Result  RadarEntityAsnRelResponseResult `json:"result,required"`
+	Success bool                            `json:"success,required"`
+	JSON    radarEntityAsnRelResponseJSON   `json:"-"`
 }
 
 // radarEntityAsnRelResponseJSON contains the JSON metadata for the struct
 // [RadarEntityAsnRelResponse]
 type radarEntityAsnRelResponseJSON struct {
-	Meta        apijson.Field
-	Rels        apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -65,16 +60,35 @@ func (r *RadarEntityAsnRelResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEntityAsnRelResponseMeta struct {
-	DataTime   string                            `json:"data_time,required"`
-	QueryTime  string                            `json:"query_time,required"`
-	TotalPeers int64                             `json:"total_peers,required"`
-	JSON       radarEntityAsnRelResponseMetaJSON `json:"-"`
+type RadarEntityAsnRelResponseResult struct {
+	Meta RadarEntityAsnRelResponseResultMeta  `json:"meta,required"`
+	Rels []RadarEntityAsnRelResponseResultRel `json:"rels,required"`
+	JSON radarEntityAsnRelResponseResultJSON  `json:"-"`
 }
 
-// radarEntityAsnRelResponseMetaJSON contains the JSON metadata for the struct
-// [RadarEntityAsnRelResponseMeta]
-type radarEntityAsnRelResponseMetaJSON struct {
+// radarEntityAsnRelResponseResultJSON contains the JSON metadata for the struct
+// [RadarEntityAsnRelResponseResult]
+type radarEntityAsnRelResponseResultJSON struct {
+	Meta        apijson.Field
+	Rels        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEntityAsnRelResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEntityAsnRelResponseResultMeta struct {
+	DataTime   string                                  `json:"data_time,required"`
+	QueryTime  string                                  `json:"query_time,required"`
+	TotalPeers int64                                   `json:"total_peers,required"`
+	JSON       radarEntityAsnRelResponseResultMetaJSON `json:"-"`
+}
+
+// radarEntityAsnRelResponseResultMetaJSON contains the JSON metadata for the
+// struct [RadarEntityAsnRelResponseResultMeta]
+type radarEntityAsnRelResponseResultMetaJSON struct {
 	DataTime    apijson.Field
 	QueryTime   apijson.Field
 	TotalPeers  apijson.Field
@@ -82,24 +96,24 @@ type radarEntityAsnRelResponseMetaJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEntityAsnRelResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityAsnRelResponseResultMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEntityAsnRelResponseRel struct {
-	Asn1        int64                            `json:"asn1,required"`
-	Asn1Country string                           `json:"asn1_country,required"`
-	Asn1Name    string                           `json:"asn1_name,required"`
-	Asn2        int64                            `json:"asn2,required"`
-	Asn2Country string                           `json:"asn2_country,required"`
-	Asn2Name    string                           `json:"asn2_name,required"`
-	Rel         string                           `json:"rel,required"`
-	JSON        radarEntityAsnRelResponseRelJSON `json:"-"`
+type RadarEntityAsnRelResponseResultRel struct {
+	Asn1        int64                                  `json:"asn1,required"`
+	Asn1Country string                                 `json:"asn1_country,required"`
+	Asn1Name    string                                 `json:"asn1_name,required"`
+	Asn2        int64                                  `json:"asn2,required"`
+	Asn2Country string                                 `json:"asn2_country,required"`
+	Asn2Name    string                                 `json:"asn2_name,required"`
+	Rel         string                                 `json:"rel,required"`
+	JSON        radarEntityAsnRelResponseResultRelJSON `json:"-"`
 }
 
-// radarEntityAsnRelResponseRelJSON contains the JSON metadata for the struct
-// [RadarEntityAsnRelResponseRel]
-type radarEntityAsnRelResponseRelJSON struct {
+// radarEntityAsnRelResponseResultRelJSON contains the JSON metadata for the struct
+// [RadarEntityAsnRelResponseResultRel]
+type radarEntityAsnRelResponseResultRelJSON struct {
 	Asn1        apijson.Field
 	Asn1Country apijson.Field
 	Asn1Name    apijson.Field
@@ -111,7 +125,7 @@ type radarEntityAsnRelResponseRelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEntityAsnRelResponseRel) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityAsnRelResponseResultRel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -138,22 +152,3 @@ const (
 	RadarEntityAsnRelParamsFormatJson RadarEntityAsnRelParamsFormat = "JSON"
 	RadarEntityAsnRelParamsFormatCsv  RadarEntityAsnRelParamsFormat = "CSV"
 )
-
-type RadarEntityAsnRelResponseEnvelope struct {
-	Result  RadarEntityAsnRelResponse             `json:"result,required"`
-	Success bool                                  `json:"success,required"`
-	JSON    radarEntityAsnRelResponseEnvelopeJSON `json:"-"`
-}
-
-// radarEntityAsnRelResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RadarEntityAsnRelResponseEnvelope]
-type radarEntityAsnRelResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarEntityAsnRelResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
