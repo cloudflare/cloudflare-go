@@ -7,6 +7,10 @@ ENHANCEMENTS:
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
 * images_variants: Add support for Images Variants CRUD operations ([#1494](https://github.com/cloudflare/cloudflare-go/issues/1494))
 
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.20.0 to 0.21.0 ([#1502](https://github.com/cloudflare/cloudflare-go/issues/1502))
+
 ## 0.87.0 (January 31st, 2024)
 
 ENHANCEMENTS:
