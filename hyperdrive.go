@@ -12,7 +12,6 @@ import (
 var (
 	ErrMissingHyperdriveConfigID       = errors.New("required hyperdrive config id is missing")
 	ErrMissingHyperdriveConfigName     = errors.New("required hyperdrive config name is missing")
-	ErrMissingHyperdriveConfigPassword = errors.New("required hyperdrive config password is missing")
 )
 
 type HyperdriveConfig struct {
@@ -24,6 +23,7 @@ type HyperdriveConfig struct {
 
 type HyperdriveConfigOrigin struct {
 	Database string `json:"database,omitempty"`
+	Password string `json:"password"`
 	Host     string `json:"host,omitempty"`
 	Port     int    `json:"port,omitempty"`
 	Scheme   string `json:"scheme,omitempty"`
@@ -42,10 +42,9 @@ type HyperdriveConfigListResponse struct {
 }
 
 type CreateHyperdriveConfigParams struct {
-	Name     string                  `json:"name"`
-	Password string                  `json:"password"`
-	Origin   HyperdriveConfigOrigin  `json:"origin"`
-	Caching  HyperdriveConfigCaching `json:"caching,omitempty"`
+	Name    string                  `json:"name"`
+	Origin  HyperdriveConfigOrigin  `json:"origin"`
+	Caching HyperdriveConfigCaching `json:"caching,omitempty"`
 }
 
 type HyperdriveConfigResponse struct {
@@ -56,7 +55,6 @@ type HyperdriveConfigResponse struct {
 type UpdateHyperdriveConfigParams struct {
 	HyperdriveID string                  `json:"-"`
 	Name         string                  `json:"name"`
-	Password     string                  `json:"password"`
 	Origin       HyperdriveConfigOrigin  `json:"origin"`
 	Caching      HyperdriveConfigCaching `json:"caching,omitempty"`
 }
@@ -97,10 +95,6 @@ func (api *API) CreateHyperdriveConfig(ctx context.Context, rc *ResourceContaine
 
 	if params.Name == "" {
 		return HyperdriveConfig{}, ErrMissingHyperdriveConfigName
-	}
-
-	if params.Password == "" {
-		return HyperdriveConfig{}, ErrMissingHyperdriveConfigPassword
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/hyperdrive/configs", rc.Identifier)

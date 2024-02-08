@@ -164,16 +164,11 @@ func TestHyperdriveConfig_Create(t *testing.T) {
 		assert.Equal(t, ErrMissingHyperdriveConfigName, err)
 	}
 
-	_, err = client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{Name: "example-hyperdrive"})
-	if assert.Error(t, err) {
-		assert.Equal(t, ErrMissingHyperdriveConfigPassword, err)
-	}
-
 	result, err := client.CreateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), CreateHyperdriveConfigParams{
-		Name:     "example-hyperdrive",
-		Password: "password",
+		Name: "example-hyperdrive",
 		Origin: HyperdriveConfigOrigin{
 			Database: "postgres",
+			Password: "password",
 			Host:     "database.example.com",
 			Port:     5432,
 			Scheme:   "postgres",
@@ -264,9 +259,9 @@ func TestHyperdriveConfig_Update(t *testing.T) {
 	result, err := client.UpdateHyperdriveConfig(context.Background(), AccountIdentifier(testAccountID), UpdateHyperdriveConfigParams{
 		HyperdriveID: "6b7efc370ea34ded8327fa20698dfe3a",
 		Name:         "example-hyperdrive",
-		Password:     "password",
 		Origin: HyperdriveConfigOrigin{
 			Database: "postgres",
+			Password: "password",
 			Host:     "database.example.com",
 			Port:     5432,
 			Scheme:   "postgres",
