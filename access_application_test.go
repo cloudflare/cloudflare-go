@@ -620,7 +620,7 @@ func TestCreatePrivateAccessApplication(t *testing.T) {
 	}
 }
 
-func TestCreateSaasAccessApplications(t *testing.T) {
+func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -762,6 +762,121 @@ func TestCreateSaasAccessApplications(t *testing.T) {
 			ConsumerServiceUrl: "https://saas.example.com",
 			SPEntityID:         "TEST12345678",
 			NameIDFormat:       "id",
+		},
+		SessionDuration: "24h",
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+}
+
+func TestCreateOIDCSaasAccessApplications(t *testing.T) {
+	setup()
+	defer teardown()
+
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodPost, r.Method, "Expected method 'POST', got %s", r.Method)
+		w.Header().Set("content-type", "application/json")
+		fmt.Fprintf(w, `{
+			"success": true,
+			"errors": [],
+			"messages": [],
+			"result": {
+				"id": "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+				"created_at": "2014-01-01T05:20:00.12345Z",
+				"updated_at": "2014-01-01T05:20:00.12345Z",
+				"aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+				"name": "Admin OIDC Saas App",
+				"domain": "example.cloudflareaccess.com/cdn-cgi/access/sso/oidc/737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+				"type": "saas",
+				"session_duration": "24h",
+				"allowed_idps": [],
+				"auto_redirect_to_identity": false,
+				"enable_binding_cookie": false,
+				"custom_deny_url": "https://www.example.com",
+				"custom_deny_message": "denied!",
+				"logo_url": "https://www.example.com/example.png",
+				"skip_interstitial": true,
+				"app_launcher_visible": true,
+				"service_auth_401_redirect": true,
+				"custom_non_identity_deny_url": "https://blocked.com",
+				"tags": ["engineers"],
+				"saas_app": {
+					"auth_type": "oidc",
+					"client_id": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+					"client_secret": "secret",
+					"redirect_uris": ["https://saas.example.com"],
+					"grant_types": ["authorization_code"],
+					"scopes": ["openid", "email", "profile", "groups"],
+					"app_launcher_url": "https://saas.example.com",
+					"group_filter_regex": ".*"
+				}
+			}
+		}
+		`)
+	}
+
+	createdAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	updatedAt, _ := time.Parse(time.RFC3339, "2014-01-01T05:20:00.12345Z")
+	fullAccessApplication := AccessApplication{
+		ID:                     "480f4f69-1a28-4fdd-9240-1ed29f0ac1db",
+		Name:                   "Admin OIDC Saas App",
+		Domain:                 "example.cloudflareaccess.com/cdn-cgi/access/sso/oidc/737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		Type:                   "saas",
+		SessionDuration:        "24h",
+		AUD:                    "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+		AllowedIdps:            []string{},
+		AutoRedirectToIdentity: BoolPtr(false),
+		EnableBindingCookie:    BoolPtr(false),
+		AppLauncherVisible:     BoolPtr(true),
+		ServiceAuth401Redirect: BoolPtr(true),
+		CustomDenyMessage:      "denied!",
+		CustomDenyURL:          "https://www.example.com",
+		LogoURL:                "https://www.example.com/example.png",
+		SkipInterstitial:       BoolPtr(true),
+		SaasApplication: &SaasApplication{
+			AuthType:         "oidc",
+			ClientID:         "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+			ClientSecret:     "secret",
+			RedirectURIs:     []string{"https://saas.example.com"},
+			GrantTypes:       []string{"authorization_code"},
+			Scopes:           []string{"openid", "email", "profile", "groups"},
+			AppLauncherURL:   "https://saas.example.com",
+			GroupFilterRegex: ".*",
+		},
+		CreatedAt:                &createdAt,
+		UpdatedAt:                &updatedAt,
+		CustomNonIdentityDenyURL: "https://blocked.com",
+		Tags:                     []string{"engineers"},
+	}
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/access/apps", handler)
+
+	actual, err := client.CreateAccessApplication(context.Background(), AccountIdentifier(testAccountID), CreateAccessApplicationParams{
+		Name: "Admin Saas Site",
+		SaasApplication: &SaasApplication{
+			AuthType:         "oidc",
+			RedirectURIs:     []string{"https://saas.example.com"},
+			AppLauncherURL:   "https://saas.example.com",
+			GroupFilterRegex: ".*",
+		},
+		SessionDuration: "24h",
+	})
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, fullAccessApplication, actual)
+	}
+
+	mux.HandleFunc("/zones/"+testZoneID+"/access/apps", handler)
+
+	actual, err = client.CreateAccessApplication(context.Background(), ZoneIdentifier(testZoneID), CreateAccessApplicationParams{
+		Name: "Admin Saas Site",
+		SaasApplication: &SaasApplication{
+			AuthType:         "oidc",
+			RedirectURIs:     []string{"https://saas.example.com"},
+			AppLauncherURL:   "https://saas.example.com",
+			GroupFilterRegex: ".*",
 		},
 		SessionDuration: "24h",
 	})
