@@ -18,13 +18,7 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewAIService] method instead.
 type AIService struct {
-	Options     []option.RequestOption
-	Huggingface *AIHuggingfaceService
-	Baai        *AIBaaiService
-	OpenAI      *AIOpenAIService
-	Microsoft   *AIMicrosoftService
-	Meta        *AIMetaService
-	Mistral     *AIMistralService
+	Options []option.RequestOption
 }
 
 // NewAIService generates a new service that applies the given options to each
@@ -33,12 +27,6 @@ type AIService struct {
 func NewAIService(opts ...option.RequestOption) (r *AIService) {
 	r = &AIService{}
 	r.Options = opts
-	r.Huggingface = NewAIHuggingfaceService(opts...)
-	r.Baai = NewAIBaaiService(opts...)
-	r.OpenAI = NewAIOpenAIService(opts...)
-	r.Microsoft = NewAIMicrosoftService(opts...)
-	r.Meta = NewAIMetaService(opts...)
-	r.Mistral = NewAIMistralService(opts...)
 	return
 }
 
