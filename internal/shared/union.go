@@ -31,6 +31,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse()      {}
+func (UnionString) ImplementsRuleListItemGetResponse()                                            {}
 func (UnionString) ImplementsTunnelConnectionDeleteResponse()                                     {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
 func (UnionString) ImplementsStreamAudioTrackDeleteResponse()                                     {}
@@ -116,6 +117,10 @@ func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomMa
 }
 func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomManagedComponentSetting() {
 }
+
+type UnionInt int64
+
+func (UnionInt) ImplementsRuleListItemGetResponse() {}
 
 type UnionFloat float64
 
