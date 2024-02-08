@@ -6,10 +6,13 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // LoadBalancerPoolHealthService contains methods and other services that help with
@@ -43,16 +46,35 @@ func (r *LoadBalancerPoolHealthService) AccountLoadBalancerPoolsPoolHealthDetail
 	return
 }
 
-type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse = interface{}
+// A list of regions from which to run health checks. Null means every Cloudflare
+// data center.
+//
+// Union satisfied by
+// [LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseUnknown]
+// or [shared.UnionString].
+type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse interface {
+	ImplementsLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelope struct {
-	Errors   []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages `json:"messages"`
+	Errors   []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeMessages `json:"messages,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
-	Result LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse `json:"result"`
+	Result LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponseEnvelopeJSON    `json:"-"`
 }
 

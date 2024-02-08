@@ -76,14 +76,14 @@ const (
 )
 
 type LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeMessages `json:"messages"`
+	Errors   []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeMessages `json:"messages,required"`
 	// List of resources that reference a given monitor.
-	Result     []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponse                 `json:"result"`
-	ResultInfo LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	Result []LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeJSON
@@ -93,8 +93,8 @@ type loadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReference
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -143,6 +143,13 @@ func (r *LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorRefer
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccessTrue LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -170,10 +177,3 @@ type loadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReference
 func (r *LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccessTrue LoadBalancerMonitorReferenceAccountLoadBalancerMonitorsListMonitorReferencesResponseEnvelopeSuccess = true
-)

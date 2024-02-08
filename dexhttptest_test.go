@@ -35,8 +35,8 @@ func TestDexHTTPTestGetWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DexHTTPTestGetParams{
 			Interval:  cloudflare.F(cloudflare.DexHTTPTestGetParamsIntervalMinute),
-			TimeEnd:   cloudflare.F("1689606812000"),
-			TimeStart: cloudflare.F("1689520412000"),
+			TimeEnd:   cloudflare.F("string"),
+			TimeStart: cloudflare.F("string"),
 			Colo:      cloudflare.F("string"),
 			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
 		},

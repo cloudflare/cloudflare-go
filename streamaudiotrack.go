@@ -6,11 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // StreamAudioTrackService contains methods and other services that help with
@@ -62,7 +65,7 @@ func (r *StreamAudioTrackService) List(ctx context.Context, accountID string, id
 
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
-func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, identifier string, audioIdentifier string, opts ...option.RequestOption) (res *string, err error) {
+func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, identifier string, audioIdentifier string, opts ...option.RequestOption) (res *StreamAudioTrackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamAudioTrackDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", accountID, identifier, audioIdentifier)
@@ -161,6 +164,23 @@ const (
 	StreamAudioTrackListResponseStatusError  StreamAudioTrackListResponseStatus = "error"
 )
 
+// Union satisfied by [StreamAudioTrackDeleteResponseUnknown] or
+// [shared.UnionString].
+type StreamAudioTrackDeleteResponse interface {
+	ImplementsStreamAudioTrackDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamAudioTrackDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type StreamAudioTrackCopyResponse struct {
 	// Denotes whether the audio track will be played by default in a player.
 	Default bool `json:"default"`
@@ -211,11 +231,11 @@ func (r StreamAudioTrackUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamAudioTrackUpdateResponseEnvelope struct {
-	Errors   []StreamAudioTrackUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   StreamAudioTrackUpdateResponse                   `json:"result"`
+	Errors   []StreamAudioTrackUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamAudioTrackUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamAudioTrackUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamAudioTrackUpdateResponseEnvelopeSuccess `json:"success"`
+	Success StreamAudioTrackUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamAudioTrackUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -280,11 +300,11 @@ const (
 )
 
 type StreamAudioTrackListResponseEnvelope struct {
-	Errors   []StreamAudioTrackListResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackListResponseEnvelopeMessages `json:"messages"`
-	Result   []StreamAudioTrackListResponse                 `json:"result"`
+	Errors   []StreamAudioTrackListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamAudioTrackListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []StreamAudioTrackListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamAudioTrackListResponseEnvelopeSuccess `json:"success"`
+	Success StreamAudioTrackListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamAudioTrackListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -349,11 +369,11 @@ const (
 )
 
 type StreamAudioTrackDeleteResponseEnvelope struct {
-	Errors   []StreamAudioTrackDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   string                                           `json:"result"`
+	Errors   []StreamAudioTrackDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamAudioTrackDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamAudioTrackDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamAudioTrackDeleteResponseEnvelopeSuccess `json:"success"`
+	Success StreamAudioTrackDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamAudioTrackDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -432,11 +452,11 @@ func (r StreamAudioTrackCopyParams) MarshalJSON() (data []byte, err error) {
 }
 
 type StreamAudioTrackCopyResponseEnvelope struct {
-	Errors   []StreamAudioTrackCopyResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamAudioTrackCopyResponseEnvelopeMessages `json:"messages"`
-	Result   StreamAudioTrackCopyResponse                   `json:"result"`
+	Errors   []StreamAudioTrackCopyResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamAudioTrackCopyResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamAudioTrackCopyResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamAudioTrackCopyResponseEnvelopeSuccess `json:"success"`
+	Success StreamAudioTrackCopyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamAudioTrackCopyResponseEnvelopeJSON    `json:"-"`
 }
 

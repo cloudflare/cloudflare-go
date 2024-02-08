@@ -31,7 +31,7 @@ func TestRadarTrafficAnomalyListWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.Radar.TrafficAnomalies.List(context.TODO(), cloudflare.RadarTrafficAnomalyListParams{
-		Asn:       cloudflare.F(int64(174)),
+		Asn:       cloudflare.F(int64(0)),
 		DateEnd:   cloudflare.F(time.Now()),
 		DateRange: cloudflare.F(cloudflare.RadarTrafficAnomalyListParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),

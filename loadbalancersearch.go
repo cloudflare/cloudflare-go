@@ -34,7 +34,7 @@ func NewLoadBalancerSearchService(opts ...option.RequestOption) (r *LoadBalancer
 }
 
 // Search for Load Balancing resources.
-func (r *LoadBalancerSearchService) List(ctx context.Context, accountIdentifier string, query LoadBalancerSearchListParams, opts ...option.RequestOption) (res *LoadBalancerSearchListResponse, err error) {
+func (r *LoadBalancerSearchService) List(ctx context.Context, accountIdentifier string, query LoadBalancerSearchListParams, opts ...option.RequestOption) (res *[]LoadBalancerSearchListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerSearchListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", accountIdentifier)
@@ -46,70 +46,7 @@ func (r *LoadBalancerSearchService) List(ctx context.Context, accountIdentifier 
 	return
 }
 
-type LoadBalancerSearchListResponse struct {
-	// A list of resources matching the search query.
-	Resources []LoadBalancerSearchListResponseResource `json:"resources"`
-	JSON      loadBalancerSearchListResponseJSON       `json:"-"`
-}
-
-// loadBalancerSearchListResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerSearchListResponse]
-type loadBalancerSearchListResponseJSON struct {
-	Resources   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A reference to a load balancer resource.
-type LoadBalancerSearchListResponseResource struct {
-	// When listed as a reference, the type (direction) of the reference.
-	ReferenceType LoadBalancerSearchListResponseResourcesReferenceType `json:"reference_type"`
-	// A list of references to (referrer) or from (referral) this resource.
-	References []interface{} `json:"references"`
-	ResourceID interface{}   `json:"resource_id"`
-	// The human-identifiable name of the resource.
-	ResourceName string `json:"resource_name"`
-	// The type of the resource.
-	ResourceType LoadBalancerSearchListResponseResourcesResourceType `json:"resource_type"`
-	JSON         loadBalancerSearchListResponseResourceJSON          `json:"-"`
-}
-
-// loadBalancerSearchListResponseResourceJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseResource]
-type loadBalancerSearchListResponseResourceJSON struct {
-	ReferenceType apijson.Field
-	References    apijson.Field
-	ResourceID    apijson.Field
-	ResourceName  apijson.Field
-	ResourceType  apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *LoadBalancerSearchListResponseResource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// When listed as a reference, the type (direction) of the reference.
-type LoadBalancerSearchListResponseResourcesReferenceType string
-
-const (
-	LoadBalancerSearchListResponseResourcesReferenceTypeReferral LoadBalancerSearchListResponseResourcesReferenceType = "referral"
-	LoadBalancerSearchListResponseResourcesReferenceTypeReferrer LoadBalancerSearchListResponseResourcesReferenceType = "referrer"
-)
-
-// The type of the resource.
-type LoadBalancerSearchListResponseResourcesResourceType string
-
-const (
-	LoadBalancerSearchListResponseResourcesResourceTypeLoadBalancer LoadBalancerSearchListResponseResourcesResourceType = "load_balancer"
-	LoadBalancerSearchListResponseResourcesResourceTypeMonitor      LoadBalancerSearchListResponseResourcesResourceType = "monitor"
-	LoadBalancerSearchListResponseResourcesResourceTypePool         LoadBalancerSearchListResponseResourcesResourceType = "pool"
-)
+type LoadBalancerSearchListResponse = interface{}
 
 type LoadBalancerSearchListParams struct {
 	Page         param.Field[interface{}]                              `query:"page"`
@@ -153,13 +90,13 @@ const (
 )
 
 type LoadBalancerSearchListResponseEnvelope struct {
-	Errors     []LoadBalancerSearchListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []LoadBalancerSearchListResponseEnvelopeMessages `json:"messages"`
-	Result     LoadBalancerSearchListResponse                   `json:"result"`
-	ResultInfo LoadBalancerSearchListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []LoadBalancerSearchListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerSearchListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerSearchListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerSearchListResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerSearchListResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerSearchListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerSearchListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerSearchListResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerSearchListResponseEnvelopeJSON contains the JSON metadata for the
@@ -168,8 +105,8 @@ type loadBalancerSearchListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -216,6 +153,13 @@ func (r *LoadBalancerSearchListResponseEnvelopeMessages) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerSearchListResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerSearchListResponseEnvelopeSuccessTrue LoadBalancerSearchListResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerSearchListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -242,10 +186,3 @@ type loadBalancerSearchListResponseEnvelopeResultInfoJSON struct {
 func (r *LoadBalancerSearchListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type LoadBalancerSearchListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerSearchListResponseEnvelopeSuccessTrue LoadBalancerSearchListResponseEnvelopeSuccess = true
-)

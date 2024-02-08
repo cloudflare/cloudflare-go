@@ -298,13 +298,13 @@ const (
 )
 
 type PageShieldPolicyListResponseEnvelope struct {
-	Errors     []PageShieldPolicyListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []PageShieldPolicyListResponseEnvelopeMessages `json:"messages"`
-	Result     []PageShieldPolicyListResponse                 `json:"result"`
-	ResultInfo PageShieldPolicyListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []PageShieldPolicyListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageShieldPolicyListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []PageShieldPolicyListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success PageShieldPolicyListResponseEnvelopeSuccess `json:"success"`
-	JSON    pageShieldPolicyListResponseEnvelopeJSON    `json:"-"`
+	Success    PageShieldPolicyListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PageShieldPolicyListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       pageShieldPolicyListResponseEnvelopeJSON       `json:"-"`
 }
 
 // pageShieldPolicyListResponseEnvelopeJSON contains the JSON metadata for the
@@ -313,8 +313,8 @@ type pageShieldPolicyListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -361,6 +361,13 @@ func (r *PageShieldPolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type PageShieldPolicyListResponseEnvelopeSuccess bool
+
+const (
+	PageShieldPolicyListResponseEnvelopeSuccessTrue PageShieldPolicyListResponseEnvelopeSuccess = true
+)
+
 type PageShieldPolicyListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -387,10 +394,3 @@ type pageShieldPolicyListResponseEnvelopeResultInfoJSON struct {
 func (r *PageShieldPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type PageShieldPolicyListResponseEnvelopeSuccess bool
-
-const (
-	PageShieldPolicyListResponseEnvelopeSuccessTrue PageShieldPolicyListResponseEnvelopeSuccess = true
-)

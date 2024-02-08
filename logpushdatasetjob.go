@@ -205,11 +205,11 @@ const (
 )
 
 type LogpushDatasetJobListResponseEnvelope struct {
-	Errors   []LogpushDatasetJobListResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushDatasetJobListResponseEnvelopeMessages `json:"messages"`
-	Result   []LogpushDatasetJobListResponse                 `json:"result"`
+	Errors   []LogpushDatasetJobListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushDatasetJobListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LogpushDatasetJobListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success LogpushDatasetJobListResponseEnvelopeSuccess `json:"success"`
+	Success LogpushDatasetJobListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushDatasetJobListResponseEnvelopeJSON    `json:"-"`
 }
 

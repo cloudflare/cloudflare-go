@@ -252,11 +252,11 @@ func (r *AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponse) 
 }
 
 type AccessCertificateGetResponseEnvelope struct {
-	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCertificateGetResponse                   `json:"result"`
+	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCertificateGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -332,11 +332,11 @@ func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessCertificateUpdateResponseEnvelope struct {
-	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCertificateUpdateResponse                   `json:"result"`
+	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCertificateUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -401,11 +401,11 @@ const (
 )
 
 type AccessCertificateDeleteResponseEnvelope struct {
-	Errors   []AccessCertificateDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCertificateDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCertificateDeleteResponse                   `json:"result"`
+	Errors   []AccessCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCertificateDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -483,11 +483,11 @@ func (r AccessCertificateAccessMTLSAuthenticationAddAnMTLSCertificateParams) Mar
 }
 
 type AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelope struct {
-	Errors   []AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponse                   `json:"result"`
+	Errors   []AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeSuccess `json:"success"`
+	Success AccessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCertificateAccessMtlsAuthenticationAddAnMtlsCertificateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -555,13 +555,13 @@ const (
 )
 
 type AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelope struct {
-	Errors     []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponse                 `json:"result"`
-	ResultInfo AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess `json:"success"`
-	JSON    accessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeJSON    `json:"-"`
+	Success    AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeJSON
@@ -571,8 +571,8 @@ type accessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelo
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -621,6 +621,13 @@ func (r *AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEn
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess bool
+
+const (
+	AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccessTrue AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess = true
+)
+
 type AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -648,10 +655,3 @@ type accessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelo
 func (r *AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess bool
-
-const (
-	AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccessTrue AccessCertificateAccessMtlsAuthenticationListMtlsCertificatesResponseEnvelopeSuccess = true
-)

@@ -4778,11 +4778,11 @@ const (
 )
 
 type LoadBalancerNewResponseEnvelope struct {
-	Errors   []LoadBalancerNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerNewResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerNewResponse                   `json:"result"`
+	Errors   []LoadBalancerNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -4847,11 +4847,11 @@ const (
 )
 
 type LoadBalancerGetResponseEnvelope struct {
-	Errors   []LoadBalancerGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerGetResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerGetResponse                   `json:"result"`
+	Errors   []LoadBalancerGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -5713,11 +5713,11 @@ const (
 )
 
 type LoadBalancerUpdateResponseEnvelope struct {
-	Errors   []LoadBalancerUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerUpdateResponse                   `json:"result"`
+	Errors   []LoadBalancerUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -5782,13 +5782,13 @@ const (
 )
 
 type LoadBalancerListResponseEnvelope struct {
-	Errors     []LoadBalancerListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []LoadBalancerListResponseEnvelopeMessages `json:"messages"`
-	Result     []LoadBalancerListResponse                 `json:"result"`
-	ResultInfo LoadBalancerListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []LoadBalancerListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerListResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerListResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerListResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -5797,8 +5797,8 @@ type loadBalancerListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5845,6 +5845,13 @@ func (r *LoadBalancerListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerListResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerListResponseEnvelopeSuccessTrue LoadBalancerListResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -5872,19 +5879,12 @@ func (r *LoadBalancerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type LoadBalancerListResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerListResponseEnvelopeSuccessTrue LoadBalancerListResponseEnvelopeSuccess = true
-)
-
 type LoadBalancerDeleteResponseEnvelope struct {
-	Errors   []LoadBalancerDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerDeleteResponse                   `json:"result"`
+	Errors   []LoadBalancerDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -711,11 +711,11 @@ const (
 )
 
 type ZoneNewResponseEnvelope struct {
-	Errors   []ZoneNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZoneNewResponseEnvelopeMessages `json:"messages"`
-	Result   ZoneNewResponse                   `json:"result"`
+	Errors   []ZoneNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneNewResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                        `json:"success"`
+	Success bool                        `json:"success,required"`
+	Result  ZoneNewResponse             `json:"result"`
 	JSON    zoneNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -724,8 +724,8 @@ type ZoneNewResponseEnvelope struct {
 type zoneNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -773,11 +773,11 @@ func (r *ZoneNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error)
 }
 
 type ZoneGetResponseEnvelope struct {
-	Errors   []ZoneGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZoneGetResponseEnvelopeMessages `json:"messages"`
-	Result   ZoneGetResponse                   `json:"result"`
+	Errors   []ZoneGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                        `json:"success"`
+	Success bool                        `json:"success,required"`
+	Result  ZoneGetResponse             `json:"result"`
 	JSON    zoneGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -786,8 +786,8 @@ type ZoneGetResponseEnvelope struct {
 type zoneGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -878,11 +878,11 @@ const (
 )
 
 type ZoneUpdateResponseEnvelope struct {
-	Errors   []ZoneUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZoneUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   ZoneUpdateResponse                   `json:"result"`
+	Errors   []ZoneUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                           `json:"success"`
+	Success bool                           `json:"success,required"`
+	Result  ZoneUpdateResponse             `json:"result"`
 	JSON    zoneUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -891,8 +891,8 @@ type ZoneUpdateResponseEnvelope struct {
 type zoneUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1037,13 +1037,13 @@ const (
 )
 
 type ZoneListResponseEnvelope struct {
-	Errors     []ZoneListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []ZoneListResponseEnvelopeMessages `json:"messages"`
+	Errors   []ZoneListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneListResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful
+	Success    bool                               `json:"success,required"`
 	Result     []ZoneListResponse                 `json:"result"`
 	ResultInfo ZoneListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success bool                         `json:"success"`
-	JSON    zoneListResponseEnvelopeJSON `json:"-"`
+	JSON       zoneListResponseEnvelopeJSON       `json:"-"`
 }
 
 // zoneListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1051,9 +1051,9 @@ type ZoneListResponseEnvelope struct {
 type zoneListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1128,11 +1128,11 @@ func (r *ZoneListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneDeleteResponseEnvelope struct {
-	Errors   []ZoneDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZoneDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   ZoneDeleteResponse                   `json:"result,nullable"`
+	Errors   []ZoneDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                           `json:"success"`
+	Success bool                           `json:"success,required"`
+	Result  ZoneDeleteResponse             `json:"result,nullable"`
 	JSON    zoneDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1141,8 +1141,8 @@ type ZoneDeleteResponseEnvelope struct {
 type zoneDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

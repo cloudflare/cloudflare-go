@@ -206,8 +206,9 @@ func (r *RadarHTTPBrowserFamiliesResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type RadarHTTPBrowserFamiliesResponseSerie0 struct {
-	Timestamps []string                                   `json:"timestamps,required"`
-	JSON       radarHTTPBrowserFamiliesResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                   `json:"timestamps,required"`
+	ExtraFields map[string][]string                        `json:"-,extras"`
+	JSON        radarHTTPBrowserFamiliesResponseSerie0JSON `json:"-"`
 }
 
 // radarHTTPBrowserFamiliesResponseSerie0JSON contains the JSON metadata for the
@@ -242,8 +243,9 @@ func (r *RadarHTTPBrowsersResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RadarHTTPBrowsersResponseSerie0 struct {
-	Timestamps []string                            `json:"timestamps,required"`
-	JSON       radarHTTPBrowsersResponseSerie0JSON `json:"-"`
+	Timestamps  []string                            `json:"timestamps,required"`
+	ExtraFields map[string][]string                 `json:"-,extras"`
+	JSON        radarHTTPBrowsersResponseSerie0JSON `json:"-"`
 }
 
 // radarHTTPBrowsersResponseSerie0JSON contains the JSON metadata for the struct
@@ -442,8 +444,9 @@ func (r *RadarHTTPOssResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RadarHTTPOssResponseSerie0 struct {
-	Timestamps []string                       `json:"timestamps,required"`
-	JSON       radarHTTPOssResponseSerie0JSON `json:"-"`
+	Timestamps  []string                       `json:"timestamps,required"`
+	ExtraFields map[string][]string            `json:"-,extras"`
+	JSON        radarHTTPOssResponseSerie0JSON `json:"-"`
 }
 
 // radarHTTPOssResponseSerie0JSON contains the JSON metadata for the struct

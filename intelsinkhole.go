@@ -81,11 +81,11 @@ func (r *IntelSinkholeListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type IntelSinkholeListResponseEnvelope struct {
-	Errors   []IntelSinkholeListResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelSinkholeListResponseEnvelopeMessages `json:"messages"`
-	Result   []IntelSinkholeListResponse                 `json:"result"`
+	Errors   []IntelSinkholeListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelSinkholeListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelSinkholeListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelSinkholeListResponseEnvelopeSuccess `json:"success"`
+	Success IntelSinkholeListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelSinkholeListResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -16,7 +16,6 @@ type Client struct {
 	Accounts                     *AccountService
 	IPs                          *IPService
 	Zones                        *ZoneService
-	AI                           *AIService
 	LoadBalancers                *LoadBalancerService
 	Access                       *AccessService
 	DNSRecords                   *DNSRecordService
@@ -84,7 +83,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Accounts = NewAccountService(opts...)
 	r.IPs = NewIPService(opts...)
 	r.Zones = NewZoneService(opts...)
-	r.AI = NewAIService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
 	r.Access = NewAccessService(opts...)
 	r.DNSRecords = NewDNSRecordService(opts...)

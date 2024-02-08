@@ -86,11 +86,11 @@ func (r *WorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerDomainGetResponseEnvelope struct {
-	Errors   []WorkerDomainGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkerDomainGetResponseEnvelopeMessages `json:"messages"`
-	Result   WorkerDomainGetResponse                   `json:"result"`
+	Errors   []WorkerDomainGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerDomainGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerDomainGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerDomainGetResponseEnvelopeSuccess `json:"success"`
+	Success WorkerDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerDomainGetResponseEnvelopeJSON    `json:"-"`
 }
 

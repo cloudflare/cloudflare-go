@@ -246,11 +246,11 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type AccessServiceTokenUpdateResponseEnvelope struct {
-	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenUpdateResponse                   `json:"result"`
+	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -315,11 +315,11 @@ const (
 )
 
 type AccessServiceTokenDeleteResponseEnvelope struct {
-	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenDeleteResponse                   `json:"result"`
+	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -397,11 +397,11 @@ func (r AccessServiceTokenAccessServiceTokensNewAServiceTokenParams) MarshalJSON
 }
 
 type AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelope struct {
-	Errors   []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse                   `json:"result"`
+	Errors   []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenAccessServiceTokensNewAServiceTokenResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccess `json:"success"`
+	Success AccessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenAccessServiceTokensNewAServiceTokenResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -469,13 +469,13 @@ const (
 )
 
 type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelope struct {
-	Errors     []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessServiceTokenAccessServiceTokensListServiceTokensResponse                 `json:"result"`
-	ResultInfo AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessServiceTokenAccessServiceTokensListServiceTokensResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess `json:"success"`
-	JSON    accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON    `json:"-"`
+	Success    AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON
@@ -485,8 +485,8 @@ type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeJSON 
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -535,6 +535,13 @@ func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess bool
+
+const (
+	AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccessTrue AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess = true
+)
+
 type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -562,10 +569,3 @@ type accessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResul
 func (r *AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccessTrue AccessServiceTokenAccessServiceTokensListServiceTokensResponseEnvelopeSuccess = true
-)

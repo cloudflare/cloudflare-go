@@ -818,24 +818,24 @@ func (r *AccountMemberDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 type AccountMemberAccountMembersAddMemberResponse struct {
 	// Membership identifier tag.
-	ID string `json:"id"`
-	// The unique activation code for the account membership.
-	Code string `json:"code"`
+	ID string `json:"id,required"`
 	// Roles assigned to this member.
-	Roles  []AccountMemberAccountMembersAddMemberResponseRole `json:"roles"`
-	Status interface{}                                        `json:"status"`
-	User   AccountMemberAccountMembersAddMemberResponseUser   `json:"user"`
-	JSON   accountMemberAccountMembersAddMemberResponseJSON   `json:"-"`
+	Roles  []AccountMemberAccountMembersAddMemberResponseRole `json:"roles,required"`
+	Status interface{}                                        `json:"status,required"`
+	User   AccountMemberAccountMembersAddMemberResponseUser   `json:"user,required"`
+	// The unique activation code for the account membership.
+	Code string                                           `json:"code"`
+	JSON accountMemberAccountMembersAddMemberResponseJSON `json:"-"`
 }
 
 // accountMemberAccountMembersAddMemberResponseJSON contains the JSON metadata for
 // the struct [AccountMemberAccountMembersAddMemberResponse]
 type accountMemberAccountMembersAddMemberResponseJSON struct {
 	ID          apijson.Field
-	Code        apijson.Field
 	Roles       apijson.Field
 	Status      apijson.Field
 	User        apijson.Field
+	Code        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1247,11 +1247,11 @@ const (
 )
 
 type AccountMemberGetResponseEnvelope struct {
-	Errors   []AccountMemberGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountMemberGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccountMemberGetResponse                   `json:"result"`
+	Errors   []AccountMemberGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountMemberGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountMemberGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccountMemberGetResponseEnvelopeSuccess `json:"success"`
+	Success AccountMemberGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountMemberGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1326,8 +1326,7 @@ func (r AccountMemberUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type AccountMemberUpdateParamsRole struct {
 	// Role identifier tag.
-	ID          param.Field[string]                                    `json:"id,required"`
-	Permissions param.Field[AccountMemberUpdateParamsRolesPermissions] `json:"permissions,required"`
+	ID param.Field[string] `json:"id,required"`
 }
 
 func (r AccountMemberUpdateParamsRole) MarshalJSON() (data []byte, err error) {
@@ -1462,11 +1461,11 @@ func (r AccountMemberUpdateParamsRolesPermissionsZones) MarshalJSON() (data []by
 }
 
 type AccountMemberUpdateResponseEnvelope struct {
-	Errors   []AccountMemberUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountMemberUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccountMemberUpdateResponse                   `json:"result"`
+	Errors   []AccountMemberUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountMemberUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountMemberUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccountMemberUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccountMemberUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountMemberUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1531,11 +1530,11 @@ const (
 )
 
 type AccountMemberDeleteResponseEnvelope struct {
-	Errors   []AccountMemberDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountMemberDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccountMemberDeleteResponse                   `json:"result,nullable"`
+	Errors   []AccountMemberDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountMemberDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountMemberDeleteResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccountMemberDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccountMemberDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountMemberDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1619,11 +1618,11 @@ const (
 )
 
 type AccountMemberAccountMembersAddMemberResponseEnvelope struct {
-	Errors   []AccountMemberAccountMembersAddMemberResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountMemberAccountMembersAddMemberResponseEnvelopeMessages `json:"messages"`
-	Result   AccountMemberAccountMembersAddMemberResponse                   `json:"result"`
+	Errors   []AccountMemberAccountMembersAddMemberResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountMemberAccountMembersAddMemberResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountMemberAccountMembersAddMemberResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccountMemberAccountMembersAddMemberResponseEnvelopeSuccess `json:"success"`
+	Success AccountMemberAccountMembersAddMemberResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountMemberAccountMembersAddMemberResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1739,13 +1738,13 @@ const (
 )
 
 type AccountMemberAccountMembersListMembersResponseEnvelope struct {
-	Errors     []AccountMemberAccountMembersListMembersResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccountMemberAccountMembersListMembersResponseEnvelopeMessages `json:"messages"`
-	Result     []AccountMemberAccountMembersListMembersResponse                 `json:"result"`
-	ResultInfo AccountMemberAccountMembersListMembersResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccountMemberAccountMembersListMembersResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountMemberAccountMembersListMembersResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccountMemberAccountMembersListMembersResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccountMemberAccountMembersListMembersResponseEnvelopeSuccess `json:"success"`
-	JSON    accountMemberAccountMembersListMembersResponseEnvelopeJSON    `json:"-"`
+	Success    AccountMemberAccountMembersListMembersResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccountMemberAccountMembersListMembersResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accountMemberAccountMembersListMembersResponseEnvelopeJSON       `json:"-"`
 }
 
 // accountMemberAccountMembersListMembersResponseEnvelopeJSON contains the JSON
@@ -1754,8 +1753,8 @@ type accountMemberAccountMembersListMembersResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1804,6 +1803,13 @@ func (r *AccountMemberAccountMembersListMembersResponseEnvelopeMessages) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccountMemberAccountMembersListMembersResponseEnvelopeSuccess bool
+
+const (
+	AccountMemberAccountMembersListMembersResponseEnvelopeSuccessTrue AccountMemberAccountMembersListMembersResponseEnvelopeSuccess = true
+)
+
 type AccountMemberAccountMembersListMembersResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -1831,10 +1837,3 @@ type accountMemberAccountMembersListMembersResponseEnvelopeResultInfoJSON struct
 func (r *AccountMemberAccountMembersListMembersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccountMemberAccountMembersListMembersResponseEnvelopeSuccess bool
-
-const (
-	AccountMemberAccountMembersListMembersResponseEnvelopeSuccessTrue AccountMemberAccountMembersListMembersResponseEnvelopeSuccess = true
-)

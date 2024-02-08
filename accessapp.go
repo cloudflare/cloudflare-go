@@ -118,6 +118,11 @@ func init() {
 }
 
 type AccessAppGetResponseObject struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain,required"`
+	// The application type.
+	Type string `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -148,9 +153,6 @@ type AccessAppGetResponseObject struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -179,9 +181,7 @@ type AccessAppGetResponseObject struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string `json:"tags"`
-	// The application type.
-	Type      string                         `json:"type"`
+	Tags      []string                       `json:"tags"`
 	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
 	JSON      accessAppGetResponseObjectJSON `json:"-"`
 }
@@ -189,6 +189,8 @@ type AccessAppGetResponseObject struct {
 // accessAppGetResponseObjectJSON contains the JSON metadata for the struct
 // [AccessAppGetResponseObject]
 type accessAppGetResponseObjectJSON struct {
+	Domain                   apijson.Field
+	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -201,7 +203,6 @@ type accessAppGetResponseObjectJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -213,7 +214,6 @@ type accessAppGetResponseObjectJSON struct {
 	SessionDuration          apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
-	Type                     apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -293,6 +293,11 @@ func init() {
 }
 
 type AccessAppUpdateResponseObject struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain,required"`
+	// The application type.
+	Type string `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -323,9 +328,6 @@ type AccessAppUpdateResponseObject struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -354,9 +356,7 @@ type AccessAppUpdateResponseObject struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string `json:"tags"`
-	// The application type.
-	Type      string                            `json:"type"`
+	Tags      []string                          `json:"tags"`
 	UpdatedAt time.Time                         `json:"updated_at" format:"date-time"`
 	JSON      accessAppUpdateResponseObjectJSON `json:"-"`
 }
@@ -364,6 +364,8 @@ type AccessAppUpdateResponseObject struct {
 // accessAppUpdateResponseObjectJSON contains the JSON metadata for the struct
 // [AccessAppUpdateResponseObject]
 type accessAppUpdateResponseObjectJSON struct {
+	Domain                   apijson.Field
+	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -376,7 +378,6 @@ type accessAppUpdateResponseObjectJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -388,7 +389,6 @@ type accessAppUpdateResponseObjectJSON struct {
 	SessionDuration          apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
-	Type                     apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -489,6 +489,11 @@ func init() {
 }
 
 type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain,required"`
+	// The application type.
+	Type string `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -519,9 +524,6 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -550,9 +552,7 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string `json:"tags"`
-	// The application type.
-	Type      string                                                        `json:"type"`
+	Tags      []string                                                      `json:"tags"`
 	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
 	JSON      accessAppAccessApplicationsAddAnApplicationResponseObjectJSON `json:"-"`
 }
@@ -561,6 +561,8 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
 // metadata for the struct
 // [AccessAppAccessApplicationsAddAnApplicationResponseObject]
 type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
+	Domain                   apijson.Field
+	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -573,7 +575,6 @@ type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -585,7 +586,6 @@ type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
 	SessionDuration          apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
-	Type                     apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -671,6 +671,11 @@ func init() {
 }
 
 type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain,required"`
+	// The application type.
+	Type string `json:"type,required"`
 	// UUID
 	ID string `json:"id"`
 	// When set to true, users can authenticate to this application using their WARP
@@ -701,9 +706,6 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
 	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages []string `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie bool `json:"enable_binding_cookie"`
@@ -732,9 +734,7 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags []string `json:"tags"`
-	// The application type.
-	Type      string                                                              `json:"type"`
+	Tags      []string                                                            `json:"tags"`
 	UpdatedAt time.Time                                                           `json:"updated_at" format:"date-time"`
 	JSON      accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON `json:"-"`
 }
@@ -743,6 +743,8 @@ type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
 // JSON metadata for the struct
 // [AccessAppAccessApplicationsListAccessApplicationsResponseObject]
 type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct {
+	Domain                   apijson.Field
+	Type                     apijson.Field
 	ID                       apijson.Field
 	AllowAuthenticateViaWarp apijson.Field
 	AllowedIdps              apijson.Field
@@ -755,7 +757,6 @@ type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct 
 	CustomDenyURL            apijson.Field
 	CustomNonIdentityDenyURL apijson.Field
 	CustomPages              apijson.Field
-	Domain                   apijson.Field
 	EnableBindingCookie      apijson.Field
 	HTTPOnlyCookieAttribute  apijson.Field
 	LogoURL                  apijson.Field
@@ -767,7 +768,6 @@ type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct 
 	SessionDuration          apijson.Field
 	SkipInterstitial         apijson.Field
 	Tags                     apijson.Field
-	Type                     apijson.Field
 	UpdatedAt                apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -843,11 +843,11 @@ type AccessAppGetParamsAppID interface {
 }
 
 type AccessAppGetResponseEnvelope struct {
-	Errors   []AccessAppGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppGetResponse                   `json:"result"`
+	Errors   []AccessAppGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -921,6 +921,11 @@ type AccessAppUpdateParams interface {
 }
 
 type AccessAppUpdateParamsVariant0 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -946,9 +951,6 @@ type AccessAppUpdateParamsVariant0 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -978,8 +980,6 @@ type AccessAppUpdateParamsVariant0 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant0) MarshalJSON() (data []byte, err error) {
@@ -1136,6 +1136,11 @@ const (
 )
 
 type AccessAppUpdateParamsVariant2 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -1161,9 +1166,6 @@ type AccessAppUpdateParamsVariant2 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1193,8 +1195,6 @@ type AccessAppUpdateParamsVariant2 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant2) MarshalJSON() (data []byte, err error) {
@@ -1251,6 +1251,11 @@ const (
 )
 
 type AccessAppUpdateParamsVariant3 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -1276,9 +1281,6 @@ type AccessAppUpdateParamsVariant3 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1308,8 +1310,6 @@ type AccessAppUpdateParamsVariant3 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant3) MarshalJSON() (data []byte, err error) {
@@ -1366,6 +1366,8 @@ const (
 )
 
 type AccessAppUpdateParamsVariant4 struct {
+	// The application type.
+	Type param.Field[AccessAppUpdateParamsVariant4Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -1376,8 +1378,6 @@ type AccessAppUpdateParamsVariant4 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant4) MarshalJSON() (data []byte, err error) {
@@ -1395,7 +1395,24 @@ type AccessAppUpdateParamsVariant4AppID interface {
 	ImplementsAccessAppUpdateParamsVariant4AppID()
 }
 
+// The application type.
+type AccessAppUpdateParamsVariant4Type string
+
+const (
+	AccessAppUpdateParamsVariant4TypeSelfHosted  AccessAppUpdateParamsVariant4Type = "self_hosted"
+	AccessAppUpdateParamsVariant4TypeSaas        AccessAppUpdateParamsVariant4Type = "saas"
+	AccessAppUpdateParamsVariant4TypeSSH         AccessAppUpdateParamsVariant4Type = "ssh"
+	AccessAppUpdateParamsVariant4TypeVnc         AccessAppUpdateParamsVariant4Type = "vnc"
+	AccessAppUpdateParamsVariant4TypeAppLauncher AccessAppUpdateParamsVariant4Type = "app_launcher"
+	AccessAppUpdateParamsVariant4TypeWarp        AccessAppUpdateParamsVariant4Type = "warp"
+	AccessAppUpdateParamsVariant4TypeBiso        AccessAppUpdateParamsVariant4Type = "biso"
+	AccessAppUpdateParamsVariant4TypeBookmark    AccessAppUpdateParamsVariant4Type = "bookmark"
+	AccessAppUpdateParamsVariant4TypeDashSSO     AccessAppUpdateParamsVariant4Type = "dash_sso"
+)
+
 type AccessAppUpdateParamsVariant5 struct {
+	// The application type.
+	Type param.Field[AccessAppUpdateParamsVariant5Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -1406,8 +1423,6 @@ type AccessAppUpdateParamsVariant5 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant5) MarshalJSON() (data []byte, err error) {
@@ -1425,7 +1440,24 @@ type AccessAppUpdateParamsVariant5AppID interface {
 	ImplementsAccessAppUpdateParamsVariant5AppID()
 }
 
+// The application type.
+type AccessAppUpdateParamsVariant5Type string
+
+const (
+	AccessAppUpdateParamsVariant5TypeSelfHosted  AccessAppUpdateParamsVariant5Type = "self_hosted"
+	AccessAppUpdateParamsVariant5TypeSaas        AccessAppUpdateParamsVariant5Type = "saas"
+	AccessAppUpdateParamsVariant5TypeSSH         AccessAppUpdateParamsVariant5Type = "ssh"
+	AccessAppUpdateParamsVariant5TypeVnc         AccessAppUpdateParamsVariant5Type = "vnc"
+	AccessAppUpdateParamsVariant5TypeAppLauncher AccessAppUpdateParamsVariant5Type = "app_launcher"
+	AccessAppUpdateParamsVariant5TypeWarp        AccessAppUpdateParamsVariant5Type = "warp"
+	AccessAppUpdateParamsVariant5TypeBiso        AccessAppUpdateParamsVariant5Type = "biso"
+	AccessAppUpdateParamsVariant5TypeBookmark    AccessAppUpdateParamsVariant5Type = "bookmark"
+	AccessAppUpdateParamsVariant5TypeDashSSO     AccessAppUpdateParamsVariant5Type = "dash_sso"
+)
+
 type AccessAppUpdateParamsVariant6 struct {
+	// The application type.
+	Type param.Field[AccessAppUpdateParamsVariant6Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -1436,8 +1468,6 @@ type AccessAppUpdateParamsVariant6 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppUpdateParamsVariant6) MarshalJSON() (data []byte, err error) {
@@ -1454,6 +1484,21 @@ func (AccessAppUpdateParamsVariant6) ImplementsAccessAppUpdateParams() {
 type AccessAppUpdateParamsVariant6AppID interface {
 	ImplementsAccessAppUpdateParamsVariant6AppID()
 }
+
+// The application type.
+type AccessAppUpdateParamsVariant6Type string
+
+const (
+	AccessAppUpdateParamsVariant6TypeSelfHosted  AccessAppUpdateParamsVariant6Type = "self_hosted"
+	AccessAppUpdateParamsVariant6TypeSaas        AccessAppUpdateParamsVariant6Type = "saas"
+	AccessAppUpdateParamsVariant6TypeSSH         AccessAppUpdateParamsVariant6Type = "ssh"
+	AccessAppUpdateParamsVariant6TypeVnc         AccessAppUpdateParamsVariant6Type = "vnc"
+	AccessAppUpdateParamsVariant6TypeAppLauncher AccessAppUpdateParamsVariant6Type = "app_launcher"
+	AccessAppUpdateParamsVariant6TypeWarp        AccessAppUpdateParamsVariant6Type = "warp"
+	AccessAppUpdateParamsVariant6TypeBiso        AccessAppUpdateParamsVariant6Type = "biso"
+	AccessAppUpdateParamsVariant6TypeBookmark    AccessAppUpdateParamsVariant6Type = "bookmark"
+	AccessAppUpdateParamsVariant6TypeDashSSO     AccessAppUpdateParamsVariant6Type = "dash_sso"
+)
 
 type AccessAppUpdateParamsVariant7 struct {
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
@@ -1486,11 +1531,11 @@ type AccessAppUpdateParamsVariant7AppID interface {
 }
 
 type AccessAppUpdateResponseEnvelope struct {
-	Errors   []AccessAppUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppUpdateResponse                   `json:"result"`
+	Errors   []AccessAppUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1562,11 +1607,11 @@ type AccessAppDeleteParamsAppID interface {
 }
 
 type AccessAppDeleteResponseEnvelope struct {
-	Errors   []AccessAppDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppDeleteResponse                   `json:"result"`
+	Errors   []AccessAppDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1644,6 +1689,11 @@ type AccessAppAccessApplicationsAddAnApplicationParams interface {
 }
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant0 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -1669,9 +1719,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant0 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1701,8 +1748,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant0 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant0) MarshalJSON() (data []byte, err error) {
@@ -1845,6 +1890,11 @@ const (
 )
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant2 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -1870,9 +1920,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant2 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1902,8 +1949,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant2 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant2) MarshalJSON() (data []byte, err error) {
@@ -1953,6 +1998,11 @@ const (
 )
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant3 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
@@ -1978,9 +2028,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant3 struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -2010,8 +2057,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant3 struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant3) MarshalJSON() (data []byte, err error) {
@@ -2061,6 +2106,8 @@ const (
 )
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant4 struct {
+	// The application type.
+	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -2071,8 +2118,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant4 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant4) MarshalJSON() (data []byte, err error) {
@@ -2083,7 +2128,24 @@ func (AccessAppAccessApplicationsAddAnApplicationParamsVariant4) ImplementsAcces
 
 }
 
+// The application type.
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "self_hosted"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "saas"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "ssh"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "vnc"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "app_launcher"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "warp"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "biso"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "bookmark"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "dash_sso"
+)
+
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant5 struct {
+	// The application type.
+	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -2094,8 +2156,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant5 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant5) MarshalJSON() (data []byte, err error) {
@@ -2106,7 +2166,24 @@ func (AccessAppAccessApplicationsAddAnApplicationParamsVariant5) ImplementsAcces
 
 }
 
+// The application type.
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "self_hosted"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "saas"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "ssh"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "vnc"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "app_launcher"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "warp"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "biso"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "bookmark"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "dash_sso"
+)
+
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant6 struct {
+	// The application type.
+	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type] `json:"type,required"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
@@ -2117,8 +2194,6 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant6 struct {
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
 	SessionDuration param.Field[string] `json:"session_duration"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
 }
 
 func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant6) MarshalJSON() (data []byte, err error) {
@@ -2128,6 +2203,21 @@ func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant6) MarshalJSON()
 func (AccessAppAccessApplicationsAddAnApplicationParamsVariant6) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
 
 }
+
+// The application type.
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "self_hosted"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "saas"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "ssh"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "vnc"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "app_launcher"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "warp"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "biso"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "bookmark"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "dash_sso"
+)
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant7 struct {
 	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
@@ -2153,11 +2243,11 @@ func (AccessAppAccessApplicationsAddAnApplicationParamsVariant7) ImplementsAcces
 }
 
 type AccessAppAccessApplicationsAddAnApplicationResponseEnvelope struct {
-	Errors   []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppAccessApplicationsAddAnApplicationResponse                   `json:"result"`
+	Errors   []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppAccessApplicationsAddAnApplicationResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2225,13 +2315,13 @@ const (
 )
 
 type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope struct {
-	Errors     []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessAppAccessApplicationsListAccessApplicationsResponse                 `json:"result"`
-	ResultInfo AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessAppAccessApplicationsListAccessApplicationsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON    `json:"-"`
+	Success    AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON contains
@@ -2241,8 +2331,8 @@ type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON struc
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2291,6 +2381,13 @@ func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessag
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess bool
+
+const (
+	AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccessTrue AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess = true
+)
+
 type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -2318,10 +2415,3 @@ type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo
 func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess bool
-
-const (
-	AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccessTrue AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess = true
-)

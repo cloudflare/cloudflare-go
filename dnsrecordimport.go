@@ -92,11 +92,11 @@ func (r DNSRecordImportDNSRecordsForAZoneImportDNSRecordsParams) MarshalJSON() (
 }
 
 type DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelope struct {
-	Errors   []DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeErrors   `json:"errors"`
-	Messages []DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeMessages `json:"messages"`
-	Result   DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse                   `json:"result"`
+	Errors   []DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeSuccess `json:"success"`
+	Success DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeSuccess `json:"success,required"`
 	Timing  DNSRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeTiming  `json:"timing"`
 	JSON    dnsRecordImportDNSRecordsForAZoneImportDNSRecordsResponseEnvelopeJSON    `json:"-"`
 }

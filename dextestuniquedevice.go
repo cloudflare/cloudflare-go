@@ -83,11 +83,11 @@ func (r DexTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 }
 
 type DexTestUniqueDeviceListResponseEnvelope struct {
-	Errors   []DexTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexTestUniqueDeviceListResponseEnvelopeMessages `json:"messages"`
-	Result   DexTestUniqueDeviceListResponse                   `json:"result"`
+	Errors   []DexTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTestUniqueDeviceListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTestUniqueDeviceListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTestUniqueDeviceListResponseEnvelopeSuccess `json:"success"`
+	Success DexTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`
 }
 

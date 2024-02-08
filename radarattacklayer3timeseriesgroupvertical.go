@@ -67,8 +67,9 @@ func (r *RadarAttackLayer3TimeseriesGroupVerticalListResponse) UnmarshalJSON(dat
 }
 
 type RadarAttackLayer3TimeseriesGroupVerticalListResponseSerie0 struct {
-	Timestamps []string                                                       `json:"timestamps,required"`
-	JSON       radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                                       `json:"timestamps,required"`
+	ExtraFields map[string][]string                                            `json:"-,extras"`
+	JSON        radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON `json:"-"`
 }
 
 // radarAttackLayer3TimeseriesGroupVerticalListResponseSerie0JSON contains the JSON

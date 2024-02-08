@@ -333,11 +333,11 @@ func (r IntelIndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type IntelIndicatorFeedNewResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedNewResponseEnvelopeMessages `json:"messages"`
-	Result   IntelIndicatorFeedNewResponse                   `json:"result"`
+	Errors   []IntelIndicatorFeedNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelIndicatorFeedNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedNewResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -402,11 +402,11 @@ const (
 )
 
 type IntelIndicatorFeedGetResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedGetResponseEnvelopeMessages `json:"messages"`
-	Result   IntelIndicatorFeedGetResponse                   `json:"result"`
+	Errors   []IntelIndicatorFeedGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelIndicatorFeedGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedGetResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -471,11 +471,11 @@ const (
 )
 
 type IntelIndicatorFeedListResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedListResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedListResponseEnvelopeMessages `json:"messages"`
-	Result   []IntelIndicatorFeedListResponse                 `json:"result"`
+	Errors   []IntelIndicatorFeedListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelIndicatorFeedListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedListResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedListResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -551,11 +551,11 @@ func (r IntelIndicatorFeedPermissionsAddParams) MarshalJSON() (data []byte, err 
 }
 
 type IntelIndicatorFeedPermissionsAddResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedPermissionsAddResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedPermissionsAddResponseEnvelopeMessages `json:"messages"`
-	Result   IntelIndicatorFeedPermissionsAddResponse                   `json:"result"`
+	Errors   []IntelIndicatorFeedPermissionsAddResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedPermissionsAddResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelIndicatorFeedPermissionsAddResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedPermissionsAddResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedPermissionsAddResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionsAddResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -632,11 +632,11 @@ func (r IntelIndicatorFeedPermissionsRemoveParams) MarshalJSON() (data []byte, e
 }
 
 type IntelIndicatorFeedPermissionsRemoveResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedPermissionsRemoveResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedPermissionsRemoveResponseEnvelopeMessages `json:"messages"`
-	Result   IntelIndicatorFeedPermissionsRemoveResponse                   `json:"result"`
+	Errors   []IntelIndicatorFeedPermissionsRemoveResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedPermissionsRemoveResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelIndicatorFeedPermissionsRemoveResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedPermissionsRemoveResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedPermissionsRemoveResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionsRemoveResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -703,11 +703,11 @@ const (
 )
 
 type IntelIndicatorFeedPermissionsViewResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedPermissionsViewResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedPermissionsViewResponseEnvelopeMessages `json:"messages"`
-	Result   []IntelIndicatorFeedPermissionsViewResponse                 `json:"result"`
+	Errors   []IntelIndicatorFeedPermissionsViewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedPermissionsViewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelIndicatorFeedPermissionsViewResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedPermissionsViewResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedPermissionsViewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionsViewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -783,11 +783,11 @@ func (r IntelIndicatorFeedSnapshotParams) MarshalJSON() (data []byte, err error)
 }
 
 type IntelIndicatorFeedSnapshotResponseEnvelope struct {
-	Errors   []IntelIndicatorFeedSnapshotResponseEnvelopeErrors   `json:"errors"`
-	Messages []IntelIndicatorFeedSnapshotResponseEnvelopeMessages `json:"messages"`
-	Result   IntelIndicatorFeedSnapshotResponse                   `json:"result"`
+	Errors   []IntelIndicatorFeedSnapshotResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIndicatorFeedSnapshotResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelIndicatorFeedSnapshotResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelIndicatorFeedSnapshotResponseEnvelopeSuccess `json:"success"`
+	Success IntelIndicatorFeedSnapshotResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedSnapshotResponseEnvelopeJSON    `json:"-"`
 }
 

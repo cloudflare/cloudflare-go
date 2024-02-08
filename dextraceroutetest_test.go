@@ -35,8 +35,8 @@ func TestDexTracerouteTestGetWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DexTracerouteTestGetParams{
 			Interval:  cloudflare.F(cloudflare.DexTracerouteTestGetParamsIntervalMinute),
-			TimeEnd:   cloudflare.F("1689606812000"),
-			TimeStart: cloudflare.F("1689520412000"),
+			TimeEnd:   cloudflare.F("string"),
+			TimeStart: cloudflare.F("string"),
 			Colo:      cloudflare.F("string"),
 			DeviceID:  cloudflare.F([]string{"string", "string", "string"}),
 		},
@@ -73,8 +73,8 @@ func TestDexTracerouteTestNetworkPath(t *testing.T) {
 		cloudflare.DexTracerouteTestNetworkPathParams{
 			DeviceID:  cloudflare.F("string"),
 			Interval:  cloudflare.F(cloudflare.DexTracerouteTestNetworkPathParamsIntervalMinute),
-			TimeEnd:   cloudflare.F("1689606812000"),
-			TimeStart: cloudflare.F("1689520412000"),
+			TimeEnd:   cloudflare.F("string"),
+			TimeStart: cloudflare.F("string"),
 		},
 	)
 	if err != nil {

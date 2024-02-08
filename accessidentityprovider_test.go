@@ -76,6 +76,7 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name: cloudflare.F("Widget Corps IDP"),
+			Type: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin),
 			ScimConfig: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
@@ -83,7 +84,6 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				Secret:                 cloudflare.F("string"),
 				UserDeprovision:        cloudflare.F(true),
 			}),
-			Type: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin),
 		},
 	)
 	if err != nil {
@@ -157,6 +157,7 @@ func TestAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 				SupportGroups:            cloudflare.F(true),
 			}),
 			Name: cloudflare.F("Widget Corps IDP"),
+			Type: cloudflare.F(cloudflare.AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnetimepin),
 			ScimConfig: cloudflare.F(cloudflare.AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdScimConfig{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
@@ -164,7 +165,6 @@ func TestAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 				Secret:                 cloudflare.F("string"),
 				UserDeprovision:        cloudflare.F(true),
 			}),
-			Type: cloudflare.F(cloudflare.AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnetimepin),
 		},
 	)
 	if err != nil {

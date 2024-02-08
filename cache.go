@@ -61,15 +61,18 @@ func (r *CacheService) UpdateRegionalTieredCache(ctx context.Context, zoneID str
 	return
 }
 
+// Instructs Cloudflare to check a regional hub data center on the way to your
+// upper tier. This can help improve performance for smart and custom tiered cache
+// topologies.
 type CacheRegionalTieredCachesResponse struct {
 	// ID of the zone setting.
-	ID CacheRegionalTieredCachesResponseID `json:"id"`
+	ID CacheRegionalTieredCachesResponseID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
-	Value CacheRegionalTieredCachesResponseValue `json:"value"`
+	Value CacheRegionalTieredCachesResponseValue `json:"value,required"`
 	JSON  cacheRegionalTieredCachesResponseJSON  `json:"-"`
 }
 
@@ -99,9 +102,9 @@ const (
 // topologies.
 type CacheRegionalTieredCachesResponseValue struct {
 	// ID of the zone setting.
-	ID CacheRegionalTieredCachesResponseValueID `json:"id"`
+	ID CacheRegionalTieredCachesResponseValueID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                                  `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       cacheRegionalTieredCachesResponseValueJSON `json:"-"`
 }
 
@@ -125,15 +128,18 @@ const (
 	CacheRegionalTieredCachesResponseValueIDTcRegional CacheRegionalTieredCachesResponseValueID = "tc_regional"
 )
 
+// Instructs Cloudflare to check a regional hub data center on the way to your
+// upper tier. This can help improve performance for smart and custom tiered cache
+// topologies.
 type CacheUpdateRegionalTieredCacheResponse struct {
 	// ID of the zone setting.
-	ID CacheUpdateRegionalTieredCacheResponseID `json:"id"`
+	ID CacheUpdateRegionalTieredCacheResponseID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Instructs Cloudflare to check a regional hub data center on the way to your
 	// upper tier. This can help improve performance for smart and custom tiered cache
 	// topologies.
-	Value CacheUpdateRegionalTieredCacheResponseValue `json:"value"`
+	Value CacheUpdateRegionalTieredCacheResponseValue `json:"value,required"`
 	JSON  cacheUpdateRegionalTieredCacheResponseJSON  `json:"-"`
 }
 
@@ -163,9 +169,9 @@ const (
 // topologies.
 type CacheUpdateRegionalTieredCacheResponseValue struct {
 	// ID of the zone setting.
-	ID CacheUpdateRegionalTieredCacheResponseValueID `json:"id"`
+	ID CacheUpdateRegionalTieredCacheResponseValueID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time                                       `json:"modified_on,required,nullable" format:"date-time"`
 	JSON       cacheUpdateRegionalTieredCacheResponseValueJSON `json:"-"`
 }
 
@@ -190,11 +196,14 @@ const (
 )
 
 type CacheRegionalTieredCachesResponseEnvelope struct {
-	Errors   []CacheRegionalTieredCachesResponseEnvelopeErrors   `json:"errors"`
-	Messages []CacheRegionalTieredCachesResponseEnvelopeMessages `json:"messages"`
-	Result   CacheRegionalTieredCachesResponse                   `json:"result"`
+	Errors   []CacheRegionalTieredCachesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheRegionalTieredCachesResponseEnvelopeMessages `json:"messages,required"`
+	// Instructs Cloudflare to check a regional hub data center on the way to your
+	// upper tier. This can help improve performance for smart and custom tiered cache
+	// topologies.
+	Result CacheRegionalTieredCachesResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success CacheRegionalTieredCachesResponseEnvelopeSuccess `json:"success"`
+	Success CacheRegionalTieredCachesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cacheRegionalTieredCachesResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -276,11 +285,14 @@ const (
 )
 
 type CacheUpdateRegionalTieredCacheResponseEnvelope struct {
-	Errors   []CacheUpdateRegionalTieredCacheResponseEnvelopeErrors   `json:"errors"`
-	Messages []CacheUpdateRegionalTieredCacheResponseEnvelopeMessages `json:"messages"`
-	Result   CacheUpdateRegionalTieredCacheResponse                   `json:"result"`
+	Errors   []CacheUpdateRegionalTieredCacheResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheUpdateRegionalTieredCacheResponseEnvelopeMessages `json:"messages,required"`
+	// Instructs Cloudflare to check a regional hub data center on the way to your
+	// upper tier. This can help improve performance for smart and custom tiered cache
+	// topologies.
+	Result CacheUpdateRegionalTieredCacheResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success CacheUpdateRegionalTieredCacheResponseEnvelopeSuccess `json:"success"`
+	Success CacheUpdateRegionalTieredCacheResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cacheUpdateRegionalTieredCacheResponseEnvelopeJSON    `json:"-"`
 }
 

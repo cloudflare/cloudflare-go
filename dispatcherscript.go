@@ -236,12 +236,12 @@ func (r *DispatcherScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) 
 }
 
 type DispatcherScriptGetResponseEnvelope struct {
-	Errors   []DispatcherScriptGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []DispatcherScriptGetResponseEnvelopeMessages `json:"messages"`
+	Errors   []DispatcherScriptGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatcherScriptGetResponseEnvelopeMessages `json:"messages,required"`
 	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result DispatcherScriptGetResponse `json:"result"`
+	Result DispatcherScriptGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success DispatcherScriptGetResponseEnvelopeSuccess `json:"success"`
+	Success DispatcherScriptGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatcherScriptGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -540,11 +540,11 @@ func (DispatcherScriptUpdateParamsVariant1) ImplementsDispatcherScriptUpdatePara
 }
 
 type DispatcherScriptUpdateResponseEnvelope struct {
-	Errors   []DispatcherScriptUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []DispatcherScriptUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   DispatcherScriptUpdateResponse                   `json:"result"`
+	Errors   []DispatcherScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatcherScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DispatcherScriptUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DispatcherScriptUpdateResponseEnvelopeSuccess `json:"success"`
+	Success DispatcherScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatcherScriptUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

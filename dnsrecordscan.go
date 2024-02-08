@@ -67,11 +67,11 @@ func (r *DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse) UnmarshalJSON(da
 }
 
 type DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelope struct {
-	Errors   []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors   `json:"errors"`
-	Messages []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages `json:"messages"`
-	Result   DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse                   `json:"result"`
+	Errors   []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccess `json:"success"`
+	Success DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeSuccess `json:"success,required"`
 	Timing  DNSRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeTiming  `json:"timing"`
 	JSON    dnsRecordScanDNSRecordsForAZoneScanDNSRecordsResponseEnvelopeJSON    `json:"-"`
 }

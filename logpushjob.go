@@ -6,12 +6,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // LogpushJobService contains methods and other services that help with interacting
@@ -390,14 +393,33 @@ const (
 	LogpushJobUpdateResponseOutputOptionsTimestampFormatRfc3339  LogpushJobUpdateResponseOutputOptionsTimestampFormat = "rfc3339"
 )
 
-type LogpushJobDeleteResponse = interface{}
+// Union satisfied by [LogpushJobDeleteResponseUnknown],
+// [LogpushJobDeleteResponseArray] or [shared.UnionString].
+type LogpushJobDeleteResponse interface {
+	ImplementsLogpushJobDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*LogpushJobDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type LogpushJobDeleteResponseArray []interface{}
+
+func (r LogpushJobDeleteResponseArray) ImplementsLogpushJobDeleteResponse() {}
 
 type LogpushJobGetResponseEnvelope struct {
-	Errors   []LogpushJobGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushJobGetResponseEnvelopeMessages `json:"messages"`
-	Result   LogpushJobGetResponse                   `json:"result,nullable"`
+	Errors   []LogpushJobGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushJobGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogpushJobGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LogpushJobGetResponseEnvelopeSuccess `json:"success"`
+	Success LogpushJobGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushJobGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -563,11 +585,11 @@ const (
 )
 
 type LogpushJobUpdateResponseEnvelope struct {
-	Errors   []LogpushJobUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushJobUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   LogpushJobUpdateResponse                   `json:"result,nullable"`
+	Errors   []LogpushJobUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushJobUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogpushJobUpdateResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LogpushJobUpdateResponseEnvelopeSuccess `json:"success"`
+	Success LogpushJobUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushJobUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -632,11 +654,11 @@ const (
 )
 
 type LogpushJobDeleteResponseEnvelope struct {
-	Errors   []LogpushJobDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushJobDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   LogpushJobDeleteResponse                   `json:"result,nullable"`
+	Errors   []LogpushJobDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushJobDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogpushJobDeleteResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LogpushJobDeleteResponseEnvelopeSuccess `json:"success"`
+	Success LogpushJobDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushJobDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

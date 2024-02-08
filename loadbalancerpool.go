@@ -1943,11 +1943,11 @@ func (r *LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseOriginsHeader
 }
 
 type LoadBalancerPoolGetResponseEnvelope struct {
-	Errors   []LoadBalancerPoolGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolGetResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerPoolGetResponse                   `json:"result"`
+	Errors   []LoadBalancerPoolGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerPoolGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2259,11 +2259,11 @@ const (
 )
 
 type LoadBalancerPoolUpdateResponseEnvelope struct {
-	Errors   []LoadBalancerPoolUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerPoolUpdateResponse                   `json:"result"`
+	Errors   []LoadBalancerPoolUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerPoolUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2328,11 +2328,11 @@ const (
 )
 
 type LoadBalancerPoolDeleteResponseEnvelope struct {
-	Errors   []LoadBalancerPoolDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerPoolDeleteResponse                   `json:"result"`
+	Errors   []LoadBalancerPoolDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerPoolDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolDeleteResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2617,11 +2617,11 @@ const (
 )
 
 type LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelope struct {
-	Errors   []LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponse                   `json:"result"`
+	Errors   []LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolAccountLoadBalancerPoolsNewPoolResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -2704,13 +2704,13 @@ func (r LoadBalancerPoolAccountLoadBalancerPoolsListPoolsParams) URLQuery() (v u
 }
 
 type LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelope struct {
-	Errors     []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeMessages `json:"messages"`
-	Result     []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponse                 `json:"result"`
-	ResultInfo LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeJSON contains
@@ -2720,8 +2720,8 @@ type loadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeJSON struc
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2770,6 +2770,13 @@ func (r *LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeMessag
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccessTrue LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -2798,13 +2805,6 @@ func (r *LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeResult
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccessTrue LoadBalancerPoolAccountLoadBalancerPoolsListPoolsResponseEnvelopeSuccess = true
-)
-
 type LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsParams struct {
 	// The email address to send health status notifications to. This field is now
 	// deprecated in favor of Cloudflare Notifications for Load Balancing, so only
@@ -2826,13 +2826,13 @@ const (
 )
 
 type LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelope struct {
-	Errors     []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeMessages `json:"messages"`
-	Result     []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponse                 `json:"result"`
-	ResultInfo LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeJSON contains
@@ -2842,8 +2842,8 @@ type loadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeJSON stru
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2892,6 +2892,13 @@ func (r *LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeMessa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccessTrue LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -2919,10 +2926,3 @@ type loadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeResultInf
 func (r *LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccessTrue LoadBalancerPoolAccountLoadBalancerPoolsPatchPoolsResponseEnvelopeSuccess = true
-)

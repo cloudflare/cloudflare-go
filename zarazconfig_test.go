@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -59,29 +60,8 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZarazConfigUpdateParams{
-			Consent: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsent{
-				ButtonTextTranslations: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsentButtonTextTranslations{
-					AcceptAll:        cloudflare.F[any](map[string]interface{}{}),
-					ConfirmMyChoices: cloudflare.F[any](map[string]interface{}{}),
-					RejectAll:        cloudflare.F[any](map[string]interface{}{}),
-				}),
-				CompanyEmail:                          cloudflare.F("string"),
-				CompanyName:                           cloudflare.F("string"),
-				CompanyStreetAddress:                  cloudflare.F("string"),
-				ConsentModalIntroHTML:                 cloudflare.F("string"),
-				ConsentModalIntroHTMLWithTranslations: cloudflare.F[any](map[string]interface{}{}),
-				CookieName:                            cloudflare.F("string"),
-				CustomCss:                             cloudflare.F("string"),
-				CustomIntroDisclaimerDismissed:        cloudflare.F(true),
-				DefaultLanguage:                       cloudflare.F("string"),
-				Enabled:                               cloudflare.F(true),
-				HideModal:                             cloudflare.F(true),
-				Purposes:                              cloudflare.F[any](map[string]interface{}{}),
-				PurposesWithTranslations:              cloudflare.F[any](map[string]interface{}{}),
-			}),
-			DataLayer:     cloudflare.F(true),
-			DebugKey:      cloudflare.F("string"),
-			HistoryChange: cloudflare.F(true),
+			DataLayer: cloudflare.F(true),
+			DebugKey:  cloudflare.F("my-debug-key"),
 			Settings: cloudflare.F(cloudflare.ZarazConfigUpdateParamsSettings{
 				AutoInjectScript: cloudflare.F(true),
 				ContextEnricher: cloudflare.F(cloudflare.ZarazConfigUpdateParamsSettingsContextEnricher{
@@ -95,16 +75,129 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 				HideIPAddress:       cloudflare.F(true),
 				HideQueryParams:     cloudflare.F(true),
 				HideUserAgent:       cloudflare.F(true),
-				InitPath:            cloudflare.F("string"),
+				InitPath:            cloudflare.F("/i"),
 				InjectIframes:       cloudflare.F(true),
 				McRootPath:          cloudflare.F("string"),
 				ScriptPath:          cloudflare.F("string"),
 				TrackPath:           cloudflare.F("string"),
 			}),
-			Tools:        cloudflare.F[any](map[string]interface{}{}),
-			Triggers:     cloudflare.F[any](map[string]interface{}{}),
-			Variables:    cloudflare.F[any](map[string]interface{}{}),
-			ZarazVersion: cloudflare.F(int64(0)),
+			Tools: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsTools{
+				"aJvt": cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool(cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool{
+					BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
+					DefaultFields: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields{
+						"testKey": shared.UnionString("TEST123456"),
+					}),
+					DefaultPurpose: cloudflare.F("string"),
+					Enabled:        cloudflare.F(true),
+					Name:           cloudflare.F("Facebook Pixel"),
+					Library:        cloudflare.F("string"),
+					NeoEvents: cloudflare.F([]cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyToolNeoEvent{{
+						BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
+						Data:             cloudflare.F[any](map[string]interface{}{}),
+						FiringTriggers:   cloudflare.F([]string{"string"}),
+					}, {
+						BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
+						Data:             cloudflare.F[any](map[string]interface{}{}),
+						FiringTriggers:   cloudflare.F([]string{"string"}),
+					}, {
+						BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
+						Data:             cloudflare.F[any](map[string]interface{}{}),
+						FiringTriggers:   cloudflare.F([]string{"string"}),
+					}}),
+					Type: cloudflare.F(cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyToolTypeLibrary),
+				}),
+			}),
+			Triggers: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsTriggers{
+				"ktBn": {
+					Description: cloudflare.F("string"),
+					ExcludeRules: cloudflare.F([]cloudflare.ZarazConfigUpdateParamsTriggersExcludeRule{cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					}), cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					}), cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					})}),
+					LoadRules: cloudflare.F([]cloudflare.ZarazConfigUpdateParamsTriggersLoadRule{cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					}), cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					}), cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRule{
+						ID:    cloudflare.F("string"),
+						Match: cloudflare.F("string"),
+						Op:    cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersLoadRulesZarazLoadRuleOpContains),
+						Value: cloudflare.F("string"),
+					})}),
+					Name:   cloudflare.F("string"),
+					System: cloudflare.F(cloudflare.ZarazConfigUpdateParamsTriggersSystemPageload),
+				},
+			}),
+			Variables: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsVariables{
+				"Autd": cloudflare.ZarazConfigUpdateParamsVariablesObject(cloudflare.ZarazConfigUpdateParamsVariablesObject{
+					Name:  cloudflare.F("ip"),
+					Type:  cloudflare.F(cloudflare.ZarazConfigUpdateParamsVariablesObjectTypeString),
+					Value: cloudflare.F("{{ system.device.ip }}"),
+				}),
+			}),
+			ZarazVersion: cloudflare.F(int64(43)),
+			Consent: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsent{
+				ButtonTextTranslations: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsentButtonTextTranslations{
+					AcceptAll: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
+					ConfirmMyChoices: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
+					RejectAll: cloudflare.F(map[string]string{
+						"foo": "string",
+					}),
+				}),
+				CompanyEmail:          cloudflare.F("string"),
+				CompanyName:           cloudflare.F("string"),
+				CompanyStreetAddress:  cloudflare.F("string"),
+				ConsentModalIntroHTML: cloudflare.F("string"),
+				ConsentModalIntroHTMLWithTranslations: cloudflare.F(map[string]string{
+					"foo": "string",
+				}),
+				CookieName:                     cloudflare.F("zaraz-consent"),
+				CustomCss:                      cloudflare.F("string"),
+				CustomIntroDisclaimerDismissed: cloudflare.F(true),
+				DefaultLanguage:                cloudflare.F("string"),
+				Enabled:                        cloudflare.F(false),
+				HideModal:                      cloudflare.F(true),
+				Purposes: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsConsentPurposes{
+					"foo": {
+						Description: cloudflare.F("string"),
+						Name:        cloudflare.F("string"),
+					},
+				}),
+				PurposesWithTranslations: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsConsentPurposesWithTranslations{
+					"foo": {
+						Description: cloudflare.F(map[string]string{
+							"foo": "string",
+						}),
+						Name: cloudflare.F(map[string]string{
+							"foo": "string",
+						}),
+						Order: cloudflare.F(int64(0)),
+					},
+				}),
+			}),
+			HistoryChange: cloudflare.F(true),
 		},
 	)
 	if err != nil {

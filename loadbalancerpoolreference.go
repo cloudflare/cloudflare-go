@@ -76,14 +76,14 @@ const (
 )
 
 type LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelope struct {
-	Errors   []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages `json:"messages"`
+	Errors   []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages `json:"messages,required"`
 	// List of resources that reference a given pool.
-	Result     []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse                 `json:"result"`
-	ResultInfo LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	Result []LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON
@@ -93,8 +93,8 @@ type loadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -143,6 +143,13 @@ func (r *LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResp
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccessTrue LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -170,10 +177,3 @@ type loadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponse
 func (r *LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccessTrue LoadBalancerPoolReferenceAccountLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess = true
-)

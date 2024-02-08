@@ -67,6 +67,8 @@ func TestAccessAppUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		cloudflare.AccessAppUpdateParamsVariant0{
+			Domain:                   cloudflare.F("test.example.com/admin"),
+			Type:                     cloudflare.F("self_hosted"),
 			AllowAuthenticateViaWarp: cloudflare.F(true),
 			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
@@ -85,7 +87,6 @@ func TestAccessAppUpdateWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("string"),
 			CustomNonIdentityDenyURL: cloudflare.F("string"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			Domain:                   cloudflare.F("test.example.com/admin"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
 			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
@@ -97,7 +98,6 @@ func TestAccessAppUpdateWithOptionalParams(t *testing.T) {
 			SessionDuration:          cloudflare.F("24h"),
 			SkipInterstitial:         cloudflare.F(true),
 			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-			Type:                     cloudflare.F("self_hosted"),
 		},
 	)
 	if err != nil {
@@ -161,6 +161,8 @@ func TestAccessAppAccessApplicationsAddAnApplicationWithOptionalParams(t *testin
 		"string",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AccessAppAccessApplicationsAddAnApplicationParamsVariant0{
+			Domain:                   cloudflare.F("test.example.com/admin"),
+			Type:                     cloudflare.F("self_hosted"),
 			AllowAuthenticateViaWarp: cloudflare.F(true),
 			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F(true),
@@ -179,7 +181,6 @@ func TestAccessAppAccessApplicationsAddAnApplicationWithOptionalParams(t *testin
 			CustomDenyURL:            cloudflare.F("string"),
 			CustomNonIdentityDenyURL: cloudflare.F("string"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			Domain:                   cloudflare.F("test.example.com/admin"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
 			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
@@ -191,7 +192,6 @@ func TestAccessAppAccessApplicationsAddAnApplicationWithOptionalParams(t *testin
 			SessionDuration:          cloudflare.F("24h"),
 			SkipInterstitial:         cloudflare.F(true),
 			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-			Type:                     cloudflare.F("self_hosted"),
 		},
 	)
 	if err != nil {

@@ -9743,11 +9743,11 @@ func (r *AccessAppPolicyAccessPoliciesListAccessPoliciesResponseRequireAccessDev
 }
 
 type AccessAppPolicyGetResponseEnvelope struct {
-	Errors   []AccessAppPolicyGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppPolicyGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppPolicyGetResponse                   `json:"result"`
+	Errors   []AccessAppPolicyGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppPolicyGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppPolicyGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppPolicyGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppPolicyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppPolicyGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -11114,11 +11114,11 @@ func (r AccessAppPolicyUpdateParamsRequireAccessDevicePostureRuleDevicePosture) 
 }
 
 type AccessAppPolicyUpdateResponseEnvelope struct {
-	Errors   []AccessAppPolicyUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppPolicyUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppPolicyUpdateResponse                   `json:"result"`
+	Errors   []AccessAppPolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppPolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppPolicyUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppPolicyUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppPolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppPolicyUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -11183,11 +11183,11 @@ const (
 )
 
 type AccessAppPolicyDeleteResponseEnvelope struct {
-	Errors   []AccessAppPolicyDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppPolicyDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppPolicyDeleteResponse                   `json:"result"`
+	Errors   []AccessAppPolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppPolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppPolicyDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppPolicyDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppPolicyDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppPolicyDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -12557,11 +12557,11 @@ func (r AccessAppPolicyAccessPoliciesNewAnAccessPolicyParamsRequireAccessDeviceP
 }
 
 type AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelope struct {
-	Errors   []AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponse                   `json:"result"`
+	Errors   []AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppPolicyAccessPoliciesNewAnAccessPolicyResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -12629,13 +12629,13 @@ const (
 )
 
 type AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelope struct {
-	Errors     []AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessAppPolicyAccessPoliciesListAccessPoliciesResponse                 `json:"result"`
-	ResultInfo AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessAppPolicyAccessPoliciesListAccessPoliciesResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess `json:"success"`
-	JSON    accessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeJSON    `json:"-"`
+	Success    AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeJSON contains the
@@ -12645,8 +12645,8 @@ type accessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeJSON struct 
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -12695,6 +12695,13 @@ func (r *AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeMessages
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess bool
+
+const (
+	AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccessTrue AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess = true
+)
+
 type AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -12722,10 +12729,3 @@ type accessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeResultInfoJS
 func (r *AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess bool
-
-const (
-	AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccessTrue AccessAppPolicyAccessPoliciesListAccessPoliciesResponseEnvelopeSuccess = true
-)

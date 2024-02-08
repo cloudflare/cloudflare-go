@@ -305,11 +305,11 @@ func (r AddressingPrefixBindingNewParams) MarshalJSON() (data []byte, err error)
 }
 
 type AddressingPrefixBindingNewResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingNewResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBindingNewResponse                   `json:"result"`
+	Errors   []AddressingPrefixBindingNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBindingNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBindingNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBindingNewResponseEnvelopeSuccess `json:"success"`
+	Success AddressingPrefixBindingNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBindingNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -374,11 +374,11 @@ const (
 )
 
 type AddressingPrefixBindingGetResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingGetResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBindingGetResponse                   `json:"result"`
+	Errors   []AddressingPrefixBindingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBindingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBindingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBindingGetResponseEnvelopeSuccess `json:"success"`
+	Success AddressingPrefixBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBindingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -443,11 +443,11 @@ const (
 )
 
 type AddressingPrefixBindingListResponseEnvelope struct {
-	Errors   []AddressingPrefixBindingListResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBindingListResponseEnvelopeMessages `json:"messages"`
-	Result   []AddressingPrefixBindingListResponse                 `json:"result"`
+	Errors   []AddressingPrefixBindingListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBindingListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AddressingPrefixBindingListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBindingListResponseEnvelopeSuccess `json:"success"`
+	Success AddressingPrefixBindingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBindingListResponseEnvelopeJSON    `json:"-"`
 }
 

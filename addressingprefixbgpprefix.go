@@ -334,11 +334,11 @@ func (r *AddressingPrefixBgpPrefixListResponseOnDemand) UnmarshalJSON(data []byt
 }
 
 type AddressingPrefixBgpPrefixGetResponseEnvelope struct {
-	Errors   []AddressingPrefixBgpPrefixGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBgpPrefixGetResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBgpPrefixGetResponse                   `json:"result"`
+	Errors   []AddressingPrefixBgpPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBgpPrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBgpPrefixGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBgpPrefixGetResponseEnvelopeSuccess `json:"success"`
+	Success AddressingPrefixBgpPrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBgpPrefixGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -419,11 +419,11 @@ func (r AddressingPrefixBgpPrefixUpdateParamsOnDemand) MarshalJSON() (data []byt
 }
 
 type AddressingPrefixBgpPrefixUpdateResponseEnvelope struct {
-	Errors   []AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AddressingPrefixBgpPrefixUpdateResponse                   `json:"result"`
+	Errors   []AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBgpPrefixUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBgpPrefixUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -489,13 +489,13 @@ const (
 )
 
 type AddressingPrefixBgpPrefixListResponseEnvelope struct {
-	Errors     []AddressingPrefixBgpPrefixListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AddressingPrefixBgpPrefixListResponseEnvelopeMessages `json:"messages"`
-	Result     []AddressingPrefixBgpPrefixListResponse                 `json:"result"`
-	ResultInfo AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AddressingPrefixBgpPrefixListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBgpPrefixListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AddressingPrefixBgpPrefixListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AddressingPrefixBgpPrefixListResponseEnvelopeSuccess `json:"success"`
-	JSON    addressingPrefixBgpPrefixListResponseEnvelopeJSON    `json:"-"`
+	Success    AddressingPrefixBgpPrefixListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       addressingPrefixBgpPrefixListResponseEnvelopeJSON       `json:"-"`
 }
 
 // addressingPrefixBgpPrefixListResponseEnvelopeJSON contains the JSON metadata for
@@ -504,8 +504,8 @@ type addressingPrefixBgpPrefixListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -552,6 +552,13 @@ func (r *AddressingPrefixBgpPrefixListResponseEnvelopeMessages) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AddressingPrefixBgpPrefixListResponseEnvelopeSuccess bool
+
+const (
+	AddressingPrefixBgpPrefixListResponseEnvelopeSuccessTrue AddressingPrefixBgpPrefixListResponseEnvelopeSuccess = true
+)
+
 type AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -579,10 +586,3 @@ type addressingPrefixBgpPrefixListResponseEnvelopeResultInfoJSON struct {
 func (r *AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AddressingPrefixBgpPrefixListResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBgpPrefixListResponseEnvelopeSuccessTrue AddressingPrefixBgpPrefixListResponseEnvelopeSuccess = true
-)

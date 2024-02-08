@@ -137,11 +137,11 @@ func (r *HoldRemoveResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type HoldGetResponseEnvelope struct {
-	Errors   []HoldGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []HoldGetResponseEnvelopeMessages `json:"messages"`
-	Result   HoldGetResponse                   `json:"result"`
+	Errors   []HoldGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HoldGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   HoldGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HoldGetResponseEnvelopeSuccess `json:"success"`
+	Success HoldGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -222,11 +222,11 @@ func (r HoldEnforceParams) URLQuery() (v url.Values) {
 }
 
 type HoldEnforceResponseEnvelope struct {
-	Errors   []HoldEnforceResponseEnvelopeErrors   `json:"errors"`
-	Messages []HoldEnforceResponseEnvelopeMessages `json:"messages"`
-	Result   HoldEnforceResponse                   `json:"result"`
+	Errors   []HoldEnforceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HoldEnforceResponseEnvelopeMessages `json:"messages,required"`
+	Result   HoldEnforceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HoldEnforceResponseEnvelopeSuccess `json:"success"`
+	Success HoldEnforceResponseEnvelopeSuccess `json:"success,required"`
 	JSON    holdEnforceResponseEnvelopeJSON    `json:"-"`
 }
 

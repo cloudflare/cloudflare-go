@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // AccountService contains methods and other services that help with interacting
@@ -71,18 +74,46 @@ func (r *AccountService) List(ctx context.Context, query AccountListParams, opts
 	return
 }
 
-type AccountGetResponse = interface{}
+// Union satisfied by [AccountGetResponseUnknown] or [shared.UnionString].
+type AccountGetResponse interface {
+	ImplementsAccountGetResponse()
+}
 
-type AccountUpdateResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [AccountUpdateResponseUnknown] or [shared.UnionString].
+type AccountUpdateResponse interface {
+	ImplementsAccountUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccountUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type AccountListResponse = interface{}
 
 type AccountGetResponseEnvelope struct {
-	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccountGetResponse                   `json:"result"`
+	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccountGetResponseEnvelopeSuccess `json:"success"`
+	Success AccountGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -201,11 +232,11 @@ const (
 )
 
 type AccountUpdateResponseEnvelope struct {
-	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccountUpdateResponse                   `json:"result"`
+	Errors   []AccountUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccountUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccountUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccountUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accountUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -295,13 +326,13 @@ const (
 )
 
 type AccountListResponseEnvelope struct {
-	Errors     []AccountListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccountListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccountListResponse                 `json:"result"`
-	ResultInfo AccountListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccountListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccountListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccountListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccountListResponseEnvelopeSuccess `json:"success"`
-	JSON    accountListResponseEnvelopeJSON    `json:"-"`
+	Success    AccountListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccountListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accountListResponseEnvelopeJSON       `json:"-"`
 }
 
 // accountListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -310,8 +341,8 @@ type accountListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -358,6 +389,13 @@ func (r *AccountListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccountListResponseEnvelopeSuccess bool
+
+const (
+	AccountListResponseEnvelopeSuccessTrue AccountListResponseEnvelopeSuccess = true
+)
+
 type AccountListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -384,10 +422,3 @@ type accountListResponseEnvelopeResultInfoJSON struct {
 func (r *AccountListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccountListResponseEnvelopeSuccess bool
-
-const (
-	AccountListResponseEnvelopeSuccessTrue AccountListResponseEnvelopeSuccess = true
-)

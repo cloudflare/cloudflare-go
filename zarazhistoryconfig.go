@@ -46,7 +46,7 @@ func (r *ZarazHistoryConfigService) Get(ctx context.Context, zoneID string, quer
 	return
 }
 
-type ZarazHistoryConfigGetResponse = interface{}
+type ZarazHistoryConfigGetResponse map[string]ZarazHistoryConfigGetResponse
 
 type ZarazHistoryConfigGetParams struct {
 	// Comma separated list of Zaraz configuration IDs
@@ -63,12 +63,12 @@ func (r ZarazHistoryConfigGetParams) URLQuery() (v url.Values) {
 }
 
 type ZarazHistoryConfigGetResponseEnvelope struct {
-	Errors   []ZarazHistoryConfigGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZarazHistoryConfigGetResponseEnvelopeMessages `json:"messages"`
+	Errors   []ZarazHistoryConfigGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazHistoryConfigGetResponseEnvelopeMessages `json:"messages,required"`
 	// Object where keys are numericc onfiguration IDs
-	Result ZarazHistoryConfigGetResponse `json:"result"`
+	Result ZarazHistoryConfigGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success"`
+	Success bool                                      `json:"success,required"`
 	JSON    zarazHistoryConfigGetResponseEnvelopeJSON `json:"-"`
 }
 

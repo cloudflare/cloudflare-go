@@ -478,11 +478,11 @@ func (r BotManagementUpdateResponseBotManagementBmSubscriptionConfig) implements
 }
 
 type BotManagementGetResponseEnvelope struct {
-	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages"`
-	Result   BotManagementGetResponse                   `json:"result"`
+	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   BotManagementGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success BotManagementGetResponseEnvelopeSuccess `json:"success"`
+	Success BotManagementGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -686,11 +686,11 @@ func (BotManagementUpdateParamsBotManagementBmSubscriptionConfig) ImplementsBotM
 }
 
 type BotManagementUpdateResponseEnvelope struct {
-	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   BotManagementUpdateResponse                   `json:"result"`
+	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BotManagementUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   BotManagementUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success"`
+	Success BotManagementUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    botManagementUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

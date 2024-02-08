@@ -1378,11 +1378,11 @@ func (r *WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseTailConsu
 }
 
 type WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelope struct {
-	Errors   []WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages"`
-	Result   WorkersForPlatformDispatchNamespaceScriptSettingGetResponse                   `json:"result"`
+	Errors   []WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkersForPlatformDispatchNamespaceScriptSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success"`
+	Success WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1450,11 +1450,11 @@ const (
 )
 
 type WorkersForPlatformDispatchNamespaceScriptSettingUpdateParams struct {
-	Errors   param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsError]   `json:"errors"`
-	Messages param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsMessage] `json:"messages"`
-	Result   param.Field[WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResult]    `json:"result"`
+	Errors   param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsError]   `json:"errors,required"`
+	Messages param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsMessage] `json:"messages,required"`
+	Result   param.Field[WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResult]    `json:"result,required"`
 	// Whether the API call was successful
-	Success param.Field[WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsSuccess] `json:"success"`
+	Success param.Field[WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsSuccess] `json:"success,required"`
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptSettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1866,11 +1866,11 @@ const (
 )
 
 type WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelope struct {
-	Errors   []WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponse                   `json:"result"`
+	Errors   []WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeSuccess `json:"success"`
+	Success WorkersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workersForPlatformDispatchNamespaceScriptSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

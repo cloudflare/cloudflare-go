@@ -93,13 +93,13 @@ func (r AccessSeatZeroTrustSeatsUpdateAUserSeatParamsBody) MarshalJSON() (data [
 }
 
 type AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelope struct {
-	Errors     []AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessSeatZeroTrustSeatsUpdateAUserSeatResponse                 `json:"result"`
-	ResultInfo AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessSeatZeroTrustSeatsUpdateAUserSeatResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess `json:"success"`
-	JSON    accessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeJSON    `json:"-"`
+	Success    AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeJSON contains the JSON
@@ -109,8 +109,8 @@ type accessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -159,6 +159,13 @@ func (r *AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeMessages) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess bool
+
+const (
+	AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccessTrue AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess = true
+)
+
 type AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -186,10 +193,3 @@ type accessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeResultInfoJSON struc
 func (r *AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess bool
-
-const (
-	AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccessTrue AccessSeatZeroTrustSeatsUpdateAUserSeatResponseEnvelopeSuccess = true
-)

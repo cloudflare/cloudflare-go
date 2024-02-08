@@ -217,12 +217,12 @@ const (
 )
 
 type R2BucketNewResponseEnvelope struct {
-	Errors   []R2BucketNewResponseEnvelopeErrors `json:"errors"`
-	Messages []string                            `json:"messages"`
+	Errors   []R2BucketNewResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                            `json:"messages,required"`
 	// A single R2 bucket
-	Result R2BucketNewResponse `json:"result"`
+	Result R2BucketNewResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success R2BucketNewResponseEnvelopeSuccess `json:"success"`
+	Success R2BucketNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2BucketNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -268,12 +268,12 @@ const (
 )
 
 type R2BucketGetResponseEnvelope struct {
-	Errors   []R2BucketGetResponseEnvelopeErrors `json:"errors"`
-	Messages []string                            `json:"messages"`
+	Errors   []R2BucketGetResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                            `json:"messages,required"`
 	// A single R2 bucket
-	Result R2BucketGetResponse `json:"result"`
+	Result R2BucketGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success R2BucketGetResponseEnvelopeSuccess `json:"success"`
+	Success R2BucketGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2BucketGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -359,13 +359,13 @@ const (
 )
 
 type R2BucketListResponseEnvelope struct {
-	Errors     []R2BucketListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []string                               `json:"messages"`
-	Result     []R2BucketListResponse                 `json:"result"`
-	ResultInfo R2BucketListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []R2BucketListResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                             `json:"messages,required"`
+	Result   []R2BucketListResponse               `json:"result,required"`
 	// Whether the API call was successful
-	Success R2BucketListResponseEnvelopeSuccess `json:"success"`
-	JSON    r2BucketListResponseEnvelopeJSON    `json:"-"`
+	Success    R2BucketListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo R2BucketListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       r2BucketListResponseEnvelopeJSON       `json:"-"`
 }
 
 // r2BucketListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -374,8 +374,8 @@ type r2BucketListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -403,6 +403,13 @@ func (r *R2BucketListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type R2BucketListResponseEnvelopeSuccess bool
+
+const (
+	R2BucketListResponseEnvelopeSuccessTrue R2BucketListResponseEnvelopeSuccess = true
+)
+
 type R2BucketListResponseEnvelopeResultInfo struct {
 	// A continuation token that should be used to fetch the next page of results
 	Cursor string `json:"cursor"`
@@ -423,13 +430,6 @@ type r2BucketListResponseEnvelopeResultInfoJSON struct {
 func (r *R2BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type R2BucketListResponseEnvelopeSuccess bool
-
-const (
-	R2BucketListResponseEnvelopeSuccessTrue R2BucketListResponseEnvelopeSuccess = true
-)
 
 type R2BucketDeleteResponseEnvelope struct {
 	Errors   []R2BucketDeleteResponseEnvelopeErrors `json:"errors,required"`

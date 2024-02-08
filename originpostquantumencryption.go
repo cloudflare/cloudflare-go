@@ -6,11 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // OriginPostQuantumEncryptionService contains methods and other services that help
@@ -67,16 +70,46 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, zoneID 
 	return
 }
 
-type OriginPostQuantumEncryptionGetResponse = interface{}
+// Union satisfied by [OriginPostQuantumEncryptionGetResponseUnknown] or
+// [shared.UnionString].
+type OriginPostQuantumEncryptionGetResponse interface {
+	ImplementsOriginPostQuantumEncryptionGetResponse()
+}
 
-type OriginPostQuantumEncryptionUpdateResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginPostQuantumEncryptionGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [OriginPostQuantumEncryptionUpdateResponseUnknown] or
+// [shared.UnionString].
+type OriginPostQuantumEncryptionUpdateResponse interface {
+	ImplementsOriginPostQuantumEncryptionUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginPostQuantumEncryptionUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
-	Errors   []OriginPostQuantumEncryptionGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []OriginPostQuantumEncryptionGetResponseEnvelopeMessages `json:"messages"`
-	Result   OriginPostQuantumEncryptionGetResponse                   `json:"result"`
+	Errors   []OriginPostQuantumEncryptionGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OriginPostQuantumEncryptionGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   OriginPostQuantumEncryptionGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success"`
+	Success OriginPostQuantumEncryptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originPostQuantumEncryptionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -159,11 +192,11 @@ const (
 )
 
 type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   OriginPostQuantumEncryptionUpdateResponse                   `json:"result"`
+	Errors   []OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   OriginPostQuantumEncryptionUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success"`
+	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

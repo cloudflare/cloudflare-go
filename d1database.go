@@ -115,11 +115,11 @@ func (r D1DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type D1DatabaseNewResponseEnvelope struct {
-	Errors   []D1DatabaseNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []D1DatabaseNewResponseEnvelopeMessages `json:"messages"`
-	Result   D1DatabaseNewResponse                   `json:"result"`
+	Errors   []D1DatabaseNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []D1DatabaseNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   D1DatabaseNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success D1DatabaseNewResponseEnvelopeSuccess `json:"success"`
+	Success D1DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    d1DatabaseNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -201,11 +201,11 @@ func (r D1DatabaseListParams) URLQuery() (v url.Values) {
 }
 
 type D1DatabaseListResponseEnvelope struct {
-	Errors   []D1DatabaseListResponseEnvelopeErrors   `json:"errors"`
-	Messages []D1DatabaseListResponseEnvelopeMessages `json:"messages"`
-	Result   []D1DatabaseListResponse                 `json:"result"`
+	Errors   []D1DatabaseListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []D1DatabaseListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []D1DatabaseListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success D1DatabaseListResponseEnvelopeSuccess `json:"success"`
+	Success D1DatabaseListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    d1DatabaseListResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -298,11 +298,11 @@ const (
 )
 
 type AccessCustomPageNewResponseEnvelope struct {
-	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCustomPageNewResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCustomPageNewResponse                   `json:"result"`
+	Errors   []AccessCustomPageNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCustomPageNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCustomPageNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success"`
+	Success AccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -367,11 +367,11 @@ const (
 )
 
 type AccessCustomPageGetResponseEnvelope struct {
-	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCustomPageGetResponse                   `json:"result"`
+	Errors   []AccessCustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCustomPageGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCustomPageGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -459,11 +459,11 @@ const (
 )
 
 type AccessCustomPageUpdateResponseEnvelope struct {
-	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCustomPageUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCustomPageUpdateResponse                   `json:"result"`
+	Errors   []AccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCustomPageUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -528,13 +528,13 @@ const (
 )
 
 type AccessCustomPageListResponseEnvelope struct {
-	Errors     []AccessCustomPageListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessCustomPageListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessCustomPageListResponse                 `json:"result"`
-	ResultInfo AccessCustomPageListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessCustomPageListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCustomPageListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessCustomPageListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessCustomPageListResponseEnvelopeSuccess `json:"success"`
-	JSON    accessCustomPageListResponseEnvelopeJSON    `json:"-"`
+	Success    AccessCustomPageListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessCustomPageListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessCustomPageListResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessCustomPageListResponseEnvelopeJSON contains the JSON metadata for the
@@ -543,8 +543,8 @@ type accessCustomPageListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -591,6 +591,13 @@ func (r *AccessCustomPageListResponseEnvelopeMessages) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessCustomPageListResponseEnvelopeSuccess bool
+
+const (
+	AccessCustomPageListResponseEnvelopeSuccessTrue AccessCustomPageListResponseEnvelopeSuccess = true
+)
+
 type AccessCustomPageListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -618,19 +625,12 @@ func (r *AccessCustomPageListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type AccessCustomPageListResponseEnvelopeSuccess bool
-
-const (
-	AccessCustomPageListResponseEnvelopeSuccessTrue AccessCustomPageListResponseEnvelopeSuccess = true
-)
-
 type AccessCustomPageDeleteResponseEnvelope struct {
-	Errors   []AccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessCustomPageDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessCustomPageDeleteResponse                   `json:"result"`
+	Errors   []AccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCustomPageDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCustomPageDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessCustomPageDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessCustomPageDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

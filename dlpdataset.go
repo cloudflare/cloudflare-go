@@ -542,11 +542,11 @@ func (r DlpDatasetNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DlpDatasetNewResponseEnvelope struct {
-	Errors     []DlpDatasetNewResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetNewResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetNewResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                    `json:"success,required"`
 	Result     DlpDatasetNewResponse                   `json:"result"`
 	ResultInfo DlpDatasetNewResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                    `json:"success"`
 	JSON       dlpDatasetNewResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -555,9 +555,9 @@ type DlpDatasetNewResponseEnvelope struct {
 type dlpDatasetNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -632,11 +632,11 @@ func (r *DlpDatasetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (er
 }
 
 type DlpDatasetGetResponseEnvelope struct {
-	Errors     []DlpDatasetGetResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetGetResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetGetResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                    `json:"success,required"`
 	Result     DlpDatasetGetResponse                   `json:"result"`
 	ResultInfo DlpDatasetGetResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                    `json:"success"`
 	JSON       dlpDatasetGetResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -645,9 +645,9 @@ type DlpDatasetGetResponseEnvelope struct {
 type dlpDatasetGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -731,11 +731,11 @@ func (r DlpDatasetUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type DlpDatasetUpdateResponseEnvelope struct {
-	Errors     []DlpDatasetUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetUpdateResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                       `json:"success,required"`
 	Result     DlpDatasetUpdateResponse                   `json:"result"`
 	ResultInfo DlpDatasetUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                       `json:"success"`
 	JSON       dlpDatasetUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -744,9 +744,9 @@ type DlpDatasetUpdateResponseEnvelope struct {
 type dlpDatasetUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -821,11 +821,11 @@ func (r *DlpDatasetUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 }
 
 type DlpDatasetListResponseEnvelope struct {
-	Errors     []DlpDatasetListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetListResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetListResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                     `json:"success,required"`
 	Result     []DlpDatasetListResponse                 `json:"result"`
 	ResultInfo DlpDatasetListResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                     `json:"success"`
 	JSON       dlpDatasetListResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -834,9 +834,9 @@ type DlpDatasetListResponseEnvelope struct {
 type dlpDatasetListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -911,11 +911,11 @@ func (r *DlpDatasetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (e
 }
 
 type DlpDatasetUploadResponseEnvelope struct {
-	Errors     []DlpDatasetUploadResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetUploadResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetUploadResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetUploadResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                       `json:"success,required"`
 	Result     DlpDatasetUploadResponse                   `json:"result"`
 	ResultInfo DlpDatasetUploadResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                       `json:"success"`
 	JSON       dlpDatasetUploadResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -924,9 +924,9 @@ type DlpDatasetUploadResponseEnvelope struct {
 type dlpDatasetUploadResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1001,11 +1001,11 @@ func (r *DlpDatasetUploadResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 }
 
 type DlpDatasetUploadPrepareResponseEnvelope struct {
-	Errors     []DlpDatasetUploadPrepareResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DlpDatasetUploadPrepareResponseEnvelopeMessages `json:"messages"`
+	Errors     []DlpDatasetUploadPrepareResponseEnvelopeErrors   `json:"errors,required"`
+	Messages   []DlpDatasetUploadPrepareResponseEnvelopeMessages `json:"messages,required"`
+	Success    bool                                              `json:"success,required"`
 	Result     DlpDatasetUploadPrepareResponse                   `json:"result"`
 	ResultInfo DlpDatasetUploadPrepareResponseEnvelopeResultInfo `json:"result_info"`
-	Success    bool                                              `json:"success"`
 	JSON       dlpDatasetUploadPrepareResponseEnvelopeJSON       `json:"-"`
 }
 
@@ -1014,9 +1014,9 @@ type DlpDatasetUploadPrepareResponseEnvelope struct {
 type dlpDatasetUploadPrepareResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

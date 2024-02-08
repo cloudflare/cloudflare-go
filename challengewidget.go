@@ -674,14 +674,14 @@ const (
 )
 
 type ChallengeWidgetNewResponseEnvelope struct {
-	Errors   []ChallengeWidgetNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []ChallengeWidgetNewResponseEnvelopeMessages `json:"messages"`
+	Errors   []ChallengeWidgetNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetNewResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful
+	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
 	Result     ChallengeWidgetNewResponse                   `json:"result"`
 	ResultInfo ChallengeWidgetNewResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success bool                                   `json:"success"`
-	JSON    challengeWidgetNewResponseEnvelopeJSON `json:"-"`
+	JSON       challengeWidgetNewResponseEnvelopeJSON       `json:"-"`
 }
 
 // challengeWidgetNewResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -689,9 +689,9 @@ type ChallengeWidgetNewResponseEnvelope struct {
 type challengeWidgetNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -766,13 +766,13 @@ func (r *ChallengeWidgetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte
 }
 
 type ChallengeWidgetGetResponseEnvelope struct {
-	Errors   []ChallengeWidgetGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ChallengeWidgetGetResponseEnvelopeMessages `json:"messages"`
-	// A Turnstile widget's detailed configuration
-	Result ChallengeWidgetGetResponse `json:"result"`
+	Errors   []ChallengeWidgetGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                   `json:"success"`
-	JSON    challengeWidgetGetResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// A Turnstile widget's detailed configuration
+	Result ChallengeWidgetGetResponse             `json:"result"`
+	JSON   challengeWidgetGetResponseEnvelopeJSON `json:"-"`
 }
 
 // challengeWidgetGetResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -780,8 +780,8 @@ type ChallengeWidgetGetResponseEnvelope struct {
 type challengeWidgetGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -871,13 +871,13 @@ const (
 )
 
 type ChallengeWidgetUpdateResponseEnvelope struct {
-	Errors   []ChallengeWidgetUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []ChallengeWidgetUpdateResponseEnvelopeMessages `json:"messages"`
-	// A Turnstile widget's detailed configuration
-	Result ChallengeWidgetUpdateResponse `json:"result"`
+	Errors   []ChallengeWidgetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success"`
-	JSON    challengeWidgetUpdateResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// A Turnstile widget's detailed configuration
+	Result ChallengeWidgetUpdateResponse             `json:"result"`
+	JSON   challengeWidgetUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // challengeWidgetUpdateResponseEnvelopeJSON contains the JSON metadata for the
@@ -885,8 +885,8 @@ type ChallengeWidgetUpdateResponseEnvelope struct {
 type challengeWidgetUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -973,13 +973,13 @@ const (
 )
 
 type ChallengeWidgetListResponseEnvelope struct {
-	Errors     []ChallengeWidgetListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []ChallengeWidgetListResponseEnvelopeMessages `json:"messages"`
+	Errors   []ChallengeWidgetListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetListResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful
+	Success    bool                                          `json:"success,required"`
 	Result     []ChallengeWidgetListResponse                 `json:"result"`
 	ResultInfo ChallengeWidgetListResponseEnvelopeResultInfo `json:"result_info"`
-	// Whether the API call was successful
-	Success bool                                    `json:"success"`
-	JSON    challengeWidgetListResponseEnvelopeJSON `json:"-"`
+	JSON       challengeWidgetListResponseEnvelopeJSON       `json:"-"`
 }
 
 // challengeWidgetListResponseEnvelopeJSON contains the JSON metadata for the
@@ -987,9 +987,9 @@ type ChallengeWidgetListResponseEnvelope struct {
 type challengeWidgetListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
+	Success     apijson.Field
 	Result      apijson.Field
 	ResultInfo  apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1064,13 +1064,13 @@ func (r *ChallengeWidgetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 }
 
 type ChallengeWidgetDeleteResponseEnvelope struct {
-	Errors   []ChallengeWidgetDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []ChallengeWidgetDeleteResponseEnvelopeMessages `json:"messages"`
-	// A Turnstile widget's detailed configuration
-	Result ChallengeWidgetDeleteResponse `json:"result"`
+	Errors   []ChallengeWidgetDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetDeleteResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                      `json:"success"`
-	JSON    challengeWidgetDeleteResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// A Turnstile widget's detailed configuration
+	Result ChallengeWidgetDeleteResponse             `json:"result"`
+	JSON   challengeWidgetDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // challengeWidgetDeleteResponseEnvelopeJSON contains the JSON metadata for the
@@ -1078,8 +1078,8 @@ type ChallengeWidgetDeleteResponseEnvelope struct {
 type challengeWidgetDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1138,13 +1138,13 @@ func (r ChallengeWidgetRotateSecretParams) MarshalJSON() (data []byte, err error
 }
 
 type ChallengeWidgetRotateSecretResponseEnvelope struct {
-	Errors   []ChallengeWidgetRotateSecretResponseEnvelopeErrors   `json:"errors"`
-	Messages []ChallengeWidgetRotateSecretResponseEnvelopeMessages `json:"messages"`
-	// A Turnstile widget's detailed configuration
-	Result ChallengeWidgetRotateSecretResponse `json:"result"`
+	Errors   []ChallengeWidgetRotateSecretResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetRotateSecretResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                            `json:"success"`
-	JSON    challengeWidgetRotateSecretResponseEnvelopeJSON `json:"-"`
+	Success bool `json:"success,required"`
+	// A Turnstile widget's detailed configuration
+	Result ChallengeWidgetRotateSecretResponse             `json:"result"`
+	JSON   challengeWidgetRotateSecretResponseEnvelopeJSON `json:"-"`
 }
 
 // challengeWidgetRotateSecretResponseEnvelopeJSON contains the JSON metadata for
@@ -1152,8 +1152,8 @@ type ChallengeWidgetRotateSecretResponseEnvelope struct {
 type challengeWidgetRotateSecretResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
-	Result      apijson.Field
 	Success     apijson.Field
+	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

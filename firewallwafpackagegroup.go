@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // FirewallWAFPackageGroupService contains methods and other services that help
@@ -82,9 +85,48 @@ func (r *FirewallWAFPackageGroupService) List(ctx context.Context, zoneID string
 	return
 }
 
-type FirewallWAFPackageGroupGetResponse = interface{}
+// Union satisfied by [FirewallWAFPackageGroupGetResponseUnknown],
+// [FirewallWAFPackageGroupGetResponseArray] or [shared.UnionString].
+type FirewallWAFPackageGroupGetResponse interface {
+	ImplementsFirewallWAFPackageGroupGetResponse()
+}
 
-type FirewallWAFPackageGroupUpdateResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageGroupGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type FirewallWAFPackageGroupGetResponseArray []interface{}
+
+func (r FirewallWAFPackageGroupGetResponseArray) ImplementsFirewallWAFPackageGroupGetResponse() {}
+
+// Union satisfied by [FirewallWAFPackageGroupUpdateResponseUnknown],
+// [FirewallWAFPackageGroupUpdateResponseArray] or [shared.UnionString].
+type FirewallWAFPackageGroupUpdateResponse interface {
+	ImplementsFirewallWAFPackageGroupUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageGroupUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type FirewallWAFPackageGroupUpdateResponseArray []interface{}
+
+func (r FirewallWAFPackageGroupUpdateResponseArray) ImplementsFirewallWAFPackageGroupUpdateResponse() {
+}
 
 type FirewallWAFPackageGroupListResponse struct {
 	// The unique identifier of the rule group.
@@ -146,11 +188,11 @@ const (
 )
 
 type FirewallWAFPackageGroupGetResponseEnvelope struct {
-	Errors   []FirewallWAFPackageGroupGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []FirewallWAFPackageGroupGetResponseEnvelopeMessages `json:"messages"`
-	Result   FirewallWAFPackageGroupGetResponse                   `json:"result"`
+	Errors   []FirewallWAFPackageGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallWAFPackageGroupGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success FirewallWAFPackageGroupGetResponseEnvelopeSuccess `json:"success"`
+	Success FirewallWAFPackageGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallWAFPackageGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -234,11 +276,11 @@ const (
 )
 
 type FirewallWAFPackageGroupUpdateResponseEnvelope struct {
-	Errors   []FirewallWAFPackageGroupUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []FirewallWAFPackageGroupUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   FirewallWAFPackageGroupUpdateResponse                   `json:"result"`
+	Errors   []FirewallWAFPackageGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallWAFPackageGroupUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success FirewallWAFPackageGroupUpdateResponseEnvelopeSuccess `json:"success"`
+	Success FirewallWAFPackageGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallWAFPackageGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -363,13 +405,13 @@ const (
 )
 
 type FirewallWAFPackageGroupListResponseEnvelope struct {
-	Errors     []FirewallWAFPackageGroupListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []FirewallWAFPackageGroupListResponseEnvelopeMessages `json:"messages"`
-	Result     []FirewallWAFPackageGroupListResponse                 `json:"result"`
-	ResultInfo FirewallWAFPackageGroupListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []FirewallWAFPackageGroupListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageGroupListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []FirewallWAFPackageGroupListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success FirewallWAFPackageGroupListResponseEnvelopeSuccess `json:"success"`
-	JSON    firewallWAFPackageGroupListResponseEnvelopeJSON    `json:"-"`
+	Success    FirewallWAFPackageGroupListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FirewallWAFPackageGroupListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       firewallWAFPackageGroupListResponseEnvelopeJSON       `json:"-"`
 }
 
 // firewallWAFPackageGroupListResponseEnvelopeJSON contains the JSON metadata for
@@ -378,8 +420,8 @@ type firewallWAFPackageGroupListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -426,6 +468,13 @@ func (r *FirewallWAFPackageGroupListResponseEnvelopeMessages) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type FirewallWAFPackageGroupListResponseEnvelopeSuccess bool
+
+const (
+	FirewallWAFPackageGroupListResponseEnvelopeSuccessTrue FirewallWAFPackageGroupListResponseEnvelopeSuccess = true
+)
+
 type FirewallWAFPackageGroupListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -452,10 +501,3 @@ type firewallWAFPackageGroupListResponseEnvelopeResultInfoJSON struct {
 func (r *FirewallWAFPackageGroupListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type FirewallWAFPackageGroupListResponseEnvelopeSuccess bool
-
-const (
-	FirewallWAFPackageGroupListResponseEnvelopeSuccessTrue FirewallWAFPackageGroupListResponseEnvelopeSuccess = true
-)

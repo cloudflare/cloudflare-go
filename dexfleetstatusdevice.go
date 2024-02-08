@@ -130,13 +130,13 @@ const (
 )
 
 type DexFleetStatusDeviceListResponseEnvelope struct {
-	Errors     []DexFleetStatusDeviceListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DexFleetStatusDeviceListResponseEnvelopeMessages `json:"messages"`
-	Result     []DexFleetStatusDeviceListResponse                 `json:"result"`
-	ResultInfo DexFleetStatusDeviceListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []DexFleetStatusDeviceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexFleetStatusDeviceListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DexFleetStatusDeviceListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success DexFleetStatusDeviceListResponseEnvelopeSuccess `json:"success"`
-	JSON    dexFleetStatusDeviceListResponseEnvelopeJSON    `json:"-"`
+	Success    DexFleetStatusDeviceListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DexFleetStatusDeviceListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dexFleetStatusDeviceListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseEnvelopeJSON contains the JSON metadata for the
@@ -145,8 +145,8 @@ type dexFleetStatusDeviceListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -193,6 +193,13 @@ func (r *DexFleetStatusDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type DexFleetStatusDeviceListResponseEnvelopeSuccess bool
+
+const (
+	DexFleetStatusDeviceListResponseEnvelopeSuccessTrue DexFleetStatusDeviceListResponseEnvelopeSuccess = true
+)
+
 type DexFleetStatusDeviceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -219,10 +226,3 @@ type dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON struct {
 func (r *DexFleetStatusDeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type DexFleetStatusDeviceListResponseEnvelopeSuccess bool
-
-const (
-	DexFleetStatusDeviceListResponseEnvelopeSuccessTrue DexFleetStatusDeviceListResponseEnvelopeSuccess = true
-)

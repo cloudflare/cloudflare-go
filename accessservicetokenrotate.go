@@ -84,11 +84,11 @@ func (r *AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse)
 }
 
 type AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelope struct {
-	Errors   []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse                   `json:"result"`
+	Errors   []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccess `json:"success"`
+	Success AccessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRotateAccessServiceTokensRotateAServiceTokenResponseEnvelopeJSON    `json:"-"`
 }
 

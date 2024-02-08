@@ -1530,7 +1530,7 @@ func (r *URLScannerScanHarResponseHarLogPagesPageTimings) UnmarshalJSON(data []b
 type URLScannerScanNewParams struct {
 	URL param.Field[string] `json:"url,required"`
 	// Set custom headers
-	CustomHeaders param.Field[interface{}] `json:"customHeaders"`
+	CustomHeaders param.Field[map[string]string] `json:"customHeaders"`
 	// Take multiple screenshots targeting different device types
 	ScreenshotsResolutions param.Field[[]URLScannerScanNewParamsScreenshotsResolution] `json:"screenshotsResolutions"`
 	// The option `Public` means it will be included in listings like recent scans and

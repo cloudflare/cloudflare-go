@@ -100,11 +100,11 @@ func (r *ZerotrustConnectivitySettingUpdateResponse) UnmarshalJSON(data []byte) 
 }
 
 type ZerotrustConnectivitySettingGetResponseEnvelope struct {
-	Errors   []ZerotrustConnectivitySettingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZerotrustConnectivitySettingGetResponseEnvelopeMessages `json:"messages"`
-	Result   ZerotrustConnectivitySettingGetResponse                   `json:"result"`
+	Errors   []ZerotrustConnectivitySettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZerotrustConnectivitySettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ZerotrustConnectivitySettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ZerotrustConnectivitySettingGetResponseEnvelopeSuccess `json:"success"`
+	Success ZerotrustConnectivitySettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zerotrustConnectivitySettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -181,11 +181,11 @@ func (r ZerotrustConnectivitySettingUpdateParams) MarshalJSON() (data []byte, er
 }
 
 type ZerotrustConnectivitySettingUpdateResponseEnvelope struct {
-	Errors   []ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   ZerotrustConnectivitySettingUpdateResponse                   `json:"result"`
+	Errors   []ZerotrustConnectivitySettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZerotrustConnectivitySettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   ZerotrustConnectivitySettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccess `json:"success"`
+	Success ZerotrustConnectivitySettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zerotrustConnectivitySettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

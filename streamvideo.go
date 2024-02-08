@@ -88,11 +88,11 @@ func (r StreamVideoStorageUsageParams) URLQuery() (v url.Values) {
 }
 
 type StreamVideoStorageUsageResponseEnvelope struct {
-	Errors   []StreamVideoStorageUsageResponseEnvelopeErrors   `json:"errors"`
-	Messages []StreamVideoStorageUsageResponseEnvelopeMessages `json:"messages"`
-	Result   StreamVideoStorageUsageResponse                   `json:"result"`
+	Errors   []StreamVideoStorageUsageResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamVideoStorageUsageResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamVideoStorageUsageResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamVideoStorageUsageResponseEnvelopeSuccess `json:"success"`
+	Success StreamVideoStorageUsageResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamVideoStorageUsageResponseEnvelopeJSON    `json:"-"`
 }
 

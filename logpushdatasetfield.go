@@ -47,11 +47,11 @@ func (r *LogpushDatasetFieldService) List(ctx context.Context, accountOrZone str
 type LogpushDatasetFieldListResponse = interface{}
 
 type LogpushDatasetFieldListResponseEnvelope struct {
-	Errors   []LogpushDatasetFieldListResponseEnvelopeErrors   `json:"errors"`
-	Messages []LogpushDatasetFieldListResponseEnvelopeMessages `json:"messages"`
-	Result   LogpushDatasetFieldListResponse                   `json:"result"`
+	Errors   []LogpushDatasetFieldListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushDatasetFieldListResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogpushDatasetFieldListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LogpushDatasetFieldListResponseEnvelopeSuccess `json:"success"`
+	Success LogpushDatasetFieldListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushDatasetFieldListResponseEnvelopeJSON    `json:"-"`
 }
 

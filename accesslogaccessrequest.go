@@ -87,13 +87,13 @@ func (r *AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLo
 }
 
 type AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelope struct {
-	Errors     []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponse                 `json:"result"`
-	ResultInfo AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeJSON    `json:"-"`
+	Success    AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeJSON
@@ -103,8 +103,8 @@ type accessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsRe
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -153,6 +153,13 @@ func (r *AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLo
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess bool
+
+const (
+	AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccessTrue AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess = true
+)
+
 type AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -180,10 +187,3 @@ type accessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsRe
 func (r *AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess bool
-
-const (
-	AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccessTrue AccessLogAccessRequestAccessAuthenticationLogsGetAccessAuthenticationLogsResponseEnvelopeSuccess = true
-)

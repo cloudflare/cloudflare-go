@@ -47,7 +47,7 @@ func (r *LoadBalancerPoolPreviewService) AccountLoadBalancerPoolsPreviewPool(ctx
 
 type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     interface{}                                                            `json:"pools"`
+	Pools     map[string]string                                                      `json:"pools"`
 	PreviewID string                                                                 `json:"preview_id"`
 	JSON      loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseJSON `json:"-"`
 }
@@ -67,6 +67,9 @@ func (r *LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse) Unm
 }
 
 type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -82,9 +85,6 @@ type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -136,11 +136,11 @@ const (
 )
 
 type LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelope struct {
-	Errors   []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse                   `json:"result"`
+	Errors   []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON    `json:"-"`
 }
 

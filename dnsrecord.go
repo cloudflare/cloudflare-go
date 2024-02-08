@@ -11880,11 +11880,11 @@ const (
 )
 
 type DNSRecordGetResponseEnvelope struct {
-	Errors   []DNSRecordGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []DNSRecordGetResponseEnvelopeMessages `json:"messages"`
-	Result   DNSRecordGetResponse                   `json:"result"`
+	Errors   []DNSRecordGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSRecordGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSRecordGetResponseEnvelopeSuccess `json:"success"`
+	Success DNSRecordGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsRecordGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -13216,11 +13216,11 @@ const (
 )
 
 type DNSRecordUpdateResponseEnvelope struct {
-	Errors   []DNSRecordUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []DNSRecordUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   DNSRecordUpdateResponse                   `json:"result"`
+	Errors   []DNSRecordUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSRecordUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSRecordUpdateResponseEnvelopeSuccess `json:"success"`
+	Success DNSRecordUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsRecordUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -14569,11 +14569,11 @@ const (
 )
 
 type DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelope struct {
-	Errors   []DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeErrors   `json:"errors"`
-	Messages []DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeMessages `json:"messages"`
-	Result   DNSRecordDNSRecordsForAZoneNewDNSRecordResponse                   `json:"result"`
+	Errors   []DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSRecordDNSRecordsForAZoneNewDNSRecordResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeSuccess `json:"success"`
+	Success DNSRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsRecordDNSRecordsForAZoneNewDNSRecordResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -14813,13 +14813,13 @@ const (
 )
 
 type DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelope struct {
-	Errors     []DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeMessages `json:"messages"`
-	Result     []DNSRecordDNSRecordsForAZoneListDNSRecordsResponse                 `json:"result"`
-	ResultInfo DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DNSRecordDNSRecordsForAZoneListDNSRecordsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess `json:"success"`
-	JSON    dnsRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeJSON    `json:"-"`
+	Success    DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dnsRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeJSON       `json:"-"`
 }
 
 // dnsRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeJSON contains the JSON
@@ -14829,8 +14829,8 @@ type dnsRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -14879,6 +14879,13 @@ func (r *DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeMessages) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess bool
+
+const (
+	DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccessTrue DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess = true
+)
+
 type DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -14906,10 +14913,3 @@ type dnsRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeResultInfoJSON str
 func (r *DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess bool
-
-const (
-	DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccessTrue DNSRecordDNSRecordsForAZoneListDNSRecordsResponseEnvelopeSuccess = true
-)

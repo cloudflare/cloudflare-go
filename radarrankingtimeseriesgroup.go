@@ -104,8 +104,9 @@ func (r *RadarRankingTimeseriesGroupListResponseMetaDateRange) UnmarshalJSON(dat
 }
 
 type RadarRankingTimeseriesGroupListResponseSerie0 struct {
-	Timestamps []string                                          `json:"timestamps,required"`
-	JSON       radarRankingTimeseriesGroupListResponseSerie0JSON `json:"-"`
+	Timestamps  []string                                                   `json:"timestamps,required"`
+	ExtraFields map[string][]RadarRankingTimeseriesGroupListResponseSerie0 `json:"-,extras"`
+	JSON        radarRankingTimeseriesGroupListResponseSerie0JSON          `json:"-"`
 }
 
 // radarRankingTimeseriesGroupListResponseSerie0JSON contains the JSON metadata for

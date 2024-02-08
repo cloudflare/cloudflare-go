@@ -109,11 +109,11 @@ func (r *GatewayAuditSSHSettingUpdateResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
-	Errors   []GatewayAuditSSHSettingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []GatewayAuditSSHSettingGetResponseEnvelopeMessages `json:"messages"`
-	Result   GatewayAuditSSHSettingGetResponse                   `json:"result"`
+	Errors   []GatewayAuditSSHSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayAuditSSHSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayAuditSSHSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success"`
+	Success GatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -189,11 +189,11 @@ func (r GatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte, err erro
 }
 
 type GatewayAuditSSHSettingUpdateResponseEnvelope struct {
-	Errors   []GatewayAuditSSHSettingUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []GatewayAuditSSHSettingUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   GatewayAuditSSHSettingUpdateResponse                   `json:"result"`
+	Errors   []GatewayAuditSSHSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayAuditSSHSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayAuditSSHSettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success"`
+	Success GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

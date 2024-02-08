@@ -43,15 +43,15 @@ func (r *LoadBalancerPreviewService) Get(ctx context.Context, accountIdentifier 
 	return
 }
 
-type LoadBalancerPreviewGetResponse = interface{}
+type LoadBalancerPreviewGetResponse map[string]LoadBalancerPreviewGetResponse
 
 type LoadBalancerPreviewGetResponseEnvelope struct {
-	Errors   []LoadBalancerPreviewGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerPreviewGetResponseEnvelopeMessages `json:"messages"`
+	Errors   []LoadBalancerPreviewGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerPreviewGetResponseEnvelopeMessages `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result LoadBalancerPreviewGetResponse `json:"result"`
+	Result LoadBalancerPreviewGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerPreviewGetResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerPreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerPreviewGetResponseEnvelopeJSON    `json:"-"`
 }
 

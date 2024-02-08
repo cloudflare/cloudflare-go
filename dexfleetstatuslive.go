@@ -206,11 +206,11 @@ func (r DexFleetStatusLiveListParams) URLQuery() (v url.Values) {
 }
 
 type DexFleetStatusLiveListResponseEnvelope struct {
-	Errors   []DexFleetStatusLiveListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexFleetStatusLiveListResponseEnvelopeMessages `json:"messages"`
-	Result   DexFleetStatusLiveListResponse                   `json:"result"`
+	Errors   []DexFleetStatusLiveListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexFleetStatusLiveListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexFleetStatusLiveListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexFleetStatusLiveListResponseEnvelopeSuccess `json:"success"`
+	Success DexFleetStatusLiveListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexFleetStatusLiveListResponseEnvelopeJSON    `json:"-"`
 }
 

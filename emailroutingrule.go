@@ -674,11 +674,11 @@ const (
 )
 
 type EmailRoutingRuleGetResponseEnvelope struct {
-	Errors   []EmailRoutingRuleGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleGetResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleGetResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleGetResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -816,11 +816,11 @@ const (
 )
 
 type EmailRoutingRuleUpdateResponseEnvelope struct {
-	Errors   []EmailRoutingRuleUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleUpdateResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleUpdateResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -885,11 +885,11 @@ const (
 )
 
 type EmailRoutingRuleDeleteResponseEnvelope struct {
-	Errors   []EmailRoutingRuleDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleDeleteResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleDeleteResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1027,11 +1027,11 @@ const (
 )
 
 type EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelope struct {
-	Errors   []EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleEmailRoutingRoutingRulesNewRoutingRuleResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1126,13 +1126,13 @@ const (
 )
 
 type EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelope struct {
-	Errors     []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeErrors   `json:"errors"`
-	Messages   []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeMessages `json:"messages"`
-	Result     []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponse                 `json:"result"`
-	ResultInfo EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeMessages `json:"messages,required"`
+	Result   []EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess `json:"success"`
-	JSON    emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeJSON    `json:"-"`
+	Success    EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeJSON       `json:"-"`
 }
 
 // emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeJSON
@@ -1142,8 +1142,8 @@ type emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeJSO
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1192,11 +1192,22 @@ func (r *EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelop
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess bool
+
+const (
+	EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccessTrue EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess = true
+)
+
 type EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfo struct {
-	Count      interface{}                                                                            `json:"count"`
-	Page       interface{}                                                                            `json:"page"`
-	PerPage    interface{}                                                                            `json:"per_page"`
-	TotalCount interface{}                                                                            `json:"total_count"`
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                                `json:"total_count"`
 	JSON       emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -1215,10 +1226,3 @@ type emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeRes
 func (r *EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess bool
-
-const (
-	EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccessTrue EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeSuccess = true
-)

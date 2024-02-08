@@ -70,13 +70,13 @@ func (r *AccessTagListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AccessTagListResponseEnvelope struct {
-	Errors     []AccessTagListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessTagListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessTagListResponse                 `json:"result"`
-	ResultInfo AccessTagListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessTagListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessTagListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessTagListResponseEnvelopeSuccess `json:"success"`
-	JSON    accessTagListResponseEnvelopeJSON    `json:"-"`
+	Success    AccessTagListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessTagListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessTagListResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessTagListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -85,8 +85,8 @@ type accessTagListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -133,6 +133,13 @@ func (r *AccessTagListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessTagListResponseEnvelopeSuccess bool
+
+const (
+	AccessTagListResponseEnvelopeSuccessTrue AccessTagListResponseEnvelopeSuccess = true
+)
+
 type AccessTagListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -159,10 +166,3 @@ type accessTagListResponseEnvelopeResultInfoJSON struct {
 func (r *AccessTagListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessTagListResponseEnvelopeSuccess bool
-
-const (
-	AccessTagListResponseEnvelopeSuccessTrue AccessTagListResponseEnvelopeSuccess = true
-)

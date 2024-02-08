@@ -804,13 +804,13 @@ func (r DexTestListParams) URLQuery() (v url.Values) {
 }
 
 type DexTestListResponseEnvelope struct {
-	Errors     []DexTestListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []DexTestListResponseEnvelopeMessages `json:"messages"`
-	Result     DexTestListResponse                   `json:"result"`
-	ResultInfo DexTestListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []DexTestListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTestListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTestListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTestListResponseEnvelopeSuccess `json:"success"`
-	JSON    dexTestListResponseEnvelopeJSON    `json:"-"`
+	Success    DexTestListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DexTestListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dexTestListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexTestListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -819,8 +819,8 @@ type dexTestListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -867,6 +867,13 @@ func (r *DexTestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type DexTestListResponseEnvelopeSuccess bool
+
+const (
+	DexTestListResponseEnvelopeSuccessTrue DexTestListResponseEnvelopeSuccess = true
+)
+
 type DexTestListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -893,10 +900,3 @@ type dexTestListResponseEnvelopeResultInfoJSON struct {
 func (r *DexTestListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type DexTestListResponseEnvelopeSuccess bool
-
-const (
-	DexTestListResponseEnvelopeSuccessTrue DexTestListResponseEnvelopeSuccess = true
-)

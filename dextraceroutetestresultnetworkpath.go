@@ -143,11 +143,11 @@ const (
 )
 
 type DexTracerouteTestResultNetworkPathListResponseEnvelope struct {
-	Errors   []DexTracerouteTestResultNetworkPathListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexTracerouteTestResultNetworkPathListResponseEnvelopeMessages `json:"messages"`
-	Result   DexTracerouteTestResultNetworkPathListResponse                   `json:"result"`
+	Errors   []DexTracerouteTestResultNetworkPathListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTracerouteTestResultNetworkPathListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTracerouteTestResultNetworkPathListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTracerouteTestResultNetworkPathListResponseEnvelopeSuccess `json:"success"`
+	Success DexTracerouteTestResultNetworkPathListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON    `json:"-"`
 }
 

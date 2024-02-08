@@ -120,29 +120,32 @@ func init() {
 }
 
 type AccessIdentityProviderGetResponseAccessAzureAd struct {
-	// UUID
-	ID     string                                               `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessAzureAdConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessAzureAdConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessAzureAdScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessAzureAdType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessAzureAdJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessAzureAdType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessAzureAdScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessAzureAdJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessAzureAdJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessAzureAd]
 type accessIdentityProviderGetResponseAccessAzureAdJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -154,6 +157,9 @@ func (r *AccessIdentityProviderGetResponseAccessAzureAd) UnmarshalJSON(data []by
 func (r AccessIdentityProviderGetResponseAccessAzureAd) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessAzureAdConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -189,6 +195,28 @@ type accessIdentityProviderGetResponseAccessAzureAdConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessAzureAdType string
+
+const (
+	AccessIdentityProviderGetResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderGetResponseAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderGetResponseAccessAzureAdType = "azureAD"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeSaml       AccessIdentityProviderGetResponseAccessAzureAdType = "saml"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeCentrify   AccessIdentityProviderGetResponseAccessAzureAdType = "centrify"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeFacebook   AccessIdentityProviderGetResponseAccessAzureAdType = "facebook"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeGitHub     AccessIdentityProviderGetResponseAccessAzureAdType = "github"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderGetResponseAccessAzureAdType = "google-apps"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeGoogle     AccessIdentityProviderGetResponseAccessAzureAdType = "google"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderGetResponseAccessAzureAdType = "linkedin"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeOidc       AccessIdentityProviderGetResponseAccessAzureAdType = "oidc"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeOkta       AccessIdentityProviderGetResponseAccessAzureAdType = "okta"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderGetResponseAccessAzureAdType = "onelogin"
+	AccessIdentityProviderGetResponseAccessAzureAdTypePingone    AccessIdentityProviderGetResponseAccessAzureAdType = "pingone"
+	AccessIdentityProviderGetResponseAccessAzureAdTypeYandex     AccessIdentityProviderGetResponseAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -230,52 +258,33 @@ func (r *AccessIdentityProviderGetResponseAccessAzureAdScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessAzureAdType string
-
-const (
-	AccessIdentityProviderGetResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderGetResponseAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderGetResponseAccessAzureAdType = "azureAD"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeSaml       AccessIdentityProviderGetResponseAccessAzureAdType = "saml"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeCentrify   AccessIdentityProviderGetResponseAccessAzureAdType = "centrify"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeFacebook   AccessIdentityProviderGetResponseAccessAzureAdType = "facebook"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeGitHub     AccessIdentityProviderGetResponseAccessAzureAdType = "github"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderGetResponseAccessAzureAdType = "google-apps"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeGoogle     AccessIdentityProviderGetResponseAccessAzureAdType = "google"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderGetResponseAccessAzureAdType = "linkedin"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeOidc       AccessIdentityProviderGetResponseAccessAzureAdType = "oidc"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeOkta       AccessIdentityProviderGetResponseAccessAzureAdType = "okta"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderGetResponseAccessAzureAdType = "onelogin"
-	AccessIdentityProviderGetResponseAccessAzureAdTypePingone    AccessIdentityProviderGetResponseAccessAzureAdType = "pingone"
-	AccessIdentityProviderGetResponseAccessAzureAdTypeYandex     AccessIdentityProviderGetResponseAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessCentrify struct {
-	// UUID
-	ID     string                                                `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessCentrifyConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessCentrifyScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessCentrifyType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessCentrifyJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessCentrifyType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessCentrifyScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessCentrifyJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessCentrifyJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessCentrify]
 type accessIdentityProviderGetResponseAccessCentrifyJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -287,6 +296,9 @@ func (r *AccessIdentityProviderGetResponseAccessCentrify) UnmarshalJSON(data []b
 func (r AccessIdentityProviderGetResponseAccessCentrify) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount string `json:"centrify_account"`
@@ -319,6 +331,28 @@ type accessIdentityProviderGetResponseAccessCentrifyConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessCentrifyType string
+
+const (
+	AccessIdentityProviderGetResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderGetResponseAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderGetResponseAccessCentrifyType = "azureAD"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeSaml       AccessIdentityProviderGetResponseAccessCentrifyType = "saml"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeCentrify   AccessIdentityProviderGetResponseAccessCentrifyType = "centrify"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeFacebook   AccessIdentityProviderGetResponseAccessCentrifyType = "facebook"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeGitHub     AccessIdentityProviderGetResponseAccessCentrifyType = "github"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderGetResponseAccessCentrifyType = "google-apps"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeGoogle     AccessIdentityProviderGetResponseAccessCentrifyType = "google"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderGetResponseAccessCentrifyType = "linkedin"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeOidc       AccessIdentityProviderGetResponseAccessCentrifyType = "oidc"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeOkta       AccessIdentityProviderGetResponseAccessCentrifyType = "okta"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderGetResponseAccessCentrifyType = "onelogin"
+	AccessIdentityProviderGetResponseAccessCentrifyTypePingone    AccessIdentityProviderGetResponseAccessCentrifyType = "pingone"
+	AccessIdentityProviderGetResponseAccessCentrifyTypeYandex     AccessIdentityProviderGetResponseAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -360,52 +394,33 @@ func (r *AccessIdentityProviderGetResponseAccessCentrifyScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessCentrifyType string
-
-const (
-	AccessIdentityProviderGetResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderGetResponseAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderGetResponseAccessCentrifyType = "azureAD"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeSaml       AccessIdentityProviderGetResponseAccessCentrifyType = "saml"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeCentrify   AccessIdentityProviderGetResponseAccessCentrifyType = "centrify"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeFacebook   AccessIdentityProviderGetResponseAccessCentrifyType = "facebook"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeGitHub     AccessIdentityProviderGetResponseAccessCentrifyType = "github"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderGetResponseAccessCentrifyType = "google-apps"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeGoogle     AccessIdentityProviderGetResponseAccessCentrifyType = "google"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderGetResponseAccessCentrifyType = "linkedin"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeOidc       AccessIdentityProviderGetResponseAccessCentrifyType = "oidc"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeOkta       AccessIdentityProviderGetResponseAccessCentrifyType = "okta"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderGetResponseAccessCentrifyType = "onelogin"
-	AccessIdentityProviderGetResponseAccessCentrifyTypePingone    AccessIdentityProviderGetResponseAccessCentrifyType = "pingone"
-	AccessIdentityProviderGetResponseAccessCentrifyTypeYandex     AccessIdentityProviderGetResponseAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessFacebook struct {
-	// UUID
-	ID     string                                                `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessFacebookConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessFacebookConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessFacebookScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessFacebookType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessFacebookJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessFacebookType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessFacebookScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessFacebookJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessFacebookJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessFacebook]
 type accessIdentityProviderGetResponseAccessFacebookJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -417,6 +432,9 @@ func (r *AccessIdentityProviderGetResponseAccessFacebook) UnmarshalJSON(data []b
 func (r AccessIdentityProviderGetResponseAccessFacebook) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -437,6 +455,28 @@ type accessIdentityProviderGetResponseAccessFacebookConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessFacebookType string
+
+const (
+	AccessIdentityProviderGetResponseAccessFacebookTypeOnetimepin AccessIdentityProviderGetResponseAccessFacebookType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessFacebookTypeAzureAd    AccessIdentityProviderGetResponseAccessFacebookType = "azureAD"
+	AccessIdentityProviderGetResponseAccessFacebookTypeSaml       AccessIdentityProviderGetResponseAccessFacebookType = "saml"
+	AccessIdentityProviderGetResponseAccessFacebookTypeCentrify   AccessIdentityProviderGetResponseAccessFacebookType = "centrify"
+	AccessIdentityProviderGetResponseAccessFacebookTypeFacebook   AccessIdentityProviderGetResponseAccessFacebookType = "facebook"
+	AccessIdentityProviderGetResponseAccessFacebookTypeGitHub     AccessIdentityProviderGetResponseAccessFacebookType = "github"
+	AccessIdentityProviderGetResponseAccessFacebookTypeGoogleApps AccessIdentityProviderGetResponseAccessFacebookType = "google-apps"
+	AccessIdentityProviderGetResponseAccessFacebookTypeGoogle     AccessIdentityProviderGetResponseAccessFacebookType = "google"
+	AccessIdentityProviderGetResponseAccessFacebookTypeLinkedin   AccessIdentityProviderGetResponseAccessFacebookType = "linkedin"
+	AccessIdentityProviderGetResponseAccessFacebookTypeOidc       AccessIdentityProviderGetResponseAccessFacebookType = "oidc"
+	AccessIdentityProviderGetResponseAccessFacebookTypeOkta       AccessIdentityProviderGetResponseAccessFacebookType = "okta"
+	AccessIdentityProviderGetResponseAccessFacebookTypeOnelogin   AccessIdentityProviderGetResponseAccessFacebookType = "onelogin"
+	AccessIdentityProviderGetResponseAccessFacebookTypePingone    AccessIdentityProviderGetResponseAccessFacebookType = "pingone"
+	AccessIdentityProviderGetResponseAccessFacebookTypeYandex     AccessIdentityProviderGetResponseAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -478,52 +518,33 @@ func (r *AccessIdentityProviderGetResponseAccessFacebookScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessFacebookType string
-
-const (
-	AccessIdentityProviderGetResponseAccessFacebookTypeOnetimepin AccessIdentityProviderGetResponseAccessFacebookType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessFacebookTypeAzureAd    AccessIdentityProviderGetResponseAccessFacebookType = "azureAD"
-	AccessIdentityProviderGetResponseAccessFacebookTypeSaml       AccessIdentityProviderGetResponseAccessFacebookType = "saml"
-	AccessIdentityProviderGetResponseAccessFacebookTypeCentrify   AccessIdentityProviderGetResponseAccessFacebookType = "centrify"
-	AccessIdentityProviderGetResponseAccessFacebookTypeFacebook   AccessIdentityProviderGetResponseAccessFacebookType = "facebook"
-	AccessIdentityProviderGetResponseAccessFacebookTypeGitHub     AccessIdentityProviderGetResponseAccessFacebookType = "github"
-	AccessIdentityProviderGetResponseAccessFacebookTypeGoogleApps AccessIdentityProviderGetResponseAccessFacebookType = "google-apps"
-	AccessIdentityProviderGetResponseAccessFacebookTypeGoogle     AccessIdentityProviderGetResponseAccessFacebookType = "google"
-	AccessIdentityProviderGetResponseAccessFacebookTypeLinkedin   AccessIdentityProviderGetResponseAccessFacebookType = "linkedin"
-	AccessIdentityProviderGetResponseAccessFacebookTypeOidc       AccessIdentityProviderGetResponseAccessFacebookType = "oidc"
-	AccessIdentityProviderGetResponseAccessFacebookTypeOkta       AccessIdentityProviderGetResponseAccessFacebookType = "okta"
-	AccessIdentityProviderGetResponseAccessFacebookTypeOnelogin   AccessIdentityProviderGetResponseAccessFacebookType = "onelogin"
-	AccessIdentityProviderGetResponseAccessFacebookTypePingone    AccessIdentityProviderGetResponseAccessFacebookType = "pingone"
-	AccessIdentityProviderGetResponseAccessFacebookTypeYandex     AccessIdentityProviderGetResponseAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessGitHub struct {
-	// UUID
-	ID     string                                              `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessGitHubConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessGitHubConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessGitHubScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessGitHubType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessGitHubJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessGitHubType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessGitHubScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessGitHubJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessGitHubJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessGitHub]
 type accessIdentityProviderGetResponseAccessGitHubJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -535,6 +556,9 @@ func (r *AccessIdentityProviderGetResponseAccessGitHub) UnmarshalJSON(data []byt
 func (r AccessIdentityProviderGetResponseAccessGitHub) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -555,6 +579,28 @@ type accessIdentityProviderGetResponseAccessGitHubConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessGitHubType string
+
+const (
+	AccessIdentityProviderGetResponseAccessGitHubTypeOnetimepin AccessIdentityProviderGetResponseAccessGitHubType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessGitHubTypeAzureAd    AccessIdentityProviderGetResponseAccessGitHubType = "azureAD"
+	AccessIdentityProviderGetResponseAccessGitHubTypeSaml       AccessIdentityProviderGetResponseAccessGitHubType = "saml"
+	AccessIdentityProviderGetResponseAccessGitHubTypeCentrify   AccessIdentityProviderGetResponseAccessGitHubType = "centrify"
+	AccessIdentityProviderGetResponseAccessGitHubTypeFacebook   AccessIdentityProviderGetResponseAccessGitHubType = "facebook"
+	AccessIdentityProviderGetResponseAccessGitHubTypeGitHub     AccessIdentityProviderGetResponseAccessGitHubType = "github"
+	AccessIdentityProviderGetResponseAccessGitHubTypeGoogleApps AccessIdentityProviderGetResponseAccessGitHubType = "google-apps"
+	AccessIdentityProviderGetResponseAccessGitHubTypeGoogle     AccessIdentityProviderGetResponseAccessGitHubType = "google"
+	AccessIdentityProviderGetResponseAccessGitHubTypeLinkedin   AccessIdentityProviderGetResponseAccessGitHubType = "linkedin"
+	AccessIdentityProviderGetResponseAccessGitHubTypeOidc       AccessIdentityProviderGetResponseAccessGitHubType = "oidc"
+	AccessIdentityProviderGetResponseAccessGitHubTypeOkta       AccessIdentityProviderGetResponseAccessGitHubType = "okta"
+	AccessIdentityProviderGetResponseAccessGitHubTypeOnelogin   AccessIdentityProviderGetResponseAccessGitHubType = "onelogin"
+	AccessIdentityProviderGetResponseAccessGitHubTypePingone    AccessIdentityProviderGetResponseAccessGitHubType = "pingone"
+	AccessIdentityProviderGetResponseAccessGitHubTypeYandex     AccessIdentityProviderGetResponseAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -596,52 +642,33 @@ func (r *AccessIdentityProviderGetResponseAccessGitHubScimConfig) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessGitHubType string
-
-const (
-	AccessIdentityProviderGetResponseAccessGitHubTypeOnetimepin AccessIdentityProviderGetResponseAccessGitHubType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessGitHubTypeAzureAd    AccessIdentityProviderGetResponseAccessGitHubType = "azureAD"
-	AccessIdentityProviderGetResponseAccessGitHubTypeSaml       AccessIdentityProviderGetResponseAccessGitHubType = "saml"
-	AccessIdentityProviderGetResponseAccessGitHubTypeCentrify   AccessIdentityProviderGetResponseAccessGitHubType = "centrify"
-	AccessIdentityProviderGetResponseAccessGitHubTypeFacebook   AccessIdentityProviderGetResponseAccessGitHubType = "facebook"
-	AccessIdentityProviderGetResponseAccessGitHubTypeGitHub     AccessIdentityProviderGetResponseAccessGitHubType = "github"
-	AccessIdentityProviderGetResponseAccessGitHubTypeGoogleApps AccessIdentityProviderGetResponseAccessGitHubType = "google-apps"
-	AccessIdentityProviderGetResponseAccessGitHubTypeGoogle     AccessIdentityProviderGetResponseAccessGitHubType = "google"
-	AccessIdentityProviderGetResponseAccessGitHubTypeLinkedin   AccessIdentityProviderGetResponseAccessGitHubType = "linkedin"
-	AccessIdentityProviderGetResponseAccessGitHubTypeOidc       AccessIdentityProviderGetResponseAccessGitHubType = "oidc"
-	AccessIdentityProviderGetResponseAccessGitHubTypeOkta       AccessIdentityProviderGetResponseAccessGitHubType = "okta"
-	AccessIdentityProviderGetResponseAccessGitHubTypeOnelogin   AccessIdentityProviderGetResponseAccessGitHubType = "onelogin"
-	AccessIdentityProviderGetResponseAccessGitHubTypePingone    AccessIdentityProviderGetResponseAccessGitHubType = "pingone"
-	AccessIdentityProviderGetResponseAccessGitHubTypeYandex     AccessIdentityProviderGetResponseAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessGoogle struct {
-	// UUID
-	ID     string                                              `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessGoogleConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessGoogleScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessGoogleType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessGoogleJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessGoogleType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessGoogleScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessGoogleJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessGoogleJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessGoogle]
 type accessIdentityProviderGetResponseAccessGoogleJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -653,6 +680,9 @@ func (r *AccessIdentityProviderGetResponseAccessGoogle) UnmarshalJSON(data []byt
 func (r AccessIdentityProviderGetResponseAccessGoogle) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessGoogleConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -679,6 +709,28 @@ type accessIdentityProviderGetResponseAccessGoogleConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessGoogleType string
+
+const (
+	AccessIdentityProviderGetResponseAccessGoogleTypeOnetimepin AccessIdentityProviderGetResponseAccessGoogleType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessGoogleTypeAzureAd    AccessIdentityProviderGetResponseAccessGoogleType = "azureAD"
+	AccessIdentityProviderGetResponseAccessGoogleTypeSaml       AccessIdentityProviderGetResponseAccessGoogleType = "saml"
+	AccessIdentityProviderGetResponseAccessGoogleTypeCentrify   AccessIdentityProviderGetResponseAccessGoogleType = "centrify"
+	AccessIdentityProviderGetResponseAccessGoogleTypeFacebook   AccessIdentityProviderGetResponseAccessGoogleType = "facebook"
+	AccessIdentityProviderGetResponseAccessGoogleTypeGitHub     AccessIdentityProviderGetResponseAccessGoogleType = "github"
+	AccessIdentityProviderGetResponseAccessGoogleTypeGoogleApps AccessIdentityProviderGetResponseAccessGoogleType = "google-apps"
+	AccessIdentityProviderGetResponseAccessGoogleTypeGoogle     AccessIdentityProviderGetResponseAccessGoogleType = "google"
+	AccessIdentityProviderGetResponseAccessGoogleTypeLinkedin   AccessIdentityProviderGetResponseAccessGoogleType = "linkedin"
+	AccessIdentityProviderGetResponseAccessGoogleTypeOidc       AccessIdentityProviderGetResponseAccessGoogleType = "oidc"
+	AccessIdentityProviderGetResponseAccessGoogleTypeOkta       AccessIdentityProviderGetResponseAccessGoogleType = "okta"
+	AccessIdentityProviderGetResponseAccessGoogleTypeOnelogin   AccessIdentityProviderGetResponseAccessGoogleType = "onelogin"
+	AccessIdentityProviderGetResponseAccessGoogleTypePingone    AccessIdentityProviderGetResponseAccessGoogleType = "pingone"
+	AccessIdentityProviderGetResponseAccessGoogleTypeYandex     AccessIdentityProviderGetResponseAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -720,52 +772,33 @@ func (r *AccessIdentityProviderGetResponseAccessGoogleScimConfig) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessGoogleType string
-
-const (
-	AccessIdentityProviderGetResponseAccessGoogleTypeOnetimepin AccessIdentityProviderGetResponseAccessGoogleType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessGoogleTypeAzureAd    AccessIdentityProviderGetResponseAccessGoogleType = "azureAD"
-	AccessIdentityProviderGetResponseAccessGoogleTypeSaml       AccessIdentityProviderGetResponseAccessGoogleType = "saml"
-	AccessIdentityProviderGetResponseAccessGoogleTypeCentrify   AccessIdentityProviderGetResponseAccessGoogleType = "centrify"
-	AccessIdentityProviderGetResponseAccessGoogleTypeFacebook   AccessIdentityProviderGetResponseAccessGoogleType = "facebook"
-	AccessIdentityProviderGetResponseAccessGoogleTypeGitHub     AccessIdentityProviderGetResponseAccessGoogleType = "github"
-	AccessIdentityProviderGetResponseAccessGoogleTypeGoogleApps AccessIdentityProviderGetResponseAccessGoogleType = "google-apps"
-	AccessIdentityProviderGetResponseAccessGoogleTypeGoogle     AccessIdentityProviderGetResponseAccessGoogleType = "google"
-	AccessIdentityProviderGetResponseAccessGoogleTypeLinkedin   AccessIdentityProviderGetResponseAccessGoogleType = "linkedin"
-	AccessIdentityProviderGetResponseAccessGoogleTypeOidc       AccessIdentityProviderGetResponseAccessGoogleType = "oidc"
-	AccessIdentityProviderGetResponseAccessGoogleTypeOkta       AccessIdentityProviderGetResponseAccessGoogleType = "okta"
-	AccessIdentityProviderGetResponseAccessGoogleTypeOnelogin   AccessIdentityProviderGetResponseAccessGoogleType = "onelogin"
-	AccessIdentityProviderGetResponseAccessGoogleTypePingone    AccessIdentityProviderGetResponseAccessGoogleType = "pingone"
-	AccessIdentityProviderGetResponseAccessGoogleTypeYandex     AccessIdentityProviderGetResponseAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessGoogleApps struct {
-	// UUID
-	ID     string                                                  `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessGoogleAppsConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessGoogleAppsType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessGoogleAppsJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessGoogleAppsType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessGoogleAppsJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessGoogleAppsJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessGoogleApps]
 type accessIdentityProviderGetResponseAccessGoogleAppsJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -777,6 +810,9 @@ func (r *AccessIdentityProviderGetResponseAccessGoogleApps) UnmarshalJSON(data [
 func (r AccessIdentityProviderGetResponseAccessGoogleApps) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain string `json:"apps_domain"`
@@ -807,6 +843,28 @@ type accessIdentityProviderGetResponseAccessGoogleAppsConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderGetResponseAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderGetResponseAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderGetResponseAccessGoogleAppsType = "saml"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderGetResponseAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderGetResponseAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderGetResponseAccessGoogleAppsType = "github"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderGetResponseAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderGetResponseAccessGoogleAppsType = "google"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderGetResponseAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderGetResponseAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderGetResponseAccessGoogleAppsType = "okta"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderGetResponseAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypePingone    AccessIdentityProviderGetResponseAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderGetResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderGetResponseAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -848,52 +906,33 @@ func (r *AccessIdentityProviderGetResponseAccessGoogleAppsScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderGetResponseAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderGetResponseAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderGetResponseAccessGoogleAppsType = "saml"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderGetResponseAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderGetResponseAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderGetResponseAccessGoogleAppsType = "github"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderGetResponseAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderGetResponseAccessGoogleAppsType = "google"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderGetResponseAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderGetResponseAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderGetResponseAccessGoogleAppsType = "okta"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderGetResponseAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypePingone    AccessIdentityProviderGetResponseAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderGetResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderGetResponseAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessLinkedin struct {
-	// UUID
-	ID     string                                                `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessLinkedinConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessLinkedinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessLinkedinScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessLinkedinType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessLinkedinJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessLinkedinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessLinkedinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessLinkedinJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessLinkedinJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessLinkedin]
 type accessIdentityProviderGetResponseAccessLinkedinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -905,6 +944,9 @@ func (r *AccessIdentityProviderGetResponseAccessLinkedin) UnmarshalJSON(data []b
 func (r AccessIdentityProviderGetResponseAccessLinkedin) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -925,6 +967,28 @@ type accessIdentityProviderGetResponseAccessLinkedinConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessLinkedinType string
+
+const (
+	AccessIdentityProviderGetResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderGetResponseAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderGetResponseAccessLinkedinType = "azureAD"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeSaml       AccessIdentityProviderGetResponseAccessLinkedinType = "saml"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeCentrify   AccessIdentityProviderGetResponseAccessLinkedinType = "centrify"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeFacebook   AccessIdentityProviderGetResponseAccessLinkedinType = "facebook"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeGitHub     AccessIdentityProviderGetResponseAccessLinkedinType = "github"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderGetResponseAccessLinkedinType = "google-apps"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeGoogle     AccessIdentityProviderGetResponseAccessLinkedinType = "google"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderGetResponseAccessLinkedinType = "linkedin"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeOidc       AccessIdentityProviderGetResponseAccessLinkedinType = "oidc"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeOkta       AccessIdentityProviderGetResponseAccessLinkedinType = "okta"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderGetResponseAccessLinkedinType = "onelogin"
+	AccessIdentityProviderGetResponseAccessLinkedinTypePingone    AccessIdentityProviderGetResponseAccessLinkedinType = "pingone"
+	AccessIdentityProviderGetResponseAccessLinkedinTypeYandex     AccessIdentityProviderGetResponseAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -966,52 +1030,33 @@ func (r *AccessIdentityProviderGetResponseAccessLinkedinScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessLinkedinType string
-
-const (
-	AccessIdentityProviderGetResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderGetResponseAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderGetResponseAccessLinkedinType = "azureAD"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeSaml       AccessIdentityProviderGetResponseAccessLinkedinType = "saml"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeCentrify   AccessIdentityProviderGetResponseAccessLinkedinType = "centrify"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeFacebook   AccessIdentityProviderGetResponseAccessLinkedinType = "facebook"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeGitHub     AccessIdentityProviderGetResponseAccessLinkedinType = "github"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderGetResponseAccessLinkedinType = "google-apps"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeGoogle     AccessIdentityProviderGetResponseAccessLinkedinType = "google"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderGetResponseAccessLinkedinType = "linkedin"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeOidc       AccessIdentityProviderGetResponseAccessLinkedinType = "oidc"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeOkta       AccessIdentityProviderGetResponseAccessLinkedinType = "okta"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderGetResponseAccessLinkedinType = "onelogin"
-	AccessIdentityProviderGetResponseAccessLinkedinTypePingone    AccessIdentityProviderGetResponseAccessLinkedinType = "pingone"
-	AccessIdentityProviderGetResponseAccessLinkedinTypeYandex     AccessIdentityProviderGetResponseAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessOidc struct {
-	// UUID
-	ID     string                                            `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessOidcConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessOidcConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessOidcScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessOidcType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessOidcJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessOidcType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessOidcScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessOidcJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessOidcJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessOidc]
 type accessIdentityProviderGetResponseAccessOidcJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1022,6 +1067,9 @@ func (r *AccessIdentityProviderGetResponseAccessOidc) UnmarshalJSON(data []byte)
 
 func (r AccessIdentityProviderGetResponseAccessOidc) implementsAccessIdentityProviderGetResponse() {}
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
@@ -1060,6 +1108,28 @@ type accessIdentityProviderGetResponseAccessOidcConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessOidcType string
+
+const (
+	AccessIdentityProviderGetResponseAccessOidcTypeOnetimepin AccessIdentityProviderGetResponseAccessOidcType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessOidcTypeAzureAd    AccessIdentityProviderGetResponseAccessOidcType = "azureAD"
+	AccessIdentityProviderGetResponseAccessOidcTypeSaml       AccessIdentityProviderGetResponseAccessOidcType = "saml"
+	AccessIdentityProviderGetResponseAccessOidcTypeCentrify   AccessIdentityProviderGetResponseAccessOidcType = "centrify"
+	AccessIdentityProviderGetResponseAccessOidcTypeFacebook   AccessIdentityProviderGetResponseAccessOidcType = "facebook"
+	AccessIdentityProviderGetResponseAccessOidcTypeGitHub     AccessIdentityProviderGetResponseAccessOidcType = "github"
+	AccessIdentityProviderGetResponseAccessOidcTypeGoogleApps AccessIdentityProviderGetResponseAccessOidcType = "google-apps"
+	AccessIdentityProviderGetResponseAccessOidcTypeGoogle     AccessIdentityProviderGetResponseAccessOidcType = "google"
+	AccessIdentityProviderGetResponseAccessOidcTypeLinkedin   AccessIdentityProviderGetResponseAccessOidcType = "linkedin"
+	AccessIdentityProviderGetResponseAccessOidcTypeOidc       AccessIdentityProviderGetResponseAccessOidcType = "oidc"
+	AccessIdentityProviderGetResponseAccessOidcTypeOkta       AccessIdentityProviderGetResponseAccessOidcType = "okta"
+	AccessIdentityProviderGetResponseAccessOidcTypeOnelogin   AccessIdentityProviderGetResponseAccessOidcType = "onelogin"
+	AccessIdentityProviderGetResponseAccessOidcTypePingone    AccessIdentityProviderGetResponseAccessOidcType = "pingone"
+	AccessIdentityProviderGetResponseAccessOidcTypeYandex     AccessIdentityProviderGetResponseAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1100,52 +1170,33 @@ func (r *AccessIdentityProviderGetResponseAccessOidcScimConfig) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessOidcType string
-
-const (
-	AccessIdentityProviderGetResponseAccessOidcTypeOnetimepin AccessIdentityProviderGetResponseAccessOidcType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessOidcTypeAzureAd    AccessIdentityProviderGetResponseAccessOidcType = "azureAD"
-	AccessIdentityProviderGetResponseAccessOidcTypeSaml       AccessIdentityProviderGetResponseAccessOidcType = "saml"
-	AccessIdentityProviderGetResponseAccessOidcTypeCentrify   AccessIdentityProviderGetResponseAccessOidcType = "centrify"
-	AccessIdentityProviderGetResponseAccessOidcTypeFacebook   AccessIdentityProviderGetResponseAccessOidcType = "facebook"
-	AccessIdentityProviderGetResponseAccessOidcTypeGitHub     AccessIdentityProviderGetResponseAccessOidcType = "github"
-	AccessIdentityProviderGetResponseAccessOidcTypeGoogleApps AccessIdentityProviderGetResponseAccessOidcType = "google-apps"
-	AccessIdentityProviderGetResponseAccessOidcTypeGoogle     AccessIdentityProviderGetResponseAccessOidcType = "google"
-	AccessIdentityProviderGetResponseAccessOidcTypeLinkedin   AccessIdentityProviderGetResponseAccessOidcType = "linkedin"
-	AccessIdentityProviderGetResponseAccessOidcTypeOidc       AccessIdentityProviderGetResponseAccessOidcType = "oidc"
-	AccessIdentityProviderGetResponseAccessOidcTypeOkta       AccessIdentityProviderGetResponseAccessOidcType = "okta"
-	AccessIdentityProviderGetResponseAccessOidcTypeOnelogin   AccessIdentityProviderGetResponseAccessOidcType = "onelogin"
-	AccessIdentityProviderGetResponseAccessOidcTypePingone    AccessIdentityProviderGetResponseAccessOidcType = "pingone"
-	AccessIdentityProviderGetResponseAccessOidcTypeYandex     AccessIdentityProviderGetResponseAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessOkta struct {
-	// UUID
-	ID     string                                            `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessOktaConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessOktaScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessOktaType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessOktaJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessOktaType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessOktaScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessOktaJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessOktaJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessOkta]
 type accessIdentityProviderGetResponseAccessOktaJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1156,6 +1207,9 @@ func (r *AccessIdentityProviderGetResponseAccessOkta) UnmarshalJSON(data []byte)
 
 func (r AccessIdentityProviderGetResponseAccessOkta) implementsAccessIdentityProviderGetResponse() {}
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID string `json:"authorization_server_id"`
@@ -1188,6 +1242,28 @@ type accessIdentityProviderGetResponseAccessOktaConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessOktaType string
+
+const (
+	AccessIdentityProviderGetResponseAccessOktaTypeOnetimepin AccessIdentityProviderGetResponseAccessOktaType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessOktaTypeAzureAd    AccessIdentityProviderGetResponseAccessOktaType = "azureAD"
+	AccessIdentityProviderGetResponseAccessOktaTypeSaml       AccessIdentityProviderGetResponseAccessOktaType = "saml"
+	AccessIdentityProviderGetResponseAccessOktaTypeCentrify   AccessIdentityProviderGetResponseAccessOktaType = "centrify"
+	AccessIdentityProviderGetResponseAccessOktaTypeFacebook   AccessIdentityProviderGetResponseAccessOktaType = "facebook"
+	AccessIdentityProviderGetResponseAccessOktaTypeGitHub     AccessIdentityProviderGetResponseAccessOktaType = "github"
+	AccessIdentityProviderGetResponseAccessOktaTypeGoogleApps AccessIdentityProviderGetResponseAccessOktaType = "google-apps"
+	AccessIdentityProviderGetResponseAccessOktaTypeGoogle     AccessIdentityProviderGetResponseAccessOktaType = "google"
+	AccessIdentityProviderGetResponseAccessOktaTypeLinkedin   AccessIdentityProviderGetResponseAccessOktaType = "linkedin"
+	AccessIdentityProviderGetResponseAccessOktaTypeOidc       AccessIdentityProviderGetResponseAccessOktaType = "oidc"
+	AccessIdentityProviderGetResponseAccessOktaTypeOkta       AccessIdentityProviderGetResponseAccessOktaType = "okta"
+	AccessIdentityProviderGetResponseAccessOktaTypeOnelogin   AccessIdentityProviderGetResponseAccessOktaType = "onelogin"
+	AccessIdentityProviderGetResponseAccessOktaTypePingone    AccessIdentityProviderGetResponseAccessOktaType = "pingone"
+	AccessIdentityProviderGetResponseAccessOktaTypeYandex     AccessIdentityProviderGetResponseAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1228,52 +1304,33 @@ func (r *AccessIdentityProviderGetResponseAccessOktaScimConfig) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessOktaType string
-
-const (
-	AccessIdentityProviderGetResponseAccessOktaTypeOnetimepin AccessIdentityProviderGetResponseAccessOktaType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessOktaTypeAzureAd    AccessIdentityProviderGetResponseAccessOktaType = "azureAD"
-	AccessIdentityProviderGetResponseAccessOktaTypeSaml       AccessIdentityProviderGetResponseAccessOktaType = "saml"
-	AccessIdentityProviderGetResponseAccessOktaTypeCentrify   AccessIdentityProviderGetResponseAccessOktaType = "centrify"
-	AccessIdentityProviderGetResponseAccessOktaTypeFacebook   AccessIdentityProviderGetResponseAccessOktaType = "facebook"
-	AccessIdentityProviderGetResponseAccessOktaTypeGitHub     AccessIdentityProviderGetResponseAccessOktaType = "github"
-	AccessIdentityProviderGetResponseAccessOktaTypeGoogleApps AccessIdentityProviderGetResponseAccessOktaType = "google-apps"
-	AccessIdentityProviderGetResponseAccessOktaTypeGoogle     AccessIdentityProviderGetResponseAccessOktaType = "google"
-	AccessIdentityProviderGetResponseAccessOktaTypeLinkedin   AccessIdentityProviderGetResponseAccessOktaType = "linkedin"
-	AccessIdentityProviderGetResponseAccessOktaTypeOidc       AccessIdentityProviderGetResponseAccessOktaType = "oidc"
-	AccessIdentityProviderGetResponseAccessOktaTypeOkta       AccessIdentityProviderGetResponseAccessOktaType = "okta"
-	AccessIdentityProviderGetResponseAccessOktaTypeOnelogin   AccessIdentityProviderGetResponseAccessOktaType = "onelogin"
-	AccessIdentityProviderGetResponseAccessOktaTypePingone    AccessIdentityProviderGetResponseAccessOktaType = "pingone"
-	AccessIdentityProviderGetResponseAccessOktaTypeYandex     AccessIdentityProviderGetResponseAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessOnelogin struct {
-	// UUID
-	ID     string                                                `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessOneloginConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessOneloginScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessOneloginType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessOneloginJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessOneloginType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessOneloginScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessOneloginJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessOneloginJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessOnelogin]
 type accessIdentityProviderGetResponseAccessOneloginJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1285,6 +1342,9 @@ func (r *AccessIdentityProviderGetResponseAccessOnelogin) UnmarshalJSON(data []b
 func (r AccessIdentityProviderGetResponseAccessOnelogin) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessOneloginConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -1314,6 +1374,28 @@ type accessIdentityProviderGetResponseAccessOneloginConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessOneloginType string
+
+const (
+	AccessIdentityProviderGetResponseAccessOneloginTypeOnetimepin AccessIdentityProviderGetResponseAccessOneloginType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessOneloginTypeAzureAd    AccessIdentityProviderGetResponseAccessOneloginType = "azureAD"
+	AccessIdentityProviderGetResponseAccessOneloginTypeSaml       AccessIdentityProviderGetResponseAccessOneloginType = "saml"
+	AccessIdentityProviderGetResponseAccessOneloginTypeCentrify   AccessIdentityProviderGetResponseAccessOneloginType = "centrify"
+	AccessIdentityProviderGetResponseAccessOneloginTypeFacebook   AccessIdentityProviderGetResponseAccessOneloginType = "facebook"
+	AccessIdentityProviderGetResponseAccessOneloginTypeGitHub     AccessIdentityProviderGetResponseAccessOneloginType = "github"
+	AccessIdentityProviderGetResponseAccessOneloginTypeGoogleApps AccessIdentityProviderGetResponseAccessOneloginType = "google-apps"
+	AccessIdentityProviderGetResponseAccessOneloginTypeGoogle     AccessIdentityProviderGetResponseAccessOneloginType = "google"
+	AccessIdentityProviderGetResponseAccessOneloginTypeLinkedin   AccessIdentityProviderGetResponseAccessOneloginType = "linkedin"
+	AccessIdentityProviderGetResponseAccessOneloginTypeOidc       AccessIdentityProviderGetResponseAccessOneloginType = "oidc"
+	AccessIdentityProviderGetResponseAccessOneloginTypeOkta       AccessIdentityProviderGetResponseAccessOneloginType = "okta"
+	AccessIdentityProviderGetResponseAccessOneloginTypeOnelogin   AccessIdentityProviderGetResponseAccessOneloginType = "onelogin"
+	AccessIdentityProviderGetResponseAccessOneloginTypePingone    AccessIdentityProviderGetResponseAccessOneloginType = "pingone"
+	AccessIdentityProviderGetResponseAccessOneloginTypeYandex     AccessIdentityProviderGetResponseAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1355,52 +1437,33 @@ func (r *AccessIdentityProviderGetResponseAccessOneloginScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessOneloginType string
-
-const (
-	AccessIdentityProviderGetResponseAccessOneloginTypeOnetimepin AccessIdentityProviderGetResponseAccessOneloginType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessOneloginTypeAzureAd    AccessIdentityProviderGetResponseAccessOneloginType = "azureAD"
-	AccessIdentityProviderGetResponseAccessOneloginTypeSaml       AccessIdentityProviderGetResponseAccessOneloginType = "saml"
-	AccessIdentityProviderGetResponseAccessOneloginTypeCentrify   AccessIdentityProviderGetResponseAccessOneloginType = "centrify"
-	AccessIdentityProviderGetResponseAccessOneloginTypeFacebook   AccessIdentityProviderGetResponseAccessOneloginType = "facebook"
-	AccessIdentityProviderGetResponseAccessOneloginTypeGitHub     AccessIdentityProviderGetResponseAccessOneloginType = "github"
-	AccessIdentityProviderGetResponseAccessOneloginTypeGoogleApps AccessIdentityProviderGetResponseAccessOneloginType = "google-apps"
-	AccessIdentityProviderGetResponseAccessOneloginTypeGoogle     AccessIdentityProviderGetResponseAccessOneloginType = "google"
-	AccessIdentityProviderGetResponseAccessOneloginTypeLinkedin   AccessIdentityProviderGetResponseAccessOneloginType = "linkedin"
-	AccessIdentityProviderGetResponseAccessOneloginTypeOidc       AccessIdentityProviderGetResponseAccessOneloginType = "oidc"
-	AccessIdentityProviderGetResponseAccessOneloginTypeOkta       AccessIdentityProviderGetResponseAccessOneloginType = "okta"
-	AccessIdentityProviderGetResponseAccessOneloginTypeOnelogin   AccessIdentityProviderGetResponseAccessOneloginType = "onelogin"
-	AccessIdentityProviderGetResponseAccessOneloginTypePingone    AccessIdentityProviderGetResponseAccessOneloginType = "pingone"
-	AccessIdentityProviderGetResponseAccessOneloginTypeYandex     AccessIdentityProviderGetResponseAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessPingone struct {
-	// UUID
-	ID     string                                               `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessPingoneConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessPingoneScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessPingoneType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessPingoneJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessPingoneType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessPingoneScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessPingoneJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessPingoneJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessPingone]
 type accessIdentityProviderGetResponseAccessPingoneJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1412,6 +1475,9 @@ func (r *AccessIdentityProviderGetResponseAccessPingone) UnmarshalJSON(data []by
 func (r AccessIdentityProviderGetResponseAccessPingone) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessPingoneConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -1441,6 +1507,28 @@ type accessIdentityProviderGetResponseAccessPingoneConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessPingoneType string
+
+const (
+	AccessIdentityProviderGetResponseAccessPingoneTypeOnetimepin AccessIdentityProviderGetResponseAccessPingoneType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessPingoneTypeAzureAd    AccessIdentityProviderGetResponseAccessPingoneType = "azureAD"
+	AccessIdentityProviderGetResponseAccessPingoneTypeSaml       AccessIdentityProviderGetResponseAccessPingoneType = "saml"
+	AccessIdentityProviderGetResponseAccessPingoneTypeCentrify   AccessIdentityProviderGetResponseAccessPingoneType = "centrify"
+	AccessIdentityProviderGetResponseAccessPingoneTypeFacebook   AccessIdentityProviderGetResponseAccessPingoneType = "facebook"
+	AccessIdentityProviderGetResponseAccessPingoneTypeGitHub     AccessIdentityProviderGetResponseAccessPingoneType = "github"
+	AccessIdentityProviderGetResponseAccessPingoneTypeGoogleApps AccessIdentityProviderGetResponseAccessPingoneType = "google-apps"
+	AccessIdentityProviderGetResponseAccessPingoneTypeGoogle     AccessIdentityProviderGetResponseAccessPingoneType = "google"
+	AccessIdentityProviderGetResponseAccessPingoneTypeLinkedin   AccessIdentityProviderGetResponseAccessPingoneType = "linkedin"
+	AccessIdentityProviderGetResponseAccessPingoneTypeOidc       AccessIdentityProviderGetResponseAccessPingoneType = "oidc"
+	AccessIdentityProviderGetResponseAccessPingoneTypeOkta       AccessIdentityProviderGetResponseAccessPingoneType = "okta"
+	AccessIdentityProviderGetResponseAccessPingoneTypeOnelogin   AccessIdentityProviderGetResponseAccessPingoneType = "onelogin"
+	AccessIdentityProviderGetResponseAccessPingoneTypePingone    AccessIdentityProviderGetResponseAccessPingoneType = "pingone"
+	AccessIdentityProviderGetResponseAccessPingoneTypeYandex     AccessIdentityProviderGetResponseAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1482,52 +1570,33 @@ func (r *AccessIdentityProviderGetResponseAccessPingoneScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessPingoneType string
-
-const (
-	AccessIdentityProviderGetResponseAccessPingoneTypeOnetimepin AccessIdentityProviderGetResponseAccessPingoneType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessPingoneTypeAzureAd    AccessIdentityProviderGetResponseAccessPingoneType = "azureAD"
-	AccessIdentityProviderGetResponseAccessPingoneTypeSaml       AccessIdentityProviderGetResponseAccessPingoneType = "saml"
-	AccessIdentityProviderGetResponseAccessPingoneTypeCentrify   AccessIdentityProviderGetResponseAccessPingoneType = "centrify"
-	AccessIdentityProviderGetResponseAccessPingoneTypeFacebook   AccessIdentityProviderGetResponseAccessPingoneType = "facebook"
-	AccessIdentityProviderGetResponseAccessPingoneTypeGitHub     AccessIdentityProviderGetResponseAccessPingoneType = "github"
-	AccessIdentityProviderGetResponseAccessPingoneTypeGoogleApps AccessIdentityProviderGetResponseAccessPingoneType = "google-apps"
-	AccessIdentityProviderGetResponseAccessPingoneTypeGoogle     AccessIdentityProviderGetResponseAccessPingoneType = "google"
-	AccessIdentityProviderGetResponseAccessPingoneTypeLinkedin   AccessIdentityProviderGetResponseAccessPingoneType = "linkedin"
-	AccessIdentityProviderGetResponseAccessPingoneTypeOidc       AccessIdentityProviderGetResponseAccessPingoneType = "oidc"
-	AccessIdentityProviderGetResponseAccessPingoneTypeOkta       AccessIdentityProviderGetResponseAccessPingoneType = "okta"
-	AccessIdentityProviderGetResponseAccessPingoneTypeOnelogin   AccessIdentityProviderGetResponseAccessPingoneType = "onelogin"
-	AccessIdentityProviderGetResponseAccessPingoneTypePingone    AccessIdentityProviderGetResponseAccessPingoneType = "pingone"
-	AccessIdentityProviderGetResponseAccessPingoneTypeYandex     AccessIdentityProviderGetResponseAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessSaml struct {
-	// UUID
-	ID     string                                            `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessSamlConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessSamlConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessSamlScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessSamlType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessSamlJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessSamlType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessSamlScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessSamlJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessSamlJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessSaml]
 type accessIdentityProviderGetResponseAccessSamlJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1538,6 +1607,9 @@ func (r *AccessIdentityProviderGetResponseAccessSaml) UnmarshalJSON(data []byte)
 
 func (r AccessIdentityProviderGetResponseAccessSaml) implementsAccessIdentityProviderGetResponse() {}
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -1599,6 +1671,28 @@ func (r *AccessIdentityProviderGetResponseAccessSamlConfigHeaderAttribute) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessSamlType string
+
+const (
+	AccessIdentityProviderGetResponseAccessSamlTypeOnetimepin AccessIdentityProviderGetResponseAccessSamlType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessSamlTypeAzureAd    AccessIdentityProviderGetResponseAccessSamlType = "azureAD"
+	AccessIdentityProviderGetResponseAccessSamlTypeSaml       AccessIdentityProviderGetResponseAccessSamlType = "saml"
+	AccessIdentityProviderGetResponseAccessSamlTypeCentrify   AccessIdentityProviderGetResponseAccessSamlType = "centrify"
+	AccessIdentityProviderGetResponseAccessSamlTypeFacebook   AccessIdentityProviderGetResponseAccessSamlType = "facebook"
+	AccessIdentityProviderGetResponseAccessSamlTypeGitHub     AccessIdentityProviderGetResponseAccessSamlType = "github"
+	AccessIdentityProviderGetResponseAccessSamlTypeGoogleApps AccessIdentityProviderGetResponseAccessSamlType = "google-apps"
+	AccessIdentityProviderGetResponseAccessSamlTypeGoogle     AccessIdentityProviderGetResponseAccessSamlType = "google"
+	AccessIdentityProviderGetResponseAccessSamlTypeLinkedin   AccessIdentityProviderGetResponseAccessSamlType = "linkedin"
+	AccessIdentityProviderGetResponseAccessSamlTypeOidc       AccessIdentityProviderGetResponseAccessSamlType = "oidc"
+	AccessIdentityProviderGetResponseAccessSamlTypeOkta       AccessIdentityProviderGetResponseAccessSamlType = "okta"
+	AccessIdentityProviderGetResponseAccessSamlTypeOnelogin   AccessIdentityProviderGetResponseAccessSamlType = "onelogin"
+	AccessIdentityProviderGetResponseAccessSamlTypePingone    AccessIdentityProviderGetResponseAccessSamlType = "pingone"
+	AccessIdentityProviderGetResponseAccessSamlTypeYandex     AccessIdentityProviderGetResponseAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderGetResponseAccessSamlScimConfig struct {
@@ -1638,52 +1732,33 @@ func (r *AccessIdentityProviderGetResponseAccessSamlScimConfig) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessSamlType string
-
-const (
-	AccessIdentityProviderGetResponseAccessSamlTypeOnetimepin AccessIdentityProviderGetResponseAccessSamlType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessSamlTypeAzureAd    AccessIdentityProviderGetResponseAccessSamlType = "azureAD"
-	AccessIdentityProviderGetResponseAccessSamlTypeSaml       AccessIdentityProviderGetResponseAccessSamlType = "saml"
-	AccessIdentityProviderGetResponseAccessSamlTypeCentrify   AccessIdentityProviderGetResponseAccessSamlType = "centrify"
-	AccessIdentityProviderGetResponseAccessSamlTypeFacebook   AccessIdentityProviderGetResponseAccessSamlType = "facebook"
-	AccessIdentityProviderGetResponseAccessSamlTypeGitHub     AccessIdentityProviderGetResponseAccessSamlType = "github"
-	AccessIdentityProviderGetResponseAccessSamlTypeGoogleApps AccessIdentityProviderGetResponseAccessSamlType = "google-apps"
-	AccessIdentityProviderGetResponseAccessSamlTypeGoogle     AccessIdentityProviderGetResponseAccessSamlType = "google"
-	AccessIdentityProviderGetResponseAccessSamlTypeLinkedin   AccessIdentityProviderGetResponseAccessSamlType = "linkedin"
-	AccessIdentityProviderGetResponseAccessSamlTypeOidc       AccessIdentityProviderGetResponseAccessSamlType = "oidc"
-	AccessIdentityProviderGetResponseAccessSamlTypeOkta       AccessIdentityProviderGetResponseAccessSamlType = "okta"
-	AccessIdentityProviderGetResponseAccessSamlTypeOnelogin   AccessIdentityProviderGetResponseAccessSamlType = "onelogin"
-	AccessIdentityProviderGetResponseAccessSamlTypePingone    AccessIdentityProviderGetResponseAccessSamlType = "pingone"
-	AccessIdentityProviderGetResponseAccessSamlTypeYandex     AccessIdentityProviderGetResponseAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessYandex struct {
-	// UUID
-	ID     string                                              `json:"id"`
-	Config AccessIdentityProviderGetResponseAccessYandexConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderGetResponseAccessYandexConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderGetResponseAccessYandexScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderGetResponseAccessYandexType `json:"type"`
-	JSON accessIdentityProviderGetResponseAccessYandexJSON `json:"-"`
+	Type AccessIdentityProviderGetResponseAccessYandexType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderGetResponseAccessYandexScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderGetResponseAccessYandexJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessYandexJSON contains the JSON metadata for
 // the struct [AccessIdentityProviderGetResponseAccessYandex]
 type accessIdentityProviderGetResponseAccessYandexJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1695,6 +1770,9 @@ func (r *AccessIdentityProviderGetResponseAccessYandex) UnmarshalJSON(data []byt
 func (r AccessIdentityProviderGetResponseAccessYandex) implementsAccessIdentityProviderGetResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderGetResponseAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -1715,6 +1793,28 @@ type accessIdentityProviderGetResponseAccessYandexConfigJSON struct {
 func (r *AccessIdentityProviderGetResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessYandexType string
+
+const (
+	AccessIdentityProviderGetResponseAccessYandexTypeOnetimepin AccessIdentityProviderGetResponseAccessYandexType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessYandexTypeAzureAd    AccessIdentityProviderGetResponseAccessYandexType = "azureAD"
+	AccessIdentityProviderGetResponseAccessYandexTypeSaml       AccessIdentityProviderGetResponseAccessYandexType = "saml"
+	AccessIdentityProviderGetResponseAccessYandexTypeCentrify   AccessIdentityProviderGetResponseAccessYandexType = "centrify"
+	AccessIdentityProviderGetResponseAccessYandexTypeFacebook   AccessIdentityProviderGetResponseAccessYandexType = "facebook"
+	AccessIdentityProviderGetResponseAccessYandexTypeGitHub     AccessIdentityProviderGetResponseAccessYandexType = "github"
+	AccessIdentityProviderGetResponseAccessYandexTypeGoogleApps AccessIdentityProviderGetResponseAccessYandexType = "google-apps"
+	AccessIdentityProviderGetResponseAccessYandexTypeGoogle     AccessIdentityProviderGetResponseAccessYandexType = "google"
+	AccessIdentityProviderGetResponseAccessYandexTypeLinkedin   AccessIdentityProviderGetResponseAccessYandexType = "linkedin"
+	AccessIdentityProviderGetResponseAccessYandexTypeOidc       AccessIdentityProviderGetResponseAccessYandexType = "oidc"
+	AccessIdentityProviderGetResponseAccessYandexTypeOkta       AccessIdentityProviderGetResponseAccessYandexType = "okta"
+	AccessIdentityProviderGetResponseAccessYandexTypeOnelogin   AccessIdentityProviderGetResponseAccessYandexType = "onelogin"
+	AccessIdentityProviderGetResponseAccessYandexTypePingone    AccessIdentityProviderGetResponseAccessYandexType = "pingone"
+	AccessIdentityProviderGetResponseAccessYandexTypeYandex     AccessIdentityProviderGetResponseAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1756,49 +1856,33 @@ func (r *AccessIdentityProviderGetResponseAccessYandexScimConfig) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderGetResponseAccessYandexType string
-
-const (
-	AccessIdentityProviderGetResponseAccessYandexTypeOnetimepin AccessIdentityProviderGetResponseAccessYandexType = "onetimepin"
-	AccessIdentityProviderGetResponseAccessYandexTypeAzureAd    AccessIdentityProviderGetResponseAccessYandexType = "azureAD"
-	AccessIdentityProviderGetResponseAccessYandexTypeSaml       AccessIdentityProviderGetResponseAccessYandexType = "saml"
-	AccessIdentityProviderGetResponseAccessYandexTypeCentrify   AccessIdentityProviderGetResponseAccessYandexType = "centrify"
-	AccessIdentityProviderGetResponseAccessYandexTypeFacebook   AccessIdentityProviderGetResponseAccessYandexType = "facebook"
-	AccessIdentityProviderGetResponseAccessYandexTypeGitHub     AccessIdentityProviderGetResponseAccessYandexType = "github"
-	AccessIdentityProviderGetResponseAccessYandexTypeGoogleApps AccessIdentityProviderGetResponseAccessYandexType = "google-apps"
-	AccessIdentityProviderGetResponseAccessYandexTypeGoogle     AccessIdentityProviderGetResponseAccessYandexType = "google"
-	AccessIdentityProviderGetResponseAccessYandexTypeLinkedin   AccessIdentityProviderGetResponseAccessYandexType = "linkedin"
-	AccessIdentityProviderGetResponseAccessYandexTypeOidc       AccessIdentityProviderGetResponseAccessYandexType = "oidc"
-	AccessIdentityProviderGetResponseAccessYandexTypeOkta       AccessIdentityProviderGetResponseAccessYandexType = "okta"
-	AccessIdentityProviderGetResponseAccessYandexTypeOnelogin   AccessIdentityProviderGetResponseAccessYandexType = "onelogin"
-	AccessIdentityProviderGetResponseAccessYandexTypePingone    AccessIdentityProviderGetResponseAccessYandexType = "pingone"
-	AccessIdentityProviderGetResponseAccessYandexTypeYandex     AccessIdentityProviderGetResponseAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseAccessOnetimepin struct {
-	// UUID
-	ID     string      `json:"id"`
-	Config interface{} `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderGetResponseAccessOnetimepinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	ScimConfig AccessIdentityProviderGetResponseAccessOnetimepinScimConfig `json:"scim_config"`
-	Type       AccessIdentityProviderGetResponseAccessOnetimepinType       `json:"type"`
 	JSON       accessIdentityProviderGetResponseAccessOnetimepinJSON       `json:"-"`
 }
 
 // accessIdentityProviderGetResponseAccessOnetimepinJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderGetResponseAccessOnetimepin]
 type accessIdentityProviderGetResponseAccessOnetimepinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1809,6 +1893,28 @@ func (r *AccessIdentityProviderGetResponseAccessOnetimepin) UnmarshalJSON(data [
 
 func (r AccessIdentityProviderGetResponseAccessOnetimepin) implementsAccessIdentityProviderGetResponse() {
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderGetResponseAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderGetResponseAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeAzureAd    AccessIdentityProviderGetResponseAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeSaml       AccessIdentityProviderGetResponseAccessOnetimepinType = "saml"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeCentrify   AccessIdentityProviderGetResponseAccessOnetimepinType = "centrify"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeFacebook   AccessIdentityProviderGetResponseAccessOnetimepinType = "facebook"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeGitHub     AccessIdentityProviderGetResponseAccessOnetimepinType = "github"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeGoogleApps AccessIdentityProviderGetResponseAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeGoogle     AccessIdentityProviderGetResponseAccessOnetimepinType = "google"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeLinkedin   AccessIdentityProviderGetResponseAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeOidc       AccessIdentityProviderGetResponseAccessOnetimepinType = "oidc"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeOkta       AccessIdentityProviderGetResponseAccessOnetimepinType = "okta"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeOnelogin   AccessIdentityProviderGetResponseAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypePingone    AccessIdentityProviderGetResponseAccessOnetimepinType = "pingone"
+	AccessIdentityProviderGetResponseAccessOnetimepinTypeYandex     AccessIdentityProviderGetResponseAccessOnetimepinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1850,12 +1956,6 @@ func (r *AccessIdentityProviderGetResponseAccessOnetimepinScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessIdentityProviderGetResponseAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderGetResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderGetResponseAccessOnetimepinType = "onetimepin"
-)
-
 // Union satisfied by [AccessIdentityProviderUpdateResponseAccessAzureAd],
 // [AccessIdentityProviderUpdateResponseAccessCentrify],
 // [AccessIdentityProviderUpdateResponseAccessFacebook],
@@ -1879,29 +1979,32 @@ func init() {
 }
 
 type AccessIdentityProviderUpdateResponseAccessAzureAd struct {
-	// UUID
-	ID     string                                                  `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessAzureAdConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessAzureAdConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessAzureAdType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessAzureAdJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessAzureAdType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessAzureAdJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessAzureAdJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessAzureAd]
 type accessIdentityProviderUpdateResponseAccessAzureAdJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1913,6 +2016,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessAzureAd) UnmarshalJSON(data [
 func (r AccessIdentityProviderUpdateResponseAccessAzureAd) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessAzureAdConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -1949,6 +2055,28 @@ type accessIdentityProviderUpdateResponseAccessAzureAdConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessAzureAdType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateResponseAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateResponseAccessAzureAdType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeSaml       AccessIdentityProviderUpdateResponseAccessAzureAdType = "saml"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateResponseAccessAzureAdType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateResponseAccessAzureAdType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateResponseAccessAzureAdType = "github"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateResponseAccessAzureAdType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateResponseAccessAzureAdType = "google"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOidc       AccessIdentityProviderUpdateResponseAccessAzureAdType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOkta       AccessIdentityProviderUpdateResponseAccessAzureAdType = "okta"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypePingone    AccessIdentityProviderUpdateResponseAccessAzureAdType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeYandex     AccessIdentityProviderUpdateResponseAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -1990,52 +2118,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessAzureAdType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateResponseAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateResponseAccessAzureAdType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeSaml       AccessIdentityProviderUpdateResponseAccessAzureAdType = "saml"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateResponseAccessAzureAdType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateResponseAccessAzureAdType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateResponseAccessAzureAdType = "github"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateResponseAccessAzureAdType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateResponseAccessAzureAdType = "google"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOidc       AccessIdentityProviderUpdateResponseAccessAzureAdType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOkta       AccessIdentityProviderUpdateResponseAccessAzureAdType = "okta"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypePingone    AccessIdentityProviderUpdateResponseAccessAzureAdType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessAzureAdTypeYandex     AccessIdentityProviderUpdateResponseAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessCentrify struct {
-	// UUID
-	ID     string                                                   `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessCentrifyConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessCentrifyType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessCentrifyJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessCentrifyType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessCentrifyJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessCentrifyJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessCentrify]
 type accessIdentityProviderUpdateResponseAccessCentrifyJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2047,6 +2156,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessCentrify) UnmarshalJSON(data 
 func (r AccessIdentityProviderUpdateResponseAccessCentrify) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount string `json:"centrify_account"`
@@ -2080,6 +2192,28 @@ type accessIdentityProviderUpdateResponseAccessCentrifyConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessCentrifyType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateResponseAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateResponseAccessCentrifyType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeSaml       AccessIdentityProviderUpdateResponseAccessCentrifyType = "saml"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateResponseAccessCentrifyType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateResponseAccessCentrifyType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateResponseAccessCentrifyType = "github"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateResponseAccessCentrifyType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateResponseAccessCentrifyType = "google"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOidc       AccessIdentityProviderUpdateResponseAccessCentrifyType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOkta       AccessIdentityProviderUpdateResponseAccessCentrifyType = "okta"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypePingone    AccessIdentityProviderUpdateResponseAccessCentrifyType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeYandex     AccessIdentityProviderUpdateResponseAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2121,52 +2255,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessCentrifyType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateResponseAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateResponseAccessCentrifyType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeSaml       AccessIdentityProviderUpdateResponseAccessCentrifyType = "saml"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateResponseAccessCentrifyType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateResponseAccessCentrifyType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateResponseAccessCentrifyType = "github"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateResponseAccessCentrifyType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateResponseAccessCentrifyType = "google"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOidc       AccessIdentityProviderUpdateResponseAccessCentrifyType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOkta       AccessIdentityProviderUpdateResponseAccessCentrifyType = "okta"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypePingone    AccessIdentityProviderUpdateResponseAccessCentrifyType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessCentrifyTypeYandex     AccessIdentityProviderUpdateResponseAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessFacebook struct {
-	// UUID
-	ID     string                                                   `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessFacebookConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessFacebookConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessFacebookScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessFacebookType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessFacebookJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessFacebookType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessFacebookScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessFacebookJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessFacebookJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessFacebook]
 type accessIdentityProviderUpdateResponseAccessFacebookJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2178,6 +2293,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessFacebook) UnmarshalJSON(data 
 func (r AccessIdentityProviderUpdateResponseAccessFacebook) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -2199,6 +2317,28 @@ type accessIdentityProviderUpdateResponseAccessFacebookConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessFacebookType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateResponseAccessFacebookType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateResponseAccessFacebookType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeSaml       AccessIdentityProviderUpdateResponseAccessFacebookType = "saml"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeCentrify   AccessIdentityProviderUpdateResponseAccessFacebookType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeFacebook   AccessIdentityProviderUpdateResponseAccessFacebookType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGitHub     AccessIdentityProviderUpdateResponseAccessFacebookType = "github"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateResponseAccessFacebookType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogle     AccessIdentityProviderUpdateResponseAccessFacebookType = "google"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateResponseAccessFacebookType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOidc       AccessIdentityProviderUpdateResponseAccessFacebookType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOkta       AccessIdentityProviderUpdateResponseAccessFacebookType = "okta"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateResponseAccessFacebookType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypePingone    AccessIdentityProviderUpdateResponseAccessFacebookType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeYandex     AccessIdentityProviderUpdateResponseAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2240,52 +2380,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessFacebookScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessFacebookType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateResponseAccessFacebookType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateResponseAccessFacebookType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeSaml       AccessIdentityProviderUpdateResponseAccessFacebookType = "saml"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeCentrify   AccessIdentityProviderUpdateResponseAccessFacebookType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeFacebook   AccessIdentityProviderUpdateResponseAccessFacebookType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeGitHub     AccessIdentityProviderUpdateResponseAccessFacebookType = "github"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateResponseAccessFacebookType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogle     AccessIdentityProviderUpdateResponseAccessFacebookType = "google"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateResponseAccessFacebookType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeOidc       AccessIdentityProviderUpdateResponseAccessFacebookType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeOkta       AccessIdentityProviderUpdateResponseAccessFacebookType = "okta"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateResponseAccessFacebookType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypePingone    AccessIdentityProviderUpdateResponseAccessFacebookType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessFacebookTypeYandex     AccessIdentityProviderUpdateResponseAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessGitHub struct {
-	// UUID
-	ID     string                                                 `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessGitHubConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGitHubConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessGitHubScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessGitHubType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessGitHubJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessGitHubType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGitHubScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGitHubJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessGitHubJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessGitHub]
 type accessIdentityProviderUpdateResponseAccessGitHubJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2297,6 +2418,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessGitHub) UnmarshalJSON(data []
 func (r AccessIdentityProviderUpdateResponseAccessGitHub) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -2317,6 +2441,28 @@ type accessIdentityProviderUpdateResponseAccessGitHubConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGitHubType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGitHubType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGitHubType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeSaml       AccessIdentityProviderUpdateResponseAccessGitHubType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeCentrify   AccessIdentityProviderUpdateResponseAccessGitHubType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeFacebook   AccessIdentityProviderUpdateResponseAccessGitHubType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGitHub     AccessIdentityProviderUpdateResponseAccessGitHubType = "github"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGitHubType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogle     AccessIdentityProviderUpdateResponseAccessGitHubType = "google"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGitHubType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOidc       AccessIdentityProviderUpdateResponseAccessGitHubType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOkta       AccessIdentityProviderUpdateResponseAccessGitHubType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGitHubType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypePingone    AccessIdentityProviderUpdateResponseAccessGitHubType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeYandex     AccessIdentityProviderUpdateResponseAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2358,52 +2504,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessGitHubScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessGitHubType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGitHubType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGitHubType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeSaml       AccessIdentityProviderUpdateResponseAccessGitHubType = "saml"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeCentrify   AccessIdentityProviderUpdateResponseAccessGitHubType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeFacebook   AccessIdentityProviderUpdateResponseAccessGitHubType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeGitHub     AccessIdentityProviderUpdateResponseAccessGitHubType = "github"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGitHubType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogle     AccessIdentityProviderUpdateResponseAccessGitHubType = "google"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGitHubType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeOidc       AccessIdentityProviderUpdateResponseAccessGitHubType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeOkta       AccessIdentityProviderUpdateResponseAccessGitHubType = "okta"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGitHubType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypePingone    AccessIdentityProviderUpdateResponseAccessGitHubType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessGitHubTypeYandex     AccessIdentityProviderUpdateResponseAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessGoogle struct {
-	// UUID
-	ID     string                                                 `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessGoogleConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessGoogleType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessGoogleJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessGoogleType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGoogleJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessGoogleJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessGoogle]
 type accessIdentityProviderUpdateResponseAccessGoogleJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2415,6 +2542,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessGoogle) UnmarshalJSON(data []
 func (r AccessIdentityProviderUpdateResponseAccessGoogle) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessGoogleConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -2441,6 +2571,28 @@ type accessIdentityProviderUpdateResponseAccessGoogleConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleType = "github"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleType = "google"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2482,52 +2634,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessGoogleScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessGoogleType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleType = "saml"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleType = "github"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleType = "google"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleType = "okta"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessGoogleTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessGoogleApps struct {
-	// UUID
-	ID     string                                                     `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessGoogleAppsType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessGoogleAppsJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessGoogleAppsType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGoogleAppsJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessGoogleAppsJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessGoogleApps]
 type accessIdentityProviderUpdateResponseAccessGoogleAppsJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2539,6 +2672,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessGoogleApps) UnmarshalJSON(dat
 func (r AccessIdentityProviderUpdateResponseAccessGoogleApps) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain string `json:"apps_domain"`
@@ -2569,6 +2705,28 @@ type accessIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "github"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2610,52 +2768,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "saml"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "github"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "okta"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessLinkedin struct {
-	// UUID
-	ID     string                                                   `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessLinkedinConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessLinkedinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessLinkedinType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessLinkedinJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessLinkedinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessLinkedinJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessLinkedinJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessLinkedin]
 type accessIdentityProviderUpdateResponseAccessLinkedinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2667,6 +2806,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessLinkedin) UnmarshalJSON(data 
 func (r AccessIdentityProviderUpdateResponseAccessLinkedin) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -2688,6 +2830,28 @@ type accessIdentityProviderUpdateResponseAccessLinkedinConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessLinkedinType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateResponseAccessLinkedinType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeSaml       AccessIdentityProviderUpdateResponseAccessLinkedinType = "saml"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateResponseAccessLinkedinType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateResponseAccessLinkedinType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateResponseAccessLinkedinType = "github"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateResponseAccessLinkedinType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateResponseAccessLinkedinType = "google"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOidc       AccessIdentityProviderUpdateResponseAccessLinkedinType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOkta       AccessIdentityProviderUpdateResponseAccessLinkedinType = "okta"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypePingone    AccessIdentityProviderUpdateResponseAccessLinkedinType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeYandex     AccessIdentityProviderUpdateResponseAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2729,52 +2893,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessLinkedinType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateResponseAccessLinkedinType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeSaml       AccessIdentityProviderUpdateResponseAccessLinkedinType = "saml"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateResponseAccessLinkedinType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateResponseAccessLinkedinType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateResponseAccessLinkedinType = "github"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateResponseAccessLinkedinType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateResponseAccessLinkedinType = "google"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOidc       AccessIdentityProviderUpdateResponseAccessLinkedinType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOkta       AccessIdentityProviderUpdateResponseAccessLinkedinType = "okta"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypePingone    AccessIdentityProviderUpdateResponseAccessLinkedinType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessLinkedinTypeYandex     AccessIdentityProviderUpdateResponseAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessOidc struct {
-	// UUID
-	ID     string                                               `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessOidcConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOidcConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessOidcScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessOidcType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessOidcJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessOidcType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOidcScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOidcJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessOidcJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessOidc]
 type accessIdentityProviderUpdateResponseAccessOidcJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2786,6 +2931,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessOidc) UnmarshalJSON(data []by
 func (r AccessIdentityProviderUpdateResponseAccessOidc) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
@@ -2824,6 +2972,28 @@ type accessIdentityProviderUpdateResponseAccessOidcConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOidcType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOidcType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOidcType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeSaml       AccessIdentityProviderUpdateResponseAccessOidcType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeCentrify   AccessIdentityProviderUpdateResponseAccessOidcType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeFacebook   AccessIdentityProviderUpdateResponseAccessOidcType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGitHub     AccessIdentityProviderUpdateResponseAccessOidcType = "github"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOidcType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogle     AccessIdentityProviderUpdateResponseAccessOidcType = "google"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOidcType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOidc       AccessIdentityProviderUpdateResponseAccessOidcType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOkta       AccessIdentityProviderUpdateResponseAccessOidcType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOidcType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypePingone    AccessIdentityProviderUpdateResponseAccessOidcType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeYandex     AccessIdentityProviderUpdateResponseAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2865,52 +3035,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessOidcScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessOidcType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessOidcTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOidcType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOidcType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeSaml       AccessIdentityProviderUpdateResponseAccessOidcType = "saml"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeCentrify   AccessIdentityProviderUpdateResponseAccessOidcType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeFacebook   AccessIdentityProviderUpdateResponseAccessOidcType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeGitHub     AccessIdentityProviderUpdateResponseAccessOidcType = "github"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOidcType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogle     AccessIdentityProviderUpdateResponseAccessOidcType = "google"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOidcType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeOidc       AccessIdentityProviderUpdateResponseAccessOidcType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeOkta       AccessIdentityProviderUpdateResponseAccessOidcType = "okta"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOidcType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessOidcTypePingone    AccessIdentityProviderUpdateResponseAccessOidcType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessOidcTypeYandex     AccessIdentityProviderUpdateResponseAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessOkta struct {
-	// UUID
-	ID     string                                               `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessOktaConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessOktaScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessOktaType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessOktaJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessOktaType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOktaScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOktaJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessOktaJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessOkta]
 type accessIdentityProviderUpdateResponseAccessOktaJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -2922,6 +3073,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessOkta) UnmarshalJSON(data []by
 func (r AccessIdentityProviderUpdateResponseAccessOkta) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID string `json:"authorization_server_id"`
@@ -2954,6 +3108,28 @@ type accessIdentityProviderUpdateResponseAccessOktaConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOktaType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOktaType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOktaType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeSaml       AccessIdentityProviderUpdateResponseAccessOktaType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeCentrify   AccessIdentityProviderUpdateResponseAccessOktaType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeFacebook   AccessIdentityProviderUpdateResponseAccessOktaType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGitHub     AccessIdentityProviderUpdateResponseAccessOktaType = "github"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOktaType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogle     AccessIdentityProviderUpdateResponseAccessOktaType = "google"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOktaType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOidc       AccessIdentityProviderUpdateResponseAccessOktaType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOkta       AccessIdentityProviderUpdateResponseAccessOktaType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOktaType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypePingone    AccessIdentityProviderUpdateResponseAccessOktaType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeYandex     AccessIdentityProviderUpdateResponseAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -2995,52 +3171,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessOktaScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessOktaType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessOktaTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOktaType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOktaType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeSaml       AccessIdentityProviderUpdateResponseAccessOktaType = "saml"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeCentrify   AccessIdentityProviderUpdateResponseAccessOktaType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeFacebook   AccessIdentityProviderUpdateResponseAccessOktaType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeGitHub     AccessIdentityProviderUpdateResponseAccessOktaType = "github"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOktaType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogle     AccessIdentityProviderUpdateResponseAccessOktaType = "google"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOktaType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeOidc       AccessIdentityProviderUpdateResponseAccessOktaType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeOkta       AccessIdentityProviderUpdateResponseAccessOktaType = "okta"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOktaType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessOktaTypePingone    AccessIdentityProviderUpdateResponseAccessOktaType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessOktaTypeYandex     AccessIdentityProviderUpdateResponseAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessOnelogin struct {
-	// UUID
-	ID     string                                                   `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessOneloginConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessOneloginScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessOneloginType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessOneloginJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessOneloginType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOneloginScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOneloginJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessOneloginJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessOnelogin]
 type accessIdentityProviderUpdateResponseAccessOneloginJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3052,6 +3209,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessOnelogin) UnmarshalJSON(data 
 func (r AccessIdentityProviderUpdateResponseAccessOnelogin) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessOneloginConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -3082,6 +3242,28 @@ type accessIdentityProviderUpdateResponseAccessOneloginConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOneloginType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOneloginType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOneloginType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeSaml       AccessIdentityProviderUpdateResponseAccessOneloginType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeCentrify   AccessIdentityProviderUpdateResponseAccessOneloginType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeFacebook   AccessIdentityProviderUpdateResponseAccessOneloginType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGitHub     AccessIdentityProviderUpdateResponseAccessOneloginType = "github"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOneloginType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogle     AccessIdentityProviderUpdateResponseAccessOneloginType = "google"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOneloginType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOidc       AccessIdentityProviderUpdateResponseAccessOneloginType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOkta       AccessIdentityProviderUpdateResponseAccessOneloginType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOneloginType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypePingone    AccessIdentityProviderUpdateResponseAccessOneloginType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeYandex     AccessIdentityProviderUpdateResponseAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3123,52 +3305,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessOneloginScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessOneloginType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOneloginType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOneloginType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeSaml       AccessIdentityProviderUpdateResponseAccessOneloginType = "saml"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeCentrify   AccessIdentityProviderUpdateResponseAccessOneloginType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeFacebook   AccessIdentityProviderUpdateResponseAccessOneloginType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeGitHub     AccessIdentityProviderUpdateResponseAccessOneloginType = "github"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOneloginType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogle     AccessIdentityProviderUpdateResponseAccessOneloginType = "google"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOneloginType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeOidc       AccessIdentityProviderUpdateResponseAccessOneloginType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeOkta       AccessIdentityProviderUpdateResponseAccessOneloginType = "okta"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOneloginType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypePingone    AccessIdentityProviderUpdateResponseAccessOneloginType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessOneloginTypeYandex     AccessIdentityProviderUpdateResponseAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessPingone struct {
-	// UUID
-	ID     string                                                  `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessPingoneConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessPingoneScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessPingoneType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessPingoneJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessPingoneType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessPingoneScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessPingoneJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessPingoneJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessPingone]
 type accessIdentityProviderUpdateResponseAccessPingoneJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3180,6 +3343,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessPingone) UnmarshalJSON(data [
 func (r AccessIdentityProviderUpdateResponseAccessPingone) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessPingoneConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -3210,6 +3376,28 @@ type accessIdentityProviderUpdateResponseAccessPingoneConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessPingoneType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateResponseAccessPingoneType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateResponseAccessPingoneType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeSaml       AccessIdentityProviderUpdateResponseAccessPingoneType = "saml"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeCentrify   AccessIdentityProviderUpdateResponseAccessPingoneType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeFacebook   AccessIdentityProviderUpdateResponseAccessPingoneType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGitHub     AccessIdentityProviderUpdateResponseAccessPingoneType = "github"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateResponseAccessPingoneType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogle     AccessIdentityProviderUpdateResponseAccessPingoneType = "google"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateResponseAccessPingoneType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOidc       AccessIdentityProviderUpdateResponseAccessPingoneType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOkta       AccessIdentityProviderUpdateResponseAccessPingoneType = "okta"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateResponseAccessPingoneType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypePingone    AccessIdentityProviderUpdateResponseAccessPingoneType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeYandex     AccessIdentityProviderUpdateResponseAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3251,52 +3439,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessPingoneScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessPingoneType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateResponseAccessPingoneType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateResponseAccessPingoneType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeSaml       AccessIdentityProviderUpdateResponseAccessPingoneType = "saml"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeCentrify   AccessIdentityProviderUpdateResponseAccessPingoneType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeFacebook   AccessIdentityProviderUpdateResponseAccessPingoneType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeGitHub     AccessIdentityProviderUpdateResponseAccessPingoneType = "github"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateResponseAccessPingoneType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogle     AccessIdentityProviderUpdateResponseAccessPingoneType = "google"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateResponseAccessPingoneType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeOidc       AccessIdentityProviderUpdateResponseAccessPingoneType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeOkta       AccessIdentityProviderUpdateResponseAccessPingoneType = "okta"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateResponseAccessPingoneType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypePingone    AccessIdentityProviderUpdateResponseAccessPingoneType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessPingoneTypeYandex     AccessIdentityProviderUpdateResponseAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessSaml struct {
-	// UUID
-	ID     string                                               `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessSamlConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessSamlConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessSamlScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessSamlType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessSamlJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessSamlType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessSamlScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessSamlJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessSamlJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessSaml]
 type accessIdentityProviderUpdateResponseAccessSamlJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3308,6 +3477,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessSaml) UnmarshalJSON(data []by
 func (r AccessIdentityProviderUpdateResponseAccessSaml) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -3369,6 +3541,28 @@ func (r *AccessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessSamlType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOnetimepin AccessIdentityProviderUpdateResponseAccessSamlType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeAzureAd    AccessIdentityProviderUpdateResponseAccessSamlType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeSaml       AccessIdentityProviderUpdateResponseAccessSamlType = "saml"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeCentrify   AccessIdentityProviderUpdateResponseAccessSamlType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeFacebook   AccessIdentityProviderUpdateResponseAccessSamlType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGitHub     AccessIdentityProviderUpdateResponseAccessSamlType = "github"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogleApps AccessIdentityProviderUpdateResponseAccessSamlType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogle     AccessIdentityProviderUpdateResponseAccessSamlType = "google"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeLinkedin   AccessIdentityProviderUpdateResponseAccessSamlType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOidc       AccessIdentityProviderUpdateResponseAccessSamlType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOkta       AccessIdentityProviderUpdateResponseAccessSamlType = "okta"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOnelogin   AccessIdentityProviderUpdateResponseAccessSamlType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypePingone    AccessIdentityProviderUpdateResponseAccessSamlType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeYandex     AccessIdentityProviderUpdateResponseAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderUpdateResponseAccessSamlScimConfig struct {
@@ -3409,52 +3603,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessSamlScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessSamlType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessSamlTypeOnetimepin AccessIdentityProviderUpdateResponseAccessSamlType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeAzureAd    AccessIdentityProviderUpdateResponseAccessSamlType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeSaml       AccessIdentityProviderUpdateResponseAccessSamlType = "saml"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeCentrify   AccessIdentityProviderUpdateResponseAccessSamlType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeFacebook   AccessIdentityProviderUpdateResponseAccessSamlType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeGitHub     AccessIdentityProviderUpdateResponseAccessSamlType = "github"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogleApps AccessIdentityProviderUpdateResponseAccessSamlType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogle     AccessIdentityProviderUpdateResponseAccessSamlType = "google"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeLinkedin   AccessIdentityProviderUpdateResponseAccessSamlType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeOidc       AccessIdentityProviderUpdateResponseAccessSamlType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeOkta       AccessIdentityProviderUpdateResponseAccessSamlType = "okta"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeOnelogin   AccessIdentityProviderUpdateResponseAccessSamlType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessSamlTypePingone    AccessIdentityProviderUpdateResponseAccessSamlType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessSamlTypeYandex     AccessIdentityProviderUpdateResponseAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessYandex struct {
-	// UUID
-	ID     string                                                 `json:"id"`
-	Config AccessIdentityProviderUpdateResponseAccessYandexConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessYandexConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderUpdateResponseAccessYandexScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderUpdateResponseAccessYandexType `json:"type"`
-	JSON accessIdentityProviderUpdateResponseAccessYandexJSON `json:"-"`
+	Type AccessIdentityProviderUpdateResponseAccessYandexType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessYandexScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessYandexJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessYandexJSON contains the JSON metadata
 // for the struct [AccessIdentityProviderUpdateResponseAccessYandex]
 type accessIdentityProviderUpdateResponseAccessYandexJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3466,6 +3641,9 @@ func (r *AccessIdentityProviderUpdateResponseAccessYandex) UnmarshalJSON(data []
 func (r AccessIdentityProviderUpdateResponseAccessYandex) implementsAccessIdentityProviderUpdateResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateResponseAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -3486,6 +3664,28 @@ type accessIdentityProviderUpdateResponseAccessYandexConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessYandexType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOnetimepin AccessIdentityProviderUpdateResponseAccessYandexType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeAzureAd    AccessIdentityProviderUpdateResponseAccessYandexType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeSaml       AccessIdentityProviderUpdateResponseAccessYandexType = "saml"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeCentrify   AccessIdentityProviderUpdateResponseAccessYandexType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeFacebook   AccessIdentityProviderUpdateResponseAccessYandexType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGitHub     AccessIdentityProviderUpdateResponseAccessYandexType = "github"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogleApps AccessIdentityProviderUpdateResponseAccessYandexType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogle     AccessIdentityProviderUpdateResponseAccessYandexType = "google"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeLinkedin   AccessIdentityProviderUpdateResponseAccessYandexType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOidc       AccessIdentityProviderUpdateResponseAccessYandexType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOkta       AccessIdentityProviderUpdateResponseAccessYandexType = "okta"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOnelogin   AccessIdentityProviderUpdateResponseAccessYandexType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypePingone    AccessIdentityProviderUpdateResponseAccessYandexType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeYandex     AccessIdentityProviderUpdateResponseAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3527,49 +3727,33 @@ func (r *AccessIdentityProviderUpdateResponseAccessYandexScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateResponseAccessYandexType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessYandexTypeOnetimepin AccessIdentityProviderUpdateResponseAccessYandexType = "onetimepin"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeAzureAd    AccessIdentityProviderUpdateResponseAccessYandexType = "azureAD"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeSaml       AccessIdentityProviderUpdateResponseAccessYandexType = "saml"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeCentrify   AccessIdentityProviderUpdateResponseAccessYandexType = "centrify"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeFacebook   AccessIdentityProviderUpdateResponseAccessYandexType = "facebook"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeGitHub     AccessIdentityProviderUpdateResponseAccessYandexType = "github"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogleApps AccessIdentityProviderUpdateResponseAccessYandexType = "google-apps"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogle     AccessIdentityProviderUpdateResponseAccessYandexType = "google"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeLinkedin   AccessIdentityProviderUpdateResponseAccessYandexType = "linkedin"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeOidc       AccessIdentityProviderUpdateResponseAccessYandexType = "oidc"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeOkta       AccessIdentityProviderUpdateResponseAccessYandexType = "okta"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeOnelogin   AccessIdentityProviderUpdateResponseAccessYandexType = "onelogin"
-	AccessIdentityProviderUpdateResponseAccessYandexTypePingone    AccessIdentityProviderUpdateResponseAccessYandexType = "pingone"
-	AccessIdentityProviderUpdateResponseAccessYandexTypeYandex     AccessIdentityProviderUpdateResponseAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderUpdateResponseAccessOnetimepin struct {
-	// UUID
-	ID     string      `json:"id"`
-	Config interface{} `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessOnetimepinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	ScimConfig AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig `json:"scim_config"`
-	Type       AccessIdentityProviderUpdateResponseAccessOnetimepinType       `json:"type"`
 	JSON       accessIdentityProviderUpdateResponseAccessOnetimepinJSON       `json:"-"`
 }
 
 // accessIdentityProviderUpdateResponseAccessOnetimepinJSON contains the JSON
 // metadata for the struct [AccessIdentityProviderUpdateResponseAccessOnetimepin]
 type accessIdentityProviderUpdateResponseAccessOnetimepinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3580,6 +3764,28 @@ func (r *AccessIdentityProviderUpdateResponseAccessOnetimepin) UnmarshalJSON(dat
 
 func (r AccessIdentityProviderUpdateResponseAccessOnetimepin) implementsAccessIdentityProviderUpdateResponse() {
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeSaml       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeCentrify   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeFacebook   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGitHub     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "github"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGoogle     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "google"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOidc       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOkta       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypePingone    AccessIdentityProviderUpdateResponseAccessOnetimepinType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeYandex     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3620,12 +3826,6 @@ type accessIdentityProviderUpdateResponseAccessOnetimepinScimConfigJSON struct {
 func (r *AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type AccessIdentityProviderUpdateResponseAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOnetimepinType = "onetimepin"
-)
 
 type AccessIdentityProviderDeleteResponse struct {
 	// UUID
@@ -3670,30 +3870,33 @@ func init() {
 }
 
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAd struct {
-	// UUID
-	ID     string                                                                                              `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAd]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3705,6 +3908,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAd) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -3741,6 +3947,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3782,53 +4010,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrify struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrify]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3840,6 +4049,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrify) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount string `json:"centrify_account"`
@@ -3873,6 +4085,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -3914,53 +4148,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebook struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebook]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -3972,6 +4187,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebook) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -3993,6 +4211,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4034,53 +4274,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHub struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHub]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4092,6 +4313,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHub) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -4113,6 +4337,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4154,53 +4400,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogle struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogle]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4212,6 +4439,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogle) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -4239,6 +4469,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4280,53 +4532,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleApps struct {
-	// UUID
-	ID     string                                                                                                 `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleApps]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4338,6 +4571,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleApps) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain string `json:"apps_domain"`
@@ -4368,6 +4604,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4409,53 +4667,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedin struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedin]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4467,6 +4706,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedin) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -4488,6 +4730,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4529,53 +4793,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidc struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidc]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4587,6 +4832,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidc) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
@@ -4626,6 +4874,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4667,53 +4937,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOkta struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOkta]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4725,6 +4976,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOkta) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID string `json:"authorization_server_id"`
@@ -4758,6 +5012,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4799,53 +5075,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnelogin struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnelogin]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4857,6 +5114,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnelogin) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -4887,6 +5147,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -4928,53 +5210,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingone struct {
-	// UUID
-	ID     string                                                                                              `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingone]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -4986,6 +5249,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingone) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -5016,6 +5282,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5057,53 +5345,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSaml struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSaml]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5115,6 +5384,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSaml) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -5177,6 +5449,28 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlScimConfig struct {
@@ -5217,53 +5511,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandex struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandex]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5275,6 +5550,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandex) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -5296,6 +5574,28 @@ type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5337,38 +5637,22 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepin struct {
-	// UUID
-	ID     string      `json:"id"`
-	Config interface{} `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config interface{} `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	ScimConfig AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinScimConfig `json:"scim_config"`
-	Type       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType       `json:"type"`
 	JSON       accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinJSON       `json:"-"`
 }
 
@@ -5376,11 +5660,11 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderRes
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepin]
 type accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5391,6 +5675,28 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepin) implementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse() {
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5432,12 +5738,6 @@ func (r *AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvide
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseAccessOnetimepinType = "onetimepin"
-)
-
 // Union satisfied by
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAd],
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrify],
@@ -5462,30 +5762,33 @@ func init() {
 }
 
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAd struct {
-	// UUID
-	ID     string                                                                                              `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAd]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5497,6 +5800,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAd) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -5533,6 +5839,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5574,53 +5902,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrify struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrify]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5632,6 +5941,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrify) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount string `json:"centrify_account"`
@@ -5665,6 +5977,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5706,53 +6040,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebook struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebook]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5764,6 +6079,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebook) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -5785,6 +6103,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5826,53 +6166,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHub struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHub]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -5884,6 +6205,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHub) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -5905,6 +6229,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -5946,53 +6292,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogle struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogle]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6004,6 +6331,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogle) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -6031,6 +6361,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6072,53 +6424,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleApps struct {
-	// UUID
-	ID     string                                                                                                 `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleApps]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6130,6 +6463,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleApps) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain string `json:"apps_domain"`
@@ -6160,6 +6496,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6201,53 +6559,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedin struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedin]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6259,6 +6598,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedin) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -6280,6 +6622,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6321,53 +6685,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidc struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidc]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6379,6 +6724,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidc) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL string `json:"auth_url"`
@@ -6418,6 +6766,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6459,53 +6829,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOkta struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOkta]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6517,6 +6868,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOkta) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID string `json:"authorization_server_id"`
@@ -6550,6 +6904,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6591,53 +6967,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOnelogin struct {
-	// UUID
-	ID     string                                                                                               `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOnelogin]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6649,6 +7006,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOnelogin) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -6679,6 +7039,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6720,53 +7102,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingone struct {
-	// UUID
-	ID     string                                                                                              `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingone]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6778,6 +7141,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingone) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneConfig struct {
 	// Custom claims
 	Claims []string `json:"claims"`
@@ -6808,6 +7174,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -6849,53 +7237,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSaml struct {
-	// UUID
-	ID     string                                                                                           `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSaml]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -6907,6 +7276,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSaml) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -6969,6 +7341,28 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlScimConfig struct {
@@ -7009,53 +7403,34 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandex struct {
-	// UUID
-	ID     string                                                                                             `json:"id"`
-	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexConfig `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexConfig `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexScimConfig `json:"scim_config"`
+	Name string `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType `json:"type"`
-	JSON accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexJSON `json:"-"`
+	Type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexJSON
 // contains the JSON metadata for the struct
 // [AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandex]
 type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexJSON struct {
-	ID          apijson.Field
 	Config      apijson.Field
 	Name        apijson.Field
-	ScimConfig  apijson.Field
 	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -7067,6 +7442,9 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 func (r AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandex) implementsAccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse() {
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID string `json:"client_id"`
@@ -7088,6 +7466,28 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "github"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "google"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7129,34 +7529,12 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "github"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "google"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderGetResponseEnvelope struct {
-	Errors   []AccessIdentityProviderGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessIdentityProviderGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessIdentityProviderGetResponse                   `json:"result"`
+	Errors   []AccessIdentityProviderGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessIdentityProviderGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessIdentityProviderGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessIdentityProviderGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessIdentityProviderGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -7240,16 +7618,19 @@ type AccessIdentityProviderUpdateParams interface {
 }
 
 type AccessIdentityProviderUpdateParamsAccessAzureAd struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
@@ -7260,6 +7641,9 @@ func (AccessIdentityProviderUpdateParamsAccessAzureAd) ImplementsAccessIdentityP
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessAzureAdConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -7280,6 +7664,28 @@ type AccessIdentityProviderUpdateParamsAccessAzureAdConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessAzureAdType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateParamsAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateParamsAccessAzureAdType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeSaml       AccessIdentityProviderUpdateParamsAccessAzureAdType = "saml"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateParamsAccessAzureAdType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateParamsAccessAzureAdType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateParamsAccessAzureAdType = "github"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateParamsAccessAzureAdType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateParamsAccessAzureAdType = "google"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOidc       AccessIdentityProviderUpdateParamsAccessAzureAdType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOkta       AccessIdentityProviderUpdateParamsAccessAzureAdType = "okta"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypePingone    AccessIdentityProviderUpdateParamsAccessAzureAdType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeYandex     AccessIdentityProviderUpdateParamsAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7307,39 +7713,20 @@ func (r AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessAzureAdType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateParamsAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateParamsAccessAzureAdType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeSaml       AccessIdentityProviderUpdateParamsAccessAzureAdType = "saml"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateParamsAccessAzureAdType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateParamsAccessAzureAdType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateParamsAccessAzureAdType = "github"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateParamsAccessAzureAdType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateParamsAccessAzureAdType = "google"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOidc       AccessIdentityProviderUpdateParamsAccessAzureAdType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOkta       AccessIdentityProviderUpdateParamsAccessAzureAdType = "okta"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypePingone    AccessIdentityProviderUpdateParamsAccessAzureAdType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessAzureAdTypeYandex     AccessIdentityProviderUpdateParamsAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessCentrify struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
@@ -7350,6 +7737,9 @@ func (AccessIdentityProviderUpdateParamsAccessCentrify) ImplementsAccessIdentity
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount param.Field[string] `json:"centrify_account"`
@@ -7368,6 +7758,28 @@ type AccessIdentityProviderUpdateParamsAccessCentrifyConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessCentrifyType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateParamsAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateParamsAccessCentrifyType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeSaml       AccessIdentityProviderUpdateParamsAccessCentrifyType = "saml"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateParamsAccessCentrifyType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateParamsAccessCentrifyType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateParamsAccessCentrifyType = "github"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateParamsAccessCentrifyType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateParamsAccessCentrifyType = "google"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOidc       AccessIdentityProviderUpdateParamsAccessCentrifyType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOkta       AccessIdentityProviderUpdateParamsAccessCentrifyType = "okta"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypePingone    AccessIdentityProviderUpdateParamsAccessCentrifyType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeYandex     AccessIdentityProviderUpdateParamsAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7395,39 +7807,20 @@ func (r AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessCentrifyType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateParamsAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateParamsAccessCentrifyType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeSaml       AccessIdentityProviderUpdateParamsAccessCentrifyType = "saml"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateParamsAccessCentrifyType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateParamsAccessCentrifyType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateParamsAccessCentrifyType = "github"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateParamsAccessCentrifyType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateParamsAccessCentrifyType = "google"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOidc       AccessIdentityProviderUpdateParamsAccessCentrifyType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOkta       AccessIdentityProviderUpdateParamsAccessCentrifyType = "okta"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypePingone    AccessIdentityProviderUpdateParamsAccessCentrifyType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessCentrifyTypeYandex     AccessIdentityProviderUpdateParamsAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessFacebook struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessFacebookConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessFacebookConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessFacebookScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessFacebookType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessFacebookType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessFacebookScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
@@ -7438,6 +7831,9 @@ func (AccessIdentityProviderUpdateParamsAccessFacebook) ImplementsAccessIdentity
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -7448,6 +7844,28 @@ type AccessIdentityProviderUpdateParamsAccessFacebookConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessFacebookType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateParamsAccessFacebookType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateParamsAccessFacebookType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeSaml       AccessIdentityProviderUpdateParamsAccessFacebookType = "saml"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeCentrify   AccessIdentityProviderUpdateParamsAccessFacebookType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeFacebook   AccessIdentityProviderUpdateParamsAccessFacebookType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGitHub     AccessIdentityProviderUpdateParamsAccessFacebookType = "github"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateParamsAccessFacebookType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogle     AccessIdentityProviderUpdateParamsAccessFacebookType = "google"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateParamsAccessFacebookType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOidc       AccessIdentityProviderUpdateParamsAccessFacebookType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOkta       AccessIdentityProviderUpdateParamsAccessFacebookType = "okta"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateParamsAccessFacebookType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypePingone    AccessIdentityProviderUpdateParamsAccessFacebookType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeYandex     AccessIdentityProviderUpdateParamsAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7475,39 +7893,20 @@ func (r AccessIdentityProviderUpdateParamsAccessFacebookScimConfig) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessFacebookType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateParamsAccessFacebookType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateParamsAccessFacebookType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeSaml       AccessIdentityProviderUpdateParamsAccessFacebookType = "saml"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeCentrify   AccessIdentityProviderUpdateParamsAccessFacebookType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeFacebook   AccessIdentityProviderUpdateParamsAccessFacebookType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeGitHub     AccessIdentityProviderUpdateParamsAccessFacebookType = "github"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateParamsAccessFacebookType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogle     AccessIdentityProviderUpdateParamsAccessFacebookType = "google"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateParamsAccessFacebookType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeOidc       AccessIdentityProviderUpdateParamsAccessFacebookType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeOkta       AccessIdentityProviderUpdateParamsAccessFacebookType = "okta"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateParamsAccessFacebookType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypePingone    AccessIdentityProviderUpdateParamsAccessFacebookType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessFacebookTypeYandex     AccessIdentityProviderUpdateParamsAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessGitHub struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessGitHubConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGitHubConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGitHubScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessGitHubType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGitHubType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGitHubScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
@@ -7518,6 +7917,9 @@ func (AccessIdentityProviderUpdateParamsAccessGitHub) ImplementsAccessIdentityPr
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -7528,6 +7930,28 @@ type AccessIdentityProviderUpdateParamsAccessGitHubConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGitHubType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGitHubType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGitHubType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeSaml       AccessIdentityProviderUpdateParamsAccessGitHubType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeCentrify   AccessIdentityProviderUpdateParamsAccessGitHubType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeFacebook   AccessIdentityProviderUpdateParamsAccessGitHubType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGitHub     AccessIdentityProviderUpdateParamsAccessGitHubType = "github"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGitHubType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogle     AccessIdentityProviderUpdateParamsAccessGitHubType = "google"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGitHubType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOidc       AccessIdentityProviderUpdateParamsAccessGitHubType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOkta       AccessIdentityProviderUpdateParamsAccessGitHubType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGitHubType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypePingone    AccessIdentityProviderUpdateParamsAccessGitHubType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeYandex     AccessIdentityProviderUpdateParamsAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7555,39 +7979,20 @@ func (r AccessIdentityProviderUpdateParamsAccessGitHubScimConfig) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessGitHubType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGitHubType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGitHubType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeSaml       AccessIdentityProviderUpdateParamsAccessGitHubType = "saml"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeCentrify   AccessIdentityProviderUpdateParamsAccessGitHubType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeFacebook   AccessIdentityProviderUpdateParamsAccessGitHubType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeGitHub     AccessIdentityProviderUpdateParamsAccessGitHubType = "github"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGitHubType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogle     AccessIdentityProviderUpdateParamsAccessGitHubType = "google"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGitHubType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeOidc       AccessIdentityProviderUpdateParamsAccessGitHubType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeOkta       AccessIdentityProviderUpdateParamsAccessGitHubType = "okta"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGitHubType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypePingone    AccessIdentityProviderUpdateParamsAccessGitHubType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessGitHubTypeYandex     AccessIdentityProviderUpdateParamsAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessGoogle struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
@@ -7598,6 +8003,9 @@ func (AccessIdentityProviderUpdateParamsAccessGoogle) ImplementsAccessIdentityPr
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessGoogleConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -7612,6 +8020,28 @@ type AccessIdentityProviderUpdateParamsAccessGoogleConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleType = "github"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleType = "google"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7639,39 +8069,20 @@ func (r AccessIdentityProviderUpdateParamsAccessGoogleScimConfig) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessGoogleType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleType = "saml"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleType = "github"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleType = "google"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleType = "okta"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessGoogleTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessGoogleApps struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
@@ -7682,6 +8093,9 @@ func (AccessIdentityProviderUpdateParamsAccessGoogleApps) ImplementsAccessIdenti
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain param.Field[string] `json:"apps_domain"`
@@ -7698,6 +8112,28 @@ type AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "github"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7725,39 +8161,20 @@ func (r AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "saml"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "github"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "okta"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessLinkedin struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
@@ -7768,6 +8185,9 @@ func (AccessIdentityProviderUpdateParamsAccessLinkedin) ImplementsAccessIdentity
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -7778,6 +8198,28 @@ type AccessIdentityProviderUpdateParamsAccessLinkedinConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessLinkedinType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateParamsAccessLinkedinType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeSaml       AccessIdentityProviderUpdateParamsAccessLinkedinType = "saml"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateParamsAccessLinkedinType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateParamsAccessLinkedinType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateParamsAccessLinkedinType = "github"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateParamsAccessLinkedinType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateParamsAccessLinkedinType = "google"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOidc       AccessIdentityProviderUpdateParamsAccessLinkedinType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOkta       AccessIdentityProviderUpdateParamsAccessLinkedinType = "okta"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypePingone    AccessIdentityProviderUpdateParamsAccessLinkedinType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeYandex     AccessIdentityProviderUpdateParamsAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7805,39 +8247,20 @@ func (r AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessLinkedinType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateParamsAccessLinkedinType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeSaml       AccessIdentityProviderUpdateParamsAccessLinkedinType = "saml"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateParamsAccessLinkedinType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateParamsAccessLinkedinType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateParamsAccessLinkedinType = "github"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateParamsAccessLinkedinType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateParamsAccessLinkedinType = "google"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOidc       AccessIdentityProviderUpdateParamsAccessLinkedinType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOkta       AccessIdentityProviderUpdateParamsAccessLinkedinType = "okta"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypePingone    AccessIdentityProviderUpdateParamsAccessLinkedinType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessLinkedinTypeYandex     AccessIdentityProviderUpdateParamsAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessOidc struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessOidcConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOidcConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOidcScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessOidcType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOidcType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOidcScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessOidc) MarshalJSON() (data []byte, err error) {
@@ -7848,6 +8271,9 @@ func (AccessIdentityProviderUpdateParamsAccessOidc) ImplementsAccessIdentityProv
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL param.Field[string] `json:"auth_url"`
@@ -7870,6 +8296,28 @@ type AccessIdentityProviderUpdateParamsAccessOidcConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessOidcConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOidcType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOidcType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOidcType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeSaml       AccessIdentityProviderUpdateParamsAccessOidcType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeCentrify   AccessIdentityProviderUpdateParamsAccessOidcType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeFacebook   AccessIdentityProviderUpdateParamsAccessOidcType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGitHub     AccessIdentityProviderUpdateParamsAccessOidcType = "github"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOidcType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogle     AccessIdentityProviderUpdateParamsAccessOidcType = "google"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOidcType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOidc       AccessIdentityProviderUpdateParamsAccessOidcType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOkta       AccessIdentityProviderUpdateParamsAccessOidcType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOidcType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypePingone    AccessIdentityProviderUpdateParamsAccessOidcType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeYandex     AccessIdentityProviderUpdateParamsAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7897,39 +8345,20 @@ func (r AccessIdentityProviderUpdateParamsAccessOidcScimConfig) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessOidcType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessOidcTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOidcType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOidcType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeSaml       AccessIdentityProviderUpdateParamsAccessOidcType = "saml"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeCentrify   AccessIdentityProviderUpdateParamsAccessOidcType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeFacebook   AccessIdentityProviderUpdateParamsAccessOidcType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeGitHub     AccessIdentityProviderUpdateParamsAccessOidcType = "github"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOidcType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogle     AccessIdentityProviderUpdateParamsAccessOidcType = "google"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOidcType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeOidc       AccessIdentityProviderUpdateParamsAccessOidcType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeOkta       AccessIdentityProviderUpdateParamsAccessOidcType = "okta"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOidcType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessOidcTypePingone    AccessIdentityProviderUpdateParamsAccessOidcType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessOidcTypeYandex     AccessIdentityProviderUpdateParamsAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessOkta struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessOktaConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOktaConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOktaScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessOktaType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOktaType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOktaScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessOkta) MarshalJSON() (data []byte, err error) {
@@ -7940,6 +8369,9 @@ func (AccessIdentityProviderUpdateParamsAccessOkta) ImplementsAccessIdentityProv
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
@@ -7958,6 +8390,28 @@ type AccessIdentityProviderUpdateParamsAccessOktaConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOktaType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOktaType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOktaType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeSaml       AccessIdentityProviderUpdateParamsAccessOktaType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeCentrify   AccessIdentityProviderUpdateParamsAccessOktaType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeFacebook   AccessIdentityProviderUpdateParamsAccessOktaType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGitHub     AccessIdentityProviderUpdateParamsAccessOktaType = "github"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOktaType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogle     AccessIdentityProviderUpdateParamsAccessOktaType = "google"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOktaType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOidc       AccessIdentityProviderUpdateParamsAccessOktaType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOkta       AccessIdentityProviderUpdateParamsAccessOktaType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOktaType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypePingone    AccessIdentityProviderUpdateParamsAccessOktaType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeYandex     AccessIdentityProviderUpdateParamsAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -7985,39 +8439,20 @@ func (r AccessIdentityProviderUpdateParamsAccessOktaScimConfig) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessOktaType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessOktaTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOktaType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOktaType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeSaml       AccessIdentityProviderUpdateParamsAccessOktaType = "saml"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeCentrify   AccessIdentityProviderUpdateParamsAccessOktaType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeFacebook   AccessIdentityProviderUpdateParamsAccessOktaType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeGitHub     AccessIdentityProviderUpdateParamsAccessOktaType = "github"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOktaType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogle     AccessIdentityProviderUpdateParamsAccessOktaType = "google"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOktaType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeOidc       AccessIdentityProviderUpdateParamsAccessOktaType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeOkta       AccessIdentityProviderUpdateParamsAccessOktaType = "okta"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOktaType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessOktaTypePingone    AccessIdentityProviderUpdateParamsAccessOktaType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessOktaTypeYandex     AccessIdentityProviderUpdateParamsAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessOnelogin struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessOneloginConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOneloginConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOneloginScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessOneloginType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOneloginType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOneloginScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
@@ -8028,6 +8463,9 @@ func (AccessIdentityProviderUpdateParamsAccessOnelogin) ImplementsAccessIdentity
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessOneloginConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -8044,6 +8482,28 @@ type AccessIdentityProviderUpdateParamsAccessOneloginConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOneloginType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOneloginType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOneloginType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeSaml       AccessIdentityProviderUpdateParamsAccessOneloginType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeCentrify   AccessIdentityProviderUpdateParamsAccessOneloginType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeFacebook   AccessIdentityProviderUpdateParamsAccessOneloginType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGitHub     AccessIdentityProviderUpdateParamsAccessOneloginType = "github"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOneloginType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogle     AccessIdentityProviderUpdateParamsAccessOneloginType = "google"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOneloginType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOidc       AccessIdentityProviderUpdateParamsAccessOneloginType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOkta       AccessIdentityProviderUpdateParamsAccessOneloginType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOneloginType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypePingone    AccessIdentityProviderUpdateParamsAccessOneloginType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeYandex     AccessIdentityProviderUpdateParamsAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8071,39 +8531,20 @@ func (r AccessIdentityProviderUpdateParamsAccessOneloginScimConfig) MarshalJSON(
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessOneloginType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOneloginType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOneloginType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeSaml       AccessIdentityProviderUpdateParamsAccessOneloginType = "saml"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeCentrify   AccessIdentityProviderUpdateParamsAccessOneloginType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeFacebook   AccessIdentityProviderUpdateParamsAccessOneloginType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeGitHub     AccessIdentityProviderUpdateParamsAccessOneloginType = "github"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOneloginType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogle     AccessIdentityProviderUpdateParamsAccessOneloginType = "google"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOneloginType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeOidc       AccessIdentityProviderUpdateParamsAccessOneloginType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeOkta       AccessIdentityProviderUpdateParamsAccessOneloginType = "okta"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOneloginType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypePingone    AccessIdentityProviderUpdateParamsAccessOneloginType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessOneloginTypeYandex     AccessIdentityProviderUpdateParamsAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessPingone struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessPingoneConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessPingoneConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessPingoneScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessPingoneType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessPingoneType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessPingoneScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessPingone) MarshalJSON() (data []byte, err error) {
@@ -8114,6 +8555,9 @@ func (AccessIdentityProviderUpdateParamsAccessPingone) ImplementsAccessIdentityP
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessPingoneConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -8130,6 +8574,28 @@ type AccessIdentityProviderUpdateParamsAccessPingoneConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessPingoneType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateParamsAccessPingoneType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateParamsAccessPingoneType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeSaml       AccessIdentityProviderUpdateParamsAccessPingoneType = "saml"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeCentrify   AccessIdentityProviderUpdateParamsAccessPingoneType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeFacebook   AccessIdentityProviderUpdateParamsAccessPingoneType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGitHub     AccessIdentityProviderUpdateParamsAccessPingoneType = "github"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateParamsAccessPingoneType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogle     AccessIdentityProviderUpdateParamsAccessPingoneType = "google"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateParamsAccessPingoneType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOidc       AccessIdentityProviderUpdateParamsAccessPingoneType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOkta       AccessIdentityProviderUpdateParamsAccessPingoneType = "okta"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateParamsAccessPingoneType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypePingone    AccessIdentityProviderUpdateParamsAccessPingoneType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeYandex     AccessIdentityProviderUpdateParamsAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8157,39 +8623,20 @@ func (r AccessIdentityProviderUpdateParamsAccessPingoneScimConfig) MarshalJSON()
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessPingoneType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateParamsAccessPingoneType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateParamsAccessPingoneType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeSaml       AccessIdentityProviderUpdateParamsAccessPingoneType = "saml"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeCentrify   AccessIdentityProviderUpdateParamsAccessPingoneType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeFacebook   AccessIdentityProviderUpdateParamsAccessPingoneType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeGitHub     AccessIdentityProviderUpdateParamsAccessPingoneType = "github"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateParamsAccessPingoneType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogle     AccessIdentityProviderUpdateParamsAccessPingoneType = "google"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateParamsAccessPingoneType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeOidc       AccessIdentityProviderUpdateParamsAccessPingoneType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeOkta       AccessIdentityProviderUpdateParamsAccessPingoneType = "okta"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateParamsAccessPingoneType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypePingone    AccessIdentityProviderUpdateParamsAccessPingoneType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessPingoneTypeYandex     AccessIdentityProviderUpdateParamsAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessSaml struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessSamlConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessSamlConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessSamlScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessSamlType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessSamlType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessSamlScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessSaml) MarshalJSON() (data []byte, err error) {
@@ -8200,6 +8647,9 @@ func (AccessIdentityProviderUpdateParamsAccessSaml) ImplementsAccessIdentityProv
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -8235,6 +8685,28 @@ func (r AccessIdentityProviderUpdateParamsAccessSamlConfigHeaderAttribute) Marsh
 	return apijson.MarshalRoot(r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessSamlType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOnetimepin AccessIdentityProviderUpdateParamsAccessSamlType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeAzureAd    AccessIdentityProviderUpdateParamsAccessSamlType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeSaml       AccessIdentityProviderUpdateParamsAccessSamlType = "saml"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeCentrify   AccessIdentityProviderUpdateParamsAccessSamlType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeFacebook   AccessIdentityProviderUpdateParamsAccessSamlType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGitHub     AccessIdentityProviderUpdateParamsAccessSamlType = "github"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogleApps AccessIdentityProviderUpdateParamsAccessSamlType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogle     AccessIdentityProviderUpdateParamsAccessSamlType = "google"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeLinkedin   AccessIdentityProviderUpdateParamsAccessSamlType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOidc       AccessIdentityProviderUpdateParamsAccessSamlType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOkta       AccessIdentityProviderUpdateParamsAccessSamlType = "okta"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOnelogin   AccessIdentityProviderUpdateParamsAccessSamlType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypePingone    AccessIdentityProviderUpdateParamsAccessSamlType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeYandex     AccessIdentityProviderUpdateParamsAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderUpdateParamsAccessSamlScimConfig struct {
@@ -8261,39 +8733,20 @@ func (r AccessIdentityProviderUpdateParamsAccessSamlScimConfig) MarshalJSON() (d
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessSamlType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessSamlTypeOnetimepin AccessIdentityProviderUpdateParamsAccessSamlType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeAzureAd    AccessIdentityProviderUpdateParamsAccessSamlType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeSaml       AccessIdentityProviderUpdateParamsAccessSamlType = "saml"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeCentrify   AccessIdentityProviderUpdateParamsAccessSamlType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeFacebook   AccessIdentityProviderUpdateParamsAccessSamlType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeGitHub     AccessIdentityProviderUpdateParamsAccessSamlType = "github"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogleApps AccessIdentityProviderUpdateParamsAccessSamlType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogle     AccessIdentityProviderUpdateParamsAccessSamlType = "google"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeLinkedin   AccessIdentityProviderUpdateParamsAccessSamlType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeOidc       AccessIdentityProviderUpdateParamsAccessSamlType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeOkta       AccessIdentityProviderUpdateParamsAccessSamlType = "okta"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeOnelogin   AccessIdentityProviderUpdateParamsAccessSamlType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessSamlTypePingone    AccessIdentityProviderUpdateParamsAccessSamlType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessSamlTypeYandex     AccessIdentityProviderUpdateParamsAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessYandex struct {
-	Config param.Field[AccessIdentityProviderUpdateParamsAccessYandexConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessYandexConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessYandexScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderUpdateParamsAccessYandexType] `json:"type"`
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessYandexType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessYandexScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessYandex) MarshalJSON() (data []byte, err error) {
@@ -8304,6 +8757,9 @@ func (AccessIdentityProviderUpdateParamsAccessYandex) ImplementsAccessIdentityPr
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderUpdateParamsAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -8314,6 +8770,28 @@ type AccessIdentityProviderUpdateParamsAccessYandexConfig struct {
 func (r AccessIdentityProviderUpdateParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessYandexType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOnetimepin AccessIdentityProviderUpdateParamsAccessYandexType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeAzureAd    AccessIdentityProviderUpdateParamsAccessYandexType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeSaml       AccessIdentityProviderUpdateParamsAccessYandexType = "saml"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeCentrify   AccessIdentityProviderUpdateParamsAccessYandexType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeFacebook   AccessIdentityProviderUpdateParamsAccessYandexType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGitHub     AccessIdentityProviderUpdateParamsAccessYandexType = "github"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogleApps AccessIdentityProviderUpdateParamsAccessYandexType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogle     AccessIdentityProviderUpdateParamsAccessYandexType = "google"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeLinkedin   AccessIdentityProviderUpdateParamsAccessYandexType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOidc       AccessIdentityProviderUpdateParamsAccessYandexType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOkta       AccessIdentityProviderUpdateParamsAccessYandexType = "okta"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOnelogin   AccessIdentityProviderUpdateParamsAccessYandexType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypePingone    AccessIdentityProviderUpdateParamsAccessYandexType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeYandex     AccessIdentityProviderUpdateParamsAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8341,36 +8819,20 @@ func (r AccessIdentityProviderUpdateParamsAccessYandexScimConfig) MarshalJSON() 
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderUpdateParamsAccessYandexType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessYandexTypeOnetimepin AccessIdentityProviderUpdateParamsAccessYandexType = "onetimepin"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeAzureAd    AccessIdentityProviderUpdateParamsAccessYandexType = "azureAD"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeSaml       AccessIdentityProviderUpdateParamsAccessYandexType = "saml"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeCentrify   AccessIdentityProviderUpdateParamsAccessYandexType = "centrify"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeFacebook   AccessIdentityProviderUpdateParamsAccessYandexType = "facebook"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeGitHub     AccessIdentityProviderUpdateParamsAccessYandexType = "github"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogleApps AccessIdentityProviderUpdateParamsAccessYandexType = "google-apps"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogle     AccessIdentityProviderUpdateParamsAccessYandexType = "google"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeLinkedin   AccessIdentityProviderUpdateParamsAccessYandexType = "linkedin"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeOidc       AccessIdentityProviderUpdateParamsAccessYandexType = "oidc"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeOkta       AccessIdentityProviderUpdateParamsAccessYandexType = "okta"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeOnelogin   AccessIdentityProviderUpdateParamsAccessYandexType = "onelogin"
-	AccessIdentityProviderUpdateParamsAccessYandexTypePingone    AccessIdentityProviderUpdateParamsAccessYandexType = "pingone"
-	AccessIdentityProviderUpdateParamsAccessYandexTypeYandex     AccessIdentityProviderUpdateParamsAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderUpdateParamsAccessOnetimepin struct {
-	Config param.Field[interface{}] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[interface{}] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOnetimepinType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOnetimepinScimConfig] `json:"scim_config"`
-	Type       param.Field[AccessIdentityProviderUpdateParamsAccessOnetimepinType]       `json:"type"`
 }
 
 func (r AccessIdentityProviderUpdateParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
@@ -8380,6 +8842,28 @@ func (r AccessIdentityProviderUpdateParamsAccessOnetimepin) MarshalJSON() (data 
 func (AccessIdentityProviderUpdateParamsAccessOnetimepin) ImplementsAccessIdentityProviderUpdateParams() {
 
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeSaml       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeCentrify   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeFacebook   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGitHub     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "github"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGoogle     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "google"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOidc       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOkta       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypePingone    AccessIdentityProviderUpdateParamsAccessOnetimepinType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeYandex     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8407,18 +8891,12 @@ func (r AccessIdentityProviderUpdateParamsAccessOnetimepinScimConfig) MarshalJSO
 	return apijson.MarshalRoot(r)
 }
 
-type AccessIdentityProviderUpdateParamsAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOnetimepinType = "onetimepin"
-)
-
 type AccessIdentityProviderUpdateResponseEnvelope struct {
-	Errors   []AccessIdentityProviderUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessIdentityProviderUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessIdentityProviderUpdateResponse                   `json:"result"`
+	Errors   []AccessIdentityProviderUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessIdentityProviderUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessIdentityProviderUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessIdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessIdentityProviderUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -8483,11 +8961,11 @@ const (
 )
 
 type AccessIdentityProviderDeleteResponseEnvelope struct {
-	Errors   []AccessIdentityProviderDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessIdentityProviderDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessIdentityProviderDeleteResponse                   `json:"result"`
+	Errors   []AccessIdentityProviderDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessIdentityProviderDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessIdentityProviderDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessIdentityProviderDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessIdentityProviderDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -8571,16 +9049,19 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 }
 
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAd struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
@@ -8591,6 +9072,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -8611,6 +9095,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8638,39 +9144,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessAzureAdType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrify struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
@@ -8681,6 +9168,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyConfig struct {
 	// Your centrify account url
 	CentrifyAccount param.Field[string] `json:"centrify_account"`
@@ -8699,6 +9189,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8726,39 +9238,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessCentrifyType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebook struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
@@ -8769,6 +9262,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -8779,6 +9275,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8806,39 +9324,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessFacebookType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHub struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
@@ -8849,6 +9348,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -8859,6 +9361,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8886,39 +9410,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGitHubType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogle struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
@@ -8929,6 +9434,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -8943,6 +9451,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -8970,39 +9500,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleApps struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
@@ -9013,6 +9524,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsConfig struct {
 	// Your companies TLD
 	AppsDomain param.Field[string] `json:"apps_domain"`
@@ -9029,6 +9543,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9056,39 +9592,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessGoogleAppsType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedin struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
@@ -9099,6 +9616,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -9109,6 +9629,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9136,39 +9678,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessLinkedinType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidc struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidc) MarshalJSON() (data []byte, err error) {
@@ -9179,6 +9702,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcConfig struct {
 	// The authorization_endpoint URL of your IdP
 	AuthURL param.Field[string] `json:"auth_url"`
@@ -9201,6 +9727,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9228,39 +9776,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOidcType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOkta struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOkta) MarshalJSON() (data []byte, err error) {
@@ -9271,6 +9800,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaConfig struct {
 	// Your okta authorization server id
 	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
@@ -9289,6 +9821,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9316,39 +9870,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOktaType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnelogin struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
@@ -9359,6 +9894,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -9375,6 +9913,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9402,39 +9962,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOneloginType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingone struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingone) MarshalJSON() (data []byte, err error) {
@@ -9445,6 +9986,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneConfig struct {
 	// Custom claims
 	Claims param.Field[[]string] `json:"claims"`
@@ -9461,6 +10005,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9488,39 +10054,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessPingoneType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSaml struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSaml) MarshalJSON() (data []byte, err error) {
@@ -9531,6 +10078,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlConfig struct {
 	// A list of SAML attribute names that will be added to your signed JWT token and
 	// can be used in SAML policy rules.
@@ -9566,6 +10116,28 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "yandex"
+)
+
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlScimConfig struct {
@@ -9592,39 +10164,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessSamlType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandex struct {
-	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexConfig] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexScimConfig] `json:"scim_config"`
+	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType] `json:"type"`
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexScimConfig] `json:"scim_config"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandex) MarshalJSON() (data []byte, err error) {
@@ -9635,6 +10188,9 @@ func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPa
 
 }
 
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexConfig struct {
 	// Your OAuth Client ID
 	ClientID param.Field[string] `json:"client_id"`
@@ -9645,6 +10201,28 @@ type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderPar
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9672,36 +10250,20 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "onetimepin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "azureAD"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "saml"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "centrify"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "facebook"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "github"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "google-apps"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "google"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "linkedin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "oidc"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "okta"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "onelogin"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "pingone"
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessYandexType = "yandex"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepin struct {
-	Config param.Field[interface{}] `json:"config"`
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[interface{}] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType] `json:"type,required"`
 	// The configuration settings for enabling a System for Cross-Domain Identity
 	// Management (SCIM) with the identity provider.
 	ScimConfig param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinScimConfig] `json:"scim_config"`
-	Type       param.Field[AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType]       `json:"type"`
 }
 
 func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
@@ -9711,6 +10273,28 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 func (AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepin) ImplementsAccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParams() {
 
 }
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeAzureAd    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeSaml       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "saml"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeCentrify   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "centrify"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeFacebook   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "facebook"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeGitHub     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "github"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeGoogleApps AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeGoogle     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "google"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeLinkedin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeOidc       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "oidc"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeOkta       AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "okta"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeOnelogin   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypePingone    AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "pingone"
+	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeYandex     AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "yandex"
+)
 
 // The configuration settings for enabling a System for Cross-Domain Identity
 // Management (SCIM) with the identity provider.
@@ -9738,18 +10322,12 @@ func (r AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProvider
 	return apijson.MarshalRoot(r)
 }
 
-type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderParamsAccessOnetimepinType = "onetimepin"
-)
-
 type AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelope struct {
-	Errors   []AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeMessages `json:"messages"`
-	Result   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse                   `json:"result"`
+	Errors   []AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeSuccess `json:"success"`
+	Success AccessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessIdentityProviderAccessIdentityProvidersAddAnAccessIdentityProviderResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -9817,13 +10395,13 @@ const (
 )
 
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelope struct {
-	Errors     []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse                 `json:"result"`
-	ResultInfo AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess `json:"success"`
-	JSON    accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeJSON    `json:"-"`
+	Success    AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeJSON
@@ -9833,8 +10411,8 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -9883,6 +10461,13 @@ func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvider
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess bool
+
+const (
+	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccessTrue AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess = true
+)
+
 type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -9910,10 +10495,3 @@ type accessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersRes
 func (r *AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess bool
-
-const (
-	AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccessTrue AccessIdentityProviderAccessIdentityProvidersListAccessIdentityProvidersResponseEnvelopeSuccess = true
-)

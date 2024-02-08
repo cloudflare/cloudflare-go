@@ -136,13 +136,13 @@ func (r AccessCertificateSettingUpdateParamsSetting) MarshalJSON() (data []byte,
 }
 
 type AccessCertificateSettingUpdateResponseEnvelope struct {
-	Errors     []AccessCertificateSettingUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessCertificateSettingUpdateResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessCertificateSettingUpdateResponse                 `json:"result"`
-	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessCertificateSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessCertificateSettingUpdateResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessCertificateSettingUpdateResponseEnvelopeSuccess `json:"success"`
-	JSON    accessCertificateSettingUpdateResponseEnvelopeJSON    `json:"-"`
+	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessCertificateSettingUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessCertificateSettingUpdateResponseEnvelopeJSON contains the JSON metadata
@@ -151,8 +151,8 @@ type accessCertificateSettingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -199,6 +199,13 @@ func (r *AccessCertificateSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessCertificateSettingUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccessCertificateSettingUpdateResponseEnvelopeSuccessTrue AccessCertificateSettingUpdateResponseEnvelopeSuccess = true
+)
+
 type AccessCertificateSettingUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -227,21 +234,14 @@ func (r *AccessCertificateSettingUpdateResponseEnvelopeResultInfo) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type AccessCertificateSettingUpdateResponseEnvelopeSuccess bool
-
-const (
-	AccessCertificateSettingUpdateResponseEnvelopeSuccessTrue AccessCertificateSettingUpdateResponseEnvelopeSuccess = true
-)
-
 type AccessCertificateSettingListResponseEnvelope struct {
-	Errors     []AccessCertificateSettingListResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessCertificateSettingListResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessCertificateSettingListResponse                 `json:"result"`
-	ResultInfo AccessCertificateSettingListResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessCertificateSettingListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateSettingListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessCertificateSettingListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessCertificateSettingListResponseEnvelopeSuccess `json:"success"`
-	JSON    accessCertificateSettingListResponseEnvelopeJSON    `json:"-"`
+	Success    AccessCertificateSettingListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessCertificateSettingListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessCertificateSettingListResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessCertificateSettingListResponseEnvelopeJSON contains the JSON metadata for
@@ -250,8 +250,8 @@ type accessCertificateSettingListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -298,6 +298,13 @@ func (r *AccessCertificateSettingListResponseEnvelopeMessages) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessCertificateSettingListResponseEnvelopeSuccess bool
+
+const (
+	AccessCertificateSettingListResponseEnvelopeSuccessTrue AccessCertificateSettingListResponseEnvelopeSuccess = true
+)
+
 type AccessCertificateSettingListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -324,10 +331,3 @@ type accessCertificateSettingListResponseEnvelopeResultInfoJSON struct {
 func (r *AccessCertificateSettingListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessCertificateSettingListResponseEnvelopeSuccess bool
-
-const (
-	AccessCertificateSettingListResponseEnvelopeSuccessTrue AccessCertificateSettingListResponseEnvelopeSuccess = true
-)

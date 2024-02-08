@@ -466,63 +466,18 @@ const (
 )
 
 type SpeedAPIScheduleNewResponseEnvelope struct {
-	Errors   []SpeedAPIScheduleNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []SpeedAPIScheduleNewResponseEnvelopeMessages `json:"messages"`
-	Result   SpeedAPIScheduleNewResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                                    `json:"success"`
-	JSON    speedAPIScheduleNewResponseEnvelopeJSON `json:"-"`
+	Result SpeedAPIScheduleNewResponse             `json:"result"`
+	JSON   speedAPIScheduleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // speedAPIScheduleNewResponseEnvelopeJSON contains the JSON metadata for the
 // struct [SpeedAPIScheduleNewResponseEnvelope]
 type speedAPIScheduleNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
 func (r *SpeedAPIScheduleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleNewResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    speedAPIScheduleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// speedAPIScheduleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpeedAPIScheduleNewResponseEnvelopeErrors]
-type speedAPIScheduleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPIScheduleNewResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    speedAPIScheduleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// speedAPIScheduleNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SpeedAPIScheduleNewResponseEnvelopeMessages]
-type speedAPIScheduleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPIScheduleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

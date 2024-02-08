@@ -47,29 +47,7 @@ func (r *DexColoService) List(ctx context.Context, accountID string, query DexCo
 	return
 }
 
-type DexColoListResponse struct {
-	// Airport code
-	AirportCode string `json:"airportCode,required"`
-	// City
-	City string `json:"city,required"`
-	// Country code
-	CountryCode string                  `json:"countryCode,required"`
-	JSON        dexColoListResponseJSON `json:"-"`
-}
-
-// dexColoListResponseJSON contains the JSON metadata for the struct
-// [DexColoListResponse]
-type dexColoListResponseJSON struct {
-	AirportCode apijson.Field
-	City        apijson.Field
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DexColoListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+type DexColoListResponse = interface{}
 
 type DexColoListParams struct {
 	// End time for connection period in RFC3339 (ISO 8601) format.
@@ -99,14 +77,14 @@ const (
 )
 
 type DexColoListResponseEnvelope struct {
-	Errors   []DexColoListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexColoListResponseEnvelopeMessages `json:"messages"`
+	Errors   []DexColoListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexColoListResponseEnvelopeMessages `json:"messages,required"`
 	// array of colos.
-	Result     []DexColoListResponse                 `json:"result"`
-	ResultInfo DexColoListResponseEnvelopeResultInfo `json:"result_info"`
+	Result []DexColoListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success DexColoListResponseEnvelopeSuccess `json:"success"`
-	JSON    dexColoListResponseEnvelopeJSON    `json:"-"`
+	Success    DexColoListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DexColoListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dexColoListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexColoListResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -115,8 +93,8 @@ type dexColoListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -163,6 +141,13 @@ func (r *DexColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type DexColoListResponseEnvelopeSuccess bool
+
+const (
+	DexColoListResponseEnvelopeSuccessTrue DexColoListResponseEnvelopeSuccess = true
+)
+
 type DexColoListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -189,10 +174,3 @@ type dexColoListResponseEnvelopeResultInfoJSON struct {
 func (r *DexColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type DexColoListResponseEnvelopeSuccess bool
-
-const (
-	DexColoListResponseEnvelopeSuccessTrue DexColoListResponseEnvelopeSuccess = true
-)

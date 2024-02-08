@@ -127,12 +127,12 @@ func (r SnippetSnippetRuleUpdateParamsRule) MarshalJSON() (data []byte, err erro
 }
 
 type SnippetSnippetRuleUpdateResponseEnvelope struct {
-	Errors   []SnippetSnippetRuleUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []SnippetSnippetRuleUpdateResponseEnvelopeMessages `json:"messages"`
+	Errors   []SnippetSnippetRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetSnippetRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// List of snippet rules
-	Result []SnippetSnippetRuleUpdateResponse `json:"result"`
+	Result []SnippetSnippetRuleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SnippetSnippetRuleUpdateResponseEnvelopeSuccess `json:"success"`
+	Success SnippetSnippetRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetSnippetRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -197,12 +197,12 @@ const (
 )
 
 type SnippetSnippetRuleListResponseEnvelope struct {
-	Errors   []SnippetSnippetRuleListResponseEnvelopeErrors   `json:"errors"`
-	Messages []SnippetSnippetRuleListResponseEnvelopeMessages `json:"messages"`
+	Errors   []SnippetSnippetRuleListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetSnippetRuleListResponseEnvelopeMessages `json:"messages,required"`
 	// List of snippet rules
-	Result []SnippetSnippetRuleListResponse `json:"result"`
+	Result []SnippetSnippetRuleListResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SnippetSnippetRuleListResponseEnvelopeSuccess `json:"success"`
+	Success SnippetSnippetRuleListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetSnippetRuleListResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -11,7 +11,9 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // FirewallWAFPackageRuleService contains methods and other services that help with
@@ -64,7 +66,26 @@ func (r *FirewallWAFPackageRuleService) Update(ctx context.Context, zoneID strin
 	return
 }
 
-type FirewallWAFPackageRuleGetResponse = interface{}
+// Union satisfied by [FirewallWAFPackageRuleGetResponseUnknown],
+// [FirewallWAFPackageRuleGetResponseArray] or [shared.UnionString].
+type FirewallWAFPackageRuleGetResponse interface {
+	ImplementsFirewallWAFPackageRuleGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageRuleGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type FirewallWAFPackageRuleGetResponseArray []interface{}
+
+func (r FirewallWAFPackageRuleGetResponseArray) ImplementsFirewallWAFPackageRuleGetResponse() {}
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
@@ -361,11 +382,11 @@ const (
 )
 
 type FirewallWAFPackageRuleGetResponseEnvelope struct {
-	Errors   []FirewallWAFPackageRuleGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []FirewallWAFPackageRuleGetResponseEnvelopeMessages `json:"messages"`
-	Result   FirewallWAFPackageRuleGetResponse                   `json:"result"`
+	Errors   []FirewallWAFPackageRuleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallWAFPackageRuleGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success FirewallWAFPackageRuleGetResponseEnvelopeSuccess `json:"success"`
+	Success FirewallWAFPackageRuleGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallWAFPackageRuleGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -454,15 +475,15 @@ const (
 )
 
 type FirewallWAFPackageRuleUpdateResponseEnvelope struct {
-	Errors   []FirewallWAFPackageRuleUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []FirewallWAFPackageRuleUpdateResponseEnvelopeMessages `json:"messages"`
+	Errors   []FirewallWAFPackageRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// When triggered, anomaly detection WAF rules contribute to an overall threat
 	// score that will determine if a request is considered malicious. You can
 	// configure the total scoring threshold through the 'sensitivity' property of the
 	// WAF package.
-	Result FirewallWAFPackageRuleUpdateResponse `json:"result"`
+	Result FirewallWAFPackageRuleUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success FirewallWAFPackageRuleUpdateResponseEnvelopeSuccess `json:"success"`
+	Success FirewallWAFPackageRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallWAFPackageRuleUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

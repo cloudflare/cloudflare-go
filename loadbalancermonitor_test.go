@@ -64,12 +64,12 @@ func TestLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
 		cloudflare.LoadBalancerMonitorUpdateParams{
+			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
 			ConsecutiveUp:   cloudflare.F(int64(0)),
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
-			ExpectedCodes:   cloudflare.F("2xx"),
 			FollowRedirects: cloudflare.F(true),
 			Header: cloudflare.F[any](map[string]interface{}{
 				"Host": map[string]interface{}{
@@ -148,12 +148,12 @@ func TestLoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorWithOptionalPar
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorParams{
+			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
 			ConsecutiveUp:   cloudflare.F(int64(0)),
 			Description:     cloudflare.F("Login page monitor"),
 			ExpectedBody:    cloudflare.F("alive"),
-			ExpectedCodes:   cloudflare.F("2xx"),
 			FollowRedirects: cloudflare.F(true),
 			Header: cloudflare.F[any](map[string]interface{}{
 				"Host": map[string]interface{}{

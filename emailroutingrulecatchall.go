@@ -259,11 +259,11 @@ const (
 )
 
 type EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelope struct {
-	Errors   []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRuleResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -391,11 +391,11 @@ const (
 )
 
 type EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelope struct {
-	Errors   []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponse                   `json:"result"`
+	Errors   []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleResponseEnvelopeJSON    `json:"-"`
 }
 

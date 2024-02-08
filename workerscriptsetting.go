@@ -1364,11 +1364,11 @@ func (r *WorkerScriptSettingUpdateResponseTailConsumer) UnmarshalJSON(data []byt
 }
 
 type WorkerScriptSettingGetResponseEnvelope struct {
-	Errors   []WorkerScriptSettingGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkerScriptSettingGetResponseEnvelopeMessages `json:"messages"`
-	Result   WorkerScriptSettingGetResponse                   `json:"result"`
+	Errors   []WorkerScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptSettingGetResponseEnvelopeSuccess `json:"success"`
+	Success WorkerScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptSettingGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -1441,11 +1441,11 @@ func (r WorkerScriptSettingUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 type WorkerScriptSettingUpdateParamsSettings struct {
-	Errors   param.Field[[]WorkerScriptSettingUpdateParamsSettingsError]   `json:"errors"`
-	Messages param.Field[[]WorkerScriptSettingUpdateParamsSettingsMessage] `json:"messages"`
-	Result   param.Field[WorkerScriptSettingUpdateParamsSettingsResult]    `json:"result"`
+	Errors   param.Field[[]WorkerScriptSettingUpdateParamsSettingsError]   `json:"errors,required"`
+	Messages param.Field[[]WorkerScriptSettingUpdateParamsSettingsMessage] `json:"messages,required"`
+	Result   param.Field[WorkerScriptSettingUpdateParamsSettingsResult]    `json:"result,required"`
 	// Whether the API call was successful
-	Success param.Field[WorkerScriptSettingUpdateParamsSettingsSuccess] `json:"success"`
+	Success param.Field[WorkerScriptSettingUpdateParamsSettingsSuccess] `json:"success,required"`
 }
 
 func (r WorkerScriptSettingUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
@@ -1857,11 +1857,11 @@ const (
 )
 
 type WorkerScriptSettingUpdateResponseEnvelope struct {
-	Errors   []WorkerScriptSettingUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkerScriptSettingUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   WorkerScriptSettingUpdateResponse                   `json:"result"`
+	Errors   []WorkerScriptSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptSettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptSettingUpdateResponseEnvelopeSuccess `json:"success"`
+	Success WorkerScriptSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptSettingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

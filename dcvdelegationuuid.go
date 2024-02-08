@@ -63,11 +63,11 @@ func (r *DcvDelegationUuidGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DcvDelegationUuidGetResponseEnvelope struct {
-	Errors   []DcvDelegationUuidGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []DcvDelegationUuidGetResponseEnvelopeMessages `json:"messages"`
-	Result   DcvDelegationUuidGetResponse                   `json:"result"`
+	Errors   []DcvDelegationUuidGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DcvDelegationUuidGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DcvDelegationUuidGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DcvDelegationUuidGetResponseEnvelopeSuccess `json:"success"`
+	Success DcvDelegationUuidGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dcvDelegationUuidGetResponseEnvelopeJSON    `json:"-"`
 }
 

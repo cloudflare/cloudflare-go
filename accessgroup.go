@@ -12482,11 +12482,11 @@ func (r *AccessGroupAccessGroupsListAccessGroupsResponseRequireAccessDevicePostu
 }
 
 type AccessGroupGetResponseEnvelope struct {
-	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessGroupGetResponse                   `json:"result"`
+	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessGroupGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessGroupGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -13795,11 +13795,11 @@ func (r AccessGroupUpdateParamsRequireAccessDevicePostureRuleDevicePosture) Mars
 }
 
 type AccessGroupUpdateResponseEnvelope struct {
-	Errors   []AccessGroupUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessGroupUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessGroupUpdateResponse                   `json:"result"`
+	Errors   []AccessGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessGroupUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -13864,11 +13864,11 @@ const (
 )
 
 type AccessGroupDeleteResponseEnvelope struct {
-	Errors   []AccessGroupDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessGroupDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessGroupDeleteResponse                   `json:"result"`
+	Errors   []AccessGroupDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessGroupDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessGroupDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -15195,11 +15195,11 @@ func (r AccessGroupAccessGroupsNewAnAccessGroupParamsRequireAccessDevicePostureR
 }
 
 type AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelope struct {
-	Errors   []AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeMessages `json:"messages"`
-	Result   AccessGroupAccessGroupsNewAnAccessGroupResponse                   `json:"result"`
+	Errors   []AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessGroupAccessGroupsNewAnAccessGroupResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeSuccess `json:"success"`
+	Success AccessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessGroupAccessGroupsNewAnAccessGroupResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -15267,13 +15267,13 @@ const (
 )
 
 type AccessGroupAccessGroupsListAccessGroupsResponseEnvelope struct {
-	Errors     []AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessGroupAccessGroupsListAccessGroupsResponse                 `json:"result"`
-	ResultInfo AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessGroupAccessGroupsListAccessGroupsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessGroupAccessGroupsListAccessGroupsResponseEnvelopeJSON    `json:"-"`
+	Success    AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessGroupAccessGroupsListAccessGroupsResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessGroupAccessGroupsListAccessGroupsResponseEnvelopeJSON contains the JSON
@@ -15283,8 +15283,8 @@ type accessGroupAccessGroupsListAccessGroupsResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -15333,6 +15333,13 @@ func (r *AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeMessages) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess bool
+
+const (
+	AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccessTrue AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess = true
+)
+
 type AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -15360,10 +15367,3 @@ type accessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfoJSON struc
 func (r *AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess bool
-
-const (
-	AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccessTrue AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeSuccess = true
-)

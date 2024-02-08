@@ -54,11 +54,11 @@ func (r ZarazPublishNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type ZarazPublishNewResponseEnvelope struct {
-	Errors   []ZarazPublishNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZarazPublishNewResponseEnvelopeMessages `json:"messages"`
-	Result   string                                    `json:"result"`
+	Errors   []ZarazPublishNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazPublishNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   string                                    `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                `json:"success"`
+	Success bool                                `json:"success,required"`
 	JSON    zarazPublishNewResponseEnvelopeJSON `json:"-"`
 }
 

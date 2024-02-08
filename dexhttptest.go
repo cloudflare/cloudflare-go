@@ -500,11 +500,11 @@ const (
 )
 
 type DexHTTPTestGetResponseEnvelope struct {
-	Errors   []DexHTTPTestGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexHTTPTestGetResponseEnvelopeMessages `json:"messages"`
-	Result   DexHTTPTestGetResponse                   `json:"result"`
+	Errors   []DexHTTPTestGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexHTTPTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexHTTPTestGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexHTTPTestGetResponseEnvelopeSuccess `json:"success"`
+	Success DexHTTPTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexHTTPTestGetResponseEnvelopeJSON    `json:"-"`
 }
 

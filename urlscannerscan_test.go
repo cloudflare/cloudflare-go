@@ -37,8 +37,10 @@ func TestURLScannerScanNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"string",
 		cloudflare.URLScannerScanNewParams{
-			URL:                    cloudflare.F("https://www.example.com"),
-			CustomHeaders:          cloudflare.F[any](map[string]interface{}{}),
+			URL: cloudflare.F("https://www.example.com"),
+			CustomHeaders: cloudflare.F(map[string]string{
+				"foo": "string",
+			}),
 			ScreenshotsResolutions: cloudflare.F([]cloudflare.URLScannerScanNewParamsScreenshotsResolution{cloudflare.URLScannerScanNewParamsScreenshotsResolutionDesktop, cloudflare.URLScannerScanNewParamsScreenshotsResolutionMobile, cloudflare.URLScannerScanNewParamsScreenshotsResolutionTablet}),
 			Visibility:             cloudflare.F(cloudflare.URLScannerScanNewParamsVisibilityPublic),
 		},

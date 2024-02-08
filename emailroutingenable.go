@@ -113,11 +113,11 @@ const (
 )
 
 type EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelope struct {
-	Errors   []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse                   `json:"result"`
+	Errors   []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingEnableEmailRoutingSettingsEnableEmailRoutingResponseEnvelopeJSON    `json:"-"`
 }
 

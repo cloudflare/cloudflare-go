@@ -205,11 +205,11 @@ func (r TeamnetRouteNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TeamnetRouteNewResponseEnvelope struct {
-	Errors   []TeamnetRouteNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []TeamnetRouteNewResponseEnvelopeMessages `json:"messages"`
-	Result   TeamnetRouteNewResponse                   `json:"result"`
+	Errors   []TeamnetRouteNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TeamnetRouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   TeamnetRouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success TeamnetRouteNewResponseEnvelopeSuccess `json:"success"`
+	Success TeamnetRouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    teamnetRouteNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -304,11 +304,11 @@ const (
 )
 
 type TeamnetRouteUpdateResponseEnvelope struct {
-	Errors   []TeamnetRouteUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []TeamnetRouteUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   TeamnetRouteUpdateResponse                   `json:"result"`
+	Errors   []TeamnetRouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TeamnetRouteUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   TeamnetRouteUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success TeamnetRouteUpdateResponseEnvelopeSuccess `json:"success"`
+	Success TeamnetRouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    teamnetRouteUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -373,11 +373,11 @@ const (
 )
 
 type TeamnetRouteDeleteResponseEnvelope struct {
-	Errors   []TeamnetRouteDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []TeamnetRouteDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   TeamnetRouteDeleteResponse                   `json:"result"`
+	Errors   []TeamnetRouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TeamnetRouteDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   TeamnetRouteDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success TeamnetRouteDeleteResponseEnvelopeSuccess `json:"success"`
+	Success TeamnetRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    teamnetRouteDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -66,31 +66,31 @@ func init() {
 }
 
 type AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope struct {
+	Errors   []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64                                                                       `json:"days_until_next_rotation"`
-	Errors                []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeErrors `json:"errors"`
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                                                                       `json:"last_key_rotation_at" format:"date-time"`
-	Messages          []AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeMessages `json:"messages"`
-	Result            AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeSuccess `json:"success"`
-	JSON    accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON    `json:"-"`
+	LastKeyRotationAt time.Time                                                                 `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON `json:"-"`
 }
 
 // accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON
 // contains the JSON metadata for the struct
 // [AccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelope]
 type accessKeyRotateAccessKeyConfigurationRotateAccessKeysResponseEnvelopeJSON struct {
-	DaysUntilNextRotation   apijson.Field
 	Errors                  apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
 	Messages                apijson.Field
 	Result                  apijson.Field
 	Success                 apijson.Field
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }

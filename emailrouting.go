@@ -123,11 +123,11 @@ const (
 )
 
 type EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelope struct {
-	Errors   []EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponse                   `json:"result"`
+	Errors   []EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingEmailRoutingSettingsGetEmailRoutingSettingsResponseEnvelopeJSON    `json:"-"`
 }
 

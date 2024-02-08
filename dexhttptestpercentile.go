@@ -172,11 +172,11 @@ func (r DexHTTPTestPercentileListParams) URLQuery() (v url.Values) {
 }
 
 type DexHTTPTestPercentileListResponseEnvelope struct {
-	Errors   []DexHTTPTestPercentileListResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexHTTPTestPercentileListResponseEnvelopeMessages `json:"messages"`
-	Result   DexHTTPTestPercentileListResponse                   `json:"result"`
+	Errors   []DexHTTPTestPercentileListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexHTTPTestPercentileListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexHTTPTestPercentileListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexHTTPTestPercentileListResponseEnvelopeSuccess `json:"success"`
+	Success DexHTTPTestPercentileListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexHTTPTestPercentileListResponseEnvelopeJSON    `json:"-"`
 }
 

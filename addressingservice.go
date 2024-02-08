@@ -68,11 +68,11 @@ func (r *AddressingServiceListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AddressingServiceListResponseEnvelope struct {
-	Errors   []AddressingServiceListResponseEnvelopeErrors   `json:"errors"`
-	Messages []AddressingServiceListResponseEnvelopeMessages `json:"messages"`
-	Result   []AddressingServiceListResponse                 `json:"result"`
+	Errors   []AddressingServiceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingServiceListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AddressingServiceListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingServiceListResponseEnvelopeSuccess `json:"success"`
+	Success AddressingServiceListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingServiceListResponseEnvelopeJSON    `json:"-"`
 }
 

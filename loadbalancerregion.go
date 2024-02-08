@@ -7,12 +7,15 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // LoadBalancerRegionService contains methods and other services that help with
@@ -59,9 +62,42 @@ func (r *LoadBalancerRegionService) LoadBalancerRegionsListRegions(ctx context.C
 	return
 }
 
-type LoadBalancerRegionGetResponse = interface{}
+// A list of countries and subdivisions mapped to a region.
+//
+// Union satisfied by [LoadBalancerRegionGetResponseUnknown] or
+// [shared.UnionString].
+type LoadBalancerRegionGetResponse interface {
+	ImplementsLoadBalancerRegionGetResponse()
+}
 
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponse = interface{}
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*LoadBalancerRegionGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by
+// [LoadBalancerRegionLoadBalancerRegionsListRegionsResponseUnknown] or
+// [shared.UnionString].
+type LoadBalancerRegionLoadBalancerRegionsListRegionsResponse interface {
+	ImplementsLoadBalancerRegionLoadBalancerRegionsListRegionsResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*LoadBalancerRegionLoadBalancerRegionsListRegionsResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 // A list of Cloudflare regions. WNAM: Western North America, ENAM: Eastern North
 // America, WEU: Western Europe, EEU: Eastern Europe, NSAM: Northern South America,
@@ -87,12 +123,12 @@ const (
 )
 
 type LoadBalancerRegionGetResponseEnvelope struct {
-	Errors   []LoadBalancerRegionGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerRegionGetResponseEnvelopeMessages `json:"messages"`
+	Errors   []LoadBalancerRegionGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerRegionGetResponseEnvelopeMessages `json:"messages,required"`
 	// A list of countries and subdivisions mapped to a region.
-	Result LoadBalancerRegionGetResponse `json:"result"`
+	Result LoadBalancerRegionGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerRegionGetResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerRegionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerRegionGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -175,11 +211,11 @@ func (r LoadBalancerRegionLoadBalancerRegionsListRegionsParams) URLQuery() (v ur
 }
 
 type LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelope struct {
-	Errors   []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerRegionLoadBalancerRegionsListRegionsResponse                   `json:"result"`
+	Errors   []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerRegionLoadBalancerRegionsListRegionsResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeJSON    `json:"-"`
 }
 

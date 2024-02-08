@@ -517,11 +517,11 @@ const (
 )
 
 type LoadBalancerMonitorGetResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorGetResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerMonitorGetResponse                   `json:"result"`
+	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -586,6 +586,9 @@ const (
 )
 
 type LoadBalancerMonitorUpdateParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -601,9 +604,6 @@ type LoadBalancerMonitorUpdateParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -655,11 +655,11 @@ const (
 )
 
 type LoadBalancerMonitorUpdateResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerMonitorUpdateResponse                   `json:"result"`
+	Errors   []LoadBalancerMonitorUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorUpdateResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerMonitorUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -724,11 +724,11 @@ const (
 )
 
 type LoadBalancerMonitorDeleteResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerMonitorDeleteResponse                   `json:"result"`
+	Errors   []LoadBalancerMonitorDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorDeleteResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerMonitorDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -793,6 +793,9 @@ const (
 )
 
 type LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -808,9 +811,6 @@ type LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorParams struct {
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -862,11 +862,11 @@ const (
 )
 
 type LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponse                   `json:"result"`
+	Errors   []LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -934,13 +934,13 @@ const (
 )
 
 type LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelope struct {
-	Errors     []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeMessages `json:"messages"`
-	Result     []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponse                 `json:"result"`
-	ResultInfo LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess `json:"success"`
-	JSON    loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeJSON    `json:"-"`
+	Success    LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeJSON       `json:"-"`
 }
 
 // loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeJSON
@@ -950,8 +950,8 @@ type loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeJ
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1000,6 +1000,13 @@ func (r *LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvel
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccessTrue LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess = true
+)
+
 type LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -1027,10 +1034,3 @@ type loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeR
 func (r *LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccessTrue LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeSuccess = true
-)

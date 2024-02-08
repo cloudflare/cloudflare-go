@@ -81,12 +81,12 @@ const (
 )
 
 type ZarazWorkflowUpdateResponseEnvelope struct {
-	Errors   []ZarazWorkflowUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []ZarazWorkflowUpdateResponseEnvelopeMessages `json:"messages"`
+	Errors   []ZarazWorkflowUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazWorkflowUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Zaraz workflow
-	Result ZarazWorkflowUpdateResponse `json:"result"`
+	Result ZarazWorkflowUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                                    `json:"success"`
+	Success bool                                    `json:"success,required"`
 	JSON    zarazWorkflowUpdateResponseEnvelopeJSON `json:"-"`
 }
 

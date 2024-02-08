@@ -99,31 +99,31 @@ func init() {
 }
 
 type AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelope struct {
+	Errors   []AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64                                                                             `json:"days_until_next_rotation"`
-	Errors                []AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeErrors `json:"errors"`
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                                                                             `json:"last_key_rotation_at" format:"date-time"`
-	Messages          []AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeMessages `json:"messages"`
-	Result            AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeSuccess `json:"success"`
-	JSON    accessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeJSON    `json:"-"`
+	LastKeyRotationAt time.Time                                                                       `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeJSON `json:"-"`
 }
 
 // accessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeJSON
 // contains the JSON metadata for the struct
 // [AccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelope]
 type accessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponseEnvelopeJSON struct {
-	DaysUntilNextRotation   apijson.Field
 	Errors                  apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
 	Messages                apijson.Field
 	Result                  apijson.Field
 	Success                 apijson.Field
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }
@@ -189,31 +189,31 @@ func (r AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationParams) Ma
 }
 
 type AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelope struct {
+	Errors   []AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeSuccess `json:"success,required"`
 	// The number of days until the next key rotation.
-	DaysUntilNextRotation float64                                                                                `json:"days_until_next_rotation"`
-	Errors                []AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeErrors `json:"errors"`
+	DaysUntilNextRotation float64 `json:"days_until_next_rotation"`
 	// The number of days between key rotations.
 	KeyRotationIntervalDays float64 `json:"key_rotation_interval_days"`
 	// The timestamp of the previous key rotation.
-	LastKeyRotationAt time.Time                                                                                `json:"last_key_rotation_at" format:"date-time"`
-	Messages          []AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeMessages `json:"messages"`
-	Result            AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse                   `json:"result"`
-	// Whether the API call was successful
-	Success AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeSuccess `json:"success"`
-	JSON    accessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeJSON    `json:"-"`
+	LastKeyRotationAt time.Time                                                                          `json:"last_key_rotation_at" format:"date-time"`
+	JSON              accessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeJSON `json:"-"`
 }
 
 // accessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeJSON
 // contains the JSON metadata for the struct
 // [AccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelope]
 type accessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponseEnvelopeJSON struct {
-	DaysUntilNextRotation   apijson.Field
 	Errors                  apijson.Field
-	KeyRotationIntervalDays apijson.Field
-	LastKeyRotationAt       apijson.Field
 	Messages                apijson.Field
 	Result                  apijson.Field
 	Success                 apijson.Field
+	DaysUntilNextRotation   apijson.Field
+	KeyRotationIntervalDays apijson.Field
+	LastKeyRotationAt       apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
 }

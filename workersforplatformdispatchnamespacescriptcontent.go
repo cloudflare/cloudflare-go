@@ -173,11 +173,11 @@ func (r WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata) Ma
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope struct {
-	Errors   []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse                   `json:"result"`
+	Errors   []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success"`
+	Success WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

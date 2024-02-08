@@ -160,11 +160,11 @@ func (r WorkerScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err
 }
 
 type WorkerScriptContentUpdateResponseEnvelope struct {
-	Errors   []WorkerScriptContentUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []WorkerScriptContentUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   WorkerScriptContentUpdateResponse                   `json:"result"`
+	Errors   []WorkerScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptContentUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptContentUpdateResponseEnvelopeSuccess `json:"success"`
+	Success WorkerScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 

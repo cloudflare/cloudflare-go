@@ -6,11 +6,14 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // TunnelConnectionService contains methods and other services that help with
@@ -45,7 +48,26 @@ func (r *TunnelConnectionService) Delete(ctx context.Context, accountID string, 
 	return
 }
 
-type TunnelConnectionDeleteResponse = interface{}
+// Union satisfied by [TunnelConnectionDeleteResponseUnknown],
+// [TunnelConnectionDeleteResponseArray] or [shared.UnionString].
+type TunnelConnectionDeleteResponse interface {
+	ImplementsTunnelConnectionDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TunnelConnectionDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type TunnelConnectionDeleteResponseArray []interface{}
+
+func (r TunnelConnectionDeleteResponseArray) ImplementsTunnelConnectionDeleteResponse() {}
 
 type TunnelConnectionDeleteParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -56,11 +78,11 @@ func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {
 }
 
 type TunnelConnectionDeleteResponseEnvelope struct {
-	Errors   []TunnelConnectionDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []TunnelConnectionDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   TunnelConnectionDeleteResponse                   `json:"result"`
+	Errors   []TunnelConnectionDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelConnectionDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   TunnelConnectionDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success"`
+	Success TunnelConnectionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tunnelConnectionDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

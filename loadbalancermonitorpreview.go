@@ -47,7 +47,7 @@ func (r *LoadBalancerMonitorPreviewService) AccountLoadBalancerMonitorsPreviewMo
 
 type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     interface{}                                                                     `json:"pools"`
+	Pools     map[string]string                                                               `json:"pools"`
 	PreviewID string                                                                          `json:"preview_id"`
 	JSON      loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON `json:"-"`
 }
@@ -67,6 +67,9 @@ func (r *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResp
 }
 
 type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
 	// Do not validate the certificate when monitor use HTTPS. This parameter is
 	// currently only valid for HTTP and HTTPS monitors.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
@@ -82,9 +85,6 @@ type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams s
 	// is not found, the origin will be marked as unhealthy. This parameter is only
 	// valid for HTTP and HTTPS monitors.
 	ExpectedBody param.Field[string] `json:"expected_body"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes param.Field[string] `json:"expected_codes"`
 	// Follow redirects if returned by the origin. This parameter is only valid for
 	// HTTP and HTTPS monitors.
 	FollowRedirects param.Field[bool] `json:"follow_redirects"`
@@ -136,11 +136,11 @@ const (
 )
 
 type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors   `json:"errors"`
-	Messages []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages `json:"messages"`
-	Result   LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse                   `json:"result"`
+	Errors   []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccess `json:"success"`
+	Success LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccess `json:"success,required"`
 	JSON    loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeJSON    `json:"-"`
 }
 

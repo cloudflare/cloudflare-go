@@ -4,34 +4,118 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAIBaaiBgeBaseEnV1_5ParamsText()                                        {}
-func (UnionString) ImplementsAIBaaiBgeLargeEnV1_5ParamsText()                                       {}
-func (UnionString) ImplementsAIBaaiBgeSmallEnV1_5ParamsText()                                       {}
-func (UnionString) ImplementsAIMetaLlama2_7bChatFp16Response()                                      {}
-func (UnionString) ImplementsAIMetaLlama2_7bChatInt8Response()                                      {}
-func (UnionString) ImplementsAIMistralMistral7bInstructV0_1Response()                               {}
-func (UnionString) ImplementsAccessAppGetParamsAppID()                                              {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant0AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant1AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant2AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant3AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant4AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant5AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant6AppID()                                   {}
-func (UnionString) ImplementsAccessAppUpdateParamsVariant7AppID()                                   {}
-func (UnionString) ImplementsAccessAppDeleteParamsAppID()                                           {}
+func (UnionString) ImplementsAccountGetResponse()    {}
+func (UnionString) ImplementsAccountUpdateResponse() {}
+func (UnionString) ImplementsLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse() {
+}
+func (UnionString) ImplementsLoadBalancerRegionGetResponse()                            {}
+func (UnionString) ImplementsLoadBalancerRegionLoadBalancerRegionsListRegionsResponse() {}
+func (UnionString) ImplementsAccessAppGetParamsAppID()                                  {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant0AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant1AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant2AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant3AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant4AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant5AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant6AppID()                       {}
+func (UnionString) ImplementsAccessAppUpdateParamsVariant7AppID()                       {}
+func (UnionString) ImplementsAccessAppDeleteParamsAppID()                               {}
+func (UnionString) ImplementsAccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse() {
+}
+func (UnionString) ImplementsAccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse() {
+}
 func (UnionString) ImplementsAccessAppRevokeTokenAccessApplicationsRevokeServiceTokensParamsAppID() {}
 func (UnionString) ImplementsAccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID() {
 }
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfigurationResponse() {}
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
-func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                         {}
-func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()                            {}
-func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue()                         {}
-func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                           {}
-func (UnionString) ImplementsSnippetDeleteResponse()                                         {}
+func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse()      {}
+func (UnionString) ImplementsTunnelConnectionDeleteResponse()                                     {}
+func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
+func (UnionString) ImplementsStreamAudioTrackDeleteResponse()                                     {}
+func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                              {}
+func (UnionString) ImplementsVectorizeIndexDeleteResponse()                                       {}
+func (UnionString) ImplementsRadarRankingTimeseriesGroupListResponseSerie0()                      {}
+func (UnionString) ImplementsOriginPostQuantumEncryptionGetResponse()                             {}
+func (UnionString) ImplementsOriginPostQuantumEncryptionUpdateResponse()                          {}
+func (UnionString) ImplementsFirewallWAFPackageGroupGetResponse()                                 {}
+func (UnionString) ImplementsFirewallWAFPackageGroupUpdateResponse()                              {}
+func (UnionString) ImplementsFirewallWAFPackageRuleGetResponse()                                  {}
+func (UnionString) ImplementsZarazConfigGetResponseToolsZarazManagedComponentDefaultField()       {}
+func (UnionString) ImplementsZarazConfigGetResponseToolsZarazManagedComponentSetting()            {}
+func (UnionString) ImplementsZarazConfigGetResponseToolsZarazCustomManagedComponentDefaultField() {}
+func (UnionString) ImplementsZarazConfigGetResponseToolsZarazCustomManagedComponentSetting()      {}
+func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentDefaultField()    {}
+func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentSetting()         {}
+func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazCustomManagedComponentDefaultField() {
+}
+func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazCustomManagedComponentSetting()     {}
+func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields()             {}
+func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentDefaultFields()       {}
+func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentSettings()            {}
+func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazCustomManagedComponentDefaultFields() {}
+func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazCustomManagedComponentSettings()      {}
+func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentDefaultField()        {}
+func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentSetting()             {}
+func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField()  {}
+func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting()       {}
+func (UnionString) ImplementsZarazExportGetResponseToolsZarazManagedComponentDefaultField()         {}
+func (UnionString) ImplementsZarazExportGetResponseToolsZarazManagedComponentSetting()              {}
+func (UnionString) ImplementsZarazExportGetResponseToolsZarazCustomManagedComponentDefaultField()   {}
+func (UnionString) ImplementsZarazExportGetResponseToolsZarazCustomManagedComponentSetting()        {}
+func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField()     {}
+func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentSetting()          {}
+func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField() {
+}
+func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting() {}
+func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentDefaultField() {
+}
+func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentSetting() {}
+func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomManagedComponentDefaultField() {
+}
+func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomManagedComponentSetting() {
+}
+func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()    {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue() {}
+func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()   {}
+func (UnionString) ImplementsLogpushJobDeleteResponse()              {}
+func (UnionString) ImplementsSnippetDeleteResponse()                 {}
+
+type UnionBool bool
+
+func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazManagedComponentDefaultField()           {}
+func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazManagedComponentSetting()                {}
+func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazCustomManagedComponentDefaultField()     {}
+func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazCustomManagedComponentSetting()          {}
+func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentDefaultField()        {}
+func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentSetting()             {}
+func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazCustomManagedComponentDefaultField()  {}
+func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazCustomManagedComponentSetting()       {}
+func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields()               {}
+func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentDefaultFields()         {}
+func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentSettings()              {}
+func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazCustomManagedComponentDefaultFields()   {}
+func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazCustomManagedComponentSettings()        {}
+func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentDefaultField()          {}
+func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentSetting()               {}
+func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField()    {}
+func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting()         {}
+func (UnionBool) ImplementsZarazExportGetResponseToolsZarazManagedComponentDefaultField()           {}
+func (UnionBool) ImplementsZarazExportGetResponseToolsZarazManagedComponentSetting()                {}
+func (UnionBool) ImplementsZarazExportGetResponseToolsZarazCustomManagedComponentDefaultField()     {}
+func (UnionBool) ImplementsZarazExportGetResponseToolsZarazCustomManagedComponentSetting()          {}
+func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField()       {}
+func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentSetting()            {}
+func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField() {}
+func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting()      {}
+func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentDefaultField() {
+}
+func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentSetting() {}
+func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomManagedComponentDefaultField() {
+}
+func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazCustomManagedComponentSetting() {
+}
 
 type UnionFloat float64
 
@@ -187,6 +271,7 @@ func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSReco
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsTxtRecordTTL()   {}
 func (UnionFloat) ImplementsDNSRecordDNSRecordsForAZoneNewDNSRecordParamsDNSRecordsUriRecordTTL()   {}
 func (UnionFloat) ImplementsEmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseTTL() {}
+func (UnionFloat) ImplementsRadarRankingTimeseriesGroupListResponseSerie0()                         {}
 func (UnionFloat) ImplementsHostnameSettingTLSGetResponseValue()                                    {}
 func (UnionFloat) ImplementsHostnameSettingTLSUpdateResponseValue()                                 {}
 func (UnionFloat) ImplementsHostnameSettingTLSUpdateParamsValue()                                   {}

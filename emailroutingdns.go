@@ -131,13 +131,13 @@ const (
 )
 
 type EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelope struct {
-	Errors     []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeMessages `json:"messages"`
-	Result     []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse                 `json:"result"`
-	ResultInfo EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess `json:"success"`
-	JSON    emailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeJSON    `json:"-"`
+	Success    EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       emailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeJSON       `json:"-"`
 }
 
 // emailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeJSON
@@ -147,8 +147,8 @@ type emailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeJ
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -197,6 +197,13 @@ func (r *EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvel
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess bool
+
+const (
+	EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccessTrue EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess = true
+)
+
 type EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -224,10 +231,3 @@ type emailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeR
 func (r *EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess bool
-
-const (
-	EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccessTrue EmailRoutingDNSEmailRoutingSettingsEmailRoutingDNSSettingsResponseEnvelopeSuccess = true
-)

@@ -186,12 +186,12 @@ type SnippetDeleteResponseArray []interface{}
 func (r SnippetDeleteResponseArray) ImplementsSnippetDeleteResponse() {}
 
 type SnippetGetResponseEnvelope struct {
-	Errors   []SnippetGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []SnippetGetResponseEnvelopeMessages `json:"messages"`
+	Errors   []SnippetGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetGetResponseEnvelopeMessages `json:"messages,required"`
 	// Snippet Information
-	Result SnippetGetResponse `json:"result"`
+	Result SnippetGetResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SnippetGetResponseEnvelopeSuccess `json:"success"`
+	Success SnippetGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -275,12 +275,12 @@ func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 }
 
 type SnippetUpdateResponseEnvelope struct {
-	Errors   []SnippetUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages"`
+	Errors   []SnippetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Snippet Information
-	Result SnippetUpdateResponse `json:"result"`
+	Result SnippetUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SnippetUpdateResponseEnvelopeSuccess `json:"success"`
+	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -345,12 +345,12 @@ const (
 )
 
 type SnippetListResponseEnvelope struct {
-	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors"`
-	Messages []SnippetListResponseEnvelopeMessages `json:"messages"`
+	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetListResponseEnvelopeMessages `json:"messages,required"`
 	// List of all zone snippets
-	Result []SnippetListResponse `json:"result"`
+	Result []SnippetListResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SnippetListResponseEnvelopeSuccess `json:"success"`
+	Success SnippetListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetListResponseEnvelopeJSON    `json:"-"`
 }
 

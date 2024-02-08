@@ -80,11 +80,11 @@ func (r *AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenRespons
 }
 
 type AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelope struct {
-	Errors   []AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeMessages `json:"messages"`
-	Result   AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponse                   `json:"result"`
+	Errors   []AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeSuccess `json:"success"`
+	Success AccessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshAccessServiceTokensRefreshAServiceTokenResponseEnvelopeJSON    `json:"-"`
 }
 

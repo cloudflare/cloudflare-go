@@ -102,11 +102,11 @@ const (
 )
 
 type VectorizeIndexListResponseEnvelope struct {
-	Errors   []VectorizeIndexListResponseEnvelopeErrors   `json:"errors"`
-	Messages []VectorizeIndexListResponseEnvelopeMessages `json:"messages"`
-	Result   []VectorizeIndexListResponse                 `json:"result"`
+	Errors   []VectorizeIndexListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VectorizeIndexListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []VectorizeIndexListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success VectorizeIndexListResponseEnvelopeSuccess `json:"success"`
+	Success VectorizeIndexListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexListResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -64,13 +64,13 @@ func (r *AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse) UnmarshalJS
 }
 
 type AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelope struct {
-	Errors     []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse                 `json:"result"`
-	ResultInfo AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeJSON    `json:"-"`
+	Success    AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeJSON contains
@@ -80,8 +80,8 @@ type accessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeJSON stru
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -130,6 +130,13 @@ func (r *AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeMessa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess bool
+
+const (
+	AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccessTrue AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess = true
+)
+
 type AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -157,10 +164,3 @@ type accessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeResultInf
 func (r *AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess bool
-
-const (
-	AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccessTrue AccessUserFailedLoginZeroTrustUsersGetFailedLoginsResponseEnvelopeSuccess = true
-)

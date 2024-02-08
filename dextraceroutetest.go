@@ -795,11 +795,11 @@ const (
 )
 
 type DexTracerouteTestGetResponseEnvelope struct {
-	Errors   []DexTracerouteTestGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexTracerouteTestGetResponseEnvelopeMessages `json:"messages"`
-	Result   DexTracerouteTestGetResponse                   `json:"result"`
+	Errors   []DexTracerouteTestGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTracerouteTestGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTracerouteTestGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTracerouteTestGetResponseEnvelopeSuccess `json:"success"`
+	Success DexTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -892,11 +892,11 @@ const (
 )
 
 type DexTracerouteTestNetworkPathResponseEnvelope struct {
-	Errors   []DexTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexTracerouteTestNetworkPathResponseEnvelopeMessages `json:"messages"`
-	Result   DexTracerouteTestNetworkPathResponse                   `json:"result"`
+	Errors   []DexTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTracerouteTestNetworkPathResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTracerouteTestNetworkPathResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success"`
+	Success DexTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -983,11 +983,11 @@ func (r DexTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DexTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []DexTracerouteTestPercentilesResponseEnvelopeErrors   `json:"errors"`
-	Messages []DexTracerouteTestPercentilesResponseEnvelopeMessages `json:"messages"`
-	Result   DexTracerouteTestPercentilesResponse                   `json:"result"`
+	Errors   []DexTracerouteTestPercentilesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexTracerouteTestPercentilesResponseEnvelopeMessages `json:"messages,required"`
+	Result   DexTracerouteTestPercentilesResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success"`
+	Success DexTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`
 }
 

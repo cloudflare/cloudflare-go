@@ -63,28 +63,32 @@ func (r *CacheReserveService) Clear(ctx context.Context, zoneID string, opts ...
 	return
 }
 
+// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
+// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
+// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
+// that you cannot undo or cancel this operation.
 type CacheReserveNewResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveNewResponseID `json:"id"`
-	// The time that the latest Cache Reserve Clear operation completed.
-	EndTs time.Time `json:"end_ts" format:"date-time"`
+	ID CacheReserveNewResponseID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
-	StartTs time.Time `json:"start_ts" format:"date-time"`
+	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveNewResponseState `json:"state"`
-	JSON  cacheReserveNewResponseJSON  `json:"-"`
+	State CacheReserveNewResponseState `json:"state,required"`
+	// The time that the latest Cache Reserve Clear operation completed.
+	EndTs time.Time                   `json:"end_ts" format:"date-time"`
+	JSON  cacheReserveNewResponseJSON `json:"-"`
 }
 
 // cacheReserveNewResponseJSON contains the JSON metadata for the struct
 // [CacheReserveNewResponse]
 type cacheReserveNewResponseJSON struct {
 	ID          apijson.Field
-	EndTs       apijson.Field
 	ModifiedOn  apijson.Field
 	StartTs     apijson.Field
 	State       apijson.Field
+	EndTs       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -108,28 +112,32 @@ const (
 	CacheReserveNewResponseStateCompleted  CacheReserveNewResponseState = "Completed"
 )
 
+// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
+// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
+// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
+// that you cannot undo or cancel this operation.
 type CacheReserveClearResponse struct {
 	// ID of the zone setting.
-	ID CacheReserveClearResponseID `json:"id"`
-	// The time that the latest Cache Reserve Clear operation completed.
-	EndTs time.Time `json:"end_ts" format:"date-time"`
+	ID CacheReserveClearResponseID `json:"id,required"`
 	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// The time that the latest Cache Reserve Clear operation started.
-	StartTs time.Time `json:"start_ts" format:"date-time"`
+	StartTs time.Time `json:"start_ts,required" format:"date-time"`
 	// The current state of the Cache Reserve Clear operation.
-	State CacheReserveClearResponseState `json:"state"`
-	JSON  cacheReserveClearResponseJSON  `json:"-"`
+	State CacheReserveClearResponseState `json:"state,required"`
+	// The time that the latest Cache Reserve Clear operation completed.
+	EndTs time.Time                     `json:"end_ts" format:"date-time"`
+	JSON  cacheReserveClearResponseJSON `json:"-"`
 }
 
 // cacheReserveClearResponseJSON contains the JSON metadata for the struct
 // [CacheReserveClearResponse]
 type cacheReserveClearResponseJSON struct {
 	ID          apijson.Field
-	EndTs       apijson.Field
 	ModifiedOn  apijson.Field
 	StartTs     apijson.Field
 	State       apijson.Field
+	EndTs       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -154,11 +162,15 @@ const (
 )
 
 type CacheReserveNewResponseEnvelope struct {
-	Errors   []CacheReserveNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []CacheReserveNewResponseEnvelopeMessages `json:"messages"`
-	Result   CacheReserveNewResponse                   `json:"result"`
+	Errors   []CacheReserveNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveNewResponseEnvelopeMessages `json:"messages,required"`
+	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
+	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
+	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
+	// that you cannot undo or cancel this operation.
+	Result CacheReserveNewResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success CacheReserveNewResponseEnvelopeSuccess `json:"success"`
+	Success CacheReserveNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cacheReserveNewResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -223,11 +235,15 @@ const (
 )
 
 type CacheReserveClearResponseEnvelope struct {
-	Errors   []CacheReserveClearResponseEnvelopeErrors   `json:"errors"`
-	Messages []CacheReserveClearResponseEnvelopeMessages `json:"messages"`
-	Result   CacheReserveClearResponse                   `json:"result"`
+	Errors   []CacheReserveClearResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheReserveClearResponseEnvelopeMessages `json:"messages,required"`
+	// You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
+	// disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
+	// You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
+	// that you cannot undo or cancel this operation.
+	Result CacheReserveClearResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success CacheReserveClearResponseEnvelopeSuccess `json:"success"`
+	Success CacheReserveClearResponseEnvelopeSuccess `json:"success,required"`
 	JSON    cacheReserveClearResponseEnvelopeJSON    `json:"-"`
 }
 

@@ -230,11 +230,11 @@ func (r *EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddre
 }
 
 type EmailRoutingAddressGetResponseEnvelope struct {
-	Errors   []EmailRoutingAddressGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingAddressGetResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingAddressGetResponse                   `json:"result"`
+	Errors   []EmailRoutingAddressGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingAddressGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingAddressGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingAddressGetResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingAddressGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingAddressGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -299,11 +299,11 @@ const (
 )
 
 type EmailRoutingAddressDeleteResponseEnvelope struct {
-	Errors   []EmailRoutingAddressDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingAddressDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingAddressDeleteResponse                   `json:"result"`
+	Errors   []EmailRoutingAddressDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingAddressDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingAddressDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingAddressDeleteResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingAddressDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingAddressDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -377,11 +377,11 @@ func (r EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddres
 }
 
 type EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelope struct {
-	Errors   []EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeErrors   `json:"errors"`
-	Messages []EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeMessages `json:"messages"`
-	Result   EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponse                   `json:"result"`
+	Errors   []EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeSuccess `json:"success"`
+	Success EmailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeSuccess `json:"success,required"`
 	JSON    emailRoutingAddressEmailRoutingDestinationAddressesNewADestinationAddressResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -486,13 +486,13 @@ const (
 )
 
 type EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelope struct {
-	Errors     []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors   `json:"errors"`
-	Messages   []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages `json:"messages"`
-	Result     []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse                 `json:"result"`
-	ResultInfo EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages `json:"messages,required"`
+	Result   []EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess `json:"success"`
-	JSON    emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON    `json:"-"`
+	Success    EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON       `json:"-"`
 }
 
 // emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON
@@ -502,8 +502,8 @@ type emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddresses
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -552,11 +552,22 @@ func (r *EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddre
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess bool
+
+const (
+	EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccessTrue EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess = true
+)
+
 type EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo struct {
-	Count      interface{}                                                                                               `json:"count"`
-	Page       interface{}                                                                                               `json:"page"`
-	PerPage    interface{}                                                                                               `json:"per_page"`
-	TotalCount interface{}                                                                                               `json:"total_count"`
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                                                                   `json:"total_count"`
 	JSON       emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
@@ -575,10 +586,3 @@ type emailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddresses
 func (r *EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess bool
-
-const (
-	EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccessTrue EmailRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess = true
-)

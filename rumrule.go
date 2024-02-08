@@ -263,64 +263,19 @@ func (r RumRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RumRuleNewResponseEnvelope struct {
-	Errors   []RumRuleNewResponseEnvelopeErrors   `json:"errors"`
-	Messages []RumRuleNewResponseEnvelopeMessages `json:"messages"`
-	Result   RumRuleNewResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                           `json:"success"`
-	JSON    rumRuleNewResponseEnvelopeJSON `json:"-"`
+	Result RumRuleNewResponse             `json:"result"`
+	JSON   rumRuleNewResponseEnvelopeJSON `json:"-"`
 }
 
 // rumRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RumRuleNewResponseEnvelope]
 type rumRuleNewResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
 func (r *RumRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleNewResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    rumRuleNewResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// rumRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RumRuleNewResponseEnvelopeErrors]
-type rumRuleNewResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleNewResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    rumRuleNewResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// rumRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [RumRuleNewResponseEnvelopeMessages]
-type rumRuleNewResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -338,21 +293,14 @@ func (r RumRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RumRuleUpdateResponseEnvelope struct {
-	Errors   []RumRuleUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []RumRuleUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   RumRuleUpdateResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                              `json:"success"`
-	JSON    rumRuleUpdateResponseEnvelopeJSON `json:"-"`
+	Result RumRuleUpdateResponse             `json:"result"`
+	JSON   rumRuleUpdateResponseEnvelopeJSON `json:"-"`
 }
 
 // rumRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RumRuleUpdateResponseEnvelope]
 type rumRuleUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -361,60 +309,15 @@ func (r *RumRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumRuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    rumRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// rumRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RumRuleUpdateResponseEnvelopeErrors]
-type rumRuleUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    rumRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// rumRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RumRuleUpdateResponseEnvelopeMessages]
-type rumRuleUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type RumRuleListResponseEnvelope struct {
-	Errors   []RumRuleListResponseEnvelopeErrors   `json:"errors"`
-	Messages []RumRuleListResponseEnvelopeMessages `json:"messages"`
-	Result   RumRuleListResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                            `json:"success"`
-	JSON    rumRuleListResponseEnvelopeJSON `json:"-"`
+	Result RumRuleListResponse             `json:"result"`
+	JSON   rumRuleListResponseEnvelopeJSON `json:"-"`
 }
 
 // rumRuleListResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RumRuleListResponseEnvelope]
 type rumRuleListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -423,102 +326,19 @@ func (r *RumRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RumRuleListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    rumRuleListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// rumRuleListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [RumRuleListResponseEnvelopeErrors]
-type rumRuleListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    rumRuleListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// rumRuleListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RumRuleListResponseEnvelopeMessages]
-type rumRuleListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type RumRuleDeleteResponseEnvelope struct {
-	Errors   []RumRuleDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []RumRuleDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   RumRuleDeleteResponse                   `json:"result"`
-	// Whether the API call was successful.
-	Success bool                              `json:"success"`
-	JSON    rumRuleDeleteResponseEnvelopeJSON `json:"-"`
+	Result RumRuleDeleteResponse             `json:"result"`
+	JSON   rumRuleDeleteResponseEnvelopeJSON `json:"-"`
 }
 
 // rumRuleDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
 // [RumRuleDeleteResponseEnvelope]
 type rumRuleDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
 	Result      apijson.Field
-	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
 func (r *RumRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleDeleteResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    rumRuleDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// rumRuleDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RumRuleDeleteResponseEnvelopeErrors]
-type rumRuleDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleDeleteResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    rumRuleDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// rumRuleDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RumRuleDeleteResponseEnvelopeMessages]
-type rumRuleDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -157,11 +157,11 @@ type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesParamsAppID int
 }
 
 type AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelope struct {
-	Errors   []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages `json:"messages"`
-	Result   AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse                   `json:"result"`
+	Errors   []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccess `json:"success"`
+	Success AccessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessAppUserPolicyCheckAccessApplicationsTestAccessPoliciesResponseEnvelopeJSON    `json:"-"`
 }
 

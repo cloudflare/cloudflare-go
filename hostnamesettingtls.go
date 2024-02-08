@@ -227,13 +227,13 @@ const (
 )
 
 type HostnameSettingTLSGetResponseEnvelope struct {
-	Errors     []HostnameSettingTLSGetResponseEnvelopeErrors   `json:"errors"`
-	Messages   []HostnameSettingTLSGetResponseEnvelopeMessages `json:"messages"`
-	Result     []HostnameSettingTLSGetResponse                 `json:"result"`
-	ResultInfo HostnameSettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []HostnameSettingTLSGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HostnameSettingTLSGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []HostnameSettingTLSGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success HostnameSettingTLSGetResponseEnvelopeSuccess `json:"success"`
-	JSON    hostnameSettingTLSGetResponseEnvelopeJSON    `json:"-"`
+	Success    HostnameSettingTLSGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo HostnameSettingTLSGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       hostnameSettingTLSGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // hostnameSettingTLSGetResponseEnvelopeJSON contains the JSON metadata for the
@@ -242,8 +242,8 @@ type hostnameSettingTLSGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -290,11 +290,22 @@ func (r *HostnameSettingTLSGetResponseEnvelopeMessages) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type HostnameSettingTLSGetResponseEnvelopeSuccess bool
+
+const (
+	HostnameSettingTLSGetResponseEnvelopeSuccessTrue HostnameSettingTLSGetResponseEnvelopeSuccess = true
+)
+
 type HostnameSettingTLSGetResponseEnvelopeResultInfo struct {
-	Count      interface{} `json:"count"`
-	Page       interface{} `json:"page"`
-	PerPage    interface{} `json:"per_page"`
-	TotalCount interface{} `json:"total_count"`
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64 `json:"total_count"`
 	// Total pages available of results
 	TotalPages float64                                             `json:"total_pages"`
 	JSON       hostnameSettingTLSGetResponseEnvelopeResultInfoJSON `json:"-"`
@@ -315,13 +326,6 @@ type hostnameSettingTLSGetResponseEnvelopeResultInfoJSON struct {
 func (r *HostnameSettingTLSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type HostnameSettingTLSGetResponseEnvelopeSuccess bool
-
-const (
-	HostnameSettingTLSGetResponseEnvelopeSuccessTrue HostnameSettingTLSGetResponseEnvelopeSuccess = true
-)
 
 type HostnameSettingTLSUpdateParams struct {
 	// The tls setting value.
@@ -354,11 +358,11 @@ type HostnameSettingTLSUpdateParamsValueArray []string
 func (r HostnameSettingTLSUpdateParamsValueArray) ImplementsHostnameSettingTLSUpdateParamsValue() {}
 
 type HostnameSettingTLSUpdateResponseEnvelope struct {
-	Errors   []HostnameSettingTLSUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []HostnameSettingTLSUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   HostnameSettingTLSUpdateResponse                   `json:"result"`
+	Errors   []HostnameSettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HostnameSettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   HostnameSettingTLSUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HostnameSettingTLSUpdateResponseEnvelopeSuccess `json:"success"`
+	Success HostnameSettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameSettingTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -432,11 +436,11 @@ const (
 )
 
 type HostnameSettingTLSDeleteResponseEnvelope struct {
-	Errors   []HostnameSettingTLSDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []HostnameSettingTLSDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   HostnameSettingTLSDeleteResponse                   `json:"result"`
+	Errors   []HostnameSettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HostnameSettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   HostnameSettingTLSDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HostnameSettingTLSDeleteResponseEnvelopeSuccess `json:"success"`
+	Success HostnameSettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameSettingTLSDeleteResponseEnvelopeJSON    `json:"-"`
 }
 

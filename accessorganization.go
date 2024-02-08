@@ -466,11 +466,11 @@ func (r AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationParam
 }
 
 type AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelope struct {
-	Errors   []AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages"`
-	Result   AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponse                   `json:"result"`
+	Errors   []AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success"`
+	Success AccessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessOrganizationZeroTrustOrganizationNewYourZeroTrustOrganizationResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -538,11 +538,11 @@ const (
 )
 
 type AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelope struct {
-	Errors   []AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages"`
-	Result   AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponse                   `json:"result"`
+	Errors   []AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success"`
+	Success AccessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessOrganizationZeroTrustOrganizationGetYourZeroTrustOrganizationResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -675,11 +675,11 @@ func (r AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationPa
 }
 
 type AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelope struct {
-	Errors   []AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages"`
-	Result   AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponse                   `json:"result"`
+	Errors   []AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success"`
+	Success AccessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessOrganizationZeroTrustOrganizationUpdateYourZeroTrustOrganizationResponseEnvelopeJSON    `json:"-"`
 }
 

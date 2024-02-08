@@ -205,11 +205,11 @@ func (r *AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicati
 }
 
 type AccessBookmarkGetResponseEnvelope struct {
-	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages"`
-	Result   AccessBookmarkGetResponse                   `json:"result"`
+	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessBookmarkGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success"`
+	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -274,11 +274,11 @@ const (
 )
 
 type AccessBookmarkUpdateResponseEnvelope struct {
-	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages"`
-	Result   AccessBookmarkUpdateResponse                   `json:"result"`
+	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessBookmarkUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success"`
+	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -343,11 +343,11 @@ const (
 )
 
 type AccessBookmarkDeleteResponseEnvelope struct {
-	Errors   []AccessBookmarkDeleteResponseEnvelopeErrors   `json:"errors"`
-	Messages []AccessBookmarkDeleteResponseEnvelopeMessages `json:"messages"`
-	Result   AccessBookmarkDeleteResponse                   `json:"result"`
+	Errors   []AccessBookmarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessBookmarkDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessBookmarkDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success"`
+	Success AccessBookmarkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
@@ -412,13 +412,13 @@ const (
 )
 
 type AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelope struct {
-	Errors     []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeErrors   `json:"errors"`
-	Messages   []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeMessages `json:"messages"`
-	Result     []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponse                 `json:"result"`
-	ResultInfo AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeResultInfo `json:"result_info"`
+	Errors   []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess `json:"success"`
-	JSON    accessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeJSON    `json:"-"`
+	Success    AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeJSON       `json:"-"`
 }
 
 // accessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeJSON
@@ -428,8 +428,8 @@ type accessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsR
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
-	ResultInfo  apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -478,6 +478,13 @@ func (r *AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Whether the API call was successful
+type AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess bool
+
+const (
+	AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccessTrue AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess = true
+)
+
 type AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
@@ -505,10 +512,3 @@ type accessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsR
 func (r *AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Whether the API call was successful
-type AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess bool
-
-const (
-	AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccessTrue AccessBookmarkAccessBookmarkApplicationsDeprecatedListBookmarkApplicationsResponseEnvelopeSuccess = true
-)
