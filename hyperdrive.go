@@ -10,8 +10,13 @@ import (
 )
 
 var (
-	ErrMissingHyperdriveConfigID       = errors.New("required hyperdrive config id is missing")
-	ErrMissingHyperdriveConfigName     = errors.New("required hyperdrive config name is missing")
+	ErrMissingHyperdriveConfigID             = errors.New("required hyperdrive config id is missing")
+	ErrMissingHyperdriveConfigName           = errors.New("required hyperdrive config name is missing")
+	ErrMissingHyperdriveConfigOriginDatabase = errors.New("required hyperdrive config origin database is missing")
+	ErrMissingHyperdriveConfigOriginPassword = errors.New("required hyperdrive config origin password is missing")
+	ErrMissingHyperdriveConfigOriginHost     = errors.New("required hyperdrive config origin host is missing")
+	ErrMissingHyperdriveConfigOriginScheme   = errors.New("required hyperdrive config origin scheme is missing")
+	ErrMissingHyperdriveConfigOriginUser     = errors.New("required hyperdrive config origin user is missing")
 )
 
 type HyperdriveConfig struct {
@@ -170,6 +175,26 @@ func (api *API) UpdateHyperdriveConfig(ctx context.Context, rc *ResourceContaine
 
 	if params.HyperdriveID == "" {
 		return HyperdriveConfig{}, ErrMissingHyperdriveConfigID
+	}
+
+	if params.Origin.Database == "" {
+		return HyperdriveConfig{}, ErrMissingHyperdriveConfigOriginDatabase
+	}
+
+	if params.Origin.Password == "" {
+		return HyperdriveConfig{}, ErrMissingHyperdriveConfigOriginPassword
+	}
+
+	if params.Origin.Host == "" {
+		return HyperdriveConfig{}, ErrMissingHyperdriveConfigOriginHost
+	}
+
+	if params.Origin.Scheme == "" {
+		return HyperdriveConfig{}, ErrMissingHyperdriveConfigOriginScheme
+	}
+
+	if params.Origin.User == "" {
+		return HyperdriveConfig{}, ErrMissingHyperdriveConfigOriginUser
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/hyperdrive/configs/%s", rc.Identifier, params.HyperdriveID)
