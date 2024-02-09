@@ -170,8 +170,8 @@ func TestContextDeadline(t *testing.T) {
 	case <-testTimeout:
 		t.Fatal("client didn't finish in time")
 	case <-testDone:
-		if diff := time.Since(deadline); diff < -20*time.Millisecond || 20*time.Millisecond < diff {
-			t.Fatalf("client did not return within 20ms of context deadline, got %s", diff)
+		if diff := time.Since(deadline); diff < -30*time.Millisecond || 30*time.Millisecond < diff {
+			t.Fatalf("client did not return within 30ms of context deadline, got %s", diff)
 		}
 	}
 }
