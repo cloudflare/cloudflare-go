@@ -55,7 +55,9 @@ func (r *DNSRecordService) Get(ctx context.Context, zoneID string, dnsRecordID s
 	return
 }
 
-// Overwrite an existing DNS record. Notes:
+// Update an existing DNS record.
+//
+// Notes:
 //
 //   - A/AAAA records cannot exist on the same name as CNAME records.
 //   - NS records cannot exist on the same name as any other record type.
