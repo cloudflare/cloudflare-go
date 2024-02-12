@@ -4,8 +4,6 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAccountGetResponse()    {}
-func (UnionString) ImplementsAccountUpdateResponse() {}
 func (UnionString) ImplementsLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse() {
 }
 func (UnionString) ImplementsLoadBalancerRegionGetResponse()                            {}
