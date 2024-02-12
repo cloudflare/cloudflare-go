@@ -14,6 +14,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.20.0 to 0.21.0 ([#1502](https://github.com/cloudflare/cloudflare-go/issues/1502))
+* deps: bumps golangci/golangci-lint-action from 3 to 4 ([#1504](https://github.com/cloudflare/cloudflare-go/issues/1504))
 
 ## 0.87.0 (January 31st, 2024)
 
