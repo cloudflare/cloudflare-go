@@ -7,6 +7,10 @@ ENHANCEMENTS:
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
 * images_variants: Add support for Images Variants CRUD operations ([#1494](https://github.com/cloudflare/cloudflare-go/issues/1494))
 
+BUG FIXES:
+
+* hyperdrive: password should be nested in origin ([#1501](https://github.com/cloudflare/cloudflare-go/issues/1501))
+
 DEPENDENCIES:
 
 * deps: bumps golang.org/x/net from 0.20.0 to 0.21.0 ([#1502](https://github.com/cloudflare/cloudflare-go/issues/1502))
