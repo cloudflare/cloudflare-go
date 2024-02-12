@@ -22,7 +22,6 @@ type Client struct {
 	DNSRecords                   *DNSRecordService
 	Emails                       *EmailService
 	AccountMembers               *AccountMemberService
-	Rules                        *RuleService
 	Tunnels                      *TunnelService
 	D1                           *D1Service
 	Dex                          *DexService
@@ -91,7 +90,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DNSRecords = NewDNSRecordService(opts...)
 	r.Emails = NewEmailService(opts...)
 	r.AccountMembers = NewAccountMemberService(opts...)
-	r.Rules = NewRuleService(opts...)
 	r.Tunnels = NewTunnelService(opts...)
 	r.D1 = NewD1Service(opts...)
 	r.Dex = NewDexService(opts...)
