@@ -1073,18 +1073,32 @@ type AccessAppUpdateParamsVariant1AppID interface {
 	ImplementsAccessAppUpdateParamsVariant1AppID()
 }
 
-type AccessAppUpdateParamsVariant1SaasApp struct {
+// Satisfied by [AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasApp],
+// [AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasApp].
+type AccessAppUpdateParamsVariant1SaasApp interface {
+	implementsAccessAppUpdateParamsVariant1SaasApp()
+}
+
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType param.Field[AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthType] `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL param.Field[string]                                               `json:"consumer_service_url"`
-	CustomAttributes   param.Field[AccessAppUpdateParamsVariant1SaasAppCustomAttributes] `json:"custom_attributes"`
+	ConsumerServiceURL param.Field[string]                                                                `json:"consumer_service_url"`
+	CustomAttributes   param.Field[AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
 	IdpEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[AccessAppUpdateParamsVariant1SaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
 	// A globally unique name for an identity or service provider.
@@ -1093,46 +1107,113 @@ type AccessAppUpdateParamsVariant1SaasApp struct {
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 }
 
-func (r AccessAppUpdateParamsVariant1SaasApp) MarshalJSON() (data []byte, err error) {
+func (r AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasApp) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessAppUpdateParamsVariant1SaasAppCustomAttributes struct {
+func (r AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasApp) implementsAccessAppUpdateParamsVariant1SaasApp() {
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthType string
+
+const (
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthTypeSaml AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthType = "saml"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthTypeOidc AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppAuthType = "oidc"
+)
+
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormat] `json:"name_format"`
-	Source     param.Field[AccessAppUpdateParamsVariant1SaasAppCustomAttributesSource]     `json:"source"`
+	NameFormat param.Field[AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
+	Source     param.Field[AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
 }
 
-func (r AccessAppUpdateParamsVariant1SaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
+func (r AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A globally unique name for an identity or service provider.
-type AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormat string
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
 const (
-	AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppUpdateParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
-type AccessAppUpdateParamsVariant1SaasAppCustomAttributesSource struct {
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r AccessAppUpdateParamsVariant1SaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
+func (r AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The format of the name identifier sent to the SaaS application.
-type AccessAppUpdateParamsVariant1SaasAppNameIDFormat string
+type AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat string
 
 const (
-	AccessAppUpdateParamsVariant1SaasAppNameIDFormatID    AccessAppUpdateParamsVariant1SaasAppNameIDFormat = "id"
-	AccessAppUpdateParamsVariant1SaasAppNameIDFormatEmail AccessAppUpdateParamsVariant1SaasAppNameIDFormat = "email"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatID    AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "id"
+	AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppUpdateParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "email"
+)
+
+type AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasApp struct {
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
+	// Identifier of the authentication protocol used for the saas app. Required for
+	// OIDC.
+	AuthType param.Field[AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthType] `json:"auth_type"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The OIDC flows supported by this application
+	GrantTypes param.Field[[]AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantType] `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
+	// tokens
+	RedirectUris param.Field[[]string] `json:"redirect_uris"`
+	// Define the user information shared with access
+	Scopes param.Field[[]AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope] `json:"scopes"`
+}
+
+func (r AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasApp) implementsAccessAppUpdateParamsVariant1SaasApp() {
+}
+
+// Identifier of the authentication protocol used for the saas app. Required for
+// OIDC.
+type AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthType string
+
+const (
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthTypeSaml AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthType = "saml"
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthTypeOidc AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppAuthType = "oidc"
+)
+
+type AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantType string
+
+const (
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code"
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
+)
+
+type AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope string
+
+const (
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScopeOpenid  AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope = "openid"
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScopeGroups  AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope = "groups"
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScopeEmail   AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope = "email"
+	AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScopeProfile AccessAppUpdateParamsVariant1SaasAppAccessOidcSaasAppScope = "profile"
 )
 
 type AccessAppUpdateParamsVariant2 struct {
@@ -1827,18 +1908,33 @@ func (AccessAppAccessApplicationsAddAnApplicationParamsVariant1) ImplementsAcces
 
 }
 
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp struct {
+// Satisfied by
+// [AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp],
+// [AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp].
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp interface {
+	implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp()
+}
+
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType] `json:"auth_type"`
 	// The service provider's endpoint that is responsible for receiving and parsing a
 	// SAML assertion.
-	ConsumerServiceURL param.Field[string]                                                                           `json:"consumer_service_url"`
-	CustomAttributes   param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributes] `json:"custom_attributes"`
+	ConsumerServiceURL param.Field[string]                                                                                            `json:"consumer_service_url"`
+	CustomAttributes   param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes] `json:"custom_attributes"`
 	// The URL that the user will be redirected to after a successful login for IDP
 	// initiated logins.
 	DefaultRelayState param.Field[string] `json:"default_relay_state"`
 	// The unique identifier for your SaaS application.
 	IdpEntityID param.Field[string] `json:"idp_entity_id"`
 	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormat] `json:"name_id_format"`
+	NameIDFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
 	// The Access public certificate that will be used to verify your identity.
 	PublicKey param.Field[string] `json:"public_key"`
 	// A globally unique name for an identity or service provider.
@@ -1847,46 +1943,113 @@ type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp struct {
 	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
 }
 
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp) MarshalJSON() (data []byte, err error) {
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributes struct {
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp) implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp() {
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthTypeSaml AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType = "saml"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthTypeOidc AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType = "oidc"
+)
+
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes struct {
 	// The name of the attribute.
 	Name param.Field[string] `json:"name"`
 	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormat] `json:"name_format"`
-	Source     param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesSource]     `json:"source"`
+	NameFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
+	Source     param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
 }
 
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A globally unique name for an identity or service provider.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormat string
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
 const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
 )
 
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesSource struct {
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource struct {
 	// The name of the IdP attribute.
 	Name param.Field[string] `json:"name"`
 }
 
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The format of the name identifier sent to the SaaS application.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormat string
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat string
 
 const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormatID    AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormat = "id"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormatEmail AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppNameIDFormat = "email"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatID    AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "id"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "email"
+)
+
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp struct {
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
+	// Identifier of the authentication protocol used for the saas app. Required for
+	// OIDC.
+	AuthType param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType] `json:"auth_type"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The OIDC flows supported by this application
+	GrantTypes param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType] `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
+	// tokens
+	RedirectUris param.Field[[]string] `json:"redirect_uris"`
+	// Define the user information shared with access
+	Scopes param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope] `json:"scopes"`
+}
+
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp) implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp() {
+}
+
+// Identifier of the authentication protocol used for the saas app. Required for
+// OIDC.
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthTypeSaml AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType = "saml"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthTypeOidc AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType = "oidc"
+)
+
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
+)
+
+type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope string
+
+const (
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeOpenid  AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "openid"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeGroups  AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "groups"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeEmail   AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "email"
+	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeProfile AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "profile"
 )
 
 type AccessAppAccessApplicationsAddAnApplicationParamsVariant2 struct {
