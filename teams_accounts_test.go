@@ -54,8 +54,13 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 			"result": {
 				"settings": {
 					"antivirus": {
-						"enabled_download_phase": true
-					},
+					"enabled_download_phase": true,
+						"notification_settings": {
+					  		"enabled":true,
+					   		"msg":"msg",
+					   		"support_url":"https://hi.com"
+						}
+				 	},
 					"tls_decrypt": {
 						"enabled": true
 					},
@@ -82,7 +87,7 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 					"browser_isolation": {
 						"url_browser_isolation_enabled": true,
 						"non_identity_enabled": true
-          				},
+					},
 					"body_scanning": {
 						"inspection_mode": "deep"
 					},
@@ -101,7 +106,14 @@ func TestTeamsAccountConfiguration(t *testing.T) {
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, actual.Settings, TeamsAccountSettings{
-			Antivirus:         &TeamsAntivirus{EnabledDownloadPhase: true},
+			Antivirus: &TeamsAntivirus{
+				EnabledDownloadPhase: true,
+				NotificationSettings: &TeamsNotificationSettings{
+					Enabled:    &trueValue,
+					Message:    "msg",
+					SupportURL: "https://hi.com",
+				},
+			},
 			ActivityLog:       &TeamsActivityLog{Enabled: true},
 			TLSDecrypt:        &TeamsTLSDecrypt{Enabled: true},
 			ProtocolDetection: &TeamsProtocolDetection{Enabled: true},
