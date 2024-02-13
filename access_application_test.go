@@ -678,7 +678,8 @@ func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 								"name": "test3"
 							}
 						}
-					]
+					],
+					"name_id_transform_jsonata": "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')"
 				}
 			}
 		}
@@ -731,6 +732,7 @@ func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 					},
 				},
 			},
+			NameIDTransformJsonata: "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')",
 		},
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
