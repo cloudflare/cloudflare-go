@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* access_application: Add support for OIDC SaaS Applications ([#1500](https://github.com/cloudflare/cloudflare-go/issues/1500))
 * access_application: Add support for `allow_authenticate_via_warp` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * access_organization: Add support for `allow_authenticate_via_warp` and `warp_auth_session_duration` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
