@@ -1,4 +1,6 @@
-## 0.88.0 (Unreleased)
+## 0.89.0 (Unreleased)
+
+## 0.88.0 (February 14th, 2023)
 
 ENHANCEMENTS:
 
