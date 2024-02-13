@@ -11,8 +11,12 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewFirewallService] method instead.
 type FirewallService struct {
-	Options []option.RequestOption
-	WAF     *FirewallWAFService
+	Options     []option.RequestOption
+	Lockdowns   *FirewallLockdownService
+	Rules       *FirewallRuleService
+	AccessRules *FirewallAccessRuleService
+	UaRules     *FirewallUaRuleService
+	WAF         *FirewallWAFService
 }
 
 // NewFirewallService generates a new service that applies the given options to
@@ -21,6 +25,10 @@ type FirewallService struct {
 func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 	r = &FirewallService{}
 	r.Options = opts
+	r.Lockdowns = NewFirewallLockdownService(opts...)
+	r.Rules = NewFirewallRuleService(opts...)
+	r.AccessRules = NewFirewallAccessRuleService(opts...)
+	r.UaRules = NewFirewallUaRuleService(opts...)
 	r.WAF = NewFirewallWAFService(opts...)
 	return
 }

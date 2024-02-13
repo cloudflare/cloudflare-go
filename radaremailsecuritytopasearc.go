@@ -193,7 +193,7 @@ type RadarEmailSecurityTopAseArcGetParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecurityTopAseArcGetParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityTopAseArcGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
 	Dmarc param.Field[[]RadarEmailSecurityTopAseArcGetParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
@@ -207,7 +207,7 @@ type RadarEmailSecurityTopAseArcGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	Spf param.Field[[]RadarEmailSecurityTopAseArcGetParamsSpf] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityTopAseArcGetParamsSPF] `query:"spf"`
 }
 
 // URLQuery serializes [RadarEmailSecurityTopAseArcGetParams]'s query parameters as
@@ -248,12 +248,12 @@ const (
 	RadarEmailSecurityTopAseArcGetParamsDateRange24wControl RadarEmailSecurityTopAseArcGetParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTopAseArcGetParamsDkim string
+type RadarEmailSecurityTopAseArcGetParamsDKIM string
 
 const (
-	RadarEmailSecurityTopAseArcGetParamsDkimPass RadarEmailSecurityTopAseArcGetParamsDkim = "PASS"
-	RadarEmailSecurityTopAseArcGetParamsDkimNone RadarEmailSecurityTopAseArcGetParamsDkim = "NONE"
-	RadarEmailSecurityTopAseArcGetParamsDkimFail RadarEmailSecurityTopAseArcGetParamsDkim = "FAIL"
+	RadarEmailSecurityTopAseArcGetParamsDKIMPass RadarEmailSecurityTopAseArcGetParamsDKIM = "PASS"
+	RadarEmailSecurityTopAseArcGetParamsDKIMNone RadarEmailSecurityTopAseArcGetParamsDKIM = "NONE"
+	RadarEmailSecurityTopAseArcGetParamsDKIMFail RadarEmailSecurityTopAseArcGetParamsDKIM = "FAIL"
 )
 
 type RadarEmailSecurityTopAseArcGetParamsDmarc string
@@ -272,12 +272,12 @@ const (
 	RadarEmailSecurityTopAseArcGetParamsFormatCsv  RadarEmailSecurityTopAseArcGetParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityTopAseArcGetParamsSpf string
+type RadarEmailSecurityTopAseArcGetParamsSPF string
 
 const (
-	RadarEmailSecurityTopAseArcGetParamsSpfPass RadarEmailSecurityTopAseArcGetParamsSpf = "PASS"
-	RadarEmailSecurityTopAseArcGetParamsSpfNone RadarEmailSecurityTopAseArcGetParamsSpf = "NONE"
-	RadarEmailSecurityTopAseArcGetParamsSpfFail RadarEmailSecurityTopAseArcGetParamsSpf = "FAIL"
+	RadarEmailSecurityTopAseArcGetParamsSPFPass RadarEmailSecurityTopAseArcGetParamsSPF = "PASS"
+	RadarEmailSecurityTopAseArcGetParamsSPFNone RadarEmailSecurityTopAseArcGetParamsSPF = "NONE"
+	RadarEmailSecurityTopAseArcGetParamsSPFFail RadarEmailSecurityTopAseArcGetParamsSPF = "FAIL"
 )
 
 type RadarEmailSecurityTopAseArcGetResponseEnvelope struct {

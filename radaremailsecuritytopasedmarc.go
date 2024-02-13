@@ -195,7 +195,7 @@ type RadarEmailSecurityTopAseDmarcGetParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecurityTopAseDmarcGetParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityTopAseDmarcGetParamsDKIM] `query:"dkim"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseDmarcGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -207,7 +207,7 @@ type RadarEmailSecurityTopAseDmarcGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	Spf param.Field[[]RadarEmailSecurityTopAseDmarcGetParamsSpf] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityTopAseDmarcGetParamsSPF] `query:"spf"`
 }
 
 // URLQuery serializes [RadarEmailSecurityTopAseDmarcGetParams]'s query parameters
@@ -256,12 +256,12 @@ const (
 	RadarEmailSecurityTopAseDmarcGetParamsDateRange24wControl RadarEmailSecurityTopAseDmarcGetParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTopAseDmarcGetParamsDkim string
+type RadarEmailSecurityTopAseDmarcGetParamsDKIM string
 
 const (
-	RadarEmailSecurityTopAseDmarcGetParamsDkimPass RadarEmailSecurityTopAseDmarcGetParamsDkim = "PASS"
-	RadarEmailSecurityTopAseDmarcGetParamsDkimNone RadarEmailSecurityTopAseDmarcGetParamsDkim = "NONE"
-	RadarEmailSecurityTopAseDmarcGetParamsDkimFail RadarEmailSecurityTopAseDmarcGetParamsDkim = "FAIL"
+	RadarEmailSecurityTopAseDmarcGetParamsDKIMPass RadarEmailSecurityTopAseDmarcGetParamsDKIM = "PASS"
+	RadarEmailSecurityTopAseDmarcGetParamsDKIMNone RadarEmailSecurityTopAseDmarcGetParamsDKIM = "NONE"
+	RadarEmailSecurityTopAseDmarcGetParamsDKIMFail RadarEmailSecurityTopAseDmarcGetParamsDKIM = "FAIL"
 )
 
 // Format results are returned in.
@@ -272,12 +272,12 @@ const (
 	RadarEmailSecurityTopAseDmarcGetParamsFormatCsv  RadarEmailSecurityTopAseDmarcGetParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityTopAseDmarcGetParamsSpf string
+type RadarEmailSecurityTopAseDmarcGetParamsSPF string
 
 const (
-	RadarEmailSecurityTopAseDmarcGetParamsSpfPass RadarEmailSecurityTopAseDmarcGetParamsSpf = "PASS"
-	RadarEmailSecurityTopAseDmarcGetParamsSpfNone RadarEmailSecurityTopAseDmarcGetParamsSpf = "NONE"
-	RadarEmailSecurityTopAseDmarcGetParamsSpfFail RadarEmailSecurityTopAseDmarcGetParamsSpf = "FAIL"
+	RadarEmailSecurityTopAseDmarcGetParamsSPFPass RadarEmailSecurityTopAseDmarcGetParamsSPF = "PASS"
+	RadarEmailSecurityTopAseDmarcGetParamsSPFNone RadarEmailSecurityTopAseDmarcGetParamsSPF = "NONE"
+	RadarEmailSecurityTopAseDmarcGetParamsSPFFail RadarEmailSecurityTopAseDmarcGetParamsSPF = "FAIL"
 )
 
 type RadarEmailSecurityTopAseDmarcGetResponseEnvelope struct {

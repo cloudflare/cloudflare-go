@@ -45,19 +45,6 @@ func (r *R2BucketService) New(ctx context.Context, accountID string, body R2Buck
 	return
 }
 
-// Gets metadata for an existing R2 bucket.
-func (r *R2BucketService) Get(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2BucketGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env R2BucketGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists all R2 buckets on your account
 func (r *R2BucketService) List(ctx context.Context, accountID string, query R2BucketListParams, opts ...option.RequestOption) (res *[]R2BucketListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -77,6 +64,19 @@ func (r *R2BucketService) Delete(ctx context.Context, accountID string, bucketNa
 	var env R2BucketDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", accountID, bucketName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Gets metadata for an existing R2 bucket.
+func (r *R2BucketService) Get(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2BucketGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env R2BucketGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", accountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -121,42 +121,6 @@ const (
 )
 
 // A single R2 bucket
-type R2BucketGetResponse struct {
-	// Creation timestamp
-	CreationDate string `json:"creation_date"`
-	// Location of the bucket
-	Location R2BucketGetResponseLocation `json:"location"`
-	// Name of the bucket
-	Name string                  `json:"name"`
-	JSON r2BucketGetResponseJSON `json:"-"`
-}
-
-// r2BucketGetResponseJSON contains the JSON metadata for the struct
-// [R2BucketGetResponse]
-type r2BucketGetResponseJSON struct {
-	CreationDate apijson.Field
-	Location     apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *R2BucketGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Location of the bucket
-type R2BucketGetResponseLocation string
-
-const (
-	R2BucketGetResponseLocationApac R2BucketGetResponseLocation = "apac"
-	R2BucketGetResponseLocationEeur R2BucketGetResponseLocation = "eeur"
-	R2BucketGetResponseLocationEnam R2BucketGetResponseLocation = "enam"
-	R2BucketGetResponseLocationWeur R2BucketGetResponseLocation = "weur"
-	R2BucketGetResponseLocationWnam R2BucketGetResponseLocation = "wnam"
-)
-
-// A single R2 bucket
 type R2BucketListResponse struct {
 	// Creation timestamp
 	CreationDate string `json:"creation_date"`
@@ -193,6 +157,42 @@ const (
 )
 
 type R2BucketDeleteResponse = interface{}
+
+// A single R2 bucket
+type R2BucketGetResponse struct {
+	// Creation timestamp
+	CreationDate string `json:"creation_date"`
+	// Location of the bucket
+	Location R2BucketGetResponseLocation `json:"location"`
+	// Name of the bucket
+	Name string                  `json:"name"`
+	JSON r2BucketGetResponseJSON `json:"-"`
+}
+
+// r2BucketGetResponseJSON contains the JSON metadata for the struct
+// [R2BucketGetResponse]
+type r2BucketGetResponseJSON struct {
+	CreationDate apijson.Field
+	Location     apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *R2BucketGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Location of the bucket
+type R2BucketGetResponseLocation string
+
+const (
+	R2BucketGetResponseLocationApac R2BucketGetResponseLocation = "apac"
+	R2BucketGetResponseLocationEeur R2BucketGetResponseLocation = "eeur"
+	R2BucketGetResponseLocationEnam R2BucketGetResponseLocation = "enam"
+	R2BucketGetResponseLocationWeur R2BucketGetResponseLocation = "weur"
+	R2BucketGetResponseLocationWnam R2BucketGetResponseLocation = "wnam"
+)
 
 type R2BucketNewParams struct {
 	// Name of the bucket
@@ -265,57 +265,6 @@ type R2BucketNewResponseEnvelopeSuccess bool
 
 const (
 	R2BucketNewResponseEnvelopeSuccessTrue R2BucketNewResponseEnvelopeSuccess = true
-)
-
-type R2BucketGetResponseEnvelope struct {
-	Errors   []R2BucketGetResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                            `json:"messages,required"`
-	// A single R2 bucket
-	Result R2BucketGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success R2BucketGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    r2BucketGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// r2BucketGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [R2BucketGetResponseEnvelope]
-type r2BucketGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2BucketGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type R2BucketGetResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    r2BucketGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// r2BucketGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [R2BucketGetResponseEnvelopeErrors]
-type r2BucketGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2BucketGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type R2BucketGetResponseEnvelopeSuccess bool
-
-const (
-	R2BucketGetResponseEnvelopeSuccessTrue R2BucketGetResponseEnvelopeSuccess = true
 )
 
 type R2BucketListParams struct {
@@ -479,4 +428,55 @@ type R2BucketDeleteResponseEnvelopeSuccess bool
 
 const (
 	R2BucketDeleteResponseEnvelopeSuccessTrue R2BucketDeleteResponseEnvelopeSuccess = true
+)
+
+type R2BucketGetResponseEnvelope struct {
+	Errors   []R2BucketGetResponseEnvelopeErrors `json:"errors,required"`
+	Messages []string                            `json:"messages,required"`
+	// A single R2 bucket
+	Result R2BucketGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success R2BucketGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    r2BucketGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// r2BucketGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [R2BucketGetResponseEnvelope]
+type r2BucketGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2BucketGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type R2BucketGetResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    r2BucketGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// r2BucketGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [R2BucketGetResponseEnvelopeErrors]
+type r2BucketGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *R2BucketGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type R2BucketGetResponseEnvelopeSuccess bool
+
+const (
+	R2BucketGetResponseEnvelopeSuccessTrue R2BucketGetResponseEnvelopeSuccess = true
 )

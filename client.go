@@ -14,19 +14,83 @@ import (
 type Client struct {
 	Options                      []option.RequestOption
 	Accounts                     *AccountService
+	Certificates                 *CertificateService
 	IPs                          *IPService
+	Memberships                  *MembershipService
+	Users                        *UserService
 	Zones                        *ZoneService
 	AI                           *AIService
 	LoadBalancers                *LoadBalancerService
 	Access                       *AccessService
+	DNSAnalytics                 *DNSAnalyticService
+	PurgeCaches                  *PurgeCachService
+	SSLs                         *SSLService
+	Subscriptions                *SubscriptionService
+	Acms                         *AcmService
+	Analytics                    *AnalyticsService
+	Argo                         *ArgoService
+	AvailablePlans               *AvailablePlanService
+	AvailableRatePlans           *AvailableRatePlanService
+	Caches                       *CachService
+	CertificateAuthorities       *CertificateAuthorityService
+	ClientCertificates           *ClientCertificateService
+	CustomCertificates           *CustomCertificateService
+	CustomHostnames              *CustomHostnameService
+	CustomNs                     *CustomNService
 	DNSRecords                   *DNSRecordService
+	DNSSECs                      *DNSSECService
 	Emails                       *EmailService
+	Filters                      *FilterService
+	Firewalls                    *FirewallService
+	Healthchecks                 *HealthcheckService
+	KeylessCertificates          *KeylessCertificateService
+	Logpush                      *LogpushService
+	Logs                         *LogService
+	OriginTLSClientAuth          *OriginTLSClientAuthService
+	Pagerules                    *PageruleService
+	RateLimits                   *RateLimitService
+	SecondaryDNS                 *SecondaryDNSService
+	Settings                     *SettingService
+	WaitingRooms                 *WaitingRoomService
+	Web3s                        *Web3Service
+	Workers                      *WorkerService
+	ActivationChecks             *ActivationCheckService
+	APIGateways                  *APIGatewayService
+	ManagedHeaders               *ManagedHeaderService
+	PageShields                  *PageShieldService
+	Rulesets                     *RulesetService
+	URLNormalizations            *URLNormalizationService
+	Spectrums                    *SpectrumService
+	Addresses                    *AddressService
+	AuditLogs                    *AuditLogService
+	Billings                     *BillingService
+	BrandProtections             *BrandProtectionService
+	CfdTunnels                   *CfdTunnelService
+	Diagnostics                  *DiagnosticService
+	DLPs                         *DLPService
+	DNSFirewalls                 *DNSFirewallService
+	Images                       *ImageService
+	Intels                       *IntelService
+	Magics                       *MagicService
 	AccountMembers               *AccountMemberService
-	Tunnels                      *TunnelService
-	D1                           *D1Service
-	Dex                          *DexService
-	R2                           *R2Service
+	Mnms                         *MnmService
+	MtlsCertificates             *MtlsCertificateService
+	Pages                        *PageService
+	Pcaps                        *PcapService
+	Registrar                    *RegistrarService
+	RequestTracers               *RequestTracerService
+	Roles                        *RoleService
+	Rules                        *RuleService
+	Storage                      *StorageService
 	Stream                       *StreamService
+	Teamnets                     *TeamnetService
+	Tunnels                      *TunnelService
+	Gateways                     *GatewayService
+	Alerting                     *AlertingService
+	Devices                      *DeviceService
+	D1                           *D1Service
+	DEX                          *DEXService
+	R2                           *R2Service
 	Teamnet                      *TeamnetService
 	WarpConnector                *WarpConnectorService
 	Dispatchers                  *DispatcherService
@@ -40,7 +104,6 @@ type Client struct {
 	Intel                        *IntelService
 	Rum                          *RumService
 	Vectorize                    *VectorizeService
-	VectorizeIndexes             *VectorizeIndexService
 	URLScanner                   *URLScannerService
 	Radar                        *RadarService
 	BotManagements               *BotManagementService
@@ -52,20 +115,19 @@ type Client struct {
 	SpeedAPI                     *SpeedAPIService
 	DcvDelegation                *DcvDelegationService
 	Hostnames                    *HostnameService
-	Logpush                      *LogpushService
-	Hold                         *HoldService
 	PageShield                   *PageShieldService
 	FontSettings                 *FontSettingService
 	Snippets                     *SnippetService
-	Dlp                          *DlpService
+	DLP                          *DLPService
 	Gateway                      *GatewayService
 	AccessTags                   *AccessTagService
 }
 
 // NewClient generates a new client with the default option read from the
-// environment (CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL, CLOUDFLARE_API_TOKEN). The
-// option passed in as arguments are applied after these default arguments, and all
-// option will be passed down to the services and requests that this client makes.
+// environment (CLOUDFLARE_API_KEY, CLOUDFLARE_EMAIL, CLOUDFLARE_API_TOKEN,
+// CLOUDFLARE_API_USER_SERVICE_KEY). The option passed in as arguments are applied
+// after these default arguments, and all option will be passed down to the
+// services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r *Client) {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_KEY"); ok {
@@ -77,24 +139,91 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	if o, ok := os.LookupEnv("CLOUDFLARE_API_TOKEN"); ok {
 		defaults = append(defaults, option.WithAPIToken(o))
 	}
+	if o, ok := os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY"); ok {
+		defaults = append(defaults, option.WithUserServiceKey(o))
+	}
 	opts = append(defaults, opts...)
 
 	r = &Client{Options: opts}
 
 	r.Accounts = NewAccountService(opts...)
+	r.Certificates = NewCertificateService(opts...)
 	r.IPs = NewIPService(opts...)
+	r.Memberships = NewMembershipService(opts...)
+	r.Users = NewUserService(opts...)
 	r.Zones = NewZoneService(opts...)
 	r.AI = NewAIService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
 	r.Access = NewAccessService(opts...)
+	r.DNSAnalytics = NewDNSAnalyticService(opts...)
+	r.PurgeCaches = NewPurgeCachService(opts...)
+	r.SSLs = NewSSLService(opts...)
+	r.Subscriptions = NewSubscriptionService(opts...)
+	r.Acms = NewAcmService(opts...)
+	r.Analytics = NewAnalyticsService(opts...)
+	r.Argo = NewArgoService(opts...)
+	r.AvailablePlans = NewAvailablePlanService(opts...)
+	r.AvailableRatePlans = NewAvailableRatePlanService(opts...)
+	r.Caches = NewCachService(opts...)
+	r.CertificateAuthorities = NewCertificateAuthorityService(opts...)
+	r.ClientCertificates = NewClientCertificateService(opts...)
+	r.CustomCertificates = NewCustomCertificateService(opts...)
+	r.CustomHostnames = NewCustomHostnameService(opts...)
+	r.CustomNs = NewCustomNService(opts...)
 	r.DNSRecords = NewDNSRecordService(opts...)
+	r.DNSSECs = NewDNSSECService(opts...)
 	r.Emails = NewEmailService(opts...)
+	r.Filters = NewFilterService(opts...)
+	r.Firewalls = NewFirewallService(opts...)
+	r.Healthchecks = NewHealthcheckService(opts...)
+	r.KeylessCertificates = NewKeylessCertificateService(opts...)
+	r.Logpush = NewLogpushService(opts...)
+	r.Logs = NewLogService(opts...)
+	r.OriginTLSClientAuth = NewOriginTLSClientAuthService(opts...)
+	r.Pagerules = NewPageruleService(opts...)
+	r.RateLimits = NewRateLimitService(opts...)
+	r.SecondaryDNS = NewSecondaryDNSService(opts...)
+	r.Settings = NewSettingService(opts...)
+	r.WaitingRooms = NewWaitingRoomService(opts...)
+	r.Web3s = NewWeb3Service(opts...)
+	r.Workers = NewWorkerService(opts...)
+	r.ActivationChecks = NewActivationCheckService(opts...)
+	r.APIGateways = NewAPIGatewayService(opts...)
+	r.ManagedHeaders = NewManagedHeaderService(opts...)
+	r.PageShields = NewPageShieldService(opts...)
+	r.Rulesets = NewRulesetService(opts...)
+	r.URLNormalizations = NewURLNormalizationService(opts...)
+	r.Spectrums = NewSpectrumService(opts...)
+	r.Addresses = NewAddressService(opts...)
+	r.AuditLogs = NewAuditLogService(opts...)
+	r.Billings = NewBillingService(opts...)
+	r.BrandProtections = NewBrandProtectionService(opts...)
+	r.CfdTunnels = NewCfdTunnelService(opts...)
+	r.Diagnostics = NewDiagnosticService(opts...)
+	r.DLPs = NewDLPService(opts...)
+	r.DNSFirewalls = NewDNSFirewallService(opts...)
+	r.Images = NewImageService(opts...)
+	r.Intels = NewIntelService(opts...)
+	r.Magics = NewMagicService(opts...)
 	r.AccountMembers = NewAccountMemberService(opts...)
-	r.Tunnels = NewTunnelService(opts...)
-	r.D1 = NewD1Service(opts...)
-	r.Dex = NewDexService(opts...)
-	r.R2 = NewR2Service(opts...)
+	r.Mnms = NewMnmService(opts...)
+	r.MtlsCertificates = NewMtlsCertificateService(opts...)
+	r.Pages = NewPageService(opts...)
+	r.Pcaps = NewPcapService(opts...)
+	r.Registrar = NewRegistrarService(opts...)
+	r.RequestTracers = NewRequestTracerService(opts...)
+	r.Roles = NewRoleService(opts...)
+	r.Rules = NewRuleService(opts...)
+	r.Storage = NewStorageService(opts...)
 	r.Stream = NewStreamService(opts...)
+	r.Teamnets = NewTeamnetService(opts...)
+	r.Tunnels = NewTunnelService(opts...)
+	r.Gateways = NewGatewayService(opts...)
+	r.Alerting = NewAlertingService(opts...)
+	r.Devices = NewDeviceService(opts...)
+	r.D1 = NewD1Service(opts...)
+	r.DEX = NewDEXService(opts...)
+	r.R2 = NewR2Service(opts...)
 	r.Teamnet = NewTeamnetService(opts...)
 	r.WarpConnector = NewWarpConnectorService(opts...)
 	r.Dispatchers = NewDispatcherService(opts...)
@@ -108,7 +237,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = NewIntelService(opts...)
 	r.Rum = NewRumService(opts...)
 	r.Vectorize = NewVectorizeService(opts...)
-	r.VectorizeIndexes = NewVectorizeIndexService(opts...)
 	r.URLScanner = NewURLScannerService(opts...)
 	r.Radar = NewRadarService(opts...)
 	r.BotManagements = NewBotManagementService(opts...)
@@ -120,12 +248,10 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.SpeedAPI = NewSpeedAPIService(opts...)
 	r.DcvDelegation = NewDcvDelegationService(opts...)
 	r.Hostnames = NewHostnameService(opts...)
-	r.Logpush = NewLogpushService(opts...)
-	r.Hold = NewHoldService(opts...)
 	r.PageShield = NewPageShieldService(opts...)
 	r.FontSettings = NewFontSettingService(opts...)
 	r.Snippets = NewSnippetService(opts...)
-	r.Dlp = NewDlpService(opts...)
+	r.DLP = NewDLPService(opts...)
 	r.Gateway = NewGatewayService(opts...)
 	r.AccessTags = NewAccessTagService(opts...)
 

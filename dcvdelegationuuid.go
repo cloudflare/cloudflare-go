@@ -32,10 +32,10 @@ func NewDcvDelegationUuidService(opts ...option.RequestOption) (r *DcvDelegation
 
 // Retrieve the account and zone specific unique identifier used as part of the
 // CNAME target for DCV Delegation.
-func (r *DcvDelegationUuidService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *DcvDelegationUuidGetResponse, err error) {
+func (r *DcvDelegationUuidService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DcvDelegationUuidGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DcvDelegationUuidGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return

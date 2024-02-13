@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexFleetStatusLiveService contains methods and other services that help with
+// DEXFleetStatusLiveService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDexFleetStatusLiveService] method
+// this service directly, and instead use the [NewDEXFleetStatusLiveService] method
 // instead.
-type DexFleetStatusLiveService struct {
+type DEXFleetStatusLiveService struct {
 	Options []option.RequestOption
 }
 
-// NewDexFleetStatusLiveService generates a new service that applies the given
+// NewDEXFleetStatusLiveService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewDexFleetStatusLiveService(opts ...option.RequestOption) (r *DexFleetStatusLiveService) {
-	r = &DexFleetStatusLiveService{}
+func NewDEXFleetStatusLiveService(opts ...option.RequestOption) (r *DEXFleetStatusLiveService) {
+	r = &DEXFleetStatusLiveService{}
 	r.Options = opts
 	return
 }
 
 // List details for live (up to 60 minutes) devices using WARP
-func (r *DexFleetStatusLiveService) List(ctx context.Context, accountID string, query DexFleetStatusLiveListParams, opts ...option.RequestOption) (res *DexFleetStatusLiveListResponse, err error) {
+func (r *DEXFleetStatusLiveService) List(ctx context.Context, accountID string, query DEXFleetStatusLiveListParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexFleetStatusLiveListResponseEnvelope
+	var env DEXFleetStatusLiveListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,36 +46,36 @@ func (r *DexFleetStatusLiveService) List(ctx context.Context, accountID string, 
 	return
 }
 
-type DexFleetStatusLiveListResponse struct {
-	DeviceStats DexFleetStatusLiveListResponseDeviceStats `json:"deviceStats"`
+type DEXFleetStatusLiveListResponse struct {
+	DeviceStats DEXFleetStatusLiveListResponseDeviceStats `json:"deviceStats"`
 	JSON        dexFleetStatusLiveListResponseJSON        `json:"-"`
 }
 
 // dexFleetStatusLiveListResponseJSON contains the JSON metadata for the struct
-// [DexFleetStatusLiveListResponse]
+// [DEXFleetStatusLiveListResponse]
 type dexFleetStatusLiveListResponseJSON struct {
 	DeviceStats apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStats struct {
-	ByColo     []DexFleetStatusLiveListResponseDeviceStatsByColo     `json:"byColo,nullable"`
-	ByMode     []DexFleetStatusLiveListResponseDeviceStatsByMode     `json:"byMode,nullable"`
-	ByPlatform []DexFleetStatusLiveListResponseDeviceStatsByPlatform `json:"byPlatform,nullable"`
-	ByStatus   []DexFleetStatusLiveListResponseDeviceStatsByStatus   `json:"byStatus,nullable"`
-	ByVersion  []DexFleetStatusLiveListResponseDeviceStatsByVersion  `json:"byVersion,nullable"`
+type DEXFleetStatusLiveListResponseDeviceStats struct {
+	ByColo     []DEXFleetStatusLiveListResponseDeviceStatsByColo     `json:"byColo,nullable"`
+	ByMode     []DEXFleetStatusLiveListResponseDeviceStatsByMode     `json:"byMode,nullable"`
+	ByPlatform []DEXFleetStatusLiveListResponseDeviceStatsByPlatform `json:"byPlatform,nullable"`
+	ByStatus   []DEXFleetStatusLiveListResponseDeviceStatsByStatus   `json:"byStatus,nullable"`
+	ByVersion  []DEXFleetStatusLiveListResponseDeviceStatsByVersion  `json:"byVersion,nullable"`
 	// Number of unique devices
 	UniqueDevicesTotal float64                                       `json:"uniqueDevicesTotal"`
 	JSON               dexFleetStatusLiveListResponseDeviceStatsJSON `json:"-"`
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsJSON contains the JSON metadata for the
-// struct [DexFleetStatusLiveListResponseDeviceStats]
+// struct [DEXFleetStatusLiveListResponseDeviceStats]
 type dexFleetStatusLiveListResponseDeviceStatsJSON struct {
 	ByColo             apijson.Field
 	ByMode             apijson.Field
@@ -87,11 +87,11 @@ type dexFleetStatusLiveListResponseDeviceStatsJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStats) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStatsByColo struct {
+type DEXFleetStatusLiveListResponseDeviceStatsByColo struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                             `json:"uniqueDevicesTotal"`
 	Value              string                                              `json:"value"`
@@ -99,7 +99,7 @@ type DexFleetStatusLiveListResponseDeviceStatsByColo struct {
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsByColoJSON contains the JSON metadata
-// for the struct [DexFleetStatusLiveListResponseDeviceStatsByColo]
+// for the struct [DEXFleetStatusLiveListResponseDeviceStatsByColo]
 type dexFleetStatusLiveListResponseDeviceStatsByColoJSON struct {
 	UniqueDevicesTotal apijson.Field
 	Value              apijson.Field
@@ -107,11 +107,11 @@ type dexFleetStatusLiveListResponseDeviceStatsByColoJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStatsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStatsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStatsByMode struct {
+type DEXFleetStatusLiveListResponseDeviceStatsByMode struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                             `json:"uniqueDevicesTotal"`
 	Value              string                                              `json:"value"`
@@ -119,7 +119,7 @@ type DexFleetStatusLiveListResponseDeviceStatsByMode struct {
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsByModeJSON contains the JSON metadata
-// for the struct [DexFleetStatusLiveListResponseDeviceStatsByMode]
+// for the struct [DEXFleetStatusLiveListResponseDeviceStatsByMode]
 type dexFleetStatusLiveListResponseDeviceStatsByModeJSON struct {
 	UniqueDevicesTotal apijson.Field
 	Value              apijson.Field
@@ -127,11 +127,11 @@ type dexFleetStatusLiveListResponseDeviceStatsByModeJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStatsByMode) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStatsByMode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStatsByPlatform struct {
+type DEXFleetStatusLiveListResponseDeviceStatsByPlatform struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                                 `json:"uniqueDevicesTotal"`
 	Value              string                                                  `json:"value"`
@@ -139,7 +139,7 @@ type DexFleetStatusLiveListResponseDeviceStatsByPlatform struct {
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsByPlatformJSON contains the JSON
-// metadata for the struct [DexFleetStatusLiveListResponseDeviceStatsByPlatform]
+// metadata for the struct [DEXFleetStatusLiveListResponseDeviceStatsByPlatform]
 type dexFleetStatusLiveListResponseDeviceStatsByPlatformJSON struct {
 	UniqueDevicesTotal apijson.Field
 	Value              apijson.Field
@@ -147,11 +147,11 @@ type dexFleetStatusLiveListResponseDeviceStatsByPlatformJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStatsByPlatform) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStatsByPlatform) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStatsByStatus struct {
+type DEXFleetStatusLiveListResponseDeviceStatsByStatus struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                               `json:"uniqueDevicesTotal"`
 	Value              string                                                `json:"value"`
@@ -159,7 +159,7 @@ type DexFleetStatusLiveListResponseDeviceStatsByStatus struct {
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsByStatusJSON contains the JSON metadata
-// for the struct [DexFleetStatusLiveListResponseDeviceStatsByStatus]
+// for the struct [DEXFleetStatusLiveListResponseDeviceStatsByStatus]
 type dexFleetStatusLiveListResponseDeviceStatsByStatusJSON struct {
 	UniqueDevicesTotal apijson.Field
 	Value              apijson.Field
@@ -167,11 +167,11 @@ type dexFleetStatusLiveListResponseDeviceStatsByStatusJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStatsByStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStatsByStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseDeviceStatsByVersion struct {
+type DEXFleetStatusLiveListResponseDeviceStatsByVersion struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                                `json:"uniqueDevicesTotal"`
 	Value              string                                                 `json:"value"`
@@ -179,7 +179,7 @@ type DexFleetStatusLiveListResponseDeviceStatsByVersion struct {
 }
 
 // dexFleetStatusLiveListResponseDeviceStatsByVersionJSON contains the JSON
-// metadata for the struct [DexFleetStatusLiveListResponseDeviceStatsByVersion]
+// metadata for the struct [DEXFleetStatusLiveListResponseDeviceStatsByVersion]
 type dexFleetStatusLiveListResponseDeviceStatsByVersionJSON struct {
 	UniqueDevicesTotal apijson.Field
 	Value              apijson.Field
@@ -187,35 +187,35 @@ type dexFleetStatusLiveListResponseDeviceStatsByVersionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseDeviceStatsByVersion) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseDeviceStatsByVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListParams struct {
+type DEXFleetStatusLiveListParams struct {
 	// Number of minutes before current time
 	SinceMinutes param.Field[float64] `query:"since_minutes,required"`
 }
 
-// URLQuery serializes [DexFleetStatusLiveListParams]'s query parameters as
+// URLQuery serializes [DEXFleetStatusLiveListParams]'s query parameters as
 // `url.Values`.
-func (r DexFleetStatusLiveListParams) URLQuery() (v url.Values) {
+func (r DEXFleetStatusLiveListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type DexFleetStatusLiveListResponseEnvelope struct {
-	Errors   []DexFleetStatusLiveListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexFleetStatusLiveListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DexFleetStatusLiveListResponse                   `json:"result,required"`
+type DEXFleetStatusLiveListResponseEnvelope struct {
+	Errors   []DEXFleetStatusLiveListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXFleetStatusLiveListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DEXFleetStatusLiveListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DexFleetStatusLiveListResponseEnvelopeSuccess `json:"success,required"`
+	Success DEXFleetStatusLiveListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexFleetStatusLiveListResponseEnvelopeJSON    `json:"-"`
 }
 
 // dexFleetStatusLiveListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DexFleetStatusLiveListResponseEnvelope]
+// struct [DEXFleetStatusLiveListResponseEnvelope]
 type dexFleetStatusLiveListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -225,18 +225,18 @@ type dexFleetStatusLiveListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseEnvelopeErrors struct {
+type DEXFleetStatusLiveListResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
 	JSON    dexFleetStatusLiveListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // dexFleetStatusLiveListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DexFleetStatusLiveListResponseEnvelopeErrors]
+// the struct [DEXFleetStatusLiveListResponseEnvelopeErrors]
 type dexFleetStatusLiveListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -244,18 +244,18 @@ type dexFleetStatusLiveListResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusLiveListResponseEnvelopeMessages struct {
+type DEXFleetStatusLiveListResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
 	JSON    dexFleetStatusLiveListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // dexFleetStatusLiveListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DexFleetStatusLiveListResponseEnvelopeMessages]
+// for the struct [DEXFleetStatusLiveListResponseEnvelopeMessages]
 type dexFleetStatusLiveListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -263,13 +263,13 @@ type dexFleetStatusLiveListResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusLiveListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusLiveListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DexFleetStatusLiveListResponseEnvelopeSuccess bool
+type DEXFleetStatusLiveListResponseEnvelopeSuccess bool
 
 const (
-	DexFleetStatusLiveListResponseEnvelopeSuccessTrue DexFleetStatusLiveListResponseEnvelopeSuccess = true
+	DEXFleetStatusLiveListResponseEnvelopeSuccessTrue DEXFleetStatusLiveListResponseEnvelopeSuccess = true
 )

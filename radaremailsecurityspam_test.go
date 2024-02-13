@@ -37,12 +37,12 @@ func TestRadarEmailSecuritySpamListWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsDateRange{cloudflare.RadarEmailSecuritySpamListParamsDateRange1d, cloudflare.RadarEmailSecuritySpamListParamsDateRange2d, cloudflare.RadarEmailSecuritySpamListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Dkim:        cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsDkim{cloudflare.RadarEmailSecuritySpamListParamsDkimPass, cloudflare.RadarEmailSecuritySpamListParamsDkimNone, cloudflare.RadarEmailSecuritySpamListParamsDkimFail}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsDKIM{cloudflare.RadarEmailSecuritySpamListParamsDKIMPass, cloudflare.RadarEmailSecuritySpamListParamsDKIMNone, cloudflare.RadarEmailSecuritySpamListParamsDKIMFail}),
 		Dmarc:       cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsDmarc{cloudflare.RadarEmailSecuritySpamListParamsDmarcPass, cloudflare.RadarEmailSecuritySpamListParamsDmarcNone, cloudflare.RadarEmailSecuritySpamListParamsDmarcFail}),
 		Format:      cloudflare.F(cloudflare.RadarEmailSecuritySpamListParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Spf:         cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsSpf{cloudflare.RadarEmailSecuritySpamListParamsSpfPass, cloudflare.RadarEmailSecuritySpamListParamsSpfNone, cloudflare.RadarEmailSecuritySpamListParamsSpfFail}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecuritySpamListParamsSPF{cloudflare.RadarEmailSecuritySpamListParamsSPFPass, cloudflare.RadarEmailSecuritySpamListParamsSPFNone, cloudflare.RadarEmailSecuritySpamListParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

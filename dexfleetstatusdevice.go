@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexFleetStatusDeviceService contains methods and other services that help with
+// DEXFleetStatusDeviceService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDexFleetStatusDeviceService]
+// this service directly, and instead use the [NewDEXFleetStatusDeviceService]
 // method instead.
-type DexFleetStatusDeviceService struct {
+type DEXFleetStatusDeviceService struct {
 	Options []option.RequestOption
 }
 
-// NewDexFleetStatusDeviceService generates a new service that applies the given
+// NewDEXFleetStatusDeviceService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewDexFleetStatusDeviceService(opts ...option.RequestOption) (r *DexFleetStatusDeviceService) {
-	r = &DexFleetStatusDeviceService{}
+func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetStatusDeviceService) {
+	r = &DEXFleetStatusDeviceService{}
 	r.Options = opts
 	return
 }
 
 // List details for devices using WARP
-func (r *DexFleetStatusDeviceService) List(ctx context.Context, accountID string, query DexFleetStatusDeviceListParams, opts ...option.RequestOption) (res *[]DexFleetStatusDeviceListResponse, err error) {
+func (r *DEXFleetStatusDeviceService) List(ctx context.Context, accountID string, query DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *[]DEXFleetStatusDeviceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexFleetStatusDeviceListResponseEnvelope
+	var env DEXFleetStatusDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/devices", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,7 +46,7 @@ func (r *DexFleetStatusDeviceService) List(ctx context.Context, accountID string
 	return
 }
 
-type DexFleetStatusDeviceListResponse struct {
+type DEXFleetStatusDeviceListResponse struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
@@ -65,7 +65,7 @@ type DexFleetStatusDeviceListResponse struct {
 }
 
 // dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
-// [DexFleetStatusDeviceListResponse]
+// [DEXFleetStatusDeviceListResponse]
 type dexFleetStatusDeviceListResponseJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
@@ -78,11 +78,11 @@ type dexFleetStatusDeviceListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusDeviceListParams struct {
+type DEXFleetStatusDeviceListParams struct {
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page,required"`
 	// Number of items per page
@@ -100,16 +100,16 @@ type DexFleetStatusDeviceListParams struct {
 	// Operating system
 	Platform param.Field[string] `query:"platform"`
 	// Dimension to sort results by
-	SortBy param.Field[DexFleetStatusDeviceListParamsSortBy] `query:"sort_by"`
+	SortBy param.Field[DEXFleetStatusDeviceListParamsSortBy] `query:"sort_by"`
 	// Network status
 	Status param.Field[string] `query:"status"`
 	// WARP client version
 	Version param.Field[string] `query:"version"`
 }
 
-// URLQuery serializes [DexFleetStatusDeviceListParams]'s query parameters as
+// URLQuery serializes [DEXFleetStatusDeviceListParams]'s query parameters as
 // `url.Values`.
-func (r DexFleetStatusDeviceListParams) URLQuery() (v url.Values) {
+func (r DEXFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -117,30 +117,30 @@ func (r DexFleetStatusDeviceListParams) URLQuery() (v url.Values) {
 }
 
 // Dimension to sort results by
-type DexFleetStatusDeviceListParamsSortBy string
+type DEXFleetStatusDeviceListParamsSortBy string
 
 const (
-	DexFleetStatusDeviceListParamsSortByColo      DexFleetStatusDeviceListParamsSortBy = "colo"
-	DexFleetStatusDeviceListParamsSortByDeviceID  DexFleetStatusDeviceListParamsSortBy = "device_id"
-	DexFleetStatusDeviceListParamsSortByMode      DexFleetStatusDeviceListParamsSortBy = "mode"
-	DexFleetStatusDeviceListParamsSortByPlatform  DexFleetStatusDeviceListParamsSortBy = "platform"
-	DexFleetStatusDeviceListParamsSortByStatus    DexFleetStatusDeviceListParamsSortBy = "status"
-	DexFleetStatusDeviceListParamsSortByTimestamp DexFleetStatusDeviceListParamsSortBy = "timestamp"
-	DexFleetStatusDeviceListParamsSortByVersion   DexFleetStatusDeviceListParamsSortBy = "version"
+	DEXFleetStatusDeviceListParamsSortByColo      DEXFleetStatusDeviceListParamsSortBy = "colo"
+	DEXFleetStatusDeviceListParamsSortByDeviceID  DEXFleetStatusDeviceListParamsSortBy = "device_id"
+	DEXFleetStatusDeviceListParamsSortByMode      DEXFleetStatusDeviceListParamsSortBy = "mode"
+	DEXFleetStatusDeviceListParamsSortByPlatform  DEXFleetStatusDeviceListParamsSortBy = "platform"
+	DEXFleetStatusDeviceListParamsSortByStatus    DEXFleetStatusDeviceListParamsSortBy = "status"
+	DEXFleetStatusDeviceListParamsSortByTimestamp DEXFleetStatusDeviceListParamsSortBy = "timestamp"
+	DEXFleetStatusDeviceListParamsSortByVersion   DEXFleetStatusDeviceListParamsSortBy = "version"
 )
 
-type DexFleetStatusDeviceListResponseEnvelope struct {
-	Errors   []DexFleetStatusDeviceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexFleetStatusDeviceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DexFleetStatusDeviceListResponse                 `json:"result,required,nullable"`
+type DEXFleetStatusDeviceListResponseEnvelope struct {
+	Errors   []DEXFleetStatusDeviceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXFleetStatusDeviceListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DEXFleetStatusDeviceListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    DexFleetStatusDeviceListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DexFleetStatusDeviceListResponseEnvelopeResultInfo `json:"result_info"`
+	Success    DEXFleetStatusDeviceListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DEXFleetStatusDeviceListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dexFleetStatusDeviceListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DexFleetStatusDeviceListResponseEnvelope]
+// struct [DEXFleetStatusDeviceListResponseEnvelope]
 type dexFleetStatusDeviceListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -151,18 +151,18 @@ type dexFleetStatusDeviceListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusDeviceListResponseEnvelopeErrors struct {
+type DEXFleetStatusDeviceListResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
 	JSON    dexFleetStatusDeviceListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DexFleetStatusDeviceListResponseEnvelopeErrors]
+// for the struct [DEXFleetStatusDeviceListResponseEnvelopeErrors]
 type dexFleetStatusDeviceListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -170,18 +170,18 @@ type dexFleetStatusDeviceListResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexFleetStatusDeviceListResponseEnvelopeMessages struct {
+type DEXFleetStatusDeviceListResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
 	JSON    dexFleetStatusDeviceListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // dexFleetStatusDeviceListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DexFleetStatusDeviceListResponseEnvelopeMessages]
+// for the struct [DEXFleetStatusDeviceListResponseEnvelopeMessages]
 type dexFleetStatusDeviceListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -189,18 +189,18 @@ type dexFleetStatusDeviceListResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DexFleetStatusDeviceListResponseEnvelopeSuccess bool
+type DEXFleetStatusDeviceListResponseEnvelopeSuccess bool
 
 const (
-	DexFleetStatusDeviceListResponseEnvelopeSuccessTrue DexFleetStatusDeviceListResponseEnvelopeSuccess = true
+	DEXFleetStatusDeviceListResponseEnvelopeSuccessTrue DEXFleetStatusDeviceListResponseEnvelopeSuccess = true
 )
 
-type DexFleetStatusDeviceListResponseEnvelopeResultInfo struct {
+type DEXFleetStatusDeviceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -213,7 +213,7 @@ type DexFleetStatusDeviceListResponseEnvelopeResultInfo struct {
 }
 
 // dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DexFleetStatusDeviceListResponseEnvelopeResultInfo]
+// metadata for the struct [DEXFleetStatusDeviceListResponseEnvelopeResultInfo]
 type dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
@@ -223,6 +223,6 @@ type dexFleetStatusDeviceListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexFleetStatusDeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXFleetStatusDeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

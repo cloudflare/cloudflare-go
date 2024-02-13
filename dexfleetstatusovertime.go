@@ -14,26 +14,26 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexFleetStatusOverTimeService contains methods and other services that help with
+// DEXFleetStatusOverTimeService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDexFleetStatusOverTimeService]
+// this service directly, and instead use the [NewDEXFleetStatusOverTimeService]
 // method instead.
-type DexFleetStatusOverTimeService struct {
+type DEXFleetStatusOverTimeService struct {
 	Options []option.RequestOption
 }
 
-// NewDexFleetStatusOverTimeService generates a new service that applies the given
+// NewDEXFleetStatusOverTimeService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewDexFleetStatusOverTimeService(opts ...option.RequestOption) (r *DexFleetStatusOverTimeService) {
-	r = &DexFleetStatusOverTimeService{}
+func NewDEXFleetStatusOverTimeService(opts ...option.RequestOption) (r *DEXFleetStatusOverTimeService) {
+	r = &DEXFleetStatusOverTimeService{}
 	r.Options = opts
 	return
 }
 
 // List details for devices using WARP, up to 7 days
-func (r *DexFleetStatusOverTimeService) List(ctx context.Context, accountID string, query DexFleetStatusOverTimeListParams, opts ...option.RequestOption) (err error) {
+func (r *DEXFleetStatusOverTimeService) List(ctx context.Context, accountID string, query DEXFleetStatusOverTimeListParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", accountID)
@@ -41,7 +41,7 @@ func (r *DexFleetStatusOverTimeService) List(ctx context.Context, accountID stri
 	return
 }
 
-type DexFleetStatusOverTimeListParams struct {
+type DEXFleetStatusOverTimeListParams struct {
 	// Timestamp in ISO format
 	TimeEnd param.Field[string] `query:"time_end,required"`
 	// Timestamp in ISO format
@@ -52,9 +52,9 @@ type DexFleetStatusOverTimeListParams struct {
 	DeviceID param.Field[string] `query:"device_id"`
 }
 
-// URLQuery serializes [DexFleetStatusOverTimeListParams]'s query parameters as
+// URLQuery serializes [DEXFleetStatusOverTimeListParams]'s query parameters as
 // `url.Values`.
-func (r DexFleetStatusOverTimeListParams) URLQuery() (v url.Values) {
+func (r DEXFleetStatusOverTimeListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

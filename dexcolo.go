@@ -15,19 +15,19 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexColoService contains methods and other services that help with interacting
+// DEXColoService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDexColoService] method instead.
-type DexColoService struct {
+// service directly, and instead use the [NewDEXColoService] method instead.
+type DEXColoService struct {
 	Options []option.RequestOption
 }
 
-// NewDexColoService generates a new service that applies the given options to each
+// NewDEXColoService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewDexColoService(opts ...option.RequestOption) (r *DexColoService) {
-	r = &DexColoService{}
+func NewDEXColoService(opts ...option.RequestOption) (r *DEXColoService) {
+	r = &DEXColoService{}
 	r.Options = opts
 	return
 }
@@ -35,9 +35,9 @@ func NewDexColoService(opts ...option.RequestOption) (r *DexColoService) {
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DexColoService) List(ctx context.Context, accountID string, query DexColoListParams, opts ...option.RequestOption) (res *[]DexColoListResponse, err error) {
+func (r *DEXColoService) List(ctx context.Context, accountID string, query DEXColoListParams, opts ...option.RequestOption) (res *[]DEXColoListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexColoListResponseEnvelope
+	var env DEXColoListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/colos", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -47,20 +47,20 @@ func (r *DexColoService) List(ctx context.Context, accountID string, query DexCo
 	return
 }
 
-type DexColoListResponse = interface{}
+type DEXColoListResponse = interface{}
 
-type DexColoListParams struct {
+type DEXColoListParams struct {
 	// End time for connection period in RFC3339 (ISO 8601) format.
 	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for connection period in RFC3339 (ISO 8601) format.
 	TimeStart param.Field[string] `query:"timeStart,required"`
 	// Type of usage that colos should be sorted by. If unspecified, returns all
 	// Cloudflare colos sorted alphabetically.
-	SortBy param.Field[DexColoListParamsSortBy] `query:"sortBy"`
+	SortBy param.Field[DEXColoListParamsSortBy] `query:"sortBy"`
 }
 
-// URLQuery serializes [DexColoListParams]'s query parameters as `url.Values`.
-func (r DexColoListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [DEXColoListParams]'s query parameters as `url.Values`.
+func (r DEXColoListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -69,26 +69,26 @@ func (r DexColoListParams) URLQuery() (v url.Values) {
 
 // Type of usage that colos should be sorted by. If unspecified, returns all
 // Cloudflare colos sorted alphabetically.
-type DexColoListParamsSortBy string
+type DEXColoListParamsSortBy string
 
 const (
-	DexColoListParamsSortByFleetStatusUsage      DexColoListParamsSortBy = "fleet-status-usage"
-	DexColoListParamsSortByApplicationTestsUsage DexColoListParamsSortBy = "application-tests-usage"
+	DEXColoListParamsSortByFleetStatusUsage      DEXColoListParamsSortBy = "fleet-status-usage"
+	DEXColoListParamsSortByApplicationTestsUsage DEXColoListParamsSortBy = "application-tests-usage"
 )
 
-type DexColoListResponseEnvelope struct {
-	Errors   []DexColoListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexColoListResponseEnvelopeMessages `json:"messages,required"`
+type DEXColoListResponseEnvelope struct {
+	Errors   []DEXColoListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXColoListResponseEnvelopeMessages `json:"messages,required"`
 	// array of colos.
-	Result []DexColoListResponse `json:"result,required,nullable"`
+	Result []DEXColoListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    DexColoListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DexColoListResponseEnvelopeResultInfo `json:"result_info"`
+	Success    DEXColoListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DEXColoListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dexColoListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexColoListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DexColoListResponseEnvelope]
+// [DEXColoListResponseEnvelope]
 type dexColoListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -99,18 +99,18 @@ type dexColoListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexColoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXColoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexColoListResponseEnvelopeErrors struct {
+type DEXColoListResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
 	JSON    dexColoListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // dexColoListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DexColoListResponseEnvelopeErrors]
+// [DEXColoListResponseEnvelopeErrors]
 type dexColoListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -118,18 +118,18 @@ type dexColoListResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexColoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXColoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexColoListResponseEnvelopeMessages struct {
+type DEXColoListResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
 	JSON    dexColoListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // dexColoListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DexColoListResponseEnvelopeMessages]
+// struct [DEXColoListResponseEnvelopeMessages]
 type dexColoListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -137,18 +137,18 @@ type dexColoListResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DexColoListResponseEnvelopeSuccess bool
+type DEXColoListResponseEnvelopeSuccess bool
 
 const (
-	DexColoListResponseEnvelopeSuccessTrue DexColoListResponseEnvelopeSuccess = true
+	DEXColoListResponseEnvelopeSuccessTrue DEXColoListResponseEnvelopeSuccess = true
 )
 
-type DexColoListResponseEnvelopeResultInfo struct {
+type DEXColoListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -161,7 +161,7 @@ type DexColoListResponseEnvelopeResultInfo struct {
 }
 
 // dexColoListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DexColoListResponseEnvelopeResultInfo]
+// struct [DEXColoListResponseEnvelopeResultInfo]
 type dexColoListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
@@ -171,6 +171,6 @@ type dexColoListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

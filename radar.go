@@ -11,14 +11,24 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewRadarService] method instead.
 type RadarService struct {
-	Options          []option.RequestOption
-	Attacks          *RadarAttackService
-	Emails           *RadarEmailService
-	Entities         *RadarEntityService
-	HTTP             *RadarHTTPService
-	Quality          *RadarQualityService
-	Ranking          *RadarRankingService
-	TrafficAnomalies *RadarTrafficAnomalyService
+	Options             []option.RequestOption
+	Annotations         *RadarAnnotationService
+	BGP                 *RadarBGPService
+	Datasets            *RadarDatasetService
+	DNS                 *RadarDNSService
+	Netflows            *RadarNetflowService
+	Searches            *RadarSearchService
+	VerifiedBots        *RadarVerifiedBotService
+	As112               *RadarAs112Service
+	ConnectionTampering *RadarConnectionTamperingService
+	Email               *RadarEmailService
+	Attacks             *RadarAttackService
+	Emails              *RadarEmailService
+	Entities            *RadarEntityService
+	HTTP                *RadarHTTPService
+	Quality             *RadarQualityService
+	Ranking             *RadarRankingService
+	TrafficAnomalies    *RadarTrafficAnomalyService
 }
 
 // NewRadarService generates a new service that applies the given options to each
@@ -27,6 +37,16 @@ type RadarService struct {
 func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r = &RadarService{}
 	r.Options = opts
+	r.Annotations = NewRadarAnnotationService(opts...)
+	r.BGP = NewRadarBGPService(opts...)
+	r.Datasets = NewRadarDatasetService(opts...)
+	r.DNS = NewRadarDNSService(opts...)
+	r.Netflows = NewRadarNetflowService(opts...)
+	r.Searches = NewRadarSearchService(opts...)
+	r.VerifiedBots = NewRadarVerifiedBotService(opts...)
+	r.As112 = NewRadarAs112Service(opts...)
+	r.ConnectionTampering = NewRadarConnectionTamperingService(opts...)
+	r.Email = NewRadarEmailService(opts...)
 	r.Attacks = NewRadarAttackService(opts...)
 	r.Emails = NewRadarEmailService(opts...)
 	r.Entities = NewRadarEntityService(opts...)

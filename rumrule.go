@@ -32,10 +32,10 @@ func NewRumRuleService(opts ...option.RequestOption) (r *RumRuleService) {
 }
 
 // Creates a new rule in a Web Analytics ruleset.
-func (r *RumRuleService) New(ctx context.Context, accountIdentifier string, rulesetIdentifier string, body RumRuleNewParams, opts ...option.RequestOption) (res *RumRuleNewResponse, err error) {
+func (r *RumRuleService) New(ctx context.Context, accountID string, rulesetID string, body RumRuleNewParams, opts ...option.RequestOption) (res *RumRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RumRuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", accountIdentifier, rulesetIdentifier)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", accountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -45,10 +45,10 @@ func (r *RumRuleService) New(ctx context.Context, accountIdentifier string, rule
 }
 
 // Updates a rule in a Web Analytics ruleset.
-func (r *RumRuleService) Update(ctx context.Context, accountIdentifier string, rulesetIdentifier string, ruleIdentifier string, body RumRuleUpdateParams, opts ...option.RequestOption) (res *RumRuleUpdateResponse, err error) {
+func (r *RumRuleService) Update(ctx context.Context, accountID string, rulesetID string, ruleID string, body RumRuleUpdateParams, opts ...option.RequestOption) (res *RumRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RumRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountIdentifier, rulesetIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -58,10 +58,10 @@ func (r *RumRuleService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // Lists all the rules in a Web Analytics ruleset.
-func (r *RumRuleService) List(ctx context.Context, accountIdentifier string, rulesetIdentifier string, opts ...option.RequestOption) (res *RumRuleListResponse, err error) {
+func (r *RumRuleService) List(ctx context.Context, accountID string, rulesetID string, opts ...option.RequestOption) (res *RumRuleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RumRuleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", accountIdentifier, rulesetIdentifier)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", accountID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -71,10 +71,10 @@ func (r *RumRuleService) List(ctx context.Context, accountIdentifier string, rul
 }
 
 // Deletes an existing rule from a Web Analytics ruleset.
-func (r *RumRuleService) Delete(ctx context.Context, accountIdentifier string, rulesetIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *RumRuleDeleteResponse, err error) {
+func (r *RumRuleService) Delete(ctx context.Context, accountID string, rulesetID string, ruleID string, opts ...option.RequestOption) (res *RumRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RumRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountIdentifier, rulesetIdentifier, ruleIdentifier)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return

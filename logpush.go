@@ -11,9 +11,12 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewLogpushService] method instead.
 type LogpushService struct {
-	Options  []option.RequestOption
-	Datasets *LogpushDatasetService
-	Jobs     *LogpushJobService
+	Options    []option.RequestOption
+	Datasets   *LogpushDatasetService
+	Edges      *LogpushEdgeService
+	Jobs       *LogpushJobService
+	Ownerships *LogpushOwnershipService
+	Validates  *LogpushValidateService
 }
 
 // NewLogpushService generates a new service that applies the given options to each
@@ -23,6 +26,9 @@ func NewLogpushService(opts ...option.RequestOption) (r *LogpushService) {
 	r = &LogpushService{}
 	r.Options = opts
 	r.Datasets = NewLogpushDatasetService(opts...)
+	r.Edges = NewLogpushEdgeService(opts...)
 	r.Jobs = NewLogpushJobService(opts...)
+	r.Ownerships = NewLogpushOwnershipService(opts...)
+	r.Validates = NewLogpushValidateService(opts...)
 	return
 }

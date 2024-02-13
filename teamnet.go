@@ -11,8 +11,9 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewTeamnetService] method instead.
 type TeamnetService struct {
-	Options []option.RequestOption
-	Routes  *TeamnetRouteService
+	Options         []option.RequestOption
+	Routes          *TeamnetRouteService
+	VirtualNetworks *TeamnetVirtualNetworkService
 }
 
 // NewTeamnetService generates a new service that applies the given options to each
@@ -22,5 +23,6 @@ func NewTeamnetService(opts ...option.RequestOption) (r *TeamnetService) {
 	r = &TeamnetService{}
 	r.Options = opts
 	r.Routes = NewTeamnetRouteService(opts...)
+	r.VirtualNetworks = NewTeamnetVirtualNetworkService(opts...)
 	return
 }

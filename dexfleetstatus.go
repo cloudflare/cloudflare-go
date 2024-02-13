@@ -6,26 +6,26 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexFleetStatusService contains methods and other services that help with
+// DEXFleetStatusService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDexFleetStatusService] method
+// this service directly, and instead use the [NewDEXFleetStatusService] method
 // instead.
-type DexFleetStatusService struct {
+type DEXFleetStatusService struct {
 	Options  []option.RequestOption
-	Devices  *DexFleetStatusDeviceService
-	Live     *DexFleetStatusLiveService
-	OverTime *DexFleetStatusOverTimeService
+	Devices  *DEXFleetStatusDeviceService
+	Live     *DEXFleetStatusLiveService
+	OverTime *DEXFleetStatusOverTimeService
 }
 
-// NewDexFleetStatusService generates a new service that applies the given options
+// NewDEXFleetStatusService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewDexFleetStatusService(opts ...option.RequestOption) (r *DexFleetStatusService) {
-	r = &DexFleetStatusService{}
+func NewDEXFleetStatusService(opts ...option.RequestOption) (r *DEXFleetStatusService) {
+	r = &DEXFleetStatusService{}
 	r.Options = opts
-	r.Devices = NewDexFleetStatusDeviceService(opts...)
-	r.Live = NewDexFleetStatusLiveService(opts...)
-	r.OverTime = NewDexFleetStatusOverTimeService(opts...)
+	r.Devices = NewDEXFleetStatusDeviceService(opts...)
+	r.Live = NewDEXFleetStatusLiveService(opts...)
+	r.OverTime = NewDEXFleetStatusOverTimeService(opts...)
 	return
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDexHTTPTestPercentileListWithOptionalParams(t *testing.T) {
+func TestDEXHTTPTestPercentileListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestDexHTTPTestPercentileListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.HTTPTests.Percentiles.List(
+	_, err := client.DEX.HTTPTests.Percentiles.List(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.DexHTTPTestPercentileListParams{
+		cloudflare.DEXHTTPTestPercentileListParams{
 			TimeEnd:   cloudflare.F("2023-09-20T17:00:00Z"),
 			TimeStart: cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("string"),

@@ -33,6 +33,32 @@ func NewAccessAppCaService(opts ...option.RequestOption) (r *AccessAppCaService)
 	return
 }
 
+// Generates a new short-lived certificate CA and public key.
+func (r *AccessAppCaService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessAppCaNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessAppCaNewResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists short-lived certificate CAs and their public keys.
+func (r *AccessAppCaService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessAppCaListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessAppCaListResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/apps/ca", accountOrZone, accountOrZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Deletes a short-lived certificate CA.
 func (r *AccessAppCaService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessAppCaDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -46,23 +72,10 @@ func (r *AccessAppCaService) Delete(ctx context.Context, accountOrZone string, a
 	return
 }
 
-// Generates a new short-lived certificate CA and public key.
-func (r *AccessAppCaService) AccessShortLivedCertificateCAsNewAShortLivedCertificateCa(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessAppCaService) AccessShortLivedCertificateCAsGetAShortLivedCertificateCa(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse, err error) {
+func (r *AccessAppCaService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessAppCaGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelope
+	var env AccessAppCaGetResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -72,17 +85,45 @@ func (r *AccessAppCaService) AccessShortLivedCertificateCAsGetAShortLivedCertifi
 	return
 }
 
-// Lists short-lived certificate CAs and their public keys.
-func (r *AccessAppCaService) AccessShortLivedCertificateCAsListShortLivedCertificateCAs(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/apps/ca", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [AccessAppCaNewResponseUnknown] or [shared.UnionString].
+type AccessAppCaNewResponse interface {
+	ImplementsAccessAppCaNewResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*AccessAppCaNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type AccessAppCaListResponse struct {
+	// The ID of the CA.
+	ID string `json:"id"`
+	// The Application Audience (AUD) tag. Identifies the application associated with
+	// the CA.
+	Aud string `json:"aud"`
+	// The public key to add to your SSH server configuration.
+	PublicKey string                      `json:"public_key"`
+	JSON      accessAppCaListResponseJSON `json:"-"`
+}
+
+// accessAppCaListResponseJSON contains the JSON metadata for the struct
+// [AccessAppCaListResponse]
+type accessAppCaListResponseJSON struct {
+	ID          apijson.Field
+	Aud         apijson.Field
+	PublicKey   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type AccessAppCaDeleteResponse struct {
@@ -103,16 +144,14 @@ func (r *AccessAppCaDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by
-// [AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseUnknown]
-// or [shared.UnionString].
-type AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse interface {
-	ImplementsAccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse()
+// Union satisfied by [AccessAppCaGetResponseUnknown] or [shared.UnionString].
+type AccessAppCaGetResponse interface {
+	ImplementsAccessAppCaGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse)(nil)).Elem(),
+		reflect.TypeOf((*AccessAppCaGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -121,47 +160,170 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseUnknown]
-// or [shared.UnionString].
-type AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse interface {
-	ImplementsAccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse()
+type AccessAppCaNewResponseEnvelope struct {
+	Errors   []AccessAppCaNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppCaNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppCaNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessAppCaNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessAppCaNewResponseEnvelopeJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponse struct {
-	// The ID of the CA.
-	ID string `json:"id"`
-	// The Application Audience (AUD) tag. Identifies the application associated with
-	// the CA.
-	Aud string `json:"aud"`
-	// The public key to add to your SSH server configuration.
-	PublicKey string                                                                            `json:"public_key"`
-	JSON      accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponse]
-type accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseJSON struct {
-	ID          apijson.Field
-	Aud         apijson.Field
-	PublicKey   apijson.Field
+// accessAppCaNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppCaNewResponseEnvelope]
+type accessAppCaNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppCaNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppCaNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessAppCaNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessAppCaNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessAppCaNewResponseEnvelopeErrors]
+type accessAppCaNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppCaNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accessAppCaNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessAppCaNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppCaNewResponseEnvelopeMessages]
+type accessAppCaNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessAppCaNewResponseEnvelopeSuccess bool
+
+const (
+	AccessAppCaNewResponseEnvelopeSuccessTrue AccessAppCaNewResponseEnvelopeSuccess = true
+)
+
+type AccessAppCaListResponseEnvelope struct {
+	Errors   []AccessAppCaListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppCaListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessAppCaListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    AccessAppCaListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessAppCaListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessAppCaListResponseEnvelopeJSON       `json:"-"`
+}
+
+// accessAppCaListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppCaListResponseEnvelope]
+type accessAppCaListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppCaListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessAppCaListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessAppCaListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessAppCaListResponseEnvelopeErrors]
+type accessAppCaListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppCaListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessAppCaListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessAppCaListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppCaListResponseEnvelopeMessages]
+type accessAppCaListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessAppCaListResponseEnvelopeSuccess bool
+
+const (
+	AccessAppCaListResponseEnvelopeSuccessTrue AccessAppCaListResponseEnvelopeSuccess = true
+)
+
+type AccessAppCaListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       accessAppCaListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// accessAppCaListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [AccessAppCaListResponseEnvelopeResultInfo]
+type accessAppCaListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppCaListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -234,19 +396,18 @@ const (
 	AccessAppCaDeleteResponseEnvelopeSuccessTrue AccessAppCaDeleteResponseEnvelopeSuccess = true
 )
 
-type AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelope struct {
-	Errors   []AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponse                   `json:"result,required"`
+type AccessAppCaGetResponseEnvelope struct {
+	Errors   []AccessAppCaGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppCaGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppCaGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeJSON    `json:"-"`
+	Success AccessAppCaGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessAppCaGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelope]
-type accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeJSON struct {
+// accessAppCaGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppCaGetResponseEnvelope]
+type accessAppCaGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -255,227 +416,51 @@ type accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaRespons
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppCaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrors struct {
-	Code    int64                                                                                          `json:"code,required"`
-	Message string                                                                                         `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrorsJSON `json:"-"`
+type AccessAppCaGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessAppCaGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrors]
-type accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrorsJSON struct {
+// accessAppCaGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessAppCaGetResponseEnvelopeErrors]
+type accessAppCaGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppCaGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessages struct {
-	Code    int64                                                                                            `json:"code,required"`
-	Message string                                                                                           `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessagesJSON `json:"-"`
+type AccessAppCaGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accessAppCaGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessages]
-type accessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessagesJSON struct {
+// accessAppCaGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppCaGetResponseEnvelopeMessages]
+type accessAppCaGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppCaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeSuccess bool
+type AccessAppCaGetResponseEnvelopeSuccess bool
 
 const (
-	AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeSuccessTrue AccessAppCaAccessShortLivedCertificateCAsNewAShortLivedCertificateCaResponseEnvelopeSuccess = true
+	AccessAppCaGetResponseEnvelopeSuccessTrue AccessAppCaGetResponseEnvelopeSuccess = true
 )
-
-type AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelope struct {
-	Errors   []AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelope]
-type accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrors struct {
-	Code    int64                                                                                          `json:"code,required"`
-	Message string                                                                                         `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrors]
-type accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessages struct {
-	Code    int64                                                                                            `json:"code,required"`
-	Message string                                                                                           `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessages]
-type accessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeSuccess bool
-
-const (
-	AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeSuccessTrue AccessAppCaAccessShortLivedCertificateCAsGetAShortLivedCertificateCaResponseEnvelopeSuccess = true
-)
-
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelope struct {
-	Errors   []AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelope]
-type accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrors struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrors]
-type accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessages struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessages]
-type accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeSuccess bool
-
-const (
-	AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeSuccessTrue AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeSuccess = true
-)
-
-type AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                             `json:"total_count"`
-	JSON       accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfo]
-type accessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppCaAccessShortLivedCertificateCAsListShortLivedCertificateCAsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

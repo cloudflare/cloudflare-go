@@ -37,12 +37,12 @@ func TestRadarEmailSecurityMaliciousListWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsDateRange{cloudflare.RadarEmailSecurityMaliciousListParamsDateRange1d, cloudflare.RadarEmailSecurityMaliciousListParamsDateRange2d, cloudflare.RadarEmailSecurityMaliciousListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Dkim:        cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsDkim{cloudflare.RadarEmailSecurityMaliciousListParamsDkimPass, cloudflare.RadarEmailSecurityMaliciousListParamsDkimNone, cloudflare.RadarEmailSecurityMaliciousListParamsDkimFail}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsDKIM{cloudflare.RadarEmailSecurityMaliciousListParamsDKIMPass, cloudflare.RadarEmailSecurityMaliciousListParamsDKIMNone, cloudflare.RadarEmailSecurityMaliciousListParamsDKIMFail}),
 		Dmarc:       cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsDmarc{cloudflare.RadarEmailSecurityMaliciousListParamsDmarcPass, cloudflare.RadarEmailSecurityMaliciousListParamsDmarcNone, cloudflare.RadarEmailSecurityMaliciousListParamsDmarcFail}),
 		Format:      cloudflare.F(cloudflare.RadarEmailSecurityMaliciousListParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Spf:         cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsSpf{cloudflare.RadarEmailSecurityMaliciousListParamsSpfPass, cloudflare.RadarEmailSecurityMaliciousListParamsSpfNone, cloudflare.RadarEmailSecurityMaliciousListParamsSpfFail}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityMaliciousListParamsSPF{cloudflare.RadarEmailSecurityMaliciousListParamsSPFPass, cloudflare.RadarEmailSecurityMaliciousListParamsSPFNone, cloudflare.RadarEmailSecurityMaliciousListParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

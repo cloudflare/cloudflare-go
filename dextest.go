@@ -15,29 +15,29 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexTestService contains methods and other services that help with interacting
+// DEXTestService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewDexTestService] method instead.
-type DexTestService struct {
+// service directly, and instead use the [NewDEXTestService] method instead.
+type DEXTestService struct {
 	Options       []option.RequestOption
-	UniqueDevices *DexTestUniqueDeviceService
+	UniqueDevices *DEXTestUniqueDeviceService
 }
 
-// NewDexTestService generates a new service that applies the given options to each
+// NewDEXTestService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewDexTestService(opts ...option.RequestOption) (r *DexTestService) {
-	r = &DexTestService{}
+func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
+	r = &DEXTestService{}
 	r.Options = opts
-	r.UniqueDevices = NewDexTestUniqueDeviceService(opts...)
+	r.UniqueDevices = NewDEXTestUniqueDeviceService(opts...)
 	return
 }
 
 // List DEX tests
-func (r *DexTestService) List(ctx context.Context, accountID string, query DexTestListParams, opts ...option.RequestOption) (res *DexTestListResponse, err error) {
+func (r *DEXTestService) List(ctx context.Context, accountID string, query DEXTestListParams, opts ...option.RequestOption) (res *DEXTestListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexTestListResponseEnvelope
+	var env DEXTestListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/tests", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -47,15 +47,15 @@ func (r *DexTestService) List(ctx context.Context, accountID string, query DexTe
 	return
 }
 
-type DexTestListResponse struct {
-	OverviewMetrics DexTestListResponseOverviewMetrics `json:"overviewMetrics,required"`
+type DEXTestListResponse struct {
+	OverviewMetrics DEXTestListResponseOverviewMetrics `json:"overviewMetrics,required"`
 	// array of test results objects.
-	Tests []DexTestListResponseTest `json:"tests,required"`
+	Tests []DEXTestListResponseTest `json:"tests,required"`
 	JSON  dexTestListResponseJSON   `json:"-"`
 }
 
 // dexTestListResponseJSON contains the JSON metadata for the struct
-// [DexTestListResponse]
+// [DEXTestListResponse]
 type dexTestListResponseJSON struct {
 	OverviewMetrics apijson.Field
 	Tests           apijson.Field
@@ -63,11 +63,11 @@ type dexTestListResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DexTestListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseOverviewMetrics struct {
+type DEXTestListResponseOverviewMetrics struct {
 	// number of tests.
 	TestsTotal int64 `json:"testsTotal,required"`
 	// percentage availability for all traceroutes results in response
@@ -76,7 +76,7 @@ type DexTestListResponseOverviewMetrics struct {
 }
 
 // dexTestListResponseOverviewMetricsJSON contains the JSON metadata for the struct
-// [DexTestListResponseOverviewMetrics]
+// [DEXTestListResponseOverviewMetrics]
 type dexTestListResponseOverviewMetricsJSON struct {
 	TestsTotal                   apijson.Field
 	AvgTracerouteAvailabilityPct apijson.Field
@@ -84,11 +84,11 @@ type dexTestListResponseOverviewMetricsJSON struct {
 	ExtraFields                  map[string]apijson.Field
 }
 
-func (r *DexTestListResponseOverviewMetrics) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseOverviewMetrics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTest struct {
+type DEXTestListResponseTest struct {
 	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// date the test was created.
@@ -102,21 +102,21 @@ type DexTestListResponseTest struct {
 	// The interval at which the synthetic application test is set to run.
 	Interval string `json:"interval,required"`
 	// test type, http or traceroute
-	Kind DexTestListResponseTestsKind `json:"kind,required"`
+	Kind DEXTestListResponseTestsKind `json:"kind,required"`
 	// name given to this test
 	Name              string                                      `json:"name,required"`
 	Updated           string                                      `json:"updated,required"`
-	HTTPResults       DexTestListResponseTestsHTTPResults         `json:"httpResults,nullable"`
-	HTTPResultsByColo []DexTestListResponseTestsHTTPResultsByColo `json:"httpResultsByColo"`
+	HTTPResults       DEXTestListResponseTestsHTTPResults         `json:"httpResults,nullable"`
+	HTTPResultsByColo []DEXTestListResponseTestsHTTPResultsByColo `json:"httpResultsByColo"`
 	// for HTTP, the method to use when running the test
 	Method                  string                                            `json:"method"`
-	TracerouteResults       DexTestListResponseTestsTracerouteResults         `json:"tracerouteResults,nullable"`
-	TracerouteResultsByColo []DexTestListResponseTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
+	TracerouteResults       DEXTestListResponseTestsTracerouteResults         `json:"tracerouteResults,nullable"`
+	TracerouteResultsByColo []DEXTestListResponseTestsTracerouteResultsByColo `json:"tracerouteResultsByColo"`
 	JSON                    dexTestListResponseTestJSON                       `json:"-"`
 }
 
 // dexTestListResponseTestJSON contains the JSON metadata for the struct
-// [DexTestListResponseTest]
+// [DEXTestListResponseTest]
 type dexTestListResponseTestJSON struct {
 	ID                      apijson.Field
 	Created                 apijson.Field
@@ -136,44 +136,44 @@ type dexTestListResponseTestJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTest) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // test type, http or traceroute
-type DexTestListResponseTestsKind string
+type DEXTestListResponseTestsKind string
 
 const (
-	DexTestListResponseTestsKindHTTP       DexTestListResponseTestsKind = "http"
-	DexTestListResponseTestsKindTraceroute DexTestListResponseTestsKind = "traceroute"
+	DEXTestListResponseTestsKindHTTP       DEXTestListResponseTestsKind = "http"
+	DEXTestListResponseTestsKindTraceroute DEXTestListResponseTestsKind = "traceroute"
 )
 
-type DexTestListResponseTestsHTTPResults struct {
-	ResourceFetchTime DexTestListResponseTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
+type DEXTestListResponseTestsHTTPResults struct {
+	ResourceFetchTime DEXTestListResponseTestsHTTPResultsResourceFetchTime `json:"resourceFetchTime,required"`
 	JSON              dexTestListResponseTestsHTTPResultsJSON              `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsJSON contains the JSON metadata for the
-// struct [DexTestListResponseTestsHTTPResults]
+// struct [DEXTestListResponseTestsHTTPResults]
 type dexTestListResponseTestsHTTPResultsJSON struct {
 	ResourceFetchTime apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResults) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTime struct {
-	History  []DexTestListResponseTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
+type DEXTestListResponseTestsHTTPResultsResourceFetchTime struct {
+	History  []DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
 	AvgMs    int64                                                         `json:"avgMs,nullable"`
-	OverTime DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	OverTime DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTime  `json:"overTime,nullable"`
 	JSON     dexTestListResponseTestsHTTPResultsResourceFetchTimeJSON      `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeJSON contains the JSON
-// metadata for the struct [DexTestListResponseTestsHTTPResultsResourceFetchTime]
+// metadata for the struct [DEXTestListResponseTestsHTTPResultsResourceFetchTime]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
@@ -182,12 +182,12 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeHistory struct {
-	TimePeriod DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistory struct {
+	TimePeriod DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                 `json:"avgMs,nullable"`
 	DeltaPct   float64                                                               `json:"deltaPct,nullable"`
 	JSON       dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryJSON       `json:"-"`
@@ -195,7 +195,7 @@ type DexTestListResponseTestsHTTPResultsResourceFetchTimeHistory struct {
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryJSON contains the
 // JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsResourceFetchTimeHistory]
+// [DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistory]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
@@ -204,19 +204,19 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod struct {
-	Units DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod struct {
+	Units DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                      `json:"value,required"`
 	JSON  dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod]
+// [DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -224,27 +224,27 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits string
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsHours    DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "hours"
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsDays     DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "days"
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns DexTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsHours    DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "hours"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsDays     DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "days"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnitsTestRuns DEXTestListResponseTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTime struct {
-	TimePeriod DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue    `json:"values,required"`
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTime struct {
+	TimePeriod DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
+	Values     []DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue    `json:"values,required"`
 	JSON       dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeJSON       `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeJSON contains the
 // JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTime]
+// [DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTime]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
@@ -252,19 +252,19 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod struct {
-	Units DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod struct {
+	Units DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                       `json:"value,required"`
 	JSON  dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod]
+// [DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -272,19 +272,19 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits string
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsHours    DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "hours"
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays     DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "days"
-	DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsHours    DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "hours"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsDays     DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "days"
+	DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
+type DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
 	AvgMs     int64                                                                 `json:"avgMs,required"`
 	Timestamp string                                                                `json:"timestamp,required"`
 	JSON      dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValueJSON `json:"-"`
@@ -292,7 +292,7 @@ type DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue struct {
 
 // dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValueJSON contains
 // the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue]
+// [DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue]
 type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
@@ -300,19 +300,19 @@ type dexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValueJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColo struct {
+type DEXTestListResponseTestsHTTPResultsByColo struct {
 	// Cloudflare colo
 	Colo              string                                                     `json:"colo,required"`
-	ResourceFetchTime DexTestListResponseTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime,required"`
+	ResourceFetchTime DEXTestListResponseTestsHTTPResultsByColoResourceFetchTime `json:"resourceFetchTime,required"`
 	JSON              dexTestListResponseTestsHTTPResultsByColoJSON              `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsByColoJSON contains the JSON metadata for the
-// struct [DexTestListResponseTestsHTTPResultsByColo]
+// struct [DEXTestListResponseTestsHTTPResultsByColo]
 type dexTestListResponseTestsHTTPResultsByColoJSON struct {
 	Colo              apijson.Field
 	ResourceFetchTime apijson.Field
@@ -320,20 +320,20 @@ type dexTestListResponseTestsHTTPResultsByColoJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTime struct {
-	History  []DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history,required"`
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTime struct {
+	History  []DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory `json:"history,required"`
 	AvgMs    int64                                                               `json:"avgMs,nullable"`
-	OverTime DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime,nullable"`
+	OverTime DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime  `json:"overTime,nullable"`
 	JSON     dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeJSON      `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeJSON contains the JSON
 // metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTime]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTime]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
@@ -342,12 +342,12 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory struct {
-	TimePeriod DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory struct {
+	TimePeriod DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                       `json:"avgMs,nullable"`
 	DeltaPct   float64                                                                     `json:"deltaPct,nullable"`
 	JSON       dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryJSON       `json:"-"`
@@ -355,7 +355,7 @@ type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory struct {
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryJSON contains
 // the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
@@ -364,19 +364,19 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod struct {
-	Units DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod struct {
+	Units DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                            `json:"value,required"`
 	JSON  dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -384,27 +384,27 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits string
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsHours    DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "hours"
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsDays     DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "days"
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsHours    DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "hours"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsDays     DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "days"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnitsTestRuns DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
-	TimePeriod DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue    `json:"values,required"`
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime struct {
+	TimePeriod DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod `json:"timePeriod,required"`
+	Values     []DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue    `json:"values,required"`
 	JSON       dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON       `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON contains
 // the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
@@ -412,19 +412,19 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON stru
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod struct {
-	Units DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod struct {
+	Units DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                             `json:"value,required"`
 	JSON  dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -432,19 +432,19 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePerio
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits string
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsHours    DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "hours"
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays     DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "days"
-	DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsHours    DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "hours"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsDays     DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "days"
+	DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnitsTestRuns DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
+type DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue struct {
 	AvgMs     int64                                                                       `json:"avgMs,required"`
 	Timestamp string                                                                      `json:"timestamp,required"`
 	JSON      dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON `json:"-"`
@@ -452,7 +452,7 @@ type DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue str
 
 // dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue]
+// [DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue]
 type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
@@ -460,36 +460,36 @@ type dexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsHTTPResultsByColoResourceFetchTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResults struct {
-	RoundTripTime DexTestListResponseTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
+type DEXTestListResponseTestsTracerouteResults struct {
+	RoundTripTime DEXTestListResponseTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
 	JSON          dexTestListResponseTestsTracerouteResultsJSON          `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsJSON contains the JSON metadata for the
-// struct [DexTestListResponseTestsTracerouteResults]
+// struct [DEXTestListResponseTestsTracerouteResults]
 type dexTestListResponseTestsTracerouteResultsJSON struct {
 	RoundTripTime apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResults) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTime struct {
-	History  []DexTestListResponseTestsTracerouteResultsRoundTripTimeHistory `json:"history,required"`
+type DEXTestListResponseTestsTracerouteResultsRoundTripTime struct {
+	History  []DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistory `json:"history,required"`
 	AvgMs    int64                                                           `json:"avgMs,nullable"`
-	OverTime DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime,nullable"`
+	OverTime DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTime  `json:"overTime,nullable"`
 	JSON     dexTestListResponseTestsTracerouteResultsRoundTripTimeJSON      `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeJSON contains the JSON
-// metadata for the struct [DexTestListResponseTestsTracerouteResultsRoundTripTime]
+// metadata for the struct [DEXTestListResponseTestsTracerouteResultsRoundTripTime]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
@@ -498,12 +498,12 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeHistory struct {
-	TimePeriod DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistory struct {
+	TimePeriod DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                   `json:"avgMs,nullable"`
 	DeltaPct   float64                                                                 `json:"deltaPct,nullable"`
 	JSON       dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryJSON       `json:"-"`
@@ -511,7 +511,7 @@ type DexTestListResponseTestsTracerouteResultsRoundTripTimeHistory struct {
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryJSON contains the
 // JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsRoundTripTimeHistory]
+// [DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistory]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
@@ -520,19 +520,19 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod struct {
-	Units DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod struct {
+	Units DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                        `json:"value,required"`
 	JSON  dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod]
+// [DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -540,27 +540,27 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits string
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsHours    DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "hours"
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsDays     DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "days"
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns DexTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsHours    DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "hours"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsDays     DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "days"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnitsTestRuns DEXTestListResponseTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTime struct {
-	TimePeriod DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue    `json:"values,required"`
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTime struct {
+	TimePeriod DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
+	Values     []DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue    `json:"values,required"`
 	JSON       dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeJSON       `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeJSON contains the
 // JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTime]
+// [DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTime]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
@@ -568,19 +568,19 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod struct {
-	Units DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod struct {
+	Units DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                         `json:"value,required"`
 	JSON  dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod]
+// [DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -588,19 +588,19 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits string
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsHours    DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "hours"
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays     DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "days"
-	DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsHours    DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "hours"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsDays     DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "days"
+	DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnitsTestRuns DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
+type DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue struct {
 	AvgMs     int64                                                                   `json:"avgMs,required"`
 	Timestamp string                                                                  `json:"timestamp,required"`
 	JSON      dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValueJSON `json:"-"`
@@ -608,7 +608,7 @@ type DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue struct 
 
 // dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValueJSON contains
 // the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue]
+// [DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue]
 type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
@@ -616,19 +616,19 @@ type dexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValueJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColo struct {
+type DEXTestListResponseTestsTracerouteResultsByColo struct {
 	// Cloudflare colo
 	Colo          string                                                       `json:"colo,required"`
-	RoundTripTime DexTestListResponseTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime,required"`
+	RoundTripTime DEXTestListResponseTestsTracerouteResultsByColoRoundTripTime `json:"roundTripTime,required"`
 	JSON          dexTestListResponseTestsTracerouteResultsByColoJSON          `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsByColoJSON contains the JSON metadata
-// for the struct [DexTestListResponseTestsTracerouteResultsByColo]
+// for the struct [DEXTestListResponseTestsTracerouteResultsByColo]
 type dexTestListResponseTestsTracerouteResultsByColoJSON struct {
 	Colo          apijson.Field
 	RoundTripTime apijson.Field
@@ -636,20 +636,20 @@ type dexTestListResponseTestsTracerouteResultsByColoJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTime struct {
-	History  []DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history,required"`
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTime struct {
+	History  []DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory `json:"history,required"`
 	AvgMs    int64                                                                 `json:"avgMs,nullable"`
-	OverTime DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime,nullable"`
+	OverTime DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime  `json:"overTime,nullable"`
 	JSON     dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeJSON      `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeJSON contains the
 // JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTime]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTime]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeJSON struct {
 	History     apijson.Field
 	AvgMs       apijson.Field
@@ -658,12 +658,12 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory struct {
-	TimePeriod DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory struct {
+	TimePeriod DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                         `json:"avgMs,nullable"`
 	DeltaPct   float64                                                                       `json:"deltaPct,nullable"`
 	JSON       dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryJSON       `json:"-"`
@@ -671,7 +671,7 @@ type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory struct 
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryJSON contains
 // the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryJSON struct {
 	TimePeriod  apijson.Field
 	AvgMs       apijson.Field
@@ -680,19 +680,19 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod struct {
-	Units DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod struct {
+	Units DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                              `json:"value,required"`
 	JSON  dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -700,27 +700,27 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeri
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits string
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsHours    DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "hours"
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsDays     DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "days"
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsHours    DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "hours"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsDays     DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "days"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnitsTestRuns DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
-	TimePeriod DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
-	Values     []DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue    `json:"values,required"`
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime struct {
+	TimePeriod DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod `json:"timePeriod,required"`
+	Values     []DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue    `json:"values,required"`
 	JSON       dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON       `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON struct {
 	TimePeriod  apijson.Field
 	Values      apijson.Field
@@ -728,19 +728,19 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON st
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod struct {
-	Units DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod struct {
+	Units DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                               `json:"value,required"`
 	JSON  dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON  `json:"-"`
 }
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON struct {
 	Units       apijson.Field
 	Value       apijson.Field
@@ -748,19 +748,19 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePer
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits string
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits string
 
 const (
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsHours    DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "hours"
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays     DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "days"
-	DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsHours    DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "hours"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsDays     DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "days"
+	DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnitsTestRuns DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits = "testRuns"
 )
 
-type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
+type DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue struct {
 	AvgMs     int64                                                                         `json:"avgMs,required"`
 	Timestamp string                                                                        `json:"timestamp,required"`
 	JSON      dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON `json:"-"`
@@ -768,7 +768,7 @@ type DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue s
 
 // dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON
 // contains the JSON metadata for the struct
-// [DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue]
+// [DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue]
 type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON struct {
 	AvgMs       apijson.Field
 	Timestamp   apijson.Field
@@ -776,11 +776,11 @@ type dexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListParams struct {
+type DEXTestListParams struct {
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`
@@ -795,26 +795,26 @@ type DexTestListParams struct {
 	TestName param.Field[string] `query:"testName"`
 }
 
-// URLQuery serializes [DexTestListParams]'s query parameters as `url.Values`.
-func (r DexTestListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [DEXTestListParams]'s query parameters as `url.Values`.
+func (r DEXTestListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type DexTestListResponseEnvelope struct {
-	Errors   []DexTestListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexTestListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DexTestListResponse                   `json:"result,required"`
+type DEXTestListResponseEnvelope struct {
+	Errors   []DEXTestListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXTestListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DEXTestListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success    DexTestListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DexTestListResponseEnvelopeResultInfo `json:"result_info"`
+	Success    DEXTestListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DEXTestListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       dexTestListResponseEnvelopeJSON       `json:"-"`
 }
 
 // dexTestListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DexTestListResponseEnvelope]
+// [DEXTestListResponseEnvelope]
 type dexTestListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -825,18 +825,18 @@ type dexTestListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseEnvelopeErrors struct {
+type DEXTestListResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
 	JSON    dexTestListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // dexTestListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DexTestListResponseEnvelopeErrors]
+// [DEXTestListResponseEnvelopeErrors]
 type dexTestListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -844,18 +844,18 @@ type dexTestListResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DexTestListResponseEnvelopeMessages struct {
+type DEXTestListResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
 	JSON    dexTestListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // dexTestListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DexTestListResponseEnvelopeMessages]
+// struct [DEXTestListResponseEnvelopeMessages]
 type dexTestListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -863,18 +863,18 @@ type dexTestListResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DexTestListResponseEnvelopeSuccess bool
+type DEXTestListResponseEnvelopeSuccess bool
 
 const (
-	DexTestListResponseEnvelopeSuccessTrue DexTestListResponseEnvelopeSuccess = true
+	DEXTestListResponseEnvelopeSuccessTrue DEXTestListResponseEnvelopeSuccess = true
 )
 
-type DexTestListResponseEnvelopeResultInfo struct {
+type DEXTestListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -887,7 +887,7 @@ type DexTestListResponseEnvelopeResultInfo struct {
 }
 
 // dexTestListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DexTestListResponseEnvelopeResultInfo]
+// struct [DEXTestListResponseEnvelopeResultInfo]
 type dexTestListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
@@ -897,6 +897,6 @@ type dexTestListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexTestListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTestListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

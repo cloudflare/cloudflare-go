@@ -1102,7 +1102,7 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk) Unmarshal
 
 type URLScannerScanGetResponseScanDomainsExampleComDNS struct {
 	Address     string                                                `json:"address,required"`
-	DnssecValid bool                                                  `json:"dnssec_valid,required"`
+	DNSSECValid bool                                                  `json:"dnssec_valid,required"`
 	Name        string                                                `json:"name,required"`
 	Type        string                                                `json:"type,required"`
 	JSON        urlScannerScanGetResponseScanDomainsExampleComDNSJSON `json:"-"`
@@ -1112,7 +1112,7 @@ type URLScannerScanGetResponseScanDomainsExampleComDNS struct {
 // for the struct [URLScannerScanGetResponseScanDomainsExampleComDNS]
 type urlScannerScanGetResponseScanDomainsExampleComDNSJSON struct {
 	Address     apijson.Field
-	DnssecValid apijson.Field
+	DNSSECValid apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string

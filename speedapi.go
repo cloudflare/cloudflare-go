@@ -114,14 +114,6 @@ func (r *SpeedAPIService) TestsDelete(ctx context.Context, zoneID string, url st
 	return
 }
 
-// Test history (list of tests) for a specific webpage.
-func (r *SpeedAPIService) TestsList(ctx context.Context, zoneID string, url string, query SpeedAPITestsListParams, opts ...option.RequestOption) (res *SpeedAPITestsListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
-}
-
 // Retrieves the result of a specific test.
 func (r *SpeedAPIService) TestsGet(ctx context.Context, zoneID string, url string, testID string, opts ...option.RequestOption) (res *SpeedAPITestsGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -132,6 +124,14 @@ func (r *SpeedAPIService) TestsGet(ctx context.Context, zoneID string, url strin
 		return
 	}
 	res = &env.Result
+	return
+}
+
+// Test history (list of tests) for a specific webpage.
+func (r *SpeedAPIService) TestsList(ctx context.Context, zoneID string, url string, query SpeedAPITestsListParams, opts ...option.RequestOption) (res *SpeedAPITestsListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -1019,91 +1019,6 @@ func (r *SpeedAPITestsDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpeedAPITestsListResponse struct {
-	Errors   []SpeedAPITestsListResponseError   `json:"errors,required"`
-	Messages []SpeedAPITestsListResponseMessage `json:"messages,required"`
-	// Whether the API call was successful.
-	Success    bool                                `json:"success,required"`
-	ResultInfo SpeedAPITestsListResponseResultInfo `json:"result_info"`
-	JSON       speedAPITestsListResponseJSON       `json:"-"`
-}
-
-// speedAPITestsListResponseJSON contains the JSON metadata for the struct
-// [SpeedAPITestsListResponse]
-type speedAPITestsListResponseJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseError struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    speedAPITestsListResponseErrorJSON `json:"-"`
-}
-
-// speedAPITestsListResponseErrorJSON contains the JSON metadata for the struct
-// [SpeedAPITestsListResponseError]
-type speedAPITestsListResponseErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseMessage struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    speedAPITestsListResponseMessageJSON `json:"-"`
-}
-
-// speedAPITestsListResponseMessageJSON contains the JSON metadata for the struct
-// [SpeedAPITestsListResponseMessage]
-type speedAPITestsListResponseMessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseMessage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpeedAPITestsListResponseResultInfo struct {
-	Count      int64                                   `json:"count"`
-	Page       int64                                   `json:"page"`
-	PerPage    int64                                   `json:"per_page"`
-	TotalCount int64                                   `json:"total_count"`
-	JSON       speedAPITestsListResponseResultInfoJSON `json:"-"`
-}
-
-// speedAPITestsListResponseResultInfoJSON contains the JSON metadata for the
-// struct [SpeedAPITestsListResponseResultInfo]
-type speedAPITestsListResponseResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type SpeedAPITestsGetResponse struct {
 	// UUID
 	ID   string    `json:"id"`
@@ -1400,6 +1315,91 @@ const (
 	SpeedAPITestsGetResponseScheduleFrequencyDaily  SpeedAPITestsGetResponseScheduleFrequency = "DAILY"
 	SpeedAPITestsGetResponseScheduleFrequencyWeekly SpeedAPITestsGetResponseScheduleFrequency = "WEEKLY"
 )
+
+type SpeedAPITestsListResponse struct {
+	Errors   []SpeedAPITestsListResponseError   `json:"errors,required"`
+	Messages []SpeedAPITestsListResponseMessage `json:"messages,required"`
+	// Whether the API call was successful.
+	Success    bool                                `json:"success,required"`
+	ResultInfo SpeedAPITestsListResponseResultInfo `json:"result_info"`
+	JSON       speedAPITestsListResponseJSON       `json:"-"`
+}
+
+// speedAPITestsListResponseJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponse]
+type speedAPITestsListResponseJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsListResponseError struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    speedAPITestsListResponseErrorJSON `json:"-"`
+}
+
+// speedAPITestsListResponseErrorJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponseError]
+type speedAPITestsListResponseErrorJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsListResponseError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsListResponseMessage struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    speedAPITestsListResponseMessageJSON `json:"-"`
+}
+
+// speedAPITestsListResponseMessageJSON contains the JSON metadata for the struct
+// [SpeedAPITestsListResponseMessage]
+type speedAPITestsListResponseMessageJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsListResponseMessage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedAPITestsListResponseResultInfo struct {
+	Count      int64                                   `json:"count"`
+	Page       int64                                   `json:"page"`
+	PerPage    int64                                   `json:"per_page"`
+	TotalCount int64                                   `json:"total_count"`
+	JSON       speedAPITestsListResponseResultInfoJSON `json:"-"`
+}
+
+// speedAPITestsListResponseResultInfoJSON contains the JSON metadata for the
+// struct [SpeedAPITestsListResponseResultInfo]
+type speedAPITestsListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type SpeedAPITrendsListResponse struct {
 	// Cumulative Layout Shift trend.
@@ -1702,6 +1702,23 @@ func (r *SpeedAPITestsDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SpeedAPITestsGetResponseEnvelope struct {
+	Result SpeedAPITestsGetResponse             `json:"result"`
+	JSON   speedAPITestsGetResponseEnvelopeJSON `json:"-"`
+}
+
+// speedAPITestsGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SpeedAPITestsGetResponseEnvelope]
+type speedAPITestsGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedAPITestsGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SpeedAPITestsListParams struct {
 	Page    param.Field[int64] `query:"page"`
 	PerPage param.Field[int64] `query:"per_page"`
@@ -1744,23 +1761,6 @@ const (
 	SpeedAPITestsListParamsRegionUsSouth1            SpeedAPITestsListParamsRegion = "us-south1"
 	SpeedAPITestsListParamsRegionUsWest1             SpeedAPITestsListParamsRegion = "us-west1"
 )
-
-type SpeedAPITestsGetResponseEnvelope struct {
-	Result SpeedAPITestsGetResponse             `json:"result"`
-	JSON   speedAPITestsGetResponseEnvelopeJSON `json:"-"`
-}
-
-// speedAPITestsGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpeedAPITestsGetResponseEnvelope]
-type speedAPITestsGetResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpeedAPITestsGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type SpeedAPITrendsListParams struct {
 	// The type of device.

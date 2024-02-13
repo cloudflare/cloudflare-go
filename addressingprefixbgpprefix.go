@@ -14,42 +14,29 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// AddressingPrefixBgpPrefixService contains methods and other services that help
+// AddressingPrefixBGPPrefixService contains methods and other services that help
 // with interacting with the cloudflare API. Note, unlike clients, this service
 // does not read variables from the environment automatically. You should not
 // instantiate this service directly, and instead use the
-// [NewAddressingPrefixBgpPrefixService] method instead.
-type AddressingPrefixBgpPrefixService struct {
+// [NewAddressingPrefixBGPPrefixService] method instead.
+type AddressingPrefixBGPPrefixService struct {
 	Options []option.RequestOption
 }
 
-// NewAddressingPrefixBgpPrefixService generates a new service that applies the
+// NewAddressingPrefixBGPPrefixService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewAddressingPrefixBgpPrefixService(opts ...option.RequestOption) (r *AddressingPrefixBgpPrefixService) {
-	r = &AddressingPrefixBgpPrefixService{}
+func NewAddressingPrefixBGPPrefixService(opts ...option.RequestOption) (r *AddressingPrefixBGPPrefixService) {
+	r = &AddressingPrefixBGPPrefixService{}
 	r.Options = opts
-	return
-}
-
-// Retrieve a single BGP Prefix according to its identifier
-func (r *AddressingPrefixBgpPrefixService) Get(ctx context.Context, accountIdentifier string, prefixIdentifier string, bgpPrefixIdentifier string, opts ...option.RequestOption) (res *AddressingPrefixBgpPrefixGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBgpPrefixGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", accountIdentifier, prefixIdentifier, bgpPrefixIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
 	return
 }
 
 // Update the properties of a BGP Prefix, such as the on demand advertisement
 // status (advertised or withdrawn).
-func (r *AddressingPrefixBgpPrefixService) Update(ctx context.Context, accountIdentifier string, prefixIdentifier string, bgpPrefixIdentifier string, body AddressingPrefixBgpPrefixUpdateParams, opts ...option.RequestOption) (res *AddressingPrefixBgpPrefixUpdateResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) Update(ctx context.Context, accountIdentifier string, prefixIdentifier string, bgpPrefixIdentifier string, body AddressingPrefixBGPPrefixUpdateParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBgpPrefixUpdateResponseEnvelope
+	var env AddressingPrefixBGPPrefixUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", accountIdentifier, prefixIdentifier, bgpPrefixIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -63,9 +50,9 @@ func (r *AddressingPrefixBgpPrefixService) Update(ctx context.Context, accountId
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *AddressingPrefixBgpPrefixService) List(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *[]AddressingPrefixBgpPrefixListResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, accountIdentifier string, prefixIdentifier string, opts ...option.RequestOption) (res *[]AddressingPrefixBGPPrefixListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressingPrefixBgpPrefixListResponseEnvelope
+	var env AddressingPrefixBGPPrefixListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", accountIdentifier, prefixIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -75,112 +62,39 @@ func (r *AddressingPrefixBgpPrefixService) List(ctx context.Context, accountIden
 	return
 }
 
-type AddressingPrefixBgpPrefixGetResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn           int64                                             `json:"asn,nullable"`
-	BgpSignalOpts AddressingPrefixBgpPrefixGetResponseBgpSignalOpts `json:"bgp_signal_opts"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr       string                                       `json:"cidr"`
-	CreatedAt  time.Time                                    `json:"created_at" format:"date-time"`
-	ModifiedAt time.Time                                    `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBgpPrefixGetResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBgpPrefixGetResponseJSON     `json:"-"`
+// Retrieve a single BGP Prefix according to its identifier
+func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, accountIdentifier string, prefixIdentifier string, bgpPrefixIdentifier string, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AddressingPrefixBGPPrefixGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", accountIdentifier, prefixIdentifier, bgpPrefixIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
-// addressingPrefixBgpPrefixGetResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBgpPrefixGetResponse]
-type addressingPrefixBgpPrefixGetResponseJSON struct {
-	ID            apijson.Field
-	Asn           apijson.Field
-	BgpSignalOpts apijson.Field
-	Cidr          apijson.Field
-	CreatedAt     apijson.Field
-	ModifiedAt    apijson.Field
-	OnDemand      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBgpPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBgpPrefixGetResponseBgpSignalOpts struct {
-	// Whether control of advertisement of the prefix to the Internet is enabled to be
-	// performed via BGP signal
-	Enabled bool `json:"enabled"`
-	// Last time BGP signaling control was toggled. This field is null if BGP signaling
-	// has never been enabled.
-	ModifiedAt time.Time                                             `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBgpPrefixGetResponseBgpSignalOptsJSON `json:"-"`
-}
-
-// addressingPrefixBgpPrefixGetResponseBgpSignalOptsJSON contains the JSON metadata
-// for the struct [AddressingPrefixBgpPrefixGetResponseBgpSignalOpts]
-type addressingPrefixBgpPrefixGetResponseBgpSignalOptsJSON struct {
-	Enabled     apijson.Field
-	ModifiedAt  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBgpPrefixGetResponseBgpSignalOpts) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBgpPrefixGetResponseOnDemand struct {
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                                             `json:"on_demand_locked"`
-	JSON           addressingPrefixBgpPrefixGetResponseOnDemandJSON `json:"-"`
-}
-
-// addressingPrefixBgpPrefixGetResponseOnDemandJSON contains the JSON metadata for
-// the struct [AddressingPrefixBgpPrefixGetResponseOnDemand]
-type addressingPrefixBgpPrefixGetResponseOnDemandJSON struct {
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBgpPrefixGetResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBgpPrefixUpdateResponse struct {
+type AddressingPrefixBGPPrefixUpdateResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	Asn           int64                                                `json:"asn,nullable"`
-	BgpSignalOpts AddressingPrefixBgpPrefixUpdateResponseBgpSignalOpts `json:"bgp_signal_opts"`
+	BGPSignalOpts AddressingPrefixBGPPrefixUpdateResponseBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr       string                                          `json:"cidr"`
 	CreatedAt  time.Time                                       `json:"created_at" format:"date-time"`
 	ModifiedAt time.Time                                       `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBgpPrefixUpdateResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBgpPrefixUpdateResponseJSON     `json:"-"`
+	OnDemand   AddressingPrefixBGPPrefixUpdateResponseOnDemand `json:"on_demand"`
+	JSON       addressingPrefixBGPPrefixUpdateResponseJSON     `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBgpPrefixUpdateResponse]
-type addressingPrefixBgpPrefixUpdateResponseJSON struct {
+// addressingPrefixBGPPrefixUpdateResponseJSON contains the JSON metadata for the
+// struct [AddressingPrefixBGPPrefixUpdateResponse]
+type addressingPrefixBGPPrefixUpdateResponseJSON struct {
 	ID            apijson.Field
 	Asn           apijson.Field
-	BgpSignalOpts apijson.Field
+	BGPSignalOpts apijson.Field
 	Cidr          apijson.Field
 	CreatedAt     apijson.Field
 	ModifiedAt    apijson.Field
@@ -189,34 +103,34 @@ type addressingPrefixBgpPrefixUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixUpdateResponseBgpSignalOpts struct {
+type AddressingPrefixBGPPrefixUpdateResponseBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
 	Enabled bool `json:"enabled"`
 	// Last time BGP signaling control was toggled. This field is null if BGP signaling
 	// has never been enabled.
 	ModifiedAt time.Time                                                `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBgpPrefixUpdateResponseBgpSignalOptsJSON `json:"-"`
+	JSON       addressingPrefixBGPPrefixUpdateResponseBGPSignalOptsJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseBgpSignalOptsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixUpdateResponseBgpSignalOpts]
-type addressingPrefixBgpPrefixUpdateResponseBgpSignalOptsJSON struct {
+// addressingPrefixBGPPrefixUpdateResponseBGPSignalOptsJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixUpdateResponseBGPSignalOpts]
+type addressingPrefixBGPPrefixUpdateResponseBGPSignalOptsJSON struct {
 	Enabled     apijson.Field
 	ModifiedAt  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponseBgpSignalOpts) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixUpdateResponseOnDemand struct {
+type AddressingPrefixBGPPrefixUpdateResponseOnDemand struct {
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
 	Advertised bool `json:"advertised,nullable"`
@@ -229,12 +143,12 @@ type AddressingPrefixBgpPrefixUpdateResponseOnDemand struct {
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
 	OnDemandLocked bool                                                `json:"on_demand_locked"`
-	JSON           addressingPrefixBgpPrefixUpdateResponseOnDemandJSON `json:"-"`
+	JSON           addressingPrefixBGPPrefixUpdateResponseOnDemandJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseOnDemandJSON contains the JSON metadata
-// for the struct [AddressingPrefixBgpPrefixUpdateResponseOnDemand]
-type addressingPrefixBgpPrefixUpdateResponseOnDemandJSON struct {
+// addressingPrefixBGPPrefixUpdateResponseOnDemandJSON contains the JSON metadata
+// for the struct [AddressingPrefixBGPPrefixUpdateResponseOnDemand]
+type addressingPrefixBGPPrefixUpdateResponseOnDemandJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	OnDemandEnabled      apijson.Field
@@ -243,30 +157,30 @@ type addressingPrefixBgpPrefixUpdateResponseOnDemandJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixListResponse struct {
+type AddressingPrefixBGPPrefixListResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	Asn           int64                                              `json:"asn,nullable"`
-	BgpSignalOpts AddressingPrefixBgpPrefixListResponseBgpSignalOpts `json:"bgp_signal_opts"`
+	BGPSignalOpts AddressingPrefixBGPPrefixListResponseBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr       string                                        `json:"cidr"`
 	CreatedAt  time.Time                                     `json:"created_at" format:"date-time"`
 	ModifiedAt time.Time                                     `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBgpPrefixListResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBgpPrefixListResponseJSON     `json:"-"`
+	OnDemand   AddressingPrefixBGPPrefixListResponseOnDemand `json:"on_demand"`
+	JSON       addressingPrefixBGPPrefixListResponseJSON     `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBgpPrefixListResponse]
-type addressingPrefixBgpPrefixListResponseJSON struct {
+// addressingPrefixBGPPrefixListResponseJSON contains the JSON metadata for the
+// struct [AddressingPrefixBGPPrefixListResponse]
+type addressingPrefixBGPPrefixListResponseJSON struct {
 	ID            apijson.Field
 	Asn           apijson.Field
-	BgpSignalOpts apijson.Field
+	BGPSignalOpts apijson.Field
 	Cidr          apijson.Field
 	CreatedAt     apijson.Field
 	ModifiedAt    apijson.Field
@@ -275,34 +189,34 @@ type addressingPrefixBgpPrefixListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixListResponseBgpSignalOpts struct {
+type AddressingPrefixBGPPrefixListResponseBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
 	Enabled bool `json:"enabled"`
 	// Last time BGP signaling control was toggled. This field is null if BGP signaling
 	// has never been enabled.
 	ModifiedAt time.Time                                              `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBgpPrefixListResponseBgpSignalOptsJSON `json:"-"`
+	JSON       addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseBgpSignalOptsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixListResponseBgpSignalOpts]
-type addressingPrefixBgpPrefixListResponseBgpSignalOptsJSON struct {
+// addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixListResponseBGPSignalOpts]
+type addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON struct {
 	Enabled     apijson.Field
 	ModifiedAt  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseBgpSignalOpts) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixListResponseOnDemand struct {
+type AddressingPrefixBGPPrefixListResponseOnDemand struct {
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
 	Advertised bool `json:"advertised,nullable"`
@@ -315,12 +229,12 @@ type AddressingPrefixBgpPrefixListResponseOnDemand struct {
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
 	OnDemandLocked bool                                              `json:"on_demand_locked"`
-	JSON           addressingPrefixBgpPrefixListResponseOnDemandJSON `json:"-"`
+	JSON           addressingPrefixBGPPrefixListResponseOnDemandJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseOnDemandJSON contains the JSON metadata for
-// the struct [AddressingPrefixBgpPrefixListResponseOnDemand]
-type addressingPrefixBgpPrefixListResponseOnDemandJSON struct {
+// addressingPrefixBGPPrefixListResponseOnDemandJSON contains the JSON metadata for
+// the struct [AddressingPrefixBGPPrefixListResponseOnDemand]
+type addressingPrefixBGPPrefixListResponseOnDemandJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	OnDemandEnabled      apijson.Field
@@ -329,107 +243,124 @@ type addressingPrefixBgpPrefixListResponseOnDemandJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixGetResponseEnvelope struct {
-	Errors   []AddressingPrefixBgpPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressingPrefixBgpPrefixGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixBgpPrefixGetResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AddressingPrefixBgpPrefixGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressingPrefixBgpPrefixGetResponseEnvelopeJSON    `json:"-"`
+type AddressingPrefixBGPPrefixGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Autonomous System Number (ASN) the prefix will be advertised under.
+	Asn           int64                                             `json:"asn,nullable"`
+	BGPSignalOpts AddressingPrefixBGPPrefixGetResponseBGPSignalOpts `json:"bgp_signal_opts"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr       string                                       `json:"cidr"`
+	CreatedAt  time.Time                                    `json:"created_at" format:"date-time"`
+	ModifiedAt time.Time                                    `json:"modified_at" format:"date-time"`
+	OnDemand   AddressingPrefixBGPPrefixGetResponseOnDemand `json:"on_demand"`
+	JSON       addressingPrefixBGPPrefixGetResponseJSON     `json:"-"`
 }
 
-// addressingPrefixBgpPrefixGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBgpPrefixGetResponseEnvelope]
-type addressingPrefixBgpPrefixGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// addressingPrefixBGPPrefixGetResponseJSON contains the JSON metadata for the
+// struct [AddressingPrefixBGPPrefixGetResponse]
+type addressingPrefixBGPPrefixGetResponseJSON struct {
+	ID            apijson.Field
+	Asn           apijson.Field
+	BGPSignalOpts apijson.Field
+	Cidr          apijson.Field
+	CreatedAt     apijson.Field
+	ModifiedAt    apijson.Field
+	OnDemand      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBGPPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBGPPrefixGetResponseBGPSignalOpts struct {
+	// Whether control of advertisement of the prefix to the Internet is enabled to be
+	// performed via BGP signal
+	Enabled bool `json:"enabled"`
+	// Last time BGP signaling control was toggled. This field is null if BGP signaling
+	// has never been enabled.
+	ModifiedAt time.Time                                             `json:"modified_at,nullable" format:"date-time"`
+	JSON       addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON `json:"-"`
+}
+
+// addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON contains the JSON metadata
+// for the struct [AddressingPrefixBGPPrefixGetResponseBGPSignalOpts]
+type addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON struct {
+	Enabled     apijson.Field
+	ModifiedAt  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixGetResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixGetResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixGetResponseEnvelopeErrorsJSON `json:"-"`
+type AddressingPrefixBGPPrefixGetResponseOnDemand struct {
+	// Prefix advertisement status to the Internet. This field is only not 'null' if on
+	// demand is enabled.
+	Advertised bool `json:"advertised,nullable"`
+	// Last time the advertisement status was changed. This field is only not 'null' if
+	// on demand is enabled.
+	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
+	// Whether advertisement of the prefix to the Internet may be dynamically enabled
+	// or disabled.
+	OnDemandEnabled bool `json:"on_demand_enabled"`
+	// Whether advertisement status of the prefix is locked, meaning it cannot be
+	// changed.
+	OnDemandLocked bool                                             `json:"on_demand_locked"`
+	JSON           addressingPrefixBGPPrefixGetResponseOnDemandJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixGetResponseEnvelopeErrors]
-type addressingPrefixBgpPrefixGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// addressingPrefixBGPPrefixGetResponseOnDemandJSON contains the JSON metadata for
+// the struct [AddressingPrefixBGPPrefixGetResponseOnDemand]
+type addressingPrefixBGPPrefixGetResponseOnDemandJSON struct {
+	Advertised           apijson.Field
+	AdvertisedModifiedAt apijson.Field
+	OnDemandEnabled      apijson.Field
+	OnDemandLocked       apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixGetResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixGetResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixGetResponseEnvelopeMessagesJSON `json:"-"`
+type AddressingPrefixBGPPrefixUpdateParams struct {
+	OnDemand param.Field[AddressingPrefixBGPPrefixUpdateParamsOnDemand] `json:"on_demand"`
 }
 
-// addressingPrefixBgpPrefixGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixGetResponseEnvelopeMessages]
-type addressingPrefixBgpPrefixGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBgpPrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressingPrefixBgpPrefixGetResponseEnvelopeSuccess bool
-
-const (
-	AddressingPrefixBgpPrefixGetResponseEnvelopeSuccessTrue AddressingPrefixBgpPrefixGetResponseEnvelopeSuccess = true
-)
-
-type AddressingPrefixBgpPrefixUpdateParams struct {
-	OnDemand param.Field[AddressingPrefixBgpPrefixUpdateParamsOnDemand] `json:"on_demand"`
-}
-
-func (r AddressingPrefixBgpPrefixUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r AddressingPrefixBGPPrefixUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressingPrefixBgpPrefixUpdateParamsOnDemand struct {
+type AddressingPrefixBGPPrefixUpdateParamsOnDemand struct {
 	Advertised param.Field[bool] `json:"advertised"`
 }
 
-func (r AddressingPrefixBgpPrefixUpdateParamsOnDemand) MarshalJSON() (data []byte, err error) {
+func (r AddressingPrefixBGPPrefixUpdateParamsOnDemand) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressingPrefixBgpPrefixUpdateResponseEnvelope struct {
-	Errors   []AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixBgpPrefixUpdateResponse                   `json:"result,required"`
+type AddressingPrefixBGPPrefixUpdateResponseEnvelope struct {
+	Errors   []AddressingPrefixBGPPrefixUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBGPPrefixUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBGPPrefixUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressingPrefixBgpPrefixUpdateResponseEnvelopeJSON    `json:"-"`
+	Success AddressingPrefixBGPPrefixUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressingPrefixBGPPrefixUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [AddressingPrefixBgpPrefixUpdateResponseEnvelope]
-type addressingPrefixBgpPrefixUpdateResponseEnvelopeJSON struct {
+// addressingPrefixBGPPrefixUpdateResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AddressingPrefixBGPPrefixUpdateResponseEnvelope]
+type addressingPrefixBGPPrefixUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -438,69 +369,69 @@ type addressingPrefixBgpPrefixUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors struct {
+type AddressingPrefixBGPPrefixUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    addressingPrefixBGPPrefixUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors]
-type addressingPrefixBgpPrefixUpdateResponseEnvelopeErrorsJSON struct {
+// addressingPrefixBGPPrefixUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixUpdateResponseEnvelopeErrors]
+type addressingPrefixBGPPrefixUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages struct {
+type AddressingPrefixBGPPrefixUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixUpdateResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    addressingPrefixBGPPrefixUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixUpdateResponseEnvelopeMessagesJSON contains the JSON
+// addressingPrefixBGPPrefixUpdateResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages]
-type addressingPrefixBgpPrefixUpdateResponseEnvelopeMessagesJSON struct {
+// [AddressingPrefixBGPPrefixUpdateResponseEnvelopeMessages]
+type addressingPrefixBGPPrefixUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccess bool
+type AddressingPrefixBGPPrefixUpdateResponseEnvelopeSuccess bool
 
 const (
-	AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccessTrue AddressingPrefixBgpPrefixUpdateResponseEnvelopeSuccess = true
+	AddressingPrefixBGPPrefixUpdateResponseEnvelopeSuccessTrue AddressingPrefixBGPPrefixUpdateResponseEnvelopeSuccess = true
 )
 
-type AddressingPrefixBgpPrefixListResponseEnvelope struct {
-	Errors   []AddressingPrefixBgpPrefixListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressingPrefixBgpPrefixListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingPrefixBgpPrefixListResponse                 `json:"result,required,nullable"`
+type AddressingPrefixBGPPrefixListResponseEnvelope struct {
+	Errors   []AddressingPrefixBGPPrefixListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBGPPrefixListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AddressingPrefixBGPPrefixListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    AddressingPrefixBgpPrefixListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       addressingPrefixBgpPrefixListResponseEnvelopeJSON       `json:"-"`
+	Success    AddressingPrefixBGPPrefixListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       addressingPrefixBGPPrefixListResponseEnvelopeJSON       `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressingPrefixBgpPrefixListResponseEnvelope]
-type addressingPrefixBgpPrefixListResponseEnvelopeJSON struct {
+// addressingPrefixBGPPrefixListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AddressingPrefixBGPPrefixListResponseEnvelope]
+type addressingPrefixBGPPrefixListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -510,56 +441,56 @@ type addressingPrefixBgpPrefixListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixListResponseEnvelopeErrors struct {
+type AddressingPrefixBGPPrefixListResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixListResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    addressingPrefixBGPPrefixListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixListResponseEnvelopeErrors]
-type addressingPrefixBgpPrefixListResponseEnvelopeErrorsJSON struct {
+// addressingPrefixBGPPrefixListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixListResponseEnvelopeErrors]
+type addressingPrefixBGPPrefixListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBgpPrefixListResponseEnvelopeMessages struct {
+type AddressingPrefixBGPPrefixListResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
-	JSON    addressingPrefixBgpPrefixListResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    addressingPrefixBGPPrefixListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressingPrefixBgpPrefixListResponseEnvelopeMessages]
-type addressingPrefixBgpPrefixListResponseEnvelopeMessagesJSON struct {
+// addressingPrefixBGPPrefixListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixListResponseEnvelopeMessages]
+type addressingPrefixBGPPrefixListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressingPrefixBgpPrefixListResponseEnvelopeSuccess bool
+type AddressingPrefixBGPPrefixListResponseEnvelopeSuccess bool
 
 const (
-	AddressingPrefixBgpPrefixListResponseEnvelopeSuccessTrue AddressingPrefixBgpPrefixListResponseEnvelopeSuccess = true
+	AddressingPrefixBGPPrefixListResponseEnvelopeSuccessTrue AddressingPrefixBGPPrefixListResponseEnvelopeSuccess = true
 )
 
-type AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo struct {
+type AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -568,13 +499,13 @@ type AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo struct {
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
 	TotalCount float64                                                     `json:"total_count"`
-	JSON       addressingPrefixBgpPrefixListResponseEnvelopeResultInfoJSON `json:"-"`
+	JSON       addressingPrefixBGPPrefixListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// addressingPrefixBgpPrefixListResponseEnvelopeResultInfoJSON contains the JSON
+// addressingPrefixBGPPrefixListResponseEnvelopeResultInfoJSON contains the JSON
 // metadata for the struct
-// [AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo]
-type addressingPrefixBgpPrefixListResponseEnvelopeResultInfoJSON struct {
+// [AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo]
+type addressingPrefixBGPPrefixListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -583,6 +514,75 @@ type addressingPrefixBgpPrefixListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBgpPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AddressingPrefixBGPPrefixGetResponseEnvelope struct {
+	Errors   []AddressingPrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressingPrefixBGPPrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingPrefixBGPPrefixGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AddressingPrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressingPrefixBGPPrefixGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// addressingPrefixBGPPrefixGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AddressingPrefixBGPPrefixGetResponseEnvelope]
+type addressingPrefixBGPPrefixGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBGPPrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBGPPrefixGetResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    addressingPrefixBGPPrefixGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// addressingPrefixBGPPrefixGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixGetResponseEnvelopeErrors]
+type addressingPrefixBGPPrefixGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBGPPrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingPrefixBGPPrefixGetResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    addressingPrefixBGPPrefixGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// addressingPrefixBGPPrefixGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AddressingPrefixBGPPrefixGetResponseEnvelopeMessages]
+type addressingPrefixBGPPrefixGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressingPrefixBGPPrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AddressingPrefixBGPPrefixGetResponseEnvelopeSuccess bool
+
+const (
+	AddressingPrefixBGPPrefixGetResponseEnvelopeSuccessTrue AddressingPrefixBGPPrefixGetResponseEnvelopeSuccess = true
+)

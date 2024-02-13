@@ -6,21 +6,25 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DlpService contains methods and other services that help with interacting with
+// DLPService contains methods and other services that help with interacting with
 // the cloudflare API. Note, unlike clients, this service does not read variables
 // from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewDlpService] method instead.
-type DlpService struct {
-	Options  []option.RequestOption
-	Datasets *DlpDatasetService
+// directly, and instead use the [NewDLPService] method instead.
+type DLPService struct {
+	Options     []option.RequestOption
+	Patterns    *DLPPatternService
+	PayloadLogs *DLPPayloadLogService
+	Profiles    *DLPProfileService
 }
 
-// NewDlpService generates a new service that applies the given options to each
+// NewDLPService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewDlpService(opts ...option.RequestOption) (r *DlpService) {
-	r = &DlpService{}
+func NewDLPService(opts ...option.RequestOption) (r *DLPService) {
+	r = &DLPService{}
 	r.Options = opts
-	r.Datasets = NewDlpDatasetService(opts...)
+	r.Patterns = NewDLPPatternService(opts...)
+	r.PayloadLogs = NewDLPPayloadLogService(opts...)
+	r.Profiles = NewDLPProfileService(opts...)
 	return
 }

@@ -104,7 +104,7 @@ type RadarEmailSecurityMaliciousListParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecurityMaliciousListParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityMaliciousListParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
 	Dmarc param.Field[[]RadarEmailSecurityMaliciousListParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
@@ -116,7 +116,7 @@ type RadarEmailSecurityMaliciousListParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	Spf param.Field[[]RadarEmailSecurityMaliciousListParamsSpf] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityMaliciousListParamsSPF] `query:"spf"`
 }
 
 // URLQuery serializes [RadarEmailSecurityMaliciousListParams]'s query parameters
@@ -168,12 +168,12 @@ const (
 	RadarEmailSecurityMaliciousListParamsDateRange24wControl RadarEmailSecurityMaliciousListParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityMaliciousListParamsDkim string
+type RadarEmailSecurityMaliciousListParamsDKIM string
 
 const (
-	RadarEmailSecurityMaliciousListParamsDkimPass RadarEmailSecurityMaliciousListParamsDkim = "PASS"
-	RadarEmailSecurityMaliciousListParamsDkimNone RadarEmailSecurityMaliciousListParamsDkim = "NONE"
-	RadarEmailSecurityMaliciousListParamsDkimFail RadarEmailSecurityMaliciousListParamsDkim = "FAIL"
+	RadarEmailSecurityMaliciousListParamsDKIMPass RadarEmailSecurityMaliciousListParamsDKIM = "PASS"
+	RadarEmailSecurityMaliciousListParamsDKIMNone RadarEmailSecurityMaliciousListParamsDKIM = "NONE"
+	RadarEmailSecurityMaliciousListParamsDKIMFail RadarEmailSecurityMaliciousListParamsDKIM = "FAIL"
 )
 
 type RadarEmailSecurityMaliciousListParamsDmarc string
@@ -192,12 +192,12 @@ const (
 	RadarEmailSecurityMaliciousListParamsFormatCsv  RadarEmailSecurityMaliciousListParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityMaliciousListParamsSpf string
+type RadarEmailSecurityMaliciousListParamsSPF string
 
 const (
-	RadarEmailSecurityMaliciousListParamsSpfPass RadarEmailSecurityMaliciousListParamsSpf = "PASS"
-	RadarEmailSecurityMaliciousListParamsSpfNone RadarEmailSecurityMaliciousListParamsSpf = "NONE"
-	RadarEmailSecurityMaliciousListParamsSpfFail RadarEmailSecurityMaliciousListParamsSpf = "FAIL"
+	RadarEmailSecurityMaliciousListParamsSPFPass RadarEmailSecurityMaliciousListParamsSPF = "PASS"
+	RadarEmailSecurityMaliciousListParamsSPFNone RadarEmailSecurityMaliciousListParamsSPF = "NONE"
+	RadarEmailSecurityMaliciousListParamsSPFFail RadarEmailSecurityMaliciousListParamsSPF = "FAIL"
 )
 
 type RadarEmailSecurityMaliciousListResponseEnvelope struct {

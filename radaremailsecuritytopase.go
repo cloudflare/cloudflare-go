@@ -23,7 +23,7 @@ import (
 type RadarEmailSecurityTopAseService struct {
 	Options []option.RequestOption
 	Arc     *RadarEmailSecurityTopAseArcService
-	Dkim    *RadarEmailSecurityTopAseDkimService
+	DKIM    *RadarEmailSecurityTopAseDKIMService
 	Dmarc   *RadarEmailSecurityTopAseDmarcService
 }
 
@@ -34,7 +34,7 @@ func NewRadarEmailSecurityTopAseService(opts ...option.RequestOption) (r *RadarE
 	r = &RadarEmailSecurityTopAseService{}
 	r.Options = opts
 	r.Arc = NewRadarEmailSecurityTopAseArcService(opts...)
-	r.Dkim = NewRadarEmailSecurityTopAseDkimService(opts...)
+	r.DKIM = NewRadarEmailSecurityTopAseDKIMService(opts...)
 	r.Dmarc = NewRadarEmailSecurityTopAseDmarcService(opts...)
 	return
 }
@@ -200,7 +200,7 @@ type RadarEmailSecurityTopAseListParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecurityTopAseListParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityTopAseListParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
 	Dmarc param.Field[[]RadarEmailSecurityTopAseListParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
@@ -214,7 +214,7 @@ type RadarEmailSecurityTopAseListParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	Spf param.Field[[]RadarEmailSecurityTopAseListParamsSpf] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityTopAseListParamsSPF] `query:"spf"`
 }
 
 // URLQuery serializes [RadarEmailSecurityTopAseListParams]'s query parameters as
@@ -254,12 +254,12 @@ const (
 	RadarEmailSecurityTopAseListParamsDateRange24wControl RadarEmailSecurityTopAseListParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTopAseListParamsDkim string
+type RadarEmailSecurityTopAseListParamsDKIM string
 
 const (
-	RadarEmailSecurityTopAseListParamsDkimPass RadarEmailSecurityTopAseListParamsDkim = "PASS"
-	RadarEmailSecurityTopAseListParamsDkimNone RadarEmailSecurityTopAseListParamsDkim = "NONE"
-	RadarEmailSecurityTopAseListParamsDkimFail RadarEmailSecurityTopAseListParamsDkim = "FAIL"
+	RadarEmailSecurityTopAseListParamsDKIMPass RadarEmailSecurityTopAseListParamsDKIM = "PASS"
+	RadarEmailSecurityTopAseListParamsDKIMNone RadarEmailSecurityTopAseListParamsDKIM = "NONE"
+	RadarEmailSecurityTopAseListParamsDKIMFail RadarEmailSecurityTopAseListParamsDKIM = "FAIL"
 )
 
 type RadarEmailSecurityTopAseListParamsDmarc string
@@ -278,12 +278,12 @@ const (
 	RadarEmailSecurityTopAseListParamsFormatCsv  RadarEmailSecurityTopAseListParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityTopAseListParamsSpf string
+type RadarEmailSecurityTopAseListParamsSPF string
 
 const (
-	RadarEmailSecurityTopAseListParamsSpfPass RadarEmailSecurityTopAseListParamsSpf = "PASS"
-	RadarEmailSecurityTopAseListParamsSpfNone RadarEmailSecurityTopAseListParamsSpf = "NONE"
-	RadarEmailSecurityTopAseListParamsSpfFail RadarEmailSecurityTopAseListParamsSpf = "FAIL"
+	RadarEmailSecurityTopAseListParamsSPFPass RadarEmailSecurityTopAseListParamsSPF = "PASS"
+	RadarEmailSecurityTopAseListParamsSPFNone RadarEmailSecurityTopAseListParamsSPF = "NONE"
+	RadarEmailSecurityTopAseListParamsSPFFail RadarEmailSecurityTopAseListParamsSPF = "FAIL"
 )
 
 type RadarEmailSecurityTopAseListResponseEnvelope struct {

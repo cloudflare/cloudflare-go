@@ -47,19 +47,6 @@ func (r *ChallengeWidgetService) New(ctx context.Context, accountIdentifier stri
 	return
 }
 
-// Show a single challenge widget configuration.
-func (r *ChallengeWidgetService) Get(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *ChallengeWidgetGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ChallengeWidgetGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Update the configuration of a widget.
 func (r *ChallengeWidgetService) Update(ctx context.Context, accountIdentifier string, sitekey string, body ChallengeWidgetUpdateParams, opts ...option.RequestOption) (res *ChallengeWidgetUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -92,6 +79,19 @@ func (r *ChallengeWidgetService) Delete(ctx context.Context, accountIdentifier s
 	var env ChallengeWidgetDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Show a single challenge widget configuration.
+func (r *ChallengeWidgetService) Get(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *ChallengeWidgetGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ChallengeWidgetGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -192,85 +192,6 @@ type ChallengeWidgetNewResponseRegion string
 
 const (
 	ChallengeWidgetNewResponseRegionWorld ChallengeWidgetNewResponseRegion = "world"
-)
-
-// A Turnstile widget's detailed configuration
-type ChallengeWidgetGetResponse struct {
-	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
-	// challenges in response to malicious bots (ENT only).
-	BotFightMode bool `json:"bot_fight_mode,required"`
-	// If Turnstile is embedded on a Cloudflare site and the widget should grant
-	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel ChallengeWidgetGetResponseClearanceLevel `json:"clearance_level,required"`
-	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
-	// Widget Mode
-	Mode ChallengeWidgetGetResponseMode `json:"mode,required"`
-	// When the widget was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
-	// a meaningful string to make it easier to identify your widget, and where it is
-	// used.
-	Name string `json:"name,required"`
-	// Do not show any Cloudflare branding on the widget (ENT only).
-	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
-	Region ChallengeWidgetGetResponseRegion `json:"region,required"`
-	// Secret key for this widget.
-	Secret string `json:"secret,required"`
-	// Widget item identifier tag.
-	Sitekey string                         `json:"sitekey,required"`
-	JSON    challengeWidgetGetResponseJSON `json:"-"`
-}
-
-// challengeWidgetGetResponseJSON contains the JSON metadata for the struct
-// [ChallengeWidgetGetResponse]
-type challengeWidgetGetResponseJSON struct {
-	BotFightMode   apijson.Field
-	ClearanceLevel apijson.Field
-	CreatedOn      apijson.Field
-	Domains        apijson.Field
-	Mode           apijson.Field
-	ModifiedOn     apijson.Field
-	Name           apijson.Field
-	Offlabel       apijson.Field
-	Region         apijson.Field
-	Secret         apijson.Field
-	Sitekey        apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// If Turnstile is embedded on a Cloudflare site and the widget should grant
-// challenge clearance, this setting can determine the clearance level to be set
-type ChallengeWidgetGetResponseClearanceLevel string
-
-const (
-	ChallengeWidgetGetResponseClearanceLevelNoClearance ChallengeWidgetGetResponseClearanceLevel = "no_clearance"
-	ChallengeWidgetGetResponseClearanceLevelJschallenge ChallengeWidgetGetResponseClearanceLevel = "jschallenge"
-	ChallengeWidgetGetResponseClearanceLevelManaged     ChallengeWidgetGetResponseClearanceLevel = "managed"
-	ChallengeWidgetGetResponseClearanceLevelInteractive ChallengeWidgetGetResponseClearanceLevel = "interactive"
-)
-
-// Widget Mode
-type ChallengeWidgetGetResponseMode string
-
-const (
-	ChallengeWidgetGetResponseModeNonInteractive ChallengeWidgetGetResponseMode = "non-interactive"
-	ChallengeWidgetGetResponseModeInvisible      ChallengeWidgetGetResponseMode = "invisible"
-	ChallengeWidgetGetResponseModeManaged        ChallengeWidgetGetResponseMode = "managed"
-)
-
-// Region where this widget can be used.
-type ChallengeWidgetGetResponseRegion string
-
-const (
-	ChallengeWidgetGetResponseRegionWorld ChallengeWidgetGetResponseRegion = "world"
 )
 
 // A Turnstile widget's detailed configuration
@@ -505,6 +426,85 @@ type ChallengeWidgetDeleteResponseRegion string
 
 const (
 	ChallengeWidgetDeleteResponseRegionWorld ChallengeWidgetDeleteResponseRegion = "world"
+)
+
+// A Turnstile widget's detailed configuration
+type ChallengeWidgetGetResponse struct {
+	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
+	// challenges in response to malicious bots (ENT only).
+	BotFightMode bool `json:"bot_fight_mode,required"`
+	// If Turnstile is embedded on a Cloudflare site and the widget should grant
+	// challenge clearance, this setting can determine the clearance level to be set
+	ClearanceLevel ChallengeWidgetGetResponseClearanceLevel `json:"clearance_level,required"`
+	// When the widget was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	Domains   []string  `json:"domains,required"`
+	// Widget Mode
+	Mode ChallengeWidgetGetResponseMode `json:"mode,required"`
+	// When the widget was modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
+	// a meaningful string to make it easier to identify your widget, and where it is
+	// used.
+	Name string `json:"name,required"`
+	// Do not show any Cloudflare branding on the widget (ENT only).
+	Offlabel bool `json:"offlabel,required"`
+	// Region where this widget can be used.
+	Region ChallengeWidgetGetResponseRegion `json:"region,required"`
+	// Secret key for this widget.
+	Secret string `json:"secret,required"`
+	// Widget item identifier tag.
+	Sitekey string                         `json:"sitekey,required"`
+	JSON    challengeWidgetGetResponseJSON `json:"-"`
+}
+
+// challengeWidgetGetResponseJSON contains the JSON metadata for the struct
+// [ChallengeWidgetGetResponse]
+type challengeWidgetGetResponseJSON struct {
+	BotFightMode   apijson.Field
+	ClearanceLevel apijson.Field
+	CreatedOn      apijson.Field
+	Domains        apijson.Field
+	Mode           apijson.Field
+	ModifiedOn     apijson.Field
+	Name           apijson.Field
+	Offlabel       apijson.Field
+	Region         apijson.Field
+	Secret         apijson.Field
+	Sitekey        apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ChallengeWidgetGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// If Turnstile is embedded on a Cloudflare site and the widget should grant
+// challenge clearance, this setting can determine the clearance level to be set
+type ChallengeWidgetGetResponseClearanceLevel string
+
+const (
+	ChallengeWidgetGetResponseClearanceLevelNoClearance ChallengeWidgetGetResponseClearanceLevel = "no_clearance"
+	ChallengeWidgetGetResponseClearanceLevelJschallenge ChallengeWidgetGetResponseClearanceLevel = "jschallenge"
+	ChallengeWidgetGetResponseClearanceLevelManaged     ChallengeWidgetGetResponseClearanceLevel = "managed"
+	ChallengeWidgetGetResponseClearanceLevelInteractive ChallengeWidgetGetResponseClearanceLevel = "interactive"
+)
+
+// Widget Mode
+type ChallengeWidgetGetResponseMode string
+
+const (
+	ChallengeWidgetGetResponseModeNonInteractive ChallengeWidgetGetResponseMode = "non-interactive"
+	ChallengeWidgetGetResponseModeInvisible      ChallengeWidgetGetResponseMode = "invisible"
+	ChallengeWidgetGetResponseModeManaged        ChallengeWidgetGetResponseMode = "managed"
+)
+
+// Region where this widget can be used.
+type ChallengeWidgetGetResponseRegion string
+
+const (
+	ChallengeWidgetGetResponseRegionWorld ChallengeWidgetGetResponseRegion = "world"
 )
 
 // A Turnstile widget's detailed configuration
@@ -762,69 +762,6 @@ type challengeWidgetNewResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *ChallengeWidgetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetGetResponseEnvelope struct {
-	Errors   []ChallengeWidgetGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ChallengeWidgetGetResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful
-	Success bool `json:"success,required"`
-	// A Turnstile widget's detailed configuration
-	Result ChallengeWidgetGetResponse             `json:"result"`
-	JSON   challengeWidgetGetResponseEnvelopeJSON `json:"-"`
-}
-
-// challengeWidgetGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ChallengeWidgetGetResponseEnvelope]
-type challengeWidgetGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetGetResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    challengeWidgetGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// challengeWidgetGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ChallengeWidgetGetResponseEnvelopeErrors]
-type challengeWidgetGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetGetResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    challengeWidgetGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// challengeWidgetGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ChallengeWidgetGetResponseEnvelopeMessages]
-type challengeWidgetGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1123,6 +1060,69 @@ type challengeWidgetDeleteResponseEnvelopeMessagesJSON struct {
 }
 
 func (r *ChallengeWidgetDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ChallengeWidgetGetResponseEnvelope struct {
+	Errors   []ChallengeWidgetGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ChallengeWidgetGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful
+	Success bool `json:"success,required"`
+	// A Turnstile widget's detailed configuration
+	Result ChallengeWidgetGetResponse             `json:"result"`
+	JSON   challengeWidgetGetResponseEnvelopeJSON `json:"-"`
+}
+
+// challengeWidgetGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ChallengeWidgetGetResponseEnvelope]
+type challengeWidgetGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ChallengeWidgetGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ChallengeWidgetGetResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    challengeWidgetGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// challengeWidgetGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ChallengeWidgetGetResponseEnvelopeErrors]
+type challengeWidgetGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ChallengeWidgetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ChallengeWidgetGetResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    challengeWidgetGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// challengeWidgetGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ChallengeWidgetGetResponseEnvelopeMessages]
+type challengeWidgetGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ChallengeWidgetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

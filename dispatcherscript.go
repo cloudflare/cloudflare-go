@@ -38,19 +38,6 @@ func NewDispatcherScriptService(opts ...option.RequestOption) (r *DispatcherScri
 	return
 }
 
-// Fetch information about a script uploaded to a Workers for Platforms namespace.
-func (r *DispatcherScriptService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *DispatcherScriptGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DispatcherScriptGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Upload a worker module to a Workers for Platforms namespace.
 func (r *DispatcherScriptService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, body DispatcherScriptUpdateParams, opts ...option.RequestOption) (res *DispatcherScriptUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -72,6 +59,86 @@ func (r *DispatcherScriptService) Delete(ctx context.Context, accountID string, 
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
+}
+
+// Fetch information about a script uploaded to a Workers for Platforms namespace.
+func (r *DispatcherScriptService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *DispatcherScriptGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DispatcherScriptGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type DispatcherScriptUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Deprecated. Deployment metadata for internal usage.
+	PipelineHash string `json:"pipeline_hash"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []DispatcherScriptUpdateResponseTailConsumer `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                             `json:"usage_model"`
+	JSON       dispatcherScriptUpdateResponseJSON `json:"-"`
+}
+
+// dispatcherScriptUpdateResponseJSON contains the JSON metadata for the struct
+// [DispatcherScriptUpdateResponse]
+type dispatcherScriptUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PipelineHash  apijson.Field
+	PlacementMode apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DispatcherScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A reference to a script that will consume logs from the attached Worker.
+type DispatcherScriptUpdateResponseTailConsumer struct {
+	// Name of Worker that is to be the consumer.
+	Service string `json:"service,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Optional dispatch namespace the script belongs to.
+	Namespace string                                         `json:"namespace"`
+	JSON      dispatcherScriptUpdateResponseTailConsumerJSON `json:"-"`
+}
+
+// dispatcherScriptUpdateResponseTailConsumerJSON contains the JSON metadata for
+// the struct [DispatcherScriptUpdateResponseTailConsumer]
+type dispatcherScriptUpdateResponseTailConsumerJSON struct {
+	Service     apijson.Field
+	Environment apijson.Field
+	Namespace   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatcherScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Details about a worker uploaded to a Workers for Platforms namespace.
@@ -167,143 +234,6 @@ type dispatcherScriptGetResponseScriptTailConsumerJSON struct {
 func (r *DispatcherScriptGetResponseScriptTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type DispatcherScriptUpdateResponse struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []DispatcherScriptUpdateResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                             `json:"usage_model"`
-	JSON       dispatcherScriptUpdateResponseJSON `json:"-"`
-}
-
-// dispatcherScriptUpdateResponseJSON contains the JSON metadata for the struct
-// [DispatcherScriptUpdateResponse]
-type dispatcherScriptUpdateResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DispatcherScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type DispatcherScriptUpdateResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                         `json:"namespace"`
-	JSON      dispatcherScriptUpdateResponseTailConsumerJSON `json:"-"`
-}
-
-// dispatcherScriptUpdateResponseTailConsumerJSON contains the JSON metadata for
-// the struct [DispatcherScriptUpdateResponseTailConsumer]
-type dispatcherScriptUpdateResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatcherScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DispatcherScriptGetResponseEnvelope struct {
-	Errors   []DispatcherScriptGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DispatcherScriptGetResponseEnvelopeMessages `json:"messages,required"`
-	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result DispatcherScriptGetResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success DispatcherScriptGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dispatcherScriptGetResponseEnvelopeJSON    `json:"-"`
-}
-
-// dispatcherScriptGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DispatcherScriptGetResponseEnvelope]
-type dispatcherScriptGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatcherScriptGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DispatcherScriptGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    dispatcherScriptGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dispatcherScriptGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DispatcherScriptGetResponseEnvelopeErrors]
-type dispatcherScriptGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatcherScriptGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DispatcherScriptGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    dispatcherScriptGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dispatcherScriptGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DispatcherScriptGetResponseEnvelopeMessages]
-type dispatcherScriptGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatcherScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DispatcherScriptGetResponseEnvelopeSuccess bool
-
-const (
-	DispatcherScriptGetResponseEnvelopeSuccessTrue DispatcherScriptGetResponseEnvelopeSuccess = true
-)
 
 // This interface is a union satisfied by one of the following:
 // [DispatcherScriptUpdateParamsVariant0], [DispatcherScriptUpdateParamsVariant1].
@@ -623,3 +553,73 @@ func (r DispatcherScriptDeleteParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+type DispatcherScriptGetResponseEnvelope struct {
+	Errors   []DispatcherScriptGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DispatcherScriptGetResponseEnvelopeMessages `json:"messages,required"`
+	// Details about a worker uploaded to a Workers for Platforms namespace.
+	Result DispatcherScriptGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success DispatcherScriptGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dispatcherScriptGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// dispatcherScriptGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DispatcherScriptGetResponseEnvelope]
+type dispatcherScriptGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatcherScriptGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DispatcherScriptGetResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    dispatcherScriptGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dispatcherScriptGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DispatcherScriptGetResponseEnvelopeErrors]
+type dispatcherScriptGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatcherScriptGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DispatcherScriptGetResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    dispatcherScriptGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dispatcherScriptGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DispatcherScriptGetResponseEnvelopeMessages]
+type dispatcherScriptGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DispatcherScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DispatcherScriptGetResponseEnvelopeSuccess bool
+
+const (
+	DispatcherScriptGetResponseEnvelopeSuccessTrue DispatcherScriptGetResponseEnvelopeSuccess = true
+)

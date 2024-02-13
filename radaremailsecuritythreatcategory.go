@@ -108,7 +108,7 @@ type RadarEmailSecurityThreatCategoryListParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecurityThreatCategoryListParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityThreatCategoryListParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
 	Dmarc param.Field[[]RadarEmailSecurityThreatCategoryListParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
@@ -120,7 +120,7 @@ type RadarEmailSecurityThreatCategoryListParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	Spf param.Field[[]RadarEmailSecurityThreatCategoryListParamsSpf] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityThreatCategoryListParamsSPF] `query:"spf"`
 }
 
 // URLQuery serializes [RadarEmailSecurityThreatCategoryListParams]'s query
@@ -172,12 +172,12 @@ const (
 	RadarEmailSecurityThreatCategoryListParamsDateRange24wControl RadarEmailSecurityThreatCategoryListParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityThreatCategoryListParamsDkim string
+type RadarEmailSecurityThreatCategoryListParamsDKIM string
 
 const (
-	RadarEmailSecurityThreatCategoryListParamsDkimPass RadarEmailSecurityThreatCategoryListParamsDkim = "PASS"
-	RadarEmailSecurityThreatCategoryListParamsDkimNone RadarEmailSecurityThreatCategoryListParamsDkim = "NONE"
-	RadarEmailSecurityThreatCategoryListParamsDkimFail RadarEmailSecurityThreatCategoryListParamsDkim = "FAIL"
+	RadarEmailSecurityThreatCategoryListParamsDKIMPass RadarEmailSecurityThreatCategoryListParamsDKIM = "PASS"
+	RadarEmailSecurityThreatCategoryListParamsDKIMNone RadarEmailSecurityThreatCategoryListParamsDKIM = "NONE"
+	RadarEmailSecurityThreatCategoryListParamsDKIMFail RadarEmailSecurityThreatCategoryListParamsDKIM = "FAIL"
 )
 
 type RadarEmailSecurityThreatCategoryListParamsDmarc string
@@ -196,12 +196,12 @@ const (
 	RadarEmailSecurityThreatCategoryListParamsFormatCsv  RadarEmailSecurityThreatCategoryListParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityThreatCategoryListParamsSpf string
+type RadarEmailSecurityThreatCategoryListParamsSPF string
 
 const (
-	RadarEmailSecurityThreatCategoryListParamsSpfPass RadarEmailSecurityThreatCategoryListParamsSpf = "PASS"
-	RadarEmailSecurityThreatCategoryListParamsSpfNone RadarEmailSecurityThreatCategoryListParamsSpf = "NONE"
-	RadarEmailSecurityThreatCategoryListParamsSpfFail RadarEmailSecurityThreatCategoryListParamsSpf = "FAIL"
+	RadarEmailSecurityThreatCategoryListParamsSPFPass RadarEmailSecurityThreatCategoryListParamsSPF = "PASS"
+	RadarEmailSecurityThreatCategoryListParamsSPFNone RadarEmailSecurityThreatCategoryListParamsSPF = "NONE"
+	RadarEmailSecurityThreatCategoryListParamsSPFFail RadarEmailSecurityThreatCategoryListParamsSPF = "FAIL"
 )
 
 type RadarEmailSecurityThreatCategoryListResponseEnvelope struct {

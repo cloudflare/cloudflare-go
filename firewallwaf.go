@@ -12,8 +12,9 @@ import (
 // this service directly, and instead use the [NewFirewallWAFService] method
 // instead.
 type FirewallWAFService struct {
-	Options  []option.RequestOption
-	Packages *FirewallWAFPackageService
+	Options   []option.RequestOption
+	Overrides *FirewallWAFOverrideService
+	Packages  *FirewallWAFPackageService
 }
 
 // NewFirewallWAFService generates a new service that applies the given options to
@@ -22,6 +23,7 @@ type FirewallWAFService struct {
 func NewFirewallWAFService(opts ...option.RequestOption) (r *FirewallWAFService) {
 	r = &FirewallWAFService{}
 	r.Options = opts
+	r.Overrides = NewFirewallWAFOverrideService(opts...)
 	r.Packages = NewFirewallWAFPackageService(opts...)
 	return
 }

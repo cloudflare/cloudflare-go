@@ -38,13 +38,13 @@ func TestRadarEmailSecurityTopAseArcGetWithOptionalParams(t *testing.T) {
 			DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange: cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsDateRange{cloudflare.RadarEmailSecurityTopAseArcGetParamsDateRange1d, cloudflare.RadarEmailSecurityTopAseArcGetParamsDateRange2d, cloudflare.RadarEmailSecurityTopAseArcGetParamsDateRange7d}),
 			DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-			Dkim:      cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsDkim{cloudflare.RadarEmailSecurityTopAseArcGetParamsDkimPass, cloudflare.RadarEmailSecurityTopAseArcGetParamsDkimNone, cloudflare.RadarEmailSecurityTopAseArcGetParamsDkimFail}),
+			DKIM:      cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsDKIM{cloudflare.RadarEmailSecurityTopAseArcGetParamsDKIMPass, cloudflare.RadarEmailSecurityTopAseArcGetParamsDKIMNone, cloudflare.RadarEmailSecurityTopAseArcGetParamsDKIMFail}),
 			Dmarc:     cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsDmarc{cloudflare.RadarEmailSecurityTopAseArcGetParamsDmarcPass, cloudflare.RadarEmailSecurityTopAseArcGetParamsDmarcNone, cloudflare.RadarEmailSecurityTopAseArcGetParamsDmarcFail}),
 			Format:    cloudflare.F(cloudflare.RadarEmailSecurityTopAseArcGetParamsFormatJson),
 			Limit:     cloudflare.F(int64(5)),
 			Location:  cloudflare.F([]string{"string", "string", "string"}),
 			Name:      cloudflare.F([]string{"string", "string", "string"}),
-			Spf:       cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsSpf{cloudflare.RadarEmailSecurityTopAseArcGetParamsSpfPass, cloudflare.RadarEmailSecurityTopAseArcGetParamsSpfNone, cloudflare.RadarEmailSecurityTopAseArcGetParamsSpfFail}),
+			SPF:       cloudflare.F([]cloudflare.RadarEmailSecurityTopAseArcGetParamsSPF{cloudflare.RadarEmailSecurityTopAseArcGetParamsSPFPass, cloudflare.RadarEmailSecurityTopAseArcGetParamsSPFNone, cloudflare.RadarEmailSecurityTopAseArcGetParamsSPFFail}),
 		},
 	)
 	if err != nil {

@@ -11,9 +11,15 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewIntelService] method instead.
 type IntelService struct {
-	Options        []option.RequestOption
-	IndicatorFeeds *IntelIndicatorFeedService
-	Sinkholes      *IntelSinkholeService
+	Options            []option.RequestOption
+	Asn                *IntelAsnService
+	DNS                *IntelDNSService
+	Domains            *IntelDomainService
+	DomainHistories    *IntelDomainHistoryService
+	IPs                *IntelIPService
+	IPLists            *IntelIPListService
+	Miscategorizations *IntelMiscategorizationService
+	Whois              *IntelWhoisService
 }
 
 // NewIntelService generates a new service that applies the given options to each
@@ -22,7 +28,13 @@ type IntelService struct {
 func NewIntelService(opts ...option.RequestOption) (r *IntelService) {
 	r = &IntelService{}
 	r.Options = opts
-	r.IndicatorFeeds = NewIntelIndicatorFeedService(opts...)
-	r.Sinkholes = NewIntelSinkholeService(opts...)
+	r.Asn = NewIntelAsnService(opts...)
+	r.DNS = NewIntelDNSService(opts...)
+	r.Domains = NewIntelDomainService(opts...)
+	r.DomainHistories = NewIntelDomainHistoryService(opts...)
+	r.IPs = NewIntelIPService(opts...)
+	r.IPLists = NewIntelIPListService(opts...)
+	r.Miscategorizations = NewIntelMiscategorizationService(opts...)
+	r.Whois = NewIntelWhoisService(opts...)
 	return
 }

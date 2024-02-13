@@ -33,19 +33,6 @@ func NewAccessGroupService(opts ...option.RequestOption) (r *AccessGroupService)
 	return
 }
 
-// Fetches a single Access group.
-func (r *AccessGroupService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessGroupGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessGroupGetResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Updates a configured Access group.
 func (r *AccessGroupService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessGroupUpdateParams, opts ...option.RequestOption) (res *AccessGroupUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -98,3024 +85,17 @@ func (r *AccessGroupService) AccessGroupsListAccessGroups(ctx context.Context, a
 	return
 }
 
-type AccessGroupGetResponse struct {
-	// UUID
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
-	// meet any of the Exclude rules.
-	Exclude []AccessGroupGetResponseExclude `json:"exclude"`
-	// Rules evaluated with an OR logical operator. A user needs to meet only one of
-	// the Include rules.
-	Include []AccessGroupGetResponseInclude `json:"include"`
-	// Rules evaluated with an AND logical operator. To match a policy, a user must
-	// meet all of the Require rules.
-	IsDefault []AccessGroupGetResponseIsDefault `json:"is_default"`
-	// The name of the Access group.
-	Name string `json:"name"`
-	// Rules evaluated with an AND logical operator. To match a policy, a user must
-	// meet all of the Require rules.
-	Require   []AccessGroupGetResponseRequire `json:"require"`
-	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
-	JSON      accessGroupGetResponseJSON      `json:"-"`
-}
-
-// accessGroupGetResponseJSON contains the JSON metadata for the struct
-// [AccessGroupGetResponse]
-type accessGroupGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Exclude     apijson.Field
-	Include     apijson.Field
-	IsDefault   apijson.Field
-	Name        apijson.Field
-	Require     apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [AccessGroupGetResponseExcludeAccessEmailRule],
-// [AccessGroupGetResponseExcludeAccessEmailListRule],
-// [AccessGroupGetResponseExcludeAccessDomainRule],
-// [AccessGroupGetResponseExcludeAccessEveryoneRule],
-// [AccessGroupGetResponseExcludeAccessIPRule],
-// [AccessGroupGetResponseExcludeAccessIPListRule],
-// [AccessGroupGetResponseExcludeAccessCertificateRule],
-// [AccessGroupGetResponseExcludeAccessAccessGroupRule],
-// [AccessGroupGetResponseExcludeAccessAzureGroupRule],
-// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRule],
-// [AccessGroupGetResponseExcludeAccessGsuiteGroupRule],
-// [AccessGroupGetResponseExcludeAccessOktaGroupRule],
-// [AccessGroupGetResponseExcludeAccessSamlGroupRule],
-// [AccessGroupGetResponseExcludeAccessServiceTokenRule],
-// [AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule],
-// [AccessGroupGetResponseExcludeAccessExternalEvaluationRule],
-// [AccessGroupGetResponseExcludeAccessCountryRule],
-// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRule] or
-// [AccessGroupGetResponseExcludeAccessDevicePostureRule].
-type AccessGroupGetResponseExclude interface {
-	implementsAccessGroupGetResponseExclude()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseExclude)(nil)).Elem(), "")
-}
-
-// Matches a specific email.
-type AccessGroupGetResponseExcludeAccessEmailRule struct {
-	Email AccessGroupGetResponseExcludeAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessGroupGetResponseExcludeAccessEmailRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessEmailRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseExcludeAccessEmailRule]
-type accessGroupGetResponseExcludeAccessEmailRuleJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessEmailRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessEmailRuleEmail struct {
-	// The email of the user.
-	Email string                                                `json:"email,required" format:"email"`
-	JSON  accessGroupGetResponseExcludeAccessEmailRuleEmailJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessEmailRuleEmailJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessEmailRuleEmail]
-type accessGroupGetResponseExcludeAccessEmailRuleEmailJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an email address from a list.
-type AccessGroupGetResponseExcludeAccessEmailListRule struct {
-	EmailList AccessGroupGetResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessGroupGetResponseExcludeAccessEmailListRuleJSON      `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessEmailListRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessEmailListRule]
-type accessGroupGetResponseExcludeAccessEmailListRuleJSON struct {
-	EmailList   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessEmailListRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessEmailListRuleEmailList struct {
-	// The ID of a previously created email list.
-	ID   string                                                        `json:"id,required"`
-	JSON accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessEmailListRuleEmailList]
-type accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Match an entire email domain.
-type AccessGroupGetResponseExcludeAccessDomainRule struct {
-	EmailDomain AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessGroupGetResponseExcludeAccessDomainRuleJSON        `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessDomainRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseExcludeAccessDomainRule]
-type accessGroupGetResponseExcludeAccessDomainRuleJSON struct {
-	EmailDomain apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessDomainRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain struct {
-	// The email domain to match.
-	Domain string                                                       `json:"domain,required"`
-	JSON   accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain]
-type accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON struct {
-	Domain      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches everyone.
-type AccessGroupGetResponseExcludeAccessEveryoneRule struct {
-	// An empty object which matches on all users.
-	Everyone interface{}                                         `json:"everyone,required"`
-	JSON     accessGroupGetResponseExcludeAccessEveryoneRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessEveryoneRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessEveryoneRule]
-type accessGroupGetResponseExcludeAccessEveryoneRuleJSON struct {
-	Everyone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessEveryoneRule) implementsAccessGroupGetResponseExclude() {}
-
-// Matches an IP address block.
-type AccessGroupGetResponseExcludeAccessIPRule struct {
-	IP   AccessGroupGetResponseExcludeAccessIPRuleIP   `json:"ip,required"`
-	JSON accessGroupGetResponseExcludeAccessIPRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessIPRuleJSON contains the JSON metadata for the
-// struct [AccessGroupGetResponseExcludeAccessIPRule]
-type accessGroupGetResponseExcludeAccessIPRuleJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessIPRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessIPRuleIP struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP   string                                          `json:"ip,required"`
-	JSON accessGroupGetResponseExcludeAccessIPRuleIPJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessIPRuleIPJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseExcludeAccessIPRuleIP]
-type accessGroupGetResponseExcludeAccessIPRuleIPJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an IP address from a list.
-type AccessGroupGetResponseExcludeAccessIPListRule struct {
-	IPList AccessGroupGetResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessGroupGetResponseExcludeAccessIPListRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessIPListRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseExcludeAccessIPListRule]
-type accessGroupGetResponseExcludeAccessIPListRuleJSON struct {
-	IPList      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessIPListRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessIPListRuleIPList struct {
-	// The ID of a previously created IP list.
-	ID   string                                                  `json:"id,required"`
-	JSON accessGroupGetResponseExcludeAccessIPListRuleIPListJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessIPListRuleIPListJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessIPListRuleIPList]
-type accessGroupGetResponseExcludeAccessIPListRuleIPListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid client certificate.
-type AccessGroupGetResponseExcludeAccessCertificateRule struct {
-	Certificate interface{}                                            `json:"certificate,required"`
-	JSON        accessGroupGetResponseExcludeAccessCertificateRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessCertificateRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessCertificateRule]
-type accessGroupGetResponseExcludeAccessCertificateRuleJSON struct {
-	Certificate apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessCertificateRule) implementsAccessGroupGetResponseExclude() {
-}
-
-// Matches an Access group.
-type AccessGroupGetResponseExcludeAccessAccessGroupRule struct {
-	Group AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessGroupGetResponseExcludeAccessAccessGroupRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAccessGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessAccessGroupRule]
-type accessGroupGetResponseExcludeAccessAccessGroupRuleJSON struct {
-	Group       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessAccessGroupRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                      `json:"id,required"`
-	JSON accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup]
-type accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AccessGroupGetResponseExcludeAccessAzureGroupRule struct {
-	AzureAd AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessGroupGetResponseExcludeAccessAzureGroupRuleJSON    `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAzureGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessAzureGroupRule]
-type accessGroupGetResponseExcludeAccessAzureGroupRuleJSON struct {
-	AzureAd     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessAzureGroupRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd struct {
-	// The ID of an Azure group.
-	ID string `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID string                                                       `json:"connection_id,required"`
-	JSON         accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd]
-type accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type AccessGroupGetResponseExcludeAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRule]
-type accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON struct {
-	GitHubOrganization apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessGitHubOrganizationRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
-	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The name of the organization.
-	Name string                                                                          `json:"name,required"`
-	JSON accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization]
-type accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type AccessGroupGetResponseExcludeAccessGsuiteGroupRule struct {
-	Gsuite AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessGsuiteGroupRule]
-type accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON struct {
-	Gsuite      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessGsuiteGroupRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email string                                                       `json:"email,required"`
-	JSON  accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite]
-type accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type AccessGroupGetResponseExcludeAccessOktaGroupRule struct {
-	Okta AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessGroupGetResponseExcludeAccessOktaGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessOktaGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessOktaGroupRule]
-type accessGroupGetResponseExcludeAccessOktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessOktaGroupRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                                                   `json:"email,required"`
-	JSON  accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta]
-type accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type AccessGroupGetResponseExcludeAccessSamlGroupRule struct {
-	Saml AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessGroupGetResponseExcludeAccessSamlGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessSamlGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessSamlGroupRule]
-type accessGroupGetResponseExcludeAccessSamlGroupRuleJSON struct {
-	Saml        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessSamlGroupRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml struct {
-	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue string                                                   `json:"attribute_value,required"`
-	JSON           accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml]
-type accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific Access Service Token
-type AccessGroupGetResponseExcludeAccessServiceTokenRule struct {
-	ServiceToken AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessGroupGetResponseExcludeAccessServiceTokenRuleJSON         `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessServiceTokenRule]
-type accessGroupGetResponseExcludeAccessServiceTokenRuleJSON struct {
-	ServiceToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessServiceTokenRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                              `json:"token_id,required"`
-	JSON    accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken]
-type accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON struct {
-	TokenID     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid Access Service Token
-type AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
-	JSON                 accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule]
-type accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseExclude() {
-}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessGroupGetResponseExcludeAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseExcludeAccessExternalEvaluationRule]
-type accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON struct {
-	ExternalEvaluation apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessExternalEvaluationRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL string                                                                          `json:"keys_url,required"`
-	JSON    accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation]
-type accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
-	EvaluateURL apijson.Field
-	KeysURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific country
-type AccessGroupGetResponseExcludeAccessCountryRule struct {
-	Geo  AccessGroupGetResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessGroupGetResponseExcludeAccessCountryRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessCountryRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessCountryRule]
-type accessGroupGetResponseExcludeAccessCountryRuleJSON struct {
-	Geo         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessCountryRule) implementsAccessGroupGetResponseExclude() {}
-
-type AccessGroupGetResponseExcludeAccessCountryRuleGeo struct {
-	// The country code that should be matched.
-	CountryCode string                                                `json:"country_code,required"`
-	JSON        accessGroupGetResponseExcludeAccessCountryRuleGeoJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessCountryRuleGeoJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseExcludeAccessCountryRuleGeo]
-type accessGroupGetResponseExcludeAccessCountryRuleGeoJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforce different MFA options
-type AccessGroupGetResponseExcludeAccessAuthenticationMethodRule struct {
-	AuthMethod AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON       `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRule]
-type accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessAuthenticationMethodRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                                    `json:"auth_method,required"`
-	JSON       accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod]
-type accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforces a device posture rule has run successfully
-type AccessGroupGetResponseExcludeAccessDevicePostureRule struct {
-	DevicePosture AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessGroupGetResponseExcludeAccessDevicePostureRuleJSON          `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessDevicePostureRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseExcludeAccessDevicePostureRule]
-type accessGroupGetResponseExcludeAccessDevicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseExcludeAccessDevicePostureRule) implementsAccessGroupGetResponseExclude() {
-}
-
-type AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                                `json:"integration_uid,required"`
-	JSON           accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON contains
-// the JSON metadata for the struct
-// [AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture]
-type accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [AccessGroupGetResponseIncludeAccessEmailRule],
-// [AccessGroupGetResponseIncludeAccessEmailListRule],
-// [AccessGroupGetResponseIncludeAccessDomainRule],
-// [AccessGroupGetResponseIncludeAccessEveryoneRule],
-// [AccessGroupGetResponseIncludeAccessIPRule],
-// [AccessGroupGetResponseIncludeAccessIPListRule],
-// [AccessGroupGetResponseIncludeAccessCertificateRule],
-// [AccessGroupGetResponseIncludeAccessAccessGroupRule],
-// [AccessGroupGetResponseIncludeAccessAzureGroupRule],
-// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRule],
-// [AccessGroupGetResponseIncludeAccessGsuiteGroupRule],
-// [AccessGroupGetResponseIncludeAccessOktaGroupRule],
-// [AccessGroupGetResponseIncludeAccessSamlGroupRule],
-// [AccessGroupGetResponseIncludeAccessServiceTokenRule],
-// [AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule],
-// [AccessGroupGetResponseIncludeAccessExternalEvaluationRule],
-// [AccessGroupGetResponseIncludeAccessCountryRule],
-// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRule] or
-// [AccessGroupGetResponseIncludeAccessDevicePostureRule].
-type AccessGroupGetResponseInclude interface {
-	implementsAccessGroupGetResponseInclude()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseInclude)(nil)).Elem(), "")
-}
-
-// Matches a specific email.
-type AccessGroupGetResponseIncludeAccessEmailRule struct {
-	Email AccessGroupGetResponseIncludeAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessGroupGetResponseIncludeAccessEmailRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessEmailRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIncludeAccessEmailRule]
-type accessGroupGetResponseIncludeAccessEmailRuleJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessEmailRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessEmailRuleEmail struct {
-	// The email of the user.
-	Email string                                                `json:"email,required" format:"email"`
-	JSON  accessGroupGetResponseIncludeAccessEmailRuleEmailJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessEmailRuleEmailJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessEmailRuleEmail]
-type accessGroupGetResponseIncludeAccessEmailRuleEmailJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an email address from a list.
-type AccessGroupGetResponseIncludeAccessEmailListRule struct {
-	EmailList AccessGroupGetResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessGroupGetResponseIncludeAccessEmailListRuleJSON      `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessEmailListRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessEmailListRule]
-type accessGroupGetResponseIncludeAccessEmailListRuleJSON struct {
-	EmailList   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessEmailListRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessEmailListRuleEmailList struct {
-	// The ID of a previously created email list.
-	ID   string                                                        `json:"id,required"`
-	JSON accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessEmailListRuleEmailList]
-type accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Match an entire email domain.
-type AccessGroupGetResponseIncludeAccessDomainRule struct {
-	EmailDomain AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessGroupGetResponseIncludeAccessDomainRuleJSON        `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessDomainRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIncludeAccessDomainRule]
-type accessGroupGetResponseIncludeAccessDomainRuleJSON struct {
-	EmailDomain apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessDomainRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain struct {
-	// The email domain to match.
-	Domain string                                                       `json:"domain,required"`
-	JSON   accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain]
-type accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON struct {
-	Domain      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches everyone.
-type AccessGroupGetResponseIncludeAccessEveryoneRule struct {
-	// An empty object which matches on all users.
-	Everyone interface{}                                         `json:"everyone,required"`
-	JSON     accessGroupGetResponseIncludeAccessEveryoneRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessEveryoneRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessEveryoneRule]
-type accessGroupGetResponseIncludeAccessEveryoneRuleJSON struct {
-	Everyone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessEveryoneRule) implementsAccessGroupGetResponseInclude() {}
-
-// Matches an IP address block.
-type AccessGroupGetResponseIncludeAccessIPRule struct {
-	IP   AccessGroupGetResponseIncludeAccessIPRuleIP   `json:"ip,required"`
-	JSON accessGroupGetResponseIncludeAccessIPRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessIPRuleJSON contains the JSON metadata for the
-// struct [AccessGroupGetResponseIncludeAccessIPRule]
-type accessGroupGetResponseIncludeAccessIPRuleJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessIPRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessIPRuleIP struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP   string                                          `json:"ip,required"`
-	JSON accessGroupGetResponseIncludeAccessIPRuleIPJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessIPRuleIPJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIncludeAccessIPRuleIP]
-type accessGroupGetResponseIncludeAccessIPRuleIPJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an IP address from a list.
-type AccessGroupGetResponseIncludeAccessIPListRule struct {
-	IPList AccessGroupGetResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessGroupGetResponseIncludeAccessIPListRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessIPListRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIncludeAccessIPListRule]
-type accessGroupGetResponseIncludeAccessIPListRuleJSON struct {
-	IPList      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessIPListRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessIPListRuleIPList struct {
-	// The ID of a previously created IP list.
-	ID   string                                                  `json:"id,required"`
-	JSON accessGroupGetResponseIncludeAccessIPListRuleIPListJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessIPListRuleIPListJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessIPListRuleIPList]
-type accessGroupGetResponseIncludeAccessIPListRuleIPListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid client certificate.
-type AccessGroupGetResponseIncludeAccessCertificateRule struct {
-	Certificate interface{}                                            `json:"certificate,required"`
-	JSON        accessGroupGetResponseIncludeAccessCertificateRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessCertificateRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessCertificateRule]
-type accessGroupGetResponseIncludeAccessCertificateRuleJSON struct {
-	Certificate apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessCertificateRule) implementsAccessGroupGetResponseInclude() {
-}
-
-// Matches an Access group.
-type AccessGroupGetResponseIncludeAccessAccessGroupRule struct {
-	Group AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessGroupGetResponseIncludeAccessAccessGroupRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAccessGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessAccessGroupRule]
-type accessGroupGetResponseIncludeAccessAccessGroupRuleJSON struct {
-	Group       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessAccessGroupRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                      `json:"id,required"`
-	JSON accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup]
-type accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AccessGroupGetResponseIncludeAccessAzureGroupRule struct {
-	AzureAd AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessGroupGetResponseIncludeAccessAzureGroupRuleJSON    `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAzureGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessAzureGroupRule]
-type accessGroupGetResponseIncludeAccessAzureGroupRuleJSON struct {
-	AzureAd     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessAzureGroupRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd struct {
-	// The ID of an Azure group.
-	ID string `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID string                                                       `json:"connection_id,required"`
-	JSON         accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd]
-type accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type AccessGroupGetResponseIncludeAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRule]
-type accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON struct {
-	GitHubOrganization apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessGitHubOrganizationRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
-	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The name of the organization.
-	Name string                                                                          `json:"name,required"`
-	JSON accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization]
-type accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type AccessGroupGetResponseIncludeAccessGsuiteGroupRule struct {
-	Gsuite AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessGsuiteGroupRule]
-type accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON struct {
-	Gsuite      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessGsuiteGroupRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email string                                                       `json:"email,required"`
-	JSON  accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite]
-type accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type AccessGroupGetResponseIncludeAccessOktaGroupRule struct {
-	Okta AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessGroupGetResponseIncludeAccessOktaGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessOktaGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessOktaGroupRule]
-type accessGroupGetResponseIncludeAccessOktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessOktaGroupRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                                                   `json:"email,required"`
-	JSON  accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta]
-type accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type AccessGroupGetResponseIncludeAccessSamlGroupRule struct {
-	Saml AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessGroupGetResponseIncludeAccessSamlGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessSamlGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessSamlGroupRule]
-type accessGroupGetResponseIncludeAccessSamlGroupRuleJSON struct {
-	Saml        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessSamlGroupRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml struct {
-	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue string                                                   `json:"attribute_value,required"`
-	JSON           accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml]
-type accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific Access Service Token
-type AccessGroupGetResponseIncludeAccessServiceTokenRule struct {
-	ServiceToken AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessGroupGetResponseIncludeAccessServiceTokenRuleJSON         `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessServiceTokenRule]
-type accessGroupGetResponseIncludeAccessServiceTokenRuleJSON struct {
-	ServiceToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessServiceTokenRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                              `json:"token_id,required"`
-	JSON    accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken]
-type accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON struct {
-	TokenID     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid Access Service Token
-type AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
-	JSON                 accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule]
-type accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseInclude() {
-}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessGroupGetResponseIncludeAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIncludeAccessExternalEvaluationRule]
-type accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON struct {
-	ExternalEvaluation apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessExternalEvaluationRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL string                                                                          `json:"keys_url,required"`
-	JSON    accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation]
-type accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
-	EvaluateURL apijson.Field
-	KeysURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific country
-type AccessGroupGetResponseIncludeAccessCountryRule struct {
-	Geo  AccessGroupGetResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessGroupGetResponseIncludeAccessCountryRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessCountryRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessCountryRule]
-type accessGroupGetResponseIncludeAccessCountryRuleJSON struct {
-	Geo         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessCountryRule) implementsAccessGroupGetResponseInclude() {}
-
-type AccessGroupGetResponseIncludeAccessCountryRuleGeo struct {
-	// The country code that should be matched.
-	CountryCode string                                                `json:"country_code,required"`
-	JSON        accessGroupGetResponseIncludeAccessCountryRuleGeoJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessCountryRuleGeoJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIncludeAccessCountryRuleGeo]
-type accessGroupGetResponseIncludeAccessCountryRuleGeoJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforce different MFA options
-type AccessGroupGetResponseIncludeAccessAuthenticationMethodRule struct {
-	AuthMethod AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON       `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRule]
-type accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessAuthenticationMethodRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                                    `json:"auth_method,required"`
-	JSON       accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod]
-type accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforces a device posture rule has run successfully
-type AccessGroupGetResponseIncludeAccessDevicePostureRule struct {
-	DevicePosture AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessGroupGetResponseIncludeAccessDevicePostureRuleJSON          `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessDevicePostureRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIncludeAccessDevicePostureRule]
-type accessGroupGetResponseIncludeAccessDevicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIncludeAccessDevicePostureRule) implementsAccessGroupGetResponseInclude() {
-}
-
-type AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                                `json:"integration_uid,required"`
-	JSON           accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON contains
-// the JSON metadata for the struct
-// [AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture]
-type accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [AccessGroupGetResponseIsDefaultAccessEmailRule],
-// [AccessGroupGetResponseIsDefaultAccessEmailListRule],
-// [AccessGroupGetResponseIsDefaultAccessDomainRule],
-// [AccessGroupGetResponseIsDefaultAccessEveryoneRule],
-// [AccessGroupGetResponseIsDefaultAccessIPRule],
-// [AccessGroupGetResponseIsDefaultAccessIPListRule],
-// [AccessGroupGetResponseIsDefaultAccessCertificateRule],
-// [AccessGroupGetResponseIsDefaultAccessAccessGroupRule],
-// [AccessGroupGetResponseIsDefaultAccessAzureGroupRule],
-// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule],
-// [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule],
-// [AccessGroupGetResponseIsDefaultAccessOktaGroupRule],
-// [AccessGroupGetResponseIsDefaultAccessSamlGroupRule],
-// [AccessGroupGetResponseIsDefaultAccessServiceTokenRule],
-// [AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule],
-// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule],
-// [AccessGroupGetResponseIsDefaultAccessCountryRule],
-// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule] or
-// [AccessGroupGetResponseIsDefaultAccessDevicePostureRule].
-type AccessGroupGetResponseIsDefault interface {
-	implementsAccessGroupGetResponseIsDefault()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseIsDefault)(nil)).Elem(), "")
-}
-
-// Matches a specific email.
-type AccessGroupGetResponseIsDefaultAccessEmailRule struct {
-	Email AccessGroupGetResponseIsDefaultAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessGroupGetResponseIsDefaultAccessEmailRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessEmailRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIsDefaultAccessEmailRule]
-type accessGroupGetResponseIsDefaultAccessEmailRuleJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessEmailRule) implementsAccessGroupGetResponseIsDefault() {}
-
-type AccessGroupGetResponseIsDefaultAccessEmailRuleEmail struct {
-	// The email of the user.
-	Email string                                                  `json:"email,required" format:"email"`
-	JSON  accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessEmailRuleEmail]
-type accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an email address from a list.
-type AccessGroupGetResponseIsDefaultAccessEmailListRule struct {
-	EmailList AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessGroupGetResponseIsDefaultAccessEmailListRuleJSON      `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessEmailListRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessEmailListRule]
-type accessGroupGetResponseIsDefaultAccessEmailListRuleJSON struct {
-	EmailList   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessEmailListRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList struct {
-	// The ID of a previously created email list.
-	ID   string                                                          `json:"id,required"`
-	JSON accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList]
-type accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Match an entire email domain.
-type AccessGroupGetResponseIsDefaultAccessDomainRule struct {
-	EmailDomain AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessGroupGetResponseIsDefaultAccessDomainRuleJSON        `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessDomainRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIsDefaultAccessDomainRule]
-type accessGroupGetResponseIsDefaultAccessDomainRuleJSON struct {
-	EmailDomain apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessDomainRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain struct {
-	// The email domain to match.
-	Domain string                                                         `json:"domain,required"`
-	JSON   accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain]
-type accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON struct {
-	Domain      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches everyone.
-type AccessGroupGetResponseIsDefaultAccessEveryoneRule struct {
-	// An empty object which matches on all users.
-	Everyone interface{}                                           `json:"everyone,required"`
-	JSON     accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIsDefaultAccessEveryoneRule]
-type accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON struct {
-	Everyone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessEveryoneRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-// Matches an IP address block.
-type AccessGroupGetResponseIsDefaultAccessIPRule struct {
-	IP   AccessGroupGetResponseIsDefaultAccessIPRuleIP   `json:"ip,required"`
-	JSON accessGroupGetResponseIsDefaultAccessIPRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessIPRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIsDefaultAccessIPRule]
-type accessGroupGetResponseIsDefaultAccessIPRuleJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessIPRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessIPRule) implementsAccessGroupGetResponseIsDefault() {}
-
-type AccessGroupGetResponseIsDefaultAccessIPRuleIP struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP   string                                            `json:"ip,required"`
-	JSON accessGroupGetResponseIsDefaultAccessIPRuleIPJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessIPRuleIPJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseIsDefaultAccessIPRuleIP]
-type accessGroupGetResponseIsDefaultAccessIPRuleIPJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an IP address from a list.
-type AccessGroupGetResponseIsDefaultAccessIPListRule struct {
-	IPList AccessGroupGetResponseIsDefaultAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessGroupGetResponseIsDefaultAccessIPListRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessIPListRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIsDefaultAccessIPListRule]
-type accessGroupGetResponseIsDefaultAccessIPListRuleJSON struct {
-	IPList      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessIPListRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessIPListRuleIPList struct {
-	// The ID of a previously created IP list.
-	ID   string                                                    `json:"id,required"`
-	JSON accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessIPListRuleIPList]
-type accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid client certificate.
-type AccessGroupGetResponseIsDefaultAccessCertificateRule struct {
-	Certificate interface{}                                              `json:"certificate,required"`
-	JSON        accessGroupGetResponseIsDefaultAccessCertificateRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessCertificateRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessCertificateRule]
-type accessGroupGetResponseIsDefaultAccessCertificateRuleJSON struct {
-	Certificate apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessCertificateRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-// Matches an Access group.
-type AccessGroupGetResponseIsDefaultAccessAccessGroupRule struct {
-	Group AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessAccessGroupRule]
-type accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON struct {
-	Group       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessAccessGroupRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                        `json:"id,required"`
-	JSON accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup]
-type accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AccessGroupGetResponseIsDefaultAccessAzureGroupRule struct {
-	AzureAd AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON    `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessAzureGroupRule]
-type accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON struct {
-	AzureAd     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessAzureGroupRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd struct {
-	// The ID of an Azure group.
-	ID string `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID string                                                         `json:"connection_id,required"`
-	JSON         accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd]
-type accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule]
-type accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON struct {
-	GitHubOrganization apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization struct {
-	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The name of the organization.
-	Name string                                                                            `json:"name,required"`
-	JSON accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization]
-type accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule struct {
-	Gsuite AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule]
-type accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON struct {
-	Gsuite      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email string                                                         `json:"email,required"`
-	JSON  accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite]
-type accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type AccessGroupGetResponseIsDefaultAccessOktaGroupRule struct {
-	Okta AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessOktaGroupRule]
-type accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessOktaGroupRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                                                     `json:"email,required"`
-	JSON  accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta]
-type accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type AccessGroupGetResponseIsDefaultAccessSamlGroupRule struct {
-	Saml AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessSamlGroupRule]
-type accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON struct {
-	Saml        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessSamlGroupRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml struct {
-	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue string                                                     `json:"attribute_value,required"`
-	JSON           accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml]
-type accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific Access Service Token
-type AccessGroupGetResponseIsDefaultAccessServiceTokenRule struct {
-	ServiceToken AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON         `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessServiceTokenRule]
-type accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON struct {
-	ServiceToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessServiceTokenRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                                `json:"token_id,required"`
-	JSON    accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON contains
-// the JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken]
-type accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON struct {
-	TokenID     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid Access Service Token
-type AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                                       `json:"any_valid_service_token,required"`
-	JSON                 accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule]
-type accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule]
-type accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON struct {
-	ExternalEvaluation apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL string                                                                            `json:"keys_url,required"`
-	JSON    accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation]
-type accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON struct {
-	EvaluateURL apijson.Field
-	KeysURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific country
-type AccessGroupGetResponseIsDefaultAccessCountryRule struct {
-	Geo  AccessGroupGetResponseIsDefaultAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessGroupGetResponseIsDefaultAccessCountryRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessCountryRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseIsDefaultAccessCountryRule]
-type accessGroupGetResponseIsDefaultAccessCountryRuleJSON struct {
-	Geo         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessCountryRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessCountryRuleGeo struct {
-	// The country code that should be matched.
-	CountryCode string                                                  `json:"country_code,required"`
-	JSON        accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessCountryRuleGeo]
-type accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforce different MFA options
-type AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule struct {
-	AuthMethod AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON       `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule]
-type accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                                      `json:"auth_method,required"`
-	JSON       accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod]
-type accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforces a device posture rule has run successfully
-type AccessGroupGetResponseIsDefaultAccessDevicePostureRule struct {
-	DevicePosture AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON          `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseIsDefaultAccessDevicePostureRule]
-type accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseIsDefaultAccessDevicePostureRule) implementsAccessGroupGetResponseIsDefault() {
-}
-
-type AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                                  `json:"integration_uid,required"`
-	JSON           accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON contains
-// the JSON metadata for the struct
-// [AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture]
-type accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific email.
-//
-// Union satisfied by [AccessGroupGetResponseRequireAccessEmailRule],
-// [AccessGroupGetResponseRequireAccessEmailListRule],
-// [AccessGroupGetResponseRequireAccessDomainRule],
-// [AccessGroupGetResponseRequireAccessEveryoneRule],
-// [AccessGroupGetResponseRequireAccessIPRule],
-// [AccessGroupGetResponseRequireAccessIPListRule],
-// [AccessGroupGetResponseRequireAccessCertificateRule],
-// [AccessGroupGetResponseRequireAccessAccessGroupRule],
-// [AccessGroupGetResponseRequireAccessAzureGroupRule],
-// [AccessGroupGetResponseRequireAccessGitHubOrganizationRule],
-// [AccessGroupGetResponseRequireAccessGsuiteGroupRule],
-// [AccessGroupGetResponseRequireAccessOktaGroupRule],
-// [AccessGroupGetResponseRequireAccessSamlGroupRule],
-// [AccessGroupGetResponseRequireAccessServiceTokenRule],
-// [AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule],
-// [AccessGroupGetResponseRequireAccessExternalEvaluationRule],
-// [AccessGroupGetResponseRequireAccessCountryRule],
-// [AccessGroupGetResponseRequireAccessAuthenticationMethodRule] or
-// [AccessGroupGetResponseRequireAccessDevicePostureRule].
-type AccessGroupGetResponseRequire interface {
-	implementsAccessGroupGetResponseRequire()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseRequire)(nil)).Elem(), "")
-}
-
-// Matches a specific email.
-type AccessGroupGetResponseRequireAccessEmailRule struct {
-	Email AccessGroupGetResponseRequireAccessEmailRuleEmail `json:"email,required"`
-	JSON  accessGroupGetResponseRequireAccessEmailRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessEmailRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseRequireAccessEmailRule]
-type accessGroupGetResponseRequireAccessEmailRuleJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessEmailRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessEmailRuleEmail struct {
-	// The email of the user.
-	Email string                                                `json:"email,required" format:"email"`
-	JSON  accessGroupGetResponseRequireAccessEmailRuleEmailJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessEmailRuleEmailJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessEmailRuleEmail]
-type accessGroupGetResponseRequireAccessEmailRuleEmailJSON struct {
-	Email       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an email address from a list.
-type AccessGroupGetResponseRequireAccessEmailListRule struct {
-	EmailList AccessGroupGetResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
-	JSON      accessGroupGetResponseRequireAccessEmailListRuleJSON      `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessEmailListRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessEmailListRule]
-type accessGroupGetResponseRequireAccessEmailListRuleJSON struct {
-	EmailList   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessEmailListRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessEmailListRuleEmailList struct {
-	// The ID of a previously created email list.
-	ID   string                                                        `json:"id,required"`
-	JSON accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessEmailListRuleEmailList]
-type accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Match an entire email domain.
-type AccessGroupGetResponseRequireAccessDomainRule struct {
-	EmailDomain AccessGroupGetResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
-	JSON        accessGroupGetResponseRequireAccessDomainRuleJSON        `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessDomainRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseRequireAccessDomainRule]
-type accessGroupGetResponseRequireAccessDomainRuleJSON struct {
-	EmailDomain apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessDomainRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessDomainRuleEmailDomain struct {
-	// The email domain to match.
-	Domain string                                                       `json:"domain,required"`
-	JSON   accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessDomainRuleEmailDomain]
-type accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON struct {
-	Domain      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches everyone.
-type AccessGroupGetResponseRequireAccessEveryoneRule struct {
-	// An empty object which matches on all users.
-	Everyone interface{}                                         `json:"everyone,required"`
-	JSON     accessGroupGetResponseRequireAccessEveryoneRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessEveryoneRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessEveryoneRule]
-type accessGroupGetResponseRequireAccessEveryoneRuleJSON struct {
-	Everyone    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessEveryoneRule) implementsAccessGroupGetResponseRequire() {}
-
-// Matches an IP address block.
-type AccessGroupGetResponseRequireAccessIPRule struct {
-	IP   AccessGroupGetResponseRequireAccessIPRuleIP   `json:"ip,required"`
-	JSON accessGroupGetResponseRequireAccessIPRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessIPRuleJSON contains the JSON metadata for the
-// struct [AccessGroupGetResponseRequireAccessIPRule]
-type accessGroupGetResponseRequireAccessIPRuleJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessIPRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessIPRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessIPRuleIP struct {
-	// An IPv4 or IPv6 CIDR block.
-	IP   string                                          `json:"ip,required"`
-	JSON accessGroupGetResponseRequireAccessIPRuleIPJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessIPRuleIPJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseRequireAccessIPRuleIP]
-type accessGroupGetResponseRequireAccessIPRuleIPJSON struct {
-	IP          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an IP address from a list.
-type AccessGroupGetResponseRequireAccessIPListRule struct {
-	IPList AccessGroupGetResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
-	JSON   accessGroupGetResponseRequireAccessIPListRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessIPListRuleJSON contains the JSON metadata for
-// the struct [AccessGroupGetResponseRequireAccessIPListRule]
-type accessGroupGetResponseRequireAccessIPListRuleJSON struct {
-	IPList      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessIPListRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessIPListRuleIPList struct {
-	// The ID of a previously created IP list.
-	ID   string                                                  `json:"id,required"`
-	JSON accessGroupGetResponseRequireAccessIPListRuleIPListJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessIPListRuleIPListJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessIPListRuleIPList]
-type accessGroupGetResponseRequireAccessIPListRuleIPListJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid client certificate.
-type AccessGroupGetResponseRequireAccessCertificateRule struct {
-	Certificate interface{}                                            `json:"certificate,required"`
-	JSON        accessGroupGetResponseRequireAccessCertificateRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessCertificateRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessCertificateRule]
-type accessGroupGetResponseRequireAccessCertificateRuleJSON struct {
-	Certificate apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessCertificateRule) implementsAccessGroupGetResponseRequire() {
-}
-
-// Matches an Access group.
-type AccessGroupGetResponseRequireAccessAccessGroupRule struct {
-	Group AccessGroupGetResponseRequireAccessAccessGroupRuleGroup `json:"group,required"`
-	JSON  accessGroupGetResponseRequireAccessAccessGroupRuleJSON  `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAccessGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessAccessGroupRule]
-type accessGroupGetResponseRequireAccessAccessGroupRuleJSON struct {
-	Group       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessAccessGroupRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessAccessGroupRuleGroup struct {
-	// The ID of a previously created Access group.
-	ID   string                                                      `json:"id,required"`
-	JSON accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessAccessGroupRuleGroup]
-type accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Azure group. Requires an Azure identity provider.
-type AccessGroupGetResponseRequireAccessAzureGroupRule struct {
-	AzureAd AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
-	JSON    accessGroupGetResponseRequireAccessAzureGroupRuleJSON    `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAzureGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessAzureGroupRule]
-type accessGroupGetResponseRequireAccessAzureGroupRuleJSON struct {
-	AzureAd     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessAzureGroupRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd struct {
-	// The ID of an Azure group.
-	ID string `json:"id,required"`
-	// The ID of your Azure identity provider.
-	ConnectionID string                                                       `json:"connection_id,required"`
-	JSON         accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd]
-type accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON struct {
-	ID           apijson.Field
-	ConnectionID apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a Github organization. Requires a Github identity provider.
-type AccessGroupGetResponseRequireAccessGitHubOrganizationRule struct {
-	GitHubOrganization AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
-	JSON               accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessGitHubOrganizationRule]
-type accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON struct {
-	GitHubOrganization apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessGitHubOrganizationRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
-	// The ID of your Github identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The name of the organization.
-	Name string                                                                          `json:"name,required"`
-	JSON accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization]
-type accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
-	ConnectionID apijson.Field
-	Name         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a group in Google Workspace. Requires a Google Workspace identity
-// provider.
-type AccessGroupGetResponseRequireAccessGsuiteGroupRule struct {
-	Gsuite AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
-	JSON   accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON   `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessGsuiteGroupRule]
-type accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON struct {
-	Gsuite      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessGsuiteGroupRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite struct {
-	// The ID of your Google Workspace identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Google Workspace group.
-	Email string                                                       `json:"email,required"`
-	JSON  accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite]
-type accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches an Okta group. Requires an Okta identity provider.
-type AccessGroupGetResponseRequireAccessOktaGroupRule struct {
-	Okta AccessGroupGetResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
-	JSON accessGroupGetResponseRequireAccessOktaGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessOktaGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessOktaGroupRule]
-type accessGroupGetResponseRequireAccessOktaGroupRuleJSON struct {
-	Okta        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessOktaGroupRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessOktaGroupRuleOkta struct {
-	// The ID of your Okta identity provider.
-	ConnectionID string `json:"connection_id,required"`
-	// The email of the Okta group.
-	Email string                                                   `json:"email,required"`
-	JSON  accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessOktaGroupRuleOkta]
-type accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON struct {
-	ConnectionID apijson.Field
-	Email        apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a SAML group. Requires a SAML identity provider.
-type AccessGroupGetResponseRequireAccessSamlGroupRule struct {
-	Saml AccessGroupGetResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
-	JSON accessGroupGetResponseRequireAccessSamlGroupRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessSamlGroupRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessSamlGroupRule]
-type accessGroupGetResponseRequireAccessSamlGroupRuleJSON struct {
-	Saml        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessSamlGroupRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessSamlGroupRuleSaml struct {
-	// The name of the SAML attribute.
-	AttributeName string `json:"attribute_name,required"`
-	// The SAML attribute value to look for.
-	AttributeValue string                                                   `json:"attribute_value,required"`
-	JSON           accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessSamlGroupRuleSaml]
-type accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON struct {
-	AttributeName  apijson.Field
-	AttributeValue apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific Access Service Token
-type AccessGroupGetResponseRequireAccessServiceTokenRule struct {
-	ServiceToken AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
-	JSON         accessGroupGetResponseRequireAccessServiceTokenRuleJSON         `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessServiceTokenRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessServiceTokenRule]
-type accessGroupGetResponseRequireAccessServiceTokenRuleJSON struct {
-	ServiceToken apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessServiceTokenRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken struct {
-	// The ID of a Service Token.
-	TokenID string                                                              `json:"token_id,required"`
-	JSON    accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken]
-type accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON struct {
-	TokenID     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches any valid Access Service Token
-type AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule struct {
-	// An empty object which matches on all service tokens.
-	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
-	JSON                 accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule]
-type accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON struct {
-	AnyValidServiceToken apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseRequire() {
-}
-
-// Create Allow or Block policies which evaluate the user based on custom criteria.
-type AccessGroupGetResponseRequireAccessExternalEvaluationRule struct {
-	ExternalEvaluation AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
-	JSON               accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON               `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON contains the JSON
-// metadata for the struct
-// [AccessGroupGetResponseRequireAccessExternalEvaluationRule]
-type accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON struct {
-	ExternalEvaluation apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessExternalEvaluationRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation struct {
-	// The API endpoint containing your business logic.
-	EvaluateURL string `json:"evaluate_url,required"`
-	// The API endpoint containing the key that Access uses to verify that the response
-	// came from your API.
-	KeysURL string                                                                          `json:"keys_url,required"`
-	JSON    accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation]
-type accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON struct {
-	EvaluateURL apijson.Field
-	KeysURL     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Matches a specific country
-type AccessGroupGetResponseRequireAccessCountryRule struct {
-	Geo  AccessGroupGetResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
-	JSON accessGroupGetResponseRequireAccessCountryRuleJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessCountryRuleJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessCountryRule]
-type accessGroupGetResponseRequireAccessCountryRuleJSON struct {
-	Geo         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessCountryRule) implementsAccessGroupGetResponseRequire() {}
-
-type AccessGroupGetResponseRequireAccessCountryRuleGeo struct {
-	// The country code that should be matched.
-	CountryCode string                                                `json:"country_code,required"`
-	JSON        accessGroupGetResponseRequireAccessCountryRuleGeoJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessCountryRuleGeoJSON contains the JSON metadata
-// for the struct [AccessGroupGetResponseRequireAccessCountryRuleGeo]
-type accessGroupGetResponseRequireAccessCountryRuleGeoJSON struct {
-	CountryCode apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforce different MFA options
-type AccessGroupGetResponseRequireAccessAuthenticationMethodRule struct {
-	AuthMethod AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
-	JSON       accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON       `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON contains the
-// JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessAuthenticationMethodRule]
-type accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessAuthenticationMethodRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod struct {
-	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
-	AuthMethod string                                                                    `json:"auth_method,required"`
-	JSON       accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON
-// contains the JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod]
-type accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON struct {
-	AuthMethod  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enforces a device posture rule has run successfully
-type AccessGroupGetResponseRequireAccessDevicePostureRule struct {
-	DevicePosture AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
-	JSON          accessGroupGetResponseRequireAccessDevicePostureRuleJSON          `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessDevicePostureRuleJSON contains the JSON
-// metadata for the struct [AccessGroupGetResponseRequireAccessDevicePostureRule]
-type accessGroupGetResponseRequireAccessDevicePostureRuleJSON struct {
-	DevicePosture apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessGroupGetResponseRequireAccessDevicePostureRule) implementsAccessGroupGetResponseRequire() {
-}
-
-type AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture struct {
-	// The ID of a device posture integration.
-	IntegrationUid string                                                                `json:"integration_uid,required"`
-	JSON           accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON `json:"-"`
-}
-
-// accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON contains
-// the JSON metadata for the struct
-// [AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture]
-type accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON struct {
-	IntegrationUid apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Fetches a single Access group.
+func (r *AccessGroupService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessGroupGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessGroupGetResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type AccessGroupUpdateResponse struct {
@@ -12481,74 +9461,3025 @@ func (r *AccessGroupAccessGroupsListAccessGroupsResponseRequireAccessDevicePostu
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessGroupGetResponseEnvelope struct {
-	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessGroupGetResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
+type AccessGroupGetResponse struct {
+	// UUID
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Rules evaluated with a NOT logical operator. To match a policy, a user cannot
+	// meet any of the Exclude rules.
+	Exclude []AccessGroupGetResponseExclude `json:"exclude"`
+	// Rules evaluated with an OR logical operator. A user needs to meet only one of
+	// the Include rules.
+	Include []AccessGroupGetResponseInclude `json:"include"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	IsDefault []AccessGroupGetResponseIsDefault `json:"is_default"`
+	// The name of the Access group.
+	Name string `json:"name"`
+	// Rules evaluated with an AND logical operator. To match a policy, a user must
+	// meet all of the Require rules.
+	Require   []AccessGroupGetResponseRequire `json:"require"`
+	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
+	JSON      accessGroupGetResponseJSON      `json:"-"`
 }
 
-// accessGroupGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessGroupGetResponseEnvelope]
-type accessGroupGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// accessGroupGetResponseJSON contains the JSON metadata for the struct
+// [AccessGroupGetResponse]
+type accessGroupGetResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Exclude     apijson.Field
+	Include     apijson.Field
+	IsDefault   apijson.Field
+	Name        apijson.Field
+	Require     apijson.Field
+	UpdatedAt   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessGroupGetResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    accessGroupGetResponseEnvelopeErrorsJSON `json:"-"`
+// Matches a specific email.
+//
+// Union satisfied by [AccessGroupGetResponseExcludeAccessEmailRule],
+// [AccessGroupGetResponseExcludeAccessEmailListRule],
+// [AccessGroupGetResponseExcludeAccessDomainRule],
+// [AccessGroupGetResponseExcludeAccessEveryoneRule],
+// [AccessGroupGetResponseExcludeAccessIPRule],
+// [AccessGroupGetResponseExcludeAccessIPListRule],
+// [AccessGroupGetResponseExcludeAccessCertificateRule],
+// [AccessGroupGetResponseExcludeAccessAccessGroupRule],
+// [AccessGroupGetResponseExcludeAccessAzureGroupRule],
+// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRule],
+// [AccessGroupGetResponseExcludeAccessGsuiteGroupRule],
+// [AccessGroupGetResponseExcludeAccessOktaGroupRule],
+// [AccessGroupGetResponseExcludeAccessSamlGroupRule],
+// [AccessGroupGetResponseExcludeAccessServiceTokenRule],
+// [AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule],
+// [AccessGroupGetResponseExcludeAccessExternalEvaluationRule],
+// [AccessGroupGetResponseExcludeAccessCountryRule],
+// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRule] or
+// [AccessGroupGetResponseExcludeAccessDevicePostureRule].
+type AccessGroupGetResponseExclude interface {
+	implementsAccessGroupGetResponseExclude()
 }
 
-// accessGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessGroupGetResponseEnvelopeErrors]
-type accessGroupGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseExclude)(nil)).Elem(), "")
+}
+
+// Matches a specific email.
+type AccessGroupGetResponseExcludeAccessEmailRule struct {
+	Email AccessGroupGetResponseExcludeAccessEmailRuleEmail `json:"email,required"`
+	JSON  accessGroupGetResponseExcludeAccessEmailRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessEmailRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseExcludeAccessEmailRule]
+type accessGroupGetResponseExcludeAccessEmailRuleJSON struct {
+	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessGroupGetResponseExcludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessGroupGetResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    accessGroupGetResponseEnvelopeMessagesJSON `json:"-"`
+func (r AccessGroupGetResponseExcludeAccessEmailRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessEmailRuleEmail struct {
+	// The email of the user.
+	Email string                                                `json:"email,required" format:"email"`
+	JSON  accessGroupGetResponseExcludeAccessEmailRuleEmailJSON `json:"-"`
 }
 
-// accessGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessGroupGetResponseEnvelopeMessages]
-type accessGroupGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+// accessGroupGetResponseExcludeAccessEmailRuleEmailJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessEmailRuleEmail]
+type accessGroupGetResponseExcludeAccessEmailRuleEmailJSON struct {
+	Email       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessGroupGetResponseExcludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Whether the API call was successful
-type AccessGroupGetResponseEnvelopeSuccess bool
+// Matches an email address from a list.
+type AccessGroupGetResponseExcludeAccessEmailListRule struct {
+	EmailList AccessGroupGetResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      accessGroupGetResponseExcludeAccessEmailListRuleJSON      `json:"-"`
+}
 
-const (
-	AccessGroupGetResponseEnvelopeSuccessTrue AccessGroupGetResponseEnvelopeSuccess = true
-)
+// accessGroupGetResponseExcludeAccessEmailListRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessEmailListRule]
+type accessGroupGetResponseExcludeAccessEmailListRuleJSON struct {
+	EmailList   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessEmailListRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessEmailListRuleEmailList struct {
+	// The ID of a previously created email list.
+	ID   string                                                        `json:"id,required"`
+	JSON accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessEmailListRuleEmailList]
+type accessGroupGetResponseExcludeAccessEmailListRuleEmailListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Match an entire email domain.
+type AccessGroupGetResponseExcludeAccessDomainRule struct {
+	EmailDomain AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        accessGroupGetResponseExcludeAccessDomainRuleJSON        `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessDomainRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseExcludeAccessDomainRule]
+type accessGroupGetResponseExcludeAccessDomainRuleJSON struct {
+	EmailDomain apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessDomainRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain struct {
+	// The email domain to match.
+	Domain string                                                       `json:"domain,required"`
+	JSON   accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain]
+type accessGroupGetResponseExcludeAccessDomainRuleEmailDomainJSON struct {
+	Domain      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches everyone.
+type AccessGroupGetResponseExcludeAccessEveryoneRule struct {
+	// An empty object which matches on all users.
+	Everyone interface{}                                         `json:"everyone,required"`
+	JSON     accessGroupGetResponseExcludeAccessEveryoneRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessEveryoneRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessEveryoneRule]
+type accessGroupGetResponseExcludeAccessEveryoneRuleJSON struct {
+	Everyone    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessEveryoneRule) implementsAccessGroupGetResponseExclude() {}
+
+// Matches an IP address block.
+type AccessGroupGetResponseExcludeAccessIPRule struct {
+	IP   AccessGroupGetResponseExcludeAccessIPRuleIP   `json:"ip,required"`
+	JSON accessGroupGetResponseExcludeAccessIPRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessIPRuleJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseExcludeAccessIPRule]
+type accessGroupGetResponseExcludeAccessIPRuleJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessIPRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessIPRuleIP struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP   string                                          `json:"ip,required"`
+	JSON accessGroupGetResponseExcludeAccessIPRuleIPJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessIPRuleIPJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseExcludeAccessIPRuleIP]
+type accessGroupGetResponseExcludeAccessIPRuleIPJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an IP address from a list.
+type AccessGroupGetResponseExcludeAccessIPListRule struct {
+	IPList AccessGroupGetResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   accessGroupGetResponseExcludeAccessIPListRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessIPListRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseExcludeAccessIPListRule]
+type accessGroupGetResponseExcludeAccessIPListRuleJSON struct {
+	IPList      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessIPListRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessIPListRuleIPList struct {
+	// The ID of a previously created IP list.
+	ID   string                                                  `json:"id,required"`
+	JSON accessGroupGetResponseExcludeAccessIPListRuleIPListJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessIPListRuleIPListJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessIPListRuleIPList]
+type accessGroupGetResponseExcludeAccessIPListRuleIPListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid client certificate.
+type AccessGroupGetResponseExcludeAccessCertificateRule struct {
+	Certificate interface{}                                            `json:"certificate,required"`
+	JSON        accessGroupGetResponseExcludeAccessCertificateRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessCertificateRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessCertificateRule]
+type accessGroupGetResponseExcludeAccessCertificateRuleJSON struct {
+	Certificate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessCertificateRule) implementsAccessGroupGetResponseExclude() {
+}
+
+// Matches an Access group.
+type AccessGroupGetResponseExcludeAccessAccessGroupRule struct {
+	Group AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  accessGroupGetResponseExcludeAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAccessGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessAccessGroupRule]
+type accessGroupGetResponseExcludeAccessAccessGroupRuleJSON struct {
+	Group       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessAccessGroupRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                      `json:"id,required"`
+	JSON accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup]
+type accessGroupGetResponseExcludeAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessGroupGetResponseExcludeAccessAzureGroupRule struct {
+	AzureAd AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    accessGroupGetResponseExcludeAccessAzureGroupRuleJSON    `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAzureGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessAzureGroupRule]
+type accessGroupGetResponseExcludeAccessAzureGroupRuleJSON struct {
+	AzureAd     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessAzureGroupRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd struct {
+	// The ID of an Azure group.
+	ID string `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID string                                                       `json:"connection_id,required"`
+	JSON         accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd]
+type accessGroupGetResponseExcludeAccessAzureGroupRuleAzureAdJSON struct {
+	ID           apijson.Field
+	ConnectionID apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessGroupGetResponseExcludeAccessGitHubOrganizationRule struct {
+	GitHubOrganization AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRule]
+type accessGroupGetResponseExcludeAccessGitHubOrganizationRuleJSON struct {
+	GitHubOrganization apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessGitHubOrganizationRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization struct {
+	// The ID of your Github identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The name of the organization.
+	Name string                                                                          `json:"name,required"`
+	JSON accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization]
+type accessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+	ConnectionID apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessGroupGetResponseExcludeAccessGsuiteGroupRule struct {
+	Gsuite AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessGsuiteGroupRule]
+type accessGroupGetResponseExcludeAccessGsuiteGroupRuleJSON struct {
+	Gsuite      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessGsuiteGroupRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email string                                                       `json:"email,required"`
+	JSON  accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite]
+type accessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessGroupGetResponseExcludeAccessOktaGroupRule struct {
+	Okta AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessGroupGetResponseExcludeAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessOktaGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessOktaGroupRule]
+type accessGroupGetResponseExcludeAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessOktaGroupRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                                   `json:"email,required"`
+	JSON  accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta]
+type accessGroupGetResponseExcludeAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessGroupGetResponseExcludeAccessSamlGroupRule struct {
+	Saml AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON accessGroupGetResponseExcludeAccessSamlGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessSamlGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessSamlGroupRule]
+type accessGroupGetResponseExcludeAccessSamlGroupRuleJSON struct {
+	Saml        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessSamlGroupRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml struct {
+	// The name of the SAML attribute.
+	AttributeName string `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue string                                                   `json:"attribute_value,required"`
+	JSON           accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml]
+type accessGroupGetResponseExcludeAccessSamlGroupRuleSamlJSON struct {
+	AttributeName  apijson.Field
+	AttributeValue apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific Access Service Token
+type AccessGroupGetResponseExcludeAccessServiceTokenRule struct {
+	ServiceToken AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         accessGroupGetResponseExcludeAccessServiceTokenRuleJSON         `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessServiceTokenRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessServiceTokenRule]
+type accessGroupGetResponseExcludeAccessServiceTokenRuleJSON struct {
+	ServiceToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessServiceTokenRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                              `json:"token_id,required"`
+	JSON    accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken]
+type accessGroupGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON struct {
+	TokenID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid Access Service Token
+type AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
+	JSON                 accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule]
+type accessGroupGetResponseExcludeAccessAnyValidServiceTokenRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseExclude() {
+}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessGroupGetResponseExcludeAccessExternalEvaluationRule struct {
+	ExternalEvaluation AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseExcludeAccessExternalEvaluationRule]
+type accessGroupGetResponseExcludeAccessExternalEvaluationRuleJSON struct {
+	ExternalEvaluation apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessExternalEvaluationRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL string `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL string                                                                          `json:"keys_url,required"`
+	JSON    accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation]
+type accessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+	EvaluateURL apijson.Field
+	KeysURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific country
+type AccessGroupGetResponseExcludeAccessCountryRule struct {
+	Geo  AccessGroupGetResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
+	JSON accessGroupGetResponseExcludeAccessCountryRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessCountryRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessCountryRule]
+type accessGroupGetResponseExcludeAccessCountryRuleJSON struct {
+	Geo         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessCountryRule) implementsAccessGroupGetResponseExclude() {}
+
+type AccessGroupGetResponseExcludeAccessCountryRuleGeo struct {
+	// The country code that should be matched.
+	CountryCode string                                                `json:"country_code,required"`
+	JSON        accessGroupGetResponseExcludeAccessCountryRuleGeoJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessCountryRuleGeoJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseExcludeAccessCountryRuleGeo]
+type accessGroupGetResponseExcludeAccessCountryRuleGeoJSON struct {
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforce different MFA options
+type AccessGroupGetResponseExcludeAccessAuthenticationMethodRule struct {
+	AuthMethod AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON       `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRule]
+type accessGroupGetResponseExcludeAccessAuthenticationMethodRuleJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessAuthenticationMethodRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod string                                                                    `json:"auth_method,required"`
+	JSON       accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod]
+type accessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforces a device posture rule has run successfully
+type AccessGroupGetResponseExcludeAccessDevicePostureRule struct {
+	DevicePosture AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessGroupGetResponseExcludeAccessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessDevicePostureRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseExcludeAccessDevicePostureRule]
+type accessGroupGetResponseExcludeAccessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseExcludeAccessDevicePostureRule) implementsAccessGroupGetResponseExclude() {
+}
+
+type AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                                `json:"integration_uid,required"`
+	JSON           accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON contains
+// the JSON metadata for the struct
+// [AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture]
+type accessGroupGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [AccessGroupGetResponseIncludeAccessEmailRule],
+// [AccessGroupGetResponseIncludeAccessEmailListRule],
+// [AccessGroupGetResponseIncludeAccessDomainRule],
+// [AccessGroupGetResponseIncludeAccessEveryoneRule],
+// [AccessGroupGetResponseIncludeAccessIPRule],
+// [AccessGroupGetResponseIncludeAccessIPListRule],
+// [AccessGroupGetResponseIncludeAccessCertificateRule],
+// [AccessGroupGetResponseIncludeAccessAccessGroupRule],
+// [AccessGroupGetResponseIncludeAccessAzureGroupRule],
+// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRule],
+// [AccessGroupGetResponseIncludeAccessGsuiteGroupRule],
+// [AccessGroupGetResponseIncludeAccessOktaGroupRule],
+// [AccessGroupGetResponseIncludeAccessSamlGroupRule],
+// [AccessGroupGetResponseIncludeAccessServiceTokenRule],
+// [AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule],
+// [AccessGroupGetResponseIncludeAccessExternalEvaluationRule],
+// [AccessGroupGetResponseIncludeAccessCountryRule],
+// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRule] or
+// [AccessGroupGetResponseIncludeAccessDevicePostureRule].
+type AccessGroupGetResponseInclude interface {
+	implementsAccessGroupGetResponseInclude()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseInclude)(nil)).Elem(), "")
+}
+
+// Matches a specific email.
+type AccessGroupGetResponseIncludeAccessEmailRule struct {
+	Email AccessGroupGetResponseIncludeAccessEmailRuleEmail `json:"email,required"`
+	JSON  accessGroupGetResponseIncludeAccessEmailRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessEmailRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIncludeAccessEmailRule]
+type accessGroupGetResponseIncludeAccessEmailRuleJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessEmailRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessEmailRuleEmail struct {
+	// The email of the user.
+	Email string                                                `json:"email,required" format:"email"`
+	JSON  accessGroupGetResponseIncludeAccessEmailRuleEmailJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessEmailRuleEmailJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessEmailRuleEmail]
+type accessGroupGetResponseIncludeAccessEmailRuleEmailJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an email address from a list.
+type AccessGroupGetResponseIncludeAccessEmailListRule struct {
+	EmailList AccessGroupGetResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      accessGroupGetResponseIncludeAccessEmailListRuleJSON      `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessEmailListRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessEmailListRule]
+type accessGroupGetResponseIncludeAccessEmailListRuleJSON struct {
+	EmailList   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessEmailListRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessEmailListRuleEmailList struct {
+	// The ID of a previously created email list.
+	ID   string                                                        `json:"id,required"`
+	JSON accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessEmailListRuleEmailList]
+type accessGroupGetResponseIncludeAccessEmailListRuleEmailListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Match an entire email domain.
+type AccessGroupGetResponseIncludeAccessDomainRule struct {
+	EmailDomain AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        accessGroupGetResponseIncludeAccessDomainRuleJSON        `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessDomainRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIncludeAccessDomainRule]
+type accessGroupGetResponseIncludeAccessDomainRuleJSON struct {
+	EmailDomain apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessDomainRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain struct {
+	// The email domain to match.
+	Domain string                                                       `json:"domain,required"`
+	JSON   accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain]
+type accessGroupGetResponseIncludeAccessDomainRuleEmailDomainJSON struct {
+	Domain      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches everyone.
+type AccessGroupGetResponseIncludeAccessEveryoneRule struct {
+	// An empty object which matches on all users.
+	Everyone interface{}                                         `json:"everyone,required"`
+	JSON     accessGroupGetResponseIncludeAccessEveryoneRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessEveryoneRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessEveryoneRule]
+type accessGroupGetResponseIncludeAccessEveryoneRuleJSON struct {
+	Everyone    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessEveryoneRule) implementsAccessGroupGetResponseInclude() {}
+
+// Matches an IP address block.
+type AccessGroupGetResponseIncludeAccessIPRule struct {
+	IP   AccessGroupGetResponseIncludeAccessIPRuleIP   `json:"ip,required"`
+	JSON accessGroupGetResponseIncludeAccessIPRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessIPRuleJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseIncludeAccessIPRule]
+type accessGroupGetResponseIncludeAccessIPRuleJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessIPRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessIPRuleIP struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP   string                                          `json:"ip,required"`
+	JSON accessGroupGetResponseIncludeAccessIPRuleIPJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessIPRuleIPJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIncludeAccessIPRuleIP]
+type accessGroupGetResponseIncludeAccessIPRuleIPJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an IP address from a list.
+type AccessGroupGetResponseIncludeAccessIPListRule struct {
+	IPList AccessGroupGetResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   accessGroupGetResponseIncludeAccessIPListRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessIPListRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIncludeAccessIPListRule]
+type accessGroupGetResponseIncludeAccessIPListRuleJSON struct {
+	IPList      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessIPListRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessIPListRuleIPList struct {
+	// The ID of a previously created IP list.
+	ID   string                                                  `json:"id,required"`
+	JSON accessGroupGetResponseIncludeAccessIPListRuleIPListJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessIPListRuleIPListJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessIPListRuleIPList]
+type accessGroupGetResponseIncludeAccessIPListRuleIPListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid client certificate.
+type AccessGroupGetResponseIncludeAccessCertificateRule struct {
+	Certificate interface{}                                            `json:"certificate,required"`
+	JSON        accessGroupGetResponseIncludeAccessCertificateRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessCertificateRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessCertificateRule]
+type accessGroupGetResponseIncludeAccessCertificateRuleJSON struct {
+	Certificate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessCertificateRule) implementsAccessGroupGetResponseInclude() {
+}
+
+// Matches an Access group.
+type AccessGroupGetResponseIncludeAccessAccessGroupRule struct {
+	Group AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  accessGroupGetResponseIncludeAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAccessGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessAccessGroupRule]
+type accessGroupGetResponseIncludeAccessAccessGroupRuleJSON struct {
+	Group       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessAccessGroupRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                      `json:"id,required"`
+	JSON accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup]
+type accessGroupGetResponseIncludeAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessGroupGetResponseIncludeAccessAzureGroupRule struct {
+	AzureAd AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    accessGroupGetResponseIncludeAccessAzureGroupRuleJSON    `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAzureGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessAzureGroupRule]
+type accessGroupGetResponseIncludeAccessAzureGroupRuleJSON struct {
+	AzureAd     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessAzureGroupRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd struct {
+	// The ID of an Azure group.
+	ID string `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID string                                                       `json:"connection_id,required"`
+	JSON         accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd]
+type accessGroupGetResponseIncludeAccessAzureGroupRuleAzureAdJSON struct {
+	ID           apijson.Field
+	ConnectionID apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessGroupGetResponseIncludeAccessGitHubOrganizationRule struct {
+	GitHubOrganization AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRule]
+type accessGroupGetResponseIncludeAccessGitHubOrganizationRuleJSON struct {
+	GitHubOrganization apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessGitHubOrganizationRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization struct {
+	// The ID of your Github identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The name of the organization.
+	Name string                                                                          `json:"name,required"`
+	JSON accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization]
+type accessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+	ConnectionID apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessGroupGetResponseIncludeAccessGsuiteGroupRule struct {
+	Gsuite AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessGsuiteGroupRule]
+type accessGroupGetResponseIncludeAccessGsuiteGroupRuleJSON struct {
+	Gsuite      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessGsuiteGroupRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email string                                                       `json:"email,required"`
+	JSON  accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite]
+type accessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessGroupGetResponseIncludeAccessOktaGroupRule struct {
+	Okta AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessGroupGetResponseIncludeAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessOktaGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessOktaGroupRule]
+type accessGroupGetResponseIncludeAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessOktaGroupRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                                   `json:"email,required"`
+	JSON  accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta]
+type accessGroupGetResponseIncludeAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessGroupGetResponseIncludeAccessSamlGroupRule struct {
+	Saml AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON accessGroupGetResponseIncludeAccessSamlGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessSamlGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessSamlGroupRule]
+type accessGroupGetResponseIncludeAccessSamlGroupRuleJSON struct {
+	Saml        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessSamlGroupRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml struct {
+	// The name of the SAML attribute.
+	AttributeName string `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue string                                                   `json:"attribute_value,required"`
+	JSON           accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml]
+type accessGroupGetResponseIncludeAccessSamlGroupRuleSamlJSON struct {
+	AttributeName  apijson.Field
+	AttributeValue apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific Access Service Token
+type AccessGroupGetResponseIncludeAccessServiceTokenRule struct {
+	ServiceToken AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         accessGroupGetResponseIncludeAccessServiceTokenRuleJSON         `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessServiceTokenRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessServiceTokenRule]
+type accessGroupGetResponseIncludeAccessServiceTokenRuleJSON struct {
+	ServiceToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessServiceTokenRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                              `json:"token_id,required"`
+	JSON    accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken]
+type accessGroupGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON struct {
+	TokenID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid Access Service Token
+type AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
+	JSON                 accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule]
+type accessGroupGetResponseIncludeAccessAnyValidServiceTokenRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseInclude() {
+}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessGroupGetResponseIncludeAccessExternalEvaluationRule struct {
+	ExternalEvaluation AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIncludeAccessExternalEvaluationRule]
+type accessGroupGetResponseIncludeAccessExternalEvaluationRuleJSON struct {
+	ExternalEvaluation apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessExternalEvaluationRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL string `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL string                                                                          `json:"keys_url,required"`
+	JSON    accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation]
+type accessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+	EvaluateURL apijson.Field
+	KeysURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific country
+type AccessGroupGetResponseIncludeAccessCountryRule struct {
+	Geo  AccessGroupGetResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
+	JSON accessGroupGetResponseIncludeAccessCountryRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessCountryRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessCountryRule]
+type accessGroupGetResponseIncludeAccessCountryRuleJSON struct {
+	Geo         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessCountryRule) implementsAccessGroupGetResponseInclude() {}
+
+type AccessGroupGetResponseIncludeAccessCountryRuleGeo struct {
+	// The country code that should be matched.
+	CountryCode string                                                `json:"country_code,required"`
+	JSON        accessGroupGetResponseIncludeAccessCountryRuleGeoJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessCountryRuleGeoJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIncludeAccessCountryRuleGeo]
+type accessGroupGetResponseIncludeAccessCountryRuleGeoJSON struct {
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforce different MFA options
+type AccessGroupGetResponseIncludeAccessAuthenticationMethodRule struct {
+	AuthMethod AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON       `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRule]
+type accessGroupGetResponseIncludeAccessAuthenticationMethodRuleJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessAuthenticationMethodRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod string                                                                    `json:"auth_method,required"`
+	JSON       accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod]
+type accessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforces a device posture rule has run successfully
+type AccessGroupGetResponseIncludeAccessDevicePostureRule struct {
+	DevicePosture AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessGroupGetResponseIncludeAccessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessDevicePostureRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIncludeAccessDevicePostureRule]
+type accessGroupGetResponseIncludeAccessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIncludeAccessDevicePostureRule) implementsAccessGroupGetResponseInclude() {
+}
+
+type AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                                `json:"integration_uid,required"`
+	JSON           accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON contains
+// the JSON metadata for the struct
+// [AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture]
+type accessGroupGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [AccessGroupGetResponseIsDefaultAccessEmailRule],
+// [AccessGroupGetResponseIsDefaultAccessEmailListRule],
+// [AccessGroupGetResponseIsDefaultAccessDomainRule],
+// [AccessGroupGetResponseIsDefaultAccessEveryoneRule],
+// [AccessGroupGetResponseIsDefaultAccessIPRule],
+// [AccessGroupGetResponseIsDefaultAccessIPListRule],
+// [AccessGroupGetResponseIsDefaultAccessCertificateRule],
+// [AccessGroupGetResponseIsDefaultAccessAccessGroupRule],
+// [AccessGroupGetResponseIsDefaultAccessAzureGroupRule],
+// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule],
+// [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule],
+// [AccessGroupGetResponseIsDefaultAccessOktaGroupRule],
+// [AccessGroupGetResponseIsDefaultAccessSamlGroupRule],
+// [AccessGroupGetResponseIsDefaultAccessServiceTokenRule],
+// [AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule],
+// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule],
+// [AccessGroupGetResponseIsDefaultAccessCountryRule],
+// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule] or
+// [AccessGroupGetResponseIsDefaultAccessDevicePostureRule].
+type AccessGroupGetResponseIsDefault interface {
+	implementsAccessGroupGetResponseIsDefault()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseIsDefault)(nil)).Elem(), "")
+}
+
+// Matches a specific email.
+type AccessGroupGetResponseIsDefaultAccessEmailRule struct {
+	Email AccessGroupGetResponseIsDefaultAccessEmailRuleEmail `json:"email,required"`
+	JSON  accessGroupGetResponseIsDefaultAccessEmailRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessEmailRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIsDefaultAccessEmailRule]
+type accessGroupGetResponseIsDefaultAccessEmailRuleJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessEmailRule) implementsAccessGroupGetResponseIsDefault() {}
+
+type AccessGroupGetResponseIsDefaultAccessEmailRuleEmail struct {
+	// The email of the user.
+	Email string                                                  `json:"email,required" format:"email"`
+	JSON  accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessEmailRuleEmail]
+type accessGroupGetResponseIsDefaultAccessEmailRuleEmailJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an email address from a list.
+type AccessGroupGetResponseIsDefaultAccessEmailListRule struct {
+	EmailList AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      accessGroupGetResponseIsDefaultAccessEmailListRuleJSON      `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessEmailListRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessEmailListRule]
+type accessGroupGetResponseIsDefaultAccessEmailListRuleJSON struct {
+	EmailList   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessEmailListRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList struct {
+	// The ID of a previously created email list.
+	ID   string                                                          `json:"id,required"`
+	JSON accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList]
+type accessGroupGetResponseIsDefaultAccessEmailListRuleEmailListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Match an entire email domain.
+type AccessGroupGetResponseIsDefaultAccessDomainRule struct {
+	EmailDomain AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        accessGroupGetResponseIsDefaultAccessDomainRuleJSON        `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessDomainRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIsDefaultAccessDomainRule]
+type accessGroupGetResponseIsDefaultAccessDomainRuleJSON struct {
+	EmailDomain apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessDomainRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain struct {
+	// The email domain to match.
+	Domain string                                                         `json:"domain,required"`
+	JSON   accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain]
+type accessGroupGetResponseIsDefaultAccessDomainRuleEmailDomainJSON struct {
+	Domain      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches everyone.
+type AccessGroupGetResponseIsDefaultAccessEveryoneRule struct {
+	// An empty object which matches on all users.
+	Everyone interface{}                                           `json:"everyone,required"`
+	JSON     accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIsDefaultAccessEveryoneRule]
+type accessGroupGetResponseIsDefaultAccessEveryoneRuleJSON struct {
+	Everyone    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessEveryoneRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+// Matches an IP address block.
+type AccessGroupGetResponseIsDefaultAccessIPRule struct {
+	IP   AccessGroupGetResponseIsDefaultAccessIPRuleIP   `json:"ip,required"`
+	JSON accessGroupGetResponseIsDefaultAccessIPRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessIPRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIsDefaultAccessIPRule]
+type accessGroupGetResponseIsDefaultAccessIPRuleJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessIPRule) implementsAccessGroupGetResponseIsDefault() {}
+
+type AccessGroupGetResponseIsDefaultAccessIPRuleIP struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP   string                                            `json:"ip,required"`
+	JSON accessGroupGetResponseIsDefaultAccessIPRuleIPJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessIPRuleIPJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseIsDefaultAccessIPRuleIP]
+type accessGroupGetResponseIsDefaultAccessIPRuleIPJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an IP address from a list.
+type AccessGroupGetResponseIsDefaultAccessIPListRule struct {
+	IPList AccessGroupGetResponseIsDefaultAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   accessGroupGetResponseIsDefaultAccessIPListRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessIPListRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIsDefaultAccessIPListRule]
+type accessGroupGetResponseIsDefaultAccessIPListRuleJSON struct {
+	IPList      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessIPListRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessIPListRuleIPList struct {
+	// The ID of a previously created IP list.
+	ID   string                                                    `json:"id,required"`
+	JSON accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessIPListRuleIPList]
+type accessGroupGetResponseIsDefaultAccessIPListRuleIPListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid client certificate.
+type AccessGroupGetResponseIsDefaultAccessCertificateRule struct {
+	Certificate interface{}                                              `json:"certificate,required"`
+	JSON        accessGroupGetResponseIsDefaultAccessCertificateRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessCertificateRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessCertificateRule]
+type accessGroupGetResponseIsDefaultAccessCertificateRuleJSON struct {
+	Certificate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessCertificateRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+// Matches an Access group.
+type AccessGroupGetResponseIsDefaultAccessAccessGroupRule struct {
+	Group AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessAccessGroupRule]
+type accessGroupGetResponseIsDefaultAccessAccessGroupRuleJSON struct {
+	Group       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessAccessGroupRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                        `json:"id,required"`
+	JSON accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup]
+type accessGroupGetResponseIsDefaultAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessGroupGetResponseIsDefaultAccessAzureGroupRule struct {
+	AzureAd AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON    `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessAzureGroupRule]
+type accessGroupGetResponseIsDefaultAccessAzureGroupRuleJSON struct {
+	AzureAd     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessAzureGroupRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd struct {
+	// The ID of an Azure group.
+	ID string `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID string                                                         `json:"connection_id,required"`
+	JSON         accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd]
+type accessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAdJSON struct {
+	ID           apijson.Field
+	ConnectionID apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule struct {
+	GitHubOrganization AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule]
+type accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleJSON struct {
+	GitHubOrganization apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization struct {
+	// The ID of your Github identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The name of the organization.
+	Name string                                                                            `json:"name,required"`
+	JSON accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization]
+type accessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+	ConnectionID apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule struct {
+	Gsuite AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule]
+type accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleJSON struct {
+	Gsuite      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessGsuiteGroupRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email string                                                         `json:"email,required"`
+	JSON  accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite]
+type accessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuiteJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessGroupGetResponseIsDefaultAccessOktaGroupRule struct {
+	Okta AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessOktaGroupRule]
+type accessGroupGetResponseIsDefaultAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessOktaGroupRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                                     `json:"email,required"`
+	JSON  accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta]
+type accessGroupGetResponseIsDefaultAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessGroupGetResponseIsDefaultAccessSamlGroupRule struct {
+	Saml AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessSamlGroupRule]
+type accessGroupGetResponseIsDefaultAccessSamlGroupRuleJSON struct {
+	Saml        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessSamlGroupRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml struct {
+	// The name of the SAML attribute.
+	AttributeName string `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue string                                                     `json:"attribute_value,required"`
+	JSON           accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml]
+type accessGroupGetResponseIsDefaultAccessSamlGroupRuleSamlJSON struct {
+	AttributeName  apijson.Field
+	AttributeValue apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific Access Service Token
+type AccessGroupGetResponseIsDefaultAccessServiceTokenRule struct {
+	ServiceToken AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON         `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessServiceTokenRule]
+type accessGroupGetResponseIsDefaultAccessServiceTokenRuleJSON struct {
+	ServiceToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessServiceTokenRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                                `json:"token_id,required"`
+	JSON    accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON contains
+// the JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken]
+type accessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceTokenJSON struct {
+	TokenID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid Access Service Token
+type AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken interface{}                                                       `json:"any_valid_service_token,required"`
+	JSON                 accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule]
+type accessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule struct {
+	ExternalEvaluation AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule]
+type accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleJSON struct {
+	ExternalEvaluation apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessExternalEvaluationRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL string `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL string                                                                            `json:"keys_url,required"`
+	JSON    accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation]
+type accessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+	EvaluateURL apijson.Field
+	KeysURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific country
+type AccessGroupGetResponseIsDefaultAccessCountryRule struct {
+	Geo  AccessGroupGetResponseIsDefaultAccessCountryRuleGeo  `json:"geo,required"`
+	JSON accessGroupGetResponseIsDefaultAccessCountryRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessCountryRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseIsDefaultAccessCountryRule]
+type accessGroupGetResponseIsDefaultAccessCountryRuleJSON struct {
+	Geo         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessCountryRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessCountryRuleGeo struct {
+	// The country code that should be matched.
+	CountryCode string                                                  `json:"country_code,required"`
+	JSON        accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessCountryRuleGeo]
+type accessGroupGetResponseIsDefaultAccessCountryRuleGeoJSON struct {
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforce different MFA options
+type AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule struct {
+	AuthMethod AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON       `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule]
+type accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod string                                                                      `json:"auth_method,required"`
+	JSON       accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod]
+type accessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethodJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforces a device posture rule has run successfully
+type AccessGroupGetResponseIsDefaultAccessDevicePostureRule struct {
+	DevicePosture AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseIsDefaultAccessDevicePostureRule]
+type accessGroupGetResponseIsDefaultAccessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseIsDefaultAccessDevicePostureRule) implementsAccessGroupGetResponseIsDefault() {
+}
+
+type AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                                  `json:"integration_uid,required"`
+	JSON           accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON contains
+// the JSON metadata for the struct
+// [AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture]
+type accessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseIsDefaultAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific email.
+//
+// Union satisfied by [AccessGroupGetResponseRequireAccessEmailRule],
+// [AccessGroupGetResponseRequireAccessEmailListRule],
+// [AccessGroupGetResponseRequireAccessDomainRule],
+// [AccessGroupGetResponseRequireAccessEveryoneRule],
+// [AccessGroupGetResponseRequireAccessIPRule],
+// [AccessGroupGetResponseRequireAccessIPListRule],
+// [AccessGroupGetResponseRequireAccessCertificateRule],
+// [AccessGroupGetResponseRequireAccessAccessGroupRule],
+// [AccessGroupGetResponseRequireAccessAzureGroupRule],
+// [AccessGroupGetResponseRequireAccessGitHubOrganizationRule],
+// [AccessGroupGetResponseRequireAccessGsuiteGroupRule],
+// [AccessGroupGetResponseRequireAccessOktaGroupRule],
+// [AccessGroupGetResponseRequireAccessSamlGroupRule],
+// [AccessGroupGetResponseRequireAccessServiceTokenRule],
+// [AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule],
+// [AccessGroupGetResponseRequireAccessExternalEvaluationRule],
+// [AccessGroupGetResponseRequireAccessCountryRule],
+// [AccessGroupGetResponseRequireAccessAuthenticationMethodRule] or
+// [AccessGroupGetResponseRequireAccessDevicePostureRule].
+type AccessGroupGetResponseRequire interface {
+	implementsAccessGroupGetResponseRequire()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessGroupGetResponseRequire)(nil)).Elem(), "")
+}
+
+// Matches a specific email.
+type AccessGroupGetResponseRequireAccessEmailRule struct {
+	Email AccessGroupGetResponseRequireAccessEmailRuleEmail `json:"email,required"`
+	JSON  accessGroupGetResponseRequireAccessEmailRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessEmailRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseRequireAccessEmailRule]
+type accessGroupGetResponseRequireAccessEmailRuleJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessEmailRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessEmailRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessEmailRuleEmail struct {
+	// The email of the user.
+	Email string                                                `json:"email,required" format:"email"`
+	JSON  accessGroupGetResponseRequireAccessEmailRuleEmailJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessEmailRuleEmailJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessEmailRuleEmail]
+type accessGroupGetResponseRequireAccessEmailRuleEmailJSON struct {
+	Email       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessEmailRuleEmail) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an email address from a list.
+type AccessGroupGetResponseRequireAccessEmailListRule struct {
+	EmailList AccessGroupGetResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
+	JSON      accessGroupGetResponseRequireAccessEmailListRuleJSON      `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessEmailListRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessEmailListRule]
+type accessGroupGetResponseRequireAccessEmailListRuleJSON struct {
+	EmailList   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessEmailListRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessEmailListRuleEmailList struct {
+	// The ID of a previously created email list.
+	ID   string                                                        `json:"id,required"`
+	JSON accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessEmailListRuleEmailList]
+type accessGroupGetResponseRequireAccessEmailListRuleEmailListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessEmailListRuleEmailList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Match an entire email domain.
+type AccessGroupGetResponseRequireAccessDomainRule struct {
+	EmailDomain AccessGroupGetResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
+	JSON        accessGroupGetResponseRequireAccessDomainRuleJSON        `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessDomainRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseRequireAccessDomainRule]
+type accessGroupGetResponseRequireAccessDomainRuleJSON struct {
+	EmailDomain apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessDomainRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessDomainRuleEmailDomain struct {
+	// The email domain to match.
+	Domain string                                                       `json:"domain,required"`
+	JSON   accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessDomainRuleEmailDomain]
+type accessGroupGetResponseRequireAccessDomainRuleEmailDomainJSON struct {
+	Domain      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessDomainRuleEmailDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches everyone.
+type AccessGroupGetResponseRequireAccessEveryoneRule struct {
+	// An empty object which matches on all users.
+	Everyone interface{}                                         `json:"everyone,required"`
+	JSON     accessGroupGetResponseRequireAccessEveryoneRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessEveryoneRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessEveryoneRule]
+type accessGroupGetResponseRequireAccessEveryoneRuleJSON struct {
+	Everyone    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessEveryoneRule) implementsAccessGroupGetResponseRequire() {}
+
+// Matches an IP address block.
+type AccessGroupGetResponseRequireAccessIPRule struct {
+	IP   AccessGroupGetResponseRequireAccessIPRuleIP   `json:"ip,required"`
+	JSON accessGroupGetResponseRequireAccessIPRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessIPRuleJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseRequireAccessIPRule]
+type accessGroupGetResponseRequireAccessIPRuleJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessIPRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessIPRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessIPRuleIP struct {
+	// An IPv4 or IPv6 CIDR block.
+	IP   string                                          `json:"ip,required"`
+	JSON accessGroupGetResponseRequireAccessIPRuleIPJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessIPRuleIPJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseRequireAccessIPRuleIP]
+type accessGroupGetResponseRequireAccessIPRuleIPJSON struct {
+	IP          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessIPRuleIP) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an IP address from a list.
+type AccessGroupGetResponseRequireAccessIPListRule struct {
+	IPList AccessGroupGetResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
+	JSON   accessGroupGetResponseRequireAccessIPListRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessIPListRuleJSON contains the JSON metadata for
+// the struct [AccessGroupGetResponseRequireAccessIPListRule]
+type accessGroupGetResponseRequireAccessIPListRuleJSON struct {
+	IPList      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessIPListRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessIPListRuleIPList struct {
+	// The ID of a previously created IP list.
+	ID   string                                                  `json:"id,required"`
+	JSON accessGroupGetResponseRequireAccessIPListRuleIPListJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessIPListRuleIPListJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessIPListRuleIPList]
+type accessGroupGetResponseRequireAccessIPListRuleIPListJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessIPListRuleIPList) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid client certificate.
+type AccessGroupGetResponseRequireAccessCertificateRule struct {
+	Certificate interface{}                                            `json:"certificate,required"`
+	JSON        accessGroupGetResponseRequireAccessCertificateRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessCertificateRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessCertificateRule]
+type accessGroupGetResponseRequireAccessCertificateRuleJSON struct {
+	Certificate apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessCertificateRule) implementsAccessGroupGetResponseRequire() {
+}
+
+// Matches an Access group.
+type AccessGroupGetResponseRequireAccessAccessGroupRule struct {
+	Group AccessGroupGetResponseRequireAccessAccessGroupRuleGroup `json:"group,required"`
+	JSON  accessGroupGetResponseRequireAccessAccessGroupRuleJSON  `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAccessGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessAccessGroupRule]
+type accessGroupGetResponseRequireAccessAccessGroupRuleJSON struct {
+	Group       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAccessGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessAccessGroupRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessAccessGroupRuleGroup struct {
+	// The ID of a previously created Access group.
+	ID   string                                                      `json:"id,required"`
+	JSON accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessAccessGroupRuleGroup]
+type accessGroupGetResponseRequireAccessAccessGroupRuleGroupJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAccessGroupRuleGroup) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Azure group. Requires an Azure identity provider.
+type AccessGroupGetResponseRequireAccessAzureGroupRule struct {
+	AzureAd AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
+	JSON    accessGroupGetResponseRequireAccessAzureGroupRuleJSON    `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAzureGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessAzureGroupRule]
+type accessGroupGetResponseRequireAccessAzureGroupRuleJSON struct {
+	AzureAd     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessAzureGroupRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd struct {
+	// The ID of an Azure group.
+	ID string `json:"id,required"`
+	// The ID of your Azure identity provider.
+	ConnectionID string                                                       `json:"connection_id,required"`
+	JSON         accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd]
+type accessGroupGetResponseRequireAccessAzureGroupRuleAzureAdJSON struct {
+	ID           apijson.Field
+	ConnectionID apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAzureGroupRuleAzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a Github organization. Requires a Github identity provider.
+type AccessGroupGetResponseRequireAccessGitHubOrganizationRule struct {
+	GitHubOrganization AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
+	JSON               accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessGitHubOrganizationRule]
+type accessGroupGetResponseRequireAccessGitHubOrganizationRuleJSON struct {
+	GitHubOrganization apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessGitHubOrganizationRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization struct {
+	// The ID of your Github identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The name of the organization.
+	Name string                                                                          `json:"name,required"`
+	JSON accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization]
+type accessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON struct {
+	ConnectionID apijson.Field
+	Name         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a group in Google Workspace. Requires a Google Workspace identity
+// provider.
+type AccessGroupGetResponseRequireAccessGsuiteGroupRule struct {
+	Gsuite AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite `json:"gsuite,required"`
+	JSON   accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON   `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessGsuiteGroupRule]
+type accessGroupGetResponseRequireAccessGsuiteGroupRuleJSON struct {
+	Gsuite      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessGsuiteGroupRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite struct {
+	// The ID of your Google Workspace identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Google Workspace group.
+	Email string                                                       `json:"email,required"`
+	JSON  accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite]
+type accessGroupGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessGsuiteGroupRuleGsuite) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches an Okta group. Requires an Okta identity provider.
+type AccessGroupGetResponseRequireAccessOktaGroupRule struct {
+	Okta AccessGroupGetResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
+	JSON accessGroupGetResponseRequireAccessOktaGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessOktaGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessOktaGroupRule]
+type accessGroupGetResponseRequireAccessOktaGroupRuleJSON struct {
+	Okta        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessOktaGroupRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessOktaGroupRuleOkta struct {
+	// The ID of your Okta identity provider.
+	ConnectionID string `json:"connection_id,required"`
+	// The email of the Okta group.
+	Email string                                                   `json:"email,required"`
+	JSON  accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessOktaGroupRuleOkta]
+type accessGroupGetResponseRequireAccessOktaGroupRuleOktaJSON struct {
+	ConnectionID apijson.Field
+	Email        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessOktaGroupRuleOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a SAML group. Requires a SAML identity provider.
+type AccessGroupGetResponseRequireAccessSamlGroupRule struct {
+	Saml AccessGroupGetResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
+	JSON accessGroupGetResponseRequireAccessSamlGroupRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessSamlGroupRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessSamlGroupRule]
+type accessGroupGetResponseRequireAccessSamlGroupRuleJSON struct {
+	Saml        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessSamlGroupRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessSamlGroupRuleSaml struct {
+	// The name of the SAML attribute.
+	AttributeName string `json:"attribute_name,required"`
+	// The SAML attribute value to look for.
+	AttributeValue string                                                   `json:"attribute_value,required"`
+	JSON           accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessSamlGroupRuleSaml]
+type accessGroupGetResponseRequireAccessSamlGroupRuleSamlJSON struct {
+	AttributeName  apijson.Field
+	AttributeValue apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessSamlGroupRuleSaml) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific Access Service Token
+type AccessGroupGetResponseRequireAccessServiceTokenRule struct {
+	ServiceToken AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
+	JSON         accessGroupGetResponseRequireAccessServiceTokenRuleJSON         `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessServiceTokenRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessServiceTokenRule]
+type accessGroupGetResponseRequireAccessServiceTokenRuleJSON struct {
+	ServiceToken apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessServiceTokenRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken struct {
+	// The ID of a Service Token.
+	TokenID string                                                              `json:"token_id,required"`
+	JSON    accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken]
+type accessGroupGetResponseRequireAccessServiceTokenRuleServiceTokenJSON struct {
+	TokenID     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessServiceTokenRuleServiceToken) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches any valid Access Service Token
+type AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule struct {
+	// An empty object which matches on all service tokens.
+	AnyValidServiceToken interface{}                                                     `json:"any_valid_service_token,required"`
+	JSON                 accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule]
+type accessGroupGetResponseRequireAccessAnyValidServiceTokenRuleJSON struct {
+	AnyValidServiceToken apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessAnyValidServiceTokenRule) implementsAccessGroupGetResponseRequire() {
+}
+
+// Create Allow or Block policies which evaluate the user based on custom criteria.
+type AccessGroupGetResponseRequireAccessExternalEvaluationRule struct {
+	ExternalEvaluation AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation `json:"external_evaluation,required"`
+	JSON               accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON               `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON contains the JSON
+// metadata for the struct
+// [AccessGroupGetResponseRequireAccessExternalEvaluationRule]
+type accessGroupGetResponseRequireAccessExternalEvaluationRuleJSON struct {
+	ExternalEvaluation apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessExternalEvaluationRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation struct {
+	// The API endpoint containing your business logic.
+	EvaluateURL string `json:"evaluate_url,required"`
+	// The API endpoint containing the key that Access uses to verify that the response
+	// came from your API.
+	KeysURL string                                                                          `json:"keys_url,required"`
+	JSON    accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation]
+type accessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON struct {
+	EvaluateURL apijson.Field
+	KeysURL     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessExternalEvaluationRuleExternalEvaluation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Matches a specific country
+type AccessGroupGetResponseRequireAccessCountryRule struct {
+	Geo  AccessGroupGetResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
+	JSON accessGroupGetResponseRequireAccessCountryRuleJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessCountryRuleJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessCountryRule]
+type accessGroupGetResponseRequireAccessCountryRuleJSON struct {
+	Geo         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessCountryRule) implementsAccessGroupGetResponseRequire() {}
+
+type AccessGroupGetResponseRequireAccessCountryRuleGeo struct {
+	// The country code that should be matched.
+	CountryCode string                                                `json:"country_code,required"`
+	JSON        accessGroupGetResponseRequireAccessCountryRuleGeoJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessCountryRuleGeoJSON contains the JSON metadata
+// for the struct [AccessGroupGetResponseRequireAccessCountryRuleGeo]
+type accessGroupGetResponseRequireAccessCountryRuleGeoJSON struct {
+	CountryCode apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessCountryRuleGeo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforce different MFA options
+type AccessGroupGetResponseRequireAccessAuthenticationMethodRule struct {
+	AuthMethod AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
+	JSON       accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON       `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON contains the
+// JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessAuthenticationMethodRule]
+type accessGroupGetResponseRequireAccessAuthenticationMethodRuleJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessAuthenticationMethodRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod struct {
+	// The type of authentication method https://datatracker.ietf.org/doc/html/rfc8176.
+	AuthMethod string                                                                    `json:"auth_method,required"`
+	JSON       accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON
+// contains the JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod]
+type accessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON struct {
+	AuthMethod  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessAuthenticationMethodRuleAuthMethod) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enforces a device posture rule has run successfully
+type AccessGroupGetResponseRequireAccessDevicePostureRule struct {
+	DevicePosture AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
+	JSON          accessGroupGetResponseRequireAccessDevicePostureRuleJSON          `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessDevicePostureRuleJSON contains the JSON
+// metadata for the struct [AccessGroupGetResponseRequireAccessDevicePostureRule]
+type accessGroupGetResponseRequireAccessDevicePostureRuleJSON struct {
+	DevicePosture apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessGroupGetResponseRequireAccessDevicePostureRule) implementsAccessGroupGetResponseRequire() {
+}
+
+type AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture struct {
+	// The ID of a device posture integration.
+	IntegrationUid string                                                                `json:"integration_uid,required"`
+	JSON           accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON `json:"-"`
+}
+
+// accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON contains
+// the JSON metadata for the struct
+// [AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture]
+type accessGroupGetResponseRequireAccessDevicePostureRuleDevicePostureJSON struct {
+	IntegrationUid apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type AccessGroupUpdateParams struct {
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -15367,3 +15298,72 @@ type accessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfoJSON struc
 func (r *AccessGroupAccessGroupsListAccessGroupsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AccessGroupGetResponseEnvelope struct {
+	Errors   []AccessGroupGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessGroupGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessGroupGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessGroupGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessGroupGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessGroupGetResponseEnvelope]
+type accessGroupGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessGroupGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessGroupGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseEnvelopeErrors]
+type accessGroupGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessGroupGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    accessGroupGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessGroupGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessGroupGetResponseEnvelopeMessages]
+type accessGroupGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessGroupGetResponseEnvelopeSuccess bool
+
+const (
+	AccessGroupGetResponseEnvelopeSuccessTrue AccessGroupGetResponseEnvelopeSuccess = true
+)

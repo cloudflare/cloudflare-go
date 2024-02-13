@@ -13,37 +13,6 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestFirewallWAFPackageGroupGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Firewall.WAF.Packages.Groups.Get(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"a25a9a7e9c00afc1fb2e0245519d725b",
-		"a25a9a7e9c00afc1fb2e0245519d725b",
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestFirewallWAFPackageGroupUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -60,7 +29,7 @@ func TestFirewallWAFPackageGroupUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Firewall.WAF.Packages.Groups.Update(
+	_, err := client.Firewalls.WAF.Packages.Groups.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
@@ -78,7 +47,7 @@ func TestFirewallWAFPackageGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallWAFPackageGroupListWithOptionalParams(t *testing.T) {
+func TestFirewallWAFPackageGroupGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -94,15 +63,46 @@ func TestFirewallWAFPackageGroupListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Firewall.WAF.Packages.Groups.List(
+	_, err := client.Firewalls.WAF.Packages.Groups.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
-		cloudflare.FirewallWAFPackageGroupListParams{
-			Direction: cloudflare.F(cloudflare.FirewallWAFPackageGroupListParamsDirectionDesc),
-			Match:     cloudflare.F(cloudflare.FirewallWAFPackageGroupListParamsMatchAny),
-			Mode:      cloudflare.F(cloudflare.FirewallWAFPackageGroupListParamsModeOn),
-			Order:     cloudflare.F(cloudflare.FirewallWAFPackageGroupListParamsOrderMode),
+		"a25a9a7e9c00afc1fb2e0245519d725b",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestFirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Firewalls.WAF.Packages.Groups.WAFRuleGroupsListWAFRuleGroups(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"a25a9a7e9c00afc1fb2e0245519d725b",
+		cloudflare.FirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsParams{
+			Direction: cloudflare.F(cloudflare.FirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsParamsDirectionDesc),
+			Match:     cloudflare.F(cloudflare.FirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsParamsMatchAny),
+			Mode:      cloudflare.F(cloudflare.FirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsParamsModeOn),
+			Order:     cloudflare.F(cloudflare.FirewallWAFPackageGroupWAFRuleGroupsListWAFRuleGroupsParamsOrderMode),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(5.000000),
 		},

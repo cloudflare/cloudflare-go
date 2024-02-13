@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// RadarEmailSecuritySpfService contains methods and other services that help with
+// RadarEmailSecuritySPFService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRadarEmailSecuritySpfService]
+// this service directly, and instead use the [NewRadarEmailSecuritySPFService]
 // method instead.
-type RadarEmailSecuritySpfService struct {
+type RadarEmailSecuritySPFService struct {
 	Options []option.RequestOption
 }
 
-// NewRadarEmailSecuritySpfService generates a new service that applies the given
+// NewRadarEmailSecuritySPFService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewRadarEmailSecuritySpfService(opts ...option.RequestOption) (r *RadarEmailSecuritySpfService) {
-	r = &RadarEmailSecuritySpfService{}
+func NewRadarEmailSecuritySPFService(opts ...option.RequestOption) (r *RadarEmailSecuritySPFService) {
+	r = &RadarEmailSecuritySPFService{}
 	r.Options = opts
 	return
 }
 
 // Percentage distribution of emails classified per SPF validation over time.
-func (r *RadarEmailSecuritySpfService) List(ctx context.Context, query RadarEmailSecuritySpfListParams, opts ...option.RequestOption) (res *RadarEmailSecuritySpfListResponse, err error) {
+func (r *RadarEmailSecuritySPFService) List(ctx context.Context, query RadarEmailSecuritySPFListParams, opts ...option.RequestOption) (res *RadarEmailSecuritySPFListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEmailSecuritySpfListResponseEnvelope
+	var env RadarEmailSecuritySPFListResponseEnvelope
 	path := "radar/email/security/timeseries_groups/spf"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,35 +46,35 @@ func (r *RadarEmailSecuritySpfService) List(ctx context.Context, query RadarEmai
 	return
 }
 
-type RadarEmailSecuritySpfListResponse struct {
+type RadarEmailSecuritySPFListResponse struct {
 	Meta   interface{}                             `json:"meta,required"`
-	Serie0 RadarEmailSecuritySpfListResponseSerie0 `json:"serie_0,required"`
-	JSON   radarEmailSecuritySpfListResponseJSON   `json:"-"`
+	Serie0 RadarEmailSecuritySPFListResponseSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecuritySPFListResponseJSON   `json:"-"`
 }
 
-// radarEmailSecuritySpfListResponseJSON contains the JSON metadata for the struct
-// [RadarEmailSecuritySpfListResponse]
-type radarEmailSecuritySpfListResponseJSON struct {
+// radarEmailSecuritySPFListResponseJSON contains the JSON metadata for the struct
+// [RadarEmailSecuritySPFListResponse]
+type radarEmailSecuritySPFListResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySpfListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySPFListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySpfListResponseSerie0 struct {
+type RadarEmailSecuritySPFListResponseSerie0 struct {
 	Fail []string                                    `json:"FAIL,required"`
 	None []string                                    `json:"NONE,required"`
 	Pass []string                                    `json:"PASS,required"`
-	JSON radarEmailSecuritySpfListResponseSerie0JSON `json:"-"`
+	JSON radarEmailSecuritySPFListResponseSerie0JSON `json:"-"`
 }
 
-// radarEmailSecuritySpfListResponseSerie0JSON contains the JSON metadata for the
-// struct [RadarEmailSecuritySpfListResponseSerie0]
-type radarEmailSecuritySpfListResponseSerie0JSON struct {
+// radarEmailSecuritySPFListResponseSerie0JSON contains the JSON metadata for the
+// struct [RadarEmailSecuritySPFListResponseSerie0]
+type radarEmailSecuritySPFListResponseSerie0JSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -82,17 +82,17 @@ type radarEmailSecuritySpfListResponseSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySpfListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySPFListResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySpfListParams struct {
+type RadarEmailSecuritySPFListParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarEmailSecuritySpfListParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarEmailSecuritySPFListParamsAggInterval] `query:"aggInterval"`
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecuritySpfListParamsArc] `query:"arc"`
+	Arc param.Field[[]RadarEmailSecuritySPFListParamsArc] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -102,15 +102,15 @@ type RadarEmailSecuritySpfListParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarEmailSecuritySpfListParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarEmailSecuritySPFListParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	Dkim param.Field[[]RadarEmailSecuritySpfListParamsDkim] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecuritySPFListParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecuritySpfListParamsDmarc] `query:"dmarc"`
+	Dmarc param.Field[[]RadarEmailSecuritySPFListParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
-	Format param.Field[RadarEmailSecuritySpfListParamsFormat] `query:"format"`
+	Format param.Field[RadarEmailSecuritySPFListParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -119,9 +119,9 @@ type RadarEmailSecuritySpfListParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarEmailSecuritySpfListParams]'s query parameters as
+// URLQuery serializes [RadarEmailSecuritySPFListParams]'s query parameters as
 // `url.Values`.
-func (r RadarEmailSecuritySpfListParams) URLQuery() (v url.Values) {
+func (r RadarEmailSecuritySPFListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -131,82 +131,82 @@ func (r RadarEmailSecuritySpfListParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarEmailSecuritySpfListParamsAggInterval string
+type RadarEmailSecuritySPFListParamsAggInterval string
 
 const (
-	RadarEmailSecuritySpfListParamsAggInterval15m RadarEmailSecuritySpfListParamsAggInterval = "15m"
-	RadarEmailSecuritySpfListParamsAggInterval1h  RadarEmailSecuritySpfListParamsAggInterval = "1h"
-	RadarEmailSecuritySpfListParamsAggInterval1d  RadarEmailSecuritySpfListParamsAggInterval = "1d"
-	RadarEmailSecuritySpfListParamsAggInterval1w  RadarEmailSecuritySpfListParamsAggInterval = "1w"
+	RadarEmailSecuritySPFListParamsAggInterval15m RadarEmailSecuritySPFListParamsAggInterval = "15m"
+	RadarEmailSecuritySPFListParamsAggInterval1h  RadarEmailSecuritySPFListParamsAggInterval = "1h"
+	RadarEmailSecuritySPFListParamsAggInterval1d  RadarEmailSecuritySPFListParamsAggInterval = "1d"
+	RadarEmailSecuritySPFListParamsAggInterval1w  RadarEmailSecuritySPFListParamsAggInterval = "1w"
 )
 
-type RadarEmailSecuritySpfListParamsArc string
+type RadarEmailSecuritySPFListParamsArc string
 
 const (
-	RadarEmailSecuritySpfListParamsArcPass RadarEmailSecuritySpfListParamsArc = "PASS"
-	RadarEmailSecuritySpfListParamsArcNone RadarEmailSecuritySpfListParamsArc = "NONE"
-	RadarEmailSecuritySpfListParamsArcFail RadarEmailSecuritySpfListParamsArc = "FAIL"
+	RadarEmailSecuritySPFListParamsArcPass RadarEmailSecuritySPFListParamsArc = "PASS"
+	RadarEmailSecuritySPFListParamsArcNone RadarEmailSecuritySPFListParamsArc = "NONE"
+	RadarEmailSecuritySPFListParamsArcFail RadarEmailSecuritySPFListParamsArc = "FAIL"
 )
 
-type RadarEmailSecuritySpfListParamsDateRange string
+type RadarEmailSecuritySPFListParamsDateRange string
 
 const (
-	RadarEmailSecuritySpfListParamsDateRange1d         RadarEmailSecuritySpfListParamsDateRange = "1d"
-	RadarEmailSecuritySpfListParamsDateRange2d         RadarEmailSecuritySpfListParamsDateRange = "2d"
-	RadarEmailSecuritySpfListParamsDateRange7d         RadarEmailSecuritySpfListParamsDateRange = "7d"
-	RadarEmailSecuritySpfListParamsDateRange14d        RadarEmailSecuritySpfListParamsDateRange = "14d"
-	RadarEmailSecuritySpfListParamsDateRange28d        RadarEmailSecuritySpfListParamsDateRange = "28d"
-	RadarEmailSecuritySpfListParamsDateRange12w        RadarEmailSecuritySpfListParamsDateRange = "12w"
-	RadarEmailSecuritySpfListParamsDateRange24w        RadarEmailSecuritySpfListParamsDateRange = "24w"
-	RadarEmailSecuritySpfListParamsDateRange52w        RadarEmailSecuritySpfListParamsDateRange = "52w"
-	RadarEmailSecuritySpfListParamsDateRange1dControl  RadarEmailSecuritySpfListParamsDateRange = "1dControl"
-	RadarEmailSecuritySpfListParamsDateRange2dControl  RadarEmailSecuritySpfListParamsDateRange = "2dControl"
-	RadarEmailSecuritySpfListParamsDateRange7dControl  RadarEmailSecuritySpfListParamsDateRange = "7dControl"
-	RadarEmailSecuritySpfListParamsDateRange14dControl RadarEmailSecuritySpfListParamsDateRange = "14dControl"
-	RadarEmailSecuritySpfListParamsDateRange28dControl RadarEmailSecuritySpfListParamsDateRange = "28dControl"
-	RadarEmailSecuritySpfListParamsDateRange12wControl RadarEmailSecuritySpfListParamsDateRange = "12wControl"
-	RadarEmailSecuritySpfListParamsDateRange24wControl RadarEmailSecuritySpfListParamsDateRange = "24wControl"
+	RadarEmailSecuritySPFListParamsDateRange1d         RadarEmailSecuritySPFListParamsDateRange = "1d"
+	RadarEmailSecuritySPFListParamsDateRange2d         RadarEmailSecuritySPFListParamsDateRange = "2d"
+	RadarEmailSecuritySPFListParamsDateRange7d         RadarEmailSecuritySPFListParamsDateRange = "7d"
+	RadarEmailSecuritySPFListParamsDateRange14d        RadarEmailSecuritySPFListParamsDateRange = "14d"
+	RadarEmailSecuritySPFListParamsDateRange28d        RadarEmailSecuritySPFListParamsDateRange = "28d"
+	RadarEmailSecuritySPFListParamsDateRange12w        RadarEmailSecuritySPFListParamsDateRange = "12w"
+	RadarEmailSecuritySPFListParamsDateRange24w        RadarEmailSecuritySPFListParamsDateRange = "24w"
+	RadarEmailSecuritySPFListParamsDateRange52w        RadarEmailSecuritySPFListParamsDateRange = "52w"
+	RadarEmailSecuritySPFListParamsDateRange1dControl  RadarEmailSecuritySPFListParamsDateRange = "1dControl"
+	RadarEmailSecuritySPFListParamsDateRange2dControl  RadarEmailSecuritySPFListParamsDateRange = "2dControl"
+	RadarEmailSecuritySPFListParamsDateRange7dControl  RadarEmailSecuritySPFListParamsDateRange = "7dControl"
+	RadarEmailSecuritySPFListParamsDateRange14dControl RadarEmailSecuritySPFListParamsDateRange = "14dControl"
+	RadarEmailSecuritySPFListParamsDateRange28dControl RadarEmailSecuritySPFListParamsDateRange = "28dControl"
+	RadarEmailSecuritySPFListParamsDateRange12wControl RadarEmailSecuritySPFListParamsDateRange = "12wControl"
+	RadarEmailSecuritySPFListParamsDateRange24wControl RadarEmailSecuritySPFListParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecuritySpfListParamsDkim string
+type RadarEmailSecuritySPFListParamsDKIM string
 
 const (
-	RadarEmailSecuritySpfListParamsDkimPass RadarEmailSecuritySpfListParamsDkim = "PASS"
-	RadarEmailSecuritySpfListParamsDkimNone RadarEmailSecuritySpfListParamsDkim = "NONE"
-	RadarEmailSecuritySpfListParamsDkimFail RadarEmailSecuritySpfListParamsDkim = "FAIL"
+	RadarEmailSecuritySPFListParamsDKIMPass RadarEmailSecuritySPFListParamsDKIM = "PASS"
+	RadarEmailSecuritySPFListParamsDKIMNone RadarEmailSecuritySPFListParamsDKIM = "NONE"
+	RadarEmailSecuritySPFListParamsDKIMFail RadarEmailSecuritySPFListParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecuritySpfListParamsDmarc string
+type RadarEmailSecuritySPFListParamsDmarc string
 
 const (
-	RadarEmailSecuritySpfListParamsDmarcPass RadarEmailSecuritySpfListParamsDmarc = "PASS"
-	RadarEmailSecuritySpfListParamsDmarcNone RadarEmailSecuritySpfListParamsDmarc = "NONE"
-	RadarEmailSecuritySpfListParamsDmarcFail RadarEmailSecuritySpfListParamsDmarc = "FAIL"
+	RadarEmailSecuritySPFListParamsDmarcPass RadarEmailSecuritySPFListParamsDmarc = "PASS"
+	RadarEmailSecuritySPFListParamsDmarcNone RadarEmailSecuritySPFListParamsDmarc = "NONE"
+	RadarEmailSecuritySPFListParamsDmarcFail RadarEmailSecuritySPFListParamsDmarc = "FAIL"
 )
 
 // Format results are returned in.
-type RadarEmailSecuritySpfListParamsFormat string
+type RadarEmailSecuritySPFListParamsFormat string
 
 const (
-	RadarEmailSecuritySpfListParamsFormatJson RadarEmailSecuritySpfListParamsFormat = "JSON"
-	RadarEmailSecuritySpfListParamsFormatCsv  RadarEmailSecuritySpfListParamsFormat = "CSV"
+	RadarEmailSecuritySPFListParamsFormatJson RadarEmailSecuritySPFListParamsFormat = "JSON"
+	RadarEmailSecuritySPFListParamsFormatCsv  RadarEmailSecuritySPFListParamsFormat = "CSV"
 )
 
-type RadarEmailSecuritySpfListResponseEnvelope struct {
-	Result  RadarEmailSecuritySpfListResponse             `json:"result,required"`
+type RadarEmailSecuritySPFListResponseEnvelope struct {
+	Result  RadarEmailSecuritySPFListResponse             `json:"result,required"`
 	Success bool                                          `json:"success,required"`
-	JSON    radarEmailSecuritySpfListResponseEnvelopeJSON `json:"-"`
+	JSON    radarEmailSecuritySPFListResponseEnvelopeJSON `json:"-"`
 }
 
-// radarEmailSecuritySpfListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarEmailSecuritySpfListResponseEnvelope]
-type radarEmailSecuritySpfListResponseEnvelopeJSON struct {
+// radarEmailSecuritySPFListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarEmailSecuritySPFListResponseEnvelope]
+type radarEmailSecuritySPFListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySpfListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySPFListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

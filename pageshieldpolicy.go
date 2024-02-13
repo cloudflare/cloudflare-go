@@ -39,14 +39,6 @@ func (r *PageShieldPolicyService) New(ctx context.Context, zoneID string, body P
 	return
 }
 
-// Fetches a Page Shield policy by ID.
-func (r *PageShieldPolicyService) Get(ctx context.Context, zoneID string, policyID string, opts ...option.RequestOption) (res *PageShieldPolicyGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
 // Update a Page Shield policy by ID.
 func (r *PageShieldPolicyService) Update(ctx context.Context, zoneID string, policyID string, body PageShieldPolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -74,6 +66,14 @@ func (r *PageShieldPolicyService) Delete(ctx context.Context, zoneID string, pol
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	return
+}
+
+// Fetches a Page Shield policy by ID.
+func (r *PageShieldPolicyService) Get(ctx context.Context, zoneID string, policyID string, opts ...option.RequestOption) (res *PageShieldPolicyGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -117,48 +117,6 @@ type PageShieldPolicyNewResponseAction string
 const (
 	PageShieldPolicyNewResponseActionAllow PageShieldPolicyNewResponseAction = "allow"
 	PageShieldPolicyNewResponseActionLog   PageShieldPolicyNewResponseAction = "log"
-)
-
-type PageShieldPolicyGetResponse struct {
-	// The ID of the policy
-	ID string `json:"id"`
-	// The action to take if the expression matches
-	Action PageShieldPolicyGetResponseAction `json:"action"`
-	// A description for the policy
-	Description string `json:"description"`
-	// Whether the policy is enabled
-	Enabled bool `json:"enabled"`
-	// The expression which must match for the policy to be applied, using the
-	// Cloudflare Firewall rule expression syntax
-	Expression string `json:"expression"`
-	// The policy which will be applied
-	Value string                          `json:"value"`
-	JSON  pageShieldPolicyGetResponseJSON `json:"-"`
-}
-
-// pageShieldPolicyGetResponseJSON contains the JSON metadata for the struct
-// [PageShieldPolicyGetResponse]
-type pageShieldPolicyGetResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to take if the expression matches
-type PageShieldPolicyGetResponseAction string
-
-const (
-	PageShieldPolicyGetResponseActionAllow PageShieldPolicyGetResponseAction = "allow"
-	PageShieldPolicyGetResponseActionLog   PageShieldPolicyGetResponseAction = "log"
 )
 
 type PageShieldPolicyUpdateResponse struct {
@@ -243,6 +201,48 @@ type PageShieldPolicyListResponseAction string
 const (
 	PageShieldPolicyListResponseActionAllow PageShieldPolicyListResponseAction = "allow"
 	PageShieldPolicyListResponseActionLog   PageShieldPolicyListResponseAction = "log"
+)
+
+type PageShieldPolicyGetResponse struct {
+	// The ID of the policy
+	ID string `json:"id"`
+	// The action to take if the expression matches
+	Action PageShieldPolicyGetResponseAction `json:"action"`
+	// A description for the policy
+	Description string `json:"description"`
+	// Whether the policy is enabled
+	Enabled bool `json:"enabled"`
+	// The expression which must match for the policy to be applied, using the
+	// Cloudflare Firewall rule expression syntax
+	Expression string `json:"expression"`
+	// The policy which will be applied
+	Value string                          `json:"value"`
+	JSON  pageShieldPolicyGetResponseJSON `json:"-"`
+}
+
+// pageShieldPolicyGetResponseJSON contains the JSON metadata for the struct
+// [PageShieldPolicyGetResponse]
+type pageShieldPolicyGetResponseJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Description apijson.Field
+	Enabled     apijson.Field
+	Expression  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to take if the expression matches
+type PageShieldPolicyGetResponseAction string
+
+const (
+	PageShieldPolicyGetResponseActionAllow PageShieldPolicyGetResponseAction = "allow"
+	PageShieldPolicyGetResponseActionLog   PageShieldPolicyGetResponseAction = "log"
 )
 
 type PageShieldPolicyNewParams struct {

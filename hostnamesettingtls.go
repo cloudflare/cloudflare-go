@@ -35,24 +35,11 @@ func NewHostnameSettingTLSService(opts ...option.RequestOption) (r *HostnameSett
 	return
 }
 
-// List the requested TLS setting for the hostnames under this zone.
-func (r *HostnameSettingTLSService) Get(ctx context.Context, zoneIdentifier string, tlsSetting HostnameSettingTLSGetParamsTLSSetting, opts ...option.RequestOption) (res *[]HostnameSettingTLSGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env HostnameSettingTLSGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", zoneIdentifier, tlsSetting)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Update the tls setting value for the hostname.
-func (r *HostnameSettingTLSService) Update(ctx context.Context, zoneIdentifier string, tlsSetting HostnameSettingTLSUpdateParamsTLSSetting, hostname string, body HostnameSettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameSettingTLSUpdateResponse, err error) {
+func (r *HostnameSettingTLSService) Update(ctx context.Context, zoneID string, settingID HostnameSettingTLSUpdateParamsSettingID, hostname string, body HostnameSettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameSettingTLSUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameSettingTLSUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneIdentifier, tlsSetting, hostname)
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -62,10 +49,10 @@ func (r *HostnameSettingTLSService) Update(ctx context.Context, zoneIdentifier s
 }
 
 // Delete the tls setting value for the hostname.
-func (r *HostnameSettingTLSService) Delete(ctx context.Context, zoneIdentifier string, tlsSetting HostnameSettingTLSDeleteParamsTLSSetting, hostname string, opts ...option.RequestOption) (res *HostnameSettingTLSDeleteResponse, err error) {
+func (r *HostnameSettingTLSService) Delete(ctx context.Context, zoneID string, settingID HostnameSettingTLSDeleteParamsSettingID, hostname string, opts ...option.RequestOption) (res *HostnameSettingTLSDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameSettingTLSDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneIdentifier, tlsSetting, hostname)
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneID, settingID, hostname)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -74,62 +61,18 @@ func (r *HostnameSettingTLSService) Delete(ctx context.Context, zoneIdentifier s
 	return
 }
 
-type HostnameSettingTLSGetResponse struct {
-	// This is the time the tls setting was originally created for this hostname.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The hostname for which the tls settings are set.
-	Hostname string `json:"hostname"`
-	// Deployment status for the given tls setting.
-	Status string `json:"status"`
-	// This is the time the tls setting was updated.
-	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
-	// The tls setting value.
-	Value HostnameSettingTLSGetResponseValue `json:"value"`
-	JSON  hostnameSettingTLSGetResponseJSON  `json:"-"`
+// List the requested TLS setting for the hostnames under this zone.
+func (r *HostnameSettingTLSService) Get(ctx context.Context, zoneID string, settingID HostnameSettingTLSGetParamsSettingID, opts ...option.RequestOption) (res *[]HostnameSettingTLSGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HostnameSettingTLSGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", zoneID, settingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-// hostnameSettingTLSGetResponseJSON contains the JSON metadata for the struct
-// [HostnameSettingTLSGetResponse]
-type hostnameSettingTLSGetResponseJSON struct {
-	CreatedAt   apijson.Field
-	Hostname    apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The tls setting value.
-//
-// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
-// [HostnameSettingTLSGetResponseValueArray].
-type HostnameSettingTLSGetResponseValue interface {
-	ImplementsHostnameSettingTLSGetResponseValue()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*HostnameSettingTLSGetResponseValue)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionFloat(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type HostnameSettingTLSGetResponseValueArray []string
-
-func (r HostnameSettingTLSGetResponseValueArray) ImplementsHostnameSettingTLSGetResponseValue() {}
 
 type HostnameSettingTLSUpdateResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
@@ -217,13 +160,247 @@ func (r *HostnameSettingTLSDeleteResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type HostnameSettingTLSGetResponse struct {
+	// This is the time the tls setting was originally created for this hostname.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The hostname for which the tls settings are set.
+	Hostname string `json:"hostname"`
+	// Deployment status for the given tls setting.
+	Status string `json:"status"`
+	// This is the time the tls setting was updated.
+	UpdatedAt time.Time `json:"updated_at" format:"date-time"`
+	// The tls setting value.
+	Value HostnameSettingTLSGetResponseValue `json:"value"`
+	JSON  hostnameSettingTLSGetResponseJSON  `json:"-"`
+}
+
+// hostnameSettingTLSGetResponseJSON contains the JSON metadata for the struct
+// [HostnameSettingTLSGetResponse]
+type hostnameSettingTLSGetResponseJSON struct {
+	CreatedAt   apijson.Field
+	Hostname    apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The tls setting value.
+//
+// Union satisfied by [shared.UnionFloat], [shared.UnionString] or
+// [HostnameSettingTLSGetResponseValueArray].
+type HostnameSettingTLSGetResponseValue interface {
+	ImplementsHostnameSettingTLSGetResponseValue()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*HostnameSettingTLSGetResponseValue)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type HostnameSettingTLSGetResponseValueArray []string
+
+func (r HostnameSettingTLSGetResponseValueArray) ImplementsHostnameSettingTLSGetResponseValue() {}
+
+type HostnameSettingTLSUpdateParams struct {
+	// The tls setting value.
+	Value param.Field[HostnameSettingTLSUpdateParamsValue] `json:"value,required"`
+}
+
+func (r HostnameSettingTLSUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
 // The TLS Setting name.
-type HostnameSettingTLSGetParamsTLSSetting string
+type HostnameSettingTLSUpdateParamsSettingID string
 
 const (
-	HostnameSettingTLSGetParamsTLSSettingCiphers       HostnameSettingTLSGetParamsTLSSetting = "ciphers"
-	HostnameSettingTLSGetParamsTLSSettingMinTLSVersion HostnameSettingTLSGetParamsTLSSetting = "min_tls_version"
-	HostnameSettingTLSGetParamsTLSSettingHTTP2         HostnameSettingTLSGetParamsTLSSetting = "http2"
+	HostnameSettingTLSUpdateParamsSettingIDCiphers       HostnameSettingTLSUpdateParamsSettingID = "ciphers"
+	HostnameSettingTLSUpdateParamsSettingIDMinTLSVersion HostnameSettingTLSUpdateParamsSettingID = "min_tls_version"
+	HostnameSettingTLSUpdateParamsSettingIDHTTP2         HostnameSettingTLSUpdateParamsSettingID = "http2"
+)
+
+// The tls setting value.
+//
+// Satisfied by [shared.UnionFloat], [shared.UnionString],
+// [HostnameSettingTLSUpdateParamsValueArray].
+type HostnameSettingTLSUpdateParamsValue interface {
+	ImplementsHostnameSettingTLSUpdateParamsValue()
+}
+
+type HostnameSettingTLSUpdateParamsValueArray []string
+
+func (r HostnameSettingTLSUpdateParamsValueArray) ImplementsHostnameSettingTLSUpdateParamsValue() {}
+
+type HostnameSettingTLSUpdateResponseEnvelope struct {
+	Errors   []HostnameSettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HostnameSettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   HostnameSettingTLSUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success HostnameSettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    hostnameSettingTLSUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// hostnameSettingTLSUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HostnameSettingTLSUpdateResponseEnvelope]
+type hostnameSettingTLSUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HostnameSettingTLSUpdateResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [HostnameSettingTLSUpdateResponseEnvelopeErrors]
+type hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HostnameSettingTLSUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [HostnameSettingTLSUpdateResponseEnvelopeMessages]
+type hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HostnameSettingTLSUpdateResponseEnvelopeSuccess bool
+
+const (
+	HostnameSettingTLSUpdateResponseEnvelopeSuccessTrue HostnameSettingTLSUpdateResponseEnvelopeSuccess = true
+)
+
+// The TLS Setting name.
+type HostnameSettingTLSDeleteParamsSettingID string
+
+const (
+	HostnameSettingTLSDeleteParamsSettingIDCiphers       HostnameSettingTLSDeleteParamsSettingID = "ciphers"
+	HostnameSettingTLSDeleteParamsSettingIDMinTLSVersion HostnameSettingTLSDeleteParamsSettingID = "min_tls_version"
+	HostnameSettingTLSDeleteParamsSettingIDHTTP2         HostnameSettingTLSDeleteParamsSettingID = "http2"
+)
+
+type HostnameSettingTLSDeleteResponseEnvelope struct {
+	Errors   []HostnameSettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HostnameSettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   HostnameSettingTLSDeleteResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success HostnameSettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    hostnameSettingTLSDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// hostnameSettingTLSDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HostnameSettingTLSDeleteResponseEnvelope]
+type hostnameSettingTLSDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HostnameSettingTLSDeleteResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [HostnameSettingTLSDeleteResponseEnvelopeErrors]
+type hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HostnameSettingTLSDeleteResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [HostnameSettingTLSDeleteResponseEnvelopeMessages]
+type hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HostnameSettingTLSDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HostnameSettingTLSDeleteResponseEnvelopeSuccess bool
+
+const (
+	HostnameSettingTLSDeleteResponseEnvelopeSuccessTrue HostnameSettingTLSDeleteResponseEnvelopeSuccess = true
+)
+
+// The TLS Setting name.
+type HostnameSettingTLSGetParamsSettingID string
+
+const (
+	HostnameSettingTLSGetParamsSettingIDCiphers       HostnameSettingTLSGetParamsSettingID = "ciphers"
+	HostnameSettingTLSGetParamsSettingIDMinTLSVersion HostnameSettingTLSGetParamsSettingID = "min_tls_version"
+	HostnameSettingTLSGetParamsSettingIDHTTP2         HostnameSettingTLSGetParamsSettingID = "http2"
 )
 
 type HostnameSettingTLSGetResponseEnvelope struct {
@@ -326,180 +503,3 @@ type hostnameSettingTLSGetResponseEnvelopeResultInfoJSON struct {
 func (r *HostnameSettingTLSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type HostnameSettingTLSUpdateParams struct {
-	// The tls setting value.
-	Value param.Field[HostnameSettingTLSUpdateParamsValue] `json:"value,required"`
-}
-
-func (r HostnameSettingTLSUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The TLS Setting name.
-type HostnameSettingTLSUpdateParamsTLSSetting string
-
-const (
-	HostnameSettingTLSUpdateParamsTLSSettingCiphers       HostnameSettingTLSUpdateParamsTLSSetting = "ciphers"
-	HostnameSettingTLSUpdateParamsTLSSettingMinTLSVersion HostnameSettingTLSUpdateParamsTLSSetting = "min_tls_version"
-	HostnameSettingTLSUpdateParamsTLSSettingHTTP2         HostnameSettingTLSUpdateParamsTLSSetting = "http2"
-)
-
-// The tls setting value.
-//
-// Satisfied by [shared.UnionFloat], [shared.UnionString],
-// [HostnameSettingTLSUpdateParamsValueArray].
-type HostnameSettingTLSUpdateParamsValue interface {
-	ImplementsHostnameSettingTLSUpdateParamsValue()
-}
-
-type HostnameSettingTLSUpdateParamsValueArray []string
-
-func (r HostnameSettingTLSUpdateParamsValueArray) ImplementsHostnameSettingTLSUpdateParamsValue() {}
-
-type HostnameSettingTLSUpdateResponseEnvelope struct {
-	Errors   []HostnameSettingTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameSettingTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameSettingTLSUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success HostnameSettingTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameSettingTLSUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// hostnameSettingTLSUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [HostnameSettingTLSUpdateResponseEnvelope]
-type hostnameSettingTLSUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameSettingTLSUpdateResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [HostnameSettingTLSUpdateResponseEnvelopeErrors]
-type hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameSettingTLSUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameSettingTLSUpdateResponseEnvelopeMessages]
-type hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HostnameSettingTLSUpdateResponseEnvelopeSuccess bool
-
-const (
-	HostnameSettingTLSUpdateResponseEnvelopeSuccessTrue HostnameSettingTLSUpdateResponseEnvelopeSuccess = true
-)
-
-// The TLS Setting name.
-type HostnameSettingTLSDeleteParamsTLSSetting string
-
-const (
-	HostnameSettingTLSDeleteParamsTLSSettingCiphers       HostnameSettingTLSDeleteParamsTLSSetting = "ciphers"
-	HostnameSettingTLSDeleteParamsTLSSettingMinTLSVersion HostnameSettingTLSDeleteParamsTLSSetting = "min_tls_version"
-	HostnameSettingTLSDeleteParamsTLSSettingHTTP2         HostnameSettingTLSDeleteParamsTLSSetting = "http2"
-)
-
-type HostnameSettingTLSDeleteResponseEnvelope struct {
-	Errors   []HostnameSettingTLSDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameSettingTLSDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameSettingTLSDeleteResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success HostnameSettingTLSDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    hostnameSettingTLSDeleteResponseEnvelopeJSON    `json:"-"`
-}
-
-// hostnameSettingTLSDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [HostnameSettingTLSDeleteResponseEnvelope]
-type hostnameSettingTLSDeleteResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameSettingTLSDeleteResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [HostnameSettingTLSDeleteResponseEnvelopeErrors]
-type hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HostnameSettingTLSDeleteResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [HostnameSettingTLSDeleteResponseEnvelopeMessages]
-type hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameSettingTLSDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HostnameSettingTLSDeleteResponseEnvelopeSuccess bool
-
-const (
-	HostnameSettingTLSDeleteResponseEnvelopeSuccessTrue HostnameSettingTLSDeleteResponseEnvelopeSuccess = true
-)

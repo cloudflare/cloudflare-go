@@ -32,19 +32,6 @@ func NewWorkerScriptSettingService(opts ...option.RequestOption) (r *WorkerScrip
 	return
 }
 
-// Get script metadata and config, such as bindings or usage model
-func (r *WorkerScriptSettingService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptSettingGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerScriptSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Patch script metadata or config, such as bindings or usage model
 func (r *WorkerScriptSettingService) Update(ctx context.Context, accountID string, scriptName string, body WorkerScriptSettingUpdateParams, opts ...option.RequestOption) (res *WorkerScriptSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -58,655 +45,17 @@ func (r *WorkerScriptSettingService) Update(ctx context.Context, accountID strin
 	return
 }
 
-type WorkerScriptSettingGetResponse struct {
-	// List of bindings attached to this Worker
-	Bindings []WorkerScriptSettingGetResponseBinding `json:"bindings"`
-	// Opt your Worker into changes after this date
-	CompatibilityDate string `json:"compatibility_date"`
-	// Opt your Worker into specific changes
-	CompatibilityFlags []string `json:"compatibility_flags"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations WorkerScriptSettingGetResponseMigrations `json:"migrations"`
-	Placement  WorkerScriptSettingGetResponsePlacement  `json:"placement"`
-	// Tags to help you manage your Workers
-	Tags []string `json:"tags"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerScriptSettingGetResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                             `json:"usage_model"`
-	JSON       workerScriptSettingGetResponseJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponse]
-type workerScriptSettingGetResponseJSON struct {
-	Bindings           apijson.Field
-	CompatibilityDate  apijson.Field
-	CompatibilityFlags apijson.Field
-	Logpush            apijson.Field
-	Migrations         apijson.Field
-	Placement          apijson.Field
-	Tags               apijson.Field
-	TailConsumers      apijson.Field
-	UsageModel         apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A binding to allow the Worker to communicate with resources
-//
-// Union satisfied by
-// [WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding],
-// [WorkerScriptSettingGetResponseBindingsWorkersServiceBinding],
-// [WorkerScriptSettingGetResponseBindingsWorkersDoBinding],
-// [WorkerScriptSettingGetResponseBindingsWorkersR2Binding],
-// [WorkerScriptSettingGetResponseBindingsWorkersQueueBinding],
-// [WorkerScriptSettingGetResponseBindingsWorkersD1Binding],
-// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding] or
-// [WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding].
-type WorkerScriptSettingGetResponseBinding interface {
-	implementsWorkerScriptSettingGetResponseBinding()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptSettingGetResponseBinding)(nil)).Elem(), "")
-}
-
-type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType `json:"type,required"`
-	JSON workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON contains the
-// JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding]
-type workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON struct {
-	Name        apijson.Field
-	NamespaceID apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType = "kv_namespace"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersServiceBinding struct {
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Name of Worker to bind to
-	Service string `json:"service,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType `json:"type,required"`
-	JSON workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON contains the
-// JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersServiceBinding]
-type workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON struct {
-	Environment apijson.Field
-	Name        apijson.Field
-	Service     apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersServiceBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersServiceBindingTypeService WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType = "service"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersDoBinding struct {
-	// The exported class name of the Durable Object
-	ClassName string `json:"class_name,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersDoBindingType `json:"type,required"`
-	// The environment of the script_name to bind to
-	Environment string `json:"environment"`
-	// Namespace identifier tag.
-	NamespaceID string `json:"namespace_id"`
-	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName string                                                     `json:"script_name"`
-	JSON       workerScriptSettingGetResponseBindingsWorkersDoBindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersDoBindingJSON contains the JSON
-// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersDoBinding]
-type workerScriptSettingGetResponseBindingsWorkersDoBindingJSON struct {
-	ClassName   apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	Environment apijson.Field
-	NamespaceID apijson.Field
-	ScriptName  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersDoBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersDoBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerScriptSettingGetResponseBindingsWorkersDoBindingType = "durable_object_namespace"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersR2Binding struct {
-	// R2 bucket to bind to
-	BucketName string `json:"bucket_name,required"`
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersR2BindingType `json:"type,required"`
-	JSON workerScriptSettingGetResponseBindingsWorkersR2BindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersR2BindingJSON contains the JSON
-// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersR2Binding]
-type workerScriptSettingGetResponseBindingsWorkersR2BindingJSON struct {
-	BucketName  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersR2Binding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersR2BindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket WorkerScriptSettingGetResponseBindingsWorkersR2BindingType = "r2_bucket"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersQueueBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Name of the Queue to bind to
-	QueueName string `json:"queue_name,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType `json:"type,required"`
-	JSON workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON contains the JSON
-// metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersQueueBinding]
-type workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON struct {
-	Name        apijson.Field
-	QueueName   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersQueueBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersQueueBindingTypeQueue WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType = "queue"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersD1Binding struct {
-	// ID of the D1 database to bind to
-	ID string `json:"id,required"`
-	// A JavaScript variable name for the binding.
-	Binding string `json:"binding,required"`
-	// The name of the D1 database associated with the 'id' provided.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersD1BindingType `json:"type,required"`
-	JSON workerScriptSettingGetResponseBindingsWorkersD1BindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersD1BindingJSON contains the JSON
-// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersD1Binding]
-type workerScriptSettingGetResponseBindingsWorkersD1BindingJSON struct {
-	ID          apijson.Field
-	Binding     apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersD1Binding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersD1BindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersD1BindingTypeD1 WorkerScriptSettingGetResponseBindingsWorkersD1BindingType = "d1"
-)
-
-type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// Namespace to bind to
-	Namespace string `json:"namespace,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType `json:"type,required"`
-	// Outbound worker
-	Outbound WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
-	JSON     workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON     `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding]
-type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON struct {
-	Name        apijson.Field
-	Namespace   apijson.Field
-	Type        apijson.Field
-	Outbound    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
-)
-
-// Outbound worker
-type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
-	// Pass information from the Dispatch Worker to the Outbound Worker through the
-	// parameters
-	Params []string `json:"params"`
-	// Outbound worker
-	Worker WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
-	JSON   workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound]
-type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON struct {
-	Params      apijson.Field
-	Worker      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Outbound worker
-type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
-	// Environment of the outbound worker
-	Environment string `json:"environment"`
-	// Name of the outbound worker
-	Service string                                                                                  `json:"service"`
-	JSON    workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker]
-type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
-	Environment apijson.Field
-	Service     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding struct {
-	// A JavaScript variable name for the binding.
-	Name string `json:"name,required"`
-	// The class of resource that the binding provides.
-	Type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType `json:"type,required"`
-	// ID of the certificate to bind to
-	CertificateID string                                                           `json:"certificate_id"`
-	JSON          workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON contains the
-// JSON metadata for the struct
-// [WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding]
-type workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON struct {
-	Name          apijson.Field
-	Type          apijson.Field
-	CertificateID apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding) implementsWorkerScriptSettingGetResponseBinding() {
-}
-
-// The class of resource that the binding provides.
-type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType string
-
-const (
-	WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType = "mtls_certificate"
-)
-
-// Migrations to apply for Durable Objects associated with this Worker.
-//
-// Union satisfied by
-// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations] or
-// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations].
-type WorkerScriptSettingGetResponseMigrations interface {
-	implementsWorkerScriptSettingGetResponseMigrations()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptSettingGetResponseMigrations)(nil)).Elem(), "")
-}
-
-// A single set of migrations to apply.
-type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses []string `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses []string `json:"new_classes"`
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses []WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass `json:"transferred_classes"`
-	JSON               workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON               `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON contains
-// the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations]
-type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON struct {
-	DeletedClasses     apijson.Field
-	NewClasses         apijson.Field
-	NewTag             apijson.Field
-	OldTag             apijson.Field
-	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations) implementsWorkerScriptSettingGetResponseMigrations() {
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass struct {
-	From string                                                                              `json:"from"`
-	To   string                                                                              `json:"to"`
-	JSON workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass]
-type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON struct {
-	From        apijson.Field
-	To          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
-	From       string                                                                                  `json:"from"`
-	FromScript string                                                                                  `json:"from_script"`
-	To         string                                                                                  `json:"to"`
-	JSON       workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass]
-type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON struct {
-	From        apijson.Field
-	FromScript  apijson.Field
-	To          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations struct {
-	// Tag to set as the latest migration tag.
-	NewTag string `json:"new_tag"`
-	// Tag used to verify against the latest migration tag for this Worker. If they
-	// don't match, the upload is rejected.
-	OldTag string `json:"old_tag"`
-	// Migrations to apply in order.
-	Steps []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep `json:"steps"`
-	JSON  workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON   `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON contains
-// the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations]
-type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON struct {
-	NewTag      apijson.Field
-	OldTag      apijson.Field
-	Steps       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations) implementsWorkerScriptSettingGetResponseMigrations() {
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep struct {
-	// A list of classes to delete Durable Object namespaces from.
-	DeletedClasses []string `json:"deleted_classes"`
-	// A list of classes to create Durable Object namespaces from.
-	NewClasses []string `json:"new_classes"`
-	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass `json:"renamed_classes"`
-	// A list of transfers for Durable Object namespaces from a different Worker and
-	// class to a class defined in this Worker.
-	TransferredClasses []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass `json:"transferred_classes"`
-	JSON               workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON                `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep]
-type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON struct {
-	DeletedClasses     apijson.Field
-	NewClasses         apijson.Field
-	RenamedClasses     apijson.Field
-	TransferredClasses apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
-	From string                                                                                `json:"from"`
-	To   string                                                                                `json:"to"`
-	JSON workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass]
-type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON struct {
-	From        apijson.Field
-	To          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
-	From       string                                                                                    `json:"from"`
-	FromScript string                                                                                    `json:"from_script"`
-	To         string                                                                                    `json:"to"`
-	JSON       workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass]
-type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON struct {
-	From        apijson.Field
-	FromScript  apijson.Field
-	To          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponsePlacement struct {
-	// Enables
-	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-	// Only `"smart"` is currently supported
-	Mode WorkerScriptSettingGetResponsePlacementMode `json:"mode"`
-	JSON workerScriptSettingGetResponsePlacementJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponsePlacementJSON contains the JSON metadata for the
-// struct [WorkerScriptSettingGetResponsePlacement]
-type workerScriptSettingGetResponsePlacementJSON struct {
-	Mode        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponsePlacement) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Enables
-// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
-// Only `"smart"` is currently supported
-type WorkerScriptSettingGetResponsePlacementMode string
-
-const (
-	WorkerScriptSettingGetResponsePlacementModeSmart WorkerScriptSettingGetResponsePlacementMode = "smart"
-)
-
-// A reference to a script that will consume logs from the attached Worker.
-type WorkerScriptSettingGetResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                         `json:"namespace"`
-	JSON      workerScriptSettingGetResponseTailConsumerJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseTailConsumerJSON contains the JSON metadata for
-// the struct [WorkerScriptSettingGetResponseTailConsumer]
-type workerScriptSettingGetResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Get script metadata and config, such as bindings or usage model
+func (r *WorkerScriptSettingService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptSettingGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerScriptSettingGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", accountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type WorkerScriptSettingUpdateResponse struct {
@@ -1363,74 +712,656 @@ func (r *WorkerScriptSettingUpdateResponseTailConsumer) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptSettingGetResponseEnvelope struct {
-	Errors   []WorkerScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptSettingGetResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptSettingGetResponseEnvelopeJSON    `json:"-"`
+type WorkerScriptSettingGetResponse struct {
+	// List of bindings attached to this Worker
+	Bindings []WorkerScriptSettingGetResponseBinding `json:"bindings"`
+	// Opt your Worker into changes after this date
+	CompatibilityDate string `json:"compatibility_date"`
+	// Opt your Worker into specific changes
+	CompatibilityFlags []string `json:"compatibility_flags"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// Migrations to apply for Durable Objects associated with this Worker.
+	Migrations WorkerScriptSettingGetResponseMigrations `json:"migrations"`
+	Placement  WorkerScriptSettingGetResponsePlacement  `json:"placement"`
+	// Tags to help you manage your Workers
+	Tags []string `json:"tags"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []WorkerScriptSettingGetResponseTailConsumer `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                             `json:"usage_model"`
+	JSON       workerScriptSettingGetResponseJSON `json:"-"`
 }
 
-// workerScriptSettingGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerScriptSettingGetResponseEnvelope]
-type workerScriptSettingGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// workerScriptSettingGetResponseJSON contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponse]
+type workerScriptSettingGetResponseJSON struct {
+	Bindings           apijson.Field
+	CompatibilityDate  apijson.Field
+	CompatibilityFlags apijson.Field
+	Logpush            apijson.Field
+	Migrations         apijson.Field
+	Placement          apijson.Field
+	Tags               apijson.Field
+	TailConsumers      apijson.Field
+	UsageModel         apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A binding to allow the Worker to communicate with resources
+//
+// Union satisfied by
+// [WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding],
+// [WorkerScriptSettingGetResponseBindingsWorkersServiceBinding],
+// [WorkerScriptSettingGetResponseBindingsWorkersDoBinding],
+// [WorkerScriptSettingGetResponseBindingsWorkersR2Binding],
+// [WorkerScriptSettingGetResponseBindingsWorkersQueueBinding],
+// [WorkerScriptSettingGetResponseBindingsWorkersD1Binding],
+// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding] or
+// [WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding].
+type WorkerScriptSettingGetResponseBinding interface {
+	implementsWorkerScriptSettingGetResponseBinding()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptSettingGetResponseBinding)(nil)).Elem(), "")
+}
+
+type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType `json:"type,required"`
+	JSON workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON contains the
+// JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding]
+type workerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingJSON struct {
+	Name        apijson.Field
+	NamespaceID apijson.Field
+	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptSettingGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    workerScriptSettingGetResponseEnvelopeErrorsJSON `json:"-"`
+func (r WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBinding) implementsWorkerScriptSettingGetResponseBinding() {
 }
 
-// workerScriptSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [WorkerScriptSettingGetResponseEnvelopeErrors]
-type workerScriptSettingGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptSettingGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    workerScriptSettingGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerScriptSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WorkerScriptSettingGetResponseEnvelopeMessages]
-type workerScriptSettingGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerScriptSettingGetResponseEnvelopeSuccess bool
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType string
 
 const (
-	WorkerScriptSettingGetResponseEnvelopeSuccessTrue WorkerScriptSettingGetResponseEnvelopeSuccess = true
+	WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerScriptSettingGetResponseBindingsWorkersKvNamespaceBindingType = "kv_namespace"
 )
+
+type WorkerScriptSettingGetResponseBindingsWorkersServiceBinding struct {
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of Worker to bind to
+	Service string `json:"service,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType `json:"type,required"`
+	JSON workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON contains the
+// JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersServiceBinding]
+type workerScriptSettingGetResponseBindingsWorkersServiceBindingJSON struct {
+	Environment apijson.Field
+	Name        apijson.Field
+	Service     apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersServiceBinding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersServiceBindingTypeService WorkerScriptSettingGetResponseBindingsWorkersServiceBindingType = "service"
+)
+
+type WorkerScriptSettingGetResponseBindingsWorkersDoBinding struct {
+	// The exported class name of the Durable Object
+	ClassName string `json:"class_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersDoBindingType `json:"type,required"`
+	// The environment of the script_name to bind to
+	Environment string `json:"environment"`
+	// Namespace identifier tag.
+	NamespaceID string `json:"namespace_id"`
+	// The script where the Durable Object is defined, if it is external to this Worker
+	ScriptName string                                                     `json:"script_name"`
+	JSON       workerScriptSettingGetResponseBindingsWorkersDoBindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersDoBindingJSON contains the JSON
+// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersDoBinding]
+type workerScriptSettingGetResponseBindingsWorkersDoBindingJSON struct {
+	ClassName   apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	Environment apijson.Field
+	NamespaceID apijson.Field
+	ScriptName  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersDoBinding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersDoBindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerScriptSettingGetResponseBindingsWorkersDoBindingType = "durable_object_namespace"
+)
+
+type WorkerScriptSettingGetResponseBindingsWorkersR2Binding struct {
+	// R2 bucket to bind to
+	BucketName string `json:"bucket_name,required"`
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersR2BindingType `json:"type,required"`
+	JSON workerScriptSettingGetResponseBindingsWorkersR2BindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersR2BindingJSON contains the JSON
+// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersR2Binding]
+type workerScriptSettingGetResponseBindingsWorkersR2BindingJSON struct {
+	BucketName  apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersR2Binding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersR2BindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersR2BindingTypeR2Bucket WorkerScriptSettingGetResponseBindingsWorkersR2BindingType = "r2_bucket"
+)
+
+type WorkerScriptSettingGetResponseBindingsWorkersQueueBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Name of the Queue to bind to
+	QueueName string `json:"queue_name,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType `json:"type,required"`
+	JSON workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON contains the JSON
+// metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersQueueBinding]
+type workerScriptSettingGetResponseBindingsWorkersQueueBindingJSON struct {
+	Name        apijson.Field
+	QueueName   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersQueueBinding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersQueueBindingTypeQueue WorkerScriptSettingGetResponseBindingsWorkersQueueBindingType = "queue"
+)
+
+type WorkerScriptSettingGetResponseBindingsWorkersD1Binding struct {
+	// ID of the D1 database to bind to
+	ID string `json:"id,required"`
+	// A JavaScript variable name for the binding.
+	Binding string `json:"binding,required"`
+	// The name of the D1 database associated with the 'id' provided.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersD1BindingType `json:"type,required"`
+	JSON workerScriptSettingGetResponseBindingsWorkersD1BindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersD1BindingJSON contains the JSON
+// metadata for the struct [WorkerScriptSettingGetResponseBindingsWorkersD1Binding]
+type workerScriptSettingGetResponseBindingsWorkersD1BindingJSON struct {
+	ID          apijson.Field
+	Binding     apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersD1Binding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersD1BindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersD1BindingTypeD1 WorkerScriptSettingGetResponseBindingsWorkersD1BindingType = "d1"
+)
+
+type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// Namespace to bind to
+	Namespace string `json:"namespace,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType `json:"type,required"`
+	// Outbound worker
+	Outbound WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
+	JSON     workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON     `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding]
+type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON struct {
+	Name        apijson.Field
+	Namespace   apijson.Field
+	Type        apijson.Field
+	Outbound    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
+)
+
+// Outbound worker
+type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
+	// Pass information from the Dispatch Worker to the Outbound Worker through the
+	// parameters
+	Params []string `json:"params"`
+	// Outbound worker
+	Worker WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
+	JSON   workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound]
+type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON struct {
+	Params      apijson.Field
+	Worker      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Outbound worker
+type WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
+	// Environment of the outbound worker
+	Environment string `json:"environment"`
+	// Name of the outbound worker
+	Service string                                                                                  `json:"service"`
+	JSON    workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker]
+type workerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
+	Environment apijson.Field
+	Service     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding struct {
+	// A JavaScript variable name for the binding.
+	Name string `json:"name,required"`
+	// The class of resource that the binding provides.
+	Type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType `json:"type,required"`
+	// ID of the certificate to bind to
+	CertificateID string                                                           `json:"certificate_id"`
+	JSON          workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON contains the
+// JSON metadata for the struct
+// [WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding]
+type workerScriptSettingGetResponseBindingsWorkersMtlsCertBindingJSON struct {
+	Name          apijson.Field
+	Type          apijson.Field
+	CertificateID apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBinding) implementsWorkerScriptSettingGetResponseBinding() {
+}
+
+// The class of resource that the binding provides.
+type WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType string
+
+const (
+	WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerScriptSettingGetResponseBindingsWorkersMtlsCertBindingType = "mtls_certificate"
+)
+
+// Migrations to apply for Durable Objects associated with this Worker.
+//
+// Union satisfied by
+// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations] or
+// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations].
+type WorkerScriptSettingGetResponseMigrations interface {
+	implementsWorkerScriptSettingGetResponseMigrations()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptSettingGetResponseMigrations)(nil)).Elem(), "")
+}
+
+// A single set of migrations to apply.
+type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses []string `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses []string `json:"new_classes"`
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses []WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses []WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass `json:"transferred_classes"`
+	JSON               workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON               `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON contains
+// the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations]
+type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON struct {
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	NewTag             apijson.Field
+	OldTag             apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrations) implementsWorkerScriptSettingGetResponseMigrations() {
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+	From string                                                                              `json:"from"`
+	To   string                                                                              `json:"to"`
+	JSON workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass]
+type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON struct {
+	From        apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+	From       string                                                                                  `json:"from"`
+	FromScript string                                                                                  `json:"from_script"`
+	To         string                                                                                  `json:"to"`
+	JSON       workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass]
+type workerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON struct {
+	From        apijson.Field
+	FromScript  apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations struct {
+	// Tag to set as the latest migration tag.
+	NewTag string `json:"new_tag"`
+	// Tag used to verify against the latest migration tag for this Worker. If they
+	// don't match, the upload is rejected.
+	OldTag string `json:"old_tag"`
+	// Migrations to apply in order.
+	Steps []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep `json:"steps"`
+	JSON  workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON   `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON contains
+// the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations]
+type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsJSON struct {
+	NewTag      apijson.Field
+	OldTag      apijson.Field
+	Steps       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrations) implementsWorkerScriptSettingGetResponseMigrations() {
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep struct {
+	// A list of classes to delete Durable Object namespaces from.
+	DeletedClasses []string `json:"deleted_classes"`
+	// A list of classes to create Durable Object namespaces from.
+	NewClasses []string `json:"new_classes"`
+	// A list of classes with Durable Object namespaces that were renamed.
+	RenamedClasses []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass `json:"renamed_classes"`
+	// A list of transfers for Durable Object namespaces from a different Worker and
+	// class to a class defined in this Worker.
+	TransferredClasses []WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass `json:"transferred_classes"`
+	JSON               workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON                `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep]
+type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON struct {
+	DeletedClasses     apijson.Field
+	NewClasses         apijson.Field
+	RenamedClasses     apijson.Field
+	TransferredClasses apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStep) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+	From string                                                                                `json:"from"`
+	To   string                                                                                `json:"to"`
+	JSON workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass]
+type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON struct {
+	From        apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+	From       string                                                                                    `json:"from"`
+	FromScript string                                                                                    `json:"from_script"`
+	To         string                                                                                    `json:"to"`
+	JSON       workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON
+// contains the JSON metadata for the struct
+// [WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass]
+type workerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON struct {
+	From        apijson.Field
+	FromScript  apijson.Field
+	To          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponsePlacement struct {
+	// Enables
+	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+	// Only `"smart"` is currently supported
+	Mode WorkerScriptSettingGetResponsePlacementMode `json:"mode"`
+	JSON workerScriptSettingGetResponsePlacementJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponsePlacementJSON contains the JSON metadata for the
+// struct [WorkerScriptSettingGetResponsePlacement]
+type workerScriptSettingGetResponsePlacementJSON struct {
+	Mode        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Enables
+// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
+// Only `"smart"` is currently supported
+type WorkerScriptSettingGetResponsePlacementMode string
+
+const (
+	WorkerScriptSettingGetResponsePlacementModeSmart WorkerScriptSettingGetResponsePlacementMode = "smart"
+)
+
+// A reference to a script that will consume logs from the attached Worker.
+type WorkerScriptSettingGetResponseTailConsumer struct {
+	// Name of Worker that is to be the consumer.
+	Service string `json:"service,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Optional dispatch namespace the script belongs to.
+	Namespace string                                         `json:"namespace"`
+	JSON      workerScriptSettingGetResponseTailConsumerJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseTailConsumerJSON contains the JSON metadata for
+// the struct [WorkerScriptSettingGetResponseTailConsumer]
+type workerScriptSettingGetResponseTailConsumerJSON struct {
+	Service     apijson.Field
+	Environment apijson.Field
+	Namespace   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type WorkerScriptSettingUpdateParams struct {
 	Settings param.Field[WorkerScriptSettingUpdateParamsSettings] `json:"settings"`
@@ -1923,4 +1854,73 @@ type WorkerScriptSettingUpdateResponseEnvelopeSuccess bool
 
 const (
 	WorkerScriptSettingUpdateResponseEnvelopeSuccessTrue WorkerScriptSettingUpdateResponseEnvelopeSuccess = true
+)
+
+type WorkerScriptSettingGetResponseEnvelope struct {
+	Errors   []WorkerScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptSettingGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerScriptSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptSettingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerScriptSettingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerScriptSettingGetResponseEnvelope]
+type workerScriptSettingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    workerScriptSettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [WorkerScriptSettingGetResponseEnvelopeErrors]
+type workerScriptSettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptSettingGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    workerScriptSettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerScriptSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [WorkerScriptSettingGetResponseEnvelopeMessages]
+type workerScriptSettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerScriptSettingGetResponseEnvelopeSuccess bool
+
+const (
+	WorkerScriptSettingGetResponseEnvelopeSuccessTrue WorkerScriptSettingGetResponseEnvelopeSuccess = true
 )

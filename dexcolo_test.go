@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDexColoListWithOptionalParams(t *testing.T) {
+func TestDEXColoListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestDexColoListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.Colos.List(
+	_, err := client.DEX.Colos.List(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
-		cloudflare.DexColoListParams{
+		cloudflare.DEXColoListParams{
 			TimeEnd:   cloudflare.F("2023-08-24T20:45:00Z"),
 			TimeStart: cloudflare.F("2023-08-20T20:45:00Z"),
-			SortBy:    cloudflare.F(cloudflare.DexColoListParamsSortByFleetStatusUsage),
+			SortBy:    cloudflare.F(cloudflare.DEXColoListParamsSortByFleetStatusUsage),
 		},
 	)
 	if err != nil {

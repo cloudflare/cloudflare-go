@@ -13,7 +13,7 @@ import (
 // instead.
 type AddressingPrefixService struct {
 	Options     []option.RequestOption
-	BgpPrefixes *AddressingPrefixBgpPrefixService
+	BGPPrefixes *AddressingPrefixBGPPrefixService
 	Bindings    *AddressingPrefixBindingService
 }
 
@@ -23,7 +23,7 @@ type AddressingPrefixService struct {
 func NewAddressingPrefixService(opts ...option.RequestOption) (r *AddressingPrefixService) {
 	r = &AddressingPrefixService{}
 	r.Options = opts
-	r.BgpPrefixes = NewAddressingPrefixBgpPrefixService(opts...)
+	r.BGPPrefixes = NewAddressingPrefixBGPPrefixService(opts...)
 	r.Bindings = NewAddressingPrefixBindingService(opts...)
 	return
 }

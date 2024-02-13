@@ -6,31 +6,31 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DexService contains methods and other services that help with interacting with
+// DEXService contains methods and other services that help with interacting with
 // the cloudflare API. Note, unlike clients, this service does not read variables
 // from the environment automatically. You should not instantiate this service
-// directly, and instead use the [NewDexService] method instead.
-type DexService struct {
+// directly, and instead use the [NewDEXService] method instead.
+type DEXService struct {
 	Options               []option.RequestOption
-	Colos                 *DexColoService
-	FleetStatus           *DexFleetStatusService
-	HTTPTests             *DexHTTPTestService
-	Tests                 *DexTestService
-	TracerouteTestResults *DexTracerouteTestResultService
-	TracerouteTests       *DexTracerouteTestService
+	Colos                 *DEXColoService
+	FleetStatus           *DEXFleetStatusService
+	HTTPTests             *DEXHTTPTestService
+	Tests                 *DEXTestService
+	TracerouteTestResults *DEXTracerouteTestResultService
+	TracerouteTests       *DEXTracerouteTestService
 }
 
-// NewDexService generates a new service that applies the given options to each
+// NewDEXService generates a new service that applies the given options to each
 // request. These options are applied after the parent client's options (if there
 // is one), and before any request-specific options.
-func NewDexService(opts ...option.RequestOption) (r *DexService) {
-	r = &DexService{}
+func NewDEXService(opts ...option.RequestOption) (r *DEXService) {
+	r = &DEXService{}
 	r.Options = opts
-	r.Colos = NewDexColoService(opts...)
-	r.FleetStatus = NewDexFleetStatusService(opts...)
-	r.HTTPTests = NewDexHTTPTestService(opts...)
-	r.Tests = NewDexTestService(opts...)
-	r.TracerouteTestResults = NewDexTracerouteTestResultService(opts...)
-	r.TracerouteTests = NewDexTracerouteTestService(opts...)
+	r.Colos = NewDEXColoService(opts...)
+	r.FleetStatus = NewDEXFleetStatusService(opts...)
+	r.HTTPTests = NewDEXHTTPTestService(opts...)
+	r.Tests = NewDEXTestService(opts...)
+	r.TracerouteTestResults = NewDEXTracerouteTestResultService(opts...)
+	r.TracerouteTests = NewDEXTracerouteTestService(opts...)
 	return
 }

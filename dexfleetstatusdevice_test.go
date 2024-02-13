@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDexFleetStatusDeviceListWithOptionalParams(t *testing.T) {
+func TestDEXFleetStatusDeviceListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestDexFleetStatusDeviceListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.FleetStatus.Devices.List(
+	_, err := client.DEX.FleetStatus.Devices.List(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
-		cloudflare.DexFleetStatusDeviceListParams{
+		cloudflare.DEXFleetStatusDeviceListParams{
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(10.000000),
 			TimeEnd:   cloudflare.F("2023-10-11T00:00:00Z"),
@@ -41,7 +41,7 @@ func TestDexFleetStatusDeviceListWithOptionalParams(t *testing.T) {
 			DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
 			Mode:      cloudflare.F("proxy"),
 			Platform:  cloudflare.F("windows"),
-			SortBy:    cloudflare.F(cloudflare.DexFleetStatusDeviceListParamsSortByColo),
+			SortBy:    cloudflare.F(cloudflare.DEXFleetStatusDeviceListParamsSortByColo),
 			Status:    cloudflare.F("connected"),
 			Version:   cloudflare.F("1.0.0"),
 		},

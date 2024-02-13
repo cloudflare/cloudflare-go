@@ -40,12 +40,12 @@ func NewAccessAppService(opts ...option.RequestOption) (r *AccessAppService) {
 	return
 }
 
-// Fetches information about an Access application.
-func (r *AccessAppService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppGetParamsAppID, opts ...option.RequestOption) (res *AccessAppGetResponse, err error) {
+// Adds a new application to Access.
+func (r *AccessAppService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessAppNewParams, opts ...option.RequestOption) (res *AccessAppNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppGetResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	var env AccessAppNewResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +66,19 @@ func (r *AccessAppService) Update(ctx context.Context, accountOrZone string, acc
 	return
 }
 
+// Lists all Access applications in an account or zone.
+func (r *AccessAppService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessAppListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessAppListResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Deletes an application from Access.
 func (r *AccessAppService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppDeleteParamsAppID, opts ...option.RequestOption) (res *AccessAppDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -79,24 +92,11 @@ func (r *AccessAppService) Delete(ctx context.Context, accountOrZone string, acc
 	return
 }
 
-// Adds a new application to Access.
-func (r *AccessAppService) AccessApplicationsAddAnApplication(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessAppAccessApplicationsAddAnApplicationParams, opts ...option.RequestOption) (res *AccessAppAccessApplicationsAddAnApplicationResponse, err error) {
+// Fetches information about an Access application.
+func (r *AccessAppService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessAppGetParamsAppID, opts ...option.RequestOption) (res *AccessAppGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessAppAccessApplicationsAddAnApplicationResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Lists all Access applications in an account or zone.
-func (r *AccessAppService) AccessApplicationsListAccessApplications(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessAppAccessApplicationsListAccessApplicationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
+	var env AccessAppGetResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -105,19 +105,19 @@ func (r *AccessAppService) AccessApplicationsListAccessApplications(ctx context.
 	return
 }
 
-// Union satisfied by [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
-// [AccessAppGetResponseObject] or [AccessAppGetResponseObject].
-type AccessAppGetResponse interface {
-	implementsAccessAppGetResponse()
+// Union satisfied by [AccessAppNewResponseObject], [AccessAppNewResponseObject],
+// [AccessAppNewResponseObject], [AccessAppNewResponseObject],
+// [AccessAppNewResponseObject], [AccessAppNewResponseObject],
+// [AccessAppNewResponseObject] or [AccessAppNewResponseObject].
+type AccessAppNewResponse interface {
+	implementsAccessAppNewResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppNewResponse)(nil)).Elem(), "")
 }
 
-type AccessAppGetResponseObject struct {
+type AccessAppNewResponseObject struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -140,7 +140,7 @@ type AccessAppGetResponseObject struct {
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
 	AutoRedirectToIdentity bool                                  `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppGetResponseObjectCorsHeaders `json:"cors_headers"`
+	CorsHeaders            AccessAppNewResponseObjectCorsHeaders `json:"cors_headers"`
 	CreatedAt              time.Time                             `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
@@ -183,12 +183,12 @@ type AccessAppGetResponseObject struct {
 	// applications in the App Launcher dashboard.
 	Tags      []string                       `json:"tags"`
 	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
-	JSON      accessAppGetResponseObjectJSON `json:"-"`
+	JSON      accessAppNewResponseObjectJSON `json:"-"`
 }
 
-// accessAppGetResponseObjectJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseObject]
-type accessAppGetResponseObjectJSON struct {
+// accessAppNewResponseObjectJSON contains the JSON metadata for the struct
+// [AccessAppNewResponseObject]
+type accessAppNewResponseObjectJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -219,13 +219,13 @@ type accessAppGetResponseObjectJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppNewResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppGetResponseObject) implementsAccessAppGetResponse() {}
+func (r AccessAppNewResponseObject) implementsAccessAppNewResponse() {}
 
-type AccessAppGetResponseObjectCorsHeaders struct {
+type AccessAppNewResponseObjectCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -238,17 +238,17 @@ type AccessAppGetResponseObjectCorsHeaders struct {
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppGetResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []AccessAppNewResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
 	MaxAge float64                                   `json:"max_age"`
-	JSON   accessAppGetResponseObjectCorsHeadersJSON `json:"-"`
+	JSON   accessAppNewResponseObjectCorsHeadersJSON `json:"-"`
 }
 
-// accessAppGetResponseObjectCorsHeadersJSON contains the JSON metadata for the
-// struct [AccessAppGetResponseObjectCorsHeaders]
-type accessAppGetResponseObjectCorsHeadersJSON struct {
+// accessAppNewResponseObjectCorsHeadersJSON contains the JSON metadata for the
+// struct [AccessAppNewResponseObjectCorsHeaders]
+type accessAppNewResponseObjectCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -261,22 +261,22 @@ type accessAppGetResponseObjectCorsHeadersJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppNewResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppGetResponseObjectCorsHeadersAllowedMethod string
+type AccessAppNewResponseObjectCorsHeadersAllowedMethod string
 
 const (
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodGet     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPost    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodHead    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPut     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodDelete  AccessAppGetResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodConnect AccessAppGetResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodOptions AccessAppGetResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodTrace   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppGetResponseObjectCorsHeadersAllowedMethodPatch   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodGet     AccessAppNewResponseObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodPost    AccessAppNewResponseObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodHead    AccessAppNewResponseObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodPut     AccessAppNewResponseObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodDelete  AccessAppNewResponseObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodConnect AccessAppNewResponseObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodOptions AccessAppNewResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodTrace   AccessAppNewResponseObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppNewResponseObjectCorsHeadersAllowedMethodPatch   AccessAppNewResponseObjectCorsHeadersAllowedMethod = "PATCH"
 )
 
 // Union satisfied by [AccessAppUpdateResponseObject],
@@ -454,6 +454,180 @@ const (
 	AccessAppUpdateResponseObjectCorsHeadersAllowedMethodPatch   AccessAppUpdateResponseObjectCorsHeadersAllowedMethod = "PATCH"
 )
 
+// Union satisfied by [AccessAppListResponseObject], [AccessAppListResponseObject],
+// [AccessAppListResponseObject], [AccessAppListResponseObject],
+// [AccessAppListResponseObject], [AccessAppListResponseObject],
+// [AccessAppListResponseObject] or [AccessAppListResponseObject].
+type AccessAppListResponse interface {
+	implementsAccessAppListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppListResponse)(nil)).Elem(), "")
+}
+
+type AccessAppListResponseObject struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain string `json:"domain,required"`
+	// The application type.
+	Type string `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// When set to true, users can authenticate to this application using their WARP
+	// session. When set to false this application will always require direct IdP
+	// authentication. This setting always overrides the organization setting for WARP
+	// authentication.
+	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps []string `json:"allowed_idps"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool `json:"app_launcher_visible"`
+	// Audience tag.
+	Aud string `json:"aud"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity bool                                   `json:"auto_redirect_to_identity"`
+	CorsHeaders            AccessAppListResponseObjectCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                              `json:"created_at" format:"date-time"`
+	// The custom error message shown to a user when they are denied access to the
+	// application.
+	CustomDenyMessage string `json:"custom_deny_message"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL string `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages []string `json:"custom_pages"`
+	// Enables the binding cookie, which increases security against compromised
+	// authorization tokens and CSRF attacks.
+	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	// Enables the HttpOnly cookie attribute, which increases security against XSS
+	// attacks.
+	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the application.
+	Name string `json:"name"`
+	// Enables cookie paths to scope an application's JWT to the application path. If
+	// disabled, the JWT will scope to the hostname by default
+	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	// Sets the SameSite cookie setting, which provides increased security against CSRF
+	// attacks.
+	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	// List of domains that Access will secure.
+	SelfHostedDomains []string `json:"self_hosted_domains"`
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
+	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration string `json:"session_duration"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial bool `json:"skip_interstitial"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags      []string                        `json:"tags"`
+	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
+	JSON      accessAppListResponseObjectJSON `json:"-"`
+}
+
+// accessAppListResponseObjectJSON contains the JSON metadata for the struct
+// [AccessAppListResponseObject]
+type accessAppListResponseObjectJSON struct {
+	Domain                   apijson.Field
+	Type                     apijson.Field
+	ID                       apijson.Field
+	AllowAuthenticateViaWarp apijson.Field
+	AllowedIdps              apijson.Field
+	AppLauncherVisible       apijson.Field
+	Aud                      apijson.Field
+	AutoRedirectToIdentity   apijson.Field
+	CorsHeaders              apijson.Field
+	CreatedAt                apijson.Field
+	CustomDenyMessage        apijson.Field
+	CustomDenyURL            apijson.Field
+	CustomNonIdentityDenyURL apijson.Field
+	CustomPages              apijson.Field
+	EnableBindingCookie      apijson.Field
+	HTTPOnlyCookieAttribute  apijson.Field
+	LogoURL                  apijson.Field
+	Name                     apijson.Field
+	PathCookieAttribute      apijson.Field
+	SameSiteCookieAttribute  apijson.Field
+	SelfHostedDomains        apijson.Field
+	ServiceAuth401Redirect   apijson.Field
+	SessionDuration          apijson.Field
+	SkipInterstitial         apijson.Field
+	Tags                     apijson.Field
+	UpdatedAt                apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessAppListResponseObject) implementsAccessAppListResponse() {}
+
+type AccessAppListResponseObjectCorsHeaders struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders bool `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods bool `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins bool `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials bool `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders []interface{} `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods []AccessAppListResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins []interface{} `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge float64                                    `json:"max_age"`
+	JSON   accessAppListResponseObjectCorsHeadersJSON `json:"-"`
+}
+
+// accessAppListResponseObjectCorsHeadersJSON contains the JSON metadata for the
+// struct [AccessAppListResponseObjectCorsHeaders]
+type accessAppListResponseObjectCorsHeadersJSON struct {
+	AllowAllHeaders  apijson.Field
+	AllowAllMethods  apijson.Field
+	AllowAllOrigins  apijson.Field
+	AllowCredentials apijson.Field
+	AllowedHeaders   apijson.Field
+	AllowedMethods   apijson.Field
+	AllowedOrigins   apijson.Field
+	MaxAge           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppListResponseObjectCorsHeadersAllowedMethod string
+
+const (
+	AccessAppListResponseObjectCorsHeadersAllowedMethodGet     AccessAppListResponseObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodPost    AccessAppListResponseObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodHead    AccessAppListResponseObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodPut     AccessAppListResponseObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodDelete  AccessAppListResponseObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodConnect AccessAppListResponseObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodOptions AccessAppListResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodTrace   AccessAppListResponseObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppListResponseObjectCorsHeadersAllowedMethodPatch   AccessAppListResponseObjectCorsHeadersAllowedMethod = "PATCH"
+)
+
 type AccessAppDeleteResponse struct {
 	// UUID
 	ID   string                      `json:"id"`
@@ -472,23 +646,19 @@ func (r *AccessAppDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject],
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject] or
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject].
-type AccessAppAccessApplicationsAddAnApplicationResponse interface {
-	implementsAccessAppAccessApplicationsAddAnApplicationResponse()
+// Union satisfied by [AccessAppGetResponseObject], [AccessAppGetResponseObject],
+// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
+// [AccessAppGetResponseObject], [AccessAppGetResponseObject],
+// [AccessAppGetResponseObject] or [AccessAppGetResponseObject].
+type AccessAppGetResponse interface {
+	implementsAccessAppGetResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsAddAnApplicationResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*AccessAppGetResponse)(nil)).Elem(), "")
 }
 
-type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
+type AccessAppGetResponseObject struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
 	Domain string `json:"domain,required"`
@@ -510,9 +680,9 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
 	Aud string `json:"aud"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                                 `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                            `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity bool                                  `json:"auto_redirect_to_identity"`
+	CorsHeaders            AccessAppGetResponseObjectCorsHeaders `json:"cors_headers"`
+	CreatedAt              time.Time                             `json:"created_at" format:"date-time"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
 	CustomDenyMessage string `json:"custom_deny_message"`
@@ -552,15 +722,14 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObject struct {
 	SkipInterstitial bool `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags      []string                                                      `json:"tags"`
-	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
-	JSON      accessAppAccessApplicationsAddAnApplicationResponseObjectJSON `json:"-"`
+	Tags      []string                       `json:"tags"`
+	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
+	JSON      accessAppGetResponseObjectJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseObjectJSON contains the JSON
-// metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseObject]
-type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
+// accessAppGetResponseObjectJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseObject]
+type accessAppGetResponseObjectJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
@@ -591,14 +760,13 @@ type accessAppAccessApplicationsAddAnApplicationResponseObjectJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseObject) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AccessAppAccessApplicationsAddAnApplicationResponseObject) implementsAccessAppAccessApplicationsAddAnApplicationResponse() {
-}
+func (r AccessAppGetResponseObject) implementsAccessAppGetResponse() {}
 
-type AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders struct {
+type AccessAppGetResponseObjectCorsHeaders struct {
 	// Allows all HTTP request headers.
 	AllowAllHeaders bool `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
@@ -611,18 +779,17 @@ type AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders struct
 	// Allowed HTTP request headers.
 	AllowedHeaders []interface{} `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods []AccessAppGetResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
 	// Allowed origins.
 	AllowedOrigins []interface{} `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                                  `json:"max_age"`
-	JSON   accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON `json:"-"`
+	MaxAge float64                                   `json:"max_age"`
+	JSON   accessAppGetResponseObjectCorsHeadersJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders]
-type accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON struct {
+// accessAppGetResponseObjectCorsHeadersJSON contains the JSON metadata for the
+// struct [AccessAppGetResponseObjectCorsHeaders]
+type accessAppGetResponseObjectCorsHeadersJSON struct {
 	AllowAllHeaders  apijson.Field
 	AllowAllMethods  apijson.Field
 	AllowAllOrigins  apijson.Field
@@ -635,225 +802,680 @@ type accessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersJSON st
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod string
+type AccessAppGetResponseObjectCorsHeadersAllowedMethod string
 
 const (
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodGet     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "GET"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodPost    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "POST"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodHead    AccessAppGetResponseObjectCorsHeadersAllowedMethod = "HEAD"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodPut     AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PUT"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodDelete  AccessAppGetResponseObjectCorsHeadersAllowedMethod = "DELETE"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodConnect AccessAppGetResponseObjectCorsHeadersAllowedMethod = "CONNECT"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodOptions AccessAppGetResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodTrace   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "TRACE"
+	AccessAppGetResponseObjectCorsHeadersAllowedMethodPatch   AccessAppGetResponseObjectCorsHeadersAllowedMethod = "PATCH"
 )
 
-// Union satisfied by
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject],
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject] or
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject].
-type AccessAppAccessApplicationsListAccessApplicationsResponse interface {
-	implementsAccessAppAccessApplicationsListAccessApplicationsResponse()
+// This interface is a union satisfied by one of the following:
+// [AccessAppNewParamsVariant0], [AccessAppNewParamsVariant1],
+// [AccessAppNewParamsVariant2], [AccessAppNewParamsVariant3],
+// [AccessAppNewParamsVariant4], [AccessAppNewParamsVariant5],
+// [AccessAppNewParamsVariant6], [AccessAppNewParamsVariant7].
+type AccessAppNewParams interface {
+	ImplementsAccessAppNewParams()
 }
 
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessAppAccessApplicationsListAccessApplicationsResponse)(nil)).Elem(), "")
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseObject struct {
+type AccessAppNewParamsVariant0 struct {
 	// The primary hostname and path that Access will secure. If the app is visible in
 	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain string `json:"domain,required"`
+	Domain param.Field[string] `json:"domain,required"`
 	// The application type.
-	Type string `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
+	Type param.Field[string] `json:"type,required"`
 	// When set to true, users can authenticate to this application using their WARP
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps []string `json:"allowed_idps"`
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
 	// Displays the application in the App Launcher.
-	AppLauncherVisible bool `json:"app_launcher_visible"`
-	// Audience tag.
-	Aud string `json:"aud"`
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity bool                                                                       `json:"auto_redirect_to_identity"`
-	CorsHeaders            AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders `json:"cors_headers"`
-	CreatedAt              time.Time                                                                  `json:"created_at" format:"date-time"`
+	AutoRedirectToIdentity param.Field[bool]                                  `json:"auto_redirect_to_identity"`
+	CorsHeaders            param.Field[AccessAppNewParamsVariant0CorsHeaders] `json:"cors_headers"`
 	// The custom error message shown to a user when they are denied access to the
 	// application.
-	CustomDenyMessage string `json:"custom_deny_message"`
+	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing identity-based rules.
-	CustomDenyURL string `json:"custom_deny_url"`
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
 	// The custom URL a user is redirected to when they are denied access to the
 	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL string `json:"custom_non_identity_deny_url"`
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
-	CustomPages []string `json:"custom_pages"`
+	CustomPages param.Field[[]string] `json:"custom_pages"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
-	EnableBindingCookie bool `json:"enable_binding_cookie"`
+	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
 	// Enables the HttpOnly cookie attribute, which increases security against XSS
 	// attacks.
-	HTTPOnlyCookieAttribute bool `json:"http_only_cookie_attribute"`
+	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
 	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL string `json:"logo_url"`
+	LogoURL param.Field[string] `json:"logo_url"`
 	// The name of the application.
-	Name string `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// Enables cookie paths to scope an application's JWT to the application path. If
 	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute bool `json:"path_cookie_attribute"`
+	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
 	// Sets the SameSite cookie setting, which provides increased security against CSRF
 	// attacks.
-	SameSiteCookieAttribute string `json:"same_site_cookie_attribute"`
+	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
 	// List of domains that Access will secure.
-	SelfHostedDomains []string `json:"self_hosted_domains"`
+	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
 	// Returns a 401 status code when the request is blocked by a Service Auth policy.
-	ServiceAuth401Redirect bool `json:"service_auth_401_redirect"`
+	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
 	// The amount of time that tokens issued for this application will be valid. Must
 	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
 	// s, m, h.
-	SessionDuration string `json:"session_duration"`
+	SessionDuration param.Field[string] `json:"session_duration"`
 	// Enables automatic authentication through cloudflared.
-	SkipInterstitial bool `json:"skip_interstitial"`
+	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
-	Tags      []string                                                            `json:"tags"`
-	UpdatedAt time.Time                                                           `json:"updated_at" format:"date-time"`
-	JSON      accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON `json:"-"`
+	Tags param.Field[[]string] `json:"tags"`
 }
 
-// accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON contains the
-// JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObject]
-type accessAppAccessApplicationsListAccessApplicationsResponseObjectJSON struct {
-	Domain                   apijson.Field
-	Type                     apijson.Field
-	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
-	AllowedIdps              apijson.Field
-	AppLauncherVisible       apijson.Field
-	Aud                      apijson.Field
-	AutoRedirectToIdentity   apijson.Field
-	CorsHeaders              apijson.Field
-	CreatedAt                apijson.Field
-	CustomDenyMessage        apijson.Field
-	CustomDenyURL            apijson.Field
-	CustomNonIdentityDenyURL apijson.Field
-	CustomPages              apijson.Field
-	EnableBindingCookie      apijson.Field
-	HTTPOnlyCookieAttribute  apijson.Field
-	LogoURL                  apijson.Field
-	Name                     apijson.Field
-	PathCookieAttribute      apijson.Field
-	SameSiteCookieAttribute  apijson.Field
-	SelfHostedDomains        apijson.Field
-	ServiceAuth401Redirect   apijson.Field
-	SessionDuration          apijson.Field
-	SkipInterstitial         apijson.Field
-	Tags                     apijson.Field
-	UpdatedAt                apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
+func (r AccessAppNewParamsVariant0) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseObject) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (AccessAppNewParamsVariant0) ImplementsAccessAppNewParams() {
+
 }
 
-func (r AccessAppAccessApplicationsListAccessApplicationsResponseObject) implementsAccessAppAccessApplicationsListAccessApplicationsResponse() {
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders struct {
+type AccessAppNewParamsVariant0CorsHeaders struct {
 	// Allows all HTTP request headers.
-	AllowAllHeaders bool `json:"allow_all_headers"`
+	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
 	// Allows all HTTP request methods.
-	AllowAllMethods bool `json:"allow_all_methods"`
+	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
 	// Allows all origins.
-	AllowAllOrigins bool `json:"allow_all_origins"`
+	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
 	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
 	// client certificates) with requests.
-	AllowCredentials bool `json:"allow_credentials"`
+	AllowCredentials param.Field[bool] `json:"allow_credentials"`
 	// Allowed HTTP request headers.
-	AllowedHeaders []interface{} `json:"allowed_headers"`
+	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
 	// Allowed HTTP request methods.
-	AllowedMethods []AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod `json:"allowed_methods"`
+	AllowedMethods param.Field[[]AccessAppNewParamsVariant0CorsHeadersAllowedMethod] `json:"allowed_methods"`
 	// Allowed origins.
-	AllowedOrigins []interface{} `json:"allowed_origins"`
+	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
 	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge float64                                                                        `json:"max_age"`
-	JSON   accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON `json:"-"`
+	MaxAge param.Field[float64] `json:"max_age"`
 }
 
-// accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders]
-type accessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersJSON struct {
-	AllowAllHeaders  apijson.Field
-	AllowAllMethods  apijson.Field
-	AllowAllOrigins  apijson.Field
-	AllowCredentials apijson.Field
-	AllowedHeaders   apijson.Field
-	AllowedMethods   apijson.Field
-	AllowedOrigins   apijson.Field
-	MaxAge           apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r AccessAppNewParamsVariant0CorsHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeaders) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod string
+type AccessAppNewParamsVariant0CorsHeadersAllowedMethod string
 
 const (
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodGet     AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPost    AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodHead    AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPut     AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodConnect AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodOptions AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsListAccessApplicationsResponseObjectCorsHeadersAllowedMethod = "PATCH"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodGet     AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "GET"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodPost    AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "POST"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodHead    AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "HEAD"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodPut     AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "PUT"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodDelete  AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "DELETE"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodConnect AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "CONNECT"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodOptions AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodTrace   AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "TRACE"
+	AccessAppNewParamsVariant0CorsHeadersAllowedMethodPatch   AccessAppNewParamsVariant0CorsHeadersAllowedMethod = "PATCH"
 )
 
-// Identifier
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type AccessAppGetParamsAppID interface {
-	ImplementsAccessAppGetParamsAppID()
+type AccessAppNewParamsVariant1 struct {
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL param.Field[string] `json:"logo_url"`
+	// The name of the application.
+	Name    param.Field[string]                            `json:"name"`
+	SaasApp param.Field[AccessAppNewParamsVariant1SaasApp] `json:"saas_app"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags param.Field[[]string] `json:"tags"`
+	// The application type.
+	Type param.Field[string] `json:"type"`
 }
 
-type AccessAppGetResponseEnvelope struct {
-	Errors   []AccessAppGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessAppGetResponse                   `json:"result,required"`
+func (r AccessAppNewParamsVariant1) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant1) ImplementsAccessAppNewParams() {
+
+}
+
+// Satisfied by [AccessAppNewParamsVariant1SaasAppAccessSamlSaasApp],
+// [AccessAppNewParamsVariant1SaasAppAccessOidcSaasApp].
+type AccessAppNewParamsVariant1SaasApp interface {
+	implementsAccessAppNewParamsVariant1SaasApp()
+}
+
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasApp struct {
+	// Optional identifier indicating the authentication protocol used for the saas
+	// app. Required for OIDC. Default if unset is "saml"
+	AuthType param.Field[AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthType] `json:"auth_type"`
+	// The service provider's endpoint that is responsible for receiving and parsing a
+	// SAML assertion.
+	ConsumerServiceURL param.Field[string]                                                             `json:"consumer_service_url"`
+	CustomAttributes   param.Field[AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes] `json:"custom_attributes"`
+	// The URL that the user will be redirected to after a successful login for IDP
+	// initiated logins.
+	DefaultRelayState param.Field[string] `json:"default_relay_state"`
+	// The unique identifier for your SaaS application.
+	IdpEntityID param.Field[string] `json:"idp_entity_id"`
+	// The format of the name identifier sent to the SaaS application.
+	NameIDFormat param.Field[AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
+	// A [JSONata](https://jsonata.org/) expression that transforms an application's
+	// user identities into a NameID value for its SAML assertion. This expression
+	// should evaluate to a singular string. The output of this expression can override
+	// the `name_id_format` setting.
+	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// A globally unique name for an identity or service provider.
+	SpEntityID param.Field[string] `json:"sp_entity_id"`
+	// The endpoint where your SaaS application will send login requests.
+	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessSamlSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessSamlSaasApp) implementsAccessAppNewParamsVariant1SaasApp() {
+}
+
+// Optional identifier indicating the authentication protocol used for the saas
+// app. Required for OIDC. Default if unset is "saml"
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthType string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthTypeSaml AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthType = "saml"
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthTypeOidc AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppAuthType = "oidc"
+)
+
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes struct {
+	// The name of the attribute.
+	Name param.Field[string] `json:"name"`
+	// A globally unique name for an identity or service provider.
+	NameFormat param.Field[AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
+	Source     param.Field[AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A globally unique name for an identity or service provider.
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
+)
+
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource struct {
+	// The name of the IdP attribute.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The format of the name identifier sent to the SaaS application.
+type AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatID    AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "id"
+	AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppNewParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "email"
+)
+
+type AccessAppNewParamsVariant1SaasAppAccessOidcSaasApp struct {
+	// The URL where this applications tile redirects users
+	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
+	// Identifier of the authentication protocol used for the saas app. Required for
+	// OIDC.
+	AuthType param.Field[AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthType] `json:"auth_type"`
+	// The application client id
+	ClientID param.Field[string] `json:"client_id"`
+	// The application client secret, only returned on POST request.
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The OIDC flows supported by this application
+	GrantTypes param.Field[[]AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantType] `json:"grant_types"`
+	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
+	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
+	// The Access public certificate that will be used to verify your identity.
+	PublicKey param.Field[string] `json:"public_key"`
+	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
+	// tokens
+	RedirectUris param.Field[[]string] `json:"redirect_uris"`
+	// Define the user information shared with access
+	Scopes param.Field[[]AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope] `json:"scopes"`
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessOidcSaasApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AccessAppNewParamsVariant1SaasAppAccessOidcSaasApp) implementsAccessAppNewParamsVariant1SaasApp() {
+}
+
+// Identifier of the authentication protocol used for the saas app. Required for
+// OIDC.
+type AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthType string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthTypeSaml AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthType = "saml"
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthTypeOidc AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppAuthType = "oidc"
+)
+
+type AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantType string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code"
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
+)
+
+type AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope string
+
+const (
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScopeOpenid  AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope = "openid"
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScopeGroups  AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope = "groups"
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScopeEmail   AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope = "email"
+	AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScopeProfile AccessAppNewParamsVariant1SaasAppAccessOidcSaasAppScope = "profile"
+)
+
+type AccessAppNewParamsVariant2 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
+	// When set to true, users can authenticate to this application using their WARP
+	// session. When set to false this application will always require direct IdP
+	// authentication. This setting always overrides the organization setting for WARP
+	// authentication.
+	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool]                                  `json:"auto_redirect_to_identity"`
+	CorsHeaders            param.Field[AccessAppNewParamsVariant2CorsHeaders] `json:"cors_headers"`
+	// The custom error message shown to a user when they are denied access to the
+	// application.
+	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// Enables the binding cookie, which increases security against compromised
+	// authorization tokens and CSRF attacks.
+	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
+	// Enables the HttpOnly cookie attribute, which increases security against XSS
+	// attacks.
+	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL param.Field[string] `json:"logo_url"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// Enables cookie paths to scope an application's JWT to the application path. If
+	// disabled, the JWT will scope to the hostname by default
+	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
+	// Sets the SameSite cookie setting, which provides increased security against CSRF
+	// attacks.
+	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// List of domains that Access will secure.
+	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
+	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags param.Field[[]string] `json:"tags"`
+}
+
+func (r AccessAppNewParamsVariant2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant2) ImplementsAccessAppNewParams() {
+
+}
+
+type AccessAppNewParamsVariant2CorsHeaders struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials param.Field[bool] `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods param.Field[[]AccessAppNewParamsVariant2CorsHeadersAllowedMethod] `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge param.Field[float64] `json:"max_age"`
+}
+
+func (r AccessAppNewParamsVariant2CorsHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessAppNewParamsVariant2CorsHeadersAllowedMethod string
+
+const (
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodGet     AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "GET"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodPost    AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "POST"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodHead    AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "HEAD"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodPut     AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "PUT"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodDelete  AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "DELETE"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodConnect AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "CONNECT"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodOptions AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodTrace   AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "TRACE"
+	AccessAppNewParamsVariant2CorsHeadersAllowedMethodPatch   AccessAppNewParamsVariant2CorsHeadersAllowedMethod = "PATCH"
+)
+
+type AccessAppNewParamsVariant3 struct {
+	// The primary hostname and path that Access will secure. If the app is visible in
+	// the App Launcher dashboard, this is the domain that will be displayed.
+	Domain param.Field[string] `json:"domain,required"`
+	// The application type.
+	Type param.Field[string] `json:"type,required"`
+	// When set to true, users can authenticate to this application using their WARP
+	// session. When set to false this application will always require direct IdP
+	// authentication. This setting always overrides the organization setting for WARP
+	// authentication.
+	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool]                                  `json:"auto_redirect_to_identity"`
+	CorsHeaders            param.Field[AccessAppNewParamsVariant3CorsHeaders] `json:"cors_headers"`
+	// The custom error message shown to a user when they are denied access to the
+	// application.
+	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing identity-based rules.
+	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
+	// The custom URL a user is redirected to when they are denied access to the
+	// application when failing non-identity rules.
+	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
+	// The custom pages that will be displayed when applicable for this application
+	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// Enables the binding cookie, which increases security against compromised
+	// authorization tokens and CSRF attacks.
+	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
+	// Enables the HttpOnly cookie attribute, which increases security against XSS
+	// attacks.
+	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL param.Field[string] `json:"logo_url"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// Enables cookie paths to scope an application's JWT to the application path. If
+	// disabled, the JWT will scope to the hostname by default
+	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
+	// Sets the SameSite cookie setting, which provides increased security against CSRF
+	// attacks.
+	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
+	// List of domains that Access will secure.
+	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
+	// Returns a 401 status code when the request is blocked by a Service Auth policy.
+	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+	// Enables automatic authentication through cloudflared.
+	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags param.Field[[]string] `json:"tags"`
+}
+
+func (r AccessAppNewParamsVariant3) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant3) ImplementsAccessAppNewParams() {
+
+}
+
+type AccessAppNewParamsVariant3CorsHeaders struct {
+	// Allows all HTTP request headers.
+	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
+	// Allows all HTTP request methods.
+	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
+	// Allows all origins.
+	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
+	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
+	// client certificates) with requests.
+	AllowCredentials param.Field[bool] `json:"allow_credentials"`
+	// Allowed HTTP request headers.
+	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
+	// Allowed HTTP request methods.
+	AllowedMethods param.Field[[]AccessAppNewParamsVariant3CorsHeadersAllowedMethod] `json:"allowed_methods"`
+	// Allowed origins.
+	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
+	// The maximum number of seconds the results of a preflight request can be cached.
+	MaxAge param.Field[float64] `json:"max_age"`
+}
+
+func (r AccessAppNewParamsVariant3CorsHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessAppNewParamsVariant3CorsHeadersAllowedMethod string
+
+const (
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodGet     AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "GET"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodPost    AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "POST"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodHead    AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "HEAD"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodPut     AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "PUT"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodDelete  AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "DELETE"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodConnect AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "CONNECT"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodOptions AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "OPTIONS"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodTrace   AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "TRACE"
+	AccessAppNewParamsVariant3CorsHeadersAllowedMethodPatch   AccessAppNewParamsVariant3CorsHeadersAllowedMethod = "PATCH"
+)
+
+type AccessAppNewParamsVariant4 struct {
+	// The application type.
+	Type param.Field[AccessAppNewParamsVariant4Type] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessAppNewParamsVariant4) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant4) ImplementsAccessAppNewParams() {
+
+}
+
+// The application type.
+type AccessAppNewParamsVariant4Type string
+
+const (
+	AccessAppNewParamsVariant4TypeSelfHosted  AccessAppNewParamsVariant4Type = "self_hosted"
+	AccessAppNewParamsVariant4TypeSaas        AccessAppNewParamsVariant4Type = "saas"
+	AccessAppNewParamsVariant4TypeSSH         AccessAppNewParamsVariant4Type = "ssh"
+	AccessAppNewParamsVariant4TypeVnc         AccessAppNewParamsVariant4Type = "vnc"
+	AccessAppNewParamsVariant4TypeAppLauncher AccessAppNewParamsVariant4Type = "app_launcher"
+	AccessAppNewParamsVariant4TypeWarp        AccessAppNewParamsVariant4Type = "warp"
+	AccessAppNewParamsVariant4TypeBiso        AccessAppNewParamsVariant4Type = "biso"
+	AccessAppNewParamsVariant4TypeBookmark    AccessAppNewParamsVariant4Type = "bookmark"
+	AccessAppNewParamsVariant4TypeDashSSO     AccessAppNewParamsVariant4Type = "dash_sso"
+)
+
+type AccessAppNewParamsVariant5 struct {
+	// The application type.
+	Type param.Field[AccessAppNewParamsVariant5Type] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessAppNewParamsVariant5) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant5) ImplementsAccessAppNewParams() {
+
+}
+
+// The application type.
+type AccessAppNewParamsVariant5Type string
+
+const (
+	AccessAppNewParamsVariant5TypeSelfHosted  AccessAppNewParamsVariant5Type = "self_hosted"
+	AccessAppNewParamsVariant5TypeSaas        AccessAppNewParamsVariant5Type = "saas"
+	AccessAppNewParamsVariant5TypeSSH         AccessAppNewParamsVariant5Type = "ssh"
+	AccessAppNewParamsVariant5TypeVnc         AccessAppNewParamsVariant5Type = "vnc"
+	AccessAppNewParamsVariant5TypeAppLauncher AccessAppNewParamsVariant5Type = "app_launcher"
+	AccessAppNewParamsVariant5TypeWarp        AccessAppNewParamsVariant5Type = "warp"
+	AccessAppNewParamsVariant5TypeBiso        AccessAppNewParamsVariant5Type = "biso"
+	AccessAppNewParamsVariant5TypeBookmark    AccessAppNewParamsVariant5Type = "bookmark"
+	AccessAppNewParamsVariant5TypeDashSSO     AccessAppNewParamsVariant5Type = "dash_sso"
+)
+
+type AccessAppNewParamsVariant6 struct {
+	// The application type.
+	Type param.Field[AccessAppNewParamsVariant6Type] `json:"type,required"`
+	// The identity providers your users can select when connecting to this
+	// application. Defaults to all IdPs configured in your account.
+	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login. You must specify only one identity provider in allowed_idps.
+	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
+	// The amount of time that tokens issued for this application will be valid. Must
+	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
+	// s, m, h.
+	SessionDuration param.Field[string] `json:"session_duration"`
+}
+
+func (r AccessAppNewParamsVariant6) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant6) ImplementsAccessAppNewParams() {
+
+}
+
+// The application type.
+type AccessAppNewParamsVariant6Type string
+
+const (
+	AccessAppNewParamsVariant6TypeSelfHosted  AccessAppNewParamsVariant6Type = "self_hosted"
+	AccessAppNewParamsVariant6TypeSaas        AccessAppNewParamsVariant6Type = "saas"
+	AccessAppNewParamsVariant6TypeSSH         AccessAppNewParamsVariant6Type = "ssh"
+	AccessAppNewParamsVariant6TypeVnc         AccessAppNewParamsVariant6Type = "vnc"
+	AccessAppNewParamsVariant6TypeAppLauncher AccessAppNewParamsVariant6Type = "app_launcher"
+	AccessAppNewParamsVariant6TypeWarp        AccessAppNewParamsVariant6Type = "warp"
+	AccessAppNewParamsVariant6TypeBiso        AccessAppNewParamsVariant6Type = "biso"
+	AccessAppNewParamsVariant6TypeBookmark    AccessAppNewParamsVariant6Type = "bookmark"
+	AccessAppNewParamsVariant6TypeDashSSO     AccessAppNewParamsVariant6Type = "dash_sso"
+)
+
+type AccessAppNewParamsVariant7 struct {
+	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
+	// The URL or domain of the bookmark.
+	Domain param.Field[interface{}] `json:"domain"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL param.Field[string] `json:"logo_url"`
+	// The name of the application.
+	Name param.Field[string] `json:"name"`
+	// The tags you want assigned to an application. Tags are used to filter
+	// applications in the App Launcher dashboard.
+	Tags param.Field[[]string] `json:"tags"`
+	// The application type.
+	Type param.Field[string] `json:"type"`
+}
+
+func (r AccessAppNewParamsVariant7) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessAppNewParamsVariant7) ImplementsAccessAppNewParams() {
+
+}
+
+type AccessAppNewResponseEnvelope struct {
+	Errors   []AccessAppNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessAppGetResponseEnvelopeJSON    `json:"-"`
+	Success AccessAppNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessAppNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessAppGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseEnvelope]
-type accessAppGetResponseEnvelopeJSON struct {
+// accessAppNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppNewResponseEnvelope]
+type accessAppNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -862,53 +1484,53 @@ type accessAppGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppGetResponseEnvelopeErrors struct {
+type AccessAppNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
-	JSON    accessAppGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    accessAppNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessAppGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccessAppGetResponseEnvelopeErrors]
-type accessAppGetResponseEnvelopeErrorsJSON struct {
+// accessAppNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AccessAppNewResponseEnvelopeErrors]
+type accessAppNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppGetResponseEnvelopeMessages struct {
+type AccessAppNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
-	JSON    accessAppGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    accessAppNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessAppGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessAppGetResponseEnvelopeMessages]
-type accessAppGetResponseEnvelopeMessagesJSON struct {
+// accessAppNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppNewResponseEnvelopeMessages]
+type accessAppNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessAppGetResponseEnvelopeSuccess bool
+type AccessAppNewResponseEnvelopeSuccess bool
 
 const (
-	AccessAppGetResponseEnvelopeSuccessTrue AccessAppGetResponseEnvelopeSuccess = true
+	AccessAppNewResponseEnvelopeSuccessTrue AccessAppNewResponseEnvelopeSuccess = true
 )
 
 // This interface is a union satisfied by one of the following:
@@ -1680,6 +2302,104 @@ const (
 	AccessAppUpdateResponseEnvelopeSuccessTrue AccessAppUpdateResponseEnvelopeSuccess = true
 )
 
+type AccessAppListResponseEnvelope struct {
+	Errors   []AccessAppListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessAppListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    AccessAppListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessAppListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessAppListResponseEnvelopeJSON       `json:"-"`
+}
+
+// accessAppListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppListResponseEnvelope]
+type accessAppListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppListResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    accessAppListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessAppListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessAppListResponseEnvelopeErrors]
+type accessAppListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessAppListResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessAppListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessAppListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppListResponseEnvelopeMessages]
+type accessAppListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessAppListResponseEnvelopeSuccess bool
+
+const (
+	AccessAppListResponseEnvelopeSuccessTrue AccessAppListResponseEnvelopeSuccess = true
+)
+
+type AccessAppListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                     `json:"total_count"`
+	JSON       accessAppListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// accessAppListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [AccessAppListResponseEnvelopeResultInfo]
+type accessAppListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessAppListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Identifier
 //
 // Satisfied by [shared.UnionString], [shared.UnionString].
@@ -1756,668 +2476,25 @@ const (
 	AccessAppDeleteResponseEnvelopeSuccessTrue AccessAppDeleteResponseEnvelopeSuccess = true
 )
 
-// This interface is a union satisfied by one of the following:
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant0],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant1],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant2],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant3],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant4],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant5],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant6],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant7].
-type AccessAppAccessApplicationsAddAnApplicationParams interface {
-	ImplementsAccessAppAccessApplicationsAddAnApplicationParams()
+// Identifier
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type AccessAppGetParamsAppID interface {
+	ImplementsAccessAppGetParamsAppID()
 }
 
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant0 struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain,required"`
-	// The application type.
-	Type param.Field[string] `json:"type,required"`
-	// When set to true, users can authenticate to this application using their WARP
-	// session. When set to false this application will always require direct IdP
-	// authentication. This setting always overrides the organization setting for WARP
-	// authentication.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                                 `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeaders] `json:"cors_headers"`
-	// The custom error message shown to a user when they are denied access to the
-	// application.
-	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing identity-based rules.
-	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
-	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// Enables the binding cookie, which increases security against compromised
-	// authorization tokens and CSRF attacks.
-	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
-	// Enables the HttpOnly cookie attribute, which increases security against XSS
-	// attacks.
-	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL param.Field[string] `json:"logo_url"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// Enables cookie paths to scope an application's JWT to the application path. If
-	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// Sets the SameSite cookie setting, which provides increased security against CSRF
-	// attacks.
-	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
-	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy.
-	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags param.Field[[]string] `json:"tags"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant0) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant0) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationParamsVariant0CorsHeadersAllowedMethod = "PATCH"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1 struct {
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL param.Field[string] `json:"logo_url"`
-	// The name of the application.
-	Name    param.Field[string]                                                           `json:"name"`
-	SaasApp param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp] `json:"saas_app"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant1) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-// Satisfied by
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp],
-// [AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp].
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp interface {
-	implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp()
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp struct {
-	// Optional identifier indicating the authentication protocol used for the saas
-	// app. Required for OIDC. Default if unset is "saml"
-	AuthType param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType] `json:"auth_type"`
-	// The service provider's endpoint that is responsible for receiving and parsing a
-	// SAML assertion.
-	ConsumerServiceURL param.Field[string]                                                                                            `json:"consumer_service_url"`
-	CustomAttributes   param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes] `json:"custom_attributes"`
-	// The URL that the user will be redirected to after a successful login for IDP
-	// initiated logins.
-	DefaultRelayState param.Field[string] `json:"default_relay_state"`
-	// The unique identifier for your SaaS application.
-	IdpEntityID param.Field[string] `json:"idp_entity_id"`
-	// The format of the name identifier sent to the SaaS application.
-	NameIDFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat] `json:"name_id_format"`
-	// A [JSONata](https://jsonata.org/) expression that transforms an application's
-	// user identities into a NameID value for its SAML assertion. This expression
-	// should evaluate to a singular string. The output of this expression can override
-	// the `name_id_format` setting.
-	NameIDTransformJsonata param.Field[string] `json:"name_id_transform_jsonata"`
-	// The Access public certificate that will be used to verify your identity.
-	PublicKey param.Field[string] `json:"public_key"`
-	// A globally unique name for an identity or service provider.
-	SpEntityID param.Field[string] `json:"sp_entity_id"`
-	// The endpoint where your SaaS application will send login requests.
-	SSOEndpoint param.Field[string] `json:"sso_endpoint"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasApp) implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp() {
-}
-
-// Optional identifier indicating the authentication protocol used for the saas
-// app. Required for OIDC. Default if unset is "saml"
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthTypeSaml AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType = "saml"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthTypeOidc AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppAuthType = "oidc"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes struct {
-	// The name of the attribute.
-	Name param.Field[string] `json:"name"`
-	// A globally unique name for an identity or service provider.
-	NameFormat param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat] `json:"name_format"`
-	Source     param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource]     `json:"source"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A globally unique name for an identity or service provider.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUnspecified AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic       AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:basic"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatUri         AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesNameFormat = "urn:oasis:names:tc:SAML:2.0:attrname-format:uri"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource struct {
-	// The name of the IdP attribute.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppCustomAttributesSource) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The format of the name identifier sent to the SaaS application.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatID    AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "id"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormatEmail AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessSamlSaasAppNameIDFormat = "email"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp struct {
-	// The URL where this applications tile redirects users
-	AppLauncherURL param.Field[string] `json:"app_launcher_url"`
-	// Identifier of the authentication protocol used for the saas app. Required for
-	// OIDC.
-	AuthType param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType] `json:"auth_type"`
-	// The application client id
-	ClientID param.Field[string] `json:"client_id"`
-	// The application client secret, only returned on POST request.
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The OIDC flows supported by this application
-	GrantTypes param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType] `json:"grant_types"`
-	// A regex to filter Cloudflare groups returned in ID token and userinfo endpoint
-	GroupFilterRegex param.Field[string] `json:"group_filter_regex"`
-	// The Access public certificate that will be used to verify your identity.
-	PublicKey param.Field[string] `json:"public_key"`
-	// The permitted URL's for Cloudflare to return Authorization codes and Access/ID
-	// tokens
-	RedirectUris param.Field[[]string] `json:"redirect_uris"`
-	// Define the user information shared with access
-	Scopes param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope] `json:"scopes"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasApp) implementsAccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasApp() {
-}
-
-// Identifier of the authentication protocol used for the saas app. Required for
-// OIDC.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthTypeSaml AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType = "saml"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthTypeOidc AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppAuthType = "oidc"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCode         AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantTypeAuthorizationCodeWithPkce AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppGrantType = "authorization_code_with_pkce"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeOpenid  AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "openid"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeGroups  AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "groups"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeEmail   AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "email"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScopeProfile AccessAppAccessApplicationsAddAnApplicationParamsVariant1SaasAppAccessOidcSaasAppScope = "profile"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant2 struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain,required"`
-	// The application type.
-	Type param.Field[string] `json:"type,required"`
-	// When set to true, users can authenticate to this application using their WARP
-	// session. When set to false this application will always require direct IdP
-	// authentication. This setting always overrides the organization setting for WARP
-	// authentication.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                                 `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeaders] `json:"cors_headers"`
-	// The custom error message shown to a user when they are denied access to the
-	// application.
-	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing identity-based rules.
-	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
-	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// Enables the binding cookie, which increases security against compromised
-	// authorization tokens and CSRF attacks.
-	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
-	// Enables the HttpOnly cookie attribute, which increases security against XSS
-	// attacks.
-	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL param.Field[string] `json:"logo_url"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// Enables cookie paths to scope an application's JWT to the application path. If
-	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// Sets the SameSite cookie setting, which provides increased security against CSRF
-	// attacks.
-	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
-	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy.
-	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags param.Field[[]string] `json:"tags"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant2) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant2) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationParamsVariant2CorsHeadersAllowedMethod = "PATCH"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant3 struct {
-	// The primary hostname and path that Access will secure. If the app is visible in
-	// the App Launcher dashboard, this is the domain that will be displayed.
-	Domain param.Field[string] `json:"domain,required"`
-	// The application type.
-	Type param.Field[string] `json:"type,required"`
-	// When set to true, users can authenticate to this application using their WARP
-	// session. When set to false this application will always require direct IdP
-	// authentication. This setting always overrides the organization setting for WARP
-	// authentication.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible param.Field[bool] `json:"app_launcher_visible"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool]                                                                 `json:"auto_redirect_to_identity"`
-	CorsHeaders            param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeaders] `json:"cors_headers"`
-	// The custom error message shown to a user when they are denied access to the
-	// application.
-	CustomDenyMessage param.Field[string] `json:"custom_deny_message"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing identity-based rules.
-	CustomDenyURL param.Field[string] `json:"custom_deny_url"`
-	// The custom URL a user is redirected to when they are denied access to the
-	// application when failing non-identity rules.
-	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
-	// The custom pages that will be displayed when applicable for this application
-	CustomPages param.Field[[]string] `json:"custom_pages"`
-	// Enables the binding cookie, which increases security against compromised
-	// authorization tokens and CSRF attacks.
-	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
-	// Enables the HttpOnly cookie attribute, which increases security against XSS
-	// attacks.
-	HTTPOnlyCookieAttribute param.Field[bool] `json:"http_only_cookie_attribute"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL param.Field[string] `json:"logo_url"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// Enables cookie paths to scope an application's JWT to the application path. If
-	// disabled, the JWT will scope to the hostname by default
-	PathCookieAttribute param.Field[bool] `json:"path_cookie_attribute"`
-	// Sets the SameSite cookie setting, which provides increased security against CSRF
-	// attacks.
-	SameSiteCookieAttribute param.Field[string] `json:"same_site_cookie_attribute"`
-	// List of domains that Access will secure.
-	SelfHostedDomains param.Field[[]string] `json:"self_hosted_domains"`
-	// Returns a 401 status code when the request is blocked by a Service Auth policy.
-	ServiceAuth401Redirect param.Field[bool] `json:"service_auth_401_redirect"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-	// Enables automatic authentication through cloudflared.
-	SkipInterstitial param.Field[bool] `json:"skip_interstitial"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags param.Field[[]string] `json:"tags"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant3) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant3) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeaders struct {
-	// Allows all HTTP request headers.
-	AllowAllHeaders param.Field[bool] `json:"allow_all_headers"`
-	// Allows all HTTP request methods.
-	AllowAllMethods param.Field[bool] `json:"allow_all_methods"`
-	// Allows all origins.
-	AllowAllOrigins param.Field[bool] `json:"allow_all_origins"`
-	// When set to `true`, includes credentials (cookies, authorization headers, or TLS
-	// client certificates) with requests.
-	AllowCredentials param.Field[bool] `json:"allow_credentials"`
-	// Allowed HTTP request headers.
-	AllowedHeaders param.Field[[]interface{}] `json:"allowed_headers"`
-	// Allowed HTTP request methods.
-	AllowedMethods param.Field[[]AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod] `json:"allowed_methods"`
-	// Allowed origins.
-	AllowedOrigins param.Field[[]interface{}] `json:"allowed_origins"`
-	// The maximum number of seconds the results of a preflight request can be cached.
-	MaxAge param.Field[float64] `json:"max_age"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeaders) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodGet     AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "GET"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodPost    AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "POST"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodHead    AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "HEAD"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodPut     AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "PUT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodDelete  AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "DELETE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodConnect AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "CONNECT"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodOptions AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "OPTIONS"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodTrace   AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "TRACE"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethodPatch   AccessAppAccessApplicationsAddAnApplicationParamsVariant3CorsHeadersAllowedMethod = "PATCH"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant4 struct {
-	// The application type.
-	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type] `json:"type,required"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant4) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant4) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-// The application type.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "self_hosted"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "saas"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "ssh"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "vnc"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "app_launcher"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "warp"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "biso"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "bookmark"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant4TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant4Type = "dash_sso"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant5 struct {
-	// The application type.
-	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type] `json:"type,required"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant5) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant5) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-// The application type.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "self_hosted"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "saas"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "ssh"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "vnc"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "app_launcher"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "warp"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "biso"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "bookmark"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant5TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant5Type = "dash_sso"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant6 struct {
-	// The application type.
-	Type param.Field[AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type] `json:"type,required"`
-	// The identity providers your users can select when connecting to this
-	// application. Defaults to all IdPs configured in your account.
-	AllowedIdps param.Field[[]string] `json:"allowed_idps"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login. You must specify only one identity provider in allowed_idps.
-	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
-	// The amount of time that tokens issued for this application will be valid. Must
-	// be in the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms,
-	// s, m, h.
-	SessionDuration param.Field[string] `json:"session_duration"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant6) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant6) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-// The application type.
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type string
-
-const (
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSelfHosted  AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "self_hosted"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSaas        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "saas"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeSSH         AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "ssh"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeVnc         AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "vnc"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeAppLauncher AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "app_launcher"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeWarp        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "warp"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeBiso        AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "biso"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeBookmark    AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "bookmark"
-	AccessAppAccessApplicationsAddAnApplicationParamsVariant6TypeDashSSO     AccessAppAccessApplicationsAddAnApplicationParamsVariant6Type = "dash_sso"
-)
-
-type AccessAppAccessApplicationsAddAnApplicationParamsVariant7 struct {
-	AppLauncherVisible param.Field[interface{}] `json:"app_launcher_visible"`
-	// The URL or domain of the bookmark.
-	Domain param.Field[interface{}] `json:"domain"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL param.Field[string] `json:"logo_url"`
-	// The name of the application.
-	Name param.Field[string] `json:"name"`
-	// The tags you want assigned to an application. Tags are used to filter
-	// applications in the App Launcher dashboard.
-	Tags param.Field[[]string] `json:"tags"`
-	// The application type.
-	Type param.Field[string] `json:"type"`
-}
-
-func (r AccessAppAccessApplicationsAddAnApplicationParamsVariant7) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessAppAccessApplicationsAddAnApplicationParamsVariant7) ImplementsAccessAppAccessApplicationsAddAnApplicationParams() {
-
-}
-
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelope struct {
-	Errors   []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessAppAccessApplicationsAddAnApplicationResponse                   `json:"result,required"`
+type AccessAppGetResponseEnvelope struct {
+	Errors   []AccessAppGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessAppGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessAppGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON    `json:"-"`
+	Success AccessAppGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessAppGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelope]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON struct {
+// accessAppGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseEnvelope]
+type accessAppGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -2426,155 +2503,51 @@ type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON `json:"-"`
+type AccessAppGetResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    accessAppGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrorsJSON struct {
+// accessAppGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [AccessAppGetResponseEnvelopeErrors]
+type accessAppGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON `json:"-"`
+type AccessAppGetResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessAppGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages]
-type accessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessagesJSON struct {
+// accessAppGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessAppGetResponseEnvelopeMessages]
+type accessAppGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessAppGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess bool
+type AccessAppGetResponseEnvelopeSuccess bool
 
 const (
-	AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccessTrue AccessAppAccessApplicationsAddAnApplicationResponseEnvelopeSuccess = true
+	AccessAppGetResponseEnvelopeSuccessTrue AccessAppGetResponseEnvelopeSuccess = true
 )
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope struct {
-	Errors   []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessAppAccessApplicationsListAccessApplicationsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON       `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess bool
-
-const (
-	AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccessTrue AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeSuccess = true
-)
-
-type AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                         `json:"total_count"`
-	JSON       accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo]
-type accessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessAppAccessApplicationsListAccessApplicationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

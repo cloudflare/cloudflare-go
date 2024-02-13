@@ -35,19 +35,6 @@ func NewEmailRoutingRuleService(opts ...option.RequestOption) (r *EmailRoutingRu
 	return
 }
 
-// Get information for a specific routing rule already created.
-func (r *EmailRoutingRuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRuleGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env EmailRoutingRuleGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Update actions and matches, or enable/disable specific routing rules.
 func (r *EmailRoutingRuleService) Update(ctx context.Context, zoneIdentifier string, ruleIdentifier string, body EmailRoutingRuleUpdateParams, opts ...option.RequestOption) (res *EmailRoutingRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -102,118 +89,18 @@ func (r *EmailRoutingRuleService) EmailRoutingRoutingRulesListRoutingRules(ctx c
 	return
 }
 
-type EmailRoutingRuleGetResponse struct {
-	// Routing rule identifier.
-	ID string `json:"id"`
-	// List actions patterns.
-	Actions []EmailRoutingRuleGetResponseAction `json:"actions"`
-	// Routing rule status.
-	Enabled EmailRoutingRuleGetResponseEnabled `json:"enabled"`
-	// Matching patterns to forward to your actions.
-	Matchers []EmailRoutingRuleGetResponseMatcher `json:"matchers"`
-	// Routing rule name.
-	Name string `json:"name"`
-	// Priority of the routing rule.
-	Priority float64 `json:"priority"`
-	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
-	Tag  string                          `json:"tag"`
-	JSON emailRoutingRuleGetResponseJSON `json:"-"`
+// Get information for a specific routing rule already created.
+func (r *EmailRoutingRuleService) Get(ctx context.Context, zoneIdentifier string, ruleIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRuleGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env EmailRoutingRuleGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/email/routing/rules/%s", zoneIdentifier, ruleIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-// emailRoutingRuleGetResponseJSON contains the JSON metadata for the struct
-// [EmailRoutingRuleGetResponse]
-type emailRoutingRuleGetResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	Enabled     apijson.Field
-	Matchers    apijson.Field
-	Name        apijson.Field
-	Priority    apijson.Field
-	Tag         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Actions pattern.
-type EmailRoutingRuleGetResponseAction struct {
-	// Type of supported action.
-	Type  EmailRoutingRuleGetResponseActionsType `json:"type,required"`
-	Value []string                               `json:"value,required"`
-	JSON  emailRoutingRuleGetResponseActionJSON  `json:"-"`
-}
-
-// emailRoutingRuleGetResponseActionJSON contains the JSON metadata for the struct
-// [EmailRoutingRuleGetResponseAction]
-type emailRoutingRuleGetResponseActionJSON struct {
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRuleGetResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Type of supported action.
-type EmailRoutingRuleGetResponseActionsType string
-
-const (
-	EmailRoutingRuleGetResponseActionsTypeDrop    EmailRoutingRuleGetResponseActionsType = "drop"
-	EmailRoutingRuleGetResponseActionsTypeForward EmailRoutingRuleGetResponseActionsType = "forward"
-	EmailRoutingRuleGetResponseActionsTypeWorker  EmailRoutingRuleGetResponseActionsType = "worker"
-)
-
-// Routing rule status.
-type EmailRoutingRuleGetResponseEnabled bool
-
-const (
-	EmailRoutingRuleGetResponseEnabledTrue  EmailRoutingRuleGetResponseEnabled = true
-	EmailRoutingRuleGetResponseEnabledFalse EmailRoutingRuleGetResponseEnabled = false
-)
-
-// Matching pattern to forward your actions.
-type EmailRoutingRuleGetResponseMatcher struct {
-	// Field for type matcher.
-	Field EmailRoutingRuleGetResponseMatchersField `json:"field,required"`
-	// Type of matcher.
-	Type EmailRoutingRuleGetResponseMatchersType `json:"type,required"`
-	// Value for matcher.
-	Value string                                 `json:"value,required"`
-	JSON  emailRoutingRuleGetResponseMatcherJSON `json:"-"`
-}
-
-// emailRoutingRuleGetResponseMatcherJSON contains the JSON metadata for the struct
-// [EmailRoutingRuleGetResponseMatcher]
-type emailRoutingRuleGetResponseMatcherJSON struct {
-	Field       apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRuleGetResponseMatcher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Field for type matcher.
-type EmailRoutingRuleGetResponseMatchersField string
-
-const (
-	EmailRoutingRuleGetResponseMatchersFieldTo EmailRoutingRuleGetResponseMatchersField = "to"
-)
-
-// Type of matcher.
-type EmailRoutingRuleGetResponseMatchersType string
-
-const (
-	EmailRoutingRuleGetResponseMatchersTypeLiteral EmailRoutingRuleGetResponseMatchersType = "literal"
-)
 
 type EmailRoutingRuleUpdateResponse struct {
 	// Routing rule identifier.
@@ -673,73 +560,117 @@ const (
 	EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseMatchersTypeLiteral EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseMatchersType = "literal"
 )
 
-type EmailRoutingRuleGetResponseEnvelope struct {
-	Errors   []EmailRoutingRuleGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingRuleGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   EmailRoutingRuleGetResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success EmailRoutingRuleGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    emailRoutingRuleGetResponseEnvelopeJSON    `json:"-"`
+type EmailRoutingRuleGetResponse struct {
+	// Routing rule identifier.
+	ID string `json:"id"`
+	// List actions patterns.
+	Actions []EmailRoutingRuleGetResponseAction `json:"actions"`
+	// Routing rule status.
+	Enabled EmailRoutingRuleGetResponseEnabled `json:"enabled"`
+	// Matching patterns to forward to your actions.
+	Matchers []EmailRoutingRuleGetResponseMatcher `json:"matchers"`
+	// Routing rule name.
+	Name string `json:"name"`
+	// Priority of the routing rule.
+	Priority float64 `json:"priority"`
+	// Routing rule tag. (Deprecated, replaced by routing rule identifier)
+	Tag  string                          `json:"tag"`
+	JSON emailRoutingRuleGetResponseJSON `json:"-"`
 }
 
-// emailRoutingRuleGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [EmailRoutingRuleGetResponseEnvelope]
-type emailRoutingRuleGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
+// emailRoutingRuleGetResponseJSON contains the JSON metadata for the struct
+// [EmailRoutingRuleGetResponse]
+type emailRoutingRuleGetResponseJSON struct {
+	ID          apijson.Field
+	Actions     apijson.Field
+	Enabled     apijson.Field
+	Matchers    apijson.Field
+	Name        apijson.Field
+	Priority    apijson.Field
+	Tag         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EmailRoutingRuleGetResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    emailRoutingRuleGetResponseEnvelopeErrorsJSON `json:"-"`
+// Actions pattern.
+type EmailRoutingRuleGetResponseAction struct {
+	// Type of supported action.
+	Type  EmailRoutingRuleGetResponseActionsType `json:"type,required"`
+	Value []string                               `json:"value,required"`
+	JSON  emailRoutingRuleGetResponseActionJSON  `json:"-"`
 }
 
-// emailRoutingRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [EmailRoutingRuleGetResponseEnvelopeErrors]
-type emailRoutingRuleGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+// emailRoutingRuleGetResponseActionJSON contains the JSON metadata for the struct
+// [EmailRoutingRuleGetResponseAction]
+type emailRoutingRuleGetResponseActionJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *EmailRoutingRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailRoutingRuleGetResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type EmailRoutingRuleGetResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    emailRoutingRuleGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [EmailRoutingRuleGetResponseEnvelopeMessages]
-type emailRoutingRuleGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type EmailRoutingRuleGetResponseEnvelopeSuccess bool
+// Type of supported action.
+type EmailRoutingRuleGetResponseActionsType string
 
 const (
-	EmailRoutingRuleGetResponseEnvelopeSuccessTrue EmailRoutingRuleGetResponseEnvelopeSuccess = true
+	EmailRoutingRuleGetResponseActionsTypeDrop    EmailRoutingRuleGetResponseActionsType = "drop"
+	EmailRoutingRuleGetResponseActionsTypeForward EmailRoutingRuleGetResponseActionsType = "forward"
+	EmailRoutingRuleGetResponseActionsTypeWorker  EmailRoutingRuleGetResponseActionsType = "worker"
+)
+
+// Routing rule status.
+type EmailRoutingRuleGetResponseEnabled bool
+
+const (
+	EmailRoutingRuleGetResponseEnabledTrue  EmailRoutingRuleGetResponseEnabled = true
+	EmailRoutingRuleGetResponseEnabledFalse EmailRoutingRuleGetResponseEnabled = false
+)
+
+// Matching pattern to forward your actions.
+type EmailRoutingRuleGetResponseMatcher struct {
+	// Field for type matcher.
+	Field EmailRoutingRuleGetResponseMatchersField `json:"field,required"`
+	// Type of matcher.
+	Type EmailRoutingRuleGetResponseMatchersType `json:"type,required"`
+	// Value for matcher.
+	Value string                                 `json:"value,required"`
+	JSON  emailRoutingRuleGetResponseMatcherJSON `json:"-"`
+}
+
+// emailRoutingRuleGetResponseMatcherJSON contains the JSON metadata for the struct
+// [EmailRoutingRuleGetResponseMatcher]
+type emailRoutingRuleGetResponseMatcherJSON struct {
+	Field       apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingRuleGetResponseMatcher) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Field for type matcher.
+type EmailRoutingRuleGetResponseMatchersField string
+
+const (
+	EmailRoutingRuleGetResponseMatchersFieldTo EmailRoutingRuleGetResponseMatchersField = "to"
+)
+
+// Type of matcher.
+type EmailRoutingRuleGetResponseMatchersType string
+
+const (
+	EmailRoutingRuleGetResponseMatchersTypeLiteral EmailRoutingRuleGetResponseMatchersType = "literal"
 )
 
 type EmailRoutingRuleUpdateParams struct {
@@ -1226,3 +1157,72 @@ type emailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeRes
 func (r *EmailRoutingRuleEmailRoutingRoutingRulesListRoutingRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type EmailRoutingRuleGetResponseEnvelope struct {
+	Errors   []EmailRoutingRuleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []EmailRoutingRuleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   EmailRoutingRuleGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success EmailRoutingRuleGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    emailRoutingRuleGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// emailRoutingRuleGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [EmailRoutingRuleGetResponseEnvelope]
+type emailRoutingRuleGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type EmailRoutingRuleGetResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    emailRoutingRuleGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// emailRoutingRuleGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [EmailRoutingRuleGetResponseEnvelopeErrors]
+type emailRoutingRuleGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type EmailRoutingRuleGetResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    emailRoutingRuleGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// emailRoutingRuleGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [EmailRoutingRuleGetResponseEnvelopeMessages]
+type emailRoutingRuleGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type EmailRoutingRuleGetResponseEnvelopeSuccess bool
+
+const (
+	EmailRoutingRuleGetResponseEnvelopeSuccessTrue EmailRoutingRuleGetResponseEnvelopeSuccess = true
+)

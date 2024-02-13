@@ -3,7 +3,7 @@
 <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-sdk-go.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
-API](https://developers.cloudflare.com/api/) from applications written in Go. The full API of this library can be found in [api.md](api.md).
+API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
 
 ## Installation
 
@@ -43,7 +43,7 @@ func main() {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),           // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
 		option.WithAPIEmail("dev@cloudflare.com"),                       // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"), // defaults to os.LookupEnv("CLOUDFLARE_API_TOKEN")
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("My User Service Key"),                // defaults to os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY")
 	)
 	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
 		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{

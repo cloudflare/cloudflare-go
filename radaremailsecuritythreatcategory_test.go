@@ -37,12 +37,12 @@ func TestRadarEmailSecurityThreatCategoryListWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsDateRange{cloudflare.RadarEmailSecurityThreatCategoryListParamsDateRange1d, cloudflare.RadarEmailSecurityThreatCategoryListParamsDateRange2d, cloudflare.RadarEmailSecurityThreatCategoryListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Dkim:        cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsDkim{cloudflare.RadarEmailSecurityThreatCategoryListParamsDkimPass, cloudflare.RadarEmailSecurityThreatCategoryListParamsDkimNone, cloudflare.RadarEmailSecurityThreatCategoryListParamsDkimFail}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsDKIM{cloudflare.RadarEmailSecurityThreatCategoryListParamsDKIMPass, cloudflare.RadarEmailSecurityThreatCategoryListParamsDKIMNone, cloudflare.RadarEmailSecurityThreatCategoryListParamsDKIMFail}),
 		Dmarc:       cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsDmarc{cloudflare.RadarEmailSecurityThreatCategoryListParamsDmarcPass, cloudflare.RadarEmailSecurityThreatCategoryListParamsDmarcNone, cloudflare.RadarEmailSecurityThreatCategoryListParamsDmarcFail}),
 		Format:      cloudflare.F(cloudflare.RadarEmailSecurityThreatCategoryListParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Spf:         cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsSpf{cloudflare.RadarEmailSecurityThreatCategoryListParamsSpfPass, cloudflare.RadarEmailSecurityThreatCategoryListParamsSpfNone, cloudflare.RadarEmailSecurityThreatCategoryListParamsSpfFail}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityThreatCategoryListParamsSPF{cloudflare.RadarEmailSecurityThreatCategoryListParamsSPFPass, cloudflare.RadarEmailSecurityThreatCategoryListParamsSPFNone, cloudflare.RadarEmailSecurityThreatCategoryListParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

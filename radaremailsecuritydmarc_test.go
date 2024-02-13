@@ -37,11 +37,11 @@ func TestRadarEmailSecurityDmarcListWithOptionalParams(t *testing.T) {
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecurityDmarcListParamsDateRange{cloudflare.RadarEmailSecurityDmarcListParamsDateRange1d, cloudflare.RadarEmailSecurityDmarcListParamsDateRange2d, cloudflare.RadarEmailSecurityDmarcListParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Dkim:        cloudflare.F([]cloudflare.RadarEmailSecurityDmarcListParamsDkim{cloudflare.RadarEmailSecurityDmarcListParamsDkimPass, cloudflare.RadarEmailSecurityDmarcListParamsDkimNone, cloudflare.RadarEmailSecurityDmarcListParamsDkimFail}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecurityDmarcListParamsDKIM{cloudflare.RadarEmailSecurityDmarcListParamsDKIMPass, cloudflare.RadarEmailSecurityDmarcListParamsDKIMNone, cloudflare.RadarEmailSecurityDmarcListParamsDKIMFail}),
 		Format:      cloudflare.F(cloudflare.RadarEmailSecurityDmarcListParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Spf:         cloudflare.F([]cloudflare.RadarEmailSecurityDmarcListParamsSpf{cloudflare.RadarEmailSecurityDmarcListParamsSpfPass, cloudflare.RadarEmailSecurityDmarcListParamsSpfNone, cloudflare.RadarEmailSecurityDmarcListParamsSpfFail}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityDmarcListParamsSPF{cloudflare.RadarEmailSecurityDmarcListParamsSPFPass, cloudflare.RadarEmailSecurityDmarcListParamsSPFNone, cloudflare.RadarEmailSecurityDmarcListParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

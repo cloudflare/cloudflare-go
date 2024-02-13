@@ -12,13 +12,9 @@ import (
 // this service directly, and instead use the [NewRadarEmailSecurityService] method
 // instead.
 type RadarEmailSecurityService struct {
-	Options        []option.RequestOption
-	Dmarc          *RadarEmailSecurityDmarcService
-	Malicious      *RadarEmailSecurityMaliciousService
-	Spam           *RadarEmailSecuritySpamService
-	Spf            *RadarEmailSecuritySpfService
-	ThreatCategory *RadarEmailSecurityThreatCategoryService
-	Top            *RadarEmailSecurityTopService
+	Options          []option.RequestOption
+	Summaries        *RadarEmailSecuritySummaryService
+	TimeseriesGroups *RadarEmailSecurityTimeseriesGroupService
 }
 
 // NewRadarEmailSecurityService generates a new service that applies the given
@@ -27,11 +23,7 @@ type RadarEmailSecurityService struct {
 func NewRadarEmailSecurityService(opts ...option.RequestOption) (r *RadarEmailSecurityService) {
 	r = &RadarEmailSecurityService{}
 	r.Options = opts
-	r.Dmarc = NewRadarEmailSecurityDmarcService(opts...)
-	r.Malicious = NewRadarEmailSecurityMaliciousService(opts...)
-	r.Spam = NewRadarEmailSecuritySpamService(opts...)
-	r.Spf = NewRadarEmailSecuritySpfService(opts...)
-	r.ThreatCategory = NewRadarEmailSecurityThreatCategoryService(opts...)
-	r.Top = NewRadarEmailSecurityTopService(opts...)
+	r.Summaries = NewRadarEmailSecuritySummaryService(opts...)
+	r.TimeseriesGroups = NewRadarEmailSecurityTimeseriesGroupService(opts...)
 	return
 }

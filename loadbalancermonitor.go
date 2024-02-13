@@ -36,19 +36,6 @@ func NewLoadBalancerMonitorService(opts ...option.RequestOption) (r *LoadBalance
 	return
 }
 
-// List a single configured monitor for an account.
-func (r *LoadBalancerMonitorService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *LoadBalancerMonitorGetResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Modify a configured monitor.
 func (r *LoadBalancerMonitorService) Update(ctx context.Context, accountIdentifier string, identifier string, body LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancerMonitorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -101,104 +88,18 @@ func (r *LoadBalancerMonitorService) AccountLoadBalancerMonitorsListMonitors(ctx
 	return
 }
 
-type LoadBalancerMonitorGetResponse struct {
-	ID string `json:"id"`
-	// Do not validate the certificate when monitor use HTTPS. This parameter is
-	// currently only valid for HTTP and HTTPS monitors.
-	AllowInsecure bool `json:"allow_insecure"`
-	// To be marked unhealthy the monitored origin must fail this healthcheck N
-	// consecutive times.
-	ConsecutiveDown int64 `json:"consecutive_down"`
-	// To be marked healthy the monitored origin must pass this healthcheck N
-	// consecutive times.
-	ConsecutiveUp int64     `json:"consecutive_up"`
-	CreatedOn     time.Time `json:"created_on" format:"date-time"`
-	// Object description.
-	Description string `json:"description"`
-	// A case-insensitive sub-string to look for in the response body. If this string
-	// is not found, the origin will be marked as unhealthy. This parameter is only
-	// valid for HTTP and HTTPS monitors.
-	ExpectedBody string `json:"expected_body"`
-	// The expected HTTP response code or code range of the health check. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	ExpectedCodes string `json:"expected_codes"`
-	// Follow redirects if returned by the origin. This parameter is only valid for
-	// HTTP and HTTPS monitors.
-	FollowRedirects bool `json:"follow_redirects"`
-	// The HTTP request headers to send in the health check. It is recommended you set
-	// a Host header by default. The User-Agent header cannot be overridden. This
-	// parameter is only valid for HTTP and HTTPS monitors.
-	Header interface{} `json:"header"`
-	// The interval between each health check. Shorter intervals may improve failover
-	// time, but will increase load on the origins as we check from multiple locations.
-	Interval int64 `json:"interval"`
-	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
-	// based checks and 'connection_established' for TCP based health checks.
-	Method     string    `json:"method"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The endpoint path you want to conduct a health check against. This parameter is
-	// only valid for HTTP and HTTPS monitors.
-	Path string `json:"path"`
-	// The port number to connect to for the health check. Required for TCP, UDP, and
-	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
-	// non-standard port (HTTP: default 80, HTTPS: default 443).
-	Port int64 `json:"port"`
-	// Assign this monitor to emulate the specified zone while probing. This parameter
-	// is only valid for HTTP and HTTPS monitors.
-	ProbeZone string `json:"probe_zone"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries int64 `json:"retries"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout int64 `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type LoadBalancerMonitorGetResponseType `json:"type"`
-	JSON loadBalancerMonitorGetResponseJSON `json:"-"`
+// List a single configured monitor for an account.
+func (r *LoadBalancerMonitorService) Get(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (res *LoadBalancerMonitorGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env LoadBalancerMonitorGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountIdentifier, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-// loadBalancerMonitorGetResponseJSON contains the JSON metadata for the struct
-// [LoadBalancerMonitorGetResponse]
-type loadBalancerMonitorGetResponseJSON struct {
-	ID              apijson.Field
-	AllowInsecure   apijson.Field
-	ConsecutiveDown apijson.Field
-	ConsecutiveUp   apijson.Field
-	CreatedOn       apijson.Field
-	Description     apijson.Field
-	ExpectedBody    apijson.Field
-	ExpectedCodes   apijson.Field
-	FollowRedirects apijson.Field
-	Header          apijson.Field
-	Interval        apijson.Field
-	Method          apijson.Field
-	ModifiedOn      apijson.Field
-	Path            apijson.Field
-	Port            apijson.Field
-	ProbeZone       apijson.Field
-	Retries         apijson.Field
-	Timeout         apijson.Field
-	Type            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The protocol to use for the health check. Currently supported protocols are
-// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorGetResponseType string
-
-const (
-	LoadBalancerMonitorGetResponseTypeHTTP     LoadBalancerMonitorGetResponseType = "http"
-	LoadBalancerMonitorGetResponseTypeHTTPs    LoadBalancerMonitorGetResponseType = "https"
-	LoadBalancerMonitorGetResponseTypeTcp      LoadBalancerMonitorGetResponseType = "tcp"
-	LoadBalancerMonitorGetResponseTypeUdpIcmp  LoadBalancerMonitorGetResponseType = "udp_icmp"
-	LoadBalancerMonitorGetResponseTypeIcmpPing LoadBalancerMonitorGetResponseType = "icmp_ping"
-	LoadBalancerMonitorGetResponseTypeSmtp     LoadBalancerMonitorGetResponseType = "smtp"
-)
 
 type LoadBalancerMonitorUpdateResponse struct {
 	ID string `json:"id"`
@@ -516,73 +417,103 @@ const (
 	LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseTypeSmtp     LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseType = "smtp"
 )
 
-type LoadBalancerMonitorGetResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerMonitorGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancerMonitorGetResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
+type LoadBalancerMonitorGetResponse struct {
+	ID string `json:"id"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure bool `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown int64 `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp int64     `json:"consecutive_up"`
+	CreatedOn     time.Time `json:"created_on" format:"date-time"`
+	// Object description.
+	Description string `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes string `json:"expected_codes"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header interface{} `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval int64 `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method     string    `json:"method"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path string `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port int64 `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone string `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type LoadBalancerMonitorGetResponseType `json:"type"`
+	JSON loadBalancerMonitorGetResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorGetResponseEnvelope]
-type loadBalancerMonitorGetResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// loadBalancerMonitorGetResponseJSON contains the JSON metadata for the struct
+// [LoadBalancerMonitorGetResponse]
+type loadBalancerMonitorGetResponseJSON struct {
+	ID              apijson.Field
+	AllowInsecure   apijson.Field
+	ConsecutiveDown apijson.Field
+	ConsecutiveUp   apijson.Field
+	CreatedOn       apijson.Field
+	Description     apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Interval        apijson.Field
+	Method          apijson.Field
+	ModifiedOn      apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	ProbeZone       apijson.Field
+	Retries         apijson.Field
+	Timeout         apijson.Field
+	Type            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorGetResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerMonitorGetResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerMonitorGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerMonitorGetResponseEnvelopeErrors]
-type loadBalancerMonitorGetResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerMonitorGetResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerMonitorGetResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerMonitorGetResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerMonitorGetResponseEnvelopeMessages]
-type loadBalancerMonitorGetResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerMonitorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type LoadBalancerMonitorGetResponseEnvelopeSuccess bool
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type LoadBalancerMonitorGetResponseType string
 
 const (
-	LoadBalancerMonitorGetResponseEnvelopeSuccessTrue LoadBalancerMonitorGetResponseEnvelopeSuccess = true
+	LoadBalancerMonitorGetResponseTypeHTTP     LoadBalancerMonitorGetResponseType = "http"
+	LoadBalancerMonitorGetResponseTypeHTTPs    LoadBalancerMonitorGetResponseType = "https"
+	LoadBalancerMonitorGetResponseTypeTcp      LoadBalancerMonitorGetResponseType = "tcp"
+	LoadBalancerMonitorGetResponseTypeUdpIcmp  LoadBalancerMonitorGetResponseType = "udp_icmp"
+	LoadBalancerMonitorGetResponseTypeIcmpPing LoadBalancerMonitorGetResponseType = "icmp_ping"
+	LoadBalancerMonitorGetResponseTypeSmtp     LoadBalancerMonitorGetResponseType = "smtp"
 )
 
 type LoadBalancerMonitorUpdateParams struct {
@@ -1034,3 +965,72 @@ type loadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeR
 func (r *LoadBalancerMonitorAccountLoadBalancerMonitorsListMonitorsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type LoadBalancerMonitorGetResponseEnvelope struct {
+	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success LoadBalancerMonitorGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancerMonitorGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancerMonitorGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancerMonitorGetResponseEnvelope]
+type loadBalancerMonitorGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerMonitorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerMonitorGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    loadBalancerMonitorGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// loadBalancerMonitorGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LoadBalancerMonitorGetResponseEnvelopeErrors]
+type loadBalancerMonitorGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerMonitorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerMonitorGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    loadBalancerMonitorGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// loadBalancerMonitorGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LoadBalancerMonitorGetResponseEnvelopeMessages]
+type loadBalancerMonitorGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerMonitorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type LoadBalancerMonitorGetResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerMonitorGetResponseEnvelopeSuccessTrue LoadBalancerMonitorGetResponseEnvelopeSuccess = true
+)

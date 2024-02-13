@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDexTracerouteTestGetWithOptionalParams(t *testing.T) {
+func TestDEXTracerouteTestGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestDexTracerouteTestGetWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.TracerouteTests.Get(
+	_, err := client.DEX.TracerouteTests.Get(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.DexTracerouteTestGetParams{
-			Interval:  cloudflare.F(cloudflare.DexTracerouteTestGetParamsIntervalMinute),
+		cloudflare.DEXTracerouteTestGetParams{
+			Interval:  cloudflare.F(cloudflare.DEXTracerouteTestGetParamsIntervalMinute),
 			TimeEnd:   cloudflare.F("1689606812000"),
 			TimeStart: cloudflare.F("1689520412000"),
 			Colo:      cloudflare.F("string"),
@@ -50,7 +50,7 @@ func TestDexTracerouteTestGetWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDexTracerouteTestNetworkPath(t *testing.T) {
+func TestDEXTracerouteTestNetworkPath(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -66,13 +66,13 @@ func TestDexTracerouteTestNetworkPath(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.TracerouteTests.NetworkPath(
+	_, err := client.DEX.TracerouteTests.NetworkPath(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.DexTracerouteTestNetworkPathParams{
+		cloudflare.DEXTracerouteTestNetworkPathParams{
 			DeviceID:  cloudflare.F("string"),
-			Interval:  cloudflare.F(cloudflare.DexTracerouteTestNetworkPathParamsIntervalMinute),
+			Interval:  cloudflare.F(cloudflare.DEXTracerouteTestNetworkPathParamsIntervalMinute),
 			TimeEnd:   cloudflare.F("1689606812000"),
 			TimeStart: cloudflare.F("1689520412000"),
 		},
@@ -86,7 +86,7 @@ func TestDexTracerouteTestNetworkPath(t *testing.T) {
 	}
 }
 
-func TestDexTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
+func TestDEXTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -102,11 +102,11 @@ func TestDexTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Dex.TracerouteTests.Percentiles(
+	_, err := client.DEX.TracerouteTests.Percentiles(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.DexTracerouteTestPercentilesParams{
+		cloudflare.DEXTracerouteTestPercentilesParams{
 			TimeEnd:   cloudflare.F("2023-09-20T17:00:00Z"),
 			TimeStart: cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("string"),

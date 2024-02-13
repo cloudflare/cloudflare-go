@@ -1,0 +1,560 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package cloudflare
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"reflect"
+	"time"
+
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
+	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
+)
+
+// CertificateService contains methods and other services that help with
+// interacting with the cloudflare API. Note, unlike clients, this service does not
+// read variables from the environment automatically. You should not instantiate
+// this service directly, and instead use the [NewCertificateService] method
+// instead.
+type CertificateService struct {
+	Options []option.RequestOption
+}
+
+// NewCertificateService generates a new service that applies the given options to
+// each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewCertificateService(opts ...option.RequestOption) (r *CertificateService) {
+	r = &CertificateService{}
+	r.Options = opts
+	return
+}
+
+// Revoke an existing Origin CA certificate by its serial number. Use your Origin
+// CA Key as your User Service Key when calling this endpoint
+// ([see above](#requests)).
+func (r *CertificateService) Delete(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *CertificateDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CertificateDeleteResponseEnvelope
+	path := fmt.Sprintf("certificates/%s", certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get an existing Origin CA certificate by its serial number. Use your Origin CA
+// Key as your User Service Key when calling this endpoint
+// ([see above](#requests)).
+func (r *CertificateService) Get(ctx context.Context, certificateID string, opts ...option.RequestOption) (res *CertificateGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CertificateGetResponseEnvelope
+	path := fmt.Sprintf("certificates/%s", certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Create an Origin CA certificate. Use your Origin CA Key as your User Service Key
+// when calling this endpoint ([see above](#requests)).
+func (r *CertificateService) OriginCaNewCertificate(ctx context.Context, body CertificateOriginCaNewCertificateParams, opts ...option.RequestOption) (res *CertificateOriginCaNewCertificateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CertificateOriginCaNewCertificateResponseEnvelope
+	path := "certificates"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// List all existing Origin CA certificates for a given zone. Use your Origin CA
+// Key as your User Service Key when calling this endpoint
+// ([see above](#requests)).
+func (r *CertificateService) OriginCaListCertificates(ctx context.Context, query CertificateOriginCaListCertificatesParams, opts ...option.RequestOption) (res *[]CertificateOriginCaListCertificatesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CertificateOriginCaListCertificatesResponseEnvelope
+	path := "certificates"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type CertificateDeleteResponse struct {
+	// Identifier
+	ID   string                        `json:"id"`
+	JSON certificateDeleteResponseJSON `json:"-"`
+}
+
+// certificateDeleteResponseJSON contains the JSON metadata for the struct
+// [CertificateDeleteResponse]
+type certificateDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [CertificateGetResponseUnknown] or [shared.UnionString].
+type CertificateGetResponse interface {
+	ImplementsCertificateGetResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CertificateGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [CertificateOriginCaNewCertificateResponseUnknown] or
+// [shared.UnionString].
+type CertificateOriginCaNewCertificateResponse interface {
+	ImplementsCertificateOriginCaNewCertificateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CertificateOriginCaNewCertificateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type CertificateOriginCaListCertificatesResponse struct {
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr,required"`
+	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
+	// certificate.
+	Hostnames []interface{} `json:"hostnames,required"`
+	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+	// or "keyless-certificate" (for Keyless SSL servers).
+	RequestType CertificateOriginCaListCertificatesResponseRequestType `json:"request_type,required"`
+	// The number of days for which the certificate should be valid.
+	RequestedValidity CertificateOriginCaListCertificatesResponseRequestedValidity `json:"requested_validity,required"`
+	// Identifier
+	ID string `json:"id"`
+	// The Origin CA certificate. Will be newline-encoded.
+	Certificate string `json:"certificate"`
+	// When the certificate will expire.
+	ExpiresOn time.Time                                       `json:"expires_on" format:"date-time"`
+	JSON      certificateOriginCaListCertificatesResponseJSON `json:"-"`
+}
+
+// certificateOriginCaListCertificatesResponseJSON contains the JSON metadata for
+// the struct [CertificateOriginCaListCertificatesResponse]
+type certificateOriginCaListCertificatesResponseJSON struct {
+	Csr               apijson.Field
+	Hostnames         apijson.Field
+	RequestType       apijson.Field
+	RequestedValidity apijson.Field
+	ID                apijson.Field
+	Certificate       apijson.Field
+	ExpiresOn         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaListCertificatesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type CertificateOriginCaListCertificatesResponseRequestType string
+
+const (
+	CertificateOriginCaListCertificatesResponseRequestTypeOriginRsa          CertificateOriginCaListCertificatesResponseRequestType = "origin-rsa"
+	CertificateOriginCaListCertificatesResponseRequestTypeOriginEcc          CertificateOriginCaListCertificatesResponseRequestType = "origin-ecc"
+	CertificateOriginCaListCertificatesResponseRequestTypeKeylessCertificate CertificateOriginCaListCertificatesResponseRequestType = "keyless-certificate"
+)
+
+// The number of days for which the certificate should be valid.
+type CertificateOriginCaListCertificatesResponseRequestedValidity float64
+
+const (
+	CertificateOriginCaListCertificatesResponseRequestedValidity7    CertificateOriginCaListCertificatesResponseRequestedValidity = 7
+	CertificateOriginCaListCertificatesResponseRequestedValidity30   CertificateOriginCaListCertificatesResponseRequestedValidity = 30
+	CertificateOriginCaListCertificatesResponseRequestedValidity90   CertificateOriginCaListCertificatesResponseRequestedValidity = 90
+	CertificateOriginCaListCertificatesResponseRequestedValidity365  CertificateOriginCaListCertificatesResponseRequestedValidity = 365
+	CertificateOriginCaListCertificatesResponseRequestedValidity730  CertificateOriginCaListCertificatesResponseRequestedValidity = 730
+	CertificateOriginCaListCertificatesResponseRequestedValidity1095 CertificateOriginCaListCertificatesResponseRequestedValidity = 1095
+	CertificateOriginCaListCertificatesResponseRequestedValidity5475 CertificateOriginCaListCertificatesResponseRequestedValidity = 5475
+)
+
+type CertificateDeleteResponseEnvelope struct {
+	Errors   []CertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   CertificateDeleteResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    certificateDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// certificateDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CertificateDeleteResponseEnvelope]
+type certificateDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateDeleteResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    certificateDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// certificateDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CertificateDeleteResponseEnvelopeErrors]
+type certificateDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateDeleteResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    certificateDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// certificateDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CertificateDeleteResponseEnvelopeMessages]
+type certificateDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CertificateDeleteResponseEnvelopeSuccess bool
+
+const (
+	CertificateDeleteResponseEnvelopeSuccessTrue CertificateDeleteResponseEnvelopeSuccess = true
+)
+
+type CertificateGetResponseEnvelope struct {
+	Errors   []CertificateGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   CertificateGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CertificateGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    certificateGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// certificateGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CertificateGetResponseEnvelope]
+type certificateGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    certificateGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// certificateGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CertificateGetResponseEnvelopeErrors]
+type certificateGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    certificateGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// certificateGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [CertificateGetResponseEnvelopeMessages]
+type certificateGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CertificateGetResponseEnvelopeSuccess bool
+
+const (
+	CertificateGetResponseEnvelopeSuccessTrue CertificateGetResponseEnvelopeSuccess = true
+)
+
+type CertificateOriginCaNewCertificateParams struct {
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr param.Field[string] `json:"csr"`
+	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
+	// certificate.
+	Hostnames param.Field[[]interface{}] `json:"hostnames"`
+	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+	// or "keyless-certificate" (for Keyless SSL servers).
+	RequestType param.Field[CertificateOriginCaNewCertificateParamsRequestType] `json:"request_type"`
+	// The number of days for which the certificate should be valid.
+	RequestedValidity param.Field[CertificateOriginCaNewCertificateParamsRequestedValidity] `json:"requested_validity"`
+}
+
+func (r CertificateOriginCaNewCertificateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type CertificateOriginCaNewCertificateParamsRequestType string
+
+const (
+	CertificateOriginCaNewCertificateParamsRequestTypeOriginRsa          CertificateOriginCaNewCertificateParamsRequestType = "origin-rsa"
+	CertificateOriginCaNewCertificateParamsRequestTypeOriginEcc          CertificateOriginCaNewCertificateParamsRequestType = "origin-ecc"
+	CertificateOriginCaNewCertificateParamsRequestTypeKeylessCertificate CertificateOriginCaNewCertificateParamsRequestType = "keyless-certificate"
+)
+
+// The number of days for which the certificate should be valid.
+type CertificateOriginCaNewCertificateParamsRequestedValidity float64
+
+const (
+	CertificateOriginCaNewCertificateParamsRequestedValidity7    CertificateOriginCaNewCertificateParamsRequestedValidity = 7
+	CertificateOriginCaNewCertificateParamsRequestedValidity30   CertificateOriginCaNewCertificateParamsRequestedValidity = 30
+	CertificateOriginCaNewCertificateParamsRequestedValidity90   CertificateOriginCaNewCertificateParamsRequestedValidity = 90
+	CertificateOriginCaNewCertificateParamsRequestedValidity365  CertificateOriginCaNewCertificateParamsRequestedValidity = 365
+	CertificateOriginCaNewCertificateParamsRequestedValidity730  CertificateOriginCaNewCertificateParamsRequestedValidity = 730
+	CertificateOriginCaNewCertificateParamsRequestedValidity1095 CertificateOriginCaNewCertificateParamsRequestedValidity = 1095
+	CertificateOriginCaNewCertificateParamsRequestedValidity5475 CertificateOriginCaNewCertificateParamsRequestedValidity = 5475
+)
+
+type CertificateOriginCaNewCertificateResponseEnvelope struct {
+	Errors   []CertificateOriginCaNewCertificateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateOriginCaNewCertificateResponseEnvelopeMessages `json:"messages,required"`
+	Result   CertificateOriginCaNewCertificateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CertificateOriginCaNewCertificateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    certificateOriginCaNewCertificateResponseEnvelopeJSON    `json:"-"`
+}
+
+// certificateOriginCaNewCertificateResponseEnvelopeJSON contains the JSON metadata
+// for the struct [CertificateOriginCaNewCertificateResponseEnvelope]
+type certificateOriginCaNewCertificateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaNewCertificateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateOriginCaNewCertificateResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    certificateOriginCaNewCertificateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// certificateOriginCaNewCertificateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [CertificateOriginCaNewCertificateResponseEnvelopeErrors]
+type certificateOriginCaNewCertificateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaNewCertificateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateOriginCaNewCertificateResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    certificateOriginCaNewCertificateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// certificateOriginCaNewCertificateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [CertificateOriginCaNewCertificateResponseEnvelopeMessages]
+type certificateOriginCaNewCertificateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaNewCertificateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CertificateOriginCaNewCertificateResponseEnvelopeSuccess bool
+
+const (
+	CertificateOriginCaNewCertificateResponseEnvelopeSuccessTrue CertificateOriginCaNewCertificateResponseEnvelopeSuccess = true
+)
+
+type CertificateOriginCaListCertificatesParams struct {
+}
+
+type CertificateOriginCaListCertificatesResponseEnvelope struct {
+	Errors   []CertificateOriginCaListCertificatesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateOriginCaListCertificatesResponseEnvelopeMessages `json:"messages,required"`
+	Result   []CertificateOriginCaListCertificatesResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    CertificateOriginCaListCertificatesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo CertificateOriginCaListCertificatesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       certificateOriginCaListCertificatesResponseEnvelopeJSON       `json:"-"`
+}
+
+// certificateOriginCaListCertificatesResponseEnvelopeJSON contains the JSON
+// metadata for the struct [CertificateOriginCaListCertificatesResponseEnvelope]
+type certificateOriginCaListCertificatesResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaListCertificatesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateOriginCaListCertificatesResponseEnvelopeErrors struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    certificateOriginCaListCertificatesResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// certificateOriginCaListCertificatesResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [CertificateOriginCaListCertificatesResponseEnvelopeErrors]
+type certificateOriginCaListCertificatesResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaListCertificatesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateOriginCaListCertificatesResponseEnvelopeMessages struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    certificateOriginCaListCertificatesResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// certificateOriginCaListCertificatesResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [CertificateOriginCaListCertificatesResponseEnvelopeMessages]
+type certificateOriginCaListCertificatesResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaListCertificatesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CertificateOriginCaListCertificatesResponseEnvelopeSuccess bool
+
+const (
+	CertificateOriginCaListCertificatesResponseEnvelopeSuccessTrue CertificateOriginCaListCertificatesResponseEnvelopeSuccess = true
+)
+
+type CertificateOriginCaListCertificatesResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                           `json:"total_count"`
+	JSON       certificateOriginCaListCertificatesResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// certificateOriginCaListCertificatesResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [CertificateOriginCaListCertificatesResponseEnvelopeResultInfo]
+type certificateOriginCaListCertificatesResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CertificateOriginCaListCertificatesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

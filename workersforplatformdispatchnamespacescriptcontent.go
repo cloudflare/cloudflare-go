@@ -37,16 +37,6 @@ func NewWorkersForPlatformDispatchNamespaceScriptContentService(opts ...option.R
 	return
 }
 
-// Fetch script content from a script uploaded to a Workers for Platforms
-// namespace.
-func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
 // Put script content for a script uploaded to a Workers for Platforms namespace.
 func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -57,6 +47,16 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx con
 		return
 	}
 	res = &env.Result
+	return
+}
+
+// Fetch script content from a script uploaded to a Workers for Platforms
+// namespace.
+func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

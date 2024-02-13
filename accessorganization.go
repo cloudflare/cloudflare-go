@@ -20,7 +20,8 @@ import (
 // this service directly, and instead use the [NewAccessOrganizationService] method
 // instead.
 type AccessOrganizationService struct {
-	Options []option.RequestOption
+	Options     []option.RequestOption
+	RevokeUsers *AccessOrganizationRevokeUserService
 }
 
 // NewAccessOrganizationService generates a new service that applies the given
@@ -29,6 +30,7 @@ type AccessOrganizationService struct {
 func NewAccessOrganizationService(opts ...option.RequestOption) (r *AccessOrganizationService) {
 	r = &AccessOrganizationService{}
 	r.Options = opts
+	r.RevokeUsers = NewAccessOrganizationRevokeUserService(opts...)
 	return
 }
 
