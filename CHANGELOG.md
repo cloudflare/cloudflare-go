@@ -7,6 +7,7 @@ ENHANCEMENTS:
 * access_organization: Add support for `allow_authenticate_via_warp` and `warp_auth_session_duration` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
 * images_variants: Add support for Images Variants CRUD operations ([#1494](https://github.com/cloudflare/cloudflare-go/issues/1494))
+* teams_rules: `AntiVirus` settings includes notification settings ([#1499](https://github.com/cloudflare/cloudflare-go/issues/1499))
 
 BUG FIXES:
 
