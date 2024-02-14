@@ -81,12 +81,14 @@ func TestAlertingV3PolicyUpdateWithOptionalParams(t *testing.T) {
 				Zones:                        cloudflare.F([]string{"string", "string", "string"}),
 			}),
 			Mechanisms: cloudflare.F(map[string][]cloudflare.AlertingV3PolicyUpdateParamsMechanisms{
-				"foo": {{
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
-				}, {
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
-				}, {
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
+				"email": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("test@example.com")),
+				}},
+				"pagerduty": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				}},
+				"webhooks": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyUpdateParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name: cloudflare.F("SSL Notification Event Policy"),
@@ -184,12 +186,14 @@ func TestAlertingV3PolicyNotificationPoliciesNewANotificationPolicyWithOptionalP
 			AlertType: cloudflare.F(cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsAlertTypeUniversalSSLEventType),
 			Enabled:   cloudflare.F(true),
 			Mechanisms: cloudflare.F(map[string][]cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanisms{
-				"foo": {{
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
-				}, {
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
-				}, {
-					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("f174e90a-fafe-4643-bbbc-4a0ed4fc8415")),
+				"email": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("test@example.com")),
+				}},
+				"pagerduty": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("e8133a15-00a4-4d69-aec1-32f70c51f6e5")),
+				}},
+				"webhooks": {{
+					ID: cloudflare.F[cloudflare.AlertingV3PolicyNotificationPoliciesNewANotificationPolicyParamsMechanismsID](shared.UnionString("14cc1190-5d2b-4b98-a696-c424cb2ad05f")),
 				}},
 			}),
 			Name:        cloudflare.F("SSL Notification Event Policy"),

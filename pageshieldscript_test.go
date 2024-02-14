@@ -70,7 +70,7 @@ func TestPageShieldScriptPageShieldListPageShieldScriptsWithOptionalParams(t *te
 			Export:              cloudflare.F(cloudflare.PageShieldScriptPageShieldListPageShieldScriptsParamsExportCsv),
 			Hosts:               cloudflare.F("blog.cloudflare.com,www.example*,*cloudflare.com"),
 			OrderBy:             cloudflare.F(cloudflare.PageShieldScriptPageShieldListPageShieldScriptsParamsOrderByFirstSeenAt),
-			Page:                cloudflare.F("2"),
+			Page:                cloudflare.F("string"),
 			PageURL:             cloudflare.F("example.com/page,*/checkout,example.com/*,*checkout*"),
 			PerPage:             cloudflare.F(100.000000),
 			PrioritizeMalicious: cloudflare.F(true),

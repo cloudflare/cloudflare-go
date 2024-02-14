@@ -31,7 +31,7 @@ func TestRadarAnnotationOutageListWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.Radar.Annotations.Outages.List(context.TODO(), cloudflare.RadarAnnotationOutageListParams{
-		Asn:       cloudflare.F(int64(174)),
+		Asn:       cloudflare.F(int64(0)),
 		DateEnd:   cloudflare.F(time.Now()),
 		DateRange: cloudflare.F(cloudflare.RadarAnnotationOutageListParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),

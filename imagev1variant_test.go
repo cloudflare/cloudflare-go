@@ -32,7 +32,7 @@ func TestImageV1VariantUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Images.V1s.Variants.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"hero",
 		cloudflare.ImageV1VariantUpdateParams{
 			Options: cloudflare.F(cloudflare.ImageV1VariantUpdateParamsOptions{
 				Fit:      cloudflare.F(cloudflare.ImageV1VariantUpdateParamsOptionsFitScaleDown),
@@ -71,7 +71,7 @@ func TestImageV1VariantDelete(t *testing.T) {
 	_, err := client.Images.V1s.Variants.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"hero",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -102,7 +102,7 @@ func TestImageV1VariantCloudflareImagesVariantsNewAVariantWithOptionalParams(t *
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ImageV1VariantCloudflareImagesVariantsNewAVariantParams{
-			ID: cloudflare.F[any](map[string]interface{}{}),
+			ID: cloudflare.F[any]("hero"),
 			Options: cloudflare.F(cloudflare.ImageV1VariantCloudflareImagesVariantsNewAVariantParamsOptions{
 				Fit:      cloudflare.F(cloudflare.ImageV1VariantCloudflareImagesVariantsNewAVariantParamsOptionsFitScaleDown),
 				Height:   cloudflare.F(768.000000),
@@ -166,7 +166,7 @@ func TestImageV1VariantGet(t *testing.T) {
 	_, err := client.Images.V1s.Variants.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		map[string]interface{}{},
+		"hero",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

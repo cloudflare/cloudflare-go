@@ -39,18 +39,6 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 					Type: cloudflare.F(cloudflare.PageruleNewParamsActionsValueTypeTemporary),
 					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
 				}),
-			}, {
-				Name: cloudflare.F(cloudflare.PageruleNewParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleNewParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleNewParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
-				Name: cloudflare.F(cloudflare.PageruleNewParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleNewParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleNewParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
 			}}),
 			Targets: cloudflare.F([]cloudflare.PageruleNewParamsTarget{{
 				Constraint: cloudflare.F(cloudflare.PageruleNewParamsTargetsConstraint{
@@ -94,18 +82,6 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.PageruleUpdateParams{
 			Actions: cloudflare.F([]cloudflare.PageruleUpdateParamsAction{{
-				Name: cloudflare.F(cloudflare.PageruleUpdateParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
-				Name: cloudflare.F(cloudflare.PageruleUpdateParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}, {
 				Name: cloudflare.F(cloudflare.PageruleUpdateParamsActionsNameForwardURL),
 				Value: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValue{
 					Type: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValueTypeTemporary),

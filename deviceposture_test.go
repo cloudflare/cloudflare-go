@@ -40,7 +40,7 @@ func TestDevicePostureUpdateWithOptionalParams(t *testing.T) {
 			Expiration:  cloudflare.F("1h"),
 			Input: cloudflare.F[cloudflare.DevicePostureUpdateParamsInput](cloudflare.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest(cloudflare.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest{
 				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(cloudflare.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac),
+				OperatingSystem: cloudflare.F(cloudflare.DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),
@@ -120,7 +120,7 @@ func TestDevicePostureDevicePostureRulesNewDevicePostureRuleWithOptionalParams(t
 			Expiration:  cloudflare.F("1h"),
 			Input: cloudflare.F[cloudflare.DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput](cloudflare.DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest(cloudflare.DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest{
 				Exists:          cloudflare.F(true),
-				OperatingSystem: cloudflare.F(cloudflare.DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystemMac),
+				OperatingSystem: cloudflare.F(cloudflare.DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux),
 				Path:            cloudflare.F("/bin/cat"),
 				Sha256:          cloudflare.F("https://api.us-2.crowdstrike.com"),
 				Thumbprint:      cloudflare.F("0aabab210bdb998e9cf45da2c9ce352977ab531c681b74cf1e487be1bbe9fe6e"),

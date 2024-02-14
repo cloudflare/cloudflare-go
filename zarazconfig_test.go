@@ -35,7 +35,7 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.ZarazConfigUpdateParams{
 			DataLayer: cloudflare.F(true),
-			DebugKey:  cloudflare.F("string"),
+			DebugKey:  cloudflare.F("my-debug-key"),
 			Settings: cloudflare.F(cloudflare.ZarazConfigUpdateParamsSettings{
 				AutoInjectScript: cloudflare.F(true),
 				ContextEnricher: cloudflare.F(cloudflare.ZarazConfigUpdateParamsSettingsContextEnricher{
@@ -49,21 +49,21 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 				HideIPAddress:       cloudflare.F(true),
 				HideQueryParams:     cloudflare.F(true),
 				HideUserAgent:       cloudflare.F(true),
-				InitPath:            cloudflare.F("string"),
+				InitPath:            cloudflare.F("/i"),
 				InjectIframes:       cloudflare.F(true),
 				McRootPath:          cloudflare.F("string"),
 				ScriptPath:          cloudflare.F("string"),
 				TrackPath:           cloudflare.F("string"),
 			}),
 			Tools: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsTools{
-				"foo": cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool(cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool{
+				"aJvt": cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool(cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyTool{
 					BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
 					DefaultFields: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields{
-						"foo": shared.UnionString("string"),
+						"testKey": shared.UnionString("TEST123456"),
 					}),
 					DefaultPurpose: cloudflare.F("string"),
 					Enabled:        cloudflare.F(true),
-					Name:           cloudflare.F("string"),
+					Name:           cloudflare.F("Facebook Pixel"),
 					Library:        cloudflare.F("string"),
 					NeoEvents: cloudflare.F([]cloudflare.ZarazConfigUpdateParamsToolsZarazLegacyToolNeoEvent{{
 						BlockingTriggers: cloudflare.F([]string{"string", "string", "string"}),
@@ -82,7 +82,7 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 				}),
 			}),
 			Triggers: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsTriggers{
-				"foo": {
+				"ktBn": {
 					Description: cloudflare.F("string"),
 					ExcludeRules: cloudflare.F([]cloudflare.ZarazConfigUpdateParamsTriggersExcludeRule{cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule(cloudflare.ZarazConfigUpdateParamsTriggersExcludeRulesZarazLoadRule{
 						ID:    cloudflare.F("string"),
@@ -121,13 +121,13 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 				},
 			}),
 			Variables: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsVariables{
-				"foo": cloudflare.ZarazConfigUpdateParamsVariablesObject(cloudflare.ZarazConfigUpdateParamsVariablesObject{
-					Name:  cloudflare.F("string"),
+				"Autd": cloudflare.ZarazConfigUpdateParamsVariablesObject(cloudflare.ZarazConfigUpdateParamsVariablesObject{
+					Name:  cloudflare.F("ip"),
 					Type:  cloudflare.F(cloudflare.ZarazConfigUpdateParamsVariablesObjectTypeString),
-					Value: cloudflare.F("string"),
+					Value: cloudflare.F("{{ system.device.ip }}"),
 				}),
 			}),
-			ZarazVersion: cloudflare.F(int64(0)),
+			ZarazVersion: cloudflare.F(int64(43)),
 			Consent: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsent{
 				ButtonTextTranslations: cloudflare.F(cloudflare.ZarazConfigUpdateParamsConsentButtonTextTranslations{
 					AcceptAll: cloudflare.F(map[string]string{
@@ -147,11 +147,11 @@ func TestZarazConfigUpdateWithOptionalParams(t *testing.T) {
 				ConsentModalIntroHTMLWithTranslations: cloudflare.F(map[string]string{
 					"foo": "string",
 				}),
-				CookieName:                     cloudflare.F("string"),
+				CookieName:                     cloudflare.F("zaraz-consent"),
 				CustomCss:                      cloudflare.F("string"),
 				CustomIntroDisclaimerDismissed: cloudflare.F(true),
 				DefaultLanguage:                cloudflare.F("string"),
-				Enabled:                        cloudflare.F(true),
+				Enabled:                        cloudflare.F(false),
 				HideModal:                      cloudflare.F(true),
 				Purposes: cloudflare.F(map[string]cloudflare.ZarazConfigUpdateParamsConsentPurposes{
 					"foo": {
