@@ -33,7 +33,9 @@ func TestHyperdriveConfigNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.HyperdriveConfigNewParams{
-			Password: cloudflare.F("password1234!"),
+			Origin: cloudflare.F(cloudflare.HyperdriveConfigNewParamsOrigin{
+				Password: cloudflare.F("password1234!"),
+			}),
 		},
 	)
 	if err != nil {
@@ -66,7 +68,9 @@ func TestHyperdriveConfigUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.HyperdriveConfigUpdateParams{
-			Password: cloudflare.F("password1234!"),
+			Origin: cloudflare.F(cloudflare.HyperdriveConfigUpdateParamsOrigin{
+				Password: cloudflare.F("password1234!"),
+			}),
 		},
 	)
 	if err != nil {

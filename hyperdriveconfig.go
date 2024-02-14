@@ -189,12 +189,20 @@ func (r *HyperdriveConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type HyperdriveConfigNewParams struct {
+	Origin param.Field[HyperdriveConfigNewParamsOrigin] `json:"origin,required"`
+}
+
+func (r HyperdriveConfigNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type HyperdriveConfigNewParamsOrigin struct {
 	// The password required to access your origin database. This value is write-only
 	// and never returned by the API.
 	Password param.Field[string] `json:"password,required"`
 }
 
-func (r HyperdriveConfigNewParams) MarshalJSON() (data []byte, err error) {
+func (r HyperdriveConfigNewParamsOrigin) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -268,12 +276,20 @@ const (
 )
 
 type HyperdriveConfigUpdateParams struct {
+	Origin param.Field[HyperdriveConfigUpdateParamsOrigin] `json:"origin,required"`
+}
+
+func (r HyperdriveConfigUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type HyperdriveConfigUpdateParamsOrigin struct {
 	// The password required to access your origin database. This value is write-only
 	// and never returned by the API.
 	Password param.Field[string] `json:"password,required"`
 }
 
-func (r HyperdriveConfigUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r HyperdriveConfigUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
