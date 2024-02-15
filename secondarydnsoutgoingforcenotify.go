@@ -3,6 +3,12 @@
 package cloudflare
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
+	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -23,3 +29,90 @@ func NewSecondaryDNSOutgoingForceNotifyService(opts ...option.RequestOption) (r 
 	r.Options = opts
 	return
 }
+
+// Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
+func (r *SecondaryDNSOutgoingForceNotifyService) SecondaryDNSPrimaryZoneForceDNSNotify(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelope
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelope struct {
+	Errors   []SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessages `json:"messages,required"`
+	// When force_notify query parameter is set to true, the response is a simple
+	// string
+	Result string `json:"result,required"`
+	// Whether the API call was successful
+	Success SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeSuccess `json:"success,required"`
+	JSON    secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeJSON    `json:"-"`
+}
+
+// secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeJSON
+// contains the JSON metadata for the struct
+// [SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelope]
+type secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrors struct {
+	Code    int64                                                                                          `json:"code,required"`
+	Message string                                                                                         `json:"message,required"`
+	JSON    secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrorsJSON
+// contains the JSON metadata for the struct
+// [SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrors]
+type secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessages struct {
+	Code    int64                                                                                            `json:"code,required"`
+	Message string                                                                                           `json:"message,required"`
+	JSON    secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessagesJSON
+// contains the JSON metadata for the struct
+// [SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessages]
+type secondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeSuccess bool
+
+const (
+	SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeSuccessTrue SecondaryDNSOutgoingForceNotifySecondaryDNSPrimaryZoneForceDNSNotifyResponseEnvelopeSuccess = true
+)
