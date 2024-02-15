@@ -32,7 +32,7 @@ func TestPurgeCachZonePurgeWithOptionalParams(t *testing.T) {
 	_, err := client.PurgeCaches.ZonePurge(
 		context.TODO(),
 		"string",
-		cloudflare.PurgeCachZonePurgeParamsZg6QCvI3Flex{
+		cloudflare.PurgeCachZonePurgeParamsVFc1B2WbFlex{
 			Hosts:    cloudflare.F([]string{"www.example.com", "images.example.com"}),
 			Prefixes: cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
 			Tags:     cloudflare.F([]string{"some-tag", "another-tag"}),
