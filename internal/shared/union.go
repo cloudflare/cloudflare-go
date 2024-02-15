@@ -12,7 +12,7 @@ func (UnionString) ImplementsMembershipUpdateResponse()                  {}
 func (UnionString) ImplementsMembershipGetResponse()                     {}
 func (UnionString) ImplementsUserUserEditUserResponse()                  {}
 func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseT1elfSrPapiResponseCommonResult() {
+func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseJoOnJ9q1APIResponseCommonResult() {
 }
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
@@ -45,7 +45,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsQBpKLyWfFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParamsMYgWnpy2FilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -149,7 +149,7 @@ func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicati
 func (UnionString) ImplementsSpectrumAppUpdateParamsOriginPort() {}
 func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginPort() {
 }
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseT1elfSrPapiResponseCommonResult() {
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseJoOnJ9q1APIResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
