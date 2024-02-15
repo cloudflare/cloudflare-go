@@ -193,7 +193,7 @@ type UserLoadBalancerMonitorUpdateResponseType string
 
 const (
 	UserLoadBalancerMonitorUpdateResponseTypeHTTP     UserLoadBalancerMonitorUpdateResponseType = "http"
-	UserLoadBalancerMonitorUpdateResponseTypeHTTPs    UserLoadBalancerMonitorUpdateResponseType = "https"
+	UserLoadBalancerMonitorUpdateResponseTypeHTTPS    UserLoadBalancerMonitorUpdateResponseType = "https"
 	UserLoadBalancerMonitorUpdateResponseTypeTcp      UserLoadBalancerMonitorUpdateResponseType = "tcp"
 	UserLoadBalancerMonitorUpdateResponseTypeUdpIcmp  UserLoadBalancerMonitorUpdateResponseType = "udp_icmp"
 	UserLoadBalancerMonitorUpdateResponseTypeIcmpPing UserLoadBalancerMonitorUpdateResponseType = "icmp_ping"
@@ -309,7 +309,7 @@ type UserLoadBalancerMonitorGetResponseType string
 
 const (
 	UserLoadBalancerMonitorGetResponseTypeHTTP     UserLoadBalancerMonitorGetResponseType = "http"
-	UserLoadBalancerMonitorGetResponseTypeHTTPs    UserLoadBalancerMonitorGetResponseType = "https"
+	UserLoadBalancerMonitorGetResponseTypeHTTPS    UserLoadBalancerMonitorGetResponseType = "https"
 	UserLoadBalancerMonitorGetResponseTypeTcp      UserLoadBalancerMonitorGetResponseType = "tcp"
 	UserLoadBalancerMonitorGetResponseTypeUdpIcmp  UserLoadBalancerMonitorGetResponseType = "udp_icmp"
 	UserLoadBalancerMonitorGetResponseTypeIcmpPing UserLoadBalancerMonitorGetResponseType = "icmp_ping"
@@ -409,7 +409,7 @@ type UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType string
 
 const (
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeHTTP     UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "http"
-	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeHTTPs    UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "https"
+	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeHTTPS    UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "https"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeTcp      UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "tcp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeUdpIcmp  UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "udp_icmp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseTypeIcmpPing UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorResponseType = "icmp_ping"
@@ -509,7 +509,7 @@ type UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType string
 
 const (
 	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeHTTP     UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "http"
-	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeHTTPs    UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "https"
+	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeHTTPS    UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "https"
 	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeTcp      UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "tcp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeUdpIcmp  UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "udp_icmp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseTypeIcmpPing UserLoadBalancerMonitorLoadBalancerMonitorsListMonitorsResponseType = "icmp_ping"
@@ -578,7 +578,7 @@ type UserLoadBalancerMonitorUpdateParamsType string
 
 const (
 	UserLoadBalancerMonitorUpdateParamsTypeHTTP     UserLoadBalancerMonitorUpdateParamsType = "http"
-	UserLoadBalancerMonitorUpdateParamsTypeHTTPs    UserLoadBalancerMonitorUpdateParamsType = "https"
+	UserLoadBalancerMonitorUpdateParamsTypeHTTPS    UserLoadBalancerMonitorUpdateParamsType = "https"
 	UserLoadBalancerMonitorUpdateParamsTypeTcp      UserLoadBalancerMonitorUpdateParamsType = "tcp"
 	UserLoadBalancerMonitorUpdateParamsTypeUdpIcmp  UserLoadBalancerMonitorUpdateParamsType = "udp_icmp"
 	UserLoadBalancerMonitorUpdateParamsTypeIcmpPing UserLoadBalancerMonitorUpdateParamsType = "icmp_ping"
@@ -854,7 +854,7 @@ type UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType string
 
 const (
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeHTTP     UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "http"
-	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeHTTPs    UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "https"
+	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeHTTPS    UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "https"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeTcp      UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "tcp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeUdpIcmp  UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "udp_icmp"
 	UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsTypeIcmpPing UserLoadBalancerMonitorLoadBalancerMonitorsNewMonitorParamsType = "icmp_ping"

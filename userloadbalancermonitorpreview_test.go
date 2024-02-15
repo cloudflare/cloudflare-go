@@ -55,7 +55,7 @@ func TestUserLoadBalancerMonitorPreviewLoadBalancerMonitorsPreviewMonitorWithOpt
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorPreviewLoadBalancerMonitorsPreviewMonitorParamsTypeHTTPs),
+			Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorPreviewLoadBalancerMonitorsPreviewMonitorParamsTypeHTTPS),
 		},
 	)
 	if err != nil {

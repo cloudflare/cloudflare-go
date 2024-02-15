@@ -56,7 +56,7 @@ func TestLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorUpdateParamsTypeHTTPs),
+			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorUpdateParamsTypeHTTPS),
 		},
 	)
 	if err != nil {
@@ -140,7 +140,7 @@ func TestLoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorWithOptionalPar
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorParamsTypeHTTPs),
+			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorAccountLoadBalancerMonitorsNewMonitorParamsTypeHTTPS),
 		},
 	)
 	if err != nil {

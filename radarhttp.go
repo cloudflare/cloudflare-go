@@ -323,7 +323,7 @@ func (r *RadarHttphttpProtocolsResponse) UnmarshalJSON(data []byte) (err error) 
 
 type RadarHttphttpProtocolsResponseSerie0 struct {
 	HTTP       []string                                 `json:"http,required"`
-	HTTPs      []string                                 `json:"https,required"`
+	HTTPS      []string                                 `json:"https,required"`
 	Timestamps []string                                 `json:"timestamps,required"`
 	JSON       radarHttphttpProtocolsResponseSerie0JSON `json:"-"`
 }
@@ -332,7 +332,7 @@ type RadarHttphttpProtocolsResponseSerie0 struct {
 // struct [RadarHttphttpProtocolsResponseSerie0]
 type radarHttphttpProtocolsResponseSerie0JSON struct {
 	HTTP        apijson.Field
-	HTTPs       apijson.Field
+	HTTPS       apijson.Field
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -561,7 +561,7 @@ type RadarHTTPBotClassesParamsHTTPProtocol string
 
 const (
 	RadarHTTPBotClassesParamsHTTPProtocolHTTP  RadarHTTPBotClassesParamsHTTPProtocol = "HTTP"
-	RadarHTTPBotClassesParamsHTTPProtocolHTTPs RadarHTTPBotClassesParamsHTTPProtocol = "HTTPS"
+	RadarHTTPBotClassesParamsHTTPProtocolHTTPS RadarHTTPBotClassesParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHTTPBotClassesParamsHTTPVersion string
@@ -730,7 +730,7 @@ type RadarHTTPBrowserFamiliesParamsHTTPProtocol string
 
 const (
 	RadarHTTPBrowserFamiliesParamsHTTPProtocolHTTP  RadarHTTPBrowserFamiliesParamsHTTPProtocol = "HTTP"
-	RadarHTTPBrowserFamiliesParamsHTTPProtocolHTTPs RadarHTTPBrowserFamiliesParamsHTTPProtocol = "HTTPS"
+	RadarHTTPBrowserFamiliesParamsHTTPProtocolHTTPS RadarHTTPBrowserFamiliesParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHTTPBrowserFamiliesParamsHTTPVersion string
@@ -902,7 +902,7 @@ type RadarHTTPBrowsersParamsHTTPProtocol string
 
 const (
 	RadarHTTPBrowsersParamsHTTPProtocolHTTP  RadarHTTPBrowsersParamsHTTPProtocol = "HTTP"
-	RadarHTTPBrowsersParamsHTTPProtocolHTTPs RadarHTTPBrowsersParamsHTTPProtocol = "HTTPS"
+	RadarHTTPBrowsersParamsHTTPProtocolHTTPS RadarHTTPBrowsersParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHTTPBrowsersParamsHTTPVersion string
@@ -1061,7 +1061,7 @@ type RadarHTTPDeviceTypesParamsHTTPProtocol string
 
 const (
 	RadarHTTPDeviceTypesParamsHTTPProtocolHTTP  RadarHTTPDeviceTypesParamsHTTPProtocol = "HTTP"
-	RadarHTTPDeviceTypesParamsHTTPProtocolHTTPs RadarHTTPDeviceTypesParamsHTTPProtocol = "HTTPS"
+	RadarHTTPDeviceTypesParamsHTTPProtocolHTTPS RadarHTTPDeviceTypesParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHTTPDeviceTypesParamsHTTPVersion string
@@ -1388,7 +1388,7 @@ type RadarHttphttpVersionsParamsHTTPProtocol string
 
 const (
 	RadarHttphttpVersionsParamsHTTPProtocolHTTP  RadarHttphttpVersionsParamsHTTPProtocol = "HTTP"
-	RadarHttphttpVersionsParamsHTTPProtocolHTTPs RadarHttphttpVersionsParamsHTTPProtocol = "HTTPS"
+	RadarHttphttpVersionsParamsHTTPProtocolHTTPS RadarHttphttpVersionsParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHttphttpVersionsParamsIPVersion string
@@ -1547,7 +1547,7 @@ type RadarHttpipVersionsParamsHTTPProtocol string
 
 const (
 	RadarHttpipVersionsParamsHTTPProtocolHTTP  RadarHttpipVersionsParamsHTTPProtocol = "HTTP"
-	RadarHttpipVersionsParamsHTTPProtocolHTTPs RadarHttpipVersionsParamsHTTPProtocol = "HTTPS"
+	RadarHttpipVersionsParamsHTTPProtocolHTTPS RadarHttpipVersionsParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHttpipVersionsParamsHTTPVersion string
@@ -1706,7 +1706,7 @@ type RadarHTTPOssParamsHTTPProtocol string
 
 const (
 	RadarHTTPOssParamsHTTPProtocolHTTP  RadarHTTPOssParamsHTTPProtocol = "HTTP"
-	RadarHTTPOssParamsHTTPProtocolHTTPs RadarHTTPOssParamsHTTPProtocol = "HTTPS"
+	RadarHTTPOssParamsHTTPProtocolHTTPS RadarHTTPOssParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHTTPOssParamsHTTPVersion string

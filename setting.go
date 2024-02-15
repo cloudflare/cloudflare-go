@@ -24,8 +24,8 @@ type SettingService struct {
 	ZeroRtt                       *SettingZeroRttService
 	AdvancedDDOS                  *SettingAdvancedDDOSService
 	AlwaysOnline                  *SettingAlwaysOnlineService
-	AlwaysUseHTTPs                *SettingAlwaysUseHTTPService
-	AutomaticHTTPsRewrites        *SettingAutomaticHTTPsRewriteService
+	AlwaysUseHTTPS                *SettingAlwaysUseHTTPSService
+	AutomaticHTTPSRewrites        *SettingAutomaticHTTPSRewriteService
 	AutomaticPlatformOptimization *SettingAutomaticPlatformOptimizationService
 	Brotli                        *SettingBrotliService
 	BrowserCacheTTL               *SettingBrowserCacheTTLService
@@ -82,8 +82,8 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.ZeroRtt = NewSettingZeroRttService(opts...)
 	r.AdvancedDDOS = NewSettingAdvancedDDOSService(opts...)
 	r.AlwaysOnline = NewSettingAlwaysOnlineService(opts...)
-	r.AlwaysUseHTTPs = NewSettingAlwaysUseHTTPService(opts...)
-	r.AutomaticHTTPsRewrites = NewSettingAutomaticHTTPsRewriteService(opts...)
+	r.AlwaysUseHTTPS = NewSettingAlwaysUseHTTPSService(opts...)
+	r.AutomaticHTTPSRewrites = NewSettingAutomaticHTTPSRewriteService(opts...)
 	r.AutomaticPlatformOptimization = NewSettingAutomaticPlatformOptimizationService(opts...)
 	r.Brotli = NewSettingBrotliService(opts...)
 	r.BrowserCacheTTL = NewSettingBrowserCacheTTLService(opts...)
@@ -162,8 +162,8 @@ func (r *SettingService) Edit(ctx context.Context, zoneID string, body SettingEd
 //
 // Union satisfied by [SettingListResponseZones0rtt],
 // [SettingListResponseZonesAdvancedDDOS], [SettingListResponseZonesAlwaysOnline],
-// [SettingListResponseZonesAlwaysUseHTTPs],
-// [SettingListResponseZonesAutomaticHTTPsRewrites],
+// [SettingListResponseZonesAlwaysUseHTTPS],
+// [SettingListResponseZonesAutomaticHTTPSRewrites],
 // [SettingListResponseZonesBrotli], [SettingListResponseZonesBrowserCacheTTL],
 // [SettingListResponseZonesBrowserCheck], [SettingListResponseZonesCacheLevel],
 // [SettingListResponseZonesChallengeTTL], [SettingListResponseZonesCiphers],
@@ -380,22 +380,22 @@ const (
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type SettingListResponseZonesAlwaysUseHTTPs struct {
+type SettingListResponseZonesAlwaysUseHTTPS struct {
 	// ID of the zone setting.
-	ID SettingListResponseZonesAlwaysUseHTTPsID `json:"id,required"`
+	ID SettingListResponseZonesAlwaysUseHTTPSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingListResponseZonesAlwaysUseHTTPsValue `json:"value,required"`
+	Value SettingListResponseZonesAlwaysUseHTTPSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingListResponseZonesAlwaysUseHTTPsEditable `json:"editable"`
+	Editable SettingListResponseZonesAlwaysUseHTTPSEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingListResponseZonesAlwaysUseHTTPsJSON `json:"-"`
+	JSON       settingListResponseZonesAlwaysUseHTTPSJSON `json:"-"`
 }
 
-// settingListResponseZonesAlwaysUseHTTPsJSON contains the JSON metadata for the
-// struct [SettingListResponseZonesAlwaysUseHTTPs]
-type settingListResponseZonesAlwaysUseHTTPsJSON struct {
+// settingListResponseZonesAlwaysUseHTTPSJSON contains the JSON metadata for the
+// struct [SettingListResponseZonesAlwaysUseHTTPS]
+type settingListResponseZonesAlwaysUseHTTPSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -404,53 +404,53 @@ type settingListResponseZonesAlwaysUseHTTPsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingListResponseZonesAlwaysUseHTTPs) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingListResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r SettingListResponseZonesAlwaysUseHTTPs) implementsSettingListResponse() {}
+func (r SettingListResponseZonesAlwaysUseHTTPS) implementsSettingListResponse() {}
 
 // ID of the zone setting.
-type SettingListResponseZonesAlwaysUseHTTPsID string
+type SettingListResponseZonesAlwaysUseHTTPSID string
 
 const (
-	SettingListResponseZonesAlwaysUseHTTPsIDAlwaysUseHTTPs SettingListResponseZonesAlwaysUseHTTPsID = "always_use_https"
+	SettingListResponseZonesAlwaysUseHTTPSIDAlwaysUseHTTPS SettingListResponseZonesAlwaysUseHTTPSID = "always_use_https"
 )
 
 // Current value of the zone setting.
-type SettingListResponseZonesAlwaysUseHTTPsValue string
+type SettingListResponseZonesAlwaysUseHTTPSValue string
 
 const (
-	SettingListResponseZonesAlwaysUseHTTPsValueOn  SettingListResponseZonesAlwaysUseHTTPsValue = "on"
-	SettingListResponseZonesAlwaysUseHTTPsValueOff SettingListResponseZonesAlwaysUseHTTPsValue = "off"
+	SettingListResponseZonesAlwaysUseHTTPSValueOn  SettingListResponseZonesAlwaysUseHTTPSValue = "on"
+	SettingListResponseZonesAlwaysUseHTTPSValueOff SettingListResponseZonesAlwaysUseHTTPSValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingListResponseZonesAlwaysUseHTTPsEditable bool
+type SettingListResponseZonesAlwaysUseHTTPSEditable bool
 
 const (
-	SettingListResponseZonesAlwaysUseHTTPsEditableTrue  SettingListResponseZonesAlwaysUseHTTPsEditable = true
-	SettingListResponseZonesAlwaysUseHTTPsEditableFalse SettingListResponseZonesAlwaysUseHTTPsEditable = false
+	SettingListResponseZonesAlwaysUseHTTPSEditableTrue  SettingListResponseZonesAlwaysUseHTTPSEditable = true
+	SettingListResponseZonesAlwaysUseHTTPSEditableFalse SettingListResponseZonesAlwaysUseHTTPSEditable = false
 )
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type SettingListResponseZonesAutomaticHTTPsRewrites struct {
+type SettingListResponseZonesAutomaticHTTPSRewrites struct {
 	// ID of the zone setting.
-	ID SettingListResponseZonesAutomaticHTTPsRewritesID `json:"id,required"`
+	ID SettingListResponseZonesAutomaticHTTPSRewritesID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingListResponseZonesAutomaticHTTPsRewritesValue `json:"value,required"`
+	Value SettingListResponseZonesAutomaticHTTPSRewritesValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingListResponseZonesAutomaticHTTPsRewritesEditable `json:"editable"`
+	Editable SettingListResponseZonesAutomaticHTTPSRewritesEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingListResponseZonesAutomaticHTTPsRewritesJSON `json:"-"`
+	JSON       settingListResponseZonesAutomaticHTTPSRewritesJSON `json:"-"`
 }
 
-// settingListResponseZonesAutomaticHTTPsRewritesJSON contains the JSON metadata
-// for the struct [SettingListResponseZonesAutomaticHTTPsRewrites]
-type settingListResponseZonesAutomaticHTTPsRewritesJSON struct {
+// settingListResponseZonesAutomaticHTTPSRewritesJSON contains the JSON metadata
+// for the struct [SettingListResponseZonesAutomaticHTTPSRewrites]
+type settingListResponseZonesAutomaticHTTPSRewritesJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -459,34 +459,34 @@ type settingListResponseZonesAutomaticHTTPsRewritesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingListResponseZonesAutomaticHTTPsRewrites) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingListResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r SettingListResponseZonesAutomaticHTTPsRewrites) implementsSettingListResponse() {}
+func (r SettingListResponseZonesAutomaticHTTPSRewrites) implementsSettingListResponse() {}
 
 // ID of the zone setting.
-type SettingListResponseZonesAutomaticHTTPsRewritesID string
+type SettingListResponseZonesAutomaticHTTPSRewritesID string
 
 const (
-	SettingListResponseZonesAutomaticHTTPsRewritesIDAutomaticHTTPsRewrites SettingListResponseZonesAutomaticHTTPsRewritesID = "automatic_https_rewrites"
+	SettingListResponseZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites SettingListResponseZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
 )
 
 // Current value of the zone setting.
-type SettingListResponseZonesAutomaticHTTPsRewritesValue string
+type SettingListResponseZonesAutomaticHTTPSRewritesValue string
 
 const (
-	SettingListResponseZonesAutomaticHTTPsRewritesValueOn  SettingListResponseZonesAutomaticHTTPsRewritesValue = "on"
-	SettingListResponseZonesAutomaticHTTPsRewritesValueOff SettingListResponseZonesAutomaticHTTPsRewritesValue = "off"
+	SettingListResponseZonesAutomaticHTTPSRewritesValueOn  SettingListResponseZonesAutomaticHTTPSRewritesValue = "on"
+	SettingListResponseZonesAutomaticHTTPSRewritesValueOff SettingListResponseZonesAutomaticHTTPSRewritesValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingListResponseZonesAutomaticHTTPsRewritesEditable bool
+type SettingListResponseZonesAutomaticHTTPSRewritesEditable bool
 
 const (
-	SettingListResponseZonesAutomaticHTTPsRewritesEditableTrue  SettingListResponseZonesAutomaticHTTPsRewritesEditable = true
-	SettingListResponseZonesAutomaticHTTPsRewritesEditableFalse SettingListResponseZonesAutomaticHTTPsRewritesEditable = false
+	SettingListResponseZonesAutomaticHTTPSRewritesEditableTrue  SettingListResponseZonesAutomaticHTTPSRewritesEditable = true
+	SettingListResponseZonesAutomaticHTTPSRewritesEditableFalse SettingListResponseZonesAutomaticHTTPSRewritesEditable = false
 )
 
 // When the client requesting an asset supports the Brotli compression algorithm,
@@ -3503,8 +3503,8 @@ const (
 //
 // Union satisfied by [SettingEditResponseZones0rtt],
 // [SettingEditResponseZonesAdvancedDDOS], [SettingEditResponseZonesAlwaysOnline],
-// [SettingEditResponseZonesAlwaysUseHTTPs],
-// [SettingEditResponseZonesAutomaticHTTPsRewrites],
+// [SettingEditResponseZonesAlwaysUseHTTPS],
+// [SettingEditResponseZonesAutomaticHTTPSRewrites],
 // [SettingEditResponseZonesBrotli], [SettingEditResponseZonesBrowserCacheTTL],
 // [SettingEditResponseZonesBrowserCheck], [SettingEditResponseZonesCacheLevel],
 // [SettingEditResponseZonesChallengeTTL], [SettingEditResponseZonesCiphers],
@@ -3721,22 +3721,22 @@ const (
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type SettingEditResponseZonesAlwaysUseHTTPs struct {
+type SettingEditResponseZonesAlwaysUseHTTPS struct {
 	// ID of the zone setting.
-	ID SettingEditResponseZonesAlwaysUseHTTPsID `json:"id,required"`
+	ID SettingEditResponseZonesAlwaysUseHTTPSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesAlwaysUseHTTPsValue `json:"value,required"`
+	Value SettingEditResponseZonesAlwaysUseHTTPSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingEditResponseZonesAlwaysUseHTTPsEditable `json:"editable"`
+	Editable SettingEditResponseZonesAlwaysUseHTTPSEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingEditResponseZonesAlwaysUseHTTPsJSON `json:"-"`
+	JSON       settingEditResponseZonesAlwaysUseHTTPSJSON `json:"-"`
 }
 
-// settingEditResponseZonesAlwaysUseHTTPsJSON contains the JSON metadata for the
-// struct [SettingEditResponseZonesAlwaysUseHTTPs]
-type settingEditResponseZonesAlwaysUseHTTPsJSON struct {
+// settingEditResponseZonesAlwaysUseHTTPSJSON contains the JSON metadata for the
+// struct [SettingEditResponseZonesAlwaysUseHTTPS]
+type settingEditResponseZonesAlwaysUseHTTPSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -3745,53 +3745,53 @@ type settingEditResponseZonesAlwaysUseHTTPsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingEditResponseZonesAlwaysUseHTTPs) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEditResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r SettingEditResponseZonesAlwaysUseHTTPs) implementsSettingEditResponse() {}
+func (r SettingEditResponseZonesAlwaysUseHTTPS) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
-type SettingEditResponseZonesAlwaysUseHTTPsID string
+type SettingEditResponseZonesAlwaysUseHTTPSID string
 
 const (
-	SettingEditResponseZonesAlwaysUseHTTPsIDAlwaysUseHTTPs SettingEditResponseZonesAlwaysUseHTTPsID = "always_use_https"
+	SettingEditResponseZonesAlwaysUseHTTPSIDAlwaysUseHTTPS SettingEditResponseZonesAlwaysUseHTTPSID = "always_use_https"
 )
 
 // Current value of the zone setting.
-type SettingEditResponseZonesAlwaysUseHTTPsValue string
+type SettingEditResponseZonesAlwaysUseHTTPSValue string
 
 const (
-	SettingEditResponseZonesAlwaysUseHTTPsValueOn  SettingEditResponseZonesAlwaysUseHTTPsValue = "on"
-	SettingEditResponseZonesAlwaysUseHTTPsValueOff SettingEditResponseZonesAlwaysUseHTTPsValue = "off"
+	SettingEditResponseZonesAlwaysUseHTTPSValueOn  SettingEditResponseZonesAlwaysUseHTTPSValue = "on"
+	SettingEditResponseZonesAlwaysUseHTTPSValueOff SettingEditResponseZonesAlwaysUseHTTPSValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingEditResponseZonesAlwaysUseHTTPsEditable bool
+type SettingEditResponseZonesAlwaysUseHTTPSEditable bool
 
 const (
-	SettingEditResponseZonesAlwaysUseHTTPsEditableTrue  SettingEditResponseZonesAlwaysUseHTTPsEditable = true
-	SettingEditResponseZonesAlwaysUseHTTPsEditableFalse SettingEditResponseZonesAlwaysUseHTTPsEditable = false
+	SettingEditResponseZonesAlwaysUseHTTPSEditableTrue  SettingEditResponseZonesAlwaysUseHTTPSEditable = true
+	SettingEditResponseZonesAlwaysUseHTTPSEditableFalse SettingEditResponseZonesAlwaysUseHTTPSEditable = false
 )
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type SettingEditResponseZonesAutomaticHTTPsRewrites struct {
+type SettingEditResponseZonesAutomaticHTTPSRewrites struct {
 	// ID of the zone setting.
-	ID SettingEditResponseZonesAutomaticHTTPsRewritesID `json:"id,required"`
+	ID SettingEditResponseZonesAutomaticHTTPSRewritesID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingEditResponseZonesAutomaticHTTPsRewritesValue `json:"value,required"`
+	Value SettingEditResponseZonesAutomaticHTTPSRewritesValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingEditResponseZonesAutomaticHTTPsRewritesEditable `json:"editable"`
+	Editable SettingEditResponseZonesAutomaticHTTPSRewritesEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingEditResponseZonesAutomaticHTTPsRewritesJSON `json:"-"`
+	JSON       settingEditResponseZonesAutomaticHTTPSRewritesJSON `json:"-"`
 }
 
-// settingEditResponseZonesAutomaticHTTPsRewritesJSON contains the JSON metadata
-// for the struct [SettingEditResponseZonesAutomaticHTTPsRewrites]
-type settingEditResponseZonesAutomaticHTTPsRewritesJSON struct {
+// settingEditResponseZonesAutomaticHTTPSRewritesJSON contains the JSON metadata
+// for the struct [SettingEditResponseZonesAutomaticHTTPSRewrites]
+type settingEditResponseZonesAutomaticHTTPSRewritesJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -3800,34 +3800,34 @@ type settingEditResponseZonesAutomaticHTTPsRewritesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingEditResponseZonesAutomaticHTTPsRewrites) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEditResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r SettingEditResponseZonesAutomaticHTTPsRewrites) implementsSettingEditResponse() {}
+func (r SettingEditResponseZonesAutomaticHTTPSRewrites) implementsSettingEditResponse() {}
 
 // ID of the zone setting.
-type SettingEditResponseZonesAutomaticHTTPsRewritesID string
+type SettingEditResponseZonesAutomaticHTTPSRewritesID string
 
 const (
-	SettingEditResponseZonesAutomaticHTTPsRewritesIDAutomaticHTTPsRewrites SettingEditResponseZonesAutomaticHTTPsRewritesID = "automatic_https_rewrites"
+	SettingEditResponseZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites SettingEditResponseZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
 )
 
 // Current value of the zone setting.
-type SettingEditResponseZonesAutomaticHTTPsRewritesValue string
+type SettingEditResponseZonesAutomaticHTTPSRewritesValue string
 
 const (
-	SettingEditResponseZonesAutomaticHTTPsRewritesValueOn  SettingEditResponseZonesAutomaticHTTPsRewritesValue = "on"
-	SettingEditResponseZonesAutomaticHTTPsRewritesValueOff SettingEditResponseZonesAutomaticHTTPsRewritesValue = "off"
+	SettingEditResponseZonesAutomaticHTTPSRewritesValueOn  SettingEditResponseZonesAutomaticHTTPSRewritesValue = "on"
+	SettingEditResponseZonesAutomaticHTTPSRewritesValueOff SettingEditResponseZonesAutomaticHTTPSRewritesValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingEditResponseZonesAutomaticHTTPsRewritesEditable bool
+type SettingEditResponseZonesAutomaticHTTPSRewritesEditable bool
 
 const (
-	SettingEditResponseZonesAutomaticHTTPsRewritesEditableTrue  SettingEditResponseZonesAutomaticHTTPsRewritesEditable = true
-	SettingEditResponseZonesAutomaticHTTPsRewritesEditableFalse SettingEditResponseZonesAutomaticHTTPsRewritesEditable = false
+	SettingEditResponseZonesAutomaticHTTPSRewritesEditableTrue  SettingEditResponseZonesAutomaticHTTPSRewritesEditable = true
+	SettingEditResponseZonesAutomaticHTTPSRewritesEditableFalse SettingEditResponseZonesAutomaticHTTPSRewritesEditable = false
 )
 
 // When the client requesting an asset supports the Brotli compression algorithm,
@@ -6916,8 +6916,8 @@ func (r SettingEditParams) MarshalJSON() (data []byte, err error) {
 // Satisfied by [SettingEditParamsItemsZones0rtt],
 // [SettingEditParamsItemsZonesAdvancedDDOS],
 // [SettingEditParamsItemsZonesAlwaysOnline],
-// [SettingEditParamsItemsZonesAlwaysUseHTTPs],
-// [SettingEditParamsItemsZonesAutomaticHTTPsRewrites],
+// [SettingEditParamsItemsZonesAlwaysUseHTTPS],
+// [SettingEditParamsItemsZonesAutomaticHTTPSRewrites],
 // [SettingEditParamsItemsZonesBrotli],
 // [SettingEditParamsItemsZonesBrowserCacheTTL],
 // [SettingEditParamsItemsZonesBrowserCheck],
@@ -7086,79 +7086,79 @@ const (
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type SettingEditParamsItemsZonesAlwaysUseHTTPs struct {
+type SettingEditParamsItemsZonesAlwaysUseHTTPS struct {
 	// ID of the zone setting.
-	ID param.Field[SettingEditParamsItemsZonesAlwaysUseHTTPsID] `json:"id,required"`
+	ID param.Field[SettingEditParamsItemsZonesAlwaysUseHTTPSID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingEditParamsItemsZonesAlwaysUseHTTPsValue] `json:"value,required"`
+	Value param.Field[SettingEditParamsItemsZonesAlwaysUseHTTPSValue] `json:"value,required"`
 }
 
-func (r SettingEditParamsItemsZonesAlwaysUseHTTPs) MarshalJSON() (data []byte, err error) {
+func (r SettingEditParamsItemsZonesAlwaysUseHTTPS) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesAlwaysUseHTTPs) implementsSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesAlwaysUseHTTPS) implementsSettingEditParamsItem() {}
 
 // ID of the zone setting.
-type SettingEditParamsItemsZonesAlwaysUseHTTPsID string
+type SettingEditParamsItemsZonesAlwaysUseHTTPSID string
 
 const (
-	SettingEditParamsItemsZonesAlwaysUseHTTPsIDAlwaysUseHTTPs SettingEditParamsItemsZonesAlwaysUseHTTPsID = "always_use_https"
+	SettingEditParamsItemsZonesAlwaysUseHTTPSIDAlwaysUseHTTPS SettingEditParamsItemsZonesAlwaysUseHTTPSID = "always_use_https"
 )
 
 // Current value of the zone setting.
-type SettingEditParamsItemsZonesAlwaysUseHTTPsValue string
+type SettingEditParamsItemsZonesAlwaysUseHTTPSValue string
 
 const (
-	SettingEditParamsItemsZonesAlwaysUseHTTPsValueOn  SettingEditParamsItemsZonesAlwaysUseHTTPsValue = "on"
-	SettingEditParamsItemsZonesAlwaysUseHTTPsValueOff SettingEditParamsItemsZonesAlwaysUseHTTPsValue = "off"
+	SettingEditParamsItemsZonesAlwaysUseHTTPSValueOn  SettingEditParamsItemsZonesAlwaysUseHTTPSValue = "on"
+	SettingEditParamsItemsZonesAlwaysUseHTTPSValueOff SettingEditParamsItemsZonesAlwaysUseHTTPSValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingEditParamsItemsZonesAlwaysUseHTTPsEditable bool
+type SettingEditParamsItemsZonesAlwaysUseHTTPSEditable bool
 
 const (
-	SettingEditParamsItemsZonesAlwaysUseHTTPsEditableTrue  SettingEditParamsItemsZonesAlwaysUseHTTPsEditable = true
-	SettingEditParamsItemsZonesAlwaysUseHTTPsEditableFalse SettingEditParamsItemsZonesAlwaysUseHTTPsEditable = false
+	SettingEditParamsItemsZonesAlwaysUseHTTPSEditableTrue  SettingEditParamsItemsZonesAlwaysUseHTTPSEditable = true
+	SettingEditParamsItemsZonesAlwaysUseHTTPSEditableFalse SettingEditParamsItemsZonesAlwaysUseHTTPSEditable = false
 )
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type SettingEditParamsItemsZonesAutomaticHTTPsRewrites struct {
+type SettingEditParamsItemsZonesAutomaticHTTPSRewrites struct {
 	// ID of the zone setting.
-	ID param.Field[SettingEditParamsItemsZonesAutomaticHTTPsRewritesID] `json:"id,required"`
+	ID param.Field[SettingEditParamsItemsZonesAutomaticHTTPSRewritesID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingEditParamsItemsZonesAutomaticHTTPsRewritesValue] `json:"value,required"`
+	Value param.Field[SettingEditParamsItemsZonesAutomaticHTTPSRewritesValue] `json:"value,required"`
 }
 
-func (r SettingEditParamsItemsZonesAutomaticHTTPsRewrites) MarshalJSON() (data []byte, err error) {
+func (r SettingEditParamsItemsZonesAutomaticHTTPSRewrites) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r SettingEditParamsItemsZonesAutomaticHTTPsRewrites) implementsSettingEditParamsItem() {}
+func (r SettingEditParamsItemsZonesAutomaticHTTPSRewrites) implementsSettingEditParamsItem() {}
 
 // ID of the zone setting.
-type SettingEditParamsItemsZonesAutomaticHTTPsRewritesID string
+type SettingEditParamsItemsZonesAutomaticHTTPSRewritesID string
 
 const (
-	SettingEditParamsItemsZonesAutomaticHTTPsRewritesIDAutomaticHTTPsRewrites SettingEditParamsItemsZonesAutomaticHTTPsRewritesID = "automatic_https_rewrites"
+	SettingEditParamsItemsZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites SettingEditParamsItemsZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
 )
 
 // Current value of the zone setting.
-type SettingEditParamsItemsZonesAutomaticHTTPsRewritesValue string
+type SettingEditParamsItemsZonesAutomaticHTTPSRewritesValue string
 
 const (
-	SettingEditParamsItemsZonesAutomaticHTTPsRewritesValueOn  SettingEditParamsItemsZonesAutomaticHTTPsRewritesValue = "on"
-	SettingEditParamsItemsZonesAutomaticHTTPsRewritesValueOff SettingEditParamsItemsZonesAutomaticHTTPsRewritesValue = "off"
+	SettingEditParamsItemsZonesAutomaticHTTPSRewritesValueOn  SettingEditParamsItemsZonesAutomaticHTTPSRewritesValue = "on"
+	SettingEditParamsItemsZonesAutomaticHTTPSRewritesValueOff SettingEditParamsItemsZonesAutomaticHTTPSRewritesValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingEditParamsItemsZonesAutomaticHTTPsRewritesEditable bool
+type SettingEditParamsItemsZonesAutomaticHTTPSRewritesEditable bool
 
 const (
-	SettingEditParamsItemsZonesAutomaticHTTPsRewritesEditableTrue  SettingEditParamsItemsZonesAutomaticHTTPsRewritesEditable = true
-	SettingEditParamsItemsZonesAutomaticHTTPsRewritesEditableFalse SettingEditParamsItemsZonesAutomaticHTTPsRewritesEditable = false
+	SettingEditParamsItemsZonesAutomaticHTTPSRewritesEditableTrue  SettingEditParamsItemsZonesAutomaticHTTPSRewritesEditable = true
+	SettingEditParamsItemsZonesAutomaticHTTPSRewritesEditableFalse SettingEditParamsItemsZonesAutomaticHTTPSRewritesEditable = false
 )
 
 // When the client requesting an asset supports the Brotli compression algorithm,

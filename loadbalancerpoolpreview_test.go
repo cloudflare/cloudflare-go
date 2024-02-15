@@ -56,7 +56,7 @@ func TestLoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolWithOptionalP
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsTypeHTTPs),
+			Type:      cloudflare.F(cloudflare.LoadBalancerPoolPreviewAccountLoadBalancerPoolsPreviewPoolParamsTypeHTTPS),
 		},
 	)
 	if err != nil {

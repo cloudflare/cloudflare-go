@@ -201,7 +201,7 @@ type RadarHttptlsVersionListParamsHTTPProtocol string
 
 const (
 	RadarHttptlsVersionListParamsHTTPProtocolHTTP  RadarHttptlsVersionListParamsHTTPProtocol = "HTTP"
-	RadarHttptlsVersionListParamsHTTPProtocolHTTPs RadarHttptlsVersionListParamsHTTPProtocol = "HTTPS"
+	RadarHttptlsVersionListParamsHTTPProtocolHTTPS RadarHttptlsVersionListParamsHTTPProtocol = "HTTPS"
 )
 
 type RadarHttptlsVersionListParamsHTTPVersion string

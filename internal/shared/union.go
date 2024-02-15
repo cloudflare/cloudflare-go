@@ -12,7 +12,7 @@ func (UnionString) ImplementsMembershipUpdateResponse()                  {}
 func (UnionString) ImplementsMembershipGetResponse()                     {}
 func (UnionString) ImplementsUserUserEditUserResponse()                  {}
 func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseWqTosW6OapiResponseCommonResult() {
+func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponse7B8bPyv1APIResponseCommonResult() {
 }
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
@@ -45,7 +45,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsNuRynDznFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParamsY4HMkxYgFilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -157,7 +157,7 @@ func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()      {}
 func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()    {}
 func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()    {}
 func (UnionString) ImplementsAddressPrefixDeleteResponse()            {}
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseWqTosW6OapiResponseCommonResult() {
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponse7B8bPyv1APIResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
@@ -377,7 +377,7 @@ func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsCertRecordTTL()       
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsCnameRecordTTL()                          {}
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsDnskeyRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsDsRecordTTL()                             {}
-func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsHTTPsRecordTTL()                          {}
+func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsHTTPSRecordTTL()                          {}
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsLocRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsMxRecordTTL()                             {}
 func (UnionFloat) ImplementsDNSRecordNewResponseDNSRecordsNaptrRecordTTL()                          {}
@@ -397,7 +397,7 @@ func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsCertRecordTTL()    
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsCnameRecordTTL()                       {}
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsDnskeyRecordTTL()                      {}
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsDsRecordTTL()                          {}
-func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsHTTPsRecordTTL()                       {}
+func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsHTTPSRecordTTL()                       {}
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsLocRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsMxRecordTTL()                          {}
 func (UnionFloat) ImplementsDNSRecordUpdateResponseDNSRecordsNaptrRecordTTL()                       {}
@@ -417,7 +417,7 @@ func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsCertRecordTTL()      
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsCnameRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsDnskeyRecordTTL()                        {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsDsRecordTTL()                            {}
-func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsHTTPsRecordTTL()                         {}
+func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsHTTPSRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsLocRecordTTL()                           {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsMxRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsNaptrRecordTTL()                         {}
@@ -437,7 +437,7 @@ func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCertRecordTTL()       
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCnameRecordTTL()                          {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsDnskeyRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsDsRecordTTL()                             {}
-func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsHTTPsRecordTTL()                          {}
+func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsHTTPSRecordTTL()                          {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsLocRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsMxRecordTTL()                             {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsNaptrRecordTTL()                          {}
@@ -457,7 +457,7 @@ func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsCertRecordTTL()         
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsCnameRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsDnskeyRecordTTL()                           {}
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsDsRecordTTL()                               {}
-func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsHTTPsRecordTTL()                            {}
+func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsHTTPSRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsLocRecordTTL()                              {}
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsMxRecordTTL()                               {}
 func (UnionFloat) ImplementsDNSRecordNewParamsDNSRecordsNaptrRecordTTL()                            {}
@@ -477,7 +477,7 @@ func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsCertRecordTTL()      
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsCnameRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsDnskeyRecordTTL()                        {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsDsRecordTTL()                            {}
-func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsHTTPsRecordTTL()                         {}
+func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsHTTPSRecordTTL()                         {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsLocRecordTTL()                           {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsMxRecordTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsDNSRecordsNaptrRecordTTL()                         {}

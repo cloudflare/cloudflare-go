@@ -39,7 +39,7 @@ func TestRadarHTTPTLSVersionListWithOptionalParams(t *testing.T) {
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DeviceType:   cloudflare.F([]cloudflare.RadarHttptlsVersionListParamsDeviceType{cloudflare.RadarHttptlsVersionListParamsDeviceTypeDesktop, cloudflare.RadarHttptlsVersionListParamsDeviceTypeMobile, cloudflare.RadarHttptlsVersionListParamsDeviceTypeOther}),
 		Format:       cloudflare.F(cloudflare.RadarHttptlsVersionListParamsFormatJson),
-		HTTPProtocol: cloudflare.F([]cloudflare.RadarHttptlsVersionListParamsHTTPProtocol{cloudflare.RadarHttptlsVersionListParamsHTTPProtocolHTTP, cloudflare.RadarHttptlsVersionListParamsHTTPProtocolHTTPs}),
+		HTTPProtocol: cloudflare.F([]cloudflare.RadarHttptlsVersionListParamsHTTPProtocol{cloudflare.RadarHttptlsVersionListParamsHTTPProtocolHTTP, cloudflare.RadarHttptlsVersionListParamsHTTPProtocolHTTPS}),
 		HTTPVersion:  cloudflare.F([]cloudflare.RadarHttptlsVersionListParamsHTTPVersion{cloudflare.RadarHttptlsVersionListParamsHTTPVersionHttPv1, cloudflare.RadarHttptlsVersionListParamsHTTPVersionHttPv2, cloudflare.RadarHttptlsVersionListParamsHTTPVersionHttPv3}),
 		IPVersion:    cloudflare.F([]cloudflare.RadarHttptlsVersionListParamsIPVersion{cloudflare.RadarHttptlsVersionListParamsIPVersionIPv4, cloudflare.RadarHttptlsVersionListParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),

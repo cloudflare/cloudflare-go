@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingAutomaticHTTPsRewriteUpdate(t *testing.T) {
+func TestSettingAutomaticHTTPSRewriteUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestSettingAutomaticHTTPsRewriteUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.AutomaticHTTPsRewrites.Update(
+	_, err := client.Settings.AutomaticHTTPSRewrites.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingAutomaticHTTPsRewriteUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingAutomaticHTTPsRewriteUpdateParamsValueOn),
+		cloudflare.SettingAutomaticHTTPSRewriteUpdateParams{
+			Value: cloudflare.F(cloudflare.SettingAutomaticHTTPSRewriteUpdateParamsValueOn),
 		},
 	)
 	if err != nil {
@@ -45,7 +45,7 @@ func TestSettingAutomaticHTTPsRewriteUpdate(t *testing.T) {
 	}
 }
 
-func TestSettingAutomaticHTTPsRewriteGet(t *testing.T) {
+func TestSettingAutomaticHTTPSRewriteGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,7 +61,7 @@ func TestSettingAutomaticHTTPsRewriteGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.AutomaticHTTPsRewrites.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Settings.AutomaticHTTPSRewrites.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
