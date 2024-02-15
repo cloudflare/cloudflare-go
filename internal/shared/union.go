@@ -12,7 +12,7 @@ func (UnionString) ImplementsMembershipUpdateResponse()                  {}
 func (UnionString) ImplementsMembershipGetResponse()                     {}
 func (UnionString) ImplementsUserUserEditUserResponse()                  {}
 func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseH208ue6vAPIResponseCommonResult() {
+func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseCl6zT1ClAPIResponseCommonResult() {
 }
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
@@ -45,7 +45,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsQxCcLmCpFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParams2sq4ljBlFilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -157,7 +157,7 @@ func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()      {}
 func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()    {}
 func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()    {}
 func (UnionString) ImplementsAddressPrefixDeleteResponse()            {}
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseH208ue6vAPIResponseCommonResult() {
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseCl6zT1ClAPIResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
