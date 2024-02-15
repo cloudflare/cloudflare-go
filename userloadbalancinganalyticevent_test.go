@@ -31,10 +31,10 @@ func TestUserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthch
 		option.WithUserServiceKey("My User Service Key"),
 	)
 	_, err := client.Users.LoadBalancingAnalytics.Events.LoadBalancerHealthcheckEventsListHealthcheckEvents(context.TODO(), cloudflare.UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams{
-		Identifier:    cloudflare.F("17b5962d775c646f3f9725cbc7a53df4"),
 		OriginHealthy: cloudflare.F(true),
 		OriginName:    cloudflare.F("primary-dc-1"),
 		PoolHealthy:   cloudflare.F(true),
+		PoolID:        cloudflare.F("17b5962d775c646f3f9725cbc7a53df4"),
 		PoolName:      cloudflare.F("primary-dc"),
 		Since:         cloudflare.F(time.Now()),
 		Until:         cloudflare.F(time.Now()),

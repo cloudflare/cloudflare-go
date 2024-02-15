@@ -71,7 +71,6 @@ func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthch
 }
 
 type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams struct {
-	Identifier param.Field[string] `query:"identifier"`
 	// If true, filter events where the origin status is healthy. If false, filter
 	// events where the origin status is unhealthy.
 	OriginHealthy param.Field[bool] `query:"origin_healthy"`
@@ -79,7 +78,8 @@ type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	OriginName param.Field[string] `query:"origin_name"`
 	// If true, filter events where the pool status is healthy. If false, filter events
 	// where the pool status is unhealthy.
-	PoolHealthy param.Field[bool] `query:"pool_healthy"`
+	PoolHealthy param.Field[bool]   `query:"pool_healthy"`
+	PoolID      param.Field[string] `query:"pool_id"`
 	// The name for the pool to filter.
 	PoolName param.Field[string] `query:"pool_name"`
 	// Start date and time of requesting data period in the ISO8601 format.

@@ -12,20 +12,15 @@ func (UnionString) ImplementsMembershipUpdateResponse()                  {}
 func (UnionString) ImplementsMembershipGetResponse()                     {}
 func (UnionString) ImplementsUserUserEditUserResponse()                  {}
 func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseOyyzRiagAPIResponseCommonResult() {
+func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseYq4V3hcHapiResponseCommonResult() {
 }
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
 func (UnionString) ImplementsUserInviteGetResponse()                                                {}
-func (UnionString) ImplementsUserLoadBalancerPoolHealthLoadBalancerPoolsPoolHealthDetailsResponse() {}
 func (UnionString) ImplementsUserOrganizationGetResponse()                                          {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponse()                                       {}
 func (UnionString) ImplementsUserTokenUpdateResponse()                                              {}
 func (UnionString) ImplementsUserTokenGetResponse()                                                 {}
-func (UnionString) ImplementsLoadBalancerPoolHealthAccountLoadBalancerPoolsPoolHealthDetailsResponse() {
-}
-func (UnionString) ImplementsLoadBalancerRegionGetResponse()                                        {}
-func (UnionString) ImplementsLoadBalancerRegionLoadBalancerRegionsListRegionsResponse()             {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant0AppID()                                   {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant1AppID()                                   {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant2AppID()                                   {}
@@ -45,7 +40,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsVFc1B2WbFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParamsGJq47JoyFilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -149,7 +144,7 @@ func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicati
 func (UnionString) ImplementsSpectrumAppUpdateParamsOriginPort() {}
 func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginPort() {
 }
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseOyyzRiagAPIResponseCommonResult() {
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseYq4V3hcHapiResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
