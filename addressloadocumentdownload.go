@@ -3,11 +3,6 @@
 package cloudflare
 
 import (
-	"context"
-	"fmt"
-	"net/http"
-
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -28,13 +23,3 @@ func NewAddressLoaDocumentDownloadService(opts ...option.RequestOption) (r *Addr
 	r.Options = opts
 	return
 }
-
-// Download specified LOA document under the account.
-func (r *AddressLoaDocumentDownloadService) List(ctx context.Context, accountIdentifier string, loaDocumentIdentifier string, opts ...option.RequestOption) (res *AddressLoaDocumentDownloadListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", accountIdentifier, loaDocumentIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-type AddressLoaDocumentDownloadListResponse = interface{}
