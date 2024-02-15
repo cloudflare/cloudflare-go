@@ -44,7 +44,7 @@ type ZarazConfigSettings struct {
 	ContextEnricher     ZarazWorker `json:"contextEnricher,omitempty"`
 }
 
-// DEPRECATED - to be removed pending migration of existing configs.
+// Deprecated: To be removed pending migration of existing configs.
 type ZarazNeoEvent struct {
 	BlockingTriggers []string       `json:"blockingTriggers"`
 	FiringTriggers   []string       `json:"firingTriggers"`
