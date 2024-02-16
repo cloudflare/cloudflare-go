@@ -32,7 +32,7 @@ func NewIntelAsnService(opts ...option.RequestOption) (r *IntelAsnService) {
 }
 
 // Get ASN Overview
-func (r *IntelAsnService) Get(ctx context.Context, accountID string, asn int64, opts ...option.RequestOption) (res *int64, err error) {
+func (r *IntelAsnService) Get(ctx context.Context, accountID string, asn interface{}, opts ...option.RequestOption) (res *int64, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelAsnGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", accountID, asn)

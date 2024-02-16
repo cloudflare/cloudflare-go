@@ -32,7 +32,7 @@ func TestIntelAsnGet(t *testing.T) {
 	_, err := client.Intels.Asn.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		int64(0),
+		map[string]interface{}{},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
