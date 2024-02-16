@@ -4,16 +4,15 @@ package shared
 
 type UnionString string
 
-func (UnionString) ImplementsAccountUpdateResponse()                     {}
-func (UnionString) ImplementsAccountGetResponse()                        {}
-func (UnionString) ImplementsCertificateGetResponse()                    {}
-func (UnionString) ImplementsCertificateOriginCaNewCertificateResponse() {}
-func (UnionString) ImplementsMembershipUpdateResponse()                  {}
-func (UnionString) ImplementsMembershipGetResponse()                     {}
-func (UnionString) ImplementsUserUserEditUserResponse()                  {}
-func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseYq4V3hcHapiResponseCommonResult() {
-}
+func (UnionString) ImplementsAccountUpdateResponse()                                                {}
+func (UnionString) ImplementsAccountGetResponse()                                                   {}
+func (UnionString) ImplementsCertificateGetResponse()                                               {}
+func (UnionString) ImplementsCertificateOriginCaNewCertificateResponse()                            {}
+func (UnionString) ImplementsMembershipUpdateResponse()                                             {}
+func (UnionString) ImplementsMembershipGetResponse()                                                {}
+func (UnionString) ImplementsUserUserEditUserResponse()                                             {}
+func (UnionString) ImplementsUserUserUserDetailsResponse()                                          {}
+func (UnionString) ImplementsUserAuditLogListResponseYq4V3hcHapiResponseCommonResult()              {}
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
 func (UnionString) ImplementsUserInviteGetResponse()                                                {}
@@ -133,11 +132,6 @@ func (UnionString) ImplementsWorkerRouteDeleteResponse()                        
 func (UnionString) ImplementsWorkerRouteWorkerRoutesNewRouteResponse()                            {}
 func (UnionString) ImplementsWorkerQueueDeleteResponse()                                          {}
 func (UnionString) ImplementsWorkerQueueConsumerDeleteResponse()                                  {}
-func (UnionString) ImplementsAPIGatewayConfigurationAPIShieldSettingsSetConfigurationPropertiesResponse() {
-}
-func (UnionString) ImplementsAPIGatewayOperationDeleteResponse()  {}
-func (UnionString) ImplementsAPIShieldAPIResponseSingleResult()   {}
-func (UnionString) ImplementsAPIGatewayUserSchemaDeleteResponse() {}
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse() {
 }
 func (UnionString) ImplementsSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse() {

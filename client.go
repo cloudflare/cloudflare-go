@@ -55,7 +55,6 @@ type Client struct {
 	Web3s                        *Web3Service
 	Workers                      *WorkerService
 	ActivationChecks             *ActivationCheckService
-	APIGateways                  *APIGatewayService
 	ManagedHeaders               *ManagedHeaderService
 	PageShields                  *PageShieldService
 	Rulesets                     *RulesetService
@@ -189,7 +188,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Web3s = NewWeb3Service(opts...)
 	r.Workers = NewWorkerService(opts...)
 	r.ActivationChecks = NewActivationCheckService(opts...)
-	r.APIGateways = NewAPIGatewayService(opts...)
 	r.ManagedHeaders = NewManagedHeaderService(opts...)
 	r.PageShields = NewPageShieldService(opts...)
 	r.Rulesets = NewRulesetService(opts...)
