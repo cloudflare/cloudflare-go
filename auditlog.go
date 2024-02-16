@@ -46,7 +46,7 @@ func (r *AuditLogService) AuditLogsGetAccountAuditLogs(ctx context.Context, acco
 }
 
 // Union satisfied by [AuditLogAuditLogsGetAccountAuditLogsResponseObject] or
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommon].
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommon].
 type AuditLogAuditLogsGetAccountAuditLogsResponse interface {
 	implementsAuditLogAuditLogsGetAccountAuditLogsResponse()
 }
@@ -225,19 +225,19 @@ func (r *AuditLogAuditLogsGetAccountAuditLogsResponseObjectResultResource) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommon struct {
-	Errors   []AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonError   `json:"errors,required"`
-	Messages []AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessage `json:"messages,required"`
-	Result   AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResult    `json:"result,required"`
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommon struct {
+	Errors   []AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonError   `json:"errors,required"`
+	Messages []AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonMessage `json:"messages,required"`
+	Result   AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResult    `json:"result,required"`
 	// Whether the API call was successful
-	Success AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonSuccess `json:"success,required"`
-	JSON    auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonJSON    `json:"-"`
+	Success AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonSuccess `json:"success,required"`
+	JSON    auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonJSON    `json:"-"`
 }
 
-// auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonJSON
+// auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonJSON
 // contains the JSON metadata for the struct
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommon]
-type auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonJSON struct {
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommon]
+type auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -246,64 +246,64 @@ type auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommon) UnmarshalJSON(data []byte) (err error) {
+func (r *AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommon) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommon) implementsAuditLogAuditLogsGetAccountAuditLogsResponse() {
+func (r AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommon) implementsAuditLogAuditLogsGetAccountAuditLogsResponse() {
 }
 
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonError struct {
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonError struct {
 	Code    int64                                                                          `json:"code,required"`
 	Message string                                                                         `json:"message,required"`
-	JSON    auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonErrorJSON `json:"-"`
+	JSON    auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonErrorJSON `json:"-"`
 }
 
-// auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonErrorJSON
+// auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonErrorJSON
 // contains the JSON metadata for the struct
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonError]
-type auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonErrorJSON struct {
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonError]
+type auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonErrorJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonError) UnmarshalJSON(data []byte) (err error) {
+func (r *AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessage struct {
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonMessage struct {
 	Code    int64                                                                            `json:"code,required"`
 	Message string                                                                           `json:"message,required"`
-	JSON    auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessageJSON `json:"-"`
+	JSON    auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonMessageJSON `json:"-"`
 }
 
-// auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessageJSON
+// auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonMessageJSON
 // contains the JSON metadata for the struct
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessage]
-type auditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessageJSON struct {
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonMessage]
+type auditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonMessageJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonMessage) UnmarshalJSON(data []byte) (err error) {
+func (r *AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Union satisfied by
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResultUnknown],
-// [AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResultArray]
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResultUnknown],
+// [AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResultArray]
 // or [shared.UnionString].
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResult interface {
-	ImplementsAuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResult()
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResult interface {
+	ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonResult()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResult)(nil)).Elem(),
+		reflect.TypeOf((*AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -312,16 +312,16 @@ func init() {
 	)
 }
 
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResultArray []interface{}
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResultArray []interface{}
 
-func (r AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResultArray) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonResult() {
+func (r AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonResultArray) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJapiResponseCommonResult() {
 }
 
 // Whether the API call was successful
-type AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonSuccess bool
+type AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonSuccess bool
 
 const (
-	AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonSuccessTrue AuditLogAuditLogsGetAccountAuditLogsResponse9cy76Al9APIResponseCommonSuccess = true
+	AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonSuccessTrue AuditLogAuditLogsGetAccountAuditLogsResponseO01pMnjJAPIResponseCommonSuccess = true
 )
 
 type AuditLogAuditLogsGetAccountAuditLogsParams struct {
