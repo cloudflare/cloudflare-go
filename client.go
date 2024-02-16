@@ -121,6 +121,7 @@ type Client struct {
 	DLP                          *DLPService
 	Gateway                      *GatewayService
 	AccessTags                   *AccessTagService
+	Calls                        *CallService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -254,6 +255,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DLP = NewDLPService(opts...)
 	r.Gateway = NewGatewayService(opts...)
 	r.AccessTags = NewAccessTagService(opts...)
+	r.Calls = NewCallService(opts...)
 
 	return
 }

@@ -12,15 +12,19 @@ func (UnionString) ImplementsMembershipUpdateResponse()                  {}
 func (UnionString) ImplementsMembershipGetResponse()                     {}
 func (UnionString) ImplementsUserUserEditUserResponse()                  {}
 func (UnionString) ImplementsUserUserUserDetailsResponse()               {}
-func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseSYy67PmvAPIResponseCommonResult() {
+func (UnionString) ImplementsUserAuditLogAuditLogsGetUserAuditLogsResponseYq4V3hcHapiResponseCommonResult() {
 }
 func (UnionString) ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()    {}
 func (UnionString) ImplementsUserInviteUpdateResponse()                                             {}
 func (UnionString) ImplementsUserInviteGetResponse()                                                {}
+func (UnionString) ImplementsUserLoadBalancerPoolHealthLoadBalancerPoolsPoolHealthDetailsResponse() {}
 func (UnionString) ImplementsUserOrganizationGetResponse()                                          {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponse()                                       {}
 func (UnionString) ImplementsUserTokenUpdateResponse()                                              {}
 func (UnionString) ImplementsUserTokenGetResponse()                                                 {}
+func (UnionString) ImplementsLoadBalancerPoolHealthGetResponse()                                    {}
+func (UnionString) ImplementsLoadBalancerRegionGetResponse()                                        {}
+func (UnionString) ImplementsLoadBalancerRegionLoadBalancerRegionsListRegionsResponse()             {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant0AppID()                                   {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant1AppID()                                   {}
 func (UnionString) ImplementsAccessAppUpdateParamsVariant2AppID()                                   {}
@@ -40,7 +44,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsHDwfmVgpFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParamsGJq47JoyFilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -96,6 +100,7 @@ func (UnionString) ImplementsCustomCertificateGetResponse()               {}
 func (UnionString) ImplementsCustomHostnameFallbackOriginUpdateResponse() {}
 func (UnionString) ImplementsCustomHostnameFallbackOriginDeleteResponse() {}
 func (UnionString) ImplementsCustomHostnameFallbackOriginGetResponse()    {}
+func (UnionString) ImplementsCustomNDeleteResponse()                      {}
 func (UnionString) ImplementsFirewallAccessRuleNewResponse()              {}
 func (UnionString) ImplementsFirewallAccessRuleUpdateResponse()           {}
 func (UnionString) ImplementsFirewallAccessRuleGetResponse()              {}
@@ -144,7 +149,15 @@ func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicati
 func (UnionString) ImplementsSpectrumAppUpdateParamsOriginPort() {}
 func (UnionString) ImplementsSpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginPort() {
 }
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseSYy67PmvAPIResponseCommonResult() {
+func (UnionString) ImplementsAddressAddressMapDeleteResponse()        {}
+func (UnionString) ImplementsAddressAddressMapAccountUpdateResponse() {}
+func (UnionString) ImplementsAddressAddressMapAccountDeleteResponse() {}
+func (UnionString) ImplementsAddressAddressMapIPUpdateResponse()      {}
+func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()      {}
+func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()    {}
+func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()    {}
+func (UnionString) ImplementsAddressPrefixDeleteResponse()            {}
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseYq4V3hcHapiResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
@@ -233,6 +246,7 @@ func (UnionString) ImplementsDevicePostureIntegrationDeleteResponse()           
 func (UnionString) ImplementsDeviceRevokeDevicesRevokeDevicesResponse()                        {}
 func (UnionString) ImplementsDeviceUnrevokeDevicesUnrevokeDevicesResponse()                    {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                        {}
+func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                           {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponse()                                  {}
 func (UnionString) ImplementsVectorizeIndexDeleteResponse()                                    {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupListResponseSerie0()                   {}
