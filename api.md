@@ -3386,14 +3386,6 @@ Methods:
 
 ## Traceroutes
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DiagnosticTracerouteDiagnosticsTracerouteResponse">DiagnosticTracerouteDiagnosticsTracerouteResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_identifier}/diagnostics/traceroute">client.Diagnostics.Traceroutes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DiagnosticTracerouteService.DiagnosticsTraceroute">DiagnosticsTraceroute</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DiagnosticTracerouteDiagnosticsTracerouteParams">DiagnosticTracerouteDiagnosticsTracerouteParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DiagnosticTracerouteDiagnosticsTracerouteResponse">DiagnosticTracerouteDiagnosticsTracerouteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # DLPs
 
 ## Patterns
