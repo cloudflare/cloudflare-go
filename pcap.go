@@ -74,8 +74,8 @@ func (r *PcapService) MagicPcapCollectionListPacketCaptureRequests(ctx context.C
 	return
 }
 
-// Union satisfied by [PcapGetResponseIvpSXk6rPcapsResponseSimple] or
-// [PcapGetResponseIvpSXk6rPcapsResponseFull].
+// Union satisfied by [PcapGetResponseJp9MvktBPcapsResponseSimple] or
+// [PcapGetResponseJp9MvktBPcapsResponseFull].
 type PcapGetResponse interface {
 	implementsPcapGetResponse()
 }
@@ -84,28 +84,28 @@ func init() {
 	apijson.RegisterUnion(reflect.TypeOf((*PcapGetResponse)(nil)).Elem(), "")
 }
 
-type PcapGetResponseIvpSXk6rPcapsResponseSimple struct {
+type PcapGetResponseJp9MvktBPcapsResponseSimple struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1 `json:"filter_v1"`
+	FilterV1 PcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus `json:"status"`
+	Status PcapGetResponseJp9MvktBPcapsResponseSimpleStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapGetResponseIvpSXk6rPcapsResponseSimpleSystem `json:"system"`
+	System PcapGetResponseJp9MvktBPcapsResponseSimpleSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapGetResponseIvpSXk6rPcapsResponseSimpleType `json:"type"`
-	JSON pcapGetResponseIvpSXk6rPcapsResponseSimpleJSON `json:"-"`
+	Type PcapGetResponseJp9MvktBPcapsResponseSimpleType `json:"type"`
+	JSON pcapGetResponseJp9MvktBPcapsResponseSimpleJSON `json:"-"`
 }
 
-// pcapGetResponseIvpSXk6rPcapsResponseSimpleJSON contains the JSON metadata for
-// the struct [PcapGetResponseIvpSXk6rPcapsResponseSimple]
-type pcapGetResponseIvpSXk6rPcapsResponseSimpleJSON struct {
+// pcapGetResponseJp9MvktBPcapsResponseSimpleJSON contains the JSON metadata for
+// the struct [PcapGetResponseJp9MvktBPcapsResponseSimple]
+type pcapGetResponseJp9MvktBPcapsResponseSimpleJSON struct {
 	ID          apijson.Field
 	FilterV1    apijson.Field
 	Status      apijson.Field
@@ -117,14 +117,14 @@ type pcapGetResponseIvpSXk6rPcapsResponseSimpleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapGetResponseIvpSXk6rPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapGetResponseJp9MvktBPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapGetResponseIvpSXk6rPcapsResponseSimple) implementsPcapGetResponse() {}
+func (r PcapGetResponseJp9MvktBPcapsResponseSimple) implementsPcapGetResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1 struct {
+type PcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -135,12 +135,12 @@ type PcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1 struct {
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                                `json:"source_port"`
-	JSON       pcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON `json:"-"`
+	JSON       pcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1JSON `json:"-"`
 }
 
-// pcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON contains the JSON
-// metadata for the struct [PcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1]
-type pcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON struct {
+// pcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1JSON contains the JSON
+// metadata for the struct [PcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1]
+type pcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -150,41 +150,41 @@ type pcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapGetResponseIvpSXk6rPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapGetResponseJp9MvktBPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus string
+type PcapGetResponseJp9MvktBPcapsResponseSimpleStatus string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusUnknown           PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "unknown"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusSuccess           PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "success"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusPending           PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "pending"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusRunning           PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "running"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusConversionPending PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_pending"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusConversionRunning PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_running"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusComplete          PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "complete"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleStatusFailed            PcapGetResponseIvpSXk6rPcapsResponseSimpleStatus = "failed"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusUnknown           PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "unknown"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusSuccess           PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "success"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusPending           PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "pending"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusRunning           PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "running"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusConversionPending PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_pending"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusConversionRunning PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_running"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusComplete          PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "complete"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleStatusFailed            PcapGetResponseJp9MvktBPcapsResponseSimpleStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapGetResponseIvpSXk6rPcapsResponseSimpleSystem string
+type PcapGetResponseJp9MvktBPcapsResponseSimpleSystem string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleSystemMagicTransit PcapGetResponseIvpSXk6rPcapsResponseSimpleSystem = "magic-transit"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleSystemMagicTransit PcapGetResponseJp9MvktBPcapsResponseSimpleSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapGetResponseIvpSXk6rPcapsResponseSimpleType string
+type PcapGetResponseJp9MvktBPcapsResponseSimpleType string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleTypeSimple PcapGetResponseIvpSXk6rPcapsResponseSimpleType = "simple"
-	PcapGetResponseIvpSXk6rPcapsResponseSimpleTypeFull   PcapGetResponseIvpSXk6rPcapsResponseSimpleType = "full"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleTypeSimple PcapGetResponseJp9MvktBPcapsResponseSimpleType = "simple"
+	PcapGetResponseJp9MvktBPcapsResponseSimpleTypeFull   PcapGetResponseJp9MvktBPcapsResponseSimpleType = "full"
 )
 
-type PcapGetResponseIvpSXk6rPcapsResponseFull struct {
+type PcapGetResponseJp9MvktBPcapsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
@@ -200,24 +200,24 @@ type PcapGetResponseIvpSXk6rPcapsResponseFull struct {
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapGetResponseIvpSXk6rPcapsResponseFullFilterV1 `json:"filter_v1"`
+	FilterV1 PcapGetResponseJp9MvktBPcapsResponseFullFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapGetResponseIvpSXk6rPcapsResponseFullStatus `json:"status"`
+	Status PcapGetResponseJp9MvktBPcapsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapGetResponseIvpSXk6rPcapsResponseFullSystem `json:"system"`
+	System PcapGetResponseJp9MvktBPcapsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapGetResponseIvpSXk6rPcapsResponseFullType `json:"type"`
-	JSON pcapGetResponseIvpSXk6rPcapsResponseFullJSON `json:"-"`
+	Type PcapGetResponseJp9MvktBPcapsResponseFullType `json:"type"`
+	JSON pcapGetResponseJp9MvktBPcapsResponseFullJSON `json:"-"`
 }
 
-// pcapGetResponseIvpSXk6rPcapsResponseFullJSON contains the JSON metadata for the
-// struct [PcapGetResponseIvpSXk6rPcapsResponseFull]
-type pcapGetResponseIvpSXk6rPcapsResponseFullJSON struct {
+// pcapGetResponseJp9MvktBPcapsResponseFullJSON contains the JSON metadata for the
+// struct [PcapGetResponseJp9MvktBPcapsResponseFull]
+type pcapGetResponseJp9MvktBPcapsResponseFullJSON struct {
 	ID              apijson.Field
 	ByteLimit       apijson.Field
 	ColoName        apijson.Field
@@ -233,14 +233,14 @@ type pcapGetResponseIvpSXk6rPcapsResponseFullJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapGetResponseIvpSXk6rPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapGetResponseJp9MvktBPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapGetResponseIvpSXk6rPcapsResponseFull) implementsPcapGetResponse() {}
+func (r PcapGetResponseJp9MvktBPcapsResponseFull) implementsPcapGetResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapGetResponseIvpSXk6rPcapsResponseFullFilterV1 struct {
+type PcapGetResponseJp9MvktBPcapsResponseFullFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -251,12 +251,12 @@ type PcapGetResponseIvpSXk6rPcapsResponseFullFilterV1 struct {
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                              `json:"source_port"`
-	JSON       pcapGetResponseIvpSXk6rPcapsResponseFullFilterV1JSON `json:"-"`
+	JSON       pcapGetResponseJp9MvktBPcapsResponseFullFilterV1JSON `json:"-"`
 }
 
-// pcapGetResponseIvpSXk6rPcapsResponseFullFilterV1JSON contains the JSON metadata
-// for the struct [PcapGetResponseIvpSXk6rPcapsResponseFullFilterV1]
-type pcapGetResponseIvpSXk6rPcapsResponseFullFilterV1JSON struct {
+// pcapGetResponseJp9MvktBPcapsResponseFullFilterV1JSON contains the JSON metadata
+// for the struct [PcapGetResponseJp9MvktBPcapsResponseFullFilterV1]
+type pcapGetResponseJp9MvktBPcapsResponseFullFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -266,43 +266,43 @@ type pcapGetResponseIvpSXk6rPcapsResponseFullFilterV1JSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapGetResponseIvpSXk6rPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapGetResponseJp9MvktBPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapGetResponseIvpSXk6rPcapsResponseFullStatus string
+type PcapGetResponseJp9MvktBPcapsResponseFullStatus string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusUnknown           PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "unknown"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusSuccess           PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "success"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusPending           PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "pending"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusRunning           PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "running"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusConversionPending PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "conversion_pending"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusConversionRunning PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "conversion_running"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusComplete          PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "complete"
-	PcapGetResponseIvpSXk6rPcapsResponseFullStatusFailed            PcapGetResponseIvpSXk6rPcapsResponseFullStatus = "failed"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusUnknown           PcapGetResponseJp9MvktBPcapsResponseFullStatus = "unknown"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusSuccess           PcapGetResponseJp9MvktBPcapsResponseFullStatus = "success"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusPending           PcapGetResponseJp9MvktBPcapsResponseFullStatus = "pending"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusRunning           PcapGetResponseJp9MvktBPcapsResponseFullStatus = "running"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusConversionPending PcapGetResponseJp9MvktBPcapsResponseFullStatus = "conversion_pending"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusConversionRunning PcapGetResponseJp9MvktBPcapsResponseFullStatus = "conversion_running"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusComplete          PcapGetResponseJp9MvktBPcapsResponseFullStatus = "complete"
+	PcapGetResponseJp9MvktBPcapsResponseFullStatusFailed            PcapGetResponseJp9MvktBPcapsResponseFullStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapGetResponseIvpSXk6rPcapsResponseFullSystem string
+type PcapGetResponseJp9MvktBPcapsResponseFullSystem string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseFullSystemMagicTransit PcapGetResponseIvpSXk6rPcapsResponseFullSystem = "magic-transit"
+	PcapGetResponseJp9MvktBPcapsResponseFullSystemMagicTransit PcapGetResponseJp9MvktBPcapsResponseFullSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapGetResponseIvpSXk6rPcapsResponseFullType string
+type PcapGetResponseJp9MvktBPcapsResponseFullType string
 
 const (
-	PcapGetResponseIvpSXk6rPcapsResponseFullTypeSimple PcapGetResponseIvpSXk6rPcapsResponseFullType = "simple"
-	PcapGetResponseIvpSXk6rPcapsResponseFullTypeFull   PcapGetResponseIvpSXk6rPcapsResponseFullType = "full"
+	PcapGetResponseJp9MvktBPcapsResponseFullTypeSimple PcapGetResponseJp9MvktBPcapsResponseFullType = "simple"
+	PcapGetResponseJp9MvktBPcapsResponseFullTypeFull   PcapGetResponseJp9MvktBPcapsResponseFullType = "full"
 )
 
 // Union satisfied by
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimple] or
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull].
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimple] or
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFull].
 type PcapMagicPcapCollectionNewPcapRequestResponse interface {
 	implementsPcapMagicPcapCollectionNewPcapRequestResponse()
 }
@@ -311,29 +311,29 @@ func init() {
 	apijson.RegisterUnion(reflect.TypeOf((*PcapMagicPcapCollectionNewPcapRequestResponse)(nil)).Elem(), "")
 }
 
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimple struct {
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimple struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1 `json:"filter_v1"`
+	FilterV1 PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus `json:"status"`
+	Status PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleSystem `json:"system"`
+	System PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleType `json:"type"`
-	JSON pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleJSON `json:"-"`
+	Type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleType `json:"type"`
+	JSON pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleJSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleJSON
+// pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleJSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimple]
-type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleJSON struct {
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimple]
+type pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleJSON struct {
 	ID          apijson.Field
 	FilterV1    apijson.Field
 	Status      apijson.Field
@@ -345,15 +345,15 @@ type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimple) implementsPcapMagicPcapCollectionNewPcapRequestResponse() {
+func (r PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimple) implementsPcapMagicPcapCollectionNewPcapRequestResponse() {
 }
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1 struct {
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -364,13 +364,13 @@ type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFil
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                                                              `json:"source_port"`
-	JSON       pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON `json:"-"`
+	JSON       pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1JSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON
+// pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1JSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1]
-type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON struct {
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1]
+type pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -380,41 +380,41 @@ type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFil
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusUnknown           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "unknown"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusSuccess           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "success"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusPending           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "pending"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusRunning           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "running"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusConversionPending PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_pending"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusConversionRunning PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_running"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusComplete          PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "complete"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatusFailed            PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleStatus = "failed"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusUnknown           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "unknown"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusSuccess           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "success"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusPending           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "pending"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusRunning           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "running"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusConversionPending PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_pending"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusConversionRunning PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_running"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusComplete          PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "complete"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatusFailed            PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleSystem string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleSystem string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleSystem = "magic-transit"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleType string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleType string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleTypeSimple PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleType = "simple"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleTypeFull   PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseSimpleType = "full"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleTypeSimple PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleType = "simple"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleTypeFull   PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseSimpleType = "full"
 )
 
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull struct {
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
@@ -430,25 +430,25 @@ type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull stru
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1 `json:"filter_v1"`
+	FilterV1 PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus `json:"status"`
+	Status PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullSystem `json:"system"`
+	System PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullType `json:"type"`
-	JSON pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullJSON `json:"-"`
+	Type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullType `json:"type"`
+	JSON pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullJSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullJSON
+// pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullJSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull]
-type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullJSON struct {
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFull]
+type pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullJSON struct {
 	ID              apijson.Field
 	ByteLimit       apijson.Field
 	ColoName        apijson.Field
@@ -464,15 +464,15 @@ type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullJSON 
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFull) implementsPcapMagicPcapCollectionNewPcapRequestResponse() {
+func (r PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFull) implementsPcapMagicPcapCollectionNewPcapRequestResponse() {
 }
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1 struct {
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -483,13 +483,13 @@ type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilte
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                                                            `json:"source_port"`
-	JSON       pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1JSON `json:"-"`
+	JSON       pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1JSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1JSON
+// pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1JSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1]
-type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1JSON struct {
+// [PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1]
+type pcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -499,44 +499,44 @@ type pcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilte
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusUnknown           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "unknown"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusSuccess           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "success"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusPending           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "pending"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusRunning           PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "running"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusConversionPending PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "conversion_pending"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusConversionRunning PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "conversion_running"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusComplete          PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "complete"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatusFailed            PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullStatus = "failed"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusUnknown           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "unknown"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusSuccess           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "success"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusPending           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "pending"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusRunning           PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "running"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusConversionPending PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "conversion_pending"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusConversionRunning PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "conversion_running"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusComplete          PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "complete"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatusFailed            PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullSystem string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullSystem string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullSystem = "magic-transit"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullType string
+type PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullType string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullTypeSimple PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullType = "simple"
-	PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullTypeFull   PcapMagicPcapCollectionNewPcapRequestResponseIvpSXk6rPcapsResponseFullType = "full"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullTypeSimple PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullType = "simple"
+	PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullTypeFull   PcapMagicPcapCollectionNewPcapRequestResponseJp9MvktBPcapsResponseFullType = "full"
 )
 
 // Union satisfied by
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimple]
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimple]
 // or
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFull].
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFull].
 type PcapMagicPcapCollectionListPacketCaptureRequestsResponse interface {
 	implementsPcapMagicPcapCollectionListPacketCaptureRequestsResponse()
 }
@@ -545,29 +545,29 @@ func init() {
 	apijson.RegisterUnion(reflect.TypeOf((*PcapMagicPcapCollectionListPacketCaptureRequestsResponse)(nil)).Elem(), "")
 }
 
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimple struct {
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimple struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1 `json:"filter_v1"`
+	FilterV1 PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus `json:"status"`
+	Status PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleSystem `json:"system"`
+	System PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleType `json:"type"`
-	JSON pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleJSON `json:"-"`
+	Type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleType `json:"type"`
+	JSON pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleJSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleJSON
+// pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleJSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimple]
-type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleJSON struct {
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimple]
+type pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleJSON struct {
 	ID          apijson.Field
 	FilterV1    apijson.Field
 	Status      apijson.Field
@@ -579,15 +579,15 @@ type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimple) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimple) implementsPcapMagicPcapCollectionListPacketCaptureRequestsResponse() {
+func (r PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimple) implementsPcapMagicPcapCollectionListPacketCaptureRequestsResponse() {
 }
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1 struct {
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -598,13 +598,13 @@ type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                                                                         `json:"source_port"`
-	JSON       pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON `json:"-"`
+	JSON       pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1JSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON
+// pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1JSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1]
-type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1JSON struct {
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1]
+type pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -614,41 +614,41 @@ type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusUnknown           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "unknown"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusSuccess           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "success"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusPending           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "pending"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusRunning           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "running"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusConversionPending PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_pending"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusConversionRunning PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "conversion_running"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusComplete          PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "complete"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatusFailed            PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleStatus = "failed"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusUnknown           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "unknown"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusSuccess           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "success"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusPending           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "pending"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusRunning           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "running"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusConversionPending PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_pending"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusConversionRunning PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "conversion_running"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusComplete          PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "complete"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatusFailed            PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleSystem string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleSystem string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleSystemMagicTransit PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleSystem = "magic-transit"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleSystemMagicTransit PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleType string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleType string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleTypeSimple PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleType = "simple"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleTypeFull   PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseSimpleType = "full"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleTypeSimple PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleType = "simple"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleTypeFull   PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseSimpleType = "full"
 )
 
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFull struct {
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFull struct {
 	// The ID for the packet capture.
 	ID string `json:"id"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
@@ -664,25 +664,25 @@ type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	// applies to `full` packet captures.
 	ErrorMessage string `json:"error_message"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1 `json:"filter_v1"`
+	FilterV1 PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1 `json:"filter_v1"`
 	// The status of the packet capture request.
-	Status PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus `json:"status"`
+	Status PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus `json:"status"`
 	// The RFC 3339 timestamp when the packet capture was created.
 	Submitted string `json:"submitted"`
 	// The system used to collect packet captures.
-	System PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullSystem `json:"system"`
+	System PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullSystem `json:"system"`
 	// The packet capture duration in seconds.
 	TimeLimit float64 `json:"time_limit"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullType `json:"type"`
-	JSON pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullJSON `json:"-"`
+	Type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullType `json:"type"`
+	JSON pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullJSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullJSON
+// pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullJSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFull]
-type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullJSON struct {
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFull]
+type pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullJSON struct {
 	ID              apijson.Field
 	ByteLimit       apijson.Field
 	ColoName        apijson.Field
@@ -698,15 +698,15 @@ type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFull) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFull) implementsPcapMagicPcapCollectionListPacketCaptureRequestsResponse() {
+func (r PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFull) implementsPcapMagicPcapCollectionListPacketCaptureRequestsResponse() {
 }
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1 struct {
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress string `json:"destination_address"`
 	// The destination port of the packet.
@@ -717,13 +717,13 @@ type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	SourceAddress string `json:"source_address"`
 	// The source port of the packet.
 	SourcePort float64                                                                                       `json:"source_port"`
-	JSON       pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1JSON `json:"-"`
+	JSON       pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1JSON `json:"-"`
 }
 
-// pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1JSON
+// pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1JSON
 // contains the JSON metadata for the struct
-// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1]
-type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1JSON struct {
+// [PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1]
+type pcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1JSON struct {
 	DestinationAddress apijson.Field
 	DestinationPort    apijson.Field
 	Protocol           apijson.Field
@@ -733,38 +733,38 @@ type pcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsRespon
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
+func (r *PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the packet capture request.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusUnknown           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "unknown"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusSuccess           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "success"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusPending           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "pending"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusRunning           PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "running"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusConversionPending PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "conversion_pending"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusConversionRunning PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "conversion_running"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusComplete          PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "complete"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatusFailed            PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullStatus = "failed"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusUnknown           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "unknown"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusSuccess           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "success"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusPending           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "pending"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusRunning           PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "running"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusConversionPending PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "conversion_pending"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusConversionRunning PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "conversion_running"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusComplete          PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "complete"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatusFailed            PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullStatus = "failed"
 )
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullSystem string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullSystem string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullSystemMagicTransit PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullSystem = "magic-transit"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullSystemMagicTransit PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullType string
+type PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullType string
 
 const (
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullTypeSimple PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullType = "simple"
-	PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullTypeFull   PcapMagicPcapCollectionListPacketCaptureRequestsResponseIvpSXk6rPcapsResponseFullType = "full"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullTypeSimple PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullType = "simple"
+	PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullTypeFull   PcapMagicPcapCollectionListPacketCaptureRequestsResponseJp9MvktBPcapsResponseFullType = "full"
 )
 
 type PcapGetResponseEnvelope struct {
@@ -837,52 +837,52 @@ const (
 )
 
 // This interface is a union satisfied by one of the following:
-// [PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimple],
-// [PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFull].
+// [PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimple],
+// [PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFull].
 type PcapMagicPcapCollectionNewPcapRequestParams interface {
 	ImplementsPcapMagicPcapCollectionNewPcapRequestParams()
 }
 
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimple struct {
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimple struct {
 	// The limit of packets contained in a packet capture.
 	PacketLimit param.Field[float64] `json:"packet_limit,required"`
 	// The system used to collect packet captures.
-	System param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleSystem] `json:"system,required"`
+	System param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleSystem] `json:"system,required"`
 	// The packet capture duration in seconds.
 	TimeLimit param.Field[float64] `json:"time_limit,required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleType] `json:"type,required"`
+	Type param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleType] `json:"type,required"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleFilterV1] `json:"filter_v1"`
+	FilterV1 param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleFilterV1] `json:"filter_v1"`
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimple) MarshalJSON() (data []byte, err error) {
+func (r PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimple) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimple) ImplementsPcapMagicPcapCollectionNewPcapRequestParams() {
+func (PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimple) ImplementsPcapMagicPcapCollectionNewPcapRequestParams() {
 
 }
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleSystem string
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleSystem string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleSystem = "magic-transit"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleType string
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleType string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleTypeSimple PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleType = "simple"
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleTypeFull   PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleType = "full"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleTypeSimple PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleType = "simple"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleTypeFull   PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleType = "full"
 )
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleFilterV1 struct {
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress param.Field[string] `json:"destination_address"`
 	// The destination port of the packet.
@@ -895,11 +895,11 @@ type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleFilter
 	SourcePort param.Field[float64] `json:"source_port"`
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestSimpleFilterV1) MarshalJSON() (data []byte, err error) {
+func (r PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestSimpleFilterV1) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFull struct {
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFull struct {
 	// The name of the data center used for the packet capture. This can be a specific
 	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
 	// packet captures.
@@ -907,47 +907,47 @@ type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFull struct 
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 	// The system used to collect packet captures.
-	System param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullSystem] `json:"system,required"`
+	System param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullSystem] `json:"system,required"`
 	// The packet capture duration in seconds.
 	TimeLimit param.Field[float64] `json:"time_limit,required"`
 	// The type of packet capture. `Simple` captures sampled packets, and `full`
 	// captures entire payloads and non-sampled packets.
-	Type param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullType] `json:"type,required"`
+	Type param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullType] `json:"type,required"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
 	ByteLimit param.Field[float64] `json:"byte_limit"`
 	// The packet capture filter. When this field is empty, all packets are captured.
-	FilterV1 param.Field[PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullFilterV1] `json:"filter_v1"`
+	FilterV1 param.Field[PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullFilterV1] `json:"filter_v1"`
 	// The limit of packets contained in a packet capture.
 	PacketLimit param.Field[float64] `json:"packet_limit"`
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFull) MarshalJSON() (data []byte, err error) {
+func (r PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFull) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFull) ImplementsPcapMagicPcapCollectionNewPcapRequestParams() {
+func (PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFull) ImplementsPcapMagicPcapCollectionNewPcapRequestParams() {
 
 }
 
 // The system used to collect packet captures.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullSystem string
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullSystem string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullSystem = "magic-transit"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullSystemMagicTransit PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullSystem = "magic-transit"
 )
 
 // The type of packet capture. `Simple` captures sampled packets, and `full`
 // captures entire payloads and non-sampled packets.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullType string
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullType string
 
 const (
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullTypeSimple PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullType = "simple"
-	PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullTypeFull   PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullType = "full"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullTypeSimple PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullType = "simple"
+	PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullTypeFull   PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullType = "full"
 )
 
 // The packet capture filter. When this field is empty, all packets are captured.
-type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullFilterV1 struct {
+type PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullFilterV1 struct {
 	// The destination IP address of the packet.
 	DestinationAddress param.Field[string] `json:"destination_address"`
 	// The destination port of the packet.
@@ -960,7 +960,7 @@ type PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullFilterV1
 	SourcePort param.Field[float64] `json:"source_port"`
 }
 
-func (r PcapMagicPcapCollectionNewPcapRequestParamsIvpSXk6rPcapsRequestFullFilterV1) MarshalJSON() (data []byte, err error) {
+func (r PcapMagicPcapCollectionNewPcapRequestParamsJp9MvktBPcapsRequestFullFilterV1) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
