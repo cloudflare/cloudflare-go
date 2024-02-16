@@ -89,67 +89,67 @@ func (r *PurgeCachZonePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 // This interface is a union satisfied by one of the following:
-// [PurgeCachZonePurgeParamsCkpEqDfYFlex],
-// [PurgeCachZonePurgeParamsCkpEqDfYEverything],
-// [PurgeCachZonePurgeParamsCkpEqDfYFiles].
+// [PurgeCachZonePurgeParams7mnXeLx2Flex],
+// [PurgeCachZonePurgeParams7mnXeLx2Everything],
+// [PurgeCachZonePurgeParams7mnXeLx2Files].
 type PurgeCachZonePurgeParams interface {
 	ImplementsPurgeCachZonePurgeParams()
 }
 
-type PurgeCachZonePurgeParamsCkpEqDfYFlex struct {
+type PurgeCachZonePurgeParams7mnXeLx2Flex struct {
 	Hosts    param.Field[[]string] `json:"hosts"`
 	Prefixes param.Field[[]string] `json:"prefixes"`
 	Tags     param.Field[[]string] `json:"tags"`
 }
 
-func (r PurgeCachZonePurgeParamsCkpEqDfYFlex) MarshalJSON() (data []byte, err error) {
+func (r PurgeCachZonePurgeParams7mnXeLx2Flex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (PurgeCachZonePurgeParamsCkpEqDfYFlex) ImplementsPurgeCachZonePurgeParams() {
+func (PurgeCachZonePurgeParams7mnXeLx2Flex) ImplementsPurgeCachZonePurgeParams() {
 
 }
 
-type PurgeCachZonePurgeParamsCkpEqDfYEverything struct {
+type PurgeCachZonePurgeParams7mnXeLx2Everything struct {
 	PurgeEverything param.Field[bool] `json:"purge_everything"`
 }
 
-func (r PurgeCachZonePurgeParamsCkpEqDfYEverything) MarshalJSON() (data []byte, err error) {
+func (r PurgeCachZonePurgeParams7mnXeLx2Everything) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (PurgeCachZonePurgeParamsCkpEqDfYEverything) ImplementsPurgeCachZonePurgeParams() {
+func (PurgeCachZonePurgeParams7mnXeLx2Everything) ImplementsPurgeCachZonePurgeParams() {
 
 }
 
-type PurgeCachZonePurgeParamsCkpEqDfYFiles struct {
-	Files param.Field[[]PurgeCachZonePurgeParamsCkpEqDfYFilesFile] `json:"files"`
+type PurgeCachZonePurgeParams7mnXeLx2Files struct {
+	Files param.Field[[]PurgeCachZonePurgeParams7mnXeLx2FilesFile] `json:"files"`
 }
 
-func (r PurgeCachZonePurgeParamsCkpEqDfYFiles) MarshalJSON() (data []byte, err error) {
+func (r PurgeCachZonePurgeParams7mnXeLx2Files) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (PurgeCachZonePurgeParamsCkpEqDfYFiles) ImplementsPurgeCachZonePurgeParams() {
+func (PurgeCachZonePurgeParams7mnXeLx2Files) ImplementsPurgeCachZonePurgeParams() {
 
 }
 
 // Satisfied by [shared.UnionString],
-// [PurgeCachZonePurgeParamsCkpEqDfYFilesFilesCkpEqDfYURLAndHeaders].
-type PurgeCachZonePurgeParamsCkpEqDfYFilesFile interface {
-	ImplementsPurgeCachZonePurgeParamsCkpEqDfYFilesFile()
+// [PurgeCachZonePurgeParams7mnXeLx2FilesFiles7mnXeLx2URLAndHeaders].
+type PurgeCachZonePurgeParams7mnXeLx2FilesFile interface {
+	ImplementsPurgeCachZonePurgeParams7mnXeLx2FilesFile()
 }
 
-type PurgeCachZonePurgeParamsCkpEqDfYFilesFilesCkpEqDfYURLAndHeaders struct {
+type PurgeCachZonePurgeParams7mnXeLx2FilesFiles7mnXeLx2URLAndHeaders struct {
 	Headers param.Field[interface{}] `json:"headers"`
 	URL     param.Field[string]      `json:"url"`
 }
 
-func (r PurgeCachZonePurgeParamsCkpEqDfYFilesFilesCkpEqDfYURLAndHeaders) MarshalJSON() (data []byte, err error) {
+func (r PurgeCachZonePurgeParams7mnXeLx2FilesFiles7mnXeLx2URLAndHeaders) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r PurgeCachZonePurgeParamsCkpEqDfYFilesFilesCkpEqDfYURLAndHeaders) ImplementsPurgeCachZonePurgeParamsCkpEqDfYFilesFile() {
+func (r PurgeCachZonePurgeParams7mnXeLx2FilesFiles7mnXeLx2URLAndHeaders) ImplementsPurgeCachZonePurgeParams7mnXeLx2FilesFile() {
 }
 
 type PurgeCachZonePurgeResponseEnvelope struct {
