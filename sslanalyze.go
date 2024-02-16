@@ -35,9 +35,9 @@ func NewSSLAnalyzeService(opts ...option.RequestOption) (r *SSLAnalyzeService) {
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *SSLAnalyzeService) AnalyzeCertificateAnalyzeCertificate(ctx context.Context, zoneID string, body SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParams, opts ...option.RequestOption) (res *SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse, err error) {
+func (r *SSLAnalyzeService) New(ctx context.Context, zoneID string, body SSLAnalyzeNewParams, opts ...option.RequestOption) (res *SSLAnalyzeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelope
+	var env SSLAnalyzeNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/analyze", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -47,16 +47,14 @@ func (r *SSLAnalyzeService) AnalyzeCertificateAnalyzeCertificate(ctx context.Con
 	return
 }
 
-// Union satisfied by
-// [SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseUnknown] or
-// [shared.UnionString].
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse interface {
-	ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()
+// Union satisfied by [SSLAnalyzeNewResponseUnknown] or [shared.UnionString].
+type SSLAnalyzeNewResponse interface {
+	ImplementsSSLAnalyzeNewResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse)(nil)).Elem(),
+		reflect.TypeOf((*SSLAnalyzeNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -65,17 +63,17 @@ func init() {
 	)
 }
 
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParams struct {
+type SSLAnalyzeNewParams struct {
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethod] `json:"bundle_method"`
+	BundleMethod param.Field[SSLAnalyzeNewParamsBundleMethod] `json:"bundle_method"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate"`
 }
 
-func (r SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParams) MarshalJSON() (data []byte, err error) {
+func (r SSLAnalyzeNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -83,27 +81,26 @@ func (r SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParams) MarshalJSON() (dat
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethod string
+type SSLAnalyzeNewParamsBundleMethod string
 
 const (
-	SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethodUbiquitous SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethod = "ubiquitous"
-	SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethodOptimal    SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethod = "optimal"
-	SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethodForce      SSLAnalyzeAnalyzeCertificateAnalyzeCertificateParamsBundleMethod = "force"
+	SSLAnalyzeNewParamsBundleMethodUbiquitous SSLAnalyzeNewParamsBundleMethod = "ubiquitous"
+	SSLAnalyzeNewParamsBundleMethodOptimal    SSLAnalyzeNewParamsBundleMethod = "optimal"
+	SSLAnalyzeNewParamsBundleMethodForce      SSLAnalyzeNewParamsBundleMethod = "force"
 )
 
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelope struct {
-	Errors   []SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse                   `json:"result,required"`
+type SSLAnalyzeNewResponseEnvelope struct {
+	Errors   []SSLAnalyzeNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLAnalyzeNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLAnalyzeNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeJSON    `json:"-"`
+	Success SSLAnalyzeNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslAnalyzeNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelope]
-type sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeJSON struct {
+// sslAnalyzeNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SSLAnalyzeNewResponseEnvelope]
+type sslAnalyzeNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -112,53 +109,51 @@ type sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLAnalyzeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrors struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrorsJSON `json:"-"`
+type SSLAnalyzeNewResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    sslAnalyzeNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrors]
-type sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrorsJSON struct {
+// sslAnalyzeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SSLAnalyzeNewResponseEnvelopeErrors]
+type sslAnalyzeNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLAnalyzeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessages struct {
-	Code    int64                                                                      `json:"code,required"`
-	Message string                                                                     `json:"message,required"`
-	JSON    sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessagesJSON `json:"-"`
+type SSLAnalyzeNewResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    sslAnalyzeNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessages]
-type sslAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessagesJSON struct {
+// sslAnalyzeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SSLAnalyzeNewResponseEnvelopeMessages]
+type sslAnalyzeNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLAnalyzeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeSuccess bool
+type SSLAnalyzeNewResponseEnvelopeSuccess bool
 
 const (
-	SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeSuccessTrue SSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponseEnvelopeSuccess = true
+	SSLAnalyzeNewResponseEnvelopeSuccessTrue SSLAnalyzeNewResponseEnvelopeSuccess = true
 )

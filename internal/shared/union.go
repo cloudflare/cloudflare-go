@@ -6,8 +6,8 @@ type UnionString string
 
 func (UnionString) ImplementsAccountUpdateResponse()                                                {}
 func (UnionString) ImplementsAccountGetResponse()                                                   {}
+func (UnionString) ImplementsCertificateNewResponse()                                               {}
 func (UnionString) ImplementsCertificateGetResponse()                                               {}
-func (UnionString) ImplementsCertificateOriginCaNewCertificateResponse()                            {}
 func (UnionString) ImplementsMembershipUpdateResponse()                                             {}
 func (UnionString) ImplementsMembershipGetResponse()                                                {}
 func (UnionString) ImplementsUserUserEditUserResponse()                                             {}
@@ -44,13 +44,13 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyCo
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
 func (UnionString) ImplementsPurgeCachZonePurgeParamsGJq47JoyFilesFile()                     {}
-func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
+func (UnionString) ImplementsSSLAnalyzeNewResponse()                                         {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
+func (UnionString) ImplementsSubscriptionNewResponse()                                       {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
 func (UnionString) ImplementsSubscriptionAccountSubscriptionsNewSubscriptionResponse()       {}
-func (UnionString) ImplementsSubscriptionZoneSubscriptionNewZoneSubscriptionResponse()       {}
+func (UnionString) ImplementsSubscriptionGetResponse()                                       {}
 func (UnionString) ImplementsSubscriptionZoneSubscriptionUpdateZoneSubscriptionResponse()    {}
-func (UnionString) ImplementsSubscriptionZoneSubscriptionZoneSubscriptionDetailsResponse()   {}
 func (UnionString) ImplementsAnalyticsColoZoneAnalyticsDeprecatedGetAnalyticsByCoLocationsResponseTimeseriesSince() {
 }
 func (UnionString) ImplementsAnalyticsColoZoneAnalyticsDeprecatedGetAnalyticsByCoLocationsResponseTimeseriesUntil() {

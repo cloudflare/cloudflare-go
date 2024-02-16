@@ -60,9 +60,9 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 }
 
 // Edit details for a single video.
-func (r *StreamService) Update(ctx context.Context, accountID string, identifier string, body StreamUpdateParams, opts ...option.RequestOption) (res *StreamUpdateResponse, err error) {
+func (r *StreamService) New(ctx context.Context, accountID string, identifier string, body StreamNewParams, opts ...option.RequestOption) (res *StreamNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamUpdateResponseEnvelope
+	var env StreamNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s", accountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -120,7 +120,7 @@ func (r *StreamService) StreamVideosListVideos(ctx context.Context, accountID st
 	return
 }
 
-type StreamUpdateResponse struct {
+type StreamNewResponse struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -132,8 +132,8 @@ type StreamUpdateResponse struct {
 	// The duration of the video in seconds. A value of `-1` means the duration is
 	// unknown. The duration becomes available after the upload and before the video is
 	// ready.
-	Duration float64                   `json:"duration"`
-	Input    StreamUpdateResponseInput `json:"input"`
+	Duration float64                `json:"duration"`
+	Input    StreamNewResponseInput `json:"input"`
 	// The live input ID used to upload a video with Stream Live.
 	LiveInput string `json:"liveInput"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
@@ -145,8 +145,8 @@ type StreamUpdateResponse struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the media item was last modified.
-	Modified time.Time                    `json:"modified" format:"date-time"`
-	Playback StreamUpdateResponsePlayback `json:"playback"`
+	Modified time.Time                 `json:"modified" format:"date-time"`
+	Playback StreamNewResponsePlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video is playable. The field is empty if the video is not
@@ -169,7 +169,7 @@ type StreamUpdateResponse struct {
 	// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 	// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 	// and `errorReasonText` provide additional details.
-	Status StreamUpdateResponseStatus `json:"status"`
+	Status StreamNewResponseStatus `json:"status"`
 	// The media item's thumbnail URI. This field is omitted until encoding is
 	// complete.
 	Thumbnail string `json:"thumbnail" format:"uri"`
@@ -184,14 +184,14 @@ type StreamUpdateResponse struct {
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
-	UploadExpiry time.Time                     `json:"uploadExpiry" format:"date-time"`
-	Watermark    StreamUpdateResponseWatermark `json:"watermark"`
-	JSON         streamUpdateResponseJSON      `json:"-"`
+	UploadExpiry time.Time                  `json:"uploadExpiry" format:"date-time"`
+	Watermark    StreamNewResponseWatermark `json:"watermark"`
+	JSON         streamNewResponseJSON      `json:"-"`
 }
 
-// streamUpdateResponseJSON contains the JSON metadata for the struct
-// [StreamUpdateResponse]
-type streamUpdateResponseJSON struct {
+// streamNewResponseJSON contains the JSON metadata for the struct
+// [StreamNewResponse]
+type streamNewResponseJSON struct {
 	AllowedOrigins        apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
@@ -219,51 +219,51 @@ type streamUpdateResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamUpdateResponseInput struct {
+type StreamNewResponseInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
 	Height int64 `json:"height"`
 	// The video width in pixels. A value of `-1` means the width is unknown. The value
 	// becomes available after the upload and before the video is ready.
-	Width int64                         `json:"width"`
-	JSON  streamUpdateResponseInputJSON `json:"-"`
+	Width int64                      `json:"width"`
+	JSON  streamNewResponseInputJSON `json:"-"`
 }
 
-// streamUpdateResponseInputJSON contains the JSON metadata for the struct
-// [StreamUpdateResponseInput]
-type streamUpdateResponseInputJSON struct {
+// streamNewResponseInputJSON contains the JSON metadata for the struct
+// [StreamNewResponseInput]
+type streamNewResponseInputJSON struct {
 	Height      apijson.Field
 	Width       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseInput) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamUpdateResponsePlayback struct {
+type StreamNewResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                           `json:"hls"`
-	JSON streamUpdateResponsePlaybackJSON `json:"-"`
+	Hls  string                        `json:"hls"`
+	JSON streamNewResponsePlaybackJSON `json:"-"`
 }
 
-// streamUpdateResponsePlaybackJSON contains the JSON metadata for the struct
-// [StreamUpdateResponsePlayback]
-type streamUpdateResponsePlaybackJSON struct {
+// streamNewResponsePlaybackJSON contains the JSON metadata for the struct
+// [StreamNewResponsePlayback]
+type streamNewResponsePlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponsePlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -272,7 +272,7 @@ func (r *StreamUpdateResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 // `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 // approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 // and `errorReasonText` provide additional details.
-type StreamUpdateResponseStatus struct {
+type StreamNewResponseStatus struct {
 	// Specifies why the video failed to encode. This field is empty if the video is
 	// not in an `error` state. Preferred for programmatic use.
 	ErrorReasonCode string `json:"errorReasonCode"`
@@ -283,13 +283,13 @@ type StreamUpdateResponseStatus struct {
 	// non-negative integer.
 	PctComplete string `json:"pctComplete"`
 	// Specifies the processing status for all quality levels for a video.
-	State StreamUpdateResponseStatusState `json:"state"`
-	JSON  streamUpdateResponseStatusJSON  `json:"-"`
+	State StreamNewResponseStatusState `json:"state"`
+	JSON  streamNewResponseStatusJSON  `json:"-"`
 }
 
-// streamUpdateResponseStatusJSON contains the JSON metadata for the struct
-// [StreamUpdateResponseStatus]
-type streamUpdateResponseStatusJSON struct {
+// streamNewResponseStatusJSON contains the JSON metadata for the struct
+// [StreamNewResponseStatus]
+type streamNewResponseStatusJSON struct {
 	ErrorReasonCode apijson.Field
 	ErrorReasonText apijson.Field
 	PctComplete     apijson.Field
@@ -298,23 +298,23 @@ type streamUpdateResponseStatusJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the processing status for all quality levels for a video.
-type StreamUpdateResponseStatusState string
+type StreamNewResponseStatusState string
 
 const (
-	StreamUpdateResponseStatusStatePendingupload StreamUpdateResponseStatusState = "pendingupload"
-	StreamUpdateResponseStatusStateDownloading   StreamUpdateResponseStatusState = "downloading"
-	StreamUpdateResponseStatusStateQueued        StreamUpdateResponseStatusState = "queued"
-	StreamUpdateResponseStatusStateInprogress    StreamUpdateResponseStatusState = "inprogress"
-	StreamUpdateResponseStatusStateReady         StreamUpdateResponseStatusState = "ready"
-	StreamUpdateResponseStatusStateError         StreamUpdateResponseStatusState = "error"
+	StreamNewResponseStatusStatePendingupload StreamNewResponseStatusState = "pendingupload"
+	StreamNewResponseStatusStateDownloading   StreamNewResponseStatusState = "downloading"
+	StreamNewResponseStatusStateQueued        StreamNewResponseStatusState = "queued"
+	StreamNewResponseStatusStateInprogress    StreamNewResponseStatusState = "inprogress"
+	StreamNewResponseStatusStateReady         StreamNewResponseStatusState = "ready"
+	StreamNewResponseStatusStateError         StreamNewResponseStatusState = "error"
 )
 
-type StreamUpdateResponseWatermark struct {
+type StreamNewResponseWatermark struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -346,13 +346,13 @@ type StreamUpdateResponseWatermark struct {
 	// The unique identifier for a watermark profile.
 	Uid string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                             `json:"width"`
-	JSON  streamUpdateResponseWatermarkJSON `json:"-"`
+	Width int64                          `json:"width"`
+	JSON  streamNewResponseWatermarkJSON `json:"-"`
 }
 
-// streamUpdateResponseWatermarkJSON contains the JSON metadata for the struct
-// [StreamUpdateResponseWatermark]
-type streamUpdateResponseWatermarkJSON struct {
+// streamNewResponseWatermarkJSON contains the JSON metadata for the struct
+// [StreamNewResponseWatermark]
+type streamNewResponseWatermarkJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -368,7 +368,7 @@ type streamUpdateResponseWatermarkJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseWatermark) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -876,7 +876,7 @@ func (r *StreamStreamVideosListVideosResponseWatermark) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamUpdateParams struct {
+type StreamNewParams struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -908,22 +908,22 @@ type StreamUpdateParams struct {
 	UploadExpiry param.Field[time.Time] `json:"uploadExpiry" format:"date-time"`
 }
 
-func (r StreamUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r StreamNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StreamUpdateResponseEnvelope struct {
-	Errors   []StreamUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamUpdateResponse                   `json:"result,required"`
+type StreamNewResponseEnvelope struct {
+	Errors   []StreamNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamUpdateResponseEnvelopeJSON    `json:"-"`
+	Success StreamNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// streamUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [StreamUpdateResponseEnvelope]
-type streamUpdateResponseEnvelopeJSON struct {
+// streamNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamNewResponseEnvelope]
+type streamNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -932,53 +932,53 @@ type streamUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    streamUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type StreamNewResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    streamNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// streamUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [StreamUpdateResponseEnvelopeErrors]
-type streamUpdateResponseEnvelopeErrorsJSON struct {
+// streamNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StreamNewResponseEnvelopeErrors]
+type streamNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    streamUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type StreamNewResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    streamNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// streamUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [StreamUpdateResponseEnvelopeMessages]
-type streamUpdateResponseEnvelopeMessagesJSON struct {
+// streamNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [StreamNewResponseEnvelopeMessages]
+type streamNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StreamUpdateResponseEnvelopeSuccess bool
+type StreamNewResponseEnvelopeSuccess bool
 
 const (
-	StreamUpdateResponseEnvelopeSuccessTrue StreamUpdateResponseEnvelopeSuccess = true
+	StreamNewResponseEnvelopeSuccessTrue StreamNewResponseEnvelopeSuccess = true
 )
 
 type StreamGetResponseEnvelope struct {

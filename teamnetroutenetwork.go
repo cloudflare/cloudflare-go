@@ -36,9 +36,9 @@ func NewTeamnetRouteNetworkService(opts ...option.RequestOption) (r *TeamnetRout
 
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *TeamnetRouteNetworkService) Update(ctx context.Context, accountID string, ipNetworkEncoded string, body TeamnetRouteNetworkUpdateParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkUpdateResponse, err error) {
+func (r *TeamnetRouteNetworkService) New(ctx context.Context, accountID string, ipNetworkEncoded string, body TeamnetRouteNetworkNewParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env TeamnetRouteNetworkUpdateResponseEnvelope
+	var env TeamnetRouteNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", accountID, ipNetworkEncoded)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -67,7 +67,7 @@ func (r *TeamnetRouteNetworkService) Delete(ctx context.Context, accountID strin
 	return
 }
 
-type TeamnetRouteNetworkUpdateResponse struct {
+type TeamnetRouteNetworkNewResponse struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -84,13 +84,13 @@ type TeamnetRouteNetworkUpdateResponse struct {
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
 	// are configured, the route is assigned to the default virtual network of the
 	// account.
-	VirtualNetworkID interface{}                           `json:"virtual_network_id"`
-	JSON             teamnetRouteNetworkUpdateResponseJSON `json:"-"`
+	VirtualNetworkID interface{}                        `json:"virtual_network_id"`
+	JSON             teamnetRouteNetworkNewResponseJSON `json:"-"`
 }
 
-// teamnetRouteNetworkUpdateResponseJSON contains the JSON metadata for the struct
-// [TeamnetRouteNetworkUpdateResponse]
-type teamnetRouteNetworkUpdateResponseJSON struct {
+// teamnetRouteNetworkNewResponseJSON contains the JSON metadata for the struct
+// [TeamnetRouteNetworkNewResponse]
+type teamnetRouteNetworkNewResponseJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -102,7 +102,7 @@ type teamnetRouteNetworkUpdateResponseJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TeamnetRouteNetworkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamnetRouteNetworkNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -145,7 +145,7 @@ func (r *TeamnetRouteNetworkDeleteResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TeamnetRouteNetworkUpdateParams struct {
+type TeamnetRouteNetworkNewParams struct {
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
@@ -154,22 +154,22 @@ type TeamnetRouteNetworkUpdateParams struct {
 	VirtualNetworkID param.Field[interface{}] `json:"virtual_network_id"`
 }
 
-func (r TeamnetRouteNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r TeamnetRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type TeamnetRouteNetworkUpdateResponseEnvelope struct {
-	Errors   []TeamnetRouteNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TeamnetRouteNetworkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamnetRouteNetworkUpdateResponse                   `json:"result,required"`
+type TeamnetRouteNetworkNewResponseEnvelope struct {
+	Errors   []TeamnetRouteNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TeamnetRouteNetworkNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   TeamnetRouteNetworkNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success TeamnetRouteNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    teamnetRouteNetworkUpdateResponseEnvelopeJSON    `json:"-"`
+	Success TeamnetRouteNetworkNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    teamnetRouteNetworkNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// teamnetRouteNetworkUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [TeamnetRouteNetworkUpdateResponseEnvelope]
-type teamnetRouteNetworkUpdateResponseEnvelopeJSON struct {
+// teamnetRouteNetworkNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [TeamnetRouteNetworkNewResponseEnvelope]
+type teamnetRouteNetworkNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -178,53 +178,53 @@ type teamnetRouteNetworkUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamnetRouteNetworkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamnetRouteNetworkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TeamnetRouteNetworkUpdateResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    teamnetRouteNetworkUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type TeamnetRouteNetworkNewResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    teamnetRouteNetworkNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// teamnetRouteNetworkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [TeamnetRouteNetworkUpdateResponseEnvelopeErrors]
-type teamnetRouteNetworkUpdateResponseEnvelopeErrorsJSON struct {
+// teamnetRouteNetworkNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [TeamnetRouteNetworkNewResponseEnvelopeErrors]
+type teamnetRouteNetworkNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamnetRouteNetworkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamnetRouteNetworkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TeamnetRouteNetworkUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    teamnetRouteNetworkUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type TeamnetRouteNetworkNewResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    teamnetRouteNetworkNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// teamnetRouteNetworkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [TeamnetRouteNetworkUpdateResponseEnvelopeMessages]
-type teamnetRouteNetworkUpdateResponseEnvelopeMessagesJSON struct {
+// teamnetRouteNetworkNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [TeamnetRouteNetworkNewResponseEnvelopeMessages]
+type teamnetRouteNetworkNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamnetRouteNetworkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamnetRouteNetworkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type TeamnetRouteNetworkUpdateResponseEnvelopeSuccess bool
+type TeamnetRouteNetworkNewResponseEnvelopeSuccess bool
 
 const (
-	TeamnetRouteNetworkUpdateResponseEnvelopeSuccessTrue TeamnetRouteNetworkUpdateResponseEnvelopeSuccess = true
+	TeamnetRouteNetworkNewResponseEnvelopeSuccessTrue TeamnetRouteNetworkNewResponseEnvelopeSuccess = true
 )
 
 type TeamnetRouteNetworkDeleteParams struct {

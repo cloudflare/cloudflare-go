@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamUpdateWithOptionalParams(t *testing.T) {
+func TestStreamNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,11 +30,11 @@ func TestStreamUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Update(
+	_, err := client.Stream.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
-		cloudflare.StreamUpdateParams{
+		cloudflare.StreamNewParams{
 			AllowedOrigins:     cloudflare.F([]string{"example.com"}),
 			Creator:            cloudflare.F("creator-id_abcde12345"),
 			MaxDurationSeconds: cloudflare.F(int64(1)),

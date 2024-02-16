@@ -55,12 +55,12 @@ func (r *SSLCertificatePackService) Update(ctx context.Context, zoneID string, c
 	return
 }
 
-// For a given zone, delete an advanced certificate pack.
-func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackDeleteResponse, err error) {
+// For a given zone, list all active certificate packs.
+func (r *SSLCertificatePackService) List(ctx context.Context, zoneID string, query SSLCertificatePackListParams, opts ...option.RequestOption) (res *[]SSLCertificatePackListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLCertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	var env SSLCertificatePackListResponseEnvelope
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -68,12 +68,12 @@ func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, c
 	return
 }
 
-// For a given zone, list all active certificate packs.
-func (r *SSLCertificatePackService) CertificatePacksListCertificatePacks(ctx context.Context, zoneID string, query SSLCertificatePackCertificatePacksListCertificatePacksParams, opts ...option.RequestOption) (res *[]SSLCertificatePackCertificatePacksListCertificatePacksResponse, err error) {
+// For a given zone, delete an advanced certificate pack.
+func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	var env SSLCertificatePackDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -200,6 +200,8 @@ const (
 	SSLCertificatePackUpdateResponseValidityDays365 SSLCertificatePackUpdateResponseValidityDays = 365
 )
 
+type SSLCertificatePackListResponse = interface{}
+
 type SSLCertificatePackDeleteResponse struct {
 	// Identifier
 	ID   string                               `json:"id"`
@@ -217,8 +219,6 @@ type sslCertificatePackDeleteResponseJSON struct {
 func (r *SSLCertificatePackDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type SSLCertificatePackCertificatePacksListCertificatePacksResponse = interface{}
 
 // Union satisfied by [SSLCertificatePackGetResponseUnknown] or
 // [shared.UnionString].
@@ -306,6 +306,125 @@ const (
 	SSLCertificatePackUpdateResponseEnvelopeSuccessTrue SSLCertificatePackUpdateResponseEnvelopeSuccess = true
 )
 
+type SSLCertificatePackListParams struct {
+	// Include Certificate Packs of all statuses, not just active ones.
+	Status param.Field[SSLCertificatePackListParamsStatus] `query:"status"`
+}
+
+// URLQuery serializes [SSLCertificatePackListParams]'s query parameters as
+// `url.Values`.
+func (r SSLCertificatePackListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Include Certificate Packs of all statuses, not just active ones.
+type SSLCertificatePackListParamsStatus string
+
+const (
+	SSLCertificatePackListParamsStatusAll SSLCertificatePackListParamsStatus = "all"
+)
+
+type SSLCertificatePackListResponseEnvelope struct {
+	Errors   []SSLCertificatePackListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLCertificatePackListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []SSLCertificatePackListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    SSLCertificatePackListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo SSLCertificatePackListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       sslCertificatePackListResponseEnvelopeJSON       `json:"-"`
+}
+
+// sslCertificatePackListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLCertificatePackListResponseEnvelope]
+type sslCertificatePackListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLCertificatePackListResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    sslCertificatePackListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sslCertificatePackListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SSLCertificatePackListResponseEnvelopeErrors]
+type sslCertificatePackListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLCertificatePackListResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    sslCertificatePackListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sslCertificatePackListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SSLCertificatePackListResponseEnvelopeMessages]
+type sslCertificatePackListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SSLCertificatePackListResponseEnvelopeSuccess bool
+
+const (
+	SSLCertificatePackListResponseEnvelopeSuccessTrue SSLCertificatePackListResponseEnvelopeSuccess = true
+)
+
+type SSLCertificatePackListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                              `json:"total_count"`
+	JSON       sslCertificatePackListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// sslCertificatePackListResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [SSLCertificatePackListResponseEnvelopeResultInfo]
+type sslCertificatePackListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SSLCertificatePackDeleteResponseEnvelope struct {
 	Errors   []SSLCertificatePackDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SSLCertificatePackDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -374,130 +493,6 @@ type SSLCertificatePackDeleteResponseEnvelopeSuccess bool
 const (
 	SSLCertificatePackDeleteResponseEnvelopeSuccessTrue SSLCertificatePackDeleteResponseEnvelopeSuccess = true
 )
-
-type SSLCertificatePackCertificatePacksListCertificatePacksParams struct {
-	// Include Certificate Packs of all statuses, not just active ones.
-	Status param.Field[SSLCertificatePackCertificatePacksListCertificatePacksParamsStatus] `query:"status"`
-}
-
-// URLQuery serializes
-// [SSLCertificatePackCertificatePacksListCertificatePacksParams]'s query
-// parameters as `url.Values`.
-func (r SSLCertificatePackCertificatePacksListCertificatePacksParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// Include Certificate Packs of all statuses, not just active ones.
-type SSLCertificatePackCertificatePacksListCertificatePacksParamsStatus string
-
-const (
-	SSLCertificatePackCertificatePacksListCertificatePacksParamsStatusAll SSLCertificatePackCertificatePacksListCertificatePacksParamsStatus = "all"
-)
-
-type SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelope struct {
-	Errors   []SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SSLCertificatePackCertificatePacksListCertificatePacksResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeJSON       `json:"-"`
-}
-
-// sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelope]
-type sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrors struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrors]
-type sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessages struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessages]
-type sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeSuccess bool
-
-const (
-	SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeSuccessTrue SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeSuccess = true
-)
-
-type SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                              `json:"total_count"`
-	JSON       sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfo]
-type sslCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackCertificatePacksListCertificatePacksResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type SSLCertificatePackGetResponseEnvelope struct {
 	Errors   []SSLCertificatePackGetResponseEnvelopeErrors   `json:"errors,required"`

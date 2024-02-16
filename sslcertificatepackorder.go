@@ -32,9 +32,9 @@ func NewSSLCertificatePackOrderService(opts ...option.RequestOption) (r *SSLCert
 }
 
 // For a given zone, order an advanced certificate pack.
-func (r *SSLCertificatePackOrderService) CertificatePacksOrderAdvancedCertificateManagerCertificatePack(ctx context.Context, zoneID string, body SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParams, opts ...option.RequestOption) (res *SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponse, err error) {
+func (r *SSLCertificatePackOrderService) New(ctx context.Context, zoneID string, body SSLCertificatePackOrderNewParams, opts ...option.RequestOption) (res *SSLCertificatePackOrderNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelope
+	var env SSLCertificatePackOrderNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -44,13 +44,13 @@ func (r *SSLCertificatePackOrderService) CertificatePacksOrderAdvancedCertificat
 	return
 }
 
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponse struct {
+type SSLCertificatePackOrderNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-	CertificateAuthority SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority SSLCertificatePackOrderNewResponseCertificateAuthority `json:"certificate_authority"`
 	// Whether or not to add Cloudflare Branding for the order. This will add
 	// sni.cloudflaressl.com as the Common Name if set true.
 	CloudflareBranding bool `json:"cloudflare_branding"`
@@ -58,20 +58,19 @@ type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCerti
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts []string `json:"hosts"`
 	// Status of certificate pack.
-	Status SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus `json:"status"`
+	Status SSLCertificatePackOrderNewResponseStatus `json:"status"`
 	// Type of certificate pack.
-	Type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseType `json:"type"`
+	Type SSLCertificatePackOrderNewResponseType `json:"type"`
 	// Validation Method selected for the order.
-	ValidationMethod SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethod `json:"validation_method"`
+	ValidationMethod SSLCertificatePackOrderNewResponseValidationMethod `json:"validation_method"`
 	// Validity Days selected for the order.
-	ValidityDays SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays `json:"validity_days"`
-	JSON         sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseJSON         `json:"-"`
+	ValidityDays SSLCertificatePackOrderNewResponseValidityDays `json:"validity_days"`
+	JSON         sslCertificatePackOrderNewResponseJSON         `json:"-"`
 }
 
-// sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponse]
-type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseJSON struct {
+// sslCertificatePackOrderNewResponseJSON contains the JSON metadata for the struct
+// [SSLCertificatePackOrderNewResponse]
+type sslCertificatePackOrderNewResponseJSON struct {
 	ID                   apijson.Field
 	CertificateAuthority apijson.Field
 	CloudflareBranding   apijson.Field
@@ -84,145 +83,144 @@ type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCerti
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackOrderNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
 // [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthority string
+type SSLCertificatePackOrderNewResponseCertificateAuthority string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthorityGoogle      SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthority = "google"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthorityLetsEncrypt SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseCertificateAuthority = "lets_encrypt"
+	SSLCertificatePackOrderNewResponseCertificateAuthorityGoogle      SSLCertificatePackOrderNewResponseCertificateAuthority = "google"
+	SSLCertificatePackOrderNewResponseCertificateAuthorityLetsEncrypt SSLCertificatePackOrderNewResponseCertificateAuthority = "lets_encrypt"
 )
 
 // Status of certificate pack.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus string
+type SSLCertificatePackOrderNewResponseStatus string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusInitializing         SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "initializing"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingValidation    SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_validation"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusDeleted              SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "deleted"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingIssuance      SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_issuance"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingDeployment    SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_deployment"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingDeletion      SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_deletion"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingExpiration    SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_expiration"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusExpired              SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "expired"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusActive               SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "active"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusInitializingTimedOut SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "initializing_timed_out"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusValidationTimedOut   SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "validation_timed_out"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusIssuanceTimedOut     SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "issuance_timed_out"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusDeploymentTimedOut   SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "deployment_timed_out"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusDeletionTimedOut     SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "deletion_timed_out"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusPendingCleanup       SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "pending_cleanup"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusStagingDeployment    SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "staging_deployment"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusStagingActive        SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "staging_active"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusDeactivating         SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "deactivating"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusInactive             SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "inactive"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusBackupIssued         SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "backup_issued"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatusHoldingDeployment    SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseStatus = "holding_deployment"
+	SSLCertificatePackOrderNewResponseStatusInitializing         SSLCertificatePackOrderNewResponseStatus = "initializing"
+	SSLCertificatePackOrderNewResponseStatusPendingValidation    SSLCertificatePackOrderNewResponseStatus = "pending_validation"
+	SSLCertificatePackOrderNewResponseStatusDeleted              SSLCertificatePackOrderNewResponseStatus = "deleted"
+	SSLCertificatePackOrderNewResponseStatusPendingIssuance      SSLCertificatePackOrderNewResponseStatus = "pending_issuance"
+	SSLCertificatePackOrderNewResponseStatusPendingDeployment    SSLCertificatePackOrderNewResponseStatus = "pending_deployment"
+	SSLCertificatePackOrderNewResponseStatusPendingDeletion      SSLCertificatePackOrderNewResponseStatus = "pending_deletion"
+	SSLCertificatePackOrderNewResponseStatusPendingExpiration    SSLCertificatePackOrderNewResponseStatus = "pending_expiration"
+	SSLCertificatePackOrderNewResponseStatusExpired              SSLCertificatePackOrderNewResponseStatus = "expired"
+	SSLCertificatePackOrderNewResponseStatusActive               SSLCertificatePackOrderNewResponseStatus = "active"
+	SSLCertificatePackOrderNewResponseStatusInitializingTimedOut SSLCertificatePackOrderNewResponseStatus = "initializing_timed_out"
+	SSLCertificatePackOrderNewResponseStatusValidationTimedOut   SSLCertificatePackOrderNewResponseStatus = "validation_timed_out"
+	SSLCertificatePackOrderNewResponseStatusIssuanceTimedOut     SSLCertificatePackOrderNewResponseStatus = "issuance_timed_out"
+	SSLCertificatePackOrderNewResponseStatusDeploymentTimedOut   SSLCertificatePackOrderNewResponseStatus = "deployment_timed_out"
+	SSLCertificatePackOrderNewResponseStatusDeletionTimedOut     SSLCertificatePackOrderNewResponseStatus = "deletion_timed_out"
+	SSLCertificatePackOrderNewResponseStatusPendingCleanup       SSLCertificatePackOrderNewResponseStatus = "pending_cleanup"
+	SSLCertificatePackOrderNewResponseStatusStagingDeployment    SSLCertificatePackOrderNewResponseStatus = "staging_deployment"
+	SSLCertificatePackOrderNewResponseStatusStagingActive        SSLCertificatePackOrderNewResponseStatus = "staging_active"
+	SSLCertificatePackOrderNewResponseStatusDeactivating         SSLCertificatePackOrderNewResponseStatus = "deactivating"
+	SSLCertificatePackOrderNewResponseStatusInactive             SSLCertificatePackOrderNewResponseStatus = "inactive"
+	SSLCertificatePackOrderNewResponseStatusBackupIssued         SSLCertificatePackOrderNewResponseStatus = "backup_issued"
+	SSLCertificatePackOrderNewResponseStatusHoldingDeployment    SSLCertificatePackOrderNewResponseStatus = "holding_deployment"
 )
 
 // Type of certificate pack.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseType string
+type SSLCertificatePackOrderNewResponseType string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseTypeAdvanced SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseType = "advanced"
+	SSLCertificatePackOrderNewResponseTypeAdvanced SSLCertificatePackOrderNewResponseType = "advanced"
 )
 
 // Validation Method selected for the order.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethod string
+type SSLCertificatePackOrderNewResponseValidationMethod string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethodTxt   SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethod = "txt"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethodHTTP  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethod = "http"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethodEmail SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidationMethod = "email"
+	SSLCertificatePackOrderNewResponseValidationMethodTxt   SSLCertificatePackOrderNewResponseValidationMethod = "txt"
+	SSLCertificatePackOrderNewResponseValidationMethodHTTP  SSLCertificatePackOrderNewResponseValidationMethod = "http"
+	SSLCertificatePackOrderNewResponseValidationMethodEmail SSLCertificatePackOrderNewResponseValidationMethod = "email"
 )
 
 // Validity Days selected for the order.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays int64
+type SSLCertificatePackOrderNewResponseValidityDays int64
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays14  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays = 14
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays30  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays = 30
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays90  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays = 90
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays365 SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseValidityDays = 365
+	SSLCertificatePackOrderNewResponseValidityDays14  SSLCertificatePackOrderNewResponseValidityDays = 14
+	SSLCertificatePackOrderNewResponseValidityDays30  SSLCertificatePackOrderNewResponseValidityDays = 30
+	SSLCertificatePackOrderNewResponseValidityDays90  SSLCertificatePackOrderNewResponseValidityDays = 90
+	SSLCertificatePackOrderNewResponseValidityDays365 SSLCertificatePackOrderNewResponseValidityDays = 365
 )
 
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParams struct {
+type SSLCertificatePackOrderNewParams struct {
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-	CertificateAuthority param.Field[SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthority] `json:"certificate_authority,required"`
+	CertificateAuthority param.Field[SSLCertificatePackOrderNewParamsCertificateAuthority] `json:"certificate_authority,required"`
 	// Comma separated list of valid host names for the certificate packs. Must contain
 	// the zone apex, may not contain more than 50 hosts, and may not be empty.
 	Hosts param.Field[[]string] `json:"hosts,required"`
 	// Type of certificate pack.
-	Type param.Field[SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsType] `json:"type,required"`
+	Type param.Field[SSLCertificatePackOrderNewParamsType] `json:"type,required"`
 	// Validation Method selected for the order.
-	ValidationMethod param.Field[SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethod] `json:"validation_method,required"`
+	ValidationMethod param.Field[SSLCertificatePackOrderNewParamsValidationMethod] `json:"validation_method,required"`
 	// Validity Days selected for the order.
-	ValidityDays param.Field[SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays] `json:"validity_days,required"`
+	ValidityDays param.Field[SSLCertificatePackOrderNewParamsValidityDays] `json:"validity_days,required"`
 	// Whether or not to add Cloudflare Branding for the order. This will add
 	// sni.cloudflaressl.com as the Common Name if set true.
 	CloudflareBranding param.Field[bool] `json:"cloudflare_branding"`
 }
 
-func (r SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParams) MarshalJSON() (data []byte, err error) {
+func (r SSLCertificatePackOrderNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
 // [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthority string
+type SSLCertificatePackOrderNewParamsCertificateAuthority string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthorityGoogle      SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthority = "google"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthorityLetsEncrypt SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthority = "lets_encrypt"
+	SSLCertificatePackOrderNewParamsCertificateAuthorityGoogle      SSLCertificatePackOrderNewParamsCertificateAuthority = "google"
+	SSLCertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt SSLCertificatePackOrderNewParamsCertificateAuthority = "lets_encrypt"
 )
 
 // Type of certificate pack.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsType string
+type SSLCertificatePackOrderNewParamsType string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsTypeAdvanced SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsType = "advanced"
+	SSLCertificatePackOrderNewParamsTypeAdvanced SSLCertificatePackOrderNewParamsType = "advanced"
 )
 
 // Validation Method selected for the order.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethod string
+type SSLCertificatePackOrderNewParamsValidationMethod string
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethodTxt   SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethod = "txt"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethodHTTP  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethod = "http"
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethodEmail SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethod = "email"
+	SSLCertificatePackOrderNewParamsValidationMethodTxt   SSLCertificatePackOrderNewParamsValidationMethod = "txt"
+	SSLCertificatePackOrderNewParamsValidationMethodHTTP  SSLCertificatePackOrderNewParamsValidationMethod = "http"
+	SSLCertificatePackOrderNewParamsValidationMethodEmail SSLCertificatePackOrderNewParamsValidationMethod = "email"
 )
 
 // Validity Days selected for the order.
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays int64
+type SSLCertificatePackOrderNewParamsValidityDays int64
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays14  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays = 14
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays30  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays = 30
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays90  SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays = 90
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays365 SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays = 365
+	SSLCertificatePackOrderNewParamsValidityDays14  SSLCertificatePackOrderNewParamsValidityDays = 14
+	SSLCertificatePackOrderNewParamsValidityDays30  SSLCertificatePackOrderNewParamsValidityDays = 30
+	SSLCertificatePackOrderNewParamsValidityDays90  SSLCertificatePackOrderNewParamsValidityDays = 90
+	SSLCertificatePackOrderNewParamsValidityDays365 SSLCertificatePackOrderNewParamsValidityDays = 365
 )
 
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelope struct {
-	Errors   []SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponse                   `json:"result,required"`
+type SSLCertificatePackOrderNewResponseEnvelope struct {
+	Errors   []SSLCertificatePackOrderNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLCertificatePackOrderNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLCertificatePackOrderNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeJSON    `json:"-"`
+	Success SSLCertificatePackOrderNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslCertificatePackOrderNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelope]
-type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeJSON struct {
+// sslCertificatePackOrderNewResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SSLCertificatePackOrderNewResponseEnvelope]
+type sslCertificatePackOrderNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -231,53 +229,51 @@ type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCerti
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackOrderNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrors struct {
-	Code    int64                                                                                                           `json:"code,required"`
-	Message string                                                                                                          `json:"message,required"`
-	JSON    sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrorsJSON `json:"-"`
+type SSLCertificatePackOrderNewResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    sslCertificatePackOrderNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrors]
-type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrorsJSON struct {
+// sslCertificatePackOrderNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SSLCertificatePackOrderNewResponseEnvelopeErrors]
+type sslCertificatePackOrderNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackOrderNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessages struct {
-	Code    int64                                                                                                             `json:"code,required"`
-	Message string                                                                                                            `json:"message,required"`
-	JSON    sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessagesJSON `json:"-"`
+type SSLCertificatePackOrderNewResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    sslCertificatePackOrderNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessages]
-type sslCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessagesJSON struct {
+// sslCertificatePackOrderNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SSLCertificatePackOrderNewResponseEnvelopeMessages]
+type sslCertificatePackOrderNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackOrderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeSuccess bool
+type SSLCertificatePackOrderNewResponseEnvelopeSuccess bool
 
 const (
-	SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeSuccessTrue SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackResponseEnvelopeSuccess = true
+	SSLCertificatePackOrderNewResponseEnvelopeSuccessTrue SSLCertificatePackOrderNewResponseEnvelopeSuccess = true
 )
