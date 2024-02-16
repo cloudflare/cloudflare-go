@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestCustomNVerifyNew(t *testing.T) {
+func TestCustomNVerifyUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestCustomNVerifyNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.CustomNs.Verifies.New(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
+	_, err := client.CustomNs.Verifies.Update(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

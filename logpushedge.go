@@ -32,9 +32,9 @@ func NewLogpushEdgeService(opts ...option.RequestOption) (r *LogpushEdgeService)
 }
 
 // Creates a new Instant Logs job for a zone.
-func (r *LogpushEdgeService) New(ctx context.Context, zoneID string, body LogpushEdgeNewParams, opts ...option.RequestOption) (res *LogpushEdgeNewResponse, err error) {
+func (r *LogpushEdgeService) Update(ctx context.Context, zoneID string, body LogpushEdgeUpdateParams, opts ...option.RequestOption) (res *LogpushEdgeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LogpushEdgeNewResponseEnvelope
+	var env LogpushEdgeUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logpush/edge", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (r *LogpushEdgeService) Get(ctx context.Context, zoneID string, opts ...opt
 	return
 }
 
-type LogpushEdgeNewResponse struct {
+type LogpushEdgeUpdateResponse struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Comma-separated list of fields.
@@ -68,13 +68,13 @@ type LogpushEdgeNewResponse struct {
 	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
 	Sample int64 `json:"sample"`
 	// Unique session id of the job.
-	SessionID string                     `json:"session_id"`
-	JSON      logpushEdgeNewResponseJSON `json:"-"`
+	SessionID string                        `json:"session_id"`
+	JSON      logpushEdgeUpdateResponseJSON `json:"-"`
 }
 
-// logpushEdgeNewResponseJSON contains the JSON metadata for the struct
-// [LogpushEdgeNewResponse]
-type logpushEdgeNewResponseJSON struct {
+// logpushEdgeUpdateResponseJSON contains the JSON metadata for the struct
+// [LogpushEdgeUpdateResponse]
+type logpushEdgeUpdateResponseJSON struct {
 	DestinationConf apijson.Field
 	Fields          apijson.Field
 	Filter          apijson.Field
@@ -84,7 +84,7 @@ type logpushEdgeNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LogpushEdgeNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushEdgeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -119,7 +119,7 @@ func (r *LogpushEdgeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushEdgeNewParams struct {
+type LogpushEdgeUpdateParams struct {
 	// Comma-separated list of fields.
 	Fields param.Field[string] `json:"fields"`
 	// Filters to drill down into specific events.
@@ -129,22 +129,22 @@ type LogpushEdgeNewParams struct {
 	Sample param.Field[int64] `json:"sample"`
 }
 
-func (r LogpushEdgeNewParams) MarshalJSON() (data []byte, err error) {
+func (r LogpushEdgeUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type LogpushEdgeNewResponseEnvelope struct {
-	Errors   []LogpushEdgeNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LogpushEdgeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushEdgeNewResponse                   `json:"result,required,nullable"`
+type LogpushEdgeUpdateResponseEnvelope struct {
+	Errors   []LogpushEdgeUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogpushEdgeUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogpushEdgeUpdateResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success LogpushEdgeNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    logpushEdgeNewResponseEnvelopeJSON    `json:"-"`
+	Success LogpushEdgeUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    logpushEdgeUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// logpushEdgeNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [LogpushEdgeNewResponseEnvelope]
-type logpushEdgeNewResponseEnvelopeJSON struct {
+// logpushEdgeUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [LogpushEdgeUpdateResponseEnvelope]
+type logpushEdgeUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -153,53 +153,53 @@ type logpushEdgeNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushEdgeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushEdgeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushEdgeNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    logpushEdgeNewResponseEnvelopeErrorsJSON `json:"-"`
+type LogpushEdgeUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    logpushEdgeUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// logpushEdgeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [LogpushEdgeNewResponseEnvelopeErrors]
-type logpushEdgeNewResponseEnvelopeErrorsJSON struct {
+// logpushEdgeUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [LogpushEdgeUpdateResponseEnvelopeErrors]
+type logpushEdgeUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushEdgeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushEdgeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogpushEdgeNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    logpushEdgeNewResponseEnvelopeMessagesJSON `json:"-"`
+type LogpushEdgeUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    logpushEdgeUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// logpushEdgeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [LogpushEdgeNewResponseEnvelopeMessages]
-type logpushEdgeNewResponseEnvelopeMessagesJSON struct {
+// logpushEdgeUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [LogpushEdgeUpdateResponseEnvelopeMessages]
+type logpushEdgeUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogpushEdgeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushEdgeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LogpushEdgeNewResponseEnvelopeSuccess bool
+type LogpushEdgeUpdateResponseEnvelopeSuccess bool
 
 const (
-	LogpushEdgeNewResponseEnvelopeSuccessTrue LogpushEdgeNewResponseEnvelopeSuccess = true
+	LogpushEdgeUpdateResponseEnvelopeSuccessTrue LogpushEdgeUpdateResponseEnvelopeSuccess = true
 )
 
 type LogpushEdgeGetResponseEnvelope struct {

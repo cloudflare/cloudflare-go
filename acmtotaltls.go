@@ -32,9 +32,9 @@ func NewAcmTotalTLSService(opts ...option.RequestOption) (r *AcmTotalTLSService)
 }
 
 // Set Total TLS Settings or disable the feature for a Zone.
-func (r *AcmTotalTLSService) New(ctx context.Context, zoneID string, body AcmTotalTLSNewParams, opts ...option.RequestOption) (res *AcmTotalTLSNewResponse, err error) {
+func (r *AcmTotalTLSService) Update(ctx context.Context, zoneID string, body AcmTotalTLSUpdateParams, opts ...option.RequestOption) (res *AcmTotalTLSUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AcmTotalTLSNewResponseEnvelope
+	var env AcmTotalTLSUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/acm/total_tls", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -57,20 +57,20 @@ func (r *AcmTotalTLSService) Get(ctx context.Context, zoneID string, opts ...opt
 	return
 }
 
-type AcmTotalTLSNewResponse struct {
+type AcmTotalTLSUpdateResponse struct {
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority AcmTotalTLSNewResponseCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority AcmTotalTLSUpdateResponseCertificateAuthority `json:"certificate_authority"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled bool `json:"enabled"`
 	// The validity period in days for the certificates ordered via Total TLS.
-	ValidityDays AcmTotalTLSNewResponseValidityDays `json:"validity_days"`
-	JSON         acmTotalTLSNewResponseJSON         `json:"-"`
+	ValidityDays AcmTotalTLSUpdateResponseValidityDays `json:"validity_days"`
+	JSON         acmTotalTLSUpdateResponseJSON         `json:"-"`
 }
 
-// acmTotalTLSNewResponseJSON contains the JSON metadata for the struct
-// [AcmTotalTLSNewResponse]
-type acmTotalTLSNewResponseJSON struct {
+// acmTotalTLSUpdateResponseJSON contains the JSON metadata for the struct
+// [AcmTotalTLSUpdateResponse]
+type acmTotalTLSUpdateResponseJSON struct {
 	CertificateAuthority apijson.Field
 	Enabled              apijson.Field
 	ValidityDays         apijson.Field
@@ -78,23 +78,23 @@ type acmTotalTLSNewResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AcmTotalTLSNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AcmTotalTLSUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
-type AcmTotalTLSNewResponseCertificateAuthority string
+type AcmTotalTLSUpdateResponseCertificateAuthority string
 
 const (
-	AcmTotalTLSNewResponseCertificateAuthorityGoogle      AcmTotalTLSNewResponseCertificateAuthority = "google"
-	AcmTotalTLSNewResponseCertificateAuthorityLetsEncrypt AcmTotalTLSNewResponseCertificateAuthority = "lets_encrypt"
+	AcmTotalTLSUpdateResponseCertificateAuthorityGoogle      AcmTotalTLSUpdateResponseCertificateAuthority = "google"
+	AcmTotalTLSUpdateResponseCertificateAuthorityLetsEncrypt AcmTotalTLSUpdateResponseCertificateAuthority = "lets_encrypt"
 )
 
 // The validity period in days for the certificates ordered via Total TLS.
-type AcmTotalTLSNewResponseValidityDays int64
+type AcmTotalTLSUpdateResponseValidityDays int64
 
 const (
-	AcmTotalTLSNewResponseValidityDays90 AcmTotalTLSNewResponseValidityDays = 90
+	AcmTotalTLSUpdateResponseValidityDays90 AcmTotalTLSUpdateResponseValidityDays = 90
 )
 
 type AcmTotalTLSGetResponse struct {
@@ -137,38 +137,38 @@ const (
 	AcmTotalTLSGetResponseValidityDays90 AcmTotalTLSGetResponseValidityDays = 90
 )
 
-type AcmTotalTLSNewParams struct {
+type AcmTotalTLSUpdateParams struct {
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// The Certificate Authority that Total TLS certificates will be issued through.
-	CertificateAuthority param.Field[AcmTotalTLSNewParamsCertificateAuthority] `json:"certificate_authority"`
+	CertificateAuthority param.Field[AcmTotalTLSUpdateParamsCertificateAuthority] `json:"certificate_authority"`
 }
 
-func (r AcmTotalTLSNewParams) MarshalJSON() (data []byte, err error) {
+func (r AcmTotalTLSUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
-type AcmTotalTLSNewParamsCertificateAuthority string
+type AcmTotalTLSUpdateParamsCertificateAuthority string
 
 const (
-	AcmTotalTLSNewParamsCertificateAuthorityGoogle      AcmTotalTLSNewParamsCertificateAuthority = "google"
-	AcmTotalTLSNewParamsCertificateAuthorityLetsEncrypt AcmTotalTLSNewParamsCertificateAuthority = "lets_encrypt"
+	AcmTotalTLSUpdateParamsCertificateAuthorityGoogle      AcmTotalTLSUpdateParamsCertificateAuthority = "google"
+	AcmTotalTLSUpdateParamsCertificateAuthorityLetsEncrypt AcmTotalTLSUpdateParamsCertificateAuthority = "lets_encrypt"
 )
 
-type AcmTotalTLSNewResponseEnvelope struct {
-	Errors   []AcmTotalTLSNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AcmTotalTLSNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AcmTotalTLSNewResponse                   `json:"result,required"`
+type AcmTotalTLSUpdateResponseEnvelope struct {
+	Errors   []AcmTotalTLSUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AcmTotalTLSUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AcmTotalTLSUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AcmTotalTLSNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    acmTotalTLSNewResponseEnvelopeJSON    `json:"-"`
+	Success AcmTotalTLSUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    acmTotalTLSUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// acmTotalTLSNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AcmTotalTLSNewResponseEnvelope]
-type acmTotalTLSNewResponseEnvelopeJSON struct {
+// acmTotalTLSUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AcmTotalTLSUpdateResponseEnvelope]
+type acmTotalTLSUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -177,53 +177,53 @@ type acmTotalTLSNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcmTotalTLSNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AcmTotalTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcmTotalTLSNewResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    acmTotalTLSNewResponseEnvelopeErrorsJSON `json:"-"`
+type AcmTotalTLSUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    acmTotalTLSUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// acmTotalTLSNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AcmTotalTLSNewResponseEnvelopeErrors]
-type acmTotalTLSNewResponseEnvelopeErrorsJSON struct {
+// acmTotalTLSUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AcmTotalTLSUpdateResponseEnvelopeErrors]
+type acmTotalTLSUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcmTotalTLSNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AcmTotalTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AcmTotalTLSNewResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    acmTotalTLSNewResponseEnvelopeMessagesJSON `json:"-"`
+type AcmTotalTLSUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    acmTotalTLSUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// acmTotalTLSNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AcmTotalTLSNewResponseEnvelopeMessages]
-type acmTotalTLSNewResponseEnvelopeMessagesJSON struct {
+// acmTotalTLSUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AcmTotalTLSUpdateResponseEnvelopeMessages]
+type acmTotalTLSUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AcmTotalTLSNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AcmTotalTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AcmTotalTLSNewResponseEnvelopeSuccess bool
+type AcmTotalTLSUpdateResponseEnvelopeSuccess bool
 
 const (
-	AcmTotalTLSNewResponseEnvelopeSuccessTrue AcmTotalTLSNewResponseEnvelopeSuccess = true
+	AcmTotalTLSUpdateResponseEnvelopeSuccessTrue AcmTotalTLSUpdateResponseEnvelopeSuccess = true
 )
 
 type AcmTotalTLSGetResponseEnvelope struct {

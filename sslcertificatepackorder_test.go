@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSSLCertificatePackOrderNewWithOptionalParams(t *testing.T) {
+func TestSSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,15 +29,15 @@ func TestSSLCertificatePackOrderNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.SSLs.CertificatePacks.Orders.New(
+	_, err := client.SSLs.CertificatePacks.Orders.CertificatePacksOrderAdvancedCertificateManagerCertificatePack(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SSLCertificatePackOrderNewParams{
-			CertificateAuthority: cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt),
+		cloudflare.SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParams{
+			CertificateAuthority: cloudflare.F(cloudflare.SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsCertificateAuthorityLetsEncrypt),
 			Hosts:                cloudflare.F([]string{"example.com", "*.example.com", "www.example.com"}),
-			Type:                 cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsTypeAdvanced),
-			ValidationMethod:     cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsValidationMethodTxt),
-			ValidityDays:         cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsValidityDays14),
+			Type:                 cloudflare.F(cloudflare.SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsTypeAdvanced),
+			ValidationMethod:     cloudflare.F(cloudflare.SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidationMethodTxt),
+			ValidityDays:         cloudflare.F(cloudflare.SSLCertificatePackOrderCertificatePacksOrderAdvancedCertificateManagerCertificatePackParamsValidityDays14),
 			CloudflareBranding:   cloudflare.F(false),
 		},
 	)
