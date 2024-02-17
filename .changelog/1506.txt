@@ -1,0 +1,3 @@
+```release-note:bug
+fix: Fix request method to call domain list endpint from POST to GET
+```
