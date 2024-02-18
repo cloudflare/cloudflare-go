@@ -44,7 +44,15 @@ type ZarazConfigSettings struct {
 	ContextEnricher     ZarazWorker `json:"contextEnricher,omitempty"`
 }
 
+// Deprecated: To be removed pending migration of existing configs.
 type ZarazNeoEvent struct {
+	BlockingTriggers []string       `json:"blockingTriggers"`
+	FiringTriggers   []string       `json:"firingTriggers"`
+	Data             map[string]any `json:"data"`
+	ActionType       string         `json:"actionType,omitempty"`
+}
+
+type ZarazAction struct {
 	BlockingTriggers []string       `json:"blockingTriggers"`
 	FiringTriggers   []string       `json:"firingTriggers"`
 	Data             map[string]any `json:"data"`
@@ -60,18 +68,19 @@ const (
 )
 
 type ZarazTool struct {
-	BlockingTriggers []string        `json:"blockingTriggers"`
-	Enabled          *bool           `json:"enabled"`
-	DefaultFields    map[string]any  `json:"defaultFields"`
-	Name             string          `json:"name"`
-	NeoEvents        []ZarazNeoEvent `json:"neoEvents"`
-	Type             ZarazToolType   `json:"type"`
-	DefaultPurpose   string          `json:"defaultPurpose,omitempty"`
-	Library          string          `json:"library,omitempty"`
-	Component        string          `json:"component,omitempty"`
-	Permissions      []string        `json:"permissions,omitempty"`
-	Settings         map[string]any  `json:"settings,omitempty"`
-	Worker           ZarazWorker     `json:"worker,omitempty"`
+	BlockingTriggers []string               `json:"blockingTriggers"`
+	Enabled          *bool                  `json:"enabled"`
+	DefaultFields    map[string]any         `json:"defaultFields"`
+	Name             string                 `json:"name"`
+	NeoEvents        []ZarazNeoEvent        `json:"neoEvents"`
+	Actions          map[string]ZarazAction `json:"actions"`
+	Type             ZarazToolType          `json:"type"`
+	DefaultPurpose   string                 `json:"defaultPurpose,omitempty"`
+	Library          string                 `json:"library,omitempty"`
+	Component        string                 `json:"component,omitempty"`
+	Permissions      []string               `json:"permissions"`
+	Settings         map[string]any         `json:"settings"`
+	Worker           ZarazWorker            `json:"worker,omitempty"`
 }
 
 type ZarazTriggerSystem string

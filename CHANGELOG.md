@@ -1,11 +1,25 @@
-## 0.88.0 (Unreleased)
+## 0.89.0 (Unreleased)
+
+## 0.88.0 (February 14th, 2023)
 
 ENHANCEMENTS:
 
+* access_application: Add support for OIDC SaaS Applications ([#1500](https://github.com/cloudflare/cloudflare-go/issues/1500))
 * access_application: Add support for `allow_authenticate_via_warp` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
+* access_application: add support for `name_id_transform_jsonata` in saas apps ([#1505](https://github.com/cloudflare/cloudflare-go/issues/1505))
 * access_organization: Add support for `allow_authenticate_via_warp` and `warp_auth_session_duration` ([#1496](https://github.com/cloudflare/cloudflare-go/issues/1496))
 * hyperdrive: Add support for hyperdrive CRUD operations ([#1492](https://github.com/cloudflare/cloudflare-go/issues/1492))
 * images_variants: Add support for Images Variants CRUD operations ([#1494](https://github.com/cloudflare/cloudflare-go/issues/1494))
+* teams_rules: `AntiVirus` settings includes notification settings ([#1499](https://github.com/cloudflare/cloudflare-go/issues/1499))
+
+BUG FIXES:
+
+* hyperdrive: password should be nested in origin ([#1501](https://github.com/cloudflare/cloudflare-go/issues/1501))
+
+DEPENDENCIES:
+
+* deps: bumps golang.org/x/net from 0.20.0 to 0.21.0 ([#1502](https://github.com/cloudflare/cloudflare-go/issues/1502))
+* deps: bumps golangci/golangci-lint-action from 3 to 4 ([#1504](https://github.com/cloudflare/cloudflare-go/issues/1504))
 
 ## 0.87.0 (January 31st, 2024)
 

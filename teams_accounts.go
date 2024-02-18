@@ -54,9 +54,10 @@ type BrowserIsolation struct {
 }
 
 type TeamsAntivirus struct {
-	EnabledDownloadPhase bool `json:"enabled_download_phase"`
-	EnabledUploadPhase   bool `json:"enabled_upload_phase"`
-	FailClosed           bool `json:"fail_closed"`
+	EnabledDownloadPhase bool                       `json:"enabled_download_phase"`
+	EnabledUploadPhase   bool                       `json:"enabled_upload_phase"`
+	FailClosed           bool                       `json:"fail_closed"`
+	NotificationSettings *TeamsNotificationSettings `json:"notification_settings"`
 }
 
 type TeamsFIPS struct {

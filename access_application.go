@@ -106,17 +106,31 @@ type SAMLAttributeConfig struct {
 }
 
 type SaasApplication struct {
-	AppID              string                `json:"app_id,omitempty"`
-	ConsumerServiceUrl string                `json:"consumer_service_url,omitempty"`
-	SPEntityID         string                `json:"sp_entity_id,omitempty"`
-	PublicKey          string                `json:"public_key,omitempty"`
-	IDPEntityID        string                `json:"idp_entity_id,omitempty"`
-	NameIDFormat       string                `json:"name_id_format,omitempty"`
-	SSOEndpoint        string                `json:"sso_endpoint,omitempty"`
-	DefaultRelayState  string                `json:"default_relay_state,omitempty"`
-	UpdatedAt          *time.Time            `json:"updated_at,omitempty"`
-	CreatedAt          *time.Time            `json:"created_at,omitempty"`
-	CustomAttributes   []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
+	// Items common to both SAML and OIDC
+	AppID     string     `json:"app_id,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
+	PublicKey string     `json:"public_key,omitempty"`
+	AuthType  string     `json:"auth_type,omitempty"`
+
+	// SAML saas app
+	ConsumerServiceUrl     string                `json:"consumer_service_url,omitempty"`
+	SPEntityID             string                `json:"sp_entity_id,omitempty"`
+	IDPEntityID            string                `json:"idp_entity_id,omitempty"`
+	NameIDFormat           string                `json:"name_id_format,omitempty"`
+	SSOEndpoint            string                `json:"sso_endpoint,omitempty"`
+	DefaultRelayState      string                `json:"default_relay_state,omitempty"`
+	CustomAttributes       []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
+	NameIDTransformJsonata string                `json:"name_id_transform_jsonata,omitempty"`
+
+	// OIDC saas app
+	ClientID         string   `json:"client_id,omitempty"`
+	ClientSecret     string   `json:"client_secret,omitempty"`
+	RedirectURIs     []string `json:"redirect_uris,omitempty"`
+	GrantTypes       []string `json:"grant_types,omitempty"`
+	Scopes           []string `json:"scopes,omitempty"`
+	AppLauncherURL   string   `json:"app_launcher_url,omitempty"`
+	GroupFilterRegex string   `json:"group_filter_regex,omitempty"`
 }
 
 type AccessAppLauncherCustomization struct {
