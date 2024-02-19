@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestPurgeCachZonePurgeWithOptionalParams(t *testing.T) {
+func TestIntelSinkholeList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,15 +29,7 @@ func TestPurgeCachZonePurgeWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.PurgeCaches.ZonePurge(
-		context.TODO(),
-		"string",
-		cloudflare.PurgeCachZonePurgeParamsKtBnhzJvFlex{
-			Hosts:    cloudflare.F([]string{"www.example.com", "images.example.com"}),
-			Prefixes: cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
-			Tags:     cloudflare.F([]string{"some-tag", "another-tag"}),
-		},
-	)
+	_, err := client.Intel.Sinkholes.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
