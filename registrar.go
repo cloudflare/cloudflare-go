@@ -104,7 +104,7 @@ func (api *API) RegistrarDomain(ctx context.Context, accountID, domainName strin
 func (api *API) RegistrarDomains(ctx context.Context, accountID string) ([]RegistrarDomain, error) {
 	uri := fmt.Sprintf("/accounts/%s/registrar/domains", accountID)
 
-	res, err := api.makeRequestContext(ctx, http.MethodPost, uri, nil)
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return []RegistrarDomain{}, err
 	}
