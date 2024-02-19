@@ -12,10 +12,27 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 )
 
+type V4PagePaginationResult struct {
+	Items []interface{}              `json:"items"`
+	JSON  v4PagePaginationResultJSON `json:"-"`
+}
+
+// v4PagePaginationResultJSON contains the JSON metadata for the struct
+// [V4PagePaginationResult]
+type v4PagePaginationResultJSON struct {
+	Items       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *V4PagePaginationResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V4PagePagination[T any] struct {
-	Data       []T                  `json:"data"`
-	ResultInfo interface{}          `json:"result_info"`
-	JSON       v4PagePaginationJSON `json:"-"`
+	Result     V4PagePaginationResult `json:"result"`
+	ResultInfo interface{}            `json:"result_info"`
+	JSON       v4PagePaginationJSON   `json:"-"`
 	cfg        *requestconfig.RequestConfig
 	res        *http.Response
 }
@@ -23,7 +40,7 @@ type V4PagePagination[T any] struct {
 // v4PagePaginationJSON contains the JSON metadata for the struct
 // [V4PagePagination[T]]
 type v4PagePaginationJSON struct {
-	Data        apijson.Field
+	Result      apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
