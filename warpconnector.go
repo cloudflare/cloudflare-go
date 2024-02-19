@@ -14,6 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -62,16 +63,26 @@ func (r *WarpConnectorService) Update(ctx context.Context, accountID string, tun
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WarpConnectorService) List(ctx context.Context, accountID string, query WarpConnectorListParams, opts ...option.RequestOption) (res *[]WarpConnectorListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WarpConnectorListResponseEnvelope
+func (r *WarpConnectorService) List(ctx context.Context, accountID string, query WarpConnectorListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WarpConnectorListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/warp_connector", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists and filters Warp Connector Tunnels in an account.
+func (r *WarpConnectorService) ListAutoPaging(ctx context.Context, accountID string, query WarpConnectorListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WarpConnectorListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 // Deletes a Warp Connector Tunnel from an account.
@@ -1474,104 +1485,6 @@ func (r WarpConnectorListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type WarpConnectorListResponseEnvelope struct {
-	Errors   []WarpConnectorListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WarpConnectorListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WarpConnectorListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    WarpConnectorListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo WarpConnectorListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       warpConnectorListResponseEnvelopeJSON       `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WarpConnectorListResponseEnvelope]
-type warpConnectorListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    warpConnectorListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WarpConnectorListResponseEnvelopeErrors]
-type warpConnectorListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WarpConnectorListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    warpConnectorListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WarpConnectorListResponseEnvelopeMessages]
-type warpConnectorListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WarpConnectorListResponseEnvelopeSuccess bool
-
-const (
-	WarpConnectorListResponseEnvelopeSuccessTrue WarpConnectorListResponseEnvelopeSuccess = true
-)
-
-type WarpConnectorListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       warpConnectorListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// warpConnectorListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [WarpConnectorListResponseEnvelopeResultInfo]
-type warpConnectorListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WarpConnectorListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type WarpConnectorDeleteParams struct {

@@ -66,16 +66,26 @@ func (r *DNSFirewallService) Update(ctx context.Context, accountID string, dnsFi
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *DNSFirewallService) List(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) (res *[]DNSFirewallListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DNSFirewallListResponseEnvelope
+func (r *DNSFirewallService) List(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSFirewallListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/dns_firewall", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List configured DNS Firewall clusters for an account.
+func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSFirewallListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 // Delete a configured DNS Firewall Cluster.
@@ -893,104 +903,6 @@ func (r DNSFirewallListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type DNSFirewallListResponseEnvelope struct {
-	Errors   []DNSFirewallListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DNSFirewallListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DNSFirewallListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DNSFirewallListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dnsFirewallListResponseEnvelopeJSON       `json:"-"`
-}
-
-// dnsFirewallListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DNSFirewallListResponseEnvelope]
-type dnsFirewallListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dnsFirewallListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsFirewallListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DNSFirewallListResponseEnvelopeErrors]
-type dnsFirewallListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    dnsFirewallListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsFirewallListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSFirewallListResponseEnvelopeMessages]
-type dnsFirewallListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DNSFirewallListResponseEnvelopeSuccess bool
-
-const (
-	DNSFirewallListResponseEnvelopeSuccessTrue DNSFirewallListResponseEnvelopeSuccess = true
-)
-
-type DNSFirewallListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                       `json:"total_count"`
-	JSON       dnsFirewallListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dnsFirewallListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DNSFirewallListResponseEnvelopeResultInfo]
-type dnsFirewallListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type DNSFirewallDeleteResponseEnvelope struct {

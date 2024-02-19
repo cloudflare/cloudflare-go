@@ -71,16 +71,28 @@ func (r *FirewallAccessRuleService) Update(ctx context.Context, identifier inter
 // Fetches IP Access rules of an account or zone. These rules apply to all the
 // zones in the account or zone. You can filter the results using several optional
 // parameters.
-func (r *FirewallAccessRuleService) List(ctx context.Context, accountOrZone string, accountOrZoneID interface{}, query FirewallAccessRuleListParams, opts ...option.RequestOption) (res *[]FirewallAccessRuleListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallAccessRuleListResponseEnvelope
+func (r *FirewallAccessRuleService) List(ctx context.Context, accountOrZone string, accountOrZoneID interface{}, query FirewallAccessRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallAccessRuleListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("%s/%v/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches IP Access rules of an account or zone. These rules apply to all the
+// zones in the account or zone. You can filter the results using several optional
+// parameters.
+func (r *FirewallAccessRuleService) ListAutoPaging(ctx context.Context, accountOrZone string, accountOrZoneID interface{}, query FirewallAccessRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallAccessRuleListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountOrZone, accountOrZoneID, query, opts...))
 }
 
 // Deletes an existing IP Access rule defined.
@@ -754,104 +766,6 @@ const (
 	FirewallAccessRuleListParamsOrderConfigurationValue  FirewallAccessRuleListParamsOrder = "configuration.value"
 	FirewallAccessRuleListParamsOrderMode                FirewallAccessRuleListParamsOrder = "mode"
 )
-
-type FirewallAccessRuleListResponseEnvelope struct {
-	Errors   []FirewallAccessRuleListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallAccessRuleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallAccessRuleListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallAccessRuleListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallAccessRuleListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallAccessRuleListResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallAccessRuleListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FirewallAccessRuleListResponseEnvelope]
-type firewallAccessRuleListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallAccessRuleListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    firewallAccessRuleListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallAccessRuleListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallAccessRuleListResponseEnvelopeErrors]
-type firewallAccessRuleListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallAccessRuleListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    firewallAccessRuleListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallAccessRuleListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FirewallAccessRuleListResponseEnvelopeMessages]
-type firewallAccessRuleListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallAccessRuleListResponseEnvelopeSuccess bool
-
-const (
-	FirewallAccessRuleListResponseEnvelopeSuccessTrue FirewallAccessRuleListResponseEnvelopeSuccess = true
-)
-
-type FirewallAccessRuleListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       firewallAccessRuleListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallAccessRuleListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [FirewallAccessRuleListResponseEnvelopeResultInfo]
-type firewallAccessRuleListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAccessRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
 	Errors   []FirewallAccessRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`

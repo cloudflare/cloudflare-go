@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -62,16 +63,26 @@ func (r *ZoneService) Update(ctx context.Context, zoneID string, body ZoneUpdate
 }
 
 // Lists, searches, sorts, and filters your zones.
-func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *[]ZoneListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ZoneListResponseEnvelope
+func (r *ZoneService) List(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ZoneListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "zones"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists, searches, sorts, and filters your zones.
+func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ZoneListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Deletes an existing zone.
@@ -975,97 +986,6 @@ const (
 	ZoneListParamsStatusActive       ZoneListParamsStatus = "active"
 	ZoneListParamsStatusMoved        ZoneListParamsStatus = "moved"
 )
-
-type ZoneListResponseEnvelope struct {
-	Errors   []ZoneListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneListResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful
-	Success    bool                               `json:"success,required"`
-	Result     []ZoneListResponse                 `json:"result"`
-	ResultInfo ZoneListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       zoneListResponseEnvelopeJSON       `json:"-"`
-}
-
-// zoneListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZoneListResponseEnvelope]
-type zoneListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    zoneListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// zoneListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ZoneListResponseEnvelopeErrors]
-type zoneListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    zoneListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// zoneListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [ZoneListResponseEnvelopeMessages]
-type zoneListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                `json:"total_count"`
-	JSON       zoneListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// zoneListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
-// [ZoneListResponseEnvelopeResultInfo]
-type zoneListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type ZoneDeleteResponseEnvelope struct {
 	Errors   []ZoneDeleteResponseEnvelopeErrors   `json:"errors,required"`

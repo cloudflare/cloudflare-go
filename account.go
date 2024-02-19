@@ -49,16 +49,26 @@ func (r *AccountService) Update(ctx context.Context, accountID interface{}, body
 }
 
 // List all accounts you have ownership or verified access to.
-func (r *AccountService) List(ctx context.Context, query AccountListParams, opts ...option.RequestOption) (res *[]AccountListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccountListResponseEnvelope
+func (r *AccountService) List(ctx context.Context, query AccountListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccountListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "accounts"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all accounts you have ownership or verified access to.
+func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccountListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Get information about a specific account that you are a member of.
@@ -257,104 +267,6 @@ const (
 	AccountListParamsDirectionAsc  AccountListParamsDirection = "asc"
 	AccountListParamsDirectionDesc AccountListParamsDirection = "desc"
 )
-
-type AccountListResponseEnvelope struct {
-	Errors   []AccountListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccountListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccountListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccountListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accountListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accountListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccountListResponseEnvelope]
-type accountListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountListResponseEnvelopeErrors struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    accountListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [AccountListResponseEnvelopeErrors]
-type accountListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountListResponseEnvelopeMessages struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    accountListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccountListResponseEnvelopeMessages]
-type accountListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccountListResponseEnvelopeSuccess bool
-
-const (
-	AccountListResponseEnvelopeSuccessTrue AccountListResponseEnvelopeSuccess = true
-)
-
-type AccountListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                   `json:"total_count"`
-	JSON       accountListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accountListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [AccountListResponseEnvelopeResultInfo]
-type accountListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type AccountGetResponseEnvelope struct {
 	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`

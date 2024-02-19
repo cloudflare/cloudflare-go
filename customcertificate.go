@@ -70,16 +70,28 @@ func (r *CustomCertificateService) Update(ctx context.Context, zoneID string, cu
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) List(ctx context.Context, zoneID string, query CustomCertificateListParams, opts ...option.RequestOption) (res *[]CustomCertificateListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CustomCertificateListResponseEnvelope
+func (r *CustomCertificateService) List(ctx context.Context, zoneID string, query CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificateListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/custom_certificates", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List, search, and filter all of your custom SSL certificates. The higher
+// priority will break ties across overlapping 'legacy_custom' certificates, but
+// 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
+func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, zoneID string, query CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificateListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
 }
 
 // Remove a SSL certificate from a zone.
@@ -697,104 +709,6 @@ const (
 	CustomCertificateListParamsMatchAny CustomCertificateListParamsMatch = "any"
 	CustomCertificateListParamsMatchAll CustomCertificateListParamsMatch = "all"
 )
-
-type CustomCertificateListResponseEnvelope struct {
-	Errors   []CustomCertificateListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomCertificateListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    CustomCertificateListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo CustomCertificateListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       customCertificateListResponseEnvelopeJSON       `json:"-"`
-}
-
-// customCertificateListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CustomCertificateListResponseEnvelope]
-type customCertificateListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomCertificateListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    customCertificateListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customCertificateListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomCertificateListResponseEnvelopeErrors]
-type customCertificateListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomCertificateListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    customCertificateListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customCertificateListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomCertificateListResponseEnvelopeMessages]
-type customCertificateListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CustomCertificateListResponseEnvelopeSuccess bool
-
-const (
-	CustomCertificateListResponseEnvelopeSuccessTrue CustomCertificateListResponseEnvelopeSuccess = true
-)
-
-type CustomCertificateListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                             `json:"total_count"`
-	JSON       customCertificateListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// customCertificateListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [CustomCertificateListResponseEnvelopeResultInfo]
-type customCertificateListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type CustomCertificateDeleteResponseEnvelope struct {
 	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`

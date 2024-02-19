@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -60,16 +61,26 @@ func (r *AccountMemberService) Update(ctx context.Context, accountID interface{}
 }
 
 // List all members of an account.
-func (r *AccountMemberService) List(ctx context.Context, accountID interface{}, query AccountMemberListParams, opts ...option.RequestOption) (res *[]AccountMemberListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccountMemberListResponseEnvelope
+func (r *AccountMemberService) List(ctx context.Context, accountID interface{}, query AccountMemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccountMemberListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%v/members", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List all members of an account.
+func (r *AccountMemberService) ListAutoPaging(ctx context.Context, accountID interface{}, query AccountMemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccountMemberListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 // Remove a member from an account.
@@ -1583,104 +1594,6 @@ const (
 	AccountMemberListParamsStatusPending  AccountMemberListParamsStatus = "pending"
 	AccountMemberListParamsStatusRejected AccountMemberListParamsStatus = "rejected"
 )
-
-type AccountMemberListResponseEnvelope struct {
-	Errors   []AccountMemberListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccountMemberListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccountMemberListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AccountMemberListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccountMemberListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accountMemberListResponseEnvelopeJSON       `json:"-"`
-}
-
-// accountMemberListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccountMemberListResponseEnvelope]
-type accountMemberListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountMemberListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountMemberListResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    accountMemberListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accountMemberListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccountMemberListResponseEnvelopeErrors]
-type accountMemberListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountMemberListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccountMemberListResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    accountMemberListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accountMemberListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccountMemberListResponseEnvelopeMessages]
-type accountMemberListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountMemberListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccountMemberListResponseEnvelopeSuccess bool
-
-const (
-	AccountMemberListResponseEnvelopeSuccessTrue AccountMemberListResponseEnvelopeSuccess = true
-)
-
-type AccountMemberListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       accountMemberListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// accountMemberListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [AccountMemberListResponseEnvelopeResultInfo]
-type accountMemberListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccountMemberListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type AccountMemberDeleteResponseEnvelope struct {
 	Errors   []AccountMemberDeleteResponseEnvelopeErrors   `json:"errors,required"`

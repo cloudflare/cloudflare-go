@@ -50,16 +50,26 @@ func (r *MembershipService) Update(ctx context.Context, membershipID string, bod
 }
 
 // List memberships of accounts the user can access.
-func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *[]MembershipListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MembershipListResponseEnvelope
+func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[MembershipListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "memberships"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List memberships of accounts the user can access.
+func (r *MembershipService) ListAutoPaging(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[MembershipListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
 // Remove the associated member from an account.
@@ -683,104 +693,6 @@ const (
 	MembershipListParamsStatusPending  MembershipListParamsStatus = "pending"
 	MembershipListParamsStatusRejected MembershipListParamsStatus = "rejected"
 )
-
-type MembershipListResponseEnvelope struct {
-	Errors   []MembershipListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MembershipListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MembershipListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    MembershipListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MembershipListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       membershipListResponseEnvelopeJSON       `json:"-"`
-}
-
-// membershipListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MembershipListResponseEnvelope]
-type membershipListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MembershipListResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    membershipListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// membershipListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MembershipListResponseEnvelopeErrors]
-type membershipListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MembershipListResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    membershipListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// membershipListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MembershipListResponseEnvelopeMessages]
-type membershipListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MembershipListResponseEnvelopeSuccess bool
-
-const (
-	MembershipListResponseEnvelopeSuccessTrue MembershipListResponseEnvelopeSuccess = true
-)
-
-type MembershipListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                      `json:"total_count"`
-	JSON       membershipListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// membershipListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [MembershipListResponseEnvelopeResultInfo]
-type membershipListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type MembershipDeleteResponseEnvelope struct {
 	Errors   []MembershipDeleteResponseEnvelopeErrors   `json:"errors,required"`

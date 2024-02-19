@@ -49,16 +49,26 @@ func (r *RateLimitService) Update(ctx context.Context, zoneIdentifier string, id
 }
 
 // Fetches the rate limits for a zone.
-func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *[]RateLimitListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RateLimitListResponseEnvelope
+func (r *RateLimitService) List(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RateLimitListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches the rate limits for a zone.
+func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query RateLimitListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RateLimitListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Fetches the details of a rate limit.
@@ -462,104 +472,6 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type RateLimitListResponseEnvelope struct {
-	Errors   []RateLimitListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RateLimitListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RateLimitListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    RateLimitListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo RateLimitListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       rateLimitListResponseEnvelopeJSON       `json:"-"`
-}
-
-// rateLimitListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RateLimitListResponseEnvelope]
-type rateLimitListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RateLimitListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    rateLimitListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// rateLimitListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RateLimitListResponseEnvelopeErrors]
-type rateLimitListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RateLimitListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    rateLimitListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// rateLimitListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RateLimitListResponseEnvelopeMessages]
-type rateLimitListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RateLimitListResponseEnvelopeSuccess bool
-
-const (
-	RateLimitListResponseEnvelopeSuccessTrue RateLimitListResponseEnvelopeSuccess = true
-)
-
-type RateLimitListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       rateLimitListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// rateLimitListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [RateLimitListResponseEnvelopeResultInfo]
-type rateLimitListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RateLimitListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type RateLimitGetResponseEnvelope struct {

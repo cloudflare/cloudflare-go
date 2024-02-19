@@ -44,11 +44,29 @@ func NewFirewallWAFPackageService(opts ...option.RequestOption) (r *FirewallWAFP
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageService) List(ctx context.Context, zoneIdentifier string, query FirewallWAFPackageListParams, opts ...option.RequestOption) (res *FirewallWAFPackageListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+func (r *FirewallWAFPackageService) List(ctx context.Context, zoneIdentifier string, query FirewallWAFPackageListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallWAFPackageListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches WAF packages for a zone.
+//
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+func (r *FirewallWAFPackageService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FirewallWAFPackageListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallWAFPackageListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Fetches the details of a WAF package.

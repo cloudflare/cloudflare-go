@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -61,16 +62,26 @@ func (r *RumSiteInfoService) Update(ctx context.Context, accountID string, siteI
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RumSiteInfoService) List(ctx context.Context, accountID string, query RumSiteInfoListParams, opts ...option.RequestOption) (res *[]RumSiteInfoListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RumSiteInfoListResponseEnvelope
+func (r *RumSiteInfoService) List(ctx context.Context, accountID string, query RumSiteInfoListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RumSiteInfoListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/rum/site_info/list", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all Web Analytics sites of an account.
+func (r *RumSiteInfoService) ListAutoPaging(ctx context.Context, accountID string, query RumSiteInfoListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RumSiteInfoListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 // Deletes an existing Web Analytics site.
@@ -583,55 +594,6 @@ const (
 	RumSiteInfoListParamsOrderByHost    RumSiteInfoListParamsOrderBy = "host"
 	RumSiteInfoListParamsOrderByCreated RumSiteInfoListParamsOrderBy = "created"
 )
-
-type RumSiteInfoListResponseEnvelope struct {
-	Result     []RumSiteInfoListResponse                 `json:"result"`
-	ResultInfo RumSiteInfoListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       rumSiteInfoListResponseEnvelopeJSON       `json:"-"`
-}
-
-// rumSiteInfoListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RumSiteInfoListResponseEnvelope]
-type rumSiteInfoListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumSiteInfoListResponseEnvelopeResultInfo struct {
-	// The total number of items on the current page.
-	Count int64 `json:"count"`
-	// Current page within the paginated list of results.
-	Page int64 `json:"page"`
-	// The maximum number of items to return per page of results.
-	PerPage int64 `json:"per_page"`
-	// The total number of items.
-	TotalCount int64 `json:"total_count"`
-	// The total number of pages.
-	TotalPages int64                                         `json:"total_pages,nullable"`
-	JSON       rumSiteInfoListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// rumSiteInfoListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [RumSiteInfoListResponseEnvelopeResultInfo]
-type rumSiteInfoListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumSiteInfoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type RumSiteInfoDeleteResponseEnvelope struct {
 	Result RumSiteInfoDeleteResponse             `json:"result"`

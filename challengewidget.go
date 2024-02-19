@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -61,16 +62,26 @@ func (r *ChallengeWidgetService) Update(ctx context.Context, accountIdentifier s
 }
 
 // Lists all turnstile widgets of an account.
-func (r *ChallengeWidgetService) List(ctx context.Context, accountIdentifier string, query ChallengeWidgetListParams, opts ...option.RequestOption) (res *[]ChallengeWidgetListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ChallengeWidgetListResponseEnvelope
+func (r *ChallengeWidgetService) List(ctx context.Context, accountIdentifier string, query ChallengeWidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ChallengeWidgetListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/challenges/widgets", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all turnstile widgets of an account.
+func (r *ChallengeWidgetService) ListAutoPaging(ctx context.Context, accountIdentifier string, query ChallengeWidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ChallengeWidgetListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
 }
 
 // Destroy a Turnstile Widget.
@@ -908,97 +919,6 @@ const (
 	ChallengeWidgetListParamsOrderCreatedOn  ChallengeWidgetListParamsOrder = "created_on"
 	ChallengeWidgetListParamsOrderModifiedOn ChallengeWidgetListParamsOrder = "modified_on"
 )
-
-type ChallengeWidgetListResponseEnvelope struct {
-	Errors   []ChallengeWidgetListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ChallengeWidgetListResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful
-	Success    bool                                          `json:"success,required"`
-	Result     []ChallengeWidgetListResponse                 `json:"result"`
-	ResultInfo ChallengeWidgetListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       challengeWidgetListResponseEnvelopeJSON       `json:"-"`
-}
-
-// challengeWidgetListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ChallengeWidgetListResponseEnvelope]
-type challengeWidgetListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    challengeWidgetListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// challengeWidgetListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ChallengeWidgetListResponseEnvelopeErrors]
-type challengeWidgetListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    challengeWidgetListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// challengeWidgetListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ChallengeWidgetListResponseEnvelopeMessages]
-type challengeWidgetListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ChallengeWidgetListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count,required"`
-	// Current page within paginated list of results
-	Page float64 `json:"page,required"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page,required"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count,required"`
-	JSON       challengeWidgetListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// challengeWidgetListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [ChallengeWidgetListResponseEnvelopeResultInfo]
-type challengeWidgetListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ChallengeWidgetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type ChallengeWidgetDeleteResponseEnvelope struct {
 	Errors   []ChallengeWidgetDeleteResponseEnvelopeErrors   `json:"errors,required"`

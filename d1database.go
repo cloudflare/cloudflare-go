@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -46,16 +47,26 @@ func (r *D1DatabaseService) New(ctx context.Context, accountID string, body D1Da
 }
 
 // Returns a list of D1 databases.
-func (r *D1DatabaseService) List(ctx context.Context, accountID string, query D1DatabaseListParams, opts ...option.RequestOption) (res *[]D1DatabaseListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env D1DatabaseListResponseEnvelope
+func (r *D1DatabaseService) List(ctx context.Context, accountID string, query D1DatabaseListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[D1DatabaseListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/d1/database", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns a list of D1 databases.
+func (r *D1DatabaseService) ListAutoPaging(ctx context.Context, accountID string, query D1DatabaseListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[D1DatabaseListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 type D1DatabaseNewResponse struct {
@@ -199,72 +210,3 @@ func (r D1DatabaseListParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
-
-type D1DatabaseListResponseEnvelope struct {
-	Errors   []D1DatabaseListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []D1DatabaseListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []D1DatabaseListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success D1DatabaseListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    d1DatabaseListResponseEnvelopeJSON    `json:"-"`
-}
-
-// d1DatabaseListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [D1DatabaseListResponseEnvelope]
-type d1DatabaseListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *D1DatabaseListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type D1DatabaseListResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    d1DatabaseListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// d1DatabaseListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [D1DatabaseListResponseEnvelopeErrors]
-type d1DatabaseListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *D1DatabaseListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type D1DatabaseListResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    d1DatabaseListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// d1DatabaseListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [D1DatabaseListResponseEnvelopeMessages]
-type d1DatabaseListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *D1DatabaseListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type D1DatabaseListResponseEnvelopeSuccess bool
-
-const (
-	D1DatabaseListResponseEnvelopeSuccessTrue D1DatabaseListResponseEnvelopeSuccess = true
-)

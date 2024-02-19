@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,29 +35,41 @@ func NewRadarBGPLeakEventService(opts ...option.RequestOption) (r *RadarBGPLeakE
 }
 
 // Get the BGP route leak events (Beta).
-func (r *RadarBGPLeakEventService) List(ctx context.Context, query RadarBGPLeakEventListParams, opts ...option.RequestOption) (res *RadarBGPLeakEventListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RadarBGPLeakEventListResponseEnvelope
+func (r *RadarBGPLeakEventService) List(ctx context.Context, query RadarBGPLeakEventListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[RadarBGPLeakEventListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "radar/bgp/leaks/events"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Get the BGP route leak events (Beta).
+func (r *RadarBGPLeakEventService) ListAutoPaging(ctx context.Context, query RadarBGPLeakEventListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[RadarBGPLeakEventListResponse] {
+	return shared.NewV4PagePaginationAutoPager(r.List(ctx, query, opts...))
 }
 
 type RadarBGPLeakEventListResponse struct {
-	AsnInfo []RadarBGPLeakEventListResponseAsnInfo `json:"asn_info,required"`
-	Events  []RadarBGPLeakEventListResponseEvent   `json:"events,required"`
-	JSON    radarBGPLeakEventListResponseJSON      `json:"-"`
+	Result     RadarBGPLeakEventListResponseResult     `json:"result,required"`
+	ResultInfo RadarBGPLeakEventListResponseResultInfo `json:"result_info,required"`
+	Success    bool                                    `json:"success,required"`
+	JSON       radarBGPLeakEventListResponseJSON       `json:"-"`
 }
 
 // radarBGPLeakEventListResponseJSON contains the JSON metadata for the struct
 // [RadarBGPLeakEventListResponse]
 type radarBGPLeakEventListResponseJSON struct {
-	AsnInfo     apijson.Field
-	Events      apijson.Field
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -65,16 +78,35 @@ func (r *RadarBGPLeakEventListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarBGPLeakEventListResponseAsnInfo struct {
-	Asn         int64                                    `json:"asn,required"`
-	CountryCode string                                   `json:"country_code,required"`
-	OrgName     string                                   `json:"org_name,required"`
-	JSON        radarBGPLeakEventListResponseAsnInfoJSON `json:"-"`
+type RadarBGPLeakEventListResponseResult struct {
+	AsnInfo []RadarBGPLeakEventListResponseResultAsnInfo `json:"asn_info,required"`
+	Events  []RadarBGPLeakEventListResponseResultEvent   `json:"events,required"`
+	JSON    radarBGPLeakEventListResponseResultJSON      `json:"-"`
 }
 
-// radarBGPLeakEventListResponseAsnInfoJSON contains the JSON metadata for the
-// struct [RadarBGPLeakEventListResponseAsnInfo]
-type radarBGPLeakEventListResponseAsnInfoJSON struct {
+// radarBGPLeakEventListResponseResultJSON contains the JSON metadata for the
+// struct [RadarBGPLeakEventListResponseResult]
+type radarBGPLeakEventListResponseResultJSON struct {
+	AsnInfo     apijson.Field
+	Events      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPLeakEventListResponseResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPLeakEventListResponseResultAsnInfo struct {
+	Asn         int64                                          `json:"asn,required"`
+	CountryCode string                                         `json:"country_code,required"`
+	OrgName     string                                         `json:"org_name,required"`
+	JSON        radarBGPLeakEventListResponseResultAsnInfoJSON `json:"-"`
+}
+
+// radarBGPLeakEventListResponseResultAsnInfoJSON contains the JSON metadata for
+// the struct [RadarBGPLeakEventListResponseResultAsnInfo]
+type radarBGPLeakEventListResponseResultAsnInfoJSON struct {
 	Asn         apijson.Field
 	CountryCode apijson.Field
 	OrgName     apijson.Field
@@ -82,30 +114,30 @@ type radarBGPLeakEventListResponseAsnInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarBGPLeakEventListResponseAsnInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarBGPLeakEventListResponseResultAsnInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarBGPLeakEventListResponseEvent struct {
-	ID          int64                                  `json:"id,required"`
-	Countries   []string                               `json:"countries,required"`
-	DetectedTs  string                                 `json:"detected_ts,required"`
-	Finished    bool                                   `json:"finished,required"`
-	LeakAsn     int64                                  `json:"leak_asn,required"`
-	LeakCount   int64                                  `json:"leak_count,required"`
-	LeakSeg     []int64                                `json:"leak_seg,required"`
-	LeakType    int64                                  `json:"leak_type,required"`
-	MaxTs       string                                 `json:"max_ts,required"`
-	MinTs       string                                 `json:"min_ts,required"`
-	OriginCount int64                                  `json:"origin_count,required"`
-	PeerCount   int64                                  `json:"peer_count,required"`
-	PrefixCount int64                                  `json:"prefix_count,required"`
-	JSON        radarBGPLeakEventListResponseEventJSON `json:"-"`
+type RadarBGPLeakEventListResponseResultEvent struct {
+	ID          int64                                        `json:"id,required"`
+	Countries   []string                                     `json:"countries,required"`
+	DetectedTs  string                                       `json:"detected_ts,required"`
+	Finished    bool                                         `json:"finished,required"`
+	LeakAsn     int64                                        `json:"leak_asn,required"`
+	LeakCount   int64                                        `json:"leak_count,required"`
+	LeakSeg     []int64                                      `json:"leak_seg,required"`
+	LeakType    int64                                        `json:"leak_type,required"`
+	MaxTs       string                                       `json:"max_ts,required"`
+	MinTs       string                                       `json:"min_ts,required"`
+	OriginCount int64                                        `json:"origin_count,required"`
+	PeerCount   int64                                        `json:"peer_count,required"`
+	PrefixCount int64                                        `json:"prefix_count,required"`
+	JSON        radarBGPLeakEventListResponseResultEventJSON `json:"-"`
 }
 
-// radarBGPLeakEventListResponseEventJSON contains the JSON metadata for the struct
-// [RadarBGPLeakEventListResponseEvent]
-type radarBGPLeakEventListResponseEventJSON struct {
+// radarBGPLeakEventListResponseResultEventJSON contains the JSON metadata for the
+// struct [RadarBGPLeakEventListResponseResultEvent]
+type radarBGPLeakEventListResponseResultEventJSON struct {
 	ID          apijson.Field
 	Countries   apijson.Field
 	DetectedTs  apijson.Field
@@ -123,7 +155,30 @@ type radarBGPLeakEventListResponseEventJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarBGPLeakEventListResponseEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarBGPLeakEventListResponseResultEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPLeakEventListResponseResultInfo struct {
+	Count      int64                                       `json:"count,required"`
+	Page       int64                                       `json:"page,required"`
+	PerPage    int64                                       `json:"per_page,required"`
+	TotalCount int64                                       `json:"total_count,required"`
+	JSON       radarBGPLeakEventListResponseResultInfoJSON `json:"-"`
+}
+
+// radarBGPLeakEventListResponseResultInfoJSON contains the JSON metadata for the
+// struct [RadarBGPLeakEventListResponseResultInfo]
+type radarBGPLeakEventListResponseResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPLeakEventListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -213,47 +268,3 @@ const (
 	RadarBGPLeakEventListParamsSortOrderAsc  RadarBGPLeakEventListParamsSortOrder = "ASC"
 	RadarBGPLeakEventListParamsSortOrderDesc RadarBGPLeakEventListParamsSortOrder = "DESC"
 )
-
-type RadarBGPLeakEventListResponseEnvelope struct {
-	Result     RadarBGPLeakEventListResponse                   `json:"result,required"`
-	ResultInfo RadarBGPLeakEventListResponseEnvelopeResultInfo `json:"result_info,required"`
-	Success    bool                                            `json:"success,required"`
-	JSON       radarBGPLeakEventListResponseEnvelopeJSON       `json:"-"`
-}
-
-// radarBGPLeakEventListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarBGPLeakEventListResponseEnvelope]
-type radarBGPLeakEventListResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	ResultInfo  apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarBGPLeakEventListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RadarBGPLeakEventListResponseEnvelopeResultInfo struct {
-	Count      int64                                               `json:"count,required"`
-	Page       int64                                               `json:"page,required"`
-	PerPage    int64                                               `json:"per_page,required"`
-	TotalCount int64                                               `json:"total_count,required"`
-	JSON       radarBGPLeakEventListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// radarBGPLeakEventListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [RadarBGPLeakEventListResponseEnvelopeResultInfo]
-type radarBGPLeakEventListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RadarBGPLeakEventListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

@@ -75,16 +75,26 @@ func (r *DNSRecordService) Update(ctx context.Context, zoneID string, dnsRecordI
 }
 
 // List, search, sort, and filter a zones' DNS records.
-func (r *DNSRecordService) List(ctx context.Context, zoneID string, query DNSRecordListParams, opts ...option.RequestOption) (res *[]DNSRecordListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DNSRecordListResponseEnvelope
+func (r *DNSRecordService) List(ctx context.Context, zoneID string, query DNSRecordListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSRecordListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/dns_records", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// List, search, sort, and filter a zones' DNS records.
+func (r *DNSRecordService) ListAutoPaging(ctx context.Context, zoneID string, query DNSRecordListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSRecordListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
 }
 
 // Delete DNS Record
@@ -14652,104 +14662,6 @@ const (
 	DNSRecordListParamsTypeTxt    DNSRecordListParamsType = "TXT"
 	DNSRecordListParamsTypeUri    DNSRecordListParamsType = "URI"
 )
-
-type DNSRecordListResponseEnvelope struct {
-	Errors   []DNSRecordListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSRecordListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DNSRecordListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DNSRecordListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DNSRecordListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dnsRecordListResponseEnvelopeJSON       `json:"-"`
-}
-
-// dnsRecordListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DNSRecordListResponseEnvelope]
-type dnsRecordListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSRecordListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    dnsRecordListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsRecordListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseEnvelopeErrors]
-type dnsRecordListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSRecordListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    dnsRecordListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsRecordListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseEnvelopeMessages]
-type dnsRecordListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DNSRecordListResponseEnvelopeSuccess bool
-
-const (
-	DNSRecordListResponseEnvelopeSuccessTrue DNSRecordListResponseEnvelopeSuccess = true
-)
-
-type DNSRecordListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                     `json:"total_count"`
-	JSON       dnsRecordListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dnsRecordListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseEnvelopeResultInfo]
-type dnsRecordListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSRecordListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type DNSRecordDeleteResponseEnvelope struct {
 	Result DNSRecordDeleteResponse             `json:"result"`
