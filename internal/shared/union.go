@@ -43,7 +43,7 @@ func (UnionString) ImplementsAccessKeyAccessKeyConfigurationGetTheAccessKeyConfi
 func (UnionString) ImplementsAccessKeyAccessKeyConfigurationUpdateTheAccessKeyConfigurationResponse() {
 }
 func (UnionString) ImplementsAccessKeyRotateAccessKeyConfigurationRotateAccessKeysResponse() {}
-func (UnionString) ImplementsPurgeCachZonePurgeParamsQbnu7BvyFilesFile()                     {}
+func (UnionString) ImplementsPurgeCachZonePurgeParamsABb3jQf9FilesFile()                     {}
 func (UnionString) ImplementsSSLAnalyzeAnalyzeCertificateAnalyzeCertificateResponse()        {}
 func (UnionString) ImplementsSSLCertificatePackGetResponse()                                 {}
 func (UnionString) ImplementsSubscriptionUpdateResponse()                                    {}
@@ -151,7 +151,7 @@ func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()      {}
 func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()    {}
 func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()    {}
 func (UnionString) ImplementsAddressPrefixDeleteResponse()            {}
-func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponse8j55rf5ZapiResponseCommonResult() {
+func (UnionString) ImplementsAuditLogAuditLogsGetAccountAuditLogsResponseVHtGuEw1APIResponseCommonResult() {
 }
 func (UnionString) ImplementsBillingProfileAccountBillingProfileBillingProfileDetailsResponse() {}
 func (UnionString) ImplementsCfdTunnelConfigurationCloudflareTunnelConfigurationGetConfigurationResponse() {
