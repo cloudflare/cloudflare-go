@@ -13,7 +13,7 @@ import (
 )
 
 type V4PagePaginationResult struct {
-	Items []interface{}              `json:"items"`
+	Items []T                        `json:"items"`
 	JSON  v4PagePaginationResultJSON `json:"-"`
 }
 
@@ -95,17 +95,17 @@ func NewV4PagePaginationAutoPager[T any](page *V4PagePagination[T], err error) *
 }
 
 func (r *V4PagePaginationAutoPager[T]) Next() bool {
-	if r.page == nil || len(r.page.Data) == 0 {
+	if r.page == nil || len(r.page.Result.Items) == 0 {
 		return false
 	}
-	if r.idx >= len(r.page.Data) {
+	if r.idx >= len(r.page.Result.Items) {
 		r.idx = 0
 		r.page, r.err = r.page.GetNextPage()
-		if r.err != nil || r.page == nil || len(r.page.Data) == 0 {
+		if r.err != nil || r.page == nil || len(r.page.Result.Items) == 0 {
 			return false
 		}
 	}
-	r.cur = r.page.Data[r.idx]
+	r.cur = r.page.Result.Items[r.idx]
 	r.run += 1
 	r.idx += 1
 	return true
