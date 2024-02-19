@@ -1,5 +1,13 @@
 ## 0.89.0 (Unreleased)
 
+NOTES:
+
+* zaraz: replace deprecated neoEvents with Actions on Zaraz Config tools schema ([#1490](https://github.com/cloudflare/cloudflare-go/issues/1490))
+
+BUG FIXES:
+
+* registrar: Fix request method to call domain list endpoint from POST to GET ([#1506](https://github.com/cloudflare/cloudflare-go/issues/1506))
+
 ## 0.88.0 (February 14th, 2023)
 
 ENHANCEMENTS:
