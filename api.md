@@ -798,14 +798,6 @@ Methods:
 
 # Cache
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#CachePurgeResponse">CachePurgeResponse</a>
-
-Methods:
-
-- <code title="post /zones/{identifier}/purge_cache">client.Cache.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#CacheService.Purge">Purge</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#CachePurgeParams">CachePurgeParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#CachePurgeResponse">CachePurgeResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ## CacheReserves
 
 Response Types:
