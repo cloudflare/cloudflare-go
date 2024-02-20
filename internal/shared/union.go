@@ -41,7 +41,7 @@ func (UnionString) ImplementsAccessApplicationUserPolicyCheckListParamsAppID()  
 func (UnionString) ImplementsAccessKeyListResponse()                                              {}
 func (UnionString) ImplementsAccessKeyReplaceResponse()                                           {}
 func (UnionString) ImplementsAccessKeyRotateResponse()                                            {}
-func (UnionString) ImplementsCachePurgeParamsDba3P8WwFilesFile()                                  {}
+func (UnionString) ImplementsCachePurgeParamsQepy7bYeFilesFile()                                  {}
 func (UnionString) ImplementsCacheTieredCacheSmartTopologyUpdateResponse()                        {}
 func (UnionString) ImplementsCacheTieredCacheSmartTopologyDeleteResponse()                        {}
 func (UnionString) ImplementsCacheTieredCacheSmartTopologyGetResponse()                           {}
