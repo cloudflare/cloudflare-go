@@ -36,9 +36,9 @@ func NewSettingImageResizingService(opts ...option.RequestOption) (r *SettingIma
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-func (r *SettingImageResizingService) Update(ctx context.Context, zoneID string, body SettingImageResizingUpdateParams, opts ...option.RequestOption) (res *SettingImageResizingUpdateResponse, err error) {
+func (r *SettingImageResizingService) Edit(ctx context.Context, zoneID string, body SettingImageResizingEditParams, opts ...option.RequestOption) (res *SettingImageResizingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingImageResizingUpdateResponseEnvelope
+	var env SettingImageResizingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/image_resizing", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -68,22 +68,22 @@ func (r *SettingImageResizingService) Get(ctx context.Context, zoneID string, op
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-type SettingImageResizingUpdateResponse struct {
+type SettingImageResizingEditResponse struct {
 	// ID of the zone setting.
-	ID SettingImageResizingUpdateResponseID `json:"id,required"`
+	ID SettingImageResizingEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingImageResizingUpdateResponseValue `json:"value,required"`
+	Value SettingImageResizingEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingImageResizingUpdateResponseEditable `json:"editable"`
+	Editable SettingImageResizingEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingImageResizingUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingImageResizingEditResponseJSON `json:"-"`
 }
 
-// settingImageResizingUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingImageResizingUpdateResponse]
-type settingImageResizingUpdateResponseJSON struct {
+// settingImageResizingEditResponseJSON contains the JSON metadata for the struct
+// [SettingImageResizingEditResponse]
+type settingImageResizingEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,33 +92,33 @@ type settingImageResizingUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingImageResizingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingImageResizingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingImageResizingUpdateResponseID string
+type SettingImageResizingEditResponseID string
 
 const (
-	SettingImageResizingUpdateResponseIDImageResizing SettingImageResizingUpdateResponseID = "image_resizing"
+	SettingImageResizingEditResponseIDImageResizing SettingImageResizingEditResponseID = "image_resizing"
 )
 
 // Current value of the zone setting.
-type SettingImageResizingUpdateResponseValue string
+type SettingImageResizingEditResponseValue string
 
 const (
-	SettingImageResizingUpdateResponseValueOn   SettingImageResizingUpdateResponseValue = "on"
-	SettingImageResizingUpdateResponseValueOff  SettingImageResizingUpdateResponseValue = "off"
-	SettingImageResizingUpdateResponseValueOpen SettingImageResizingUpdateResponseValue = "open"
+	SettingImageResizingEditResponseValueOn   SettingImageResizingEditResponseValue = "on"
+	SettingImageResizingEditResponseValueOff  SettingImageResizingEditResponseValue = "off"
+	SettingImageResizingEditResponseValueOpen SettingImageResizingEditResponseValue = "open"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingImageResizingUpdateResponseEditable bool
+type SettingImageResizingEditResponseEditable bool
 
 const (
-	SettingImageResizingUpdateResponseEditableTrue  SettingImageResizingUpdateResponseEditable = true
-	SettingImageResizingUpdateResponseEditableFalse SettingImageResizingUpdateResponseEditable = false
+	SettingImageResizingEditResponseEditableTrue  SettingImageResizingEditResponseEditable = true
+	SettingImageResizingEditResponseEditableFalse SettingImageResizingEditResponseEditable = false
 )
 
 // Image Resizing provides on-demand resizing, conversion and optimisation for
@@ -178,15 +178,15 @@ const (
 	SettingImageResizingGetResponseEditableFalse SettingImageResizingGetResponseEditable = false
 )
 
-type SettingImageResizingUpdateParams struct {
+type SettingImageResizingEditParams struct {
 	// Image Resizing provides on-demand resizing, conversion and optimisation for
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 	// more information.
-	Value param.Field[SettingImageResizingUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingImageResizingEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingImageResizingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingImageResizingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -194,58 +194,58 @@ func (r SettingImageResizingUpdateParams) MarshalJSON() (data []byte, err error)
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-type SettingImageResizingUpdateParamsValue struct {
+type SettingImageResizingEditParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[SettingImageResizingUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[SettingImageResizingEditParamsValueID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingImageResizingUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[SettingImageResizingEditParamsValueValue] `json:"value,required"`
 }
 
-func (r SettingImageResizingUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r SettingImageResizingEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // ID of the zone setting.
-type SettingImageResizingUpdateParamsValueID string
+type SettingImageResizingEditParamsValueID string
 
 const (
-	SettingImageResizingUpdateParamsValueIDImageResizing SettingImageResizingUpdateParamsValueID = "image_resizing"
+	SettingImageResizingEditParamsValueIDImageResizing SettingImageResizingEditParamsValueID = "image_resizing"
 )
 
 // Current value of the zone setting.
-type SettingImageResizingUpdateParamsValueValue string
+type SettingImageResizingEditParamsValueValue string
 
 const (
-	SettingImageResizingUpdateParamsValueValueOn   SettingImageResizingUpdateParamsValueValue = "on"
-	SettingImageResizingUpdateParamsValueValueOff  SettingImageResizingUpdateParamsValueValue = "off"
-	SettingImageResizingUpdateParamsValueValueOpen SettingImageResizingUpdateParamsValueValue = "open"
+	SettingImageResizingEditParamsValueValueOn   SettingImageResizingEditParamsValueValue = "on"
+	SettingImageResizingEditParamsValueValueOff  SettingImageResizingEditParamsValueValue = "off"
+	SettingImageResizingEditParamsValueValueOpen SettingImageResizingEditParamsValueValue = "open"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingImageResizingUpdateParamsValueEditable bool
+type SettingImageResizingEditParamsValueEditable bool
 
 const (
-	SettingImageResizingUpdateParamsValueEditableTrue  SettingImageResizingUpdateParamsValueEditable = true
-	SettingImageResizingUpdateParamsValueEditableFalse SettingImageResizingUpdateParamsValueEditable = false
+	SettingImageResizingEditParamsValueEditableTrue  SettingImageResizingEditParamsValueEditable = true
+	SettingImageResizingEditParamsValueEditableFalse SettingImageResizingEditParamsValueEditable = false
 )
 
-type SettingImageResizingUpdateResponseEnvelope struct {
-	Errors   []SettingImageResizingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingImageResizingUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingImageResizingEditResponseEnvelope struct {
+	Errors   []SettingImageResizingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingImageResizingEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Image Resizing provides on-demand resizing, conversion and optimisation for
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 	// more information.
-	Result SettingImageResizingUpdateResponse             `json:"result"`
-	JSON   settingImageResizingUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingImageResizingEditResponse             `json:"result"`
+	JSON   settingImageResizingEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingImageResizingUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingImageResizingUpdateResponseEnvelope]
-type settingImageResizingUpdateResponseEnvelopeJSON struct {
+// settingImageResizingEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingImageResizingEditResponseEnvelope]
+type settingImageResizingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -254,45 +254,45 @@ type settingImageResizingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingImageResizingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingImageResizingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingImageResizingUpdateResponseEnvelopeErrors struct {
+type SettingImageResizingEditResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    settingImageResizingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingImageResizingEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingImageResizingEditResponseEnvelopeErrors]
+type settingImageResizingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingImageResizingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingImageResizingEditResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
-	JSON    settingImageResizingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingImageResizingEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingImageResizingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingImageResizingUpdateResponseEnvelopeErrors]
-type settingImageResizingUpdateResponseEnvelopeErrorsJSON struct {
+// settingImageResizingEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingImageResizingEditResponseEnvelopeMessages]
+type settingImageResizingEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingImageResizingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingImageResizingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingImageResizingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingImageResizingUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingImageResizingUpdateResponseEnvelopeMessages]
-type settingImageResizingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingImageResizingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingImageResizingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

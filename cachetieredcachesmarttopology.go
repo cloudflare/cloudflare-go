@@ -34,12 +34,12 @@ func NewCacheTieredCacheSmartTopologyService(opts ...option.RequestOption) (r *C
 	return
 }
 
-// Updates enablement of Tiered Cache
-func (r *CacheTieredCacheSmartTopologyService) Update(ctx context.Context, zoneID string, body CacheTieredCacheSmartTopologyUpdateParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyUpdateResponse, err error) {
+// Remvoves enablement of Smart Tiered Cache
+func (r *CacheTieredCacheSmartTopologyService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CacheTieredCacheSmartTopologyUpdateResponseEnvelope
+	var env CacheTieredCacheSmartTopologyDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,12 +47,12 @@ func (r *CacheTieredCacheSmartTopologyService) Update(ctx context.Context, zoneI
 	return
 }
 
-// Remvoves enablement of Smart Tiered Cache
-func (r *CacheTieredCacheSmartTopologyService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyDeleteResponse, err error) {
+// Updates enablement of Tiered Cache
+func (r *CacheTieredCacheSmartTopologyService) Edit(ctx context.Context, zoneID string, body CacheTieredCacheSmartTopologyEditParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CacheTieredCacheSmartTopologyDeleteResponseEnvelope
+	var env CacheTieredCacheSmartTopologyEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,23 +73,6 @@ func (r *CacheTieredCacheSmartTopologyService) Get(ctx context.Context, zoneID s
 	return
 }
 
-// Union satisfied by [CacheTieredCacheSmartTopologyUpdateResponseUnknown] or
-// [shared.UnionString].
-type CacheTieredCacheSmartTopologyUpdateResponse interface {
-	ImplementsCacheTieredCacheSmartTopologyUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CacheTieredCacheSmartTopologyUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 // Union satisfied by [CacheTieredCacheSmartTopologyDeleteResponseUnknown] or
 // [shared.UnionString].
 type CacheTieredCacheSmartTopologyDeleteResponse interface {
@@ -99,6 +82,23 @@ type CacheTieredCacheSmartTopologyDeleteResponse interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*CacheTieredCacheSmartTopologyDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [CacheTieredCacheSmartTopologyEditResponseUnknown] or
+// [shared.UnionString].
+type CacheTieredCacheSmartTopologyEditResponse interface {
+	ImplementsCacheTieredCacheSmartTopologyEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CacheTieredCacheSmartTopologyEditResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -123,94 +123,6 @@ func init() {
 		},
 	)
 }
-
-type CacheTieredCacheSmartTopologyUpdateParams struct {
-	// Enables Tiered Cache.
-	Value param.Field[CacheTieredCacheSmartTopologyUpdateParamsValue] `json:"value,required"`
-}
-
-func (r CacheTieredCacheSmartTopologyUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Enables Tiered Cache.
-type CacheTieredCacheSmartTopologyUpdateParamsValue string
-
-const (
-	CacheTieredCacheSmartTopologyUpdateParamsValueOn  CacheTieredCacheSmartTopologyUpdateParamsValue = "on"
-	CacheTieredCacheSmartTopologyUpdateParamsValueOff CacheTieredCacheSmartTopologyUpdateParamsValue = "off"
-)
-
-type CacheTieredCacheSmartTopologyUpdateResponseEnvelope struct {
-	Errors   []CacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CacheTieredCacheSmartTopologyUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheTieredCacheSmartTopologyUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheTieredCacheSmartTopologyUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// cacheTieredCacheSmartTopologyUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [CacheTieredCacheSmartTopologyUpdateResponseEnvelope]
-type cacheTieredCacheSmartTopologyUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheTieredCacheSmartTopologyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    cacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [CacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrors]
-type cacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheTieredCacheSmartTopologyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    cacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [CacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessages]
-type cacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheTieredCacheSmartTopologyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CacheTieredCacheSmartTopologyUpdateResponseEnvelopeSuccess bool
-
-const (
-	CacheTieredCacheSmartTopologyUpdateResponseEnvelopeSuccessTrue CacheTieredCacheSmartTopologyUpdateResponseEnvelopeSuccess = true
-)
 
 type CacheTieredCacheSmartTopologyDeleteResponseEnvelope struct {
 	Errors   []CacheTieredCacheSmartTopologyDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -281,6 +193,94 @@ type CacheTieredCacheSmartTopologyDeleteResponseEnvelopeSuccess bool
 
 const (
 	CacheTieredCacheSmartTopologyDeleteResponseEnvelopeSuccessTrue CacheTieredCacheSmartTopologyDeleteResponseEnvelopeSuccess = true
+)
+
+type CacheTieredCacheSmartTopologyEditParams struct {
+	// Enables Tiered Cache.
+	Value param.Field[CacheTieredCacheSmartTopologyEditParamsValue] `json:"value,required"`
+}
+
+func (r CacheTieredCacheSmartTopologyEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Enables Tiered Cache.
+type CacheTieredCacheSmartTopologyEditParamsValue string
+
+const (
+	CacheTieredCacheSmartTopologyEditParamsValueOn  CacheTieredCacheSmartTopologyEditParamsValue = "on"
+	CacheTieredCacheSmartTopologyEditParamsValueOff CacheTieredCacheSmartTopologyEditParamsValue = "off"
+)
+
+type CacheTieredCacheSmartTopologyEditResponseEnvelope struct {
+	Errors   []CacheTieredCacheSmartTopologyEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheTieredCacheSmartTopologyEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   CacheTieredCacheSmartTopologyEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    cacheTieredCacheSmartTopologyEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// cacheTieredCacheSmartTopologyEditResponseEnvelopeJSON contains the JSON metadata
+// for the struct [CacheTieredCacheSmartTopologyEditResponseEnvelope]
+type cacheTieredCacheSmartTopologyEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheTieredCacheSmartTopologyEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheTieredCacheSmartTopologyEditResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    cacheTieredCacheSmartTopologyEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheTieredCacheSmartTopologyEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [CacheTieredCacheSmartTopologyEditResponseEnvelopeErrors]
+type cacheTieredCacheSmartTopologyEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheTieredCacheSmartTopologyEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheTieredCacheSmartTopologyEditResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    cacheTieredCacheSmartTopologyEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheTieredCacheSmartTopologyEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [CacheTieredCacheSmartTopologyEditResponseEnvelopeMessages]
+type cacheTieredCacheSmartTopologyEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheTieredCacheSmartTopologyEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccess bool
+
+const (
+	CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccessTrue CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccess = true
 )
 
 type CacheTieredCacheSmartTopologyGetResponseEnvelope struct {

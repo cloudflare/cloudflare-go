@@ -35,9 +35,9 @@ func NewArgoSmartRoutingService(opts ...option.RequestOption) (r *ArgoSmartRouti
 }
 
 // Updates enablement of Argo Smart Routing.
-func (r *ArgoSmartRoutingService) Update(ctx context.Context, zoneID string, body ArgoSmartRoutingUpdateParams, opts ...option.RequestOption) (res *ArgoSmartRoutingUpdateResponse, err error) {
+func (r *ArgoSmartRoutingService) Edit(ctx context.Context, zoneID string, body ArgoSmartRoutingEditParams, opts ...option.RequestOption) (res *ArgoSmartRoutingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ArgoSmartRoutingUpdateResponseEnvelope
+	var env ArgoSmartRoutingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -60,15 +60,15 @@ func (r *ArgoSmartRoutingService) Get(ctx context.Context, zoneID string, opts .
 	return
 }
 
-// Union satisfied by [ArgoSmartRoutingUpdateResponseUnknown] or
+// Union satisfied by [ArgoSmartRoutingEditResponseUnknown] or
 // [shared.UnionString].
-type ArgoSmartRoutingUpdateResponse interface {
-	ImplementsArgoSmartRoutingUpdateResponse()
+type ArgoSmartRoutingEditResponse interface {
+	ImplementsArgoSmartRoutingEditResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ArgoSmartRoutingUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*ArgoSmartRoutingEditResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -93,35 +93,35 @@ func init() {
 	)
 }
 
-type ArgoSmartRoutingUpdateParams struct {
+type ArgoSmartRoutingEditParams struct {
 	// Enables Argo Smart Routing.
-	Value param.Field[ArgoSmartRoutingUpdateParamsValue] `json:"value,required"`
+	Value param.Field[ArgoSmartRoutingEditParamsValue] `json:"value,required"`
 }
 
-func (r ArgoSmartRoutingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r ArgoSmartRoutingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables Argo Smart Routing.
-type ArgoSmartRoutingUpdateParamsValue string
+type ArgoSmartRoutingEditParamsValue string
 
 const (
-	ArgoSmartRoutingUpdateParamsValueOn  ArgoSmartRoutingUpdateParamsValue = "on"
-	ArgoSmartRoutingUpdateParamsValueOff ArgoSmartRoutingUpdateParamsValue = "off"
+	ArgoSmartRoutingEditParamsValueOn  ArgoSmartRoutingEditParamsValue = "on"
+	ArgoSmartRoutingEditParamsValueOff ArgoSmartRoutingEditParamsValue = "off"
 )
 
-type ArgoSmartRoutingUpdateResponseEnvelope struct {
-	Errors   []ArgoSmartRoutingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ArgoSmartRoutingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ArgoSmartRoutingUpdateResponse                   `json:"result,required"`
+type ArgoSmartRoutingEditResponseEnvelope struct {
+	Errors   []ArgoSmartRoutingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ArgoSmartRoutingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ArgoSmartRoutingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ArgoSmartRoutingUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    argoSmartRoutingUpdateResponseEnvelopeJSON    `json:"-"`
+	Success ArgoSmartRoutingEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    argoSmartRoutingEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// argoSmartRoutingUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ArgoSmartRoutingUpdateResponseEnvelope]
-type argoSmartRoutingUpdateResponseEnvelopeJSON struct {
+// argoSmartRoutingEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ArgoSmartRoutingEditResponseEnvelope]
+type argoSmartRoutingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -130,53 +130,53 @@ type argoSmartRoutingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ArgoSmartRoutingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ArgoSmartRoutingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ArgoSmartRoutingUpdateResponseEnvelopeErrors struct {
+type ArgoSmartRoutingEditResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    argoSmartRoutingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// argoSmartRoutingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ArgoSmartRoutingEditResponseEnvelopeErrors]
+type argoSmartRoutingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ArgoSmartRoutingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ArgoSmartRoutingEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    argoSmartRoutingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    argoSmartRoutingEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// argoSmartRoutingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ArgoSmartRoutingUpdateResponseEnvelopeErrors]
-type argoSmartRoutingUpdateResponseEnvelopeErrorsJSON struct {
+// argoSmartRoutingEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ArgoSmartRoutingEditResponseEnvelopeMessages]
+type argoSmartRoutingEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ArgoSmartRoutingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ArgoSmartRoutingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    argoSmartRoutingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// argoSmartRoutingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [ArgoSmartRoutingUpdateResponseEnvelopeMessages]
-type argoSmartRoutingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ArgoSmartRoutingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ArgoSmartRoutingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ArgoSmartRoutingUpdateResponseEnvelopeSuccess bool
+type ArgoSmartRoutingEditResponseEnvelopeSuccess bool
 
 const (
-	ArgoSmartRoutingUpdateResponseEnvelopeSuccessTrue ArgoSmartRoutingUpdateResponseEnvelopeSuccess = true
+	ArgoSmartRoutingEditResponseEnvelopeSuccessTrue ArgoSmartRoutingEditResponseEnvelopeSuccess = true
 )
 
 type ArgoSmartRoutingGetResponseEnvelope struct {

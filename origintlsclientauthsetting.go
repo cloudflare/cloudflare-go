@@ -31,6 +31,21 @@ func NewOriginTLSClientAuthSettingService(opts ...option.RequestOption) (r *Orig
 	return
 }
 
+// Enable or disable zone-level authenticated origin pulls. 'enabled' should be set
+// true either before/after the certificate is uploaded to see the certificate in
+// use.
+func (r *OriginTLSClientAuthSettingService) Update(ctx context.Context, zoneID string, body OriginTLSClientAuthSettingUpdateParams, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env OriginTLSClientAuthSettingUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get whether zone-level authenticated origin pulls is enabled or not. It is false
 // by default.
 func (r *OriginTLSClientAuthSettingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingGetResponse, err error) {
@@ -45,19 +60,22 @@ func (r *OriginTLSClientAuthSettingService) Get(ctx context.Context, zoneID stri
 	return
 }
 
-// Enable or disable zone-level authenticated origin pulls. 'enabled' should be set
-// true either before/after the certificate is uploaded to see the certificate in
-// use.
-func (r *OriginTLSClientAuthSettingService) Replace(ctx context.Context, zoneID string, body OriginTLSClientAuthSettingReplaceParams, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env OriginTLSClientAuthSettingReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type OriginTLSClientAuthSettingUpdateResponse struct {
+	// Indicates whether zone-level authenticated origin pulls is enabled.
+	Enabled bool                                         `json:"enabled"`
+	JSON    originTLSClientAuthSettingUpdateResponseJSON `json:"-"`
+}
+
+// originTLSClientAuthSettingUpdateResponseJSON contains the JSON metadata for the
+// struct [OriginTLSClientAuthSettingUpdateResponse]
+type originTLSClientAuthSettingUpdateResponseJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type OriginTLSClientAuthSettingGetResponse struct {
@@ -78,23 +96,84 @@ func (r *OriginTLSClientAuthSettingGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type OriginTLSClientAuthSettingReplaceResponse struct {
+type OriginTLSClientAuthSettingUpdateParams struct {
 	// Indicates whether zone-level authenticated origin pulls is enabled.
-	Enabled bool                                          `json:"enabled"`
-	JSON    originTLSClientAuthSettingReplaceResponseJSON `json:"-"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 }
 
-// originTLSClientAuthSettingReplaceResponseJSON contains the JSON metadata for the
-// struct [OriginTLSClientAuthSettingReplaceResponse]
-type originTLSClientAuthSettingReplaceResponseJSON struct {
-	Enabled     apijson.Field
+func (r OriginTLSClientAuthSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type OriginTLSClientAuthSettingUpdateResponseEnvelope struct {
+	Errors   []OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   OriginTLSClientAuthSettingUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    originTLSClientAuthSettingUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// originTLSClientAuthSettingUpdateResponseEnvelopeJSON contains the JSON metadata
+// for the struct [OriginTLSClientAuthSettingUpdateResponseEnvelope]
+type originTLSClientAuthSettingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginTLSClientAuthSettingReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginTLSClientAuthSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    originTLSClientAuthSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// originTLSClientAuthSettingUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors]
+type originTLSClientAuthSettingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    originTLSClientAuthSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// originTLSClientAuthSettingUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages]
+type originTLSClientAuthSettingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccess bool
+
+const (
+	OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccessTrue OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccess = true
+)
 
 type OriginTLSClientAuthSettingGetResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthSettingGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -163,84 +242,4 @@ type OriginTLSClientAuthSettingGetResponseEnvelopeSuccess bool
 
 const (
 	OriginTLSClientAuthSettingGetResponseEnvelopeSuccessTrue OriginTLSClientAuthSettingGetResponseEnvelopeSuccess = true
-)
-
-type OriginTLSClientAuthSettingReplaceParams struct {
-	// Indicates whether zone-level authenticated origin pulls is enabled.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r OriginTLSClientAuthSettingReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OriginTLSClientAuthSettingReplaceResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthSettingReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthSettingReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginTLSClientAuthSettingReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success OriginTLSClientAuthSettingReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    originTLSClientAuthSettingReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// originTLSClientAuthSettingReplaceResponseEnvelopeJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthSettingReplaceResponseEnvelope]
-type originTLSClientAuthSettingReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthSettingReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginTLSClientAuthSettingReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    originTLSClientAuthSettingReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originTLSClientAuthSettingReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [OriginTLSClientAuthSettingReplaceResponseEnvelopeErrors]
-type originTLSClientAuthSettingReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthSettingReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginTLSClientAuthSettingReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    originTLSClientAuthSettingReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originTLSClientAuthSettingReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [OriginTLSClientAuthSettingReplaceResponseEnvelopeMessages]
-type originTLSClientAuthSettingReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthSettingReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type OriginTLSClientAuthSettingReplaceResponseEnvelopeSuccess bool
-
-const (
-	OriginTLSClientAuthSettingReplaceResponseEnvelopeSuccessTrue OriginTLSClientAuthSettingReplaceResponseEnvelopeSuccess = true
 )

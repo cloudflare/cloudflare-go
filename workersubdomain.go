@@ -31,6 +31,19 @@ func NewWorkerSubdomainService(opts ...option.RequestOption) (r *WorkerSubdomain
 	return
 }
 
+// Creates a Workers subdomain for an account.
+func (r *WorkerSubdomainService) Update(ctx context.Context, accountID string, body WorkerSubdomainUpdateParams, opts ...option.RequestOption) (res *WorkerSubdomainUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerSubdomainUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/subdomain", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Returns a Workers subdomain for an account.
 func (r *WorkerSubdomainService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *WorkerSubdomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -44,17 +57,21 @@ func (r *WorkerSubdomainService) Get(ctx context.Context, accountID string, opts
 	return
 }
 
-// Creates a Workers subdomain for an account.
-func (r *WorkerSubdomainService) Replace(ctx context.Context, accountID string, body WorkerSubdomainReplaceParams, opts ...option.RequestOption) (res *WorkerSubdomainReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerSubdomainReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/subdomain", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type WorkerSubdomainUpdateResponse struct {
+	Name interface{}                       `json:"name"`
+	JSON workerSubdomainUpdateResponseJSON `json:"-"`
+}
+
+// workerSubdomainUpdateResponseJSON contains the JSON metadata for the struct
+// [WorkerSubdomainUpdateResponse]
+type workerSubdomainUpdateResponseJSON struct {
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerSubdomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerSubdomainGetResponse struct {
@@ -74,22 +91,82 @@ func (r *WorkerSubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerSubdomainReplaceResponse struct {
-	Name interface{}                        `json:"name"`
-	JSON workerSubdomainReplaceResponseJSON `json:"-"`
+type WorkerSubdomainUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
 }
 
-// workerSubdomainReplaceResponseJSON contains the JSON metadata for the struct
-// [WorkerSubdomainReplaceResponse]
-type workerSubdomainReplaceResponseJSON struct {
-	Name        apijson.Field
+func (r WorkerSubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type WorkerSubdomainUpdateResponseEnvelope struct {
+	Errors   []WorkerSubdomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerSubdomainUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerSubdomainUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerSubdomainUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerSubdomainUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerSubdomainUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerSubdomainUpdateResponseEnvelope]
+type workerSubdomainUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerSubdomainReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerSubdomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type WorkerSubdomainUpdateResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    workerSubdomainUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerSubdomainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [WorkerSubdomainUpdateResponseEnvelopeErrors]
+type workerSubdomainUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerSubdomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerSubdomainUpdateResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    workerSubdomainUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerSubdomainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerSubdomainUpdateResponseEnvelopeMessages]
+type workerSubdomainUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerSubdomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerSubdomainUpdateResponseEnvelopeSuccess bool
+
+const (
+	WorkerSubdomainUpdateResponseEnvelopeSuccessTrue WorkerSubdomainUpdateResponseEnvelopeSuccess = true
+)
 
 type WorkerSubdomainGetResponseEnvelope struct {
 	Errors   []WorkerSubdomainGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -158,81 +235,4 @@ type WorkerSubdomainGetResponseEnvelopeSuccess bool
 
 const (
 	WorkerSubdomainGetResponseEnvelopeSuccessTrue WorkerSubdomainGetResponseEnvelopeSuccess = true
-)
-
-type WorkerSubdomainReplaceParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r WorkerSubdomainReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type WorkerSubdomainReplaceResponseEnvelope struct {
-	Errors   []WorkerSubdomainReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerSubdomainReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerSubdomainReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerSubdomainReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerSubdomainReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerSubdomainReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerSubdomainReplaceResponseEnvelope]
-type workerSubdomainReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerSubdomainReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerSubdomainReplaceResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    workerSubdomainReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerSubdomainReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [WorkerSubdomainReplaceResponseEnvelopeErrors]
-type workerSubdomainReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerSubdomainReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerSubdomainReplaceResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    workerSubdomainReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerSubdomainReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WorkerSubdomainReplaceResponseEnvelopeMessages]
-type workerSubdomainReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerSubdomainReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerSubdomainReplaceResponseEnvelopeSuccess bool
-
-const (
-	WorkerSubdomainReplaceResponseEnvelopeSuccessTrue WorkerSubdomainReplaceResponseEnvelopeSuccess = true
 )

@@ -34,9 +34,9 @@ func NewSettingIPV6Service(opts ...option.RequestOption) (r *SettingIPV6Service)
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Update(ctx context.Context, zoneID string, body SettingIPV6UpdateParams, opts ...option.RequestOption) (res *SettingIPV6UpdateResponse, err error) {
+func (r *SettingIPV6Service) Edit(ctx context.Context, zoneID string, body SettingIPV6EditParams, opts ...option.RequestOption) (res *SettingIPV6EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingIPV6UpdateResponseEnvelope
+	var env SettingIPV6EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingIPV6Service) Get(ctx context.Context, zoneID string, opts ...opt
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type SettingIPV6UpdateResponse struct {
+type SettingIPV6EditResponse struct {
 	// ID of the zone setting.
-	ID SettingIPV6UpdateResponseID `json:"id,required"`
+	ID SettingIPV6EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingIPV6UpdateResponseValue `json:"value,required"`
+	Value SettingIPV6EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingIPV6UpdateResponseEditable `json:"editable"`
+	Editable SettingIPV6EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingIPV6UpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingIPV6EditResponseJSON `json:"-"`
 }
 
-// settingIPV6UpdateResponseJSON contains the JSON metadata for the struct
-// [SettingIPV6UpdateResponse]
-type settingIPV6UpdateResponseJSON struct {
+// settingIPV6EditResponseJSON contains the JSON metadata for the struct
+// [SettingIPV6EditResponse]
+type settingIPV6EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingIPV6UpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPV6UpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPV6EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingIPV6UpdateResponseID string
+type SettingIPV6EditResponseID string
 
 const (
-	SettingIPV6UpdateResponseIDIPV6 SettingIPV6UpdateResponseID = "ipv6"
+	SettingIPV6EditResponseIDIPV6 SettingIPV6EditResponseID = "ipv6"
 )
 
 // Current value of the zone setting.
-type SettingIPV6UpdateResponseValue string
+type SettingIPV6EditResponseValue string
 
 const (
-	SettingIPV6UpdateResponseValueOff SettingIPV6UpdateResponseValue = "off"
-	SettingIPV6UpdateResponseValueOn  SettingIPV6UpdateResponseValue = "on"
+	SettingIPV6EditResponseValueOff SettingIPV6EditResponseValue = "off"
+	SettingIPV6EditResponseValueOn  SettingIPV6EditResponseValue = "on"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingIPV6UpdateResponseEditable bool
+type SettingIPV6EditResponseEditable bool
 
 const (
-	SettingIPV6UpdateResponseEditableTrue  SettingIPV6UpdateResponseEditable = true
-	SettingIPV6UpdateResponseEditableFalse SettingIPV6UpdateResponseEditable = false
+	SettingIPV6EditResponseEditableTrue  SettingIPV6EditResponseEditable = true
+	SettingIPV6EditResponseEditableFalse SettingIPV6EditResponseEditable = false
 )
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
@@ -168,37 +168,37 @@ const (
 	SettingIPV6GetResponseEditableFalse SettingIPV6GetResponseEditable = false
 )
 
-type SettingIPV6UpdateParams struct {
+type SettingIPV6EditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingIPV6UpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingIPV6EditParamsValue] `json:"value,required"`
 }
 
-func (r SettingIPV6UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingIPV6EditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingIPV6UpdateParamsValue string
+type SettingIPV6EditParamsValue string
 
 const (
-	SettingIPV6UpdateParamsValueOff SettingIPV6UpdateParamsValue = "off"
-	SettingIPV6UpdateParamsValueOn  SettingIPV6UpdateParamsValue = "on"
+	SettingIPV6EditParamsValueOff SettingIPV6EditParamsValue = "off"
+	SettingIPV6EditParamsValueOn  SettingIPV6EditParamsValue = "on"
 )
 
-type SettingIPV6UpdateResponseEnvelope struct {
-	Errors   []SettingIPV6UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPV6UpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingIPV6EditResponseEnvelope struct {
+	Errors   []SettingIPV6EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingIPV6EditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IPv6 on all subdomains that are Cloudflare enabled.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-	Result SettingIPV6UpdateResponse             `json:"result"`
-	JSON   settingIPV6UpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingIPV6EditResponse             `json:"result"`
+	JSON   settingIPV6EditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingIPV6UpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingIPV6UpdateResponseEnvelope]
-type settingIPV6UpdateResponseEnvelopeJSON struct {
+// settingIPV6EditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingIPV6EditResponseEnvelope]
+type settingIPV6EditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,45 +207,45 @@ type settingIPV6UpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPV6UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPV6EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingIPV6UpdateResponseEnvelopeErrors struct {
+type SettingIPV6EditResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    settingIPV6EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingIPV6EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingIPV6EditResponseEnvelopeErrors]
+type settingIPV6EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingIPV6EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingIPV6EditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
-	JSON    settingIPV6UpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingIPV6EditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingIPV6UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingIPV6UpdateResponseEnvelopeErrors]
-type settingIPV6UpdateResponseEnvelopeErrorsJSON struct {
+// settingIPV6EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingIPV6EditResponseEnvelopeMessages]
+type settingIPV6EditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPV6UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingIPV6UpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    settingIPV6UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPV6UpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingIPV6UpdateResponseEnvelopeMessages]
-type settingIPV6UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPV6UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPV6EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

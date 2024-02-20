@@ -35,9 +35,9 @@ func NewSettingSortQueryStringForCacheService(opts ...option.RequestOption) (r *
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-func (r *SettingSortQueryStringForCacheService) Update(ctx context.Context, zoneID string, body SettingSortQueryStringForCacheUpdateParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheUpdateResponse, err error) {
+func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, zoneID string, body SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingSortQueryStringForCacheUpdateResponseEnvelope
+	var env SettingSortQueryStringForCacheEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -65,22 +65,22 @@ func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, zoneID 
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-type SettingSortQueryStringForCacheUpdateResponse struct {
+type SettingSortQueryStringForCacheEditResponse struct {
 	// ID of the zone setting.
-	ID SettingSortQueryStringForCacheUpdateResponseID `json:"id,required"`
+	ID SettingSortQueryStringForCacheEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSortQueryStringForCacheUpdateResponseValue `json:"value,required"`
+	Value SettingSortQueryStringForCacheEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingSortQueryStringForCacheUpdateResponseEditable `json:"editable"`
+	Editable SettingSortQueryStringForCacheEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSortQueryStringForCacheUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingSortQueryStringForCacheEditResponseJSON `json:"-"`
 }
 
-// settingSortQueryStringForCacheUpdateResponseJSON contains the JSON metadata for
-// the struct [SettingSortQueryStringForCacheUpdateResponse]
-type settingSortQueryStringForCacheUpdateResponseJSON struct {
+// settingSortQueryStringForCacheEditResponseJSON contains the JSON metadata for
+// the struct [SettingSortQueryStringForCacheEditResponse]
+type settingSortQueryStringForCacheEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,32 +89,32 @@ type settingSortQueryStringForCacheUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSortQueryStringForCacheUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSortQueryStringForCacheEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingSortQueryStringForCacheUpdateResponseID string
+type SettingSortQueryStringForCacheEditResponseID string
 
 const (
-	SettingSortQueryStringForCacheUpdateResponseIDSortQueryStringForCache SettingSortQueryStringForCacheUpdateResponseID = "sort_query_string_for_cache"
+	SettingSortQueryStringForCacheEditResponseIDSortQueryStringForCache SettingSortQueryStringForCacheEditResponseID = "sort_query_string_for_cache"
 )
 
 // Current value of the zone setting.
-type SettingSortQueryStringForCacheUpdateResponseValue string
+type SettingSortQueryStringForCacheEditResponseValue string
 
 const (
-	SettingSortQueryStringForCacheUpdateResponseValueOn  SettingSortQueryStringForCacheUpdateResponseValue = "on"
-	SettingSortQueryStringForCacheUpdateResponseValueOff SettingSortQueryStringForCacheUpdateResponseValue = "off"
+	SettingSortQueryStringForCacheEditResponseValueOn  SettingSortQueryStringForCacheEditResponseValue = "on"
+	SettingSortQueryStringForCacheEditResponseValueOff SettingSortQueryStringForCacheEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingSortQueryStringForCacheUpdateResponseEditable bool
+type SettingSortQueryStringForCacheEditResponseEditable bool
 
 const (
-	SettingSortQueryStringForCacheUpdateResponseEditableTrue  SettingSortQueryStringForCacheUpdateResponseEditable = true
-	SettingSortQueryStringForCacheUpdateResponseEditableFalse SettingSortQueryStringForCacheUpdateResponseEditable = false
+	SettingSortQueryStringForCacheEditResponseEditableTrue  SettingSortQueryStringForCacheEditResponseEditable = true
+	SettingSortQueryStringForCacheEditResponseEditableFalse SettingSortQueryStringForCacheEditResponseEditable = false
 )
 
 // Cloudflare will treat files with the same query strings as the same file in
@@ -172,38 +172,38 @@ const (
 	SettingSortQueryStringForCacheGetResponseEditableFalse SettingSortQueryStringForCacheGetResponseEditable = false
 )
 
-type SettingSortQueryStringForCacheUpdateParams struct {
+type SettingSortQueryStringForCacheEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingSortQueryStringForCacheUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingSortQueryStringForCacheEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingSortQueryStringForCacheUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingSortQueryStringForCacheEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingSortQueryStringForCacheUpdateParamsValue string
+type SettingSortQueryStringForCacheEditParamsValue string
 
 const (
-	SettingSortQueryStringForCacheUpdateParamsValueOn  SettingSortQueryStringForCacheUpdateParamsValue = "on"
-	SettingSortQueryStringForCacheUpdateParamsValueOff SettingSortQueryStringForCacheUpdateParamsValue = "off"
+	SettingSortQueryStringForCacheEditParamsValueOn  SettingSortQueryStringForCacheEditParamsValue = "on"
+	SettingSortQueryStringForCacheEditParamsValueOff SettingSortQueryStringForCacheEditParamsValue = "off"
 )
 
-type SettingSortQueryStringForCacheUpdateResponseEnvelope struct {
-	Errors   []SettingSortQueryStringForCacheUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSortQueryStringForCacheUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingSortQueryStringForCacheEditResponseEnvelope struct {
+	Errors   []SettingSortQueryStringForCacheEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingSortQueryStringForCacheEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will treat files with the same query strings as the same file in
 	// cache, regardless of the order of the query strings. This is limited to
 	// Enterprise Zones.
-	Result SettingSortQueryStringForCacheUpdateResponse             `json:"result"`
-	JSON   settingSortQueryStringForCacheUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingSortQueryStringForCacheEditResponse             `json:"result"`
+	JSON   settingSortQueryStringForCacheEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingSortQueryStringForCacheUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [SettingSortQueryStringForCacheUpdateResponseEnvelope]
-type settingSortQueryStringForCacheUpdateResponseEnvelopeJSON struct {
+// settingSortQueryStringForCacheEditResponseEnvelopeJSON contains the JSON
+// metadata for the struct [SettingSortQueryStringForCacheEditResponseEnvelope]
+type settingSortQueryStringForCacheEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -212,47 +212,47 @@ type settingSortQueryStringForCacheUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSortQueryStringForCacheUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSortQueryStringForCacheEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingSortQueryStringForCacheUpdateResponseEnvelopeErrors struct {
+type SettingSortQueryStringForCacheEditResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [SettingSortQueryStringForCacheEditResponseEnvelopeErrors]
+type settingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingSortQueryStringForCacheEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSortQueryStringForCacheEditResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
-	JSON    settingSortQueryStringForCacheUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingSortQueryStringForCacheUpdateResponseEnvelopeErrorsJSON contains the JSON
+// settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [SettingSortQueryStringForCacheUpdateResponseEnvelopeErrors]
-type settingSortQueryStringForCacheUpdateResponseEnvelopeErrorsJSON struct {
+// [SettingSortQueryStringForCacheEditResponseEnvelopeMessages]
+type settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSortQueryStringForCacheUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingSortQueryStringForCacheUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    settingSortQueryStringForCacheUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSortQueryStringForCacheUpdateResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [SettingSortQueryStringForCacheUpdateResponseEnvelopeMessages]
-type settingSortQueryStringForCacheUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSortQueryStringForCacheUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSortQueryStringForCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

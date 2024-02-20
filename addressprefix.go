@@ -52,19 +52,6 @@ func (r *AddressPrefixService) New(ctx context.Context, accountID string, body A
 	return
 }
 
-// Modify the description for a prefix owned by the account.
-func (r *AddressPrefixService) Update(ctx context.Context, accountID string, prefixID string, body AddressPrefixUpdateParams, opts ...option.RequestOption) (res *AddressPrefixUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AddressPrefixUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List all prefixes owned by the account.
 func (r *AddressPrefixService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AddressPrefixListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -84,6 +71,19 @@ func (r *AddressPrefixService) Delete(ctx context.Context, accountID string, pre
 	var env AddressPrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Modify the description for a prefix owned by the account.
+func (r *AddressPrefixService) Edit(ctx context.Context, accountID string, prefixID string, body AddressPrefixEditParams, opts ...option.RequestOption) (res *AddressPrefixEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AddressPrefixEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -157,62 +157,6 @@ type addressPrefixNewResponseJSON struct {
 }
 
 func (r *AddressPrefixNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixUpdateResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	AccountID string `json:"account_id"`
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Approval state of the prefix (P = pending, V = active).
-	Approved string `json:"approved"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn int64 `json:"asn,nullable"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Description of the prefix.
-	Description string `json:"description"`
-	// Identifier for the uploaded LOA document.
-	LoaDocumentID string    `json:"loa_document_id,nullable"`
-	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                            `json:"on_demand_locked"`
-	JSON           addressPrefixUpdateResponseJSON `json:"-"`
-}
-
-// addressPrefixUpdateResponseJSON contains the JSON metadata for the struct
-// [AddressPrefixUpdateResponse]
-type addressPrefixUpdateResponseJSON struct {
-	ID                   apijson.Field
-	AccountID            apijson.Field
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	Approved             apijson.Field
-	Asn                  apijson.Field
-	Cidr                 apijson.Field
-	CreatedAt            apijson.Field
-	Description          apijson.Field
-	LoaDocumentID        apijson.Field
-	ModifiedAt           apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AddressPrefixUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -292,6 +236,62 @@ func init() {
 type AddressPrefixDeleteResponseArray []interface{}
 
 func (r AddressPrefixDeleteResponseArray) ImplementsAddressPrefixDeleteResponse() {}
+
+type AddressPrefixEditResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	AccountID string `json:"account_id"`
+	// Prefix advertisement status to the Internet. This field is only not 'null' if on
+	// demand is enabled.
+	Advertised bool `json:"advertised,nullable"`
+	// Last time the advertisement status was changed. This field is only not 'null' if
+	// on demand is enabled.
+	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
+	// Approval state of the prefix (P = pending, V = active).
+	Approved string `json:"approved"`
+	// Autonomous System Number (ASN) the prefix will be advertised under.
+	Asn int64 `json:"asn,nullable"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr      string    `json:"cidr"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Description of the prefix.
+	Description string `json:"description"`
+	// Identifier for the uploaded LOA document.
+	LoaDocumentID string    `json:"loa_document_id,nullable"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	// Whether advertisement of the prefix to the Internet may be dynamically enabled
+	// or disabled.
+	OnDemandEnabled bool `json:"on_demand_enabled"`
+	// Whether advertisement status of the prefix is locked, meaning it cannot be
+	// changed.
+	OnDemandLocked bool                          `json:"on_demand_locked"`
+	JSON           addressPrefixEditResponseJSON `json:"-"`
+}
+
+// addressPrefixEditResponseJSON contains the JSON metadata for the struct
+// [AddressPrefixEditResponse]
+type addressPrefixEditResponseJSON struct {
+	ID                   apijson.Field
+	AccountID            apijson.Field
+	Advertised           apijson.Field
+	AdvertisedModifiedAt apijson.Field
+	Approved             apijson.Field
+	Asn                  apijson.Field
+	Cidr                 apijson.Field
+	CreatedAt            apijson.Field
+	Description          apijson.Field
+	LoaDocumentID        apijson.Field
+	ModifiedAt           apijson.Field
+	OnDemandEnabled      apijson.Field
+	OnDemandLocked       apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AddressPrefixEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type AddressPrefixGetResponse struct {
 	// Identifier
@@ -429,84 +429,6 @@ type AddressPrefixNewResponseEnvelopeSuccess bool
 
 const (
 	AddressPrefixNewResponseEnvelopeSuccessTrue AddressPrefixNewResponseEnvelopeSuccess = true
-)
-
-type AddressPrefixUpdateParams struct {
-	// Description of the prefix.
-	Description param.Field[string] `json:"description,required"`
-}
-
-func (r AddressPrefixUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AddressPrefixUpdateResponseEnvelope struct {
-	Errors   []AddressPrefixUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressPrefixUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressPrefixUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AddressPrefixUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressPrefixUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressPrefixUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AddressPrefixUpdateResponseEnvelope]
-type addressPrefixUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    addressPrefixUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressPrefixUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AddressPrefixUpdateResponseEnvelopeErrors]
-type addressPrefixUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    addressPrefixUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressPrefixUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressPrefixUpdateResponseEnvelopeMessages]
-type addressPrefixUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressPrefixUpdateResponseEnvelopeSuccess bool
-
-const (
-	AddressPrefixUpdateResponseEnvelopeSuccessTrue AddressPrefixUpdateResponseEnvelopeSuccess = true
 )
 
 type AddressPrefixListResponseEnvelope struct {
@@ -704,6 +626,84 @@ type addressPrefixDeleteResponseEnvelopeResultInfoJSON struct {
 func (r *AddressPrefixDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AddressPrefixEditParams struct {
+	// Description of the prefix.
+	Description param.Field[string] `json:"description,required"`
+}
+
+func (r AddressPrefixEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AddressPrefixEditResponseEnvelope struct {
+	Errors   []AddressPrefixEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressPrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressPrefixEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AddressPrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressPrefixEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// addressPrefixEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AddressPrefixEditResponseEnvelope]
+type addressPrefixEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixEditResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    addressPrefixEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// addressPrefixEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AddressPrefixEditResponseEnvelopeErrors]
+type addressPrefixEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixEditResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    addressPrefixEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// addressPrefixEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AddressPrefixEditResponseEnvelopeMessages]
+type addressPrefixEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AddressPrefixEditResponseEnvelopeSuccess bool
+
+const (
+	AddressPrefixEditResponseEnvelopeSuccessTrue AddressPrefixEditResponseEnvelopeSuccess = true
+)
 
 type AddressPrefixGetResponseEnvelope struct {
 	Errors   []AddressPrefixGetResponseEnvelopeErrors   `json:"errors,required"`

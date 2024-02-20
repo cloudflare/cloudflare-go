@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingMinifyUpdateWithOptionalParams(t *testing.T) {
+func TestSettingMinifyEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,14 +29,14 @@ func TestSettingMinifyUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.Minify.Update(
+	_, err := client.Settings.Minify.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingMinifyUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingMinifyUpdateParamsValue{
-				Css:  cloudflare.F(cloudflare.SettingMinifyUpdateParamsValueCssOn),
-				HTML: cloudflare.F(cloudflare.SettingMinifyUpdateParamsValueHTMLOn),
-				Js:   cloudflare.F(cloudflare.SettingMinifyUpdateParamsValueJsOn),
+		cloudflare.SettingMinifyEditParams{
+			Value: cloudflare.F(cloudflare.SettingMinifyEditParamsValue{
+				Css:  cloudflare.F(cloudflare.SettingMinifyEditParamsValueCssOn),
+				HTML: cloudflare.F(cloudflare.SettingMinifyEditParamsValueHTMLOn),
+				Js:   cloudflare.F(cloudflare.SettingMinifyEditParamsValueJsOn),
 			}),
 		},
 	)

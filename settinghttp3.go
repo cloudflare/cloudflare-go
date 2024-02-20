@@ -33,9 +33,9 @@ func NewSettingHTTP3Service(opts ...option.RequestOption) (r *SettingHTTP3Servic
 }
 
 // Value of the HTTP3 setting.
-func (r *SettingHTTP3Service) Update(ctx context.Context, zoneID string, body SettingHTTP3UpdateParams, opts ...option.RequestOption) (res *SettingHTTP3UpdateResponse, err error) {
+func (r *SettingHTTP3Service) Edit(ctx context.Context, zoneID string, body SettingHTTP3EditParams, opts ...option.RequestOption) (res *SettingHTTP3EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingHTTP3UpdateResponseEnvelope
+	var env SettingHTTP3EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http3", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingHTTP3Service) Get(ctx context.Context, zoneID string, opts ...op
 }
 
 // HTTP3 enabled for this zone.
-type SettingHTTP3UpdateResponse struct {
+type SettingHTTP3EditResponse struct {
 	// ID of the zone setting.
-	ID SettingHTTP3UpdateResponseID `json:"id,required"`
+	ID SettingHTTP3EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingHTTP3UpdateResponseValue `json:"value,required"`
+	Value SettingHTTP3EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingHTTP3UpdateResponseEditable `json:"editable"`
+	Editable SettingHTTP3EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingHTTP3UpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingHTTP3EditResponseJSON `json:"-"`
 }
 
-// settingHTTP3UpdateResponseJSON contains the JSON metadata for the struct
-// [SettingHTTP3UpdateResponse]
-type settingHTTP3UpdateResponseJSON struct {
+// settingHTTP3EditResponseJSON contains the JSON metadata for the struct
+// [SettingHTTP3EditResponse]
+type settingHTTP3EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,32 +83,32 @@ type settingHTTP3UpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP3UpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP3EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingHTTP3UpdateResponseID string
+type SettingHTTP3EditResponseID string
 
 const (
-	SettingHTTP3UpdateResponseIDHTTP3 SettingHTTP3UpdateResponseID = "http3"
+	SettingHTTP3EditResponseIDHTTP3 SettingHTTP3EditResponseID = "http3"
 )
 
 // Current value of the zone setting.
-type SettingHTTP3UpdateResponseValue string
+type SettingHTTP3EditResponseValue string
 
 const (
-	SettingHTTP3UpdateResponseValueOn  SettingHTTP3UpdateResponseValue = "on"
-	SettingHTTP3UpdateResponseValueOff SettingHTTP3UpdateResponseValue = "off"
+	SettingHTTP3EditResponseValueOn  SettingHTTP3EditResponseValue = "on"
+	SettingHTTP3EditResponseValueOff SettingHTTP3EditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingHTTP3UpdateResponseEditable bool
+type SettingHTTP3EditResponseEditable bool
 
 const (
-	SettingHTTP3UpdateResponseEditableTrue  SettingHTTP3UpdateResponseEditable = true
-	SettingHTTP3UpdateResponseEditableFalse SettingHTTP3UpdateResponseEditable = false
+	SettingHTTP3EditResponseEditableTrue  SettingHTTP3EditResponseEditable = true
+	SettingHTTP3EditResponseEditableFalse SettingHTTP3EditResponseEditable = false
 )
 
 // HTTP3 enabled for this zone.
@@ -164,36 +164,36 @@ const (
 	SettingHTTP3GetResponseEditableFalse SettingHTTP3GetResponseEditable = false
 )
 
-type SettingHTTP3UpdateParams struct {
+type SettingHTTP3EditParams struct {
 	// Value of the HTTP3 setting.
-	Value param.Field[SettingHTTP3UpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingHTTP3EditParamsValue] `json:"value,required"`
 }
 
-func (r SettingHTTP3UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingHTTP3EditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the HTTP3 setting.
-type SettingHTTP3UpdateParamsValue string
+type SettingHTTP3EditParamsValue string
 
 const (
-	SettingHTTP3UpdateParamsValueOn  SettingHTTP3UpdateParamsValue = "on"
-	SettingHTTP3UpdateParamsValueOff SettingHTTP3UpdateParamsValue = "off"
+	SettingHTTP3EditParamsValueOn  SettingHTTP3EditParamsValue = "on"
+	SettingHTTP3EditParamsValueOff SettingHTTP3EditParamsValue = "off"
 )
 
-type SettingHTTP3UpdateResponseEnvelope struct {
-	Errors   []SettingHTTP3UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHTTP3UpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingHTTP3EditResponseEnvelope struct {
+	Errors   []SettingHTTP3EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingHTTP3EditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP3 enabled for this zone.
-	Result SettingHTTP3UpdateResponse             `json:"result"`
-	JSON   settingHTTP3UpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingHTTP3EditResponse             `json:"result"`
+	JSON   settingHTTP3EditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingHTTP3UpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingHTTP3UpdateResponseEnvelope]
-type settingHTTP3UpdateResponseEnvelopeJSON struct {
+// settingHTTP3EditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingHTTP3EditResponseEnvelope]
+type settingHTTP3EditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -202,45 +202,45 @@ type settingHTTP3UpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP3UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP3EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingHTTP3UpdateResponseEnvelopeErrors struct {
+type SettingHTTP3EditResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    settingHTTP3EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingHTTP3EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingHTTP3EditResponseEnvelopeErrors]
+type settingHTTP3EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingHTTP3EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingHTTP3EditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
-	JSON    settingHTTP3UpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingHTTP3EditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingHTTP3UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingHTTP3UpdateResponseEnvelopeErrors]
-type settingHTTP3UpdateResponseEnvelopeErrorsJSON struct {
+// settingHTTP3EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingHTTP3EditResponseEnvelopeMessages]
+type settingHTTP3EditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP3UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingHTTP3UpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingHTTP3UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHTTP3UpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingHTTP3UpdateResponseEnvelopeMessages]
-type settingHTTP3UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP3UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

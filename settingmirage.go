@@ -36,9 +36,9 @@ func NewSettingMirageService(opts ...option.RequestOption) (r *SettingMirageServ
 // Refer to our
 // [blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for more
 // information.
-func (r *SettingMirageService) Update(ctx context.Context, zoneID string, body SettingMirageUpdateParams, opts ...option.RequestOption) (res *SettingMirageUpdateResponse, err error) {
+func (r *SettingMirageService) Edit(ctx context.Context, zoneID string, body SettingMirageEditParams, opts ...option.RequestOption) (res *SettingMirageEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingMirageUpdateResponseEnvelope
+	var env SettingMirageEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/mirage", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -68,22 +68,22 @@ func (r *SettingMirageService) Get(ctx context.Context, zoneID string, opts ...o
 // Refer to
 // [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 // more information.
-type SettingMirageUpdateResponse struct {
+type SettingMirageEditResponse struct {
 	// ID of the zone setting.
-	ID SettingMirageUpdateResponseID `json:"id,required"`
+	ID SettingMirageEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingMirageUpdateResponseValue `json:"value,required"`
+	Value SettingMirageEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingMirageUpdateResponseEditable `json:"editable"`
+	Editable SettingMirageEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingMirageUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingMirageEditResponseJSON `json:"-"`
 }
 
-// settingMirageUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingMirageUpdateResponse]
-type settingMirageUpdateResponseJSON struct {
+// settingMirageEditResponseJSON contains the JSON metadata for the struct
+// [SettingMirageEditResponse]
+type settingMirageEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,32 +92,32 @@ type settingMirageUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingMirageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingMirageEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingMirageUpdateResponseID string
+type SettingMirageEditResponseID string
 
 const (
-	SettingMirageUpdateResponseIDMirage SettingMirageUpdateResponseID = "mirage"
+	SettingMirageEditResponseIDMirage SettingMirageEditResponseID = "mirage"
 )
 
 // Current value of the zone setting.
-type SettingMirageUpdateResponseValue string
+type SettingMirageEditResponseValue string
 
 const (
-	SettingMirageUpdateResponseValueOn  SettingMirageUpdateResponseValue = "on"
-	SettingMirageUpdateResponseValueOff SettingMirageUpdateResponseValue = "off"
+	SettingMirageEditResponseValueOn  SettingMirageEditResponseValue = "on"
+	SettingMirageEditResponseValueOff SettingMirageEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingMirageUpdateResponseEditable bool
+type SettingMirageEditResponseEditable bool
 
 const (
-	SettingMirageUpdateResponseEditableTrue  SettingMirageUpdateResponseEditable = true
-	SettingMirageUpdateResponseEditableFalse SettingMirageUpdateResponseEditable = false
+	SettingMirageEditResponseEditableTrue  SettingMirageEditResponseEditable = true
+	SettingMirageEditResponseEditableFalse SettingMirageEditResponseEditable = false
 )
 
 // Automatically optimize image loading for website visitors on mobile devices.
@@ -176,39 +176,39 @@ const (
 	SettingMirageGetResponseEditableFalse SettingMirageGetResponseEditable = false
 )
 
-type SettingMirageUpdateParams struct {
+type SettingMirageEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingMirageUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingMirageEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingMirageUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingMirageEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingMirageUpdateParamsValue string
+type SettingMirageEditParamsValue string
 
 const (
-	SettingMirageUpdateParamsValueOn  SettingMirageUpdateParamsValue = "on"
-	SettingMirageUpdateParamsValueOff SettingMirageUpdateParamsValue = "off"
+	SettingMirageEditParamsValueOn  SettingMirageEditParamsValue = "on"
+	SettingMirageEditParamsValueOff SettingMirageEditParamsValue = "off"
 )
 
-type SettingMirageUpdateResponseEnvelope struct {
-	Errors   []SettingMirageUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingMirageUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingMirageEditResponseEnvelope struct {
+	Errors   []SettingMirageEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingMirageEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Automatically optimize image loading for website visitors on mobile devices.
 	// Refer to
 	// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
 	// more information.
-	Result SettingMirageUpdateResponse             `json:"result"`
-	JSON   settingMirageUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingMirageEditResponse             `json:"result"`
+	JSON   settingMirageEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingMirageUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingMirageUpdateResponseEnvelope]
-type settingMirageUpdateResponseEnvelopeJSON struct {
+// settingMirageEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingMirageEditResponseEnvelope]
+type settingMirageEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -217,45 +217,45 @@ type settingMirageUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingMirageUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingMirageEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingMirageUpdateResponseEnvelopeErrors struct {
+type SettingMirageEditResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    settingMirageEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingMirageEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingMirageEditResponseEnvelopeErrors]
+type settingMirageEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingMirageEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingMirageEditResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    settingMirageUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingMirageEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingMirageUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingMirageUpdateResponseEnvelopeErrors]
-type settingMirageUpdateResponseEnvelopeErrorsJSON struct {
+// settingMirageEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingMirageEditResponseEnvelopeMessages]
+type settingMirageEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingMirageUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingMirageUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingMirageUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingMirageUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingMirageUpdateResponseEnvelopeMessages]
-type settingMirageUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingMirageUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingMirageEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

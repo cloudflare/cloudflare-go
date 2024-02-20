@@ -52,19 +52,6 @@ func (r *DNSFirewallService) New(ctx context.Context, accountID string, body DNS
 	return
 }
 
-// Modify a DNS Firewall Cluster configuration.
-func (r *DNSFirewallService) Update(ctx context.Context, accountID string, dnsFirewallID string, body DNSFirewallUpdateParams, opts ...option.RequestOption) (res *DNSFirewallUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DNSFirewallUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List configured DNS Firewall clusters for an account.
 func (r *DNSFirewallService) List(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSFirewallListResponse], err error) {
 	var raw *http.Response
@@ -94,6 +81,19 @@ func (r *DNSFirewallService) Delete(ctx context.Context, accountID string, dnsFi
 	var env DNSFirewallDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Modify a DNS Firewall Cluster configuration.
+func (r *DNSFirewallService) Edit(ctx context.Context, accountID string, dnsFirewallID string, body DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DNSFirewallEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -241,133 +241,6 @@ func (r *DNSFirewallNewResponseAttackMitigation) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallUpdateResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests bool                                     `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       []DNSFirewallUpdateResponseDNSFirewallIP `json:"dns_firewall_ips,required" format:"ipv4"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback bool `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
-	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
-	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
-	// Last modification of DNS Firewall cluster.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// DNS Firewall Cluster Name.
-	Name        string                                `json:"name,required"`
-	UpstreamIPs []DNSFirewallUpdateResponseUpstreamIP `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
-	AttackMitigation DNSFirewallUpdateResponseAttackMitigation `json:"attack_mitigation,nullable"`
-	// Negative DNS Cache TTL.
-	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
-	// Deprecated alias for "upstream_ips".
-	OriginIPs interface{} `json:"origin_ips"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
-	Ratelimit float64 `json:"ratelimit,nullable"`
-	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
-	Retries float64                       `json:"retries"`
-	JSON    dnsFirewallUpdateResponseJSON `json:"-"`
-}
-
-// dnsFirewallUpdateResponseJSON contains the JSON metadata for the struct
-// [DNSFirewallUpdateResponse]
-type dnsFirewallUpdateResponseJSON struct {
-	ID                   apijson.Field
-	DeprecateAnyRequests apijson.Field
-	DNSFirewallIPs       apijson.Field
-	EcsFallback          apijson.Field
-	MaximumCacheTTL      apijson.Field
-	MinimumCacheTTL      apijson.Field
-	ModifiedOn           apijson.Field
-	Name                 apijson.Field
-	UpstreamIPs          apijson.Field
-	AttackMitigation     apijson.Field
-	NegativeCacheTTL     apijson.Field
-	OriginIPs            apijson.Field
-	Ratelimit            apijson.Field
-	Retries              apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *DNSFirewallUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type DNSFirewallUpdateResponseDNSFirewallIP interface {
-	ImplementsDNSFirewallUpdateResponseDNSFirewallIP()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSFirewallUpdateResponseDNSFirewallIP)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Union satisfied by [shared.UnionString] or [shared.UnionString].
-type DNSFirewallUpdateResponseUpstreamIP interface {
-	ImplementsDNSFirewallUpdateResponseUpstreamIP()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSFirewallUpdateResponseUpstreamIP)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Attack mitigation settings.
-type DNSFirewallUpdateResponseAttackMitigation struct {
-	// When enabled, random-prefix attacks are automatically mitigated and the upstream
-	// DNS servers protected.
-	Enabled bool `json:"enabled"`
-	// Deprecated alias for "only_when_upstream_unhealthy".
-	OnlyWhenOriginUnhealthy interface{} `json:"only_when_origin_unhealthy"`
-	// Only mitigate attacks when upstream servers seem unhealthy.
-	OnlyWhenUpstreamUnhealthy bool                                          `json:"only_when_upstream_unhealthy"`
-	JSON                      dnsFirewallUpdateResponseAttackMitigationJSON `json:"-"`
-}
-
-// dnsFirewallUpdateResponseAttackMitigationJSON contains the JSON metadata for the
-// struct [DNSFirewallUpdateResponseAttackMitigation]
-type dnsFirewallUpdateResponseAttackMitigationJSON struct {
-	Enabled                   apijson.Field
-	OnlyWhenOriginUnhealthy   apijson.Field
-	OnlyWhenUpstreamUnhealthy apijson.Field
-	raw                       string
-	ExtraFields               map[string]apijson.Field
-}
-
-func (r *DNSFirewallUpdateResponseAttackMitigation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type DNSFirewallListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -510,6 +383,133 @@ type dnsFirewallDeleteResponseJSON struct {
 }
 
 func (r *DNSFirewallDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSFirewallEditResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Deprecate the response to ANY requests.
+	DeprecateAnyRequests bool                                   `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       []DNSFirewallEditResponseDNSFirewallIP `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
+	EcsFallback bool `json:"ecs_fallback,required"`
+	// Maximum DNS Cache TTL.
+	MaximumCacheTTL float64 `json:"maximum_cache_ttl,required"`
+	// Minimum DNS Cache TTL.
+	MinimumCacheTTL float64 `json:"minimum_cache_ttl,required"`
+	// Last modification of DNS Firewall cluster.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// DNS Firewall Cluster Name.
+	Name        string                              `json:"name,required"`
+	UpstreamIPs []DNSFirewallEditResponseUpstreamIP `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings.
+	AttackMitigation DNSFirewallEditResponseAttackMitigation `json:"attack_mitigation,nullable"`
+	// Negative DNS Cache TTL.
+	NegativeCacheTTL float64 `json:"negative_cache_ttl,nullable"`
+	// Deprecated alias for "upstream_ips".
+	OriginIPs interface{} `json:"origin_ips"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster).
+	Ratelimit float64 `json:"ratelimit,nullable"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt).
+	Retries float64                     `json:"retries"`
+	JSON    dnsFirewallEditResponseJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseJSON contains the JSON metadata for the struct
+// [DNSFirewallEditResponse]
+type dnsFirewallEditResponseJSON struct {
+	ID                   apijson.Field
+	DeprecateAnyRequests apijson.Field
+	DNSFirewallIPs       apijson.Field
+	EcsFallback          apijson.Field
+	MaximumCacheTTL      apijson.Field
+	MinimumCacheTTL      apijson.Field
+	ModifiedOn           apijson.Field
+	Name                 apijson.Field
+	UpstreamIPs          apijson.Field
+	AttackMitigation     apijson.Field
+	NegativeCacheTTL     apijson.Field
+	OriginIPs            apijson.Field
+	Ratelimit            apijson.Field
+	Retries              apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Cloudflare-assigned DNS IPv4 Address.
+//
+// Union satisfied by [shared.UnionString] or [shared.UnionString].
+type DNSFirewallEditResponseDNSFirewallIP interface {
+	ImplementsDNSFirewallEditResponseDNSFirewallIP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSFirewallEditResponseDNSFirewallIP)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Upstream DNS Server IPv4 Address.
+//
+// Union satisfied by [shared.UnionString] or [shared.UnionString].
+type DNSFirewallEditResponseUpstreamIP interface {
+	ImplementsDNSFirewallEditResponseUpstreamIP()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSFirewallEditResponseUpstreamIP)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Attack mitigation settings.
+type DNSFirewallEditResponseAttackMitigation struct {
+	// When enabled, random-prefix attacks are automatically mitigated and the upstream
+	// DNS servers protected.
+	Enabled bool `json:"enabled"`
+	// Deprecated alias for "only_when_upstream_unhealthy".
+	OnlyWhenOriginUnhealthy interface{} `json:"only_when_origin_unhealthy"`
+	// Only mitigate attacks when upstream servers seem unhealthy.
+	OnlyWhenUpstreamUnhealthy bool                                        `json:"only_when_upstream_unhealthy"`
+	JSON                      dnsFirewallEditResponseAttackMitigationJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseAttackMitigationJSON contains the JSON metadata for the
+// struct [DNSFirewallEditResponseAttackMitigation]
+type dnsFirewallEditResponseAttackMitigationJSON struct {
+	Enabled                   apijson.Field
+	OnlyWhenOriginUnhealthy   apijson.Field
+	OnlyWhenUpstreamUnhealthy apijson.Field
+	raw                       string
+	ExtraFields               map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseAttackMitigation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -761,135 +761,6 @@ const (
 	DNSFirewallNewResponseEnvelopeSuccessTrue DNSFirewallNewResponseEnvelopeSuccess = true
 )
 
-type DNSFirewallUpdateParams struct {
-	// Deprecate the response to ANY requests.
-	DeprecateAnyRequests param.Field[bool]                                   `json:"deprecate_any_requests,required"`
-	DNSFirewallIPs       param.Field[[]DNSFirewallUpdateParamsDNSFirewallIP] `json:"dns_firewall_ips,required" format:"ipv4"`
-	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
-	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
-	// Maximum DNS Cache TTL.
-	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
-	// Minimum DNS Cache TTL.
-	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
-	// DNS Firewall Cluster Name.
-	Name        param.Field[string]                              `json:"name,required"`
-	UpstreamIPs param.Field[[]DNSFirewallUpdateParamsUpstreamIP] `json:"upstream_ips,required" format:"ipv4"`
-	// Attack mitigation settings.
-	AttackMitigation param.Field[DNSFirewallUpdateParamsAttackMitigation] `json:"attack_mitigation"`
-	// Negative DNS Cache TTL.
-	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
-	// Deprecated alias for "upstream_ips".
-	OriginIPs param.Field[interface{}] `json:"origin_ips"`
-	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
-	// the upstream nameservers configured on the cluster).
-	Ratelimit param.Field[float64] `json:"ratelimit"`
-	// Number of retries for fetching DNS responses from upstream nameservers (not
-	// counting the initial attempt).
-	Retries param.Field[float64] `json:"retries"`
-}
-
-func (r DNSFirewallUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Cloudflare-assigned DNS IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type DNSFirewallUpdateParamsDNSFirewallIP interface {
-	ImplementsDNSFirewallUpdateParamsDNSFirewallIP()
-}
-
-// Upstream DNS Server IPv4 Address.
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type DNSFirewallUpdateParamsUpstreamIP interface {
-	ImplementsDNSFirewallUpdateParamsUpstreamIP()
-}
-
-// Attack mitigation settings.
-type DNSFirewallUpdateParamsAttackMitigation struct {
-	// When enabled, random-prefix attacks are automatically mitigated and the upstream
-	// DNS servers protected.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Deprecated alias for "only_when_upstream_unhealthy".
-	OnlyWhenOriginUnhealthy param.Field[interface{}] `json:"only_when_origin_unhealthy"`
-	// Only mitigate attacks when upstream servers seem unhealthy.
-	OnlyWhenUpstreamUnhealthy param.Field[bool] `json:"only_when_upstream_unhealthy"`
-}
-
-func (r DNSFirewallUpdateParamsAttackMitigation) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DNSFirewallUpdateResponseEnvelope struct {
-	Errors   []DNSFirewallUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSFirewallUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success DNSFirewallUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dnsFirewallUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// dnsFirewallUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DNSFirewallUpdateResponseEnvelope]
-type dnsFirewallUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    dnsFirewallUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnsFirewallUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DNSFirewallUpdateResponseEnvelopeErrors]
-type dnsFirewallUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    dnsFirewallUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnsFirewallUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSFirewallUpdateResponseEnvelopeMessages]
-type dnsFirewallUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DNSFirewallUpdateResponseEnvelopeSuccess bool
-
-const (
-	DNSFirewallUpdateResponseEnvelopeSuccessTrue DNSFirewallUpdateResponseEnvelopeSuccess = true
-)
-
 type DNSFirewallListParams struct {
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -972,6 +843,135 @@ type DNSFirewallDeleteResponseEnvelopeSuccess bool
 
 const (
 	DNSFirewallDeleteResponseEnvelopeSuccessTrue DNSFirewallDeleteResponseEnvelopeSuccess = true
+)
+
+type DNSFirewallEditParams struct {
+	// Deprecate the response to ANY requests.
+	DeprecateAnyRequests param.Field[bool]                                 `json:"deprecate_any_requests,required"`
+	DNSFirewallIPs       param.Field[[]DNSFirewallEditParamsDNSFirewallIP] `json:"dns_firewall_ips,required" format:"ipv4"`
+	// Forward client IP (resolver) subnet if no EDNS Client Subnet is sent.
+	EcsFallback param.Field[bool] `json:"ecs_fallback,required"`
+	// Maximum DNS Cache TTL.
+	MaximumCacheTTL param.Field[float64] `json:"maximum_cache_ttl,required"`
+	// Minimum DNS Cache TTL.
+	MinimumCacheTTL param.Field[float64] `json:"minimum_cache_ttl,required"`
+	// DNS Firewall Cluster Name.
+	Name        param.Field[string]                            `json:"name,required"`
+	UpstreamIPs param.Field[[]DNSFirewallEditParamsUpstreamIP] `json:"upstream_ips,required" format:"ipv4"`
+	// Attack mitigation settings.
+	AttackMitigation param.Field[DNSFirewallEditParamsAttackMitigation] `json:"attack_mitigation"`
+	// Negative DNS Cache TTL.
+	NegativeCacheTTL param.Field[float64] `json:"negative_cache_ttl"`
+	// Deprecated alias for "upstream_ips".
+	OriginIPs param.Field[interface{}] `json:"origin_ips"`
+	// Ratelimit in queries per second per datacenter (applies to DNS queries sent to
+	// the upstream nameservers configured on the cluster).
+	Ratelimit param.Field[float64] `json:"ratelimit"`
+	// Number of retries for fetching DNS responses from upstream nameservers (not
+	// counting the initial attempt).
+	Retries param.Field[float64] `json:"retries"`
+}
+
+func (r DNSFirewallEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Cloudflare-assigned DNS IPv4 Address.
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type DNSFirewallEditParamsDNSFirewallIP interface {
+	ImplementsDNSFirewallEditParamsDNSFirewallIP()
+}
+
+// Upstream DNS Server IPv4 Address.
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type DNSFirewallEditParamsUpstreamIP interface {
+	ImplementsDNSFirewallEditParamsUpstreamIP()
+}
+
+// Attack mitigation settings.
+type DNSFirewallEditParamsAttackMitigation struct {
+	// When enabled, random-prefix attacks are automatically mitigated and the upstream
+	// DNS servers protected.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Deprecated alias for "only_when_upstream_unhealthy".
+	OnlyWhenOriginUnhealthy param.Field[interface{}] `json:"only_when_origin_unhealthy"`
+	// Only mitigate attacks when upstream servers seem unhealthy.
+	OnlyWhenUpstreamUnhealthy param.Field[bool] `json:"only_when_upstream_unhealthy"`
+}
+
+func (r DNSFirewallEditParamsAttackMitigation) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DNSFirewallEditResponseEnvelope struct {
+	Errors   []DNSFirewallEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSFirewallEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success DNSFirewallEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dnsFirewallEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSFirewallEditResponseEnvelope]
+type dnsFirewallEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSFirewallEditResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    dnsFirewallEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DNSFirewallEditResponseEnvelopeErrors]
+type dnsFirewallEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSFirewallEditResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    dnsFirewallEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnsFirewallEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSFirewallEditResponseEnvelopeMessages]
+type dnsFirewallEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DNSFirewallEditResponseEnvelopeSuccess bool
+
+const (
+	DNSFirewallEditResponseEnvelopeSuccessTrue DNSFirewallEditResponseEnvelopeSuccess = true
 )
 
 type DNSFirewallGetResponseEnvelope struct {

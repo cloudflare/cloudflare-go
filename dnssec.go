@@ -34,12 +34,12 @@ func NewDNSSECService(opts ...option.RequestOption) (r *DNSSECService) {
 	return
 }
 
-// Enable or disable DNSSEC.
-func (r *DNSSECService) Update(ctx context.Context, zoneID string, body DNSSECUpdateParams, opts ...option.RequestOption) (res *DNSSECUpdateResponse, err error) {
+// Delete DNSSEC.
+func (r *DNSSECService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DNSSECDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DNSSECUpdateResponseEnvelope
+	var env DNSSECDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,12 +47,12 @@ func (r *DNSSECService) Update(ctx context.Context, zoneID string, body DNSSECUp
 	return
 }
 
-// Delete DNSSEC.
-func (r *DNSSECService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DNSSECDeleteResponse, err error) {
+// Enable or disable DNSSEC.
+func (r *DNSSECService) Edit(ctx context.Context, zoneID string, body DNSSECEditParams, opts ...option.RequestOption) (res *DNSSECEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DNSSECDeleteResponseEnvelope
+	var env DNSSECEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,7 +73,23 @@ func (r *DNSSECService) Get(ctx context.Context, zoneID string, opts ...option.R
 	return
 }
 
-type DNSSECUpdateResponse struct {
+// Union satisfied by [DNSSECDeleteResponseUnknown] or [shared.UnionString].
+type DNSSECDeleteResponse interface {
+	ImplementsDNSSECDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSSECDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type DNSSECEditResponse struct {
 	// Algorithm key code.
 	Algorithm string `json:"algorithm,nullable"`
 	// Digest hash.
@@ -112,13 +128,13 @@ type DNSSECUpdateResponse struct {
 	// Public key for DS record.
 	PublicKey string `json:"public_key,nullable"`
 	// Status of DNSSEC, based on user-desired state and presence of necessary records.
-	Status DNSSECUpdateResponseStatus `json:"status"`
-	JSON   dnssecUpdateResponseJSON   `json:"-"`
+	Status DNSSECEditResponseStatus `json:"status"`
+	JSON   dnssecEditResponseJSON   `json:"-"`
 }
 
-// dnssecUpdateResponseJSON contains the JSON metadata for the struct
-// [DNSSECUpdateResponse]
-type dnssecUpdateResponseJSON struct {
+// dnssecEditResponseJSON contains the JSON metadata for the struct
+// [DNSSECEditResponse]
+type dnssecEditResponseJSON struct {
 	Algorithm         apijson.Field
 	Digest            apijson.Field
 	DigestAlgorithm   apijson.Field
@@ -136,36 +152,20 @@ type dnssecUpdateResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DNSSECUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSSECEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of DNSSEC, based on user-desired state and presence of necessary records.
-type DNSSECUpdateResponseStatus string
+type DNSSECEditResponseStatus string
 
 const (
-	DNSSECUpdateResponseStatusActive          DNSSECUpdateResponseStatus = "active"
-	DNSSECUpdateResponseStatusPending         DNSSECUpdateResponseStatus = "pending"
-	DNSSECUpdateResponseStatusDisabled        DNSSECUpdateResponseStatus = "disabled"
-	DNSSECUpdateResponseStatusPendingDisabled DNSSECUpdateResponseStatus = "pending-disabled"
-	DNSSECUpdateResponseStatusError           DNSSECUpdateResponseStatus = "error"
+	DNSSECEditResponseStatusActive          DNSSECEditResponseStatus = "active"
+	DNSSECEditResponseStatusPending         DNSSECEditResponseStatus = "pending"
+	DNSSECEditResponseStatusDisabled        DNSSECEditResponseStatus = "disabled"
+	DNSSECEditResponseStatusPendingDisabled DNSSECEditResponseStatus = "pending-disabled"
+	DNSSECEditResponseStatusError           DNSSECEditResponseStatus = "error"
 )
-
-// Union satisfied by [DNSSECDeleteResponseUnknown] or [shared.UnionString].
-type DNSSECDeleteResponse interface {
-	ImplementsDNSSECDeleteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSSECDeleteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
 
 type DNSSECGetResponse struct {
 	// Algorithm key code.
@@ -245,109 +245,6 @@ const (
 	DNSSECGetResponseStatusError           DNSSECGetResponseStatus = "error"
 )
 
-type DNSSECUpdateParams struct {
-	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
-	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
-	// records (except those automatically generated by Cloudflare) to be added to the
-	// zone.
-	//
-	// See
-	// [Multi-signer DNSSEC](https://developers.cloudflare.com/dns/dnssec/multi-signer-dnssec/)
-	// for details.
-	DNSSECMultiSigner param.Field[bool] `json:"dnssec_multi_signer"`
-	// If true, allows Cloudflare to transfer in a DNSSEC-signed zone including
-	// signatures from an external provider, without requiring Cloudflare to sign any
-	// records on the fly.
-	//
-	// Note that this feature has some limitations. See
-	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
-	// for details.
-	DNSSECPresigned param.Field[bool] `json:"dnssec_presigned"`
-	// Status of DNSSEC, based on user-desired state and presence of necessary records.
-	Status param.Field[DNSSECUpdateParamsStatus] `json:"status"`
-}
-
-func (r DNSSECUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Status of DNSSEC, based on user-desired state and presence of necessary records.
-type DNSSECUpdateParamsStatus string
-
-const (
-	DNSSECUpdateParamsStatusActive   DNSSECUpdateParamsStatus = "active"
-	DNSSECUpdateParamsStatusDisabled DNSSECUpdateParamsStatus = "disabled"
-)
-
-type DNSSECUpdateResponseEnvelope struct {
-	Errors   []DNSSECUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSSECUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSSECUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success DNSSECUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dnssecUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// dnssecUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DNSSECUpdateResponseEnvelope]
-type dnssecUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSECUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSSECUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    dnssecUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dnssecUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [DNSSECUpdateResponseEnvelopeErrors]
-type dnssecUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSECUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSSECUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    dnssecUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dnssecUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [DNSSECUpdateResponseEnvelopeMessages]
-type dnssecUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSSECUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DNSSECUpdateResponseEnvelopeSuccess bool
-
-const (
-	DNSSECUpdateResponseEnvelopeSuccessTrue DNSSECUpdateResponseEnvelopeSuccess = true
-)
-
 type DNSSECDeleteResponseEnvelope struct {
 	Errors   []DNSSECDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSSECDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -415,6 +312,109 @@ type DNSSECDeleteResponseEnvelopeSuccess bool
 
 const (
 	DNSSECDeleteResponseEnvelopeSuccessTrue DNSSECDeleteResponseEnvelopeSuccess = true
+)
+
+type DNSSECEditParams struct {
+	// If true, multi-signer DNSSEC is enabled on the zone, allowing multiple providers
+	// to serve a DNSSEC-signed zone at the same time. This is required for DNSKEY
+	// records (except those automatically generated by Cloudflare) to be added to the
+	// zone.
+	//
+	// See
+	// [Multi-signer DNSSEC](https://developers.cloudflare.com/dns/dnssec/multi-signer-dnssec/)
+	// for details.
+	DNSSECMultiSigner param.Field[bool] `json:"dnssec_multi_signer"`
+	// If true, allows Cloudflare to transfer in a DNSSEC-signed zone including
+	// signatures from an external provider, without requiring Cloudflare to sign any
+	// records on the fly.
+	//
+	// Note that this feature has some limitations. See
+	// [Cloudflare as Secondary](https://developers.cloudflare.com/dns/zone-setups/zone-transfers/cloudflare-as-secondary/setup/#dnssec)
+	// for details.
+	DNSSECPresigned param.Field[bool] `json:"dnssec_presigned"`
+	// Status of DNSSEC, based on user-desired state and presence of necessary records.
+	Status param.Field[DNSSECEditParamsStatus] `json:"status"`
+}
+
+func (r DNSSECEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Status of DNSSEC, based on user-desired state and presence of necessary records.
+type DNSSECEditParamsStatus string
+
+const (
+	DNSSECEditParamsStatusActive   DNSSECEditParamsStatus = "active"
+	DNSSECEditParamsStatusDisabled DNSSECEditParamsStatus = "disabled"
+)
+
+type DNSSECEditResponseEnvelope struct {
+	Errors   []DNSSECEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSSECEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSSECEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success DNSSECEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dnssecEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnssecEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSSECEditResponseEnvelope]
+type dnssecEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSSECEditResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    dnssecEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnssecEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSSECEditResponseEnvelopeErrors]
+type dnssecEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSSECEditResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    dnssecEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnssecEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [DNSSECEditResponseEnvelopeMessages]
+type dnssecEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DNSSECEditResponseEnvelopeSuccess bool
+
+const (
+	DNSSECEditResponseEnvelopeSuccessTrue DNSSECEditResponseEnvelopeSuccess = true
 )
 
 type DNSSECGetResponseEnvelope struct {

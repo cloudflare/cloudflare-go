@@ -47,6 +47,19 @@ func (r *AccessServiceTokenService) New(ctx context.Context, accountOrZone strin
 	return
 }
 
+// Updates a configured service token.
+func (r *AccessServiceTokenService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokenUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessServiceTokenUpdateResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists all service tokens.
 func (r *AccessServiceTokenService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessServiceTokenListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -79,19 +92,6 @@ func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier stri
 	var env AccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates a configured service token.
-func (r *AccessServiceTokenService) Replace(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessServiceTokenReplaceParams, opts ...option.RequestOption) (res *AccessServiceTokenReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessServiceTokenReplaceResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/service_tokens/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -147,6 +147,40 @@ type accessServiceTokenNewResponseJSON struct {
 }
 
 func (r *AccessServiceTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenUpdateResponse struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                               `json:"name"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokenUpdateResponseJSON `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessServiceTokenUpdateResponse]
+type accessServiceTokenUpdateResponseJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -249,40 +283,6 @@ type accessServiceTokenRefreshResponseJSON struct {
 }
 
 func (r *AccessServiceTokenRefreshResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenReplaceResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                `json:"name"`
-	UpdatedAt time.Time                             `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenReplaceResponseJSON `json:"-"`
-}
-
-// accessServiceTokenReplaceResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenReplaceResponse]
-type accessServiceTokenReplaceResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -404,6 +404,88 @@ type AccessServiceTokenNewResponseEnvelopeSuccess bool
 
 const (
 	AccessServiceTokenNewResponseEnvelopeSuccessTrue AccessServiceTokenNewResponseEnvelopeSuccess = true
+)
+
+type AccessServiceTokenUpdateParams struct {
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration param.Field[string] `json:"duration"`
+	// The name of the service token.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessServiceTokenUpdateResponseEnvelope struct {
+	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessServiceTokenUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AccessServiceTokenUpdateResponseEnvelope]
+type accessServiceTokenUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenUpdateResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    accessServiceTokenUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AccessServiceTokenUpdateResponseEnvelopeErrors]
+type accessServiceTokenUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessServiceTokenUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    accessServiceTokenUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessServiceTokenUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AccessServiceTokenUpdateResponseEnvelopeMessages]
+type accessServiceTokenUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokenUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessServiceTokenUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccessServiceTokenUpdateResponseEnvelopeSuccessTrue AccessServiceTokenUpdateResponseEnvelopeSuccess = true
 )
 
 type AccessServiceTokenListResponseEnvelope struct {
@@ -640,88 +722,6 @@ type AccessServiceTokenRefreshResponseEnvelopeSuccess bool
 
 const (
 	AccessServiceTokenRefreshResponseEnvelopeSuccessTrue AccessServiceTokenRefreshResponseEnvelopeSuccess = true
-)
-
-type AccessServiceTokenReplaceParams struct {
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration param.Field[string] `json:"duration"`
-	// The name of the service token.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AccessServiceTokenReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessServiceTokenReplaceResponseEnvelope struct {
-	Errors   []AccessServiceTokenReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessServiceTokenReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokenReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessServiceTokenReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessServiceTokenReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessServiceTokenReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessServiceTokenReplaceResponseEnvelope]
-type accessServiceTokenReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenReplaceResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    accessServiceTokenReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessServiceTokenReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessServiceTokenReplaceResponseEnvelopeErrors]
-type accessServiceTokenReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessServiceTokenReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    accessServiceTokenReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessServiceTokenReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessServiceTokenReplaceResponseEnvelopeMessages]
-type accessServiceTokenReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessServiceTokenReplaceResponseEnvelopeSuccess bool
-
-const (
-	AccessServiceTokenReplaceResponseEnvelopeSuccessTrue AccessServiceTokenReplaceResponseEnvelopeSuccess = true
 )
 
 type AccessServiceTokenRotateResponseEnvelope struct {

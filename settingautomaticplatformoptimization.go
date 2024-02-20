@@ -35,9 +35,9 @@ func NewSettingAutomaticPlatformOptimizationService(opts ...option.RequestOption
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Update(ctx context.Context, zoneID string, body SettingAutomaticPlatformOptimizationUpdateParams, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationUpdateResponse, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, zoneID string, body SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingAutomaticPlatformOptimizationUpdateResponseEnvelope
+	var env SettingAutomaticPlatformOptimizationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,7 +62,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, z
 	return
 }
 
-type SettingAutomaticPlatformOptimizationUpdateResponse struct {
+type SettingAutomaticPlatformOptimizationEditResponse struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -79,13 +79,13 @@ type SettingAutomaticPlatformOptimizationUpdateResponse struct {
 	// Indicates whether or not
 	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
 	// installed.
-	WpPlugin bool                                                   `json:"wp_plugin,required"`
-	JSON     settingAutomaticPlatformOptimizationUpdateResponseJSON `json:"-"`
+	WpPlugin bool                                                 `json:"wp_plugin,required"`
+	JSON     settingAutomaticPlatformOptimizationEditResponseJSON `json:"-"`
 }
 
-// settingAutomaticPlatformOptimizationUpdateResponseJSON contains the JSON
-// metadata for the struct [SettingAutomaticPlatformOptimizationUpdateResponse]
-type settingAutomaticPlatformOptimizationUpdateResponseJSON struct {
+// settingAutomaticPlatformOptimizationEditResponseJSON contains the JSON metadata
+// for the struct [SettingAutomaticPlatformOptimizationEditResponse]
+type settingAutomaticPlatformOptimizationEditResponseJSON struct {
 	CacheByDeviceType apijson.Field
 	Cf                apijson.Field
 	Enabled           apijson.Field
@@ -96,7 +96,7 @@ type settingAutomaticPlatformOptimizationUpdateResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *SettingAutomaticPlatformOptimizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticPlatformOptimizationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -138,15 +138,15 @@ func (r *SettingAutomaticPlatformOptimizationGetResponse) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingAutomaticPlatformOptimizationUpdateParams struct {
-	Value param.Field[SettingAutomaticPlatformOptimizationUpdateParamsValue] `json:"value,required"`
+type SettingAutomaticPlatformOptimizationEditParams struct {
+	Value param.Field[SettingAutomaticPlatformOptimizationEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingAutomaticPlatformOptimizationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SettingAutomaticPlatformOptimizationUpdateParamsValue struct {
+type SettingAutomaticPlatformOptimizationEditParamsValue struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
 	// is enabled.
@@ -166,23 +166,23 @@ type SettingAutomaticPlatformOptimizationUpdateParamsValue struct {
 	WpPlugin param.Field[bool] `json:"wp_plugin,required"`
 }
 
-func (r SettingAutomaticPlatformOptimizationUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r SettingAutomaticPlatformOptimizationEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SettingAutomaticPlatformOptimizationUpdateResponseEnvelope struct {
-	Errors   []SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingAutomaticPlatformOptimizationEditResponseEnvelope struct {
+	Errors   []SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
-	Success bool                                                           `json:"success,required"`
-	Result  SettingAutomaticPlatformOptimizationUpdateResponse             `json:"result"`
-	JSON    settingAutomaticPlatformOptimizationUpdateResponseEnvelopeJSON `json:"-"`
+	Success bool                                                         `json:"success,required"`
+	Result  SettingAutomaticPlatformOptimizationEditResponse             `json:"result"`
+	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingAutomaticPlatformOptimizationUpdateResponseEnvelopeJSON contains the JSON
+// settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON contains the JSON
 // metadata for the struct
-// [SettingAutomaticPlatformOptimizationUpdateResponseEnvelope]
-type settingAutomaticPlatformOptimizationUpdateResponseEnvelopeJSON struct {
+// [SettingAutomaticPlatformOptimizationEditResponseEnvelope]
+type settingAutomaticPlatformOptimizationEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -191,47 +191,47 @@ type settingAutomaticPlatformOptimizationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAutomaticPlatformOptimizationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrors struct {
+type SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors struct {
+	Code    int64                                                              `json:"code,required"`
+	Message string                                                             `json:"message,required"`
+	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON contains the
+// JSON metadata for the struct
+// [SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors]
+type settingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages struct {
 	Code    int64                                                                `json:"code,required"`
 	Message string                                                               `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrorsJSON contains
+// settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON contains
 // the JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrors]
-type settingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrorsJSON struct {
+// [SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages]
+type settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    settingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessages]
-type settingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticPlatformOptimizationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

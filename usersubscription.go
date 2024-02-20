@@ -35,6 +35,19 @@ func NewUserSubscriptionService(opts ...option.RequestOption) (r *UserSubscripti
 	return
 }
 
+// Updates a user's subscriptions.
+func (r *UserSubscriptionService) Update(ctx context.Context, identifier string, body UserSubscriptionUpdateParams, opts ...option.RequestOption) (res *UserSubscriptionUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserSubscriptionUpdateResponseEnvelope
+	path := fmt.Sprintf("user/subscriptions/%s", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists all of a user's subscriptions.
 func (r *UserSubscriptionService) List(ctx context.Context, opts ...option.RequestOption) (res *[]UserSubscriptionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -56,17 +69,21 @@ func (r *UserSubscriptionService) Delete(ctx context.Context, identifier string,
 	return
 }
 
-// Updates a user's subscriptions.
-func (r *UserSubscriptionService) Replace(ctx context.Context, identifier string, body UserSubscriptionReplaceParams, opts ...option.RequestOption) (res *UserSubscriptionReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserSubscriptionReplaceResponseEnvelope
-	path := fmt.Sprintf("user/subscriptions/%s", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [UserSubscriptionUpdateResponseUnknown] or
+// [shared.UnionString].
+type UserSubscriptionUpdateResponse interface {
+	ImplementsUserSubscriptionUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserSubscriptionUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type UserSubscriptionListResponse struct {
@@ -263,22 +280,155 @@ func (r *UserSubscriptionDeleteResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [UserSubscriptionReplaceResponseUnknown] or
-// [shared.UnionString].
-type UserSubscriptionReplaceResponse interface {
-	ImplementsUserSubscriptionReplaceResponse()
+type UserSubscriptionUpdateParams struct {
+	App param.Field[UserSubscriptionUpdateParamsApp] `json:"app"`
+	// The list of add-ons subscribed to.
+	ComponentValues param.Field[[]UserSubscriptionUpdateParamsComponentValue] `json:"component_values"`
+	// How often the subscription is renewed automatically.
+	Frequency param.Field[UserSubscriptionUpdateParamsFrequency] `json:"frequency"`
+	// The rate plan applied to the subscription.
+	RatePlan param.Field[UserSubscriptionUpdateParamsRatePlan] `json:"rate_plan"`
+	// A simple zone object. May have null properties if not a zone subscription.
+	Zone param.Field[UserSubscriptionUpdateParamsZone] `json:"zone"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserSubscriptionReplaceResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r UserSubscriptionUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
+
+type UserSubscriptionUpdateParamsApp struct {
+	// app install id.
+	InstallID param.Field[string] `json:"install_id"`
+}
+
+func (r UserSubscriptionUpdateParamsApp) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A component value for a subscription.
+type UserSubscriptionUpdateParamsComponentValue struct {
+	// The default amount assigned.
+	Default param.Field[float64] `json:"default"`
+	// The name of the component value.
+	Name param.Field[string] `json:"name"`
+	// The unit price for the component value.
+	Price param.Field[float64] `json:"price"`
+	// The amount of the component value assigned.
+	Value param.Field[float64] `json:"value"`
+}
+
+func (r UserSubscriptionUpdateParamsComponentValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// How often the subscription is renewed automatically.
+type UserSubscriptionUpdateParamsFrequency string
+
+const (
+	UserSubscriptionUpdateParamsFrequencyWeekly    UserSubscriptionUpdateParamsFrequency = "weekly"
+	UserSubscriptionUpdateParamsFrequencyMonthly   UserSubscriptionUpdateParamsFrequency = "monthly"
+	UserSubscriptionUpdateParamsFrequencyQuarterly UserSubscriptionUpdateParamsFrequency = "quarterly"
+	UserSubscriptionUpdateParamsFrequencyYearly    UserSubscriptionUpdateParamsFrequency = "yearly"
+)
+
+// The rate plan applied to the subscription.
+type UserSubscriptionUpdateParamsRatePlan struct {
+	// The ID of the rate plan.
+	ID param.Field[interface{}] `json:"id"`
+	// The currency applied to the rate plan subscription.
+	Currency param.Field[string] `json:"currency"`
+	// Whether this rate plan is managed externally from Cloudflare.
+	ExternallyManaged param.Field[bool] `json:"externally_managed"`
+	// Whether a rate plan is enterprise-based (or newly adopted term contract).
+	IsContract param.Field[bool] `json:"is_contract"`
+	// The full name of the rate plan.
+	PublicName param.Field[string] `json:"public_name"`
+	// The scope that this rate plan applies to.
+	Scope param.Field[string] `json:"scope"`
+	// The list of sets this rate plan applies to.
+	Sets param.Field[[]string] `json:"sets"`
+}
+
+func (r UserSubscriptionUpdateParamsRatePlan) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A simple zone object. May have null properties if not a zone subscription.
+type UserSubscriptionUpdateParamsZone struct {
+}
+
+func (r UserSubscriptionUpdateParamsZone) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserSubscriptionUpdateResponseEnvelope struct {
+	Errors   []UserSubscriptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserSubscriptionUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserSubscriptionUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserSubscriptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userSubscriptionUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// userSubscriptionUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [UserSubscriptionUpdateResponseEnvelope]
+type userSubscriptionUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserSubscriptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserSubscriptionUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    userSubscriptionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userSubscriptionUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [UserSubscriptionUpdateResponseEnvelopeErrors]
+type userSubscriptionUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserSubscriptionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserSubscriptionUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    userSubscriptionUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userSubscriptionUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [UserSubscriptionUpdateResponseEnvelopeMessages]
+type userSubscriptionUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserSubscriptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserSubscriptionUpdateResponseEnvelopeSuccess bool
+
+const (
+	UserSubscriptionUpdateResponseEnvelopeSuccessTrue UserSubscriptionUpdateResponseEnvelopeSuccess = true
+)
 
 type UserSubscriptionListResponseEnvelope struct {
 	Errors   []UserSubscriptionListResponseEnvelopeErrors   `json:"errors,required"`
@@ -377,153 +527,3 @@ type userSubscriptionListResponseEnvelopeResultInfoJSON struct {
 func (r *UserSubscriptionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type UserSubscriptionReplaceParams struct {
-	App param.Field[UserSubscriptionReplaceParamsApp] `json:"app"`
-	// The list of add-ons subscribed to.
-	ComponentValues param.Field[[]UserSubscriptionReplaceParamsComponentValue] `json:"component_values"`
-	// How often the subscription is renewed automatically.
-	Frequency param.Field[UserSubscriptionReplaceParamsFrequency] `json:"frequency"`
-	// The rate plan applied to the subscription.
-	RatePlan param.Field[UserSubscriptionReplaceParamsRatePlan] `json:"rate_plan"`
-	// A simple zone object. May have null properties if not a zone subscription.
-	Zone param.Field[UserSubscriptionReplaceParamsZone] `json:"zone"`
-}
-
-func (r UserSubscriptionReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type UserSubscriptionReplaceParamsApp struct {
-	// app install id.
-	InstallID param.Field[string] `json:"install_id"`
-}
-
-func (r UserSubscriptionReplaceParamsApp) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A component value for a subscription.
-type UserSubscriptionReplaceParamsComponentValue struct {
-	// The default amount assigned.
-	Default param.Field[float64] `json:"default"`
-	// The name of the component value.
-	Name param.Field[string] `json:"name"`
-	// The unit price for the component value.
-	Price param.Field[float64] `json:"price"`
-	// The amount of the component value assigned.
-	Value param.Field[float64] `json:"value"`
-}
-
-func (r UserSubscriptionReplaceParamsComponentValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// How often the subscription is renewed automatically.
-type UserSubscriptionReplaceParamsFrequency string
-
-const (
-	UserSubscriptionReplaceParamsFrequencyWeekly    UserSubscriptionReplaceParamsFrequency = "weekly"
-	UserSubscriptionReplaceParamsFrequencyMonthly   UserSubscriptionReplaceParamsFrequency = "monthly"
-	UserSubscriptionReplaceParamsFrequencyQuarterly UserSubscriptionReplaceParamsFrequency = "quarterly"
-	UserSubscriptionReplaceParamsFrequencyYearly    UserSubscriptionReplaceParamsFrequency = "yearly"
-)
-
-// The rate plan applied to the subscription.
-type UserSubscriptionReplaceParamsRatePlan struct {
-	// The ID of the rate plan.
-	ID param.Field[interface{}] `json:"id"`
-	// The currency applied to the rate plan subscription.
-	Currency param.Field[string] `json:"currency"`
-	// Whether this rate plan is managed externally from Cloudflare.
-	ExternallyManaged param.Field[bool] `json:"externally_managed"`
-	// Whether a rate plan is enterprise-based (or newly adopted term contract).
-	IsContract param.Field[bool] `json:"is_contract"`
-	// The full name of the rate plan.
-	PublicName param.Field[string] `json:"public_name"`
-	// The scope that this rate plan applies to.
-	Scope param.Field[string] `json:"scope"`
-	// The list of sets this rate plan applies to.
-	Sets param.Field[[]string] `json:"sets"`
-}
-
-func (r UserSubscriptionReplaceParamsRatePlan) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A simple zone object. May have null properties if not a zone subscription.
-type UserSubscriptionReplaceParamsZone struct {
-}
-
-func (r UserSubscriptionReplaceParamsZone) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type UserSubscriptionReplaceResponseEnvelope struct {
-	Errors   []UserSubscriptionReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserSubscriptionReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserSubscriptionReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success UserSubscriptionReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userSubscriptionReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// userSubscriptionReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [UserSubscriptionReplaceResponseEnvelope]
-type userSubscriptionReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserSubscriptionReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserSubscriptionReplaceResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    userSubscriptionReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userSubscriptionReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [UserSubscriptionReplaceResponseEnvelopeErrors]
-type userSubscriptionReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserSubscriptionReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserSubscriptionReplaceResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    userSubscriptionReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userSubscriptionReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [UserSubscriptionReplaceResponseEnvelopeMessages]
-type userSubscriptionReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserSubscriptionReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserSubscriptionReplaceResponseEnvelopeSuccess bool
-
-const (
-	UserSubscriptionReplaceResponseEnvelopeSuccessTrue UserSubscriptionReplaceResponseEnvelopeSuccess = true
-)

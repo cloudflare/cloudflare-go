@@ -49,6 +49,21 @@ func (r *MagicIpsecTunnelService) New(ctx context.Context, accountIdentifier str
 	return
 }
 
+// Updates a specific IPsec tunnel associated with an account. Use
+// `?validate_only=true` as an optional query parameter to only run validation
+// without persisting changes.
+func (r *MagicIpsecTunnelService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicIpsecTunnelUpdateParams, opts ...option.RequestOption) (res *MagicIpsecTunnelUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MagicIpsecTunnelUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists IPsec tunnels associated with an account.
 func (r *MagicIpsecTunnelService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MagicIpsecTunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -83,21 +98,6 @@ func (r *MagicIpsecTunnelService) Get(ctx context.Context, accountIdentifier str
 	var env MagicIpsecTunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates a specific IPsec tunnel associated with an account. Use
-// `?validate_only=true` as an optional query parameter to only run validation
-// without persisting changes.
-func (r *MagicIpsecTunnelService) Replace(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicIpsecTunnelReplaceParams, opts ...option.RequestOption) (res *MagicIpsecTunnelReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MagicIpsecTunnelReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -241,6 +241,25 @@ const (
 	MagicIpsecTunnelNewResponseIpsecTunnelsTunnelHealthCheckTypeReply   MagicIpsecTunnelNewResponseIpsecTunnelsTunnelHealthCheckType = "reply"
 	MagicIpsecTunnelNewResponseIpsecTunnelsTunnelHealthCheckTypeRequest MagicIpsecTunnelNewResponseIpsecTunnelsTunnelHealthCheckType = "request"
 )
+
+type MagicIpsecTunnelUpdateResponse struct {
+	Modified            bool                               `json:"modified"`
+	ModifiedIpsecTunnel interface{}                        `json:"modified_ipsec_tunnel"`
+	JSON                magicIpsecTunnelUpdateResponseJSON `json:"-"`
+}
+
+// magicIpsecTunnelUpdateResponseJSON contains the JSON metadata for the struct
+// [MagicIpsecTunnelUpdateResponse]
+type magicIpsecTunnelUpdateResponseJSON struct {
+	Modified            apijson.Field
+	ModifiedIpsecTunnel apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *MagicIpsecTunnelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type MagicIpsecTunnelListResponse struct {
 	IpsecTunnels []MagicIpsecTunnelListResponseIpsecTunnel `json:"ipsec_tunnels"`
@@ -415,25 +434,6 @@ func (r *MagicIpsecTunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicIpsecTunnelReplaceResponse struct {
-	Modified            bool                                `json:"modified"`
-	ModifiedIpsecTunnel interface{}                         `json:"modified_ipsec_tunnel"`
-	JSON                magicIpsecTunnelReplaceResponseJSON `json:"-"`
-}
-
-// magicIpsecTunnelReplaceResponseJSON contains the JSON metadata for the struct
-// [MagicIpsecTunnelReplaceResponse]
-type magicIpsecTunnelReplaceResponseJSON struct {
-	Modified            apijson.Field
-	ModifiedIpsecTunnel apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *MagicIpsecTunnelReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type MagicIpsecTunnelNewParams struct {
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
@@ -525,6 +525,99 @@ type MagicIpsecTunnelNewResponseEnvelopeSuccess bool
 
 const (
 	MagicIpsecTunnelNewResponseEnvelopeSuccessTrue MagicIpsecTunnelNewResponseEnvelopeSuccess = true
+)
+
+type MagicIpsecTunnelUpdateParams struct {
+	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
+	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress param.Field[string] `json:"interface_address,required"`
+	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
+	Name param.Field[string] `json:"name,required"`
+	// The IP address assigned to the customer side of the IPsec tunnel.
+	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
+	// An optional description forthe IPsec tunnel.
+	Description param.Field[string] `json:"description"`
+	// A randomly generated or provided string for use in the IPsec tunnel.
+	Psk param.Field[string] `json:"psk"`
+	// If `true`, then IPsec replay protection will be supported in the
+	// Cloudflare-to-customer direction.
+	ReplayProtection param.Field[bool] `json:"replay_protection"`
+}
+
+func (r MagicIpsecTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type MagicIpsecTunnelUpdateResponseEnvelope struct {
+	Errors   []MagicIpsecTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicIpsecTunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicIpsecTunnelUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MagicIpsecTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicIpsecTunnelUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// magicIpsecTunnelUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [MagicIpsecTunnelUpdateResponseEnvelope]
+type magicIpsecTunnelUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicIpsecTunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicIpsecTunnelUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    magicIpsecTunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// magicIpsecTunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [MagicIpsecTunnelUpdateResponseEnvelopeErrors]
+type magicIpsecTunnelUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicIpsecTunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicIpsecTunnelUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    magicIpsecTunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// magicIpsecTunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [MagicIpsecTunnelUpdateResponseEnvelopeMessages]
+type magicIpsecTunnelUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicIpsecTunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MagicIpsecTunnelUpdateResponseEnvelopeSuccess bool
+
+const (
+	MagicIpsecTunnelUpdateResponseEnvelopeSuccessTrue MagicIpsecTunnelUpdateResponseEnvelopeSuccess = true
 )
 
 type MagicIpsecTunnelListResponseEnvelope struct {
@@ -732,97 +825,4 @@ type MagicIpsecTunnelGetResponseEnvelopeSuccess bool
 
 const (
 	MagicIpsecTunnelGetResponseEnvelopeSuccessTrue MagicIpsecTunnelGetResponseEnvelopeSuccess = true
-)
-
-type MagicIpsecTunnelReplaceParams struct {
-	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
-	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint,required"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address,required"`
-	// The name of the IPsec tunnel. The name cannot share a name with other tunnels.
-	Name param.Field[string] `json:"name,required"`
-	// The IP address assigned to the customer side of the IPsec tunnel.
-	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
-	// An optional description forthe IPsec tunnel.
-	Description param.Field[string] `json:"description"`
-	// A randomly generated or provided string for use in the IPsec tunnel.
-	Psk param.Field[string] `json:"psk"`
-	// If `true`, then IPsec replay protection will be supported in the
-	// Cloudflare-to-customer direction.
-	ReplayProtection param.Field[bool] `json:"replay_protection"`
-}
-
-func (r MagicIpsecTunnelReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MagicIpsecTunnelReplaceResponseEnvelope struct {
-	Errors   []MagicIpsecTunnelReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicIpsecTunnelReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicIpsecTunnelReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MagicIpsecTunnelReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicIpsecTunnelReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// magicIpsecTunnelReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MagicIpsecTunnelReplaceResponseEnvelope]
-type magicIpsecTunnelReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicIpsecTunnelReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicIpsecTunnelReplaceResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    magicIpsecTunnelReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// magicIpsecTunnelReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [MagicIpsecTunnelReplaceResponseEnvelopeErrors]
-type magicIpsecTunnelReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicIpsecTunnelReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicIpsecTunnelReplaceResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    magicIpsecTunnelReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// magicIpsecTunnelReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [MagicIpsecTunnelReplaceResponseEnvelopeMessages]
-type magicIpsecTunnelReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicIpsecTunnelReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MagicIpsecTunnelReplaceResponseEnvelopeSuccess bool
-
-const (
-	MagicIpsecTunnelReplaceResponseEnvelopeSuccessTrue MagicIpsecTunnelReplaceResponseEnvelopeSuccess = true
 )

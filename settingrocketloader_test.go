@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingRocketLoaderUpdateWithOptionalParams(t *testing.T) {
+func TestSettingRocketLoaderEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestSettingRocketLoaderUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.RocketLoader.Update(
+	_, err := client.Settings.RocketLoader.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingRocketLoaderUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingRocketLoaderUpdateParamsValue{
-				ID:    cloudflare.F(cloudflare.SettingRocketLoaderUpdateParamsValueIDRocketLoader),
-				Value: cloudflare.F(cloudflare.SettingRocketLoaderUpdateParamsValueValueOn),
+		cloudflare.SettingRocketLoaderEditParams{
+			Value: cloudflare.F(cloudflare.SettingRocketLoaderEditParamsValue{
+				ID:    cloudflare.F(cloudflare.SettingRocketLoaderEditParamsValueIDRocketLoader),
+				Value: cloudflare.F(cloudflare.SettingRocketLoaderEditParamsValueValueOn),
 			}),
 		},
 	)

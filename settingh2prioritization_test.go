@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingH2PrioritizationUpdateWithOptionalParams(t *testing.T) {
+func TestSettingH2PrioritizationEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestSettingH2PrioritizationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.H2Prioritization.Update(
+	_, err := client.Settings.H2Prioritization.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingH2PrioritizationUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingH2PrioritizationUpdateParamsValue{
-				ID:    cloudflare.F(cloudflare.SettingH2PrioritizationUpdateParamsValueIDH2Prioritization),
-				Value: cloudflare.F(cloudflare.SettingH2PrioritizationUpdateParamsValueValueOn),
+		cloudflare.SettingH2PrioritizationEditParams{
+			Value: cloudflare.F(cloudflare.SettingH2PrioritizationEditParamsValue{
+				ID:    cloudflare.F(cloudflare.SettingH2PrioritizationEditParamsValueIDH2Prioritization),
+				Value: cloudflare.F(cloudflare.SettingH2PrioritizationEditParamsValueValueOn),
 			}),
 		},
 	)

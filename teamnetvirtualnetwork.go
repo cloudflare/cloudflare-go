@@ -49,19 +49,6 @@ func (r *TeamnetVirtualNetworkService) New(ctx context.Context, accountID string
 	return
 }
 
-// Updates an existing virtual network.
-func (r *TeamnetVirtualNetworkService) Update(ctx context.Context, accountID string, virtualNetworkID string, body TeamnetVirtualNetworkUpdateParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env TeamnetVirtualNetworkUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountID, virtualNetworkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists and filters virtual networks in an account.
 func (r *TeamnetVirtualNetworkService) List(ctx context.Context, accountID string, query TeamnetVirtualNetworkListParams, opts ...option.RequestOption) (res *[]TeamnetVirtualNetworkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -81,6 +68,19 @@ func (r *TeamnetVirtualNetworkService) Delete(ctx context.Context, accountID str
 	var env TeamnetVirtualNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountID, virtualNetworkID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates an existing virtual network.
+func (r *TeamnetVirtualNetworkService) Edit(ctx context.Context, accountID string, virtualNetworkID string, body TeamnetVirtualNetworkEditParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env TeamnetVirtualNetworkEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountID, virtualNetworkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -108,27 +108,6 @@ func init() {
 type TeamnetVirtualNetworkNewResponseArray []interface{}
 
 func (r TeamnetVirtualNetworkNewResponseArray) ImplementsTeamnetVirtualNetworkNewResponse() {}
-
-// Union satisfied by [TeamnetVirtualNetworkUpdateResponseUnknown],
-// [TeamnetVirtualNetworkUpdateResponseArray] or [shared.UnionString].
-type TeamnetVirtualNetworkUpdateResponse interface {
-	ImplementsTeamnetVirtualNetworkUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*TeamnetVirtualNetworkUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type TeamnetVirtualNetworkUpdateResponseArray []interface{}
-
-func (r TeamnetVirtualNetworkUpdateResponseArray) ImplementsTeamnetVirtualNetworkUpdateResponse() {}
 
 type TeamnetVirtualNetworkListResponse struct {
 	// UUID of the virtual network.
@@ -184,6 +163,27 @@ func init() {
 type TeamnetVirtualNetworkDeleteResponseArray []interface{}
 
 func (r TeamnetVirtualNetworkDeleteResponseArray) ImplementsTeamnetVirtualNetworkDeleteResponse() {}
+
+// Union satisfied by [TeamnetVirtualNetworkEditResponseUnknown],
+// [TeamnetVirtualNetworkEditResponseArray] or [shared.UnionString].
+type TeamnetVirtualNetworkEditResponse interface {
+	ImplementsTeamnetVirtualNetworkEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*TeamnetVirtualNetworkEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type TeamnetVirtualNetworkEditResponseArray []interface{}
+
+func (r TeamnetVirtualNetworkEditResponseArray) ImplementsTeamnetVirtualNetworkEditResponse() {}
 
 type TeamnetVirtualNetworkNewParams struct {
 	// A user-friendly name for the virtual network.
@@ -265,88 +265,6 @@ type TeamnetVirtualNetworkNewResponseEnvelopeSuccess bool
 
 const (
 	TeamnetVirtualNetworkNewResponseEnvelopeSuccessTrue TeamnetVirtualNetworkNewResponseEnvelopeSuccess = true
-)
-
-type TeamnetVirtualNetworkUpdateParams struct {
-	// Optional remark describing the virtual network.
-	Comment param.Field[string] `json:"comment"`
-	// If `true`, this virtual network is the default for the account.
-	IsDefaultNetwork param.Field[bool] `json:"is_default_network"`
-	// A user-friendly name for the virtual network.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r TeamnetVirtualNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TeamnetVirtualNetworkUpdateResponseEnvelope struct {
-	Errors   []TeamnetVirtualNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TeamnetVirtualNetworkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamnetVirtualNetworkUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success TeamnetVirtualNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    teamnetVirtualNetworkUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// teamnetVirtualNetworkUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [TeamnetVirtualNetworkUpdateResponseEnvelope]
-type teamnetVirtualNetworkUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetVirtualNetworkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TeamnetVirtualNetworkUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    teamnetVirtualNetworkUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// teamnetVirtualNetworkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [TeamnetVirtualNetworkUpdateResponseEnvelopeErrors]
-type teamnetVirtualNetworkUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetVirtualNetworkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TeamnetVirtualNetworkUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    teamnetVirtualNetworkUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// teamnetVirtualNetworkUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [TeamnetVirtualNetworkUpdateResponseEnvelopeMessages]
-type teamnetVirtualNetworkUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetVirtualNetworkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TeamnetVirtualNetworkUpdateResponseEnvelopeSuccess bool
-
-const (
-	TeamnetVirtualNetworkUpdateResponseEnvelopeSuccessTrue TeamnetVirtualNetworkUpdateResponseEnvelopeSuccess = true
 )
 
 type TeamnetVirtualNetworkListParams struct {
@@ -536,4 +454,86 @@ type TeamnetVirtualNetworkDeleteResponseEnvelopeSuccess bool
 
 const (
 	TeamnetVirtualNetworkDeleteResponseEnvelopeSuccessTrue TeamnetVirtualNetworkDeleteResponseEnvelopeSuccess = true
+)
+
+type TeamnetVirtualNetworkEditParams struct {
+	// Optional remark describing the virtual network.
+	Comment param.Field[string] `json:"comment"`
+	// If `true`, this virtual network is the default for the account.
+	IsDefaultNetwork param.Field[bool] `json:"is_default_network"`
+	// A user-friendly name for the virtual network.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r TeamnetVirtualNetworkEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type TeamnetVirtualNetworkEditResponseEnvelope struct {
+	Errors   []TeamnetVirtualNetworkEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TeamnetVirtualNetworkEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   TeamnetVirtualNetworkEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success TeamnetVirtualNetworkEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    teamnetVirtualNetworkEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// teamnetVirtualNetworkEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [TeamnetVirtualNetworkEditResponseEnvelope]
+type teamnetVirtualNetworkEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TeamnetVirtualNetworkEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TeamnetVirtualNetworkEditResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    teamnetVirtualNetworkEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// teamnetVirtualNetworkEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [TeamnetVirtualNetworkEditResponseEnvelopeErrors]
+type teamnetVirtualNetworkEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TeamnetVirtualNetworkEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TeamnetVirtualNetworkEditResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    teamnetVirtualNetworkEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// teamnetVirtualNetworkEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [TeamnetVirtualNetworkEditResponseEnvelopeMessages]
+type teamnetVirtualNetworkEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TeamnetVirtualNetworkEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type TeamnetVirtualNetworkEditResponseEnvelopeSuccess bool
+
+const (
+	TeamnetVirtualNetworkEditResponseEnvelopeSuccessTrue TeamnetVirtualNetworkEditResponseEnvelopeSuccess = true
 )

@@ -44,6 +44,19 @@ func (r *AccessTagService) New(ctx context.Context, identifier string, body Acce
 	return
 }
 
+// Update a tag
+func (r *AccessTagService) Update(ctx context.Context, identifier string, tagName string, body AccessTagUpdateParams, opts ...option.RequestOption) (res *AccessTagUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessTagUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List tags
 func (r *AccessTagService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessTagListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -83,19 +96,6 @@ func (r *AccessTagService) Get(ctx context.Context, identifier string, name stri
 	return
 }
 
-// Update a tag
-func (r *AccessTagService) Replace(ctx context.Context, identifier string, tagName string, body AccessTagReplaceParams, opts ...option.RequestOption) (res *AccessTagReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessTagReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/access/tags/%s", identifier, tagName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // A tag
 type AccessTagNewResponse struct {
 	// The name of the tag
@@ -119,6 +119,32 @@ type accessTagNewResponseJSON struct {
 }
 
 func (r *AccessTagNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A tag
+type AccessTagUpdateResponse struct {
+	// The name of the tag
+	Name string `json:"name,required"`
+	// The number of applications that have this tag
+	AppCount  int64                       `json:"app_count"`
+	CreatedAt time.Time                   `json:"created_at" format:"date-time"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      accessTagUpdateResponseJSON `json:"-"`
+}
+
+// accessTagUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessTagUpdateResponse]
+type accessTagUpdateResponseJSON struct {
+	Name        apijson.Field
+	AppCount    apijson.Field
+	CreatedAt   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -189,32 +215,6 @@ type accessTagGetResponseJSON struct {
 }
 
 func (r *AccessTagGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A tag
-type AccessTagReplaceResponse struct {
-	// The name of the tag
-	Name string `json:"name,required"`
-	// The number of applications that have this tag
-	AppCount  int64                        `json:"app_count"`
-	CreatedAt time.Time                    `json:"created_at" format:"date-time"`
-	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
-	JSON      accessTagReplaceResponseJSON `json:"-"`
-}
-
-// accessTagReplaceResponseJSON contains the JSON metadata for the struct
-// [AccessTagReplaceResponse]
-type accessTagReplaceResponseJSON struct {
-	Name        apijson.Field
-	AppCount    apijson.Field
-	CreatedAt   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -295,6 +295,85 @@ type AccessTagNewResponseEnvelopeSuccess bool
 
 const (
 	AccessTagNewResponseEnvelopeSuccessTrue AccessTagNewResponseEnvelopeSuccess = true
+)
+
+type AccessTagUpdateParams struct {
+	// The name of the tag
+	Name param.Field[string] `json:"name,required"`
+}
+
+func (r AccessTagUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessTagUpdateResponseEnvelope struct {
+	Errors   []AccessTagUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessTagUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// A tag
+	Result AccessTagUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessTagUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessTagUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessTagUpdateResponseEnvelope]
+type accessTagUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessTagUpdateResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    accessTagUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessTagUpdateResponseEnvelopeErrors]
+type accessTagUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessTagUpdateResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessTagUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessTagUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessTagUpdateResponseEnvelopeMessages]
+type accessTagUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessTagUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessTagUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccessTagUpdateResponseEnvelopeSuccessTrue AccessTagUpdateResponseEnvelopeSuccess = true
 )
 
 type AccessTagListResponseEnvelope struct {
@@ -532,83 +611,4 @@ type AccessTagGetResponseEnvelopeSuccess bool
 
 const (
 	AccessTagGetResponseEnvelopeSuccessTrue AccessTagGetResponseEnvelopeSuccess = true
-)
-
-type AccessTagReplaceParams struct {
-	// The name of the tag
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r AccessTagReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessTagReplaceResponseEnvelope struct {
-	Errors   []AccessTagReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessTagReplaceResponseEnvelopeMessages `json:"messages,required"`
-	// A tag
-	Result AccessTagReplaceResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessTagReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessTagReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessTagReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessTagReplaceResponseEnvelope]
-type accessTagReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessTagReplaceResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    accessTagReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessTagReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessTagReplaceResponseEnvelopeErrors]
-type accessTagReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessTagReplaceResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    accessTagReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessTagReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessTagReplaceResponseEnvelopeMessages]
-type accessTagReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessTagReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessTagReplaceResponseEnvelopeSuccess bool
-
-const (
-	AccessTagReplaceResponseEnvelopeSuccessTrue AccessTagReplaceResponseEnvelopeSuccess = true
 )

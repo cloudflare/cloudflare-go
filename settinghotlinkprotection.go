@@ -39,9 +39,9 @@ func NewSettingHotlinkProtectionService(opts ...option.RequestOption) (r *Settin
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *SettingHotlinkProtectionService) Update(ctx context.Context, zoneID string, body SettingHotlinkProtectionUpdateParams, opts ...option.RequestOption) (res *SettingHotlinkProtectionUpdateResponse, err error) {
+func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, zoneID string, body SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *SettingHotlinkProtectionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingHotlinkProtectionUpdateResponseEnvelope
+	var env SettingHotlinkProtectionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -77,22 +77,22 @@ func (r *SettingHotlinkProtectionService) Get(ctx context.Context, zoneID string
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type SettingHotlinkProtectionUpdateResponse struct {
+type SettingHotlinkProtectionEditResponse struct {
 	// ID of the zone setting.
-	ID SettingHotlinkProtectionUpdateResponseID `json:"id,required"`
+	ID SettingHotlinkProtectionEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingHotlinkProtectionUpdateResponseValue `json:"value,required"`
+	Value SettingHotlinkProtectionEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingHotlinkProtectionUpdateResponseEditable `json:"editable"`
+	Editable SettingHotlinkProtectionEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingHotlinkProtectionUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingHotlinkProtectionEditResponseJSON `json:"-"`
 }
 
-// settingHotlinkProtectionUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingHotlinkProtectionUpdateResponse]
-type settingHotlinkProtectionUpdateResponseJSON struct {
+// settingHotlinkProtectionEditResponseJSON contains the JSON metadata for the
+// struct [SettingHotlinkProtectionEditResponse]
+type settingHotlinkProtectionEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -101,32 +101,32 @@ type settingHotlinkProtectionUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHotlinkProtectionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHotlinkProtectionEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingHotlinkProtectionUpdateResponseID string
+type SettingHotlinkProtectionEditResponseID string
 
 const (
-	SettingHotlinkProtectionUpdateResponseIDHotlinkProtection SettingHotlinkProtectionUpdateResponseID = "hotlink_protection"
+	SettingHotlinkProtectionEditResponseIDHotlinkProtection SettingHotlinkProtectionEditResponseID = "hotlink_protection"
 )
 
 // Current value of the zone setting.
-type SettingHotlinkProtectionUpdateResponseValue string
+type SettingHotlinkProtectionEditResponseValue string
 
 const (
-	SettingHotlinkProtectionUpdateResponseValueOn  SettingHotlinkProtectionUpdateResponseValue = "on"
-	SettingHotlinkProtectionUpdateResponseValueOff SettingHotlinkProtectionUpdateResponseValue = "off"
+	SettingHotlinkProtectionEditResponseValueOn  SettingHotlinkProtectionEditResponseValue = "on"
+	SettingHotlinkProtectionEditResponseValueOff SettingHotlinkProtectionEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingHotlinkProtectionUpdateResponseEditable bool
+type SettingHotlinkProtectionEditResponseEditable bool
 
 const (
-	SettingHotlinkProtectionUpdateResponseEditableTrue  SettingHotlinkProtectionUpdateResponseEditable = true
-	SettingHotlinkProtectionUpdateResponseEditableFalse SettingHotlinkProtectionUpdateResponseEditable = false
+	SettingHotlinkProtectionEditResponseEditableTrue  SettingHotlinkProtectionEditResponseEditable = true
+	SettingHotlinkProtectionEditResponseEditableFalse SettingHotlinkProtectionEditResponseEditable = false
 )
 
 // When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -188,26 +188,26 @@ const (
 	SettingHotlinkProtectionGetResponseEditableFalse SettingHotlinkProtectionGetResponseEditable = false
 )
 
-type SettingHotlinkProtectionUpdateParams struct {
+type SettingHotlinkProtectionEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingHotlinkProtectionUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingHotlinkProtectionEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingHotlinkProtectionUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingHotlinkProtectionEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingHotlinkProtectionUpdateParamsValue string
+type SettingHotlinkProtectionEditParamsValue string
 
 const (
-	SettingHotlinkProtectionUpdateParamsValueOn  SettingHotlinkProtectionUpdateParamsValue = "on"
-	SettingHotlinkProtectionUpdateParamsValueOff SettingHotlinkProtectionUpdateParamsValue = "off"
+	SettingHotlinkProtectionEditParamsValueOn  SettingHotlinkProtectionEditParamsValue = "on"
+	SettingHotlinkProtectionEditParamsValueOff SettingHotlinkProtectionEditParamsValue = "off"
 )
 
-type SettingHotlinkProtectionUpdateResponseEnvelope struct {
-	Errors   []SettingHotlinkProtectionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHotlinkProtectionUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingHotlinkProtectionEditResponseEnvelope struct {
+	Errors   []SettingHotlinkProtectionEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingHotlinkProtectionEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -217,13 +217,13 @@ type SettingHotlinkProtectionUpdateResponseEnvelope struct {
 	// view images from your page, but other sites won't be able to steal them for use
 	// on their own pages.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-	Result SettingHotlinkProtectionUpdateResponse             `json:"result"`
-	JSON   settingHotlinkProtectionUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingHotlinkProtectionEditResponse             `json:"result"`
+	JSON   settingHotlinkProtectionEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingHotlinkProtectionUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SettingHotlinkProtectionUpdateResponseEnvelope]
-type settingHotlinkProtectionUpdateResponseEnvelopeJSON struct {
+// settingHotlinkProtectionEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingHotlinkProtectionEditResponseEnvelope]
+type settingHotlinkProtectionEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -232,45 +232,45 @@ type settingHotlinkProtectionUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHotlinkProtectionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHotlinkProtectionEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingHotlinkProtectionUpdateResponseEnvelopeErrors struct {
+type SettingHotlinkProtectionEditResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    settingHotlinkProtectionEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingHotlinkProtectionEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeErrors]
+type settingHotlinkProtectionEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingHotlinkProtectionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingHotlinkProtectionEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
-	JSON    settingHotlinkProtectionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingHotlinkProtectionEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingHotlinkProtectionUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionUpdateResponseEnvelopeErrors]
-type settingHotlinkProtectionUpdateResponseEnvelopeErrorsJSON struct {
+// settingHotlinkProtectionEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingHotlinkProtectionEditResponseEnvelopeMessages]
+type settingHotlinkProtectionEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHotlinkProtectionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingHotlinkProtectionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    settingHotlinkProtectionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHotlinkProtectionUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingHotlinkProtectionUpdateResponseEnvelopeMessages]
-type settingHotlinkProtectionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHotlinkProtectionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHotlinkProtectionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

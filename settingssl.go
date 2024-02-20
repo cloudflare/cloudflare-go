@@ -47,9 +47,9 @@ func NewSettingSSLService(opts ...option.RequestOption) (r *SettingSSLService) {
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Update(ctx context.Context, zoneID string, body SettingSSLUpdateParams, opts ...option.RequestOption) (res *SettingSSLUpdateResponse, err error) {
+func (r *SettingSSLService) Edit(ctx context.Context, zoneID string, body SettingSSLEditParams, opts ...option.RequestOption) (res *SettingSSLEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingSSLUpdateResponseEnvelope
+	var env SettingSSLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -103,22 +103,22 @@ func (r *SettingSSLService) Get(ctx context.Context, zoneID string, opts ...opti
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type SettingSSLUpdateResponse struct {
+type SettingSSLEditResponse struct {
 	// ID of the zone setting.
-	ID SettingSSLUpdateResponseID `json:"id,required"`
+	ID SettingSSLEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSSLUpdateResponseValue `json:"value,required"`
+	Value SettingSSLEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingSSLUpdateResponseEditable `json:"editable"`
+	Editable SettingSSLEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSSLUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingSSLEditResponseJSON `json:"-"`
 }
 
-// settingSSLUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingSSLUpdateResponse]
-type settingSSLUpdateResponseJSON struct {
+// settingSSLEditResponseJSON contains the JSON metadata for the struct
+// [SettingSSLEditResponse]
+type settingSSLEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -127,34 +127,34 @@ type settingSSLUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSSLUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSSLEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingSSLUpdateResponseID string
+type SettingSSLEditResponseID string
 
 const (
-	SettingSSLUpdateResponseIDSSL SettingSSLUpdateResponseID = "ssl"
+	SettingSSLEditResponseIDSSL SettingSSLEditResponseID = "ssl"
 )
 
 // Current value of the zone setting.
-type SettingSSLUpdateResponseValue string
+type SettingSSLEditResponseValue string
 
 const (
-	SettingSSLUpdateResponseValueOff      SettingSSLUpdateResponseValue = "off"
-	SettingSSLUpdateResponseValueFlexible SettingSSLUpdateResponseValue = "flexible"
-	SettingSSLUpdateResponseValueFull     SettingSSLUpdateResponseValue = "full"
-	SettingSSLUpdateResponseValueStrict   SettingSSLUpdateResponseValue = "strict"
+	SettingSSLEditResponseValueOff      SettingSSLEditResponseValue = "off"
+	SettingSSLEditResponseValueFlexible SettingSSLEditResponseValue = "flexible"
+	SettingSSLEditResponseValueFull     SettingSSLEditResponseValue = "full"
+	SettingSSLEditResponseValueStrict   SettingSSLEditResponseValue = "strict"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingSSLUpdateResponseEditable bool
+type SettingSSLEditResponseEditable bool
 
 const (
-	SettingSSLUpdateResponseEditableTrue  SettingSSLUpdateResponseEditable = true
-	SettingSSLUpdateResponseEditableFalse SettingSSLUpdateResponseEditable = false
+	SettingSSLEditResponseEditableTrue  SettingSSLEditResponseEditable = true
+	SettingSSLEditResponseEditableFalse SettingSSLEditResponseEditable = false
 )
 
 // SSL encrypts your visitor's connection and safeguards credit card numbers and
@@ -227,28 +227,28 @@ const (
 	SettingSSLGetResponseEditableFalse SettingSSLGetResponseEditable = false
 )
 
-type SettingSSLUpdateParams struct {
+type SettingSSLEditParams struct {
 	// Value of the zone setting. Notes: Depends on the zone's plan level
-	Value param.Field[SettingSSLUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingSSLEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingSSLUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingSSLEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Depends on the zone's plan level
-type SettingSSLUpdateParamsValue string
+type SettingSSLEditParamsValue string
 
 const (
-	SettingSSLUpdateParamsValueOff      SettingSSLUpdateParamsValue = "off"
-	SettingSSLUpdateParamsValueFlexible SettingSSLUpdateParamsValue = "flexible"
-	SettingSSLUpdateParamsValueFull     SettingSSLUpdateParamsValue = "full"
-	SettingSSLUpdateParamsValueStrict   SettingSSLUpdateParamsValue = "strict"
+	SettingSSLEditParamsValueOff      SettingSSLEditParamsValue = "off"
+	SettingSSLEditParamsValueFlexible SettingSSLEditParamsValue = "flexible"
+	SettingSSLEditParamsValueFull     SettingSSLEditParamsValue = "full"
+	SettingSSLEditParamsValueStrict   SettingSSLEditParamsValue = "strict"
 )
 
-type SettingSSLUpdateResponseEnvelope struct {
-	Errors   []SettingSSLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSSLUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingSSLEditResponseEnvelope struct {
+	Errors   []SettingSSLEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingSSLEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// SSL encrypts your visitor's connection and safeguards credit card numbers and
@@ -267,13 +267,13 @@ type SettingSSLUpdateResponseEnvelope struct {
 	// web server. This certificate must be signed by a certificate authority, have an
 	// expiration date in the future, and respond for the request domain name
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result SettingSSLUpdateResponse             `json:"result"`
-	JSON   settingSSLUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingSSLEditResponse             `json:"result"`
+	JSON   settingSSLEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingSSLUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingSSLUpdateResponseEnvelope]
-type settingSSLUpdateResponseEnvelopeJSON struct {
+// settingSSLEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingSSLEditResponseEnvelope]
+type settingSSLEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -282,45 +282,45 @@ type settingSSLUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSSLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSSLEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingSSLUpdateResponseEnvelopeErrors struct {
+type SettingSSLEditResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    settingSSLEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingSSLEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingSSLEditResponseEnvelopeErrors]
+type settingSSLEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingSSLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSSLEditResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
-	JSON    settingSSLUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingSSLEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingSSLUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingSSLUpdateResponseEnvelopeErrors]
-type settingSSLUpdateResponseEnvelopeErrorsJSON struct {
+// settingSSLEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingSSLEditResponseEnvelopeMessages]
+type settingSSLEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSSLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingSSLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingSSLUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSSLUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingSSLUpdateResponseEnvelopeMessages]
-type settingSSLUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSSLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSSLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

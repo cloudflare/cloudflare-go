@@ -46,6 +46,19 @@ func (r *StreamLiveInputOutputService) New(ctx context.Context, accountID string
 	return
 }
 
+// Updates the state of an output.
+func (r *StreamLiveInputOutputService) Update(ctx context.Context, accountID string, liveInputIdentifier string, outputIdentifier string, body StreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputOutputUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamLiveInputOutputUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountID, liveInputIdentifier, outputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves all outputs associated with a specified live input.
 func (r *StreamLiveInputOutputService) List(ctx context.Context, accountID string, liveInputIdentifier string, opts ...option.RequestOption) (res *[]StreamLiveInputOutputListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -65,19 +78,6 @@ func (r *StreamLiveInputOutputService) Delete(ctx context.Context, accountID str
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountID, liveInputIdentifier, outputIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
-}
-
-// Updates the state of an output.
-func (r *StreamLiveInputOutputService) Replace(ctx context.Context, accountID string, liveInputIdentifier string, outputIdentifier string, body StreamLiveInputOutputReplaceParams, opts ...option.RequestOption) (res *StreamLiveInputOutputReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamLiveInputOutputReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountID, liveInputIdentifier, outputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
 	return
 }
 
@@ -112,6 +112,37 @@ func (r *StreamLiveInputOutputNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type StreamLiveInputOutputUpdateResponse struct {
+	// When enabled, live video streamed to the associated live input will be sent to
+	// the output URL. When disabled, live video will not be sent to the output URL,
+	// even when streaming to the associated live input. Use this to control precisely
+	// when you start and stop simulcasting to specific destinations like YouTube and
+	// Twitch.
+	Enabled bool `json:"enabled"`
+	// The streamKey used to authenticate against an output's target.
+	StreamKey string `json:"streamKey"`
+	// A unique identifier for the output.
+	Uid string `json:"uid"`
+	// The URL an output uses to restream.
+	URL  string                                  `json:"url"`
+	JSON streamLiveInputOutputUpdateResponseJSON `json:"-"`
+}
+
+// streamLiveInputOutputUpdateResponseJSON contains the JSON metadata for the
+// struct [StreamLiveInputOutputUpdateResponse]
+type streamLiveInputOutputUpdateResponseJSON struct {
+	Enabled     apijson.Field
+	StreamKey   apijson.Field
+	Uid         apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type StreamLiveInputOutputListResponse struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
@@ -140,37 +171,6 @@ type streamLiveInputOutputListResponseJSON struct {
 }
 
 func (r *StreamLiveInputOutputListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamLiveInputOutputReplaceResponse struct {
-	// When enabled, live video streamed to the associated live input will be sent to
-	// the output URL. When disabled, live video will not be sent to the output URL,
-	// even when streaming to the associated live input. Use this to control precisely
-	// when you start and stop simulcasting to specific destinations like YouTube and
-	// Twitch.
-	Enabled bool `json:"enabled"`
-	// The streamKey used to authenticate against an output's target.
-	StreamKey string `json:"streamKey"`
-	// A unique identifier for the output.
-	Uid string `json:"uid"`
-	// The URL an output uses to restream.
-	URL  string                                   `json:"url"`
-	JSON streamLiveInputOutputReplaceResponseJSON `json:"-"`
-}
-
-// streamLiveInputOutputReplaceResponseJSON contains the JSON metadata for the
-// struct [StreamLiveInputOutputReplaceResponse]
-type streamLiveInputOutputReplaceResponseJSON struct {
-	Enabled     apijson.Field
-	StreamKey   apijson.Field
-	Uid         apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamLiveInputOutputReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -260,6 +260,88 @@ const (
 	StreamLiveInputOutputNewResponseEnvelopeSuccessTrue StreamLiveInputOutputNewResponseEnvelopeSuccess = true
 )
 
+type StreamLiveInputOutputUpdateParams struct {
+	// When enabled, live video streamed to the associated live input will be sent to
+	// the output URL. When disabled, live video will not be sent to the output URL,
+	// even when streaming to the associated live input. Use this to control precisely
+	// when you start and stop simulcasting to specific destinations like YouTube and
+	// Twitch.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r StreamLiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type StreamLiveInputOutputUpdateResponseEnvelope struct {
+	Errors   []StreamLiveInputOutputUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamLiveInputOutputUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamLiveInputOutputUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamLiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamLiveInputOutputUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamLiveInputOutputUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [StreamLiveInputOutputUpdateResponseEnvelope]
+type streamLiveInputOutputUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamLiveInputOutputUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    streamLiveInputOutputUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamLiveInputOutputUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [StreamLiveInputOutputUpdateResponseEnvelopeErrors]
+type streamLiveInputOutputUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamLiveInputOutputUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    streamLiveInputOutputUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamLiveInputOutputUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [StreamLiveInputOutputUpdateResponseEnvelopeMessages]
+type streamLiveInputOutputUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamLiveInputOutputUpdateResponseEnvelopeSuccess bool
+
+const (
+	StreamLiveInputOutputUpdateResponseEnvelopeSuccessTrue StreamLiveInputOutputUpdateResponseEnvelopeSuccess = true
+)
+
 type StreamLiveInputOutputListResponseEnvelope struct {
 	Errors   []StreamLiveInputOutputListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamLiveInputOutputListResponseEnvelopeMessages `json:"messages,required"`
@@ -327,86 +409,4 @@ type StreamLiveInputOutputListResponseEnvelopeSuccess bool
 
 const (
 	StreamLiveInputOutputListResponseEnvelopeSuccessTrue StreamLiveInputOutputListResponseEnvelopeSuccess = true
-)
-
-type StreamLiveInputOutputReplaceParams struct {
-	// When enabled, live video streamed to the associated live input will be sent to
-	// the output URL. When disabled, live video will not be sent to the output URL,
-	// even when streaming to the associated live input. Use this to control precisely
-	// when you start and stop simulcasting to specific destinations like YouTube and
-	// Twitch.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r StreamLiveInputOutputReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type StreamLiveInputOutputReplaceResponseEnvelope struct {
-	Errors   []StreamLiveInputOutputReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamLiveInputOutputReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamLiveInputOutputReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamLiveInputOutputReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamLiveInputOutputReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamLiveInputOutputReplaceResponseEnvelopeJSON contains the JSON metadata for
-// the struct [StreamLiveInputOutputReplaceResponseEnvelope]
-type streamLiveInputOutputReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamLiveInputOutputReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamLiveInputOutputReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    streamLiveInputOutputReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamLiveInputOutputReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [StreamLiveInputOutputReplaceResponseEnvelopeErrors]
-type streamLiveInputOutputReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamLiveInputOutputReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamLiveInputOutputReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    streamLiveInputOutputReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamLiveInputOutputReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [StreamLiveInputOutputReplaceResponseEnvelopeMessages]
-type streamLiveInputOutputReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamLiveInputOutputReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamLiveInputOutputReplaceResponseEnvelopeSuccess bool
-
-const (
-	StreamLiveInputOutputReplaceResponseEnvelopeSuccessTrue StreamLiveInputOutputReplaceResponseEnvelopeSuccess = true
 )

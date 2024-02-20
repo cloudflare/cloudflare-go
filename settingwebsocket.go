@@ -35,9 +35,9 @@ func NewSettingWebsocketService(opts ...option.RequestOption) (r *SettingWebsock
 // Changes Websockets setting. For more information about Websockets, please refer
 // to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *SettingWebsocketService) Update(ctx context.Context, zoneID string, body SettingWebsocketUpdateParams, opts ...option.RequestOption) (res *SettingWebsocketUpdateResponse, err error) {
+func (r *SettingWebsocketService) Edit(ctx context.Context, zoneID string, body SettingWebsocketEditParams, opts ...option.RequestOption) (res *SettingWebsocketEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingWebsocketUpdateResponseEnvelope
+	var env SettingWebsocketEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -68,22 +68,22 @@ func (r *SettingWebsocketService) Get(ctx context.Context, zoneID string, opts .
 // real-time applications such as live chat and gaming. For more information refer
 // to
 // [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-type SettingWebsocketUpdateResponse struct {
+type SettingWebsocketEditResponse struct {
 	// ID of the zone setting.
-	ID SettingWebsocketUpdateResponseID `json:"id,required"`
+	ID SettingWebsocketEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingWebsocketUpdateResponseValue `json:"value,required"`
+	Value SettingWebsocketEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingWebsocketUpdateResponseEditable `json:"editable"`
+	Editable SettingWebsocketEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingWebsocketUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingWebsocketEditResponseJSON `json:"-"`
 }
 
-// settingWebsocketUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingWebsocketUpdateResponse]
-type settingWebsocketUpdateResponseJSON struct {
+// settingWebsocketEditResponseJSON contains the JSON metadata for the struct
+// [SettingWebsocketEditResponse]
+type settingWebsocketEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,32 +92,32 @@ type settingWebsocketUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebsocketUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebsocketEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingWebsocketUpdateResponseID string
+type SettingWebsocketEditResponseID string
 
 const (
-	SettingWebsocketUpdateResponseIDWebsockets SettingWebsocketUpdateResponseID = "websockets"
+	SettingWebsocketEditResponseIDWebsockets SettingWebsocketEditResponseID = "websockets"
 )
 
 // Current value of the zone setting.
-type SettingWebsocketUpdateResponseValue string
+type SettingWebsocketEditResponseValue string
 
 const (
-	SettingWebsocketUpdateResponseValueOff SettingWebsocketUpdateResponseValue = "off"
-	SettingWebsocketUpdateResponseValueOn  SettingWebsocketUpdateResponseValue = "on"
+	SettingWebsocketEditResponseValueOff SettingWebsocketEditResponseValue = "off"
+	SettingWebsocketEditResponseValueOn  SettingWebsocketEditResponseValue = "on"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingWebsocketUpdateResponseEditable bool
+type SettingWebsocketEditResponseEditable bool
 
 const (
-	SettingWebsocketUpdateResponseEditableTrue  SettingWebsocketUpdateResponseEditable = true
-	SettingWebsocketUpdateResponseEditableFalse SettingWebsocketUpdateResponseEditable = false
+	SettingWebsocketEditResponseEditableTrue  SettingWebsocketEditResponseEditable = true
+	SettingWebsocketEditResponseEditableFalse SettingWebsocketEditResponseEditable = false
 )
 
 // WebSockets are open connections sustained between the client and the origin
@@ -179,26 +179,26 @@ const (
 	SettingWebsocketGetResponseEditableFalse SettingWebsocketGetResponseEditable = false
 )
 
-type SettingWebsocketUpdateParams struct {
+type SettingWebsocketEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingWebsocketUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingWebsocketEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingWebsocketUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingWebsocketEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingWebsocketUpdateParamsValue string
+type SettingWebsocketEditParamsValue string
 
 const (
-	SettingWebsocketUpdateParamsValueOff SettingWebsocketUpdateParamsValue = "off"
-	SettingWebsocketUpdateParamsValueOn  SettingWebsocketUpdateParamsValue = "on"
+	SettingWebsocketEditParamsValueOff SettingWebsocketEditParamsValue = "off"
+	SettingWebsocketEditParamsValueOn  SettingWebsocketEditParamsValue = "on"
 )
 
-type SettingWebsocketUpdateResponseEnvelope struct {
-	Errors   []SettingWebsocketUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWebsocketUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingWebsocketEditResponseEnvelope struct {
+	Errors   []SettingWebsocketEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingWebsocketEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// WebSockets are open connections sustained between the client and the origin
@@ -208,13 +208,13 @@ type SettingWebsocketUpdateResponseEnvelope struct {
 	// real-time applications such as live chat and gaming. For more information refer
 	// to
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result SettingWebsocketUpdateResponse             `json:"result"`
-	JSON   settingWebsocketUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingWebsocketEditResponse             `json:"result"`
+	JSON   settingWebsocketEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingWebsocketUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingWebsocketUpdateResponseEnvelope]
-type settingWebsocketUpdateResponseEnvelopeJSON struct {
+// settingWebsocketEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingWebsocketEditResponseEnvelope]
+type settingWebsocketEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -223,45 +223,45 @@ type settingWebsocketUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebsocketUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebsocketEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingWebsocketUpdateResponseEnvelopeErrors struct {
+type SettingWebsocketEditResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    settingWebsocketEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingWebsocketEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingWebsocketEditResponseEnvelopeErrors]
+type settingWebsocketEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingWebsocketEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingWebsocketEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    settingWebsocketUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingWebsocketEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingWebsocketUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingWebsocketUpdateResponseEnvelopeErrors]
-type settingWebsocketUpdateResponseEnvelopeErrorsJSON struct {
+// settingWebsocketEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingWebsocketEditResponseEnvelopeMessages]
+type settingWebsocketEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWebsocketUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingWebsocketUpdateResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    settingWebsocketUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWebsocketUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingWebsocketUpdateResponseEnvelopeMessages]
-type settingWebsocketUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWebsocketUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWebsocketEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

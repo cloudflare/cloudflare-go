@@ -49,6 +49,19 @@ func (r *FirewallUaRuleService) New(ctx context.Context, zoneIdentifier string, 
 	return
 }
 
+// Updates an existing User Agent Blocking rule.
+func (r *FirewallUaRuleService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallUaRuleUpdateParams, opts ...option.RequestOption) (res *FirewallUaRuleUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FirewallUaRuleUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches User Agent Blocking rules in a zone. You can filter the results using
 // several optional parameters.
 func (r *FirewallUaRuleService) List(ctx context.Context, zoneIdentifier string, query FirewallUaRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallUaRuleListResponse], err error) {
@@ -100,19 +113,6 @@ func (r *FirewallUaRuleService) Get(ctx context.Context, zoneIdentifier string, 
 	return
 }
 
-// Updates an existing User Agent Blocking rule.
-func (r *FirewallUaRuleService) Replace(ctx context.Context, zoneIdentifier string, id string, body FirewallUaRuleReplaceParams, opts ...option.RequestOption) (res *FirewallUaRuleReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallUaRuleReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Union satisfied by [FirewallUaRuleNewResponseUnknown] or [shared.UnionString].
 type FirewallUaRuleNewResponse interface {
 	ImplementsFirewallUaRuleNewResponse()
@@ -121,6 +121,23 @@ type FirewallUaRuleNewResponse interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*FirewallUaRuleNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [FirewallUaRuleUpdateResponseUnknown] or
+// [shared.UnionString].
+type FirewallUaRuleUpdateResponse interface {
+	ImplementsFirewallUaRuleUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallUaRuleUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -227,23 +244,6 @@ func init() {
 	)
 }
 
-// Union satisfied by [FirewallUaRuleReplaceResponseUnknown] or
-// [shared.UnionString].
-type FirewallUaRuleReplaceResponse interface {
-	ImplementsFirewallUaRuleReplaceResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallUaRuleReplaceResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
 type FirewallUaRuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -319,6 +319,83 @@ type FirewallUaRuleNewResponseEnvelopeSuccess bool
 
 const (
 	FirewallUaRuleNewResponseEnvelopeSuccessTrue FirewallUaRuleNewResponseEnvelopeSuccess = true
+)
+
+type FirewallUaRuleUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FirewallUaRuleUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FirewallUaRuleUpdateResponseEnvelope struct {
+	Errors   []FirewallUaRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallUaRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallUaRuleUpdateResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success FirewallUaRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallUaRuleUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// firewallUaRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [FirewallUaRuleUpdateResponseEnvelope]
+type firewallUaRuleUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallUaRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallUaRuleUpdateResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    firewallUaRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// firewallUaRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [FirewallUaRuleUpdateResponseEnvelopeErrors]
+type firewallUaRuleUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallUaRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallUaRuleUpdateResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    firewallUaRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// firewallUaRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [FirewallUaRuleUpdateResponseEnvelopeMessages]
+type firewallUaRuleUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallUaRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FirewallUaRuleUpdateResponseEnvelopeSuccess bool
+
+const (
+	FirewallUaRuleUpdateResponseEnvelopeSuccessTrue FirewallUaRuleUpdateResponseEnvelopeSuccess = true
 )
 
 type FirewallUaRuleListParams struct {
@@ -480,81 +557,4 @@ type FirewallUaRuleGetResponseEnvelopeSuccess bool
 
 const (
 	FirewallUaRuleGetResponseEnvelopeSuccessTrue FirewallUaRuleGetResponseEnvelopeSuccess = true
-)
-
-type FirewallUaRuleReplaceParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FirewallUaRuleReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FirewallUaRuleReplaceResponseEnvelope struct {
-	Errors   []FirewallUaRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallUaRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallUaRuleReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success FirewallUaRuleReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallUaRuleReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// firewallUaRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FirewallUaRuleReplaceResponseEnvelope]
-type firewallUaRuleReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallUaRuleReplaceResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    firewallUaRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallUaRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallUaRuleReplaceResponseEnvelopeErrors]
-type firewallUaRuleReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallUaRuleReplaceResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    firewallUaRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallUaRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FirewallUaRuleReplaceResponseEnvelopeMessages]
-type firewallUaRuleReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallUaRuleReplaceResponseEnvelopeSuccess bool
-
-const (
-	FirewallUaRuleReplaceResponseEnvelopeSuccessTrue FirewallUaRuleReplaceResponseEnvelopeSuccess = true
 )

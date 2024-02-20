@@ -46,6 +46,19 @@ func (r *SecondaryDNSOutgoingService) New(ctx context.Context, zoneID interface{
 	return
 }
 
+// Update primary zone configuration for outgoing zone transfers.
+func (r *SecondaryDNSOutgoingService) Update(ctx context.Context, zoneID interface{}, body SecondaryDNSOutgoingUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SecondaryDNSOutgoingUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Delete primary zone configuration for outgoing zone transfers.
 func (r *SecondaryDNSOutgoingService) Delete(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *SecondaryDNSOutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -112,19 +125,6 @@ func (r *SecondaryDNSOutgoingService) Get(ctx context.Context, zoneID interface{
 	return
 }
 
-// Update primary zone configuration for outgoing zone transfers.
-func (r *SecondaryDNSOutgoingService) Replace(ctx context.Context, zoneID interface{}, body SecondaryDNSOutgoingReplaceParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SecondaryDNSOutgoingReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type SecondaryDNSOutgoingNewResponse struct {
 	ID interface{} `json:"id"`
 	// The time for a specific event.
@@ -157,6 +157,41 @@ type secondaryDNSOutgoingNewResponseJSON struct {
 }
 
 func (r *SecondaryDNSOutgoingNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDNSOutgoingUpdateResponse struct {
+	ID interface{} `json:"id"`
+	// The time for a specific event.
+	CheckedTime string `json:"checked_time"`
+	// The time for a specific event.
+	CreatedTime string `json:"created_time"`
+	// The time for a specific event.
+	LastTransferredTime string `json:"last_transferred_time"`
+	// Zone name.
+	Name string `json:"name"`
+	// A list of peer tags.
+	Peers []interface{} `json:"peers"`
+	// The serial number of the SOA for the given zone.
+	SoaSerial float64                                `json:"soa_serial"`
+	JSON      secondaryDNSOutgoingUpdateResponseJSON `json:"-"`
+}
+
+// secondaryDNSOutgoingUpdateResponseJSON contains the JSON metadata for the struct
+// [SecondaryDNSOutgoingUpdateResponse]
+type secondaryDNSOutgoingUpdateResponseJSON struct {
+	ID                  apijson.Field
+	CheckedTime         apijson.Field
+	CreatedTime         apijson.Field
+	LastTransferredTime apijson.Field
+	Name                apijson.Field
+	Peers               apijson.Field
+	SoaSerial           apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -209,41 +244,6 @@ type secondaryDNSOutgoingGetResponseJSON struct {
 }
 
 func (r *SecondaryDNSOutgoingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDNSOutgoingReplaceResponse struct {
-	ID interface{} `json:"id"`
-	// The time for a specific event.
-	CheckedTime string `json:"checked_time"`
-	// The time for a specific event.
-	CreatedTime string `json:"created_time"`
-	// The time for a specific event.
-	LastTransferredTime string `json:"last_transferred_time"`
-	// Zone name.
-	Name string `json:"name"`
-	// A list of peer tags.
-	Peers []interface{} `json:"peers"`
-	// The serial number of the SOA for the given zone.
-	SoaSerial float64                                 `json:"soa_serial"`
-	JSON      secondaryDNSOutgoingReplaceResponseJSON `json:"-"`
-}
-
-// secondaryDNSOutgoingReplaceResponseJSON contains the JSON metadata for the
-// struct [SecondaryDNSOutgoingReplaceResponse]
-type secondaryDNSOutgoingReplaceResponseJSON struct {
-	ID                  apijson.Field
-	CheckedTime         apijson.Field
-	CreatedTime         apijson.Field
-	LastTransferredTime apijson.Field
-	Name                apijson.Field
-	Peers               apijson.Field
-	SoaSerial           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *SecondaryDNSOutgoingReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -325,6 +325,86 @@ type SecondaryDNSOutgoingNewResponseEnvelopeSuccess bool
 
 const (
 	SecondaryDNSOutgoingNewResponseEnvelopeSuccessTrue SecondaryDNSOutgoingNewResponseEnvelopeSuccess = true
+)
+
+type SecondaryDNSOutgoingUpdateParams struct {
+	// Zone name.
+	Name param.Field[string] `json:"name,required"`
+	// A list of peer tags.
+	Peers param.Field[[]interface{}] `json:"peers,required"`
+}
+
+func (r SecondaryDNSOutgoingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SecondaryDNSOutgoingUpdateResponseEnvelope struct {
+	Errors   []SecondaryDNSOutgoingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDNSOutgoingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   SecondaryDNSOutgoingUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SecondaryDNSOutgoingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    secondaryDNSOutgoingUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// secondaryDNSOutgoingUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SecondaryDNSOutgoingUpdateResponseEnvelope]
+type secondaryDNSOutgoingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDNSOutgoingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    secondaryDNSOutgoingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// secondaryDNSOutgoingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SecondaryDNSOutgoingUpdateResponseEnvelopeErrors]
+type secondaryDNSOutgoingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDNSOutgoingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    secondaryDNSOutgoingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// secondaryDNSOutgoingUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SecondaryDNSOutgoingUpdateResponseEnvelopeMessages]
+type secondaryDNSOutgoingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDNSOutgoingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SecondaryDNSOutgoingUpdateResponseEnvelopeSuccess bool
+
+const (
+	SecondaryDNSOutgoingUpdateResponseEnvelopeSuccessTrue SecondaryDNSOutgoingUpdateResponseEnvelopeSuccess = true
 )
 
 type SecondaryDNSOutgoingDeleteResponseEnvelope struct {
@@ -675,84 +755,4 @@ type SecondaryDNSOutgoingGetResponseEnvelopeSuccess bool
 
 const (
 	SecondaryDNSOutgoingGetResponseEnvelopeSuccessTrue SecondaryDNSOutgoingGetResponseEnvelopeSuccess = true
-)
-
-type SecondaryDNSOutgoingReplaceParams struct {
-	// Zone name.
-	Name param.Field[string] `json:"name,required"`
-	// A list of peer tags.
-	Peers param.Field[[]interface{}] `json:"peers,required"`
-}
-
-func (r SecondaryDNSOutgoingReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SecondaryDNSOutgoingReplaceResponseEnvelope struct {
-	Errors   []SecondaryDNSOutgoingReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecondaryDNSOutgoingReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSOutgoingReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success SecondaryDNSOutgoingReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    secondaryDNSOutgoingReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// secondaryDNSOutgoingReplaceResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SecondaryDNSOutgoingReplaceResponseEnvelope]
-type secondaryDNSOutgoingReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDNSOutgoingReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDNSOutgoingReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    secondaryDNSOutgoingReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// secondaryDNSOutgoingReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SecondaryDNSOutgoingReplaceResponseEnvelopeErrors]
-type secondaryDNSOutgoingReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDNSOutgoingReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDNSOutgoingReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    secondaryDNSOutgoingReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// secondaryDNSOutgoingReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SecondaryDNSOutgoingReplaceResponseEnvelopeMessages]
-type secondaryDNSOutgoingReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDNSOutgoingReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SecondaryDNSOutgoingReplaceResponseEnvelopeSuccess bool
-
-const (
-	SecondaryDNSOutgoingReplaceResponseEnvelopeSuccessTrue SecondaryDNSOutgoingReplaceResponseEnvelopeSuccess = true
 )

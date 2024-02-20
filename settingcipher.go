@@ -33,9 +33,9 @@ func NewSettingCipherService(opts ...option.RequestOption) (r *SettingCipherServ
 }
 
 // Changes ciphers setting.
-func (r *SettingCipherService) Update(ctx context.Context, zoneID string, body SettingCipherUpdateParams, opts ...option.RequestOption) (res *SettingCipherUpdateResponse, err error) {
+func (r *SettingCipherService) Edit(ctx context.Context, zoneID string, body SettingCipherEditParams, opts ...option.RequestOption) (res *SettingCipherEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingCipherUpdateResponseEnvelope
+	var env SettingCipherEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ciphers", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -60,22 +60,22 @@ func (r *SettingCipherService) Get(ctx context.Context, zoneID string, opts ...o
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.
-type SettingCipherUpdateResponse struct {
+type SettingCipherEditResponse struct {
 	// ID of the zone setting.
-	ID SettingCipherUpdateResponseID `json:"id,required"`
+	ID SettingCipherEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
 	Value []string `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingCipherUpdateResponseEditable `json:"editable"`
+	Editable SettingCipherEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingCipherUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingCipherEditResponseJSON `json:"-"`
 }
 
-// settingCipherUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingCipherUpdateResponse]
-type settingCipherUpdateResponseJSON struct {
+// settingCipherEditResponseJSON contains the JSON metadata for the struct
+// [SettingCipherEditResponse]
+type settingCipherEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -84,24 +84,24 @@ type settingCipherUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCipherUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCipherEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingCipherUpdateResponseID string
+type SettingCipherEditResponseID string
 
 const (
-	SettingCipherUpdateResponseIDCiphers SettingCipherUpdateResponseID = "ciphers"
+	SettingCipherEditResponseIDCiphers SettingCipherEditResponseID = "ciphers"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingCipherUpdateResponseEditable bool
+type SettingCipherEditResponseEditable bool
 
 const (
-	SettingCipherUpdateResponseEditableTrue  SettingCipherUpdateResponseEditable = true
-	SettingCipherUpdateResponseEditableFalse SettingCipherUpdateResponseEditable = false
+	SettingCipherEditResponseEditableTrue  SettingCipherEditResponseEditable = true
+	SettingCipherEditResponseEditableFalse SettingCipherEditResponseEditable = false
 )
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
@@ -150,29 +150,29 @@ const (
 	SettingCipherGetResponseEditableFalse SettingCipherGetResponseEditable = false
 )
 
-type SettingCipherUpdateParams struct {
+type SettingCipherEditParams struct {
 	// Value of the zone setting.
 	Value param.Field[[]string] `json:"value,required"`
 }
 
-func (r SettingCipherUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingCipherEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SettingCipherUpdateResponseEnvelope struct {
-	Errors   []SettingCipherUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCipherUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingCipherEditResponseEnvelope struct {
+	Errors   []SettingCipherEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingCipherEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
-	Result SettingCipherUpdateResponse             `json:"result"`
-	JSON   settingCipherUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingCipherEditResponse             `json:"result"`
+	JSON   settingCipherEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingCipherUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingCipherUpdateResponseEnvelope]
-type settingCipherUpdateResponseEnvelopeJSON struct {
+// settingCipherEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingCipherEditResponseEnvelope]
+type settingCipherEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -181,45 +181,45 @@ type settingCipherUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCipherUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCipherEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingCipherUpdateResponseEnvelopeErrors struct {
+type SettingCipherEditResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    settingCipherEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingCipherEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingCipherEditResponseEnvelopeErrors]
+type settingCipherEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingCipherEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingCipherEditResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    settingCipherUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingCipherEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingCipherUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingCipherUpdateResponseEnvelopeErrors]
-type settingCipherUpdateResponseEnvelopeErrorsJSON struct {
+// settingCipherEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingCipherEditResponseEnvelopeMessages]
+type settingCipherEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCipherUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingCipherUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingCipherUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCipherUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingCipherUpdateResponseEnvelopeMessages]
-type settingCipherUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCipherUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCipherEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -53,19 +53,6 @@ func (r *DevicePolicyService) New(ctx context.Context, identifier interface{}, b
 	return
 }
 
-// Updates a configured device settings profile.
-func (r *DevicePolicyService) Update(ctx context.Context, identifier interface{}, uuid string, body DevicePolicyUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches a list of the device settings profiles for an account.
 func (r *DevicePolicyService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -93,6 +80,19 @@ func (r *DevicePolicyService) Delete(ctx context.Context, identifier interface{}
 	return
 }
 
+// Updates a configured device settings profile.
+func (r *DevicePolicyService) Edit(ctx context.Context, identifier interface{}, uuid string, body DevicePolicyEditParams, opts ...option.RequestOption) (res *[]DevicePolicyEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePolicyEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s", identifier, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches a device settings profile by ID.
 func (r *DevicePolicyService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *[]DevicePolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -107,8 +107,6 @@ func (r *DevicePolicyService) Get(ctx context.Context, identifier interface{}, u
 }
 
 type DevicePolicyNewResponse = interface{}
-
-type DevicePolicyUpdateResponse = interface{}
 
 type DevicePolicyListResponse struct {
 	// Whether to allow the user to switch WARP between modes.
@@ -478,6 +476,8 @@ func (r *DevicePolicyDeleteResponseServiceModeV2) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePolicyEditResponse = interface{}
+
 type DevicePolicyGetResponse = interface{}
 
 type DevicePolicyNewParams struct {
@@ -634,155 +634,6 @@ type devicePolicyNewResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *DevicePolicyNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyUpdateParams struct {
-	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
-	// Whether to receive update notifications when a new version of the client is
-	// available.
-	AllowUpdates param.Field[bool] `json:"allow_updates"`
-	// Whether to allow devices to leave the organization.
-	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect param.Field[float64] `json:"auto_connect"`
-	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal param.Field[float64] `json:"captive_portal"`
-	// A description of the policy.
-	Description param.Field[string] `json:"description"`
-	// If the `dns_server` field of a fallback domain is not present, the client will
-	// fall back to a best guess of the default/system DNS resolvers unless this policy
-	// option is set to `true`.
-	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Whether the policy will be applied to matching devices.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
-	// The wirefilter expression to match devices.
-	Match param.Field[string] `json:"match"`
-	// The name of the device settings profile.
-	Name param.Field[string] `json:"name"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence    param.Field[float64]                               `json:"precedence"`
-	ServiceModeV2 param.Field[DevicePolicyUpdateParamsServiceModeV2] `json:"service_mode_v2"`
-	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL param.Field[string] `json:"support_url"`
-	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked param.Field[bool] `json:"switch_locked"`
-}
-
-func (r DevicePolicyUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyUpdateParamsServiceModeV2 struct {
-	// The mode to run the WARP client under.
-	Mode param.Field[string] `json:"mode"`
-	// The port number when used with proxy mode.
-	Port param.Field[float64] `json:"port"`
-}
-
-func (r DevicePolicyUpdateParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyUpdateResponseEnvelope struct {
-	Errors   []DevicePolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyUpdateResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [DevicePolicyUpdateResponseEnvelope]
-type devicePolicyUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    devicePolicyUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePolicyUpdateResponseEnvelopeErrors]
-type devicePolicyUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    devicePolicyUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePolicyUpdateResponseEnvelopeMessages]
-type devicePolicyUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyUpdateResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyUpdateResponseEnvelopeSuccessTrue DevicePolicyUpdateResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                          `json:"total_count"`
-	JSON       devicePolicyUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [DevicePolicyUpdateResponseEnvelopeResultInfo]
-type devicePolicyUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -979,6 +830,155 @@ type devicePolicyDeleteResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *DevicePolicyDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyEditParams struct {
+	// Whether to allow the user to switch WARP between modes.
+	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
+	// Whether to receive update notifications when a new version of the client is
+	// available.
+	AllowUpdates param.Field[bool] `json:"allow_updates"`
+	// Whether to allow devices to leave the organization.
+	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
+	// The amount of time in minutes to reconnect after having been disabled.
+	AutoConnect param.Field[float64] `json:"auto_connect"`
+	// Turn on the captive portal after the specified amount of time.
+	CaptivePortal param.Field[float64] `json:"captive_portal"`
+	// A description of the policy.
+	Description param.Field[string] `json:"description"`
+	// If the `dns_server` field of a fallback domain is not present, the client will
+	// fall back to a best guess of the default/system DNS resolvers unless this policy
+	// option is set to `true`.
+	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
+	// Whether the policy will be applied to matching devices.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Whether to add Microsoft IPs to Split Tunnel exclusions.
+	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
+	// The wirefilter expression to match devices.
+	Match param.Field[string] `json:"match"`
+	// The name of the device settings profile.
+	Name param.Field[string] `json:"name"`
+	// The precedence of the policy. Lower values indicate higher precedence. Policies
+	// will be evaluated in ascending order of this field.
+	Precedence    param.Field[float64]                             `json:"precedence"`
+	ServiceModeV2 param.Field[DevicePolicyEditParamsServiceModeV2] `json:"service_mode_v2"`
+	// The URL to launch when the Send Feedback button is clicked.
+	SupportURL param.Field[string] `json:"support_url"`
+	// Whether to allow the user to turn off the WARP switch and disconnect the client.
+	SwitchLocked param.Field[bool] `json:"switch_locked"`
+}
+
+func (r DevicePolicyEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyEditParamsServiceModeV2 struct {
+	// The mode to run the WARP client under.
+	Mode param.Field[string] `json:"mode"`
+	// The port number when used with proxy mode.
+	Port param.Field[float64] `json:"port"`
+}
+
+func (r DevicePolicyEditParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyEditResponseEnvelope struct {
+	Errors   []DevicePolicyEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyEditResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePolicyEditResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyEditResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePolicyEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DevicePolicyEditResponseEnvelope]
+type devicePolicyEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyEditResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    devicePolicyEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePolicyEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePolicyEditResponseEnvelopeErrors]
+type devicePolicyEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyEditResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    devicePolicyEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePolicyEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePolicyEditResponseEnvelopeMessages]
+type devicePolicyEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePolicyEditResponseEnvelopeSuccess bool
+
+const (
+	DevicePolicyEditResponseEnvelopeSuccessTrue DevicePolicyEditResponseEnvelopeSuccess = true
+)
+
+type DevicePolicyEditResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	JSON       devicePolicyEditResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePolicyEditResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [DevicePolicyEditResponseEnvelopeResultInfo]
+type devicePolicyEditResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

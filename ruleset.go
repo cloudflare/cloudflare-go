@@ -52,6 +52,19 @@ func (r *RulesetService) New(ctx context.Context, accountOrZone string, accountO
 	return
 }
 
+// Updates an account or zone ruleset, creating a new version.
+func (r *RulesetService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, body RulesetUpdateParams, opts ...option.RequestOption) (res *RulesetUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RulesetUpdateResponseEnvelope
+	path := fmt.Sprintf("%s/%s/rulesets/%s", accountOrZone, accountOrZoneID, rulesetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches all rulesets.
 func (r *RulesetService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]RulesetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -80,19 +93,6 @@ func (r *RulesetService) Get(ctx context.Context, accountOrZone string, accountO
 	var env RulesetGetResponseEnvelope
 	path := fmt.Sprintf("%s/%s/rulesets/%s", accountOrZone, accountOrZoneID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates an account or zone ruleset, creating a new version.
-func (r *RulesetService) Replace(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, body RulesetReplaceParams, opts ...option.RequestOption) (res *RulesetReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RulesetReplaceResponseEnvelope
-	path := fmt.Sprintf("%s/%s/rulesets/%s", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -821,6 +821,730 @@ type rulesetNewResponseRulesRulesetsSkipRuleLoggingJSON struct {
 }
 
 func (r *RulesetNewResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A result.
+type RulesetUpdateResponse struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id,required"`
+	// The kind of the ruleset.
+	Kind RulesetUpdateResponseKind `json:"kind,required"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name,required"`
+	// The phase of the ruleset.
+	Phase RulesetUpdateResponsePhase `json:"phase,required"`
+	// The list of rules in the ruleset.
+	Rules []RulesetUpdateResponseRule `json:"rules,required"`
+	// The version of the ruleset.
+	Version string `json:"version,required"`
+	// An informative description of the ruleset.
+	Description string                    `json:"description"`
+	JSON        rulesetUpdateResponseJSON `json:"-"`
+}
+
+// rulesetUpdateResponseJSON contains the JSON metadata for the struct
+// [RulesetUpdateResponse]
+type rulesetUpdateResponseJSON struct {
+	ID          apijson.Field
+	Kind        apijson.Field
+	LastUpdated apijson.Field
+	Name        apijson.Field
+	Phase       apijson.Field
+	Rules       apijson.Field
+	Version     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The kind of the ruleset.
+type RulesetUpdateResponseKind string
+
+const (
+	RulesetUpdateResponseKindManaged RulesetUpdateResponseKind = "managed"
+	RulesetUpdateResponseKindCustom  RulesetUpdateResponseKind = "custom"
+	RulesetUpdateResponseKindRoot    RulesetUpdateResponseKind = "root"
+	RulesetUpdateResponseKindZone    RulesetUpdateResponseKind = "zone"
+)
+
+// The phase of the ruleset.
+type RulesetUpdateResponsePhase string
+
+const (
+	RulesetUpdateResponsePhaseDDOSL4                         RulesetUpdateResponsePhase = "ddos_l4"
+	RulesetUpdateResponsePhaseDDOSL7                         RulesetUpdateResponsePhase = "ddos_l7"
+	RulesetUpdateResponsePhaseHTTPConfigSettings             RulesetUpdateResponsePhase = "http_config_settings"
+	RulesetUpdateResponsePhaseHTTPCustomErrors               RulesetUpdateResponsePhase = "http_custom_errors"
+	RulesetUpdateResponsePhaseHTTPLogCustomFields            RulesetUpdateResponsePhase = "http_log_custom_fields"
+	RulesetUpdateResponsePhaseHTTPRatelimit                  RulesetUpdateResponsePhase = "http_ratelimit"
+	RulesetUpdateResponsePhaseHTTPRequestCacheSettings       RulesetUpdateResponsePhase = "http_request_cache_settings"
+	RulesetUpdateResponsePhaseHTTPRequestDynamicRedirect     RulesetUpdateResponsePhase = "http_request_dynamic_redirect"
+	RulesetUpdateResponsePhaseHTTPRequestFirewallCustom      RulesetUpdateResponsePhase = "http_request_firewall_custom"
+	RulesetUpdateResponsePhaseHTTPRequestFirewallManaged     RulesetUpdateResponsePhase = "http_request_firewall_managed"
+	RulesetUpdateResponsePhaseHTTPRequestLateTransform       RulesetUpdateResponsePhase = "http_request_late_transform"
+	RulesetUpdateResponsePhaseHTTPRequestOrigin              RulesetUpdateResponsePhase = "http_request_origin"
+	RulesetUpdateResponsePhaseHTTPRequestRedirect            RulesetUpdateResponsePhase = "http_request_redirect"
+	RulesetUpdateResponsePhaseHTTPRequestSanitize            RulesetUpdateResponsePhase = "http_request_sanitize"
+	RulesetUpdateResponsePhaseHTTPRequestSbfm                RulesetUpdateResponsePhase = "http_request_sbfm"
+	RulesetUpdateResponsePhaseHTTPRequestSelectConfiguration RulesetUpdateResponsePhase = "http_request_select_configuration"
+	RulesetUpdateResponsePhaseHTTPRequestTransform           RulesetUpdateResponsePhase = "http_request_transform"
+	RulesetUpdateResponsePhaseHTTPResponseCompression        RulesetUpdateResponsePhase = "http_response_compression"
+	RulesetUpdateResponsePhaseHTTPResponseFirewallManaged    RulesetUpdateResponsePhase = "http_response_firewall_managed"
+	RulesetUpdateResponsePhaseHTTPResponseHeadersTransform   RulesetUpdateResponsePhase = "http_response_headers_transform"
+	RulesetUpdateResponsePhaseMagicTransit                   RulesetUpdateResponsePhase = "magic_transit"
+	RulesetUpdateResponsePhaseMagicTransitIDsManaged         RulesetUpdateResponsePhase = "magic_transit_ids_managed"
+	RulesetUpdateResponsePhaseMagicTransitManaged            RulesetUpdateResponsePhase = "magic_transit_managed"
+)
+
+// Union satisfied by [RulesetUpdateResponseRulesRulesetsBlockRule],
+// [RulesetUpdateResponseRulesRulesetsExecuteRule],
+// [RulesetUpdateResponseRulesRulesetsLogRule] or
+// [RulesetUpdateResponseRulesRulesetsSkipRule].
+type RulesetUpdateResponseRule interface {
+	implementsRulesetUpdateResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RulesetUpdateResponseRule)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsBlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsLogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetUpdateResponseRulesRulesetsSkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+type RulesetUpdateResponseRulesRulesetsBlockRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetUpdateResponseRulesRulesetsBlockRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetUpdateResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetUpdateResponseRulesRulesetsBlockRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                          `json:"ref"`
+	JSON rulesetUpdateResponseRulesRulesetsBlockRuleJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for
+// the struct [RulesetUpdateResponseRulesRulesetsBlockRule]
+type rulesetUpdateResponseRulesRulesetsBlockRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetUpdateResponseRulesRulesetsBlockRule) implementsRulesetUpdateResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateResponseRulesRulesetsBlockRuleAction string
+
+const (
+	RulesetUpdateResponseRulesRulesetsBlockRuleActionBlock RulesetUpdateResponseRulesRulesetsBlockRuleAction = "block"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateResponseRulesRulesetsBlockRuleActionParameters struct {
+	// The response to show when the block is applied.
+	Response RulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
+	JSON     rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsBlockRuleActionParameters]
+type rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersJSON struct {
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The response to show when the block is applied.
+type RulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponse struct {
+	// The content to return.
+	Content string `json:"content,required"`
+	// The type of the content to return.
+	ContentType string `json:"content_type,required"`
+	// The status code to return.
+	StatusCode int64                                                                   `json:"status_code,required"`
+	JSON       rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponseJSON contains
+// the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponse]
+type rulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
+	Content     apijson.Field
+	ContentType apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateResponseRulesRulesetsBlockRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                   `json:"enabled,required"`
+	JSON    rulesetUpdateResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsBlockRuleLoggingJSON contains the JSON
+// metadata for the struct [RulesetUpdateResponseRulesRulesetsBlockRuleLogging]
+type rulesetUpdateResponseRulesRulesetsBlockRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetUpdateResponseRulesRulesetsExecuteRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetUpdateResponseRulesRulesetsExecuteRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetUpdateResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetUpdateResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                            `json:"ref"`
+	JSON rulesetUpdateResponseRulesRulesetsExecuteRuleJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata for
+// the struct [RulesetUpdateResponseRulesRulesetsExecuteRule]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetUpdateResponseRulesRulesetsExecuteRule) implementsRulesetUpdateResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleAction string
+
+const (
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionExecute RulesetUpdateResponseRulesRulesetsExecuteRuleAction = "execute"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParameters struct {
+	// The ID of the ruleset to execute.
+	ID string `json:"id,required"`
+	// The configuration to use for matched data logging.
+	MatchedData RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
+	// A set of overrides to apply to the target ruleset.
+	Overrides RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
+	JSON      rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsExecuteRuleActionParameters]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
+	ID          apijson.Field
+	MatchedData apijson.Field
+	Overrides   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration to use for matched data logging.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
+	// The public key to encrypt matched data logs with.
+	PublicKey string                                                                       `json:"public_key,required"`
+	JSON      rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
+	PublicKey   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A set of overrides to apply to the target ruleset.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
+	// An action to override all rules with. This option has lower precedence than rule
+	// and category overrides.
+	Action string `json:"action"`
+	// A list of category-level overrides. This option has the second-highest
+	// precedence after rule-level overrides.
+	Categories []RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
+	// Whether to enable execution of all rules. This option has lower precedence than
+	// rule and category overrides.
+	Enabled bool `json:"enabled"`
+	// A list of rule-level overrides. This option has the highest precedence.
+	Rules []RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
+	// A sensitivity level to set for all rules. This option has lower precedence than
+	// rule and category overrides and is only applicable for DDoS phases.
+	SensitivityLevel RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverrides]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
+	Action           apijson.Field
+	Categories       apijson.Field
+	Enabled          apijson.Field
+	Rules            apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A category-level override
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
+	// The name of the category to override.
+	Category string `json:"category,required"`
+	// The action to override rules in the category with.
+	Action string `json:"action"`
+	// Whether to enable execution of rules in the category.
+	Enabled bool `json:"enabled"`
+	// The sensitivity level to use for rules in the category.
+	SensitivityLevel RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
+	Category         apijson.Field
+	Action           apijson.Field
+	Enabled          apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The sensitivity level to use for rules in the category.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+
+const (
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+)
+
+// A rule-level override
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
+	// The ID of the rule to override.
+	ID string `json:"id,required"`
+	// The action to override the rule with.
+	Action string `json:"action"`
+	// Whether to enable execution of the rule.
+	Enabled bool `json:"enabled"`
+	// The score threshold to use for the rule.
+	ScoreThreshold int64 `json:"score_threshold"`
+	// The sensitivity level to use for the rule.
+	SensitivityLevel RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
+// contains the JSON metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
+	ID               apijson.Field
+	Action           apijson.Field
+	Enabled          apijson.Field
+	ScoreThreshold   apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The sensitivity level to use for the rule.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+
+const (
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+)
+
+// A sensitivity level to set for all rules. This option has lower precedence than
+// rule and category overrides and is only applicable for DDoS phases.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+
+const (
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetUpdateResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateResponseRulesRulesetsExecuteRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                     `json:"enabled,required"`
+	JSON    rulesetUpdateResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsExecuteRuleLoggingJSON contains the JSON
+// metadata for the struct [RulesetUpdateResponseRulesRulesetsExecuteRuleLogging]
+type rulesetUpdateResponseRulesRulesetsExecuteRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetUpdateResponseRulesRulesetsLogRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetUpdateResponseRulesRulesetsLogRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetUpdateResponseRulesRulesetsLogRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                        `json:"ref"`
+	JSON rulesetUpdateResponseRulesRulesetsLogRuleJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsLogRuleJSON contains the JSON metadata for the
+// struct [RulesetUpdateResponseRulesRulesetsLogRule]
+type rulesetUpdateResponseRulesRulesetsLogRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetUpdateResponseRulesRulesetsLogRule) implementsRulesetUpdateResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateResponseRulesRulesetsLogRuleAction string
+
+const (
+	RulesetUpdateResponseRulesRulesetsLogRuleActionLog RulesetUpdateResponseRulesRulesetsLogRuleAction = "log"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateResponseRulesRulesetsLogRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                 `json:"enabled,required"`
+	JSON    rulesetUpdateResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsLogRuleLoggingJSON contains the JSON metadata
+// for the struct [RulesetUpdateResponseRulesRulesetsLogRuleLogging]
+type rulesetUpdateResponseRulesRulesetsLogRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetUpdateResponseRulesRulesetsSkipRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetUpdateResponseRulesRulesetsSkipRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetUpdateResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetUpdateResponseRulesRulesetsSkipRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                         `json:"ref"`
+	JSON rulesetUpdateResponseRulesRulesetsSkipRuleJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for
+// the struct [RulesetUpdateResponseRulesRulesetsSkipRule]
+type rulesetUpdateResponseRulesRulesetsSkipRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetUpdateResponseRulesRulesetsSkipRule) implementsRulesetUpdateResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateResponseRulesRulesetsSkipRuleAction string
+
+const (
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionSkip RulesetUpdateResponseRulesRulesetsSkipRuleAction = "skip"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateResponseRulesRulesetsSkipRuleActionParameters struct {
+	// A list of phases to skip the execution of. This option is incompatible with the
+	// ruleset and rulesets options.
+	Phases []RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
+	// A list of legacy security products to skip the execution of.
+	Products []RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
+	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
+	// execution of. This option is incompatible with the ruleset option.
+	Rules map[string][]string `json:"rules"`
+	// A ruleset to skip the execution of. This option is incompatible with the
+	// rulesets, rules and phases options.
+	Ruleset RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
+	// A list of ruleset IDs to skip the execution of. This option is incompatible with
+	// the ruleset and phases options.
+	Rulesets []string                                                       `json:"rulesets"`
+	JSON     rulesetUpdateResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsSkipRuleActionParametersJSON contains the JSON
+// metadata for the struct
+// [RulesetUpdateResponseRulesRulesetsSkipRuleActionParameters]
+type rulesetUpdateResponseRulesRulesetsSkipRuleActionParametersJSON struct {
+	Phases      apijson.Field
+	Products    apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	Rulesets    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A phase to skip the execution of.
+type RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase string
+
+const (
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+)
+
+// The name of a legacy security product to skip the execution of.
+type RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct string
+
+const (
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductBic           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+)
+
+// A ruleset to skip the execution of. This option is incompatible with the
+// rulesets, rules and phases options.
+type RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersRuleset string
+
+const (
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateResponseRulesRulesetsSkipRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                  `json:"enabled,required"`
+	JSON    rulesetUpdateResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
+}
+
+// rulesetUpdateResponseRulesRulesetsSkipRuleLoggingJSON contains the JSON metadata
+// for the struct [RulesetUpdateResponseRulesRulesetsSkipRuleLogging]
+type rulesetUpdateResponseRulesRulesetsSkipRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1624,730 +2348,6 @@ func (r *RulesetGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A result.
-type RulesetReplaceResponse struct {
-	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
-	// The kind of the ruleset.
-	Kind RulesetReplaceResponseKind `json:"kind,required"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
-	// The phase of the ruleset.
-	Phase RulesetReplaceResponsePhase `json:"phase,required"`
-	// The list of rules in the ruleset.
-	Rules []RulesetReplaceResponseRule `json:"rules,required"`
-	// The version of the ruleset.
-	Version string `json:"version,required"`
-	// An informative description of the ruleset.
-	Description string                     `json:"description"`
-	JSON        rulesetReplaceResponseJSON `json:"-"`
-}
-
-// rulesetReplaceResponseJSON contains the JSON metadata for the struct
-// [RulesetReplaceResponse]
-type rulesetReplaceResponseJSON struct {
-	ID          apijson.Field
-	Kind        apijson.Field
-	LastUpdated apijson.Field
-	Name        apijson.Field
-	Phase       apijson.Field
-	Rules       apijson.Field
-	Version     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The kind of the ruleset.
-type RulesetReplaceResponseKind string
-
-const (
-	RulesetReplaceResponseKindManaged RulesetReplaceResponseKind = "managed"
-	RulesetReplaceResponseKindCustom  RulesetReplaceResponseKind = "custom"
-	RulesetReplaceResponseKindRoot    RulesetReplaceResponseKind = "root"
-	RulesetReplaceResponseKindZone    RulesetReplaceResponseKind = "zone"
-)
-
-// The phase of the ruleset.
-type RulesetReplaceResponsePhase string
-
-const (
-	RulesetReplaceResponsePhaseDDOSL4                         RulesetReplaceResponsePhase = "ddos_l4"
-	RulesetReplaceResponsePhaseDDOSL7                         RulesetReplaceResponsePhase = "ddos_l7"
-	RulesetReplaceResponsePhaseHTTPConfigSettings             RulesetReplaceResponsePhase = "http_config_settings"
-	RulesetReplaceResponsePhaseHTTPCustomErrors               RulesetReplaceResponsePhase = "http_custom_errors"
-	RulesetReplaceResponsePhaseHTTPLogCustomFields            RulesetReplaceResponsePhase = "http_log_custom_fields"
-	RulesetReplaceResponsePhaseHTTPRatelimit                  RulesetReplaceResponsePhase = "http_ratelimit"
-	RulesetReplaceResponsePhaseHTTPRequestCacheSettings       RulesetReplaceResponsePhase = "http_request_cache_settings"
-	RulesetReplaceResponsePhaseHTTPRequestDynamicRedirect     RulesetReplaceResponsePhase = "http_request_dynamic_redirect"
-	RulesetReplaceResponsePhaseHTTPRequestFirewallCustom      RulesetReplaceResponsePhase = "http_request_firewall_custom"
-	RulesetReplaceResponsePhaseHTTPRequestFirewallManaged     RulesetReplaceResponsePhase = "http_request_firewall_managed"
-	RulesetReplaceResponsePhaseHTTPRequestLateTransform       RulesetReplaceResponsePhase = "http_request_late_transform"
-	RulesetReplaceResponsePhaseHTTPRequestOrigin              RulesetReplaceResponsePhase = "http_request_origin"
-	RulesetReplaceResponsePhaseHTTPRequestRedirect            RulesetReplaceResponsePhase = "http_request_redirect"
-	RulesetReplaceResponsePhaseHTTPRequestSanitize            RulesetReplaceResponsePhase = "http_request_sanitize"
-	RulesetReplaceResponsePhaseHTTPRequestSbfm                RulesetReplaceResponsePhase = "http_request_sbfm"
-	RulesetReplaceResponsePhaseHTTPRequestSelectConfiguration RulesetReplaceResponsePhase = "http_request_select_configuration"
-	RulesetReplaceResponsePhaseHTTPRequestTransform           RulesetReplaceResponsePhase = "http_request_transform"
-	RulesetReplaceResponsePhaseHTTPResponseCompression        RulesetReplaceResponsePhase = "http_response_compression"
-	RulesetReplaceResponsePhaseHTTPResponseFirewallManaged    RulesetReplaceResponsePhase = "http_response_firewall_managed"
-	RulesetReplaceResponsePhaseHTTPResponseHeadersTransform   RulesetReplaceResponsePhase = "http_response_headers_transform"
-	RulesetReplaceResponsePhaseMagicTransit                   RulesetReplaceResponsePhase = "magic_transit"
-	RulesetReplaceResponsePhaseMagicTransitIDsManaged         RulesetReplaceResponsePhase = "magic_transit_ids_managed"
-	RulesetReplaceResponsePhaseMagicTransitManaged            RulesetReplaceResponsePhase = "magic_transit_managed"
-)
-
-// Union satisfied by [RulesetReplaceResponseRulesRulesetsBlockRule],
-// [RulesetReplaceResponseRulesRulesetsExecuteRule],
-// [RulesetReplaceResponseRulesRulesetsLogRule] or
-// [RulesetReplaceResponseRulesRulesetsSkipRule].
-type RulesetReplaceResponseRule interface {
-	implementsRulesetReplaceResponseRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetReplaceResponseRule)(nil)).Elem(),
-		"action",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetReplaceResponseRulesRulesetsBlockRule{}),
-			DiscriminatorValue: "block",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetReplaceResponseRulesRulesetsExecuteRule{}),
-			DiscriminatorValue: "execute",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetReplaceResponseRulesRulesetsLogRule{}),
-			DiscriminatorValue: "log",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetReplaceResponseRulesRulesetsSkipRule{}),
-			DiscriminatorValue: "skip",
-		},
-	)
-}
-
-type RulesetReplaceResponseRulesRulesetsBlockRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetReplaceResponseRulesRulesetsBlockRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetReplaceResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging RulesetReplaceResponseRulesRulesetsBlockRuleLogging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                           `json:"ref"`
-	JSON rulesetReplaceResponseRulesRulesetsBlockRuleJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for
-// the struct [RulesetReplaceResponseRulesRulesetsBlockRule]
-type rulesetReplaceResponseRulesRulesetsBlockRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r RulesetReplaceResponseRulesRulesetsBlockRule) implementsRulesetReplaceResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceResponseRulesRulesetsBlockRuleAction string
-
-const (
-	RulesetReplaceResponseRulesRulesetsBlockRuleActionBlock RulesetReplaceResponseRulesRulesetsBlockRuleAction = "block"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceResponseRulesRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response RulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
-	JSON     rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersJSON contains the
-// JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsBlockRuleActionParameters]
-type rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersJSON struct {
-	Response    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The response to show when the block is applied.
-type RulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content string `json:"content,required"`
-	// The type of the content to return.
-	ContentType string `json:"content_type,required"`
-	// The status code to return.
-	StatusCode int64                                                                    `json:"status_code,required"`
-	JSON       rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponseJSON
-// contains the JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponse]
-type rulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
-	Content     apijson.Field
-	ContentType apijson.Field
-	StatusCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceResponseRulesRulesetsBlockRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                    `json:"enabled,required"`
-	JSON    rulesetReplaceResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsBlockRuleLoggingJSON contains the JSON
-// metadata for the struct [RulesetReplaceResponseRulesRulesetsBlockRuleLogging]
-type rulesetReplaceResponseRulesRulesetsBlockRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetReplaceResponseRulesRulesetsExecuteRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetReplaceResponseRulesRulesetsExecuteRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetReplaceResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging RulesetReplaceResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                             `json:"ref"`
-	JSON rulesetReplaceResponseRulesRulesetsExecuteRuleJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata
-// for the struct [RulesetReplaceResponseRulesRulesetsExecuteRule]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r RulesetReplaceResponseRulesRulesetsExecuteRule) implementsRulesetReplaceResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleAction string
-
-const (
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionExecute RulesetReplaceResponseRulesRulesetsExecuteRuleAction = "execute"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID string `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
-	JSON      rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersJSON contains the
-// JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsExecuteRuleActionParameters]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
-	ID          apijson.Field
-	MatchedData apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration to use for matched data logging.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey string                                                                        `json:"public_key,required"`
-	JSON      rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON
-// contains the JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A set of overrides to apply to the target ruleset.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action string `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories []RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled bool `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules []RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON
-// contains the JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverrides]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
-	Action           apijson.Field
-	Categories       apijson.Field
-	Enabled          apijson.Field
-	Rules            apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A category-level override
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category string `json:"category,required"`
-	// The action to override rules in the category with.
-	Action string `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled bool `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
-// contains the JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
-	Category         apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The sensitivity level to use for rules in the category.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-// A rule-level override
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID string `json:"id,required"`
-	// The action to override the rule with.
-	Action string `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled bool `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold int64 `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
-	ID               apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	ScoreThreshold   apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The sensitivity level to use for the rule.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetReplaceResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceResponseRulesRulesetsExecuteRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                      `json:"enabled,required"`
-	JSON    rulesetReplaceResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsExecuteRuleLoggingJSON contains the JSON
-// metadata for the struct [RulesetReplaceResponseRulesRulesetsExecuteRuleLogging]
-type rulesetReplaceResponseRulesRulesetsExecuteRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetReplaceResponseRulesRulesetsLogRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetReplaceResponseRulesRulesetsLogRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging RulesetReplaceResponseRulesRulesetsLogRuleLogging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                         `json:"ref"`
-	JSON rulesetReplaceResponseRulesRulesetsLogRuleJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsLogRuleJSON contains the JSON metadata for
-// the struct [RulesetReplaceResponseRulesRulesetsLogRule]
-type rulesetReplaceResponseRulesRulesetsLogRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r RulesetReplaceResponseRulesRulesetsLogRule) implementsRulesetReplaceResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceResponseRulesRulesetsLogRuleAction string
-
-const (
-	RulesetReplaceResponseRulesRulesetsLogRuleActionLog RulesetReplaceResponseRulesRulesetsLogRuleAction = "log"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceResponseRulesRulesetsLogRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                  `json:"enabled,required"`
-	JSON    rulesetReplaceResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsLogRuleLoggingJSON contains the JSON metadata
-// for the struct [RulesetReplaceResponseRulesRulesetsLogRuleLogging]
-type rulesetReplaceResponseRulesRulesetsLogRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetReplaceResponseRulesRulesetsSkipRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
-	// The unique ID of the rule.
-	ID string `json:"id"`
-	// The action to perform when the rule matches.
-	Action RulesetReplaceResponseRulesRulesetsSkipRuleAction `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters RulesetReplaceResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
-	// An informative description of the rule.
-	Description string `json:"description"`
-	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging RulesetReplaceResponseRulesRulesetsSkipRuleLogging `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref  string                                          `json:"ref"`
-	JSON rulesetReplaceResponseRulesRulesetsSkipRuleJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for
-// the struct [RulesetReplaceResponseRulesRulesetsSkipRule]
-type rulesetReplaceResponseRulesRulesetsSkipRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r RulesetReplaceResponseRulesRulesetsSkipRule) implementsRulesetReplaceResponseRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceResponseRulesRulesetsSkipRuleAction string
-
-const (
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionSkip RulesetReplaceResponseRulesRulesetsSkipRuleAction = "skip"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceResponseRulesRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases []RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products []RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules map[string][]string `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets []string                                                        `json:"rulesets"`
-	JSON     rulesetReplaceResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsSkipRuleActionParametersJSON contains the
-// JSON metadata for the struct
-// [RulesetReplaceResponseRulesRulesetsSkipRuleActionParameters]
-type rulesetReplaceResponseRulesRulesetsSkipRuleActionParametersJSON struct {
-	Phases      apijson.Field
-	Products    apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	Rulesets    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A phase to skip the execution of.
-type RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-// The name of a legacy security product to skip the execution of.
-type RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductBic           RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetReplaceResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceResponseRulesRulesetsSkipRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled bool                                                   `json:"enabled,required"`
-	JSON    rulesetReplaceResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
-}
-
-// rulesetReplaceResponseRulesRulesetsSkipRuleLoggingJSON contains the JSON
-// metadata for the struct [RulesetReplaceResponseRulesRulesetsSkipRuleLogging]
-type rulesetReplaceResponseRulesRulesetsSkipRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type RulesetNewParams struct {
 	// The kind of the ruleset.
 	Kind param.Field[RulesetNewParamsKind] `json:"kind,required"`
@@ -2909,6 +2909,570 @@ const (
 	RulesetNewResponseEnvelopeSuccessTrue RulesetNewResponseEnvelopeSuccess = true
 )
 
+type RulesetUpdateParams struct {
+	// The unique ID of the ruleset.
+	ID param.Field[string] `json:"id,required"`
+	// The list of rules in the ruleset.
+	Rules param.Field[[]RulesetUpdateParamsRule] `json:"rules,required"`
+	// An informative description of the ruleset.
+	Description param.Field[string] `json:"description"`
+	// The kind of the ruleset.
+	Kind param.Field[RulesetUpdateParamsKind] `json:"kind"`
+	// The human-readable name of the ruleset.
+	Name param.Field[string] `json:"name"`
+	// The phase of the ruleset.
+	Phase param.Field[RulesetUpdateParamsPhase] `json:"phase"`
+}
+
+func (r RulesetUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Satisfied by [RulesetUpdateParamsRulesRulesetsBlockRule],
+// [RulesetUpdateParamsRulesRulesetsExecuteRule],
+// [RulesetUpdateParamsRulesRulesetsLogRule],
+// [RulesetUpdateParamsRulesRulesetsSkipRule].
+type RulesetUpdateParamsRule interface {
+	implementsRulesetUpdateParamsRule()
+}
+
+type RulesetUpdateParamsRulesRulesetsBlockRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RulesetUpdateParamsRulesRulesetsBlockRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[RulesetUpdateParamsRulesRulesetsBlockRuleLogging] `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRule) implementsRulesetUpdateParamsRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateParamsRulesRulesetsBlockRuleAction string
+
+const (
+	RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock RulesetUpdateParamsRulesRulesetsBlockRuleAction = "block"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters struct {
+	// The response to show when the block is applied.
+	Response param.Field[RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse] `json:"response"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The response to show when the block is applied.
+type RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse struct {
+	// The content to return.
+	Content param.Field[string] `json:"content,required"`
+	// The type of the content to return.
+	ContentType param.Field[string] `json:"content_type,required"`
+	// The status code to return.
+	StatusCode param.Field[int64] `json:"status_code,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateParamsRulesRulesetsBlockRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsBlockRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RulesetUpdateParamsRulesRulesetsExecuteRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleLogging] `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRule) implementsRulesetUpdateParamsRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleAction string
+
+const (
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionExecute RulesetUpdateParamsRulesRulesetsExecuteRuleAction = "execute"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParameters struct {
+	// The ID of the ruleset to execute.
+	ID param.Field[string] `json:"id,required"`
+	// The configuration to use for matched data logging.
+	MatchedData param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
+	// A set of overrides to apply to the target ruleset.
+	Overrides param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The configuration to use for matched data logging.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersMatchedData struct {
+	// The public key to encrypt matched data logs with.
+	PublicKey param.Field[string] `json:"public_key,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A set of overrides to apply to the target ruleset.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverrides struct {
+	// An action to override all rules with. This option has lower precedence than rule
+	// and category overrides.
+	Action param.Field[string] `json:"action"`
+	// A list of category-level overrides. This option has the second-highest
+	// precedence after rule-level overrides.
+	Categories param.Field[[]RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
+	// Whether to enable execution of all rules. This option has lower precedence than
+	// rule and category overrides.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A list of rule-level overrides. This option has the highest precedence.
+	Rules param.Field[[]RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
+	// A sensitivity level to set for all rules. This option has lower precedence than
+	// rule and category overrides and is only applicable for DDoS phases.
+	SensitivityLevel param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A category-level override
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
+	// The name of the category to override.
+	Category param.Field[string] `json:"category,required"`
+	// The action to override rules in the category with.
+	Action param.Field[string] `json:"action"`
+	// Whether to enable execution of rules in the category.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The sensitivity level to use for rules in the category.
+	SensitivityLevel param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The sensitivity level to use for rules in the category.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+
+const (
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+)
+
+// A rule-level override
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
+	// The ID of the rule to override.
+	ID param.Field[string] `json:"id,required"`
+	// The action to override the rule with.
+	Action param.Field[string] `json:"action"`
+	// Whether to enable execution of the rule.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The score threshold to use for the rule.
+	ScoreThreshold param.Field[int64] `json:"score_threshold"`
+	// The sensitivity level to use for the rule.
+	SensitivityLevel param.Field[RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The sensitivity level to use for the rule.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+
+const (
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+)
+
+// A sensitivity level to set for all rules. This option has lower precedence than
+// rule and category overrides and is only applicable for DDoS phases.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+
+const (
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetUpdateParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateParamsRulesRulesetsExecuteRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsExecuteRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RulesetUpdateParamsRulesRulesetsLogRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RulesetUpdateParamsRulesRulesetsLogRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[RulesetUpdateParamsRulesRulesetsLogRuleLogging] `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsLogRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RulesetUpdateParamsRulesRulesetsLogRule) implementsRulesetUpdateParamsRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateParamsRulesRulesetsLogRuleAction string
+
+const (
+	RulesetUpdateParamsRulesRulesetsLogRuleActionLog RulesetUpdateParamsRulesRulesetsLogRuleAction = "log"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateParamsRulesRulesetsLogRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsLogRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RulesetUpdateParamsRulesRulesetsSkipRule struct {
+	// The unique ID of the rule.
+	ID param.Field[string] `json:"id"`
+	// The action to perform when the rule matches.
+	Action param.Field[RulesetUpdateParamsRulesRulesetsSkipRuleAction] `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters param.Field[RulesetUpdateParamsRulesRulesetsSkipRuleActionParameters] `json:"action_parameters"`
+	// An informative description of the rule.
+	Description param.Field[string] `json:"description"`
+	// Whether the rule should be executed.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression param.Field[string] `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging param.Field[RulesetUpdateParamsRulesRulesetsSkipRuleLogging] `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref param.Field[string] `json:"ref"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRule) implementsRulesetUpdateParamsRule() {}
+
+// The action to perform when the rule matches.
+type RulesetUpdateParamsRulesRulesetsSkipRuleAction string
+
+const (
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionSkip RulesetUpdateParamsRulesRulesetsSkipRuleAction = "skip"
+)
+
+// The parameters configuring the rule's action.
+type RulesetUpdateParamsRulesRulesetsSkipRuleActionParameters struct {
+	// A list of phases to skip the execution of. This option is incompatible with the
+	// ruleset and rulesets options.
+	Phases param.Field[[]RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase] `json:"phases"`
+	// A list of legacy security products to skip the execution of.
+	Products param.Field[[]RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct] `json:"products"`
+	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
+	// execution of. This option is incompatible with the ruleset option.
+	Rules param.Field[map[string][]string] `json:"rules"`
+	// A ruleset to skip the execution of. This option is incompatible with the
+	// rulesets, rules and phases options.
+	Ruleset param.Field[RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
+	// A list of ruleset IDs to skip the execution of. This option is incompatible with
+	// the ruleset and phases options.
+	Rulesets param.Field[[]string] `json:"rulesets"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A phase to skip the execution of.
+type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase string
+
+const (
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+)
+
+// The name of a legacy security product to skip the execution of.
+type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct string
+
+const (
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductBic           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "bic"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductHot           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "hot"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductWAF           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "waf"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+)
+
+// A ruleset to skip the execution of. This option is incompatible with the
+// rulesets, rules and phases options.
+type RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset string
+
+const (
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersRuleset = "current"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetUpdateParamsRulesRulesetsSkipRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled param.Field[bool] `json:"enabled,required"`
+}
+
+func (r RulesetUpdateParamsRulesRulesetsSkipRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The kind of the ruleset.
+type RulesetUpdateParamsKind string
+
+const (
+	RulesetUpdateParamsKindManaged RulesetUpdateParamsKind = "managed"
+	RulesetUpdateParamsKindCustom  RulesetUpdateParamsKind = "custom"
+	RulesetUpdateParamsKindRoot    RulesetUpdateParamsKind = "root"
+	RulesetUpdateParamsKindZone    RulesetUpdateParamsKind = "zone"
+)
+
+// The phase of the ruleset.
+type RulesetUpdateParamsPhase string
+
+const (
+	RulesetUpdateParamsPhaseDDOSL4                         RulesetUpdateParamsPhase = "ddos_l4"
+	RulesetUpdateParamsPhaseDDOSL7                         RulesetUpdateParamsPhase = "ddos_l7"
+	RulesetUpdateParamsPhaseHTTPConfigSettings             RulesetUpdateParamsPhase = "http_config_settings"
+	RulesetUpdateParamsPhaseHTTPCustomErrors               RulesetUpdateParamsPhase = "http_custom_errors"
+	RulesetUpdateParamsPhaseHTTPLogCustomFields            RulesetUpdateParamsPhase = "http_log_custom_fields"
+	RulesetUpdateParamsPhaseHTTPRatelimit                  RulesetUpdateParamsPhase = "http_ratelimit"
+	RulesetUpdateParamsPhaseHTTPRequestCacheSettings       RulesetUpdateParamsPhase = "http_request_cache_settings"
+	RulesetUpdateParamsPhaseHTTPRequestDynamicRedirect     RulesetUpdateParamsPhase = "http_request_dynamic_redirect"
+	RulesetUpdateParamsPhaseHTTPRequestFirewallCustom      RulesetUpdateParamsPhase = "http_request_firewall_custom"
+	RulesetUpdateParamsPhaseHTTPRequestFirewallManaged     RulesetUpdateParamsPhase = "http_request_firewall_managed"
+	RulesetUpdateParamsPhaseHTTPRequestLateTransform       RulesetUpdateParamsPhase = "http_request_late_transform"
+	RulesetUpdateParamsPhaseHTTPRequestOrigin              RulesetUpdateParamsPhase = "http_request_origin"
+	RulesetUpdateParamsPhaseHTTPRequestRedirect            RulesetUpdateParamsPhase = "http_request_redirect"
+	RulesetUpdateParamsPhaseHTTPRequestSanitize            RulesetUpdateParamsPhase = "http_request_sanitize"
+	RulesetUpdateParamsPhaseHTTPRequestSbfm                RulesetUpdateParamsPhase = "http_request_sbfm"
+	RulesetUpdateParamsPhaseHTTPRequestSelectConfiguration RulesetUpdateParamsPhase = "http_request_select_configuration"
+	RulesetUpdateParamsPhaseHTTPRequestTransform           RulesetUpdateParamsPhase = "http_request_transform"
+	RulesetUpdateParamsPhaseHTTPResponseCompression        RulesetUpdateParamsPhase = "http_response_compression"
+	RulesetUpdateParamsPhaseHTTPResponseFirewallManaged    RulesetUpdateParamsPhase = "http_response_firewall_managed"
+	RulesetUpdateParamsPhaseHTTPResponseHeadersTransform   RulesetUpdateParamsPhase = "http_response_headers_transform"
+	RulesetUpdateParamsPhaseMagicTransit                   RulesetUpdateParamsPhase = "magic_transit"
+	RulesetUpdateParamsPhaseMagicTransitIDsManaged         RulesetUpdateParamsPhase = "magic_transit_ids_managed"
+	RulesetUpdateParamsPhaseMagicTransitManaged            RulesetUpdateParamsPhase = "magic_transit_managed"
+)
+
+// A response object.
+type RulesetUpdateResponseEnvelope struct {
+	// A list of error messages.
+	Errors []RulesetUpdateResponseEnvelopeErrors `json:"errors,required"`
+	// A list of warning messages.
+	Messages []RulesetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// A result.
+	Result RulesetUpdateResponse `json:"result,required"`
+	// Whether the API call was successful.
+	Success RulesetUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    rulesetUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// rulesetUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RulesetUpdateResponseEnvelope]
+type rulesetUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A message.
+type RulesetUpdateResponseEnvelopeErrors struct {
+	// A text description of this message.
+	Message string `json:"message,required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source RulesetUpdateResponseEnvelopeErrorsSource `json:"source"`
+	JSON   rulesetUpdateResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// rulesetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RulesetUpdateResponseEnvelopeErrors]
+type rulesetUpdateResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The source of this message.
+type RulesetUpdateResponseEnvelopeErrorsSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                        `json:"pointer,required"`
+	JSON    rulesetUpdateResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// rulesetUpdateResponseEnvelopeErrorsSourceJSON contains the JSON metadata for the
+// struct [RulesetUpdateResponseEnvelopeErrorsSource]
+type rulesetUpdateResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A message.
+type RulesetUpdateResponseEnvelopeMessages struct {
+	// A text description of this message.
+	Message string `json:"message,required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source RulesetUpdateResponseEnvelopeMessagesSource `json:"source"`
+	JSON   rulesetUpdateResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// rulesetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RulesetUpdateResponseEnvelopeMessages]
+type rulesetUpdateResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The source of this message.
+type RulesetUpdateResponseEnvelopeMessagesSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                          `json:"pointer,required"`
+	JSON    rulesetUpdateResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// rulesetUpdateResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RulesetUpdateResponseEnvelopeMessagesSource]
+type rulesetUpdateResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetUpdateResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type RulesetUpdateResponseEnvelopeSuccess bool
+
+const (
+	RulesetUpdateResponseEnvelopeSuccessTrue RulesetUpdateResponseEnvelopeSuccess = true
+)
+
 // A response object.
 type RulesetListResponseEnvelope struct {
 	// A list of error messages.
@@ -3153,568 +3717,4 @@ type RulesetGetResponseEnvelopeSuccess bool
 
 const (
 	RulesetGetResponseEnvelopeSuccessTrue RulesetGetResponseEnvelopeSuccess = true
-)
-
-type RulesetReplaceParams struct {
-	// The unique ID of the ruleset.
-	ID param.Field[string] `json:"id,required"`
-	// The list of rules in the ruleset.
-	Rules param.Field[[]RulesetReplaceParamsRule] `json:"rules,required"`
-	// An informative description of the ruleset.
-	Description param.Field[string] `json:"description"`
-	// The kind of the ruleset.
-	Kind param.Field[RulesetReplaceParamsKind] `json:"kind"`
-	// The human-readable name of the ruleset.
-	Name param.Field[string] `json:"name"`
-	// The phase of the ruleset.
-	Phase param.Field[RulesetReplaceParamsPhase] `json:"phase"`
-}
-
-func (r RulesetReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Satisfied by [RulesetReplaceParamsRulesRulesetsBlockRule],
-// [RulesetReplaceParamsRulesRulesetsExecuteRule],
-// [RulesetReplaceParamsRulesRulesetsLogRule],
-// [RulesetReplaceParamsRulesRulesetsSkipRule].
-type RulesetReplaceParamsRule interface {
-	implementsRulesetReplaceParamsRule()
-}
-
-type RulesetReplaceParamsRulesRulesetsBlockRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetReplaceParamsRulesRulesetsBlockRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetReplaceParamsRulesRulesetsBlockRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetReplaceParamsRulesRulesetsBlockRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetReplaceParamsRulesRulesetsBlockRule) implementsRulesetReplaceParamsRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceParamsRulesRulesetsBlockRuleAction string
-
-const (
-	RulesetReplaceParamsRulesRulesetsBlockRuleActionBlock RulesetReplaceParamsRulesRulesetsBlockRuleAction = "block"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceParamsRulesRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response param.Field[RulesetReplaceParamsRulesRulesetsBlockRuleActionParametersResponse] `json:"response"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The response to show when the block is applied.
-type RulesetReplaceParamsRulesRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content param.Field[string] `json:"content,required"`
-	// The type of the content to return.
-	ContentType param.Field[string] `json:"content_type,required"`
-	// The status code to return.
-	StatusCode param.Field[int64] `json:"status_code,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceParamsRulesRulesetsBlockRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsBlockRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetReplaceParamsRulesRulesetsExecuteRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRule) implementsRulesetReplaceParamsRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleAction string
-
-const (
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionExecute RulesetReplaceParamsRulesRulesetsExecuteRuleAction = "execute"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID param.Field[string] `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration to use for matched data logging.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey param.Field[string] `json:"public_key,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A set of overrides to apply to the target ruleset.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action param.Field[string] `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories param.Field[[]RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules param.Field[[]RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A category-level override
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category param.Field[string] `json:"category,required"`
-	// The action to override rules in the category with.
-	Action param.Field[string] `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The sensitivity level to use for rules in the category.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-// A rule-level override
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID param.Field[string] `json:"id,required"`
-	// The action to override the rule with.
-	Action param.Field[string] `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold param.Field[int64] `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel param.Field[RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The sensitivity level to use for the rule.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetReplaceParamsRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceParamsRulesRulesetsExecuteRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsExecuteRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetReplaceParamsRulesRulesetsLogRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetReplaceParamsRulesRulesetsLogRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetReplaceParamsRulesRulesetsLogRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsLogRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetReplaceParamsRulesRulesetsLogRule) implementsRulesetReplaceParamsRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceParamsRulesRulesetsLogRuleAction string
-
-const (
-	RulesetReplaceParamsRulesRulesetsLogRuleActionLog RulesetReplaceParamsRulesRulesetsLogRuleAction = "log"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceParamsRulesRulesetsLogRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsLogRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetReplaceParamsRulesRulesetsSkipRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetReplaceParamsRulesRulesetsSkipRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetReplaceParamsRulesRulesetsSkipRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetReplaceParamsRulesRulesetsSkipRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r RulesetReplaceParamsRulesRulesetsSkipRule) implementsRulesetReplaceParamsRule() {}
-
-// The action to perform when the rule matches.
-type RulesetReplaceParamsRulesRulesetsSkipRuleAction string
-
-const (
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionSkip RulesetReplaceParamsRulesRulesetsSkipRuleAction = "skip"
-)
-
-// The parameters configuring the rule's action.
-type RulesetReplaceParamsRulesRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases param.Field[[]RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase] `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products param.Field[[]RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct] `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules param.Field[map[string][]string] `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset param.Field[RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets param.Field[[]string] `json:"rulesets"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A phase to skip the execution of.
-type RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-// The name of a legacy security product to skip the execution of.
-type RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductBic           RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductHot           RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductWAF           RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetReplaceParamsRulesRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetReplaceParamsRulesRulesetsSkipRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetReplaceParamsRulesRulesetsSkipRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The kind of the ruleset.
-type RulesetReplaceParamsKind string
-
-const (
-	RulesetReplaceParamsKindManaged RulesetReplaceParamsKind = "managed"
-	RulesetReplaceParamsKindCustom  RulesetReplaceParamsKind = "custom"
-	RulesetReplaceParamsKindRoot    RulesetReplaceParamsKind = "root"
-	RulesetReplaceParamsKindZone    RulesetReplaceParamsKind = "zone"
-)
-
-// The phase of the ruleset.
-type RulesetReplaceParamsPhase string
-
-const (
-	RulesetReplaceParamsPhaseDDOSL4                         RulesetReplaceParamsPhase = "ddos_l4"
-	RulesetReplaceParamsPhaseDDOSL7                         RulesetReplaceParamsPhase = "ddos_l7"
-	RulesetReplaceParamsPhaseHTTPConfigSettings             RulesetReplaceParamsPhase = "http_config_settings"
-	RulesetReplaceParamsPhaseHTTPCustomErrors               RulesetReplaceParamsPhase = "http_custom_errors"
-	RulesetReplaceParamsPhaseHTTPLogCustomFields            RulesetReplaceParamsPhase = "http_log_custom_fields"
-	RulesetReplaceParamsPhaseHTTPRatelimit                  RulesetReplaceParamsPhase = "http_ratelimit"
-	RulesetReplaceParamsPhaseHTTPRequestCacheSettings       RulesetReplaceParamsPhase = "http_request_cache_settings"
-	RulesetReplaceParamsPhaseHTTPRequestDynamicRedirect     RulesetReplaceParamsPhase = "http_request_dynamic_redirect"
-	RulesetReplaceParamsPhaseHTTPRequestFirewallCustom      RulesetReplaceParamsPhase = "http_request_firewall_custom"
-	RulesetReplaceParamsPhaseHTTPRequestFirewallManaged     RulesetReplaceParamsPhase = "http_request_firewall_managed"
-	RulesetReplaceParamsPhaseHTTPRequestLateTransform       RulesetReplaceParamsPhase = "http_request_late_transform"
-	RulesetReplaceParamsPhaseHTTPRequestOrigin              RulesetReplaceParamsPhase = "http_request_origin"
-	RulesetReplaceParamsPhaseHTTPRequestRedirect            RulesetReplaceParamsPhase = "http_request_redirect"
-	RulesetReplaceParamsPhaseHTTPRequestSanitize            RulesetReplaceParamsPhase = "http_request_sanitize"
-	RulesetReplaceParamsPhaseHTTPRequestSbfm                RulesetReplaceParamsPhase = "http_request_sbfm"
-	RulesetReplaceParamsPhaseHTTPRequestSelectConfiguration RulesetReplaceParamsPhase = "http_request_select_configuration"
-	RulesetReplaceParamsPhaseHTTPRequestTransform           RulesetReplaceParamsPhase = "http_request_transform"
-	RulesetReplaceParamsPhaseHTTPResponseCompression        RulesetReplaceParamsPhase = "http_response_compression"
-	RulesetReplaceParamsPhaseHTTPResponseFirewallManaged    RulesetReplaceParamsPhase = "http_response_firewall_managed"
-	RulesetReplaceParamsPhaseHTTPResponseHeadersTransform   RulesetReplaceParamsPhase = "http_response_headers_transform"
-	RulesetReplaceParamsPhaseMagicTransit                   RulesetReplaceParamsPhase = "magic_transit"
-	RulesetReplaceParamsPhaseMagicTransitIDsManaged         RulesetReplaceParamsPhase = "magic_transit_ids_managed"
-	RulesetReplaceParamsPhaseMagicTransitManaged            RulesetReplaceParamsPhase = "magic_transit_managed"
-)
-
-// A response object.
-type RulesetReplaceResponseEnvelope struct {
-	// A list of error messages.
-	Errors []RulesetReplaceResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []RulesetReplaceResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetReplaceResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success RulesetReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    rulesetReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// rulesetReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RulesetReplaceResponseEnvelope]
-type rulesetReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A message.
-type RulesetReplaceResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetReplaceResponseEnvelopeErrorsSource `json:"source"`
-	JSON   rulesetReplaceResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// rulesetReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RulesetReplaceResponseEnvelopeErrors]
-type rulesetReplaceResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The source of this message.
-type RulesetReplaceResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                         `json:"pointer,required"`
-	JSON    rulesetReplaceResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// rulesetReplaceResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
-// the struct [RulesetReplaceResponseEnvelopeErrorsSource]
-type rulesetReplaceResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A message.
-type RulesetReplaceResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetReplaceResponseEnvelopeMessagesSource `json:"source"`
-	JSON   rulesetReplaceResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// rulesetReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RulesetReplaceResponseEnvelopeMessages]
-type rulesetReplaceResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The source of this message.
-type RulesetReplaceResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                           `json:"pointer,required"`
-	JSON    rulesetReplaceResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// rulesetReplaceResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
-// the struct [RulesetReplaceResponseEnvelopeMessagesSource]
-type rulesetReplaceResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetReplaceResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type RulesetReplaceResponseEnvelopeSuccess bool
-
-const (
-	RulesetReplaceResponseEnvelopeSuccessTrue RulesetReplaceResponseEnvelopeSuccess = true
 )

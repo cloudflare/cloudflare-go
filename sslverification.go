@@ -33,22 +33,6 @@ func NewSSLVerificationService(opts ...option.RequestOption) (r *SSLVerification
 	return
 }
 
-// Edit SSL validation method for a certificate pack. A PATCH request will request
-// an immediate validation check on any certificate, and return the updated status.
-// If a validation method is provided, the validation will be immediately attempted
-// using that method.
-func (r *SSLVerificationService) Update(ctx context.Context, zoneID string, certificatePackID string, body SSLVerificationUpdateParams, opts ...option.RequestOption) (res *SSLVerificationUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SSLVerificationUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/verification/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Get SSL Verification Info for a Zone.
 func (r *SSLVerificationService) List(ctx context.Context, zoneID string, query SSLVerificationListParams, opts ...option.RequestOption) (res *[]SSLVerificationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -62,36 +46,21 @@ func (r *SSLVerificationService) List(ctx context.Context, zoneID string, query 
 	return
 }
 
-type SSLVerificationUpdateResponse struct {
-	// Result status.
-	Status string `json:"status"`
-	// Desired validation method.
-	ValidationMethod SSLVerificationUpdateResponseValidationMethod `json:"validation_method"`
-	JSON             sslVerificationUpdateResponseJSON             `json:"-"`
+// Edit SSL validation method for a certificate pack. A PATCH request will request
+// an immediate validation check on any certificate, and return the updated status.
+// If a validation method is provided, the validation will be immediately attempted
+// using that method.
+func (r *SSLVerificationService) Edit(ctx context.Context, zoneID string, certificatePackID string, body SSLVerificationEditParams, opts ...option.RequestOption) (res *SSLVerificationEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SSLVerificationEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/ssl/verification/%s", zoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-// sslVerificationUpdateResponseJSON contains the JSON metadata for the struct
-// [SSLVerificationUpdateResponse]
-type sslVerificationUpdateResponseJSON struct {
-	Status           apijson.Field
-	ValidationMethod apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *SSLVerificationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Desired validation method.
-type SSLVerificationUpdateResponseValidationMethod string
-
-const (
-	SSLVerificationUpdateResponseValidationMethodHTTP  SSLVerificationUpdateResponseValidationMethod = "http"
-	SSLVerificationUpdateResponseValidationMethodCname SSLVerificationUpdateResponseValidationMethod = "cname"
-	SSLVerificationUpdateResponseValidationMethodTxt   SSLVerificationUpdateResponseValidationMethod = "txt"
-	SSLVerificationUpdateResponseValidationMethodEmail SSLVerificationUpdateResponseValidationMethod = "email"
-)
 
 type SSLVerificationListResponse struct {
 	// Current status of certificate.
@@ -214,92 +183,35 @@ const (
 	SSLVerificationListResponseVerificationTypeMetaTag SSLVerificationListResponseVerificationType = "meta tag"
 )
 
-type SSLVerificationUpdateParams struct {
+type SSLVerificationEditResponse struct {
+	// Result status.
+	Status string `json:"status"`
 	// Desired validation method.
-	ValidationMethod param.Field[SSLVerificationUpdateParamsValidationMethod] `json:"validation_method,required"`
+	ValidationMethod SSLVerificationEditResponseValidationMethod `json:"validation_method"`
+	JSON             sslVerificationEditResponseJSON             `json:"-"`
 }
 
-func (r SSLVerificationUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// sslVerificationEditResponseJSON contains the JSON metadata for the struct
+// [SSLVerificationEditResponse]
+type sslVerificationEditResponseJSON struct {
+	Status           apijson.Field
+	ValidationMethod apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SSLVerificationEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Desired validation method.
-type SSLVerificationUpdateParamsValidationMethod string
+type SSLVerificationEditResponseValidationMethod string
 
 const (
-	SSLVerificationUpdateParamsValidationMethodHTTP  SSLVerificationUpdateParamsValidationMethod = "http"
-	SSLVerificationUpdateParamsValidationMethodCname SSLVerificationUpdateParamsValidationMethod = "cname"
-	SSLVerificationUpdateParamsValidationMethodTxt   SSLVerificationUpdateParamsValidationMethod = "txt"
-	SSLVerificationUpdateParamsValidationMethodEmail SSLVerificationUpdateParamsValidationMethod = "email"
-)
-
-type SSLVerificationUpdateResponseEnvelope struct {
-	Errors   []SSLVerificationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLVerificationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLVerificationUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success SSLVerificationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslVerificationUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// sslVerificationUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SSLVerificationUpdateResponseEnvelope]
-type sslVerificationUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLVerificationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLVerificationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    sslVerificationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sslVerificationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SSLVerificationUpdateResponseEnvelopeErrors]
-type sslVerificationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLVerificationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLVerificationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    sslVerificationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sslVerificationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SSLVerificationUpdateResponseEnvelopeMessages]
-type sslVerificationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLVerificationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SSLVerificationUpdateResponseEnvelopeSuccess bool
-
-const (
-	SSLVerificationUpdateResponseEnvelopeSuccessTrue SSLVerificationUpdateResponseEnvelopeSuccess = true
+	SSLVerificationEditResponseValidationMethodHTTP  SSLVerificationEditResponseValidationMethod = "http"
+	SSLVerificationEditResponseValidationMethodCname SSLVerificationEditResponseValidationMethod = "cname"
+	SSLVerificationEditResponseValidationMethodTxt   SSLVerificationEditResponseValidationMethod = "txt"
+	SSLVerificationEditResponseValidationMethodEmail SSLVerificationEditResponseValidationMethod = "email"
 )
 
 type SSLVerificationListParams struct {
@@ -339,3 +251,91 @@ type sslVerificationListResponseEnvelopeJSON struct {
 func (r *SSLVerificationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type SSLVerificationEditParams struct {
+	// Desired validation method.
+	ValidationMethod param.Field[SSLVerificationEditParamsValidationMethod] `json:"validation_method,required"`
+}
+
+func (r SSLVerificationEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Desired validation method.
+type SSLVerificationEditParamsValidationMethod string
+
+const (
+	SSLVerificationEditParamsValidationMethodHTTP  SSLVerificationEditParamsValidationMethod = "http"
+	SSLVerificationEditParamsValidationMethodCname SSLVerificationEditParamsValidationMethod = "cname"
+	SSLVerificationEditParamsValidationMethodTxt   SSLVerificationEditParamsValidationMethod = "txt"
+	SSLVerificationEditParamsValidationMethodEmail SSLVerificationEditParamsValidationMethod = "email"
+)
+
+type SSLVerificationEditResponseEnvelope struct {
+	Errors   []SSLVerificationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLVerificationEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLVerificationEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SSLVerificationEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslVerificationEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// sslVerificationEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLVerificationEditResponseEnvelope]
+type sslVerificationEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLVerificationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLVerificationEditResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    sslVerificationEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sslVerificationEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SSLVerificationEditResponseEnvelopeErrors]
+type sslVerificationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLVerificationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLVerificationEditResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    sslVerificationEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sslVerificationEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SSLVerificationEditResponseEnvelopeMessages]
+type sslVerificationEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLVerificationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SSLVerificationEditResponseEnvelopeSuccess bool
+
+const (
+	SSLVerificationEditResponseEnvelopeSuccessTrue SSLVerificationEditResponseEnvelopeSuccess = true
+)

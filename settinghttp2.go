@@ -33,9 +33,9 @@ func NewSettingHTTP2Service(opts ...option.RequestOption) (r *SettingHTTP2Servic
 }
 
 // Value of the HTTP2 setting.
-func (r *SettingHTTP2Service) Update(ctx context.Context, zoneID string, body SettingHTTP2UpdateParams, opts ...option.RequestOption) (res *SettingHTTP2UpdateResponse, err error) {
+func (r *SettingHTTP2Service) Edit(ctx context.Context, zoneID string, body SettingHTTP2EditParams, opts ...option.RequestOption) (res *SettingHTTP2EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingHTTP2UpdateResponseEnvelope
+	var env SettingHTTP2EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http2", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingHTTP2Service) Get(ctx context.Context, zoneID string, opts ...op
 }
 
 // HTTP2 enabled for this zone.
-type SettingHTTP2UpdateResponse struct {
+type SettingHTTP2EditResponse struct {
 	// ID of the zone setting.
-	ID SettingHTTP2UpdateResponseID `json:"id,required"`
+	ID SettingHTTP2EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingHTTP2UpdateResponseValue `json:"value,required"`
+	Value SettingHTTP2EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingHTTP2UpdateResponseEditable `json:"editable"`
+	Editable SettingHTTP2EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingHTTP2UpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingHTTP2EditResponseJSON `json:"-"`
 }
 
-// settingHTTP2UpdateResponseJSON contains the JSON metadata for the struct
-// [SettingHTTP2UpdateResponse]
-type settingHTTP2UpdateResponseJSON struct {
+// settingHTTP2EditResponseJSON contains the JSON metadata for the struct
+// [SettingHTTP2EditResponse]
+type settingHTTP2EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,32 +83,32 @@ type settingHTTP2UpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP2UpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP2EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingHTTP2UpdateResponseID string
+type SettingHTTP2EditResponseID string
 
 const (
-	SettingHTTP2UpdateResponseIDHTTP2 SettingHTTP2UpdateResponseID = "http2"
+	SettingHTTP2EditResponseIDHTTP2 SettingHTTP2EditResponseID = "http2"
 )
 
 // Current value of the zone setting.
-type SettingHTTP2UpdateResponseValue string
+type SettingHTTP2EditResponseValue string
 
 const (
-	SettingHTTP2UpdateResponseValueOn  SettingHTTP2UpdateResponseValue = "on"
-	SettingHTTP2UpdateResponseValueOff SettingHTTP2UpdateResponseValue = "off"
+	SettingHTTP2EditResponseValueOn  SettingHTTP2EditResponseValue = "on"
+	SettingHTTP2EditResponseValueOff SettingHTTP2EditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingHTTP2UpdateResponseEditable bool
+type SettingHTTP2EditResponseEditable bool
 
 const (
-	SettingHTTP2UpdateResponseEditableTrue  SettingHTTP2UpdateResponseEditable = true
-	SettingHTTP2UpdateResponseEditableFalse SettingHTTP2UpdateResponseEditable = false
+	SettingHTTP2EditResponseEditableTrue  SettingHTTP2EditResponseEditable = true
+	SettingHTTP2EditResponseEditableFalse SettingHTTP2EditResponseEditable = false
 )
 
 // HTTP2 enabled for this zone.
@@ -164,36 +164,36 @@ const (
 	SettingHTTP2GetResponseEditableFalse SettingHTTP2GetResponseEditable = false
 )
 
-type SettingHTTP2UpdateParams struct {
+type SettingHTTP2EditParams struct {
 	// Value of the HTTP2 setting.
-	Value param.Field[SettingHTTP2UpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingHTTP2EditParamsValue] `json:"value,required"`
 }
 
-func (r SettingHTTP2UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingHTTP2EditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the HTTP2 setting.
-type SettingHTTP2UpdateParamsValue string
+type SettingHTTP2EditParamsValue string
 
 const (
-	SettingHTTP2UpdateParamsValueOn  SettingHTTP2UpdateParamsValue = "on"
-	SettingHTTP2UpdateParamsValueOff SettingHTTP2UpdateParamsValue = "off"
+	SettingHTTP2EditParamsValueOn  SettingHTTP2EditParamsValue = "on"
+	SettingHTTP2EditParamsValueOff SettingHTTP2EditParamsValue = "off"
 )
 
-type SettingHTTP2UpdateResponseEnvelope struct {
-	Errors   []SettingHTTP2UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingHTTP2UpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingHTTP2EditResponseEnvelope struct {
+	Errors   []SettingHTTP2EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingHTTP2EditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP2 enabled for this zone.
-	Result SettingHTTP2UpdateResponse             `json:"result"`
-	JSON   settingHTTP2UpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingHTTP2EditResponse             `json:"result"`
+	JSON   settingHTTP2EditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingHTTP2UpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingHTTP2UpdateResponseEnvelope]
-type settingHTTP2UpdateResponseEnvelopeJSON struct {
+// settingHTTP2EditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingHTTP2EditResponseEnvelope]
+type settingHTTP2EditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -202,45 +202,45 @@ type settingHTTP2UpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP2UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP2EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingHTTP2UpdateResponseEnvelopeErrors struct {
+type SettingHTTP2EditResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    settingHTTP2EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingHTTP2EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingHTTP2EditResponseEnvelopeErrors]
+type settingHTTP2EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingHTTP2EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingHTTP2EditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
-	JSON    settingHTTP2UpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingHTTP2EditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingHTTP2UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingHTTP2UpdateResponseEnvelopeErrors]
-type settingHTTP2UpdateResponseEnvelopeErrorsJSON struct {
+// settingHTTP2EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingHTTP2EditResponseEnvelopeMessages]
+type settingHTTP2EditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP2UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingHTTP2UpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    settingHTTP2UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingHTTP2UpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingHTTP2UpdateResponseEnvelopeMessages]
-type settingHTTP2UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingHTTP2UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingHTTP2EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

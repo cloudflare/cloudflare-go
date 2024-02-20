@@ -31,14 +31,6 @@ func NewManagedHeaderService(opts ...option.RequestOption) (r *ManagedHeaderServ
 	return
 }
 
-// Updates the status of one or more Managed Transforms.
-func (r *ManagedHeaderService) Update(ctx context.Context, zoneID string, body ManagedHeaderUpdateParams, opts ...option.RequestOption) (res *ManagedHeaderUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/managed_headers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
-	return
-}
-
 // Fetches a list of all Managed Transforms.
 func (r *ManagedHeaderService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -47,71 +39,12 @@ func (r *ManagedHeaderService) List(ctx context.Context, zoneID string, opts ...
 	return
 }
 
-type ManagedHeaderUpdateResponse struct {
-	ManagedRequestHeaders  []ManagedHeaderUpdateResponseManagedRequestHeader  `json:"managed_request_headers"`
-	ManagedResponseHeaders []ManagedHeaderUpdateResponseManagedResponseHeader `json:"managed_response_headers"`
-	JSON                   managedHeaderUpdateResponseJSON                    `json:"-"`
-}
-
-// managedHeaderUpdateResponseJSON contains the JSON metadata for the struct
-// [ManagedHeaderUpdateResponse]
-type managedHeaderUpdateResponseJSON struct {
-	ManagedRequestHeaders  apijson.Field
-	ManagedResponseHeaders apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ManagedHeaderUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ManagedHeaderUpdateResponseManagedRequestHeader struct {
-	// Human-readable identifier of the Managed Transform.
-	ID string `json:"id"`
-	// When true, the Managed Transform is available in the current Cloudflare plan.
-	Available bool `json:"available"`
-	// When true, the Managed Transform is enabled.
-	Enabled bool                                                `json:"enabled"`
-	JSON    managedHeaderUpdateResponseManagedRequestHeaderJSON `json:"-"`
-}
-
-// managedHeaderUpdateResponseManagedRequestHeaderJSON contains the JSON metadata
-// for the struct [ManagedHeaderUpdateResponseManagedRequestHeader]
-type managedHeaderUpdateResponseManagedRequestHeaderJSON struct {
-	ID          apijson.Field
-	Available   apijson.Field
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedHeaderUpdateResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ManagedHeaderUpdateResponseManagedResponseHeader struct {
-	// Human-readable identifier of the Managed Transform.
-	ID string `json:"id"`
-	// When true, the Managed Transform is available in the current Cloudflare plan.
-	Available bool `json:"available"`
-	// When true, the Managed Transform is enabled.
-	Enabled bool                                                 `json:"enabled"`
-	JSON    managedHeaderUpdateResponseManagedResponseHeaderJSON `json:"-"`
-}
-
-// managedHeaderUpdateResponseManagedResponseHeaderJSON contains the JSON metadata
-// for the struct [ManagedHeaderUpdateResponseManagedResponseHeader]
-type managedHeaderUpdateResponseManagedResponseHeaderJSON struct {
-	ID          apijson.Field
-	Available   apijson.Field
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ManagedHeaderUpdateResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Updates the status of one or more Managed Transforms.
+func (r *ManagedHeaderService) Edit(ctx context.Context, zoneID string, body ManagedHeaderEditParams, opts ...option.RequestOption) (res *ManagedHeaderEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/managed_headers", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	return
 }
 
 type ManagedHeaderListResponse struct {
@@ -175,33 +108,100 @@ func (r *ManagedHeaderListResponseManagedResponseHeader) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ManagedHeaderUpdateParams struct {
-	ManagedRequestHeaders  param.Field[[]ManagedHeaderUpdateParamsManagedRequestHeader]  `json:"managed_request_headers,required"`
-	ManagedResponseHeaders param.Field[[]ManagedHeaderUpdateParamsManagedResponseHeader] `json:"managed_response_headers,required"`
+type ManagedHeaderEditResponse struct {
+	ManagedRequestHeaders  []ManagedHeaderEditResponseManagedRequestHeader  `json:"managed_request_headers"`
+	ManagedResponseHeaders []ManagedHeaderEditResponseManagedResponseHeader `json:"managed_response_headers"`
+	JSON                   managedHeaderEditResponseJSON                    `json:"-"`
 }
 
-func (r ManagedHeaderUpdateParams) MarshalJSON() (data []byte, err error) {
+// managedHeaderEditResponseJSON contains the JSON metadata for the struct
+// [ManagedHeaderEditResponse]
+type managedHeaderEditResponseJSON struct {
+	ManagedRequestHeaders  apijson.Field
+	ManagedResponseHeaders apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *ManagedHeaderEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ManagedHeaderEditResponseManagedRequestHeader struct {
+	// Human-readable identifier of the Managed Transform.
+	ID string `json:"id"`
+	// When true, the Managed Transform is available in the current Cloudflare plan.
+	Available bool `json:"available"`
+	// When true, the Managed Transform is enabled.
+	Enabled bool                                              `json:"enabled"`
+	JSON    managedHeaderEditResponseManagedRequestHeaderJSON `json:"-"`
+}
+
+// managedHeaderEditResponseManagedRequestHeaderJSON contains the JSON metadata for
+// the struct [ManagedHeaderEditResponseManagedRequestHeader]
+type managedHeaderEditResponseManagedRequestHeaderJSON struct {
+	ID          apijson.Field
+	Available   apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ManagedHeaderEditResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ManagedHeaderEditResponseManagedResponseHeader struct {
+	// Human-readable identifier of the Managed Transform.
+	ID string `json:"id"`
+	// When true, the Managed Transform is available in the current Cloudflare plan.
+	Available bool `json:"available"`
+	// When true, the Managed Transform is enabled.
+	Enabled bool                                               `json:"enabled"`
+	JSON    managedHeaderEditResponseManagedResponseHeaderJSON `json:"-"`
+}
+
+// managedHeaderEditResponseManagedResponseHeaderJSON contains the JSON metadata
+// for the struct [ManagedHeaderEditResponseManagedResponseHeader]
+type managedHeaderEditResponseManagedResponseHeaderJSON struct {
+	ID          apijson.Field
+	Available   apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ManagedHeaderEditResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ManagedHeaderEditParams struct {
+	ManagedRequestHeaders  param.Field[[]ManagedHeaderEditParamsManagedRequestHeader]  `json:"managed_request_headers,required"`
+	ManagedResponseHeaders param.Field[[]ManagedHeaderEditParamsManagedResponseHeader] `json:"managed_response_headers,required"`
+}
+
+func (r ManagedHeaderEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ManagedHeaderUpdateParamsManagedRequestHeader struct {
+type ManagedHeaderEditParamsManagedRequestHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID param.Field[string] `json:"id"`
 	// When true, the Managed Transform is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ManagedHeaderUpdateParamsManagedRequestHeader) MarshalJSON() (data []byte, err error) {
+func (r ManagedHeaderEditParamsManagedRequestHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type ManagedHeaderUpdateParamsManagedResponseHeader struct {
+type ManagedHeaderEditParamsManagedResponseHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID param.Field[string] `json:"id"`
 	// When true, the Managed Transform is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r ManagedHeaderUpdateParamsManagedResponseHeader) MarshalJSON() (data []byte, err error) {
+func (r ManagedHeaderEditParamsManagedResponseHeader) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

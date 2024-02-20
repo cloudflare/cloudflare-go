@@ -47,19 +47,6 @@ func (r *ImageV1VariantService) New(ctx context.Context, accountID string, body 
 	return
 }
 
-// Updating a variant purges the cache for all images associated with the variant.
-func (r *ImageV1VariantService) Update(ctx context.Context, accountID string, variantID interface{}, body ImageV1VariantUpdateParams, opts ...option.RequestOption) (res *ImageV1VariantUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ImageV1VariantUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists existing variants.
 func (r *ImageV1VariantService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1VariantListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -79,6 +66,19 @@ func (r *ImageV1VariantService) Delete(ctx context.Context, accountID string, va
 	var env ImageV1VariantDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updating a variant purges the cache for all images associated with the variant.
+func (r *ImageV1VariantService) Edit(ctx context.Context, accountID string, variantID interface{}, body ImageV1VariantEditParams, opts ...option.RequestOption) (res *ImageV1VariantEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ImageV1VariantEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -188,97 +188,6 @@ const (
 	ImageV1VariantNewResponseVariantOptionsMetadataKeep      ImageV1VariantNewResponseVariantOptionsMetadata = "keep"
 	ImageV1VariantNewResponseVariantOptionsMetadataCopyright ImageV1VariantNewResponseVariantOptionsMetadata = "copyright"
 	ImageV1VariantNewResponseVariantOptionsMetadataNone      ImageV1VariantNewResponseVariantOptionsMetadata = "none"
-)
-
-type ImageV1VariantUpdateResponse struct {
-	Variant ImageV1VariantUpdateResponseVariant `json:"variant"`
-	JSON    imageV1VariantUpdateResponseJSON    `json:"-"`
-}
-
-// imageV1VariantUpdateResponseJSON contains the JSON metadata for the struct
-// [ImageV1VariantUpdateResponse]
-type imageV1VariantUpdateResponseJSON struct {
-	Variant     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImageV1VariantUpdateResponseVariant struct {
-	ID interface{} `json:"id,required"`
-	// Allows you to define image resizing sizes for different use cases.
-	Options ImageV1VariantUpdateResponseVariantOptions `json:"options,required"`
-	// Indicates whether the variant can access an image without a signature,
-	// regardless of image access control.
-	NeverRequireSignedURLs bool                                    `json:"neverRequireSignedURLs"`
-	JSON                   imageV1VariantUpdateResponseVariantJSON `json:"-"`
-}
-
-// imageV1VariantUpdateResponseVariantJSON contains the JSON metadata for the
-// struct [ImageV1VariantUpdateResponseVariant]
-type imageV1VariantUpdateResponseVariantJSON struct {
-	ID                     apijson.Field
-	Options                apijson.Field
-	NeverRequireSignedURLs apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponseVariant) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Allows you to define image resizing sizes for different use cases.
-type ImageV1VariantUpdateResponseVariantOptions struct {
-	// The fit property describes how the width and height dimensions should be
-	// interpreted.
-	Fit ImageV1VariantUpdateResponseVariantOptionsFit `json:"fit,required"`
-	// Maximum height in image pixels.
-	Height float64 `json:"height,required"`
-	// What EXIF data should be preserved in the output image.
-	Metadata ImageV1VariantUpdateResponseVariantOptionsMetadata `json:"metadata,required"`
-	// Maximum width in image pixels.
-	Width float64                                        `json:"width,required"`
-	JSON  imageV1VariantUpdateResponseVariantOptionsJSON `json:"-"`
-}
-
-// imageV1VariantUpdateResponseVariantOptionsJSON contains the JSON metadata for
-// the struct [ImageV1VariantUpdateResponseVariantOptions]
-type imageV1VariantUpdateResponseVariantOptionsJSON struct {
-	Fit         apijson.Field
-	Height      apijson.Field
-	Metadata    apijson.Field
-	Width       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponseVariantOptions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The fit property describes how the width and height dimensions should be
-// interpreted.
-type ImageV1VariantUpdateResponseVariantOptionsFit string
-
-const (
-	ImageV1VariantUpdateResponseVariantOptionsFitScaleDown ImageV1VariantUpdateResponseVariantOptionsFit = "scale-down"
-	ImageV1VariantUpdateResponseVariantOptionsFitContain   ImageV1VariantUpdateResponseVariantOptionsFit = "contain"
-	ImageV1VariantUpdateResponseVariantOptionsFitCover     ImageV1VariantUpdateResponseVariantOptionsFit = "cover"
-	ImageV1VariantUpdateResponseVariantOptionsFitCrop      ImageV1VariantUpdateResponseVariantOptionsFit = "crop"
-	ImageV1VariantUpdateResponseVariantOptionsFitPad       ImageV1VariantUpdateResponseVariantOptionsFit = "pad"
-)
-
-// What EXIF data should be preserved in the output image.
-type ImageV1VariantUpdateResponseVariantOptionsMetadata string
-
-const (
-	ImageV1VariantUpdateResponseVariantOptionsMetadataKeep      ImageV1VariantUpdateResponseVariantOptionsMetadata = "keep"
-	ImageV1VariantUpdateResponseVariantOptionsMetadataCopyright ImageV1VariantUpdateResponseVariantOptionsMetadata = "copyright"
-	ImageV1VariantUpdateResponseVariantOptionsMetadataNone      ImageV1VariantUpdateResponseVariantOptionsMetadata = "none"
 )
 
 type ImageV1VariantListResponse struct {
@@ -405,6 +314,97 @@ func init() {
 		},
 	)
 }
+
+type ImageV1VariantEditResponse struct {
+	Variant ImageV1VariantEditResponseVariant `json:"variant"`
+	JSON    imageV1VariantEditResponseJSON    `json:"-"`
+}
+
+// imageV1VariantEditResponseJSON contains the JSON metadata for the struct
+// [ImageV1VariantEditResponse]
+type imageV1VariantEditResponseJSON struct {
+	Variant     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1VariantEditResponseVariant struct {
+	ID interface{} `json:"id,required"`
+	// Allows you to define image resizing sizes for different use cases.
+	Options ImageV1VariantEditResponseVariantOptions `json:"options,required"`
+	// Indicates whether the variant can access an image without a signature,
+	// regardless of image access control.
+	NeverRequireSignedURLs bool                                  `json:"neverRequireSignedURLs"`
+	JSON                   imageV1VariantEditResponseVariantJSON `json:"-"`
+}
+
+// imageV1VariantEditResponseVariantJSON contains the JSON metadata for the struct
+// [ImageV1VariantEditResponseVariant]
+type imageV1VariantEditResponseVariantJSON struct {
+	ID                     apijson.Field
+	Options                apijson.Field
+	NeverRequireSignedURLs apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponseVariant) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Allows you to define image resizing sizes for different use cases.
+type ImageV1VariantEditResponseVariantOptions struct {
+	// The fit property describes how the width and height dimensions should be
+	// interpreted.
+	Fit ImageV1VariantEditResponseVariantOptionsFit `json:"fit,required"`
+	// Maximum height in image pixels.
+	Height float64 `json:"height,required"`
+	// What EXIF data should be preserved in the output image.
+	Metadata ImageV1VariantEditResponseVariantOptionsMetadata `json:"metadata,required"`
+	// Maximum width in image pixels.
+	Width float64                                      `json:"width,required"`
+	JSON  imageV1VariantEditResponseVariantOptionsJSON `json:"-"`
+}
+
+// imageV1VariantEditResponseVariantOptionsJSON contains the JSON metadata for the
+// struct [ImageV1VariantEditResponseVariantOptions]
+type imageV1VariantEditResponseVariantOptionsJSON struct {
+	Fit         apijson.Field
+	Height      apijson.Field
+	Metadata    apijson.Field
+	Width       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponseVariantOptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The fit property describes how the width and height dimensions should be
+// interpreted.
+type ImageV1VariantEditResponseVariantOptionsFit string
+
+const (
+	ImageV1VariantEditResponseVariantOptionsFitScaleDown ImageV1VariantEditResponseVariantOptionsFit = "scale-down"
+	ImageV1VariantEditResponseVariantOptionsFitContain   ImageV1VariantEditResponseVariantOptionsFit = "contain"
+	ImageV1VariantEditResponseVariantOptionsFitCover     ImageV1VariantEditResponseVariantOptionsFit = "cover"
+	ImageV1VariantEditResponseVariantOptionsFitCrop      ImageV1VariantEditResponseVariantOptionsFit = "crop"
+	ImageV1VariantEditResponseVariantOptionsFitPad       ImageV1VariantEditResponseVariantOptionsFit = "pad"
+)
+
+// What EXIF data should be preserved in the output image.
+type ImageV1VariantEditResponseVariantOptionsMetadata string
+
+const (
+	ImageV1VariantEditResponseVariantOptionsMetadataKeep      ImageV1VariantEditResponseVariantOptionsMetadata = "keep"
+	ImageV1VariantEditResponseVariantOptionsMetadataCopyright ImageV1VariantEditResponseVariantOptionsMetadata = "copyright"
+	ImageV1VariantEditResponseVariantOptionsMetadataNone      ImageV1VariantEditResponseVariantOptionsMetadata = "none"
+)
 
 type ImageV1VariantGetResponse struct {
 	Variant ImageV1VariantGetResponseVariant `json:"variant"`
@@ -617,125 +617,6 @@ const (
 	ImageV1VariantNewResponseEnvelopeSuccessTrue ImageV1VariantNewResponseEnvelopeSuccess = true
 )
 
-type ImageV1VariantUpdateParams struct {
-	// Allows you to define image resizing sizes for different use cases.
-	Options param.Field[ImageV1VariantUpdateParamsOptions] `json:"options,required"`
-	// Indicates whether the variant can access an image without a signature,
-	// regardless of image access control.
-	NeverRequireSignedURLs param.Field[bool] `json:"neverRequireSignedURLs"`
-}
-
-func (r ImageV1VariantUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allows you to define image resizing sizes for different use cases.
-type ImageV1VariantUpdateParamsOptions struct {
-	// The fit property describes how the width and height dimensions should be
-	// interpreted.
-	Fit param.Field[ImageV1VariantUpdateParamsOptionsFit] `json:"fit,required"`
-	// Maximum height in image pixels.
-	Height param.Field[float64] `json:"height,required"`
-	// What EXIF data should be preserved in the output image.
-	Metadata param.Field[ImageV1VariantUpdateParamsOptionsMetadata] `json:"metadata,required"`
-	// Maximum width in image pixels.
-	Width param.Field[float64] `json:"width,required"`
-}
-
-func (r ImageV1VariantUpdateParamsOptions) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The fit property describes how the width and height dimensions should be
-// interpreted.
-type ImageV1VariantUpdateParamsOptionsFit string
-
-const (
-	ImageV1VariantUpdateParamsOptionsFitScaleDown ImageV1VariantUpdateParamsOptionsFit = "scale-down"
-	ImageV1VariantUpdateParamsOptionsFitContain   ImageV1VariantUpdateParamsOptionsFit = "contain"
-	ImageV1VariantUpdateParamsOptionsFitCover     ImageV1VariantUpdateParamsOptionsFit = "cover"
-	ImageV1VariantUpdateParamsOptionsFitCrop      ImageV1VariantUpdateParamsOptionsFit = "crop"
-	ImageV1VariantUpdateParamsOptionsFitPad       ImageV1VariantUpdateParamsOptionsFit = "pad"
-)
-
-// What EXIF data should be preserved in the output image.
-type ImageV1VariantUpdateParamsOptionsMetadata string
-
-const (
-	ImageV1VariantUpdateParamsOptionsMetadataKeep      ImageV1VariantUpdateParamsOptionsMetadata = "keep"
-	ImageV1VariantUpdateParamsOptionsMetadataCopyright ImageV1VariantUpdateParamsOptionsMetadata = "copyright"
-	ImageV1VariantUpdateParamsOptionsMetadataNone      ImageV1VariantUpdateParamsOptionsMetadata = "none"
-)
-
-type ImageV1VariantUpdateResponseEnvelope struct {
-	Errors   []ImageV1VariantUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ImageV1VariantUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImageV1VariantUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success ImageV1VariantUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    imageV1VariantUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// imageV1VariantUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [ImageV1VariantUpdateResponseEnvelope]
-type imageV1VariantUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImageV1VariantUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    imageV1VariantUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// imageV1VariantUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [ImageV1VariantUpdateResponseEnvelopeErrors]
-type imageV1VariantUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImageV1VariantUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    imageV1VariantUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// imageV1VariantUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ImageV1VariantUpdateResponseEnvelopeMessages]
-type imageV1VariantUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1VariantUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ImageV1VariantUpdateResponseEnvelopeSuccess bool
-
-const (
-	ImageV1VariantUpdateResponseEnvelopeSuccessTrue ImageV1VariantUpdateResponseEnvelopeSuccess = true
-)
-
 type ImageV1VariantListResponseEnvelope struct {
 	Errors   []ImageV1VariantListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ImageV1VariantListResponseEnvelopeMessages `json:"messages,required"`
@@ -872,6 +753,125 @@ type ImageV1VariantDeleteResponseEnvelopeSuccess bool
 
 const (
 	ImageV1VariantDeleteResponseEnvelopeSuccessTrue ImageV1VariantDeleteResponseEnvelopeSuccess = true
+)
+
+type ImageV1VariantEditParams struct {
+	// Allows you to define image resizing sizes for different use cases.
+	Options param.Field[ImageV1VariantEditParamsOptions] `json:"options,required"`
+	// Indicates whether the variant can access an image without a signature,
+	// regardless of image access control.
+	NeverRequireSignedURLs param.Field[bool] `json:"neverRequireSignedURLs"`
+}
+
+func (r ImageV1VariantEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Allows you to define image resizing sizes for different use cases.
+type ImageV1VariantEditParamsOptions struct {
+	// The fit property describes how the width and height dimensions should be
+	// interpreted.
+	Fit param.Field[ImageV1VariantEditParamsOptionsFit] `json:"fit,required"`
+	// Maximum height in image pixels.
+	Height param.Field[float64] `json:"height,required"`
+	// What EXIF data should be preserved in the output image.
+	Metadata param.Field[ImageV1VariantEditParamsOptionsMetadata] `json:"metadata,required"`
+	// Maximum width in image pixels.
+	Width param.Field[float64] `json:"width,required"`
+}
+
+func (r ImageV1VariantEditParamsOptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The fit property describes how the width and height dimensions should be
+// interpreted.
+type ImageV1VariantEditParamsOptionsFit string
+
+const (
+	ImageV1VariantEditParamsOptionsFitScaleDown ImageV1VariantEditParamsOptionsFit = "scale-down"
+	ImageV1VariantEditParamsOptionsFitContain   ImageV1VariantEditParamsOptionsFit = "contain"
+	ImageV1VariantEditParamsOptionsFitCover     ImageV1VariantEditParamsOptionsFit = "cover"
+	ImageV1VariantEditParamsOptionsFitCrop      ImageV1VariantEditParamsOptionsFit = "crop"
+	ImageV1VariantEditParamsOptionsFitPad       ImageV1VariantEditParamsOptionsFit = "pad"
+)
+
+// What EXIF data should be preserved in the output image.
+type ImageV1VariantEditParamsOptionsMetadata string
+
+const (
+	ImageV1VariantEditParamsOptionsMetadataKeep      ImageV1VariantEditParamsOptionsMetadata = "keep"
+	ImageV1VariantEditParamsOptionsMetadataCopyright ImageV1VariantEditParamsOptionsMetadata = "copyright"
+	ImageV1VariantEditParamsOptionsMetadataNone      ImageV1VariantEditParamsOptionsMetadata = "none"
+)
+
+type ImageV1VariantEditResponseEnvelope struct {
+	Errors   []ImageV1VariantEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ImageV1VariantEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ImageV1VariantEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success ImageV1VariantEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    imageV1VariantEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// imageV1VariantEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ImageV1VariantEditResponseEnvelope]
+type imageV1VariantEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1VariantEditResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    imageV1VariantEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// imageV1VariantEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ImageV1VariantEditResponseEnvelopeErrors]
+type imageV1VariantEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1VariantEditResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    imageV1VariantEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// imageV1VariantEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ImageV1VariantEditResponseEnvelopeMessages]
+type imageV1VariantEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1VariantEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ImageV1VariantEditResponseEnvelopeSuccess bool
+
+const (
+	ImageV1VariantEditResponseEnvelopeSuccessTrue ImageV1VariantEditResponseEnvelopeSuccess = true
 )
 
 type ImageV1VariantGetResponseEnvelope struct {

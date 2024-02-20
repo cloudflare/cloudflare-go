@@ -86,6 +86,80 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Access.Groups.Update(
+		context.TODO(),
+		"string",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.AccessGroupUpdateParams{
+			Include: cloudflare.F([]cloudflare.AccessGroupUpdateParamsInclude{cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			})}),
+			Name: cloudflare.F("Allow devs"),
+			Exclude: cloudflare.F([]cloudflare.AccessGroupUpdateParamsExclude{cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			})}),
+			IsDefault: cloudflare.F(true),
+			Require: cloudflare.F([]cloudflare.AccessGroupUpdateParamsRequire{cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			}), cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRule{
+				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsRequireAccessEmailRuleEmail{
+					Email: cloudflare.F("test@example.com"),
+				}),
+			})}),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestAccessGroupList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -168,80 +242,6 @@ func TestAccessGroupGet(t *testing.T) {
 		"string",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAccessGroupReplaceWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Access.Groups.Replace(
-		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.AccessGroupReplaceParams{
-			Include: cloudflare.F([]cloudflare.AccessGroupReplaceParamsInclude{cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsIncludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			})}),
-			Name: cloudflare.F("Allow devs"),
-			Exclude: cloudflare.F([]cloudflare.AccessGroupReplaceParamsExclude{cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsExcludeAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			})}),
-			IsDefault: cloudflare.F(true),
-			Require: cloudflare.F([]cloudflare.AccessGroupReplaceParamsRequire{cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			}), cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRule{
-				Email: cloudflare.F(cloudflare.AccessGroupReplaceParamsRequireAccessEmailRuleEmail{
-					Email: cloudflare.F("test@example.com"),
-				}),
-			})}),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

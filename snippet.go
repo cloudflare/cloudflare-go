@@ -37,6 +37,19 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 	return
 }
 
+// Put Snippet
+func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snippetName string, body SnippetUpdateParams, opts ...option.RequestOption) (res *SnippetUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SnippetUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // All Snippets
 func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]SnippetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -76,17 +89,29 @@ func (r *SnippetService) Get(ctx context.Context, zoneIdentifier string, snippet
 	return
 }
 
-// Put Snippet
-func (r *SnippetService) Replace(ctx context.Context, zoneIdentifier string, snippetName string, body SnippetReplaceParams, opts ...option.RequestOption) (res *SnippetReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SnippetReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Snippet Information
+type SnippetUpdateResponse struct {
+	// Creation time of the snippet
+	CreatedOn string `json:"created_on"`
+	// Modification time of the snippet
+	ModifiedOn string `json:"modified_on"`
+	// Snippet identifying name
+	SnippetName string                    `json:"snippet_name"`
+	JSON        snippetUpdateResponseJSON `json:"-"`
+}
+
+// snippetUpdateResponseJSON contains the JSON metadata for the struct
+// [SnippetUpdateResponse]
+type snippetUpdateResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	SnippetName apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnippetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Snippet Information
@@ -160,30 +185,94 @@ func (r *SnippetGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Snippet Information
-type SnippetReplaceResponse struct {
-	// Creation time of the snippet
-	CreatedOn string `json:"created_on"`
-	// Modification time of the snippet
-	ModifiedOn string `json:"modified_on"`
-	// Snippet identifying name
-	SnippetName string                     `json:"snippet_name"`
-	JSON        snippetReplaceResponseJSON `json:"-"`
+type SnippetUpdateParams struct {
+	// Content files of uploaded snippet
+	Files    param.Field[string]                      `json:"files"`
+	Metadata param.Field[SnippetUpdateParamsMetadata] `json:"metadata"`
 }
 
-// snippetReplaceResponseJSON contains the JSON metadata for the struct
-// [SnippetReplaceResponse]
-type snippetReplaceResponseJSON struct {
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	SnippetName apijson.Field
+func (r SnippetUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SnippetUpdateParamsMetadata struct {
+	// Main module name of uploaded snippet
+	MainModule param.Field[string] `json:"main_module"`
+}
+
+func (r SnippetUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type SnippetUpdateResponseEnvelope struct {
+	Errors   []SnippetUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages,required"`
+	// Snippet Information
+	Result SnippetUpdateResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    snippetUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// snippetUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SnippetUpdateResponseEnvelope]
+type snippetUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SnippetReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SnippetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type SnippetUpdateResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    snippetUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// snippetUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SnippetUpdateResponseEnvelopeErrors]
+type snippetUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnippetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SnippetUpdateResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    snippetUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// snippetUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SnippetUpdateResponseEnvelopeMessages]
+type snippetUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnippetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SnippetUpdateResponseEnvelopeSuccess bool
+
+const (
+	SnippetUpdateResponseEnvelopeSuccessTrue SnippetUpdateResponseEnvelopeSuccess = true
+)
 
 type SnippetListResponseEnvelope struct {
 	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors,required"`
@@ -392,93 +481,4 @@ type SnippetGetResponseEnvelopeSuccess bool
 
 const (
 	SnippetGetResponseEnvelopeSuccessTrue SnippetGetResponseEnvelopeSuccess = true
-)
-
-type SnippetReplaceParams struct {
-	// Content files of uploaded snippet
-	Files    param.Field[string]                       `json:"files"`
-	Metadata param.Field[SnippetReplaceParamsMetadata] `json:"metadata"`
-}
-
-func (r SnippetReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SnippetReplaceParamsMetadata struct {
-	// Main module name of uploaded snippet
-	MainModule param.Field[string] `json:"main_module"`
-}
-
-func (r SnippetReplaceParamsMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SnippetReplaceResponseEnvelope struct {
-	Errors   []SnippetReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SnippetReplaceResponseEnvelopeMessages `json:"messages,required"`
-	// Snippet Information
-	Result SnippetReplaceResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success SnippetReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    snippetReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// snippetReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SnippetReplaceResponseEnvelope]
-type snippetReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SnippetReplaceResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    snippetReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// snippetReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SnippetReplaceResponseEnvelopeErrors]
-type snippetReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SnippetReplaceResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    snippetReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// snippetReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SnippetReplaceResponseEnvelopeMessages]
-type snippetReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SnippetReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SnippetReplaceResponseEnvelopeSuccess bool
-
-const (
-	SnippetReplaceResponseEnvelopeSuccessTrue SnippetReplaceResponseEnvelopeSuccess = true
 )

@@ -45,6 +45,19 @@ func (r *AccessIdentityProviderService) New(ctx context.Context, accountOrZone s
 	return
 }
 
+// Updates a configured identity provider.
+func (r *AccessIdentityProviderService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessIdentityProviderUpdateParams, opts ...option.RequestOption) (res *AccessIdentityProviderUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessIdentityProviderUpdateResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/identity_providers/%s", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists all configured identity providers.
 func (r *AccessIdentityProviderService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessIdentityProviderListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -77,19 +90,6 @@ func (r *AccessIdentityProviderService) Get(ctx context.Context, accountOrZone s
 	var env AccessIdentityProviderGetResponseEnvelope
 	path := fmt.Sprintf("%s/%s/access/identity_providers/%s", accountOrZone, accountOrZoneID, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates a configured identity provider.
-func (r *AccessIdentityProviderService) Replace(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessIdentityProviderReplaceParams, opts ...option.RequestOption) (res *AccessIdentityProviderReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessIdentityProviderReplaceResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/identity_providers/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1953,6 +1953,1877 @@ type accessIdentityProviderNewResponseAccessOnetimepinScimConfigJSON struct {
 }
 
 func (r *AccessIdentityProviderNewResponseAccessOnetimepinScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [AccessIdentityProviderUpdateResponseAccessAzureAd],
+// [AccessIdentityProviderUpdateResponseAccessCentrify],
+// [AccessIdentityProviderUpdateResponseAccessFacebook],
+// [AccessIdentityProviderUpdateResponseAccessGitHub],
+// [AccessIdentityProviderUpdateResponseAccessGoogle],
+// [AccessIdentityProviderUpdateResponseAccessGoogleApps],
+// [AccessIdentityProviderUpdateResponseAccessLinkedin],
+// [AccessIdentityProviderUpdateResponseAccessOidc],
+// [AccessIdentityProviderUpdateResponseAccessOkta],
+// [AccessIdentityProviderUpdateResponseAccessOnelogin],
+// [AccessIdentityProviderUpdateResponseAccessPingone],
+// [AccessIdentityProviderUpdateResponseAccessSaml],
+// [AccessIdentityProviderUpdateResponseAccessYandex] or
+// [AccessIdentityProviderUpdateResponseAccessOnetimepin].
+type AccessIdentityProviderUpdateResponse interface {
+	implementsAccessIdentityProviderUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*AccessIdentityProviderUpdateResponse)(nil)).Elem(), "")
+}
+
+type AccessIdentityProviderUpdateResponseAccessAzureAd struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessAzureAdConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessAzureAdType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessAzureAdJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessAzureAdJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessAzureAd]
+type accessIdentityProviderUpdateResponseAccessAzureAdJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessAzureAd) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessAzureAd) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessAzureAdConfig struct {
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// Should Cloudflare try to load authentication contexts from your account
+	ConditionalAccessEnabled bool `json:"conditional_access_enabled"`
+	// Your Azure directory uuid
+	DirectoryID string `json:"directory_id"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// Should Cloudflare try to load groups from your account
+	SupportGroups bool                                                        `json:"support_groups"`
+	JSON          accessIdentityProviderUpdateResponseAccessAzureAdConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessAzureAdConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessAzureAdConfig]
+type accessIdentityProviderUpdateResponseAccessAzureAdConfigJSON struct {
+	Claims                   apijson.Field
+	ClientID                 apijson.Field
+	ClientSecret             apijson.Field
+	ConditionalAccessEnabled apijson.Field
+	DirectoryID              apijson.Field
+	EmailClaimName           apijson.Field
+	SupportGroups            apijson.Field
+	raw                      string
+	ExtraFields              map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessAzureAdType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateResponseAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateResponseAccessAzureAdType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeSaml       AccessIdentityProviderUpdateResponseAccessAzureAdType = "saml"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateResponseAccessAzureAdType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateResponseAccessAzureAdType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateResponseAccessAzureAdType = "github"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateResponseAccessAzureAdType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateResponseAccessAzureAdType = "google"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOidc       AccessIdentityProviderUpdateResponseAccessAzureAdType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOkta       AccessIdentityProviderUpdateResponseAccessAzureAdType = "okta"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateResponseAccessAzureAdType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypePingone    AccessIdentityProviderUpdateResponseAccessAzureAdType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessAzureAdTypeYandex     AccessIdentityProviderUpdateResponseAccessAzureAdType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                            `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessAzureAdScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessAzureAdScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig]
+type accessIdentityProviderUpdateResponseAccessAzureAdScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessAzureAdScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessCentrify struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessCentrifyConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessCentrifyType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessCentrifyJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessCentrifyJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessCentrify]
+type accessIdentityProviderUpdateResponseAccessCentrifyJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessCentrify) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessCentrifyConfig struct {
+	// Your centrify account url
+	CentrifyAccount string `json:"centrify_account"`
+	// Your centrify app id
+	CentrifyAppID string `json:"centrify_app_id"`
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string                                                       `json:"email_claim_name"`
+	JSON           accessIdentityProviderUpdateResponseAccessCentrifyConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessCentrifyConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessCentrifyConfig]
+type accessIdentityProviderUpdateResponseAccessCentrifyConfigJSON struct {
+	CentrifyAccount apijson.Field
+	CentrifyAppID   apijson.Field
+	Claims          apijson.Field
+	ClientID        apijson.Field
+	ClientSecret    apijson.Field
+	EmailClaimName  apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessCentrifyType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateResponseAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateResponseAccessCentrifyType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeSaml       AccessIdentityProviderUpdateResponseAccessCentrifyType = "saml"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateResponseAccessCentrifyType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateResponseAccessCentrifyType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateResponseAccessCentrifyType = "github"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateResponseAccessCentrifyType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateResponseAccessCentrifyType = "google"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOidc       AccessIdentityProviderUpdateResponseAccessCentrifyType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOkta       AccessIdentityProviderUpdateResponseAccessCentrifyType = "okta"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateResponseAccessCentrifyType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypePingone    AccessIdentityProviderUpdateResponseAccessCentrifyType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessCentrifyTypeYandex     AccessIdentityProviderUpdateResponseAccessCentrifyType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                             `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessCentrifyScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessCentrifyScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig]
+type accessIdentityProviderUpdateResponseAccessCentrifyScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessCentrifyScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessFacebook struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessFacebookConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessFacebookType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessFacebookScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessFacebookJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessFacebookJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessFacebook]
+type accessIdentityProviderUpdateResponseAccessFacebookJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessFacebook) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessFacebook) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessFacebookConfig struct {
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string                                                       `json:"client_secret"`
+	JSON         accessIdentityProviderUpdateResponseAccessFacebookConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessFacebookConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessFacebookConfig]
+type accessIdentityProviderUpdateResponseAccessFacebookConfigJSON struct {
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessFacebookType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateResponseAccessFacebookType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateResponseAccessFacebookType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeSaml       AccessIdentityProviderUpdateResponseAccessFacebookType = "saml"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeCentrify   AccessIdentityProviderUpdateResponseAccessFacebookType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeFacebook   AccessIdentityProviderUpdateResponseAccessFacebookType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGitHub     AccessIdentityProviderUpdateResponseAccessFacebookType = "github"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateResponseAccessFacebookType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeGoogle     AccessIdentityProviderUpdateResponseAccessFacebookType = "google"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateResponseAccessFacebookType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOidc       AccessIdentityProviderUpdateResponseAccessFacebookType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOkta       AccessIdentityProviderUpdateResponseAccessFacebookType = "okta"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateResponseAccessFacebookType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypePingone    AccessIdentityProviderUpdateResponseAccessFacebookType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessFacebookTypeYandex     AccessIdentityProviderUpdateResponseAccessFacebookType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessFacebookScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                             `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessFacebookScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessFacebookScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessFacebookScimConfig]
+type accessIdentityProviderUpdateResponseAccessFacebookScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessFacebookScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessGitHub struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGitHubConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessGitHubType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGitHubScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGitHubJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGitHubJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessGitHub]
+type accessIdentityProviderUpdateResponseAccessGitHubJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGitHub) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessGitHub) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGitHubConfig struct {
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string                                                     `json:"client_secret"`
+	JSON         accessIdentityProviderUpdateResponseAccessGitHubConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGitHubConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessGitHubConfig]
+type accessIdentityProviderUpdateResponseAccessGitHubConfigJSON struct {
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGitHubType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGitHubType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGitHubType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeSaml       AccessIdentityProviderUpdateResponseAccessGitHubType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeCentrify   AccessIdentityProviderUpdateResponseAccessGitHubType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeFacebook   AccessIdentityProviderUpdateResponseAccessGitHubType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGitHub     AccessIdentityProviderUpdateResponseAccessGitHubType = "github"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGitHubType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeGoogle     AccessIdentityProviderUpdateResponseAccessGitHubType = "google"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGitHubType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOidc       AccessIdentityProviderUpdateResponseAccessGitHubType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOkta       AccessIdentityProviderUpdateResponseAccessGitHubType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGitHubType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypePingone    AccessIdentityProviderUpdateResponseAccessGitHubType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGitHubTypeYandex     AccessIdentityProviderUpdateResponseAccessGitHubType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessGitHubScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                           `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessGitHubScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGitHubScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessGitHubScimConfig]
+type accessIdentityProviderUpdateResponseAccessGitHubScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGitHubScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessGoogle struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGoogleConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessGoogleType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGoogleJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessGoogle]
+type accessIdentityProviderUpdateResponseAccessGoogleJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogle) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessGoogle) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleConfig struct {
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string                                                     `json:"email_claim_name"`
+	JSON           accessIdentityProviderUpdateResponseAccessGoogleConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessGoogleConfig]
+type accessIdentityProviderUpdateResponseAccessGoogleConfigJSON struct {
+	Claims         apijson.Field
+	ClientID       apijson.Field
+	ClientSecret   apijson.Field
+	EmailClaimName apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleType = "github"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleType = "google"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGoogleTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessGoogleScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                           `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessGoogleScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessGoogleScimConfig]
+type accessIdentityProviderUpdateResponseAccessGoogleScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogleScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessGoogleApps struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessGoogleAppsType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessGoogleAppsJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleAppsJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessGoogleApps]
+type accessIdentityProviderUpdateResponseAccessGoogleAppsJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessGoogleApps) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig struct {
+	// Your companies TLD
+	AppsDomain string `json:"apps_domain"`
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string                                                         `json:"email_claim_name"`
+	JSON           accessIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig]
+type accessIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON struct {
+	AppsDomain     apijson.Field
+	Claims         apijson.Field
+	ClientID       apijson.Field
+	ClientSecret   apijson.Field
+	EmailClaimName apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "saml"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "github"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "google"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "okta"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateResponseAccessGoogleAppsType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                               `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessGoogleAppsScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessGoogleAppsScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig]
+type accessIdentityProviderUpdateResponseAccessGoogleAppsScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessGoogleAppsScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessLinkedin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessLinkedinConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessLinkedinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessLinkedinJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessLinkedinJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessLinkedin]
+type accessIdentityProviderUpdateResponseAccessLinkedinJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessLinkedin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessLinkedin) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessLinkedinConfig struct {
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string                                                       `json:"client_secret"`
+	JSON         accessIdentityProviderUpdateResponseAccessLinkedinConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessLinkedinConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessLinkedinConfig]
+type accessIdentityProviderUpdateResponseAccessLinkedinConfigJSON struct {
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessLinkedinType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateResponseAccessLinkedinType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeSaml       AccessIdentityProviderUpdateResponseAccessLinkedinType = "saml"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateResponseAccessLinkedinType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateResponseAccessLinkedinType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateResponseAccessLinkedinType = "github"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateResponseAccessLinkedinType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateResponseAccessLinkedinType = "google"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOidc       AccessIdentityProviderUpdateResponseAccessLinkedinType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOkta       AccessIdentityProviderUpdateResponseAccessLinkedinType = "okta"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateResponseAccessLinkedinType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypePingone    AccessIdentityProviderUpdateResponseAccessLinkedinType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessLinkedinTypeYandex     AccessIdentityProviderUpdateResponseAccessLinkedinType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                             `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessLinkedinScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessLinkedinScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig]
+type accessIdentityProviderUpdateResponseAccessLinkedinScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessLinkedinScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessOidc struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOidcConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessOidcType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOidcScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOidcJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOidcJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessOidc]
+type accessIdentityProviderUpdateResponseAccessOidcJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessOidc) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOidcConfig struct {
+	// The authorization_endpoint URL of your IdP
+	AuthURL string `json:"auth_url"`
+	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
+	CertsURL string `json:"certs_url"`
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// OAuth scopes
+	Scopes []string `json:"scopes"`
+	// The token_endpoint URL of your IdP
+	TokenURL string                                                   `json:"token_url"`
+	JSON     accessIdentityProviderUpdateResponseAccessOidcConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOidcConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessOidcConfig]
+type accessIdentityProviderUpdateResponseAccessOidcConfigJSON struct {
+	AuthURL        apijson.Field
+	CertsURL       apijson.Field
+	Claims         apijson.Field
+	ClientID       apijson.Field
+	ClientSecret   apijson.Field
+	EmailClaimName apijson.Field
+	Scopes         apijson.Field
+	TokenURL       apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOidcType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOidcType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOidcType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeSaml       AccessIdentityProviderUpdateResponseAccessOidcType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeCentrify   AccessIdentityProviderUpdateResponseAccessOidcType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeFacebook   AccessIdentityProviderUpdateResponseAccessOidcType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGitHub     AccessIdentityProviderUpdateResponseAccessOidcType = "github"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOidcType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeGoogle     AccessIdentityProviderUpdateResponseAccessOidcType = "google"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOidcType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOidc       AccessIdentityProviderUpdateResponseAccessOidcType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOkta       AccessIdentityProviderUpdateResponseAccessOidcType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOidcType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOidcTypePingone    AccessIdentityProviderUpdateResponseAccessOidcType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOidcTypeYandex     AccessIdentityProviderUpdateResponseAccessOidcType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessOidcScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                         `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessOidcScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOidcScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessOidcScimConfig]
+type accessIdentityProviderUpdateResponseAccessOidcScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOidcScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessOkta struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOktaConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessOktaType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOktaScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOktaJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOktaJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessOkta]
+type accessIdentityProviderUpdateResponseAccessOktaJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessOkta) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOktaConfig struct {
+	// Your okta authorization server id
+	AuthorizationServerID string `json:"authorization_server_id"`
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// Your okta account url
+	OktaAccount string                                                   `json:"okta_account"`
+	JSON        accessIdentityProviderUpdateResponseAccessOktaConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOktaConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessOktaConfig]
+type accessIdentityProviderUpdateResponseAccessOktaConfigJSON struct {
+	AuthorizationServerID apijson.Field
+	Claims                apijson.Field
+	ClientID              apijson.Field
+	ClientSecret          apijson.Field
+	EmailClaimName        apijson.Field
+	OktaAccount           apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOktaType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOktaType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOktaType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeSaml       AccessIdentityProviderUpdateResponseAccessOktaType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeCentrify   AccessIdentityProviderUpdateResponseAccessOktaType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeFacebook   AccessIdentityProviderUpdateResponseAccessOktaType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGitHub     AccessIdentityProviderUpdateResponseAccessOktaType = "github"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOktaType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeGoogle     AccessIdentityProviderUpdateResponseAccessOktaType = "google"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOktaType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOidc       AccessIdentityProviderUpdateResponseAccessOktaType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOkta       AccessIdentityProviderUpdateResponseAccessOktaType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOktaType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOktaTypePingone    AccessIdentityProviderUpdateResponseAccessOktaType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOktaTypeYandex     AccessIdentityProviderUpdateResponseAccessOktaType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessOktaScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                         `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessOktaScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOktaScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessOktaScimConfig]
+type accessIdentityProviderUpdateResponseAccessOktaScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOktaScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessOnelogin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessOneloginConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessOneloginType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOneloginScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOneloginJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOneloginJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessOnelogin]
+type accessIdentityProviderUpdateResponseAccessOneloginJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessOnelogin) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOneloginConfig struct {
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// Your OneLogin account url
+	OneloginAccount string                                                       `json:"onelogin_account"`
+	JSON            accessIdentityProviderUpdateResponseAccessOneloginConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOneloginConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessOneloginConfig]
+type accessIdentityProviderUpdateResponseAccessOneloginConfigJSON struct {
+	Claims          apijson.Field
+	ClientID        apijson.Field
+	ClientSecret    apijson.Field
+	EmailClaimName  apijson.Field
+	OneloginAccount apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOneloginType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOneloginType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOneloginType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeSaml       AccessIdentityProviderUpdateResponseAccessOneloginType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeCentrify   AccessIdentityProviderUpdateResponseAccessOneloginType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeFacebook   AccessIdentityProviderUpdateResponseAccessOneloginType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGitHub     AccessIdentityProviderUpdateResponseAccessOneloginType = "github"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOneloginType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeGoogle     AccessIdentityProviderUpdateResponseAccessOneloginType = "google"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOneloginType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOidc       AccessIdentityProviderUpdateResponseAccessOneloginType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOkta       AccessIdentityProviderUpdateResponseAccessOneloginType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOneloginType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypePingone    AccessIdentityProviderUpdateResponseAccessOneloginType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOneloginTypeYandex     AccessIdentityProviderUpdateResponseAccessOneloginType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessOneloginScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                             `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessOneloginScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOneloginScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessOneloginScimConfig]
+type accessIdentityProviderUpdateResponseAccessOneloginScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOneloginScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessPingone struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessPingoneConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessPingoneType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessPingoneScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessPingoneJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessPingoneJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessPingone]
+type accessIdentityProviderUpdateResponseAccessPingoneJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessPingone) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessPingoneConfig struct {
+	// Custom claims
+	Claims []string `json:"claims"`
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName string `json:"email_claim_name"`
+	// Your PingOne environment identifier
+	PingEnvID string                                                      `json:"ping_env_id"`
+	JSON      accessIdentityProviderUpdateResponseAccessPingoneConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessPingoneConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessPingoneConfig]
+type accessIdentityProviderUpdateResponseAccessPingoneConfigJSON struct {
+	Claims         apijson.Field
+	ClientID       apijson.Field
+	ClientSecret   apijson.Field
+	EmailClaimName apijson.Field
+	PingEnvID      apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessPingoneType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateResponseAccessPingoneType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateResponseAccessPingoneType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeSaml       AccessIdentityProviderUpdateResponseAccessPingoneType = "saml"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeCentrify   AccessIdentityProviderUpdateResponseAccessPingoneType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeFacebook   AccessIdentityProviderUpdateResponseAccessPingoneType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGitHub     AccessIdentityProviderUpdateResponseAccessPingoneType = "github"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateResponseAccessPingoneType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeGoogle     AccessIdentityProviderUpdateResponseAccessPingoneType = "google"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateResponseAccessPingoneType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOidc       AccessIdentityProviderUpdateResponseAccessPingoneType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOkta       AccessIdentityProviderUpdateResponseAccessPingoneType = "okta"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateResponseAccessPingoneType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypePingone    AccessIdentityProviderUpdateResponseAccessPingoneType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessPingoneTypeYandex     AccessIdentityProviderUpdateResponseAccessPingoneType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessPingoneScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                            `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessPingoneScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessPingoneScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessPingoneScimConfig]
+type accessIdentityProviderUpdateResponseAccessPingoneScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessPingoneScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessSaml struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessSamlConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessSamlType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessSamlScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessSamlJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessSamlJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessSaml]
+type accessIdentityProviderUpdateResponseAccessSamlJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessSaml) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessSamlConfig struct {
+	// A list of SAML attribute names that will be added to your signed JWT token and
+	// can be used in SAML policy rules.
+	Attributes []string `json:"attributes"`
+	// The attribute name for email in the SAML response.
+	EmailAttributeName string `json:"email_attribute_name"`
+	// Add a list of attribute names that will be returned in the response header from
+	// the Access callback.
+	HeaderAttributes []AccessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute `json:"header_attributes"`
+	// X509 certificate to verify the signature in the SAML authentication response
+	IdpPublicCerts []string `json:"idp_public_certs"`
+	// IdP Entity ID or Issuer URL
+	IssuerURL string `json:"issuer_url"`
+	// Sign the SAML authentication request with Access credentials. To verify the
+	// signature, use the public key from the Access certs endpoints.
+	SignRequest bool `json:"sign_request"`
+	// URL to send the SAML authentication requests to
+	SSOTargetURL string                                                   `json:"sso_target_url"`
+	JSON         accessIdentityProviderUpdateResponseAccessSamlConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessSamlConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessSamlConfig]
+type accessIdentityProviderUpdateResponseAccessSamlConfigJSON struct {
+	Attributes         apijson.Field
+	EmailAttributeName apijson.Field
+	HeaderAttributes   apijson.Field
+	IdpPublicCerts     apijson.Field
+	IssuerURL          apijson.Field
+	SignRequest        apijson.Field
+	SSOTargetURL       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessSamlConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute struct {
+	// attribute name from the IDP
+	AttributeName string `json:"attribute_name"`
+	// header that will be added on the request to the origin
+	HeaderName string                                                                  `json:"header_name"`
+	JSON       accessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttributeJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttributeJSON contains
+// the JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute]
+type accessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttributeJSON struct {
+	AttributeName apijson.Field
+	HeaderName    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessSamlType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOnetimepin AccessIdentityProviderUpdateResponseAccessSamlType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeAzureAd    AccessIdentityProviderUpdateResponseAccessSamlType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeSaml       AccessIdentityProviderUpdateResponseAccessSamlType = "saml"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeCentrify   AccessIdentityProviderUpdateResponseAccessSamlType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeFacebook   AccessIdentityProviderUpdateResponseAccessSamlType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGitHub     AccessIdentityProviderUpdateResponseAccessSamlType = "github"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogleApps AccessIdentityProviderUpdateResponseAccessSamlType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeGoogle     AccessIdentityProviderUpdateResponseAccessSamlType = "google"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeLinkedin   AccessIdentityProviderUpdateResponseAccessSamlType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOidc       AccessIdentityProviderUpdateResponseAccessSamlType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOkta       AccessIdentityProviderUpdateResponseAccessSamlType = "okta"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeOnelogin   AccessIdentityProviderUpdateResponseAccessSamlType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessSamlTypePingone    AccessIdentityProviderUpdateResponseAccessSamlType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessSamlTypeYandex     AccessIdentityProviderUpdateResponseAccessSamlType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessSamlScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                         `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessSamlScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessSamlScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessSamlScimConfig]
+type accessIdentityProviderUpdateResponseAccessSamlScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessSamlScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessYandex struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config AccessIdentityProviderUpdateResponseAccessYandexConfig `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessYandexType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessYandexScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessYandexJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessYandexJSON contains the JSON metadata
+// for the struct [AccessIdentityProviderUpdateResponseAccessYandex]
+type accessIdentityProviderUpdateResponseAccessYandexJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessYandex) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessYandex) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessYandexConfig struct {
+	// Your OAuth Client ID
+	ClientID string `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret string                                                     `json:"client_secret"`
+	JSON         accessIdentityProviderUpdateResponseAccessYandexConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessYandexConfigJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessYandexConfig]
+type accessIdentityProviderUpdateResponseAccessYandexConfigJSON struct {
+	ClientID     apijson.Field
+	ClientSecret apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessYandexType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOnetimepin AccessIdentityProviderUpdateResponseAccessYandexType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeAzureAd    AccessIdentityProviderUpdateResponseAccessYandexType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeSaml       AccessIdentityProviderUpdateResponseAccessYandexType = "saml"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeCentrify   AccessIdentityProviderUpdateResponseAccessYandexType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeFacebook   AccessIdentityProviderUpdateResponseAccessYandexType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGitHub     AccessIdentityProviderUpdateResponseAccessYandexType = "github"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogleApps AccessIdentityProviderUpdateResponseAccessYandexType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeGoogle     AccessIdentityProviderUpdateResponseAccessYandexType = "google"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeLinkedin   AccessIdentityProviderUpdateResponseAccessYandexType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOidc       AccessIdentityProviderUpdateResponseAccessYandexType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOkta       AccessIdentityProviderUpdateResponseAccessYandexType = "okta"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeOnelogin   AccessIdentityProviderUpdateResponseAccessYandexType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessYandexTypePingone    AccessIdentityProviderUpdateResponseAccessYandexType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessYandexTypeYandex     AccessIdentityProviderUpdateResponseAccessYandexType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessYandexScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                           `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessYandexScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessYandexScimConfigJSON contains the JSON
+// metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessYandexScimConfig]
+type accessIdentityProviderUpdateResponseAccessYandexScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessYandexScimConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseAccessOnetimepin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config interface{} `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name string `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type AccessIdentityProviderUpdateResponseAccessOnetimepinType `json:"type,required"`
+	// UUID
+	ID string `json:"id"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig `json:"scim_config"`
+	JSON       accessIdentityProviderUpdateResponseAccessOnetimepinJSON       `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOnetimepinJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseAccessOnetimepin]
+type accessIdentityProviderUpdateResponseAccessOnetimepinJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	ID          apijson.Field
+	ScimConfig  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r AccessIdentityProviderUpdateResponseAccessOnetimepin) implementsAccessIdentityProviderUpdateResponse() {
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateResponseAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateResponseAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeAzureAd    AccessIdentityProviderUpdateResponseAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeSaml       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "saml"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeCentrify   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "centrify"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeFacebook   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "facebook"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGitHub     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "github"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGoogleApps AccessIdentityProviderUpdateResponseAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeGoogle     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "google"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeLinkedin   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOidc       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "oidc"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOkta       AccessIdentityProviderUpdateResponseAccessOnetimepinType = "okta"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeOnelogin   AccessIdentityProviderUpdateResponseAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypePingone    AccessIdentityProviderUpdateResponseAccessOnetimepinType = "pingone"
+	AccessIdentityProviderUpdateResponseAccessOnetimepinTypeYandex     AccessIdentityProviderUpdateResponseAccessOnetimepinType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled bool `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision bool `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision bool `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret string `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision bool                                                               `json:"user_deprovision"`
+	JSON            accessIdentityProviderUpdateResponseAccessOnetimepinScimConfigJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseAccessOnetimepinScimConfigJSON contains the
+// JSON metadata for the struct
+// [AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig]
+type accessIdentityProviderUpdateResponseAccessOnetimepinScimConfigJSON struct {
+	Enabled                apijson.Field
+	GroupMemberDeprovision apijson.Field
+	SeatDeprovision        apijson.Field
+	Secret                 apijson.Field
+	UserDeprovision        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseAccessOnetimepinScimConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5594,1880 +7465,6 @@ func (r *AccessIdentityProviderGetResponseAccessOnetimepinScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [AccessIdentityProviderReplaceResponseAccessAzureAd],
-// [AccessIdentityProviderReplaceResponseAccessCentrify],
-// [AccessIdentityProviderReplaceResponseAccessFacebook],
-// [AccessIdentityProviderReplaceResponseAccessGitHub],
-// [AccessIdentityProviderReplaceResponseAccessGoogle],
-// [AccessIdentityProviderReplaceResponseAccessGoogleApps],
-// [AccessIdentityProviderReplaceResponseAccessLinkedin],
-// [AccessIdentityProviderReplaceResponseAccessOidc],
-// [AccessIdentityProviderReplaceResponseAccessOkta],
-// [AccessIdentityProviderReplaceResponseAccessOnelogin],
-// [AccessIdentityProviderReplaceResponseAccessPingone],
-// [AccessIdentityProviderReplaceResponseAccessSaml],
-// [AccessIdentityProviderReplaceResponseAccessYandex] or
-// [AccessIdentityProviderReplaceResponseAccessOnetimepin].
-type AccessIdentityProviderReplaceResponse interface {
-	implementsAccessIdentityProviderReplaceResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*AccessIdentityProviderReplaceResponse)(nil)).Elem(), "")
-}
-
-type AccessIdentityProviderReplaceResponseAccessAzureAd struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessAzureAdConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessAzureAdType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessAzureAdScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessAzureAdJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessAzureAdJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessAzureAd]
-type accessIdentityProviderReplaceResponseAccessAzureAdJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessAzureAd) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessAzureAd) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessAzureAdConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled bool `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID string `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups bool                                                         `json:"support_groups"`
-	JSON          accessIdentityProviderReplaceResponseAccessAzureAdConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessAzureAdConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessAzureAdConfig]
-type accessIdentityProviderReplaceResponseAccessAzureAdConfigJSON struct {
-	Claims                   apijson.Field
-	ClientID                 apijson.Field
-	ClientSecret             apijson.Field
-	ConditionalAccessEnabled apijson.Field
-	DirectoryID              apijson.Field
-	EmailClaimName           apijson.Field
-	SupportGroups            apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessAzureAdType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeOnetimepin AccessIdentityProviderReplaceResponseAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeAzureAd    AccessIdentityProviderReplaceResponseAccessAzureAdType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeSaml       AccessIdentityProviderReplaceResponseAccessAzureAdType = "saml"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeCentrify   AccessIdentityProviderReplaceResponseAccessAzureAdType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeFacebook   AccessIdentityProviderReplaceResponseAccessAzureAdType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeGitHub     AccessIdentityProviderReplaceResponseAccessAzureAdType = "github"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeGoogleApps AccessIdentityProviderReplaceResponseAccessAzureAdType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeGoogle     AccessIdentityProviderReplaceResponseAccessAzureAdType = "google"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeLinkedin   AccessIdentityProviderReplaceResponseAccessAzureAdType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeOidc       AccessIdentityProviderReplaceResponseAccessAzureAdType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeOkta       AccessIdentityProviderReplaceResponseAccessAzureAdType = "okta"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeOnelogin   AccessIdentityProviderReplaceResponseAccessAzureAdType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypePingone    AccessIdentityProviderReplaceResponseAccessAzureAdType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessAzureAdTypeYandex     AccessIdentityProviderReplaceResponseAccessAzureAdType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessAzureAdScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                             `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessAzureAdScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessAzureAdScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessAzureAdScimConfig]
-type accessIdentityProviderReplaceResponseAccessAzureAdScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessAzureAdScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessCentrify struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessCentrifyConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessCentrifyType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessCentrifyScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessCentrifyJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessCentrifyJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessCentrify]
-type accessIdentityProviderReplaceResponseAccessCentrifyJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessCentrify) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessCentrifyConfig struct {
-	// Your centrify account url
-	CentrifyAccount string `json:"centrify_account"`
-	// Your centrify app id
-	CentrifyAppID string `json:"centrify_app_id"`
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string                                                        `json:"email_claim_name"`
-	JSON           accessIdentityProviderReplaceResponseAccessCentrifyConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessCentrifyConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessCentrifyConfig]
-type accessIdentityProviderReplaceResponseAccessCentrifyConfigJSON struct {
-	CentrifyAccount apijson.Field
-	CentrifyAppID   apijson.Field
-	Claims          apijson.Field
-	ClientID        apijson.Field
-	ClientSecret    apijson.Field
-	EmailClaimName  apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessCentrifyType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeOnetimepin AccessIdentityProviderReplaceResponseAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeAzureAd    AccessIdentityProviderReplaceResponseAccessCentrifyType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeSaml       AccessIdentityProviderReplaceResponseAccessCentrifyType = "saml"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeCentrify   AccessIdentityProviderReplaceResponseAccessCentrifyType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeFacebook   AccessIdentityProviderReplaceResponseAccessCentrifyType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeGitHub     AccessIdentityProviderReplaceResponseAccessCentrifyType = "github"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeGoogleApps AccessIdentityProviderReplaceResponseAccessCentrifyType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeGoogle     AccessIdentityProviderReplaceResponseAccessCentrifyType = "google"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeLinkedin   AccessIdentityProviderReplaceResponseAccessCentrifyType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeOidc       AccessIdentityProviderReplaceResponseAccessCentrifyType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeOkta       AccessIdentityProviderReplaceResponseAccessCentrifyType = "okta"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeOnelogin   AccessIdentityProviderReplaceResponseAccessCentrifyType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypePingone    AccessIdentityProviderReplaceResponseAccessCentrifyType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessCentrifyTypeYandex     AccessIdentityProviderReplaceResponseAccessCentrifyType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessCentrifyScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                              `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessCentrifyScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessCentrifyScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessCentrifyScimConfig]
-type accessIdentityProviderReplaceResponseAccessCentrifyScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessCentrifyScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessFacebook struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessFacebookConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessFacebookType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessFacebookScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessFacebookJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessFacebookJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessFacebook]
-type accessIdentityProviderReplaceResponseAccessFacebookJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessFacebook) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessFacebook) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                                        `json:"client_secret"`
-	JSON         accessIdentityProviderReplaceResponseAccessFacebookConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessFacebookConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessFacebookConfig]
-type accessIdentityProviderReplaceResponseAccessFacebookConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessFacebookType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeOnetimepin AccessIdentityProviderReplaceResponseAccessFacebookType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeAzureAd    AccessIdentityProviderReplaceResponseAccessFacebookType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeSaml       AccessIdentityProviderReplaceResponseAccessFacebookType = "saml"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeCentrify   AccessIdentityProviderReplaceResponseAccessFacebookType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeFacebook   AccessIdentityProviderReplaceResponseAccessFacebookType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeGitHub     AccessIdentityProviderReplaceResponseAccessFacebookType = "github"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeGoogleApps AccessIdentityProviderReplaceResponseAccessFacebookType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeGoogle     AccessIdentityProviderReplaceResponseAccessFacebookType = "google"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeLinkedin   AccessIdentityProviderReplaceResponseAccessFacebookType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeOidc       AccessIdentityProviderReplaceResponseAccessFacebookType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeOkta       AccessIdentityProviderReplaceResponseAccessFacebookType = "okta"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeOnelogin   AccessIdentityProviderReplaceResponseAccessFacebookType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypePingone    AccessIdentityProviderReplaceResponseAccessFacebookType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessFacebookTypeYandex     AccessIdentityProviderReplaceResponseAccessFacebookType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessFacebookScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                              `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessFacebookScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessFacebookScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessFacebookScimConfig]
-type accessIdentityProviderReplaceResponseAccessFacebookScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessFacebookScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessGitHub struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessGitHubConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessGitHubType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessGitHubScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessGitHubJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGitHubJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessGitHub]
-type accessIdentityProviderReplaceResponseAccessGitHubJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGitHub) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessGitHub) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                                      `json:"client_secret"`
-	JSON         accessIdentityProviderReplaceResponseAccessGitHubConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGitHubConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGitHubConfig]
-type accessIdentityProviderReplaceResponseAccessGitHubConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGitHubType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeOnetimepin AccessIdentityProviderReplaceResponseAccessGitHubType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeAzureAd    AccessIdentityProviderReplaceResponseAccessGitHubType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeSaml       AccessIdentityProviderReplaceResponseAccessGitHubType = "saml"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeCentrify   AccessIdentityProviderReplaceResponseAccessGitHubType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeFacebook   AccessIdentityProviderReplaceResponseAccessGitHubType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeGitHub     AccessIdentityProviderReplaceResponseAccessGitHubType = "github"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeGoogleApps AccessIdentityProviderReplaceResponseAccessGitHubType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeGoogle     AccessIdentityProviderReplaceResponseAccessGitHubType = "google"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeLinkedin   AccessIdentityProviderReplaceResponseAccessGitHubType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeOidc       AccessIdentityProviderReplaceResponseAccessGitHubType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeOkta       AccessIdentityProviderReplaceResponseAccessGitHubType = "okta"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeOnelogin   AccessIdentityProviderReplaceResponseAccessGitHubType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypePingone    AccessIdentityProviderReplaceResponseAccessGitHubType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessGitHubTypeYandex     AccessIdentityProviderReplaceResponseAccessGitHubType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessGitHubScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                            `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessGitHubScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGitHubScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGitHubScimConfig]
-type accessIdentityProviderReplaceResponseAccessGitHubScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGitHubScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessGoogle struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessGoogleConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessGoogleType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessGoogleScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessGoogleJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessGoogle]
-type accessIdentityProviderReplaceResponseAccessGoogleJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogle) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessGoogle) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGoogleConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string                                                      `json:"email_claim_name"`
-	JSON           accessIdentityProviderReplaceResponseAccessGoogleConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGoogleConfig]
-type accessIdentityProviderReplaceResponseAccessGoogleConfigJSON struct {
-	Claims         apijson.Field
-	ClientID       apijson.Field
-	ClientSecret   apijson.Field
-	EmailClaimName apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGoogleType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeOnetimepin AccessIdentityProviderReplaceResponseAccessGoogleType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeAzureAd    AccessIdentityProviderReplaceResponseAccessGoogleType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeSaml       AccessIdentityProviderReplaceResponseAccessGoogleType = "saml"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeCentrify   AccessIdentityProviderReplaceResponseAccessGoogleType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeFacebook   AccessIdentityProviderReplaceResponseAccessGoogleType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeGitHub     AccessIdentityProviderReplaceResponseAccessGoogleType = "github"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeGoogleApps AccessIdentityProviderReplaceResponseAccessGoogleType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeGoogle     AccessIdentityProviderReplaceResponseAccessGoogleType = "google"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeLinkedin   AccessIdentityProviderReplaceResponseAccessGoogleType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeOidc       AccessIdentityProviderReplaceResponseAccessGoogleType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeOkta       AccessIdentityProviderReplaceResponseAccessGoogleType = "okta"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeOnelogin   AccessIdentityProviderReplaceResponseAccessGoogleType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypePingone    AccessIdentityProviderReplaceResponseAccessGoogleType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessGoogleTypeYandex     AccessIdentityProviderReplaceResponseAccessGoogleType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessGoogleScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                            `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessGoogleScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGoogleScimConfig]
-type accessIdentityProviderReplaceResponseAccessGoogleScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogleScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessGoogleApps struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessGoogleAppsConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessGoogleAppsType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessGoogleAppsScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessGoogleAppsJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleAppsJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessGoogleApps]
-type accessIdentityProviderReplaceResponseAccessGoogleAppsJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessGoogleApps) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGoogleAppsConfig struct {
-	// Your companies TLD
-	AppsDomain string `json:"apps_domain"`
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string                                                          `json:"email_claim_name"`
-	JSON           accessIdentityProviderReplaceResponseAccessGoogleAppsConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleAppsConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGoogleAppsConfig]
-type accessIdentityProviderReplaceResponseAccessGoogleAppsConfigJSON struct {
-	AppsDomain     apijson.Field
-	Claims         apijson.Field
-	ClientID       apijson.Field
-	ClientSecret   apijson.Field
-	EmailClaimName apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeOnetimepin AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeAzureAd    AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeSaml       AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "saml"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeCentrify   AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeFacebook   AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeGitHub     AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "github"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeGoogleApps AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeGoogle     AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "google"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeLinkedin   AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeOidc       AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeOkta       AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "okta"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeOnelogin   AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypePingone    AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessGoogleAppsTypeYandex     AccessIdentityProviderReplaceResponseAccessGoogleAppsType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessGoogleAppsScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                                `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessGoogleAppsScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessGoogleAppsScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessGoogleAppsScimConfig]
-type accessIdentityProviderReplaceResponseAccessGoogleAppsScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessGoogleAppsScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessLinkedin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessLinkedinConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessLinkedinType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessLinkedinScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessLinkedinJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessLinkedinJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessLinkedin]
-type accessIdentityProviderReplaceResponseAccessLinkedinJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessLinkedin) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessLinkedin) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                                        `json:"client_secret"`
-	JSON         accessIdentityProviderReplaceResponseAccessLinkedinConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessLinkedinConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessLinkedinConfig]
-type accessIdentityProviderReplaceResponseAccessLinkedinConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessLinkedinType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeOnetimepin AccessIdentityProviderReplaceResponseAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeAzureAd    AccessIdentityProviderReplaceResponseAccessLinkedinType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeSaml       AccessIdentityProviderReplaceResponseAccessLinkedinType = "saml"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeCentrify   AccessIdentityProviderReplaceResponseAccessLinkedinType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeFacebook   AccessIdentityProviderReplaceResponseAccessLinkedinType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeGitHub     AccessIdentityProviderReplaceResponseAccessLinkedinType = "github"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeGoogleApps AccessIdentityProviderReplaceResponseAccessLinkedinType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeGoogle     AccessIdentityProviderReplaceResponseAccessLinkedinType = "google"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeLinkedin   AccessIdentityProviderReplaceResponseAccessLinkedinType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeOidc       AccessIdentityProviderReplaceResponseAccessLinkedinType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeOkta       AccessIdentityProviderReplaceResponseAccessLinkedinType = "okta"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeOnelogin   AccessIdentityProviderReplaceResponseAccessLinkedinType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypePingone    AccessIdentityProviderReplaceResponseAccessLinkedinType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessLinkedinTypeYandex     AccessIdentityProviderReplaceResponseAccessLinkedinType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessLinkedinScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                              `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessLinkedinScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessLinkedinScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessLinkedinScimConfig]
-type accessIdentityProviderReplaceResponseAccessLinkedinScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessLinkedinScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessOidc struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessOidcConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessOidcType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessOidcScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessOidcJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOidcJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessOidc]
-type accessIdentityProviderReplaceResponseAccessOidcJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessOidc) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOidcConfig struct {
-	// The authorization_endpoint URL of your IdP
-	AuthURL string `json:"auth_url"`
-	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL string `json:"certs_url"`
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// OAuth scopes
-	Scopes []string `json:"scopes"`
-	// The token_endpoint URL of your IdP
-	TokenURL string                                                    `json:"token_url"`
-	JSON     accessIdentityProviderReplaceResponseAccessOidcConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOidcConfigJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessOidcConfig]
-type accessIdentityProviderReplaceResponseAccessOidcConfigJSON struct {
-	AuthURL        apijson.Field
-	CertsURL       apijson.Field
-	Claims         apijson.Field
-	ClientID       apijson.Field
-	ClientSecret   apijson.Field
-	EmailClaimName apijson.Field
-	Scopes         apijson.Field
-	TokenURL       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOidcType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessOidcTypeOnetimepin AccessIdentityProviderReplaceResponseAccessOidcType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeAzureAd    AccessIdentityProviderReplaceResponseAccessOidcType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeSaml       AccessIdentityProviderReplaceResponseAccessOidcType = "saml"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeCentrify   AccessIdentityProviderReplaceResponseAccessOidcType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeFacebook   AccessIdentityProviderReplaceResponseAccessOidcType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeGitHub     AccessIdentityProviderReplaceResponseAccessOidcType = "github"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeGoogleApps AccessIdentityProviderReplaceResponseAccessOidcType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeGoogle     AccessIdentityProviderReplaceResponseAccessOidcType = "google"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeLinkedin   AccessIdentityProviderReplaceResponseAccessOidcType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeOidc       AccessIdentityProviderReplaceResponseAccessOidcType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeOkta       AccessIdentityProviderReplaceResponseAccessOidcType = "okta"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeOnelogin   AccessIdentityProviderReplaceResponseAccessOidcType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessOidcTypePingone    AccessIdentityProviderReplaceResponseAccessOidcType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessOidcTypeYandex     AccessIdentityProviderReplaceResponseAccessOidcType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessOidcScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                          `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessOidcScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOidcScimConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessOidcScimConfig]
-type accessIdentityProviderReplaceResponseAccessOidcScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOidcScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessOkta struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessOktaConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessOktaType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessOktaScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessOktaJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOktaJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessOkta]
-type accessIdentityProviderReplaceResponseAccessOktaJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessOkta) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOktaConfig struct {
-	// Your okta authorization server id
-	AuthorizationServerID string `json:"authorization_server_id"`
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Your okta account url
-	OktaAccount string                                                    `json:"okta_account"`
-	JSON        accessIdentityProviderReplaceResponseAccessOktaConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOktaConfigJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessOktaConfig]
-type accessIdentityProviderReplaceResponseAccessOktaConfigJSON struct {
-	AuthorizationServerID apijson.Field
-	Claims                apijson.Field
-	ClientID              apijson.Field
-	ClientSecret          apijson.Field
-	EmailClaimName        apijson.Field
-	OktaAccount           apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOktaType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessOktaTypeOnetimepin AccessIdentityProviderReplaceResponseAccessOktaType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeAzureAd    AccessIdentityProviderReplaceResponseAccessOktaType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeSaml       AccessIdentityProviderReplaceResponseAccessOktaType = "saml"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeCentrify   AccessIdentityProviderReplaceResponseAccessOktaType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeFacebook   AccessIdentityProviderReplaceResponseAccessOktaType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeGitHub     AccessIdentityProviderReplaceResponseAccessOktaType = "github"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeGoogleApps AccessIdentityProviderReplaceResponseAccessOktaType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeGoogle     AccessIdentityProviderReplaceResponseAccessOktaType = "google"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeLinkedin   AccessIdentityProviderReplaceResponseAccessOktaType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeOidc       AccessIdentityProviderReplaceResponseAccessOktaType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeOkta       AccessIdentityProviderReplaceResponseAccessOktaType = "okta"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeOnelogin   AccessIdentityProviderReplaceResponseAccessOktaType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessOktaTypePingone    AccessIdentityProviderReplaceResponseAccessOktaType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessOktaTypeYandex     AccessIdentityProviderReplaceResponseAccessOktaType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessOktaScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                          `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessOktaScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOktaScimConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessOktaScimConfig]
-type accessIdentityProviderReplaceResponseAccessOktaScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOktaScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessOnelogin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessOneloginConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessOneloginType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessOneloginScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessOneloginJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOneloginJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessOnelogin]
-type accessIdentityProviderReplaceResponseAccessOneloginJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessOnelogin) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOneloginConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Your OneLogin account url
-	OneloginAccount string                                                        `json:"onelogin_account"`
-	JSON            accessIdentityProviderReplaceResponseAccessOneloginConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOneloginConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessOneloginConfig]
-type accessIdentityProviderReplaceResponseAccessOneloginConfigJSON struct {
-	Claims          apijson.Field
-	ClientID        apijson.Field
-	ClientSecret    apijson.Field
-	EmailClaimName  apijson.Field
-	OneloginAccount apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOneloginType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeOnetimepin AccessIdentityProviderReplaceResponseAccessOneloginType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeAzureAd    AccessIdentityProviderReplaceResponseAccessOneloginType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeSaml       AccessIdentityProviderReplaceResponseAccessOneloginType = "saml"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeCentrify   AccessIdentityProviderReplaceResponseAccessOneloginType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeFacebook   AccessIdentityProviderReplaceResponseAccessOneloginType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeGitHub     AccessIdentityProviderReplaceResponseAccessOneloginType = "github"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeGoogleApps AccessIdentityProviderReplaceResponseAccessOneloginType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeGoogle     AccessIdentityProviderReplaceResponseAccessOneloginType = "google"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeLinkedin   AccessIdentityProviderReplaceResponseAccessOneloginType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeOidc       AccessIdentityProviderReplaceResponseAccessOneloginType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeOkta       AccessIdentityProviderReplaceResponseAccessOneloginType = "okta"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeOnelogin   AccessIdentityProviderReplaceResponseAccessOneloginType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypePingone    AccessIdentityProviderReplaceResponseAccessOneloginType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessOneloginTypeYandex     AccessIdentityProviderReplaceResponseAccessOneloginType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessOneloginScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                              `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessOneloginScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOneloginScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessOneloginScimConfig]
-type accessIdentityProviderReplaceResponseAccessOneloginScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOneloginScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessPingone struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessPingoneConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessPingoneType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessPingoneScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessPingoneJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessPingoneJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessPingone]
-type accessIdentityProviderReplaceResponseAccessPingoneJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessPingone) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessPingoneConfig struct {
-	// Custom claims
-	Claims []string `json:"claims"`
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName string `json:"email_claim_name"`
-	// Your PingOne environment identifier
-	PingEnvID string                                                       `json:"ping_env_id"`
-	JSON      accessIdentityProviderReplaceResponseAccessPingoneConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessPingoneConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessPingoneConfig]
-type accessIdentityProviderReplaceResponseAccessPingoneConfigJSON struct {
-	Claims         apijson.Field
-	ClientID       apijson.Field
-	ClientSecret   apijson.Field
-	EmailClaimName apijson.Field
-	PingEnvID      apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessPingoneType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeOnetimepin AccessIdentityProviderReplaceResponseAccessPingoneType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeAzureAd    AccessIdentityProviderReplaceResponseAccessPingoneType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeSaml       AccessIdentityProviderReplaceResponseAccessPingoneType = "saml"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeCentrify   AccessIdentityProviderReplaceResponseAccessPingoneType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeFacebook   AccessIdentityProviderReplaceResponseAccessPingoneType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeGitHub     AccessIdentityProviderReplaceResponseAccessPingoneType = "github"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeGoogleApps AccessIdentityProviderReplaceResponseAccessPingoneType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeGoogle     AccessIdentityProviderReplaceResponseAccessPingoneType = "google"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeLinkedin   AccessIdentityProviderReplaceResponseAccessPingoneType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeOidc       AccessIdentityProviderReplaceResponseAccessPingoneType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeOkta       AccessIdentityProviderReplaceResponseAccessPingoneType = "okta"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeOnelogin   AccessIdentityProviderReplaceResponseAccessPingoneType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypePingone    AccessIdentityProviderReplaceResponseAccessPingoneType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessPingoneTypeYandex     AccessIdentityProviderReplaceResponseAccessPingoneType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessPingoneScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                             `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessPingoneScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessPingoneScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessPingoneScimConfig]
-type accessIdentityProviderReplaceResponseAccessPingoneScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessPingoneScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessSaml struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessSamlConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessSamlType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessSamlScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessSamlJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessSamlJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessSaml]
-type accessIdentityProviderReplaceResponseAccessSamlJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessSaml) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessSamlConfig struct {
-	// A list of SAML attribute names that will be added to your signed JWT token and
-	// can be used in SAML policy rules.
-	Attributes []string `json:"attributes"`
-	// The attribute name for email in the SAML response.
-	EmailAttributeName string `json:"email_attribute_name"`
-	// Add a list of attribute names that will be returned in the response header from
-	// the Access callback.
-	HeaderAttributes []AccessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttribute `json:"header_attributes"`
-	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts []string `json:"idp_public_certs"`
-	// IdP Entity ID or Issuer URL
-	IssuerURL string `json:"issuer_url"`
-	// Sign the SAML authentication request with Access credentials. To verify the
-	// signature, use the public key from the Access certs endpoints.
-	SignRequest bool `json:"sign_request"`
-	// URL to send the SAML authentication requests to
-	SSOTargetURL string                                                    `json:"sso_target_url"`
-	JSON         accessIdentityProviderReplaceResponseAccessSamlConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessSamlConfigJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessSamlConfig]
-type accessIdentityProviderReplaceResponseAccessSamlConfigJSON struct {
-	Attributes         apijson.Field
-	EmailAttributeName apijson.Field
-	HeaderAttributes   apijson.Field
-	IdpPublicCerts     apijson.Field
-	IssuerURL          apijson.Field
-	SignRequest        apijson.Field
-	SSOTargetURL       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessSamlConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttribute struct {
-	// attribute name from the IDP
-	AttributeName string `json:"attribute_name"`
-	// header that will be added on the request to the origin
-	HeaderName string                                                                   `json:"header_name"`
-	JSON       accessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttributeJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttributeJSON
-// contains the JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttribute]
-type accessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttributeJSON struct {
-	AttributeName apijson.Field
-	HeaderName    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessSamlType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessSamlTypeOnetimepin AccessIdentityProviderReplaceResponseAccessSamlType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeAzureAd    AccessIdentityProviderReplaceResponseAccessSamlType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeSaml       AccessIdentityProviderReplaceResponseAccessSamlType = "saml"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeCentrify   AccessIdentityProviderReplaceResponseAccessSamlType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeFacebook   AccessIdentityProviderReplaceResponseAccessSamlType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeGitHub     AccessIdentityProviderReplaceResponseAccessSamlType = "github"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeGoogleApps AccessIdentityProviderReplaceResponseAccessSamlType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeGoogle     AccessIdentityProviderReplaceResponseAccessSamlType = "google"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeLinkedin   AccessIdentityProviderReplaceResponseAccessSamlType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeOidc       AccessIdentityProviderReplaceResponseAccessSamlType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeOkta       AccessIdentityProviderReplaceResponseAccessSamlType = "okta"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeOnelogin   AccessIdentityProviderReplaceResponseAccessSamlType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessSamlTypePingone    AccessIdentityProviderReplaceResponseAccessSamlType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessSamlTypeYandex     AccessIdentityProviderReplaceResponseAccessSamlType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessSamlScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                          `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessSamlScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessSamlScimConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessSamlScimConfig]
-type accessIdentityProviderReplaceResponseAccessSamlScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessSamlScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessYandex struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config AccessIdentityProviderReplaceResponseAccessYandexConfig `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessYandexType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessYandexScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessYandexJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessYandexJSON contains the JSON metadata
-// for the struct [AccessIdentityProviderReplaceResponseAccessYandex]
-type accessIdentityProviderReplaceResponseAccessYandexJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessYandex) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessYandex) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID string `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret string                                                      `json:"client_secret"`
-	JSON         accessIdentityProviderReplaceResponseAccessYandexConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessYandexConfigJSON contains the JSON
-// metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessYandexConfig]
-type accessIdentityProviderReplaceResponseAccessYandexConfigJSON struct {
-	ClientID     apijson.Field
-	ClientSecret apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessYandexType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessYandexTypeOnetimepin AccessIdentityProviderReplaceResponseAccessYandexType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeAzureAd    AccessIdentityProviderReplaceResponseAccessYandexType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeSaml       AccessIdentityProviderReplaceResponseAccessYandexType = "saml"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeCentrify   AccessIdentityProviderReplaceResponseAccessYandexType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeFacebook   AccessIdentityProviderReplaceResponseAccessYandexType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeGitHub     AccessIdentityProviderReplaceResponseAccessYandexType = "github"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeGoogleApps AccessIdentityProviderReplaceResponseAccessYandexType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeGoogle     AccessIdentityProviderReplaceResponseAccessYandexType = "google"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeLinkedin   AccessIdentityProviderReplaceResponseAccessYandexType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeOidc       AccessIdentityProviderReplaceResponseAccessYandexType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeOkta       AccessIdentityProviderReplaceResponseAccessYandexType = "okta"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeOnelogin   AccessIdentityProviderReplaceResponseAccessYandexType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessYandexTypePingone    AccessIdentityProviderReplaceResponseAccessYandexType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessYandexTypeYandex     AccessIdentityProviderReplaceResponseAccessYandexType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessYandexScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                            `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessYandexScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessYandexScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessYandexScimConfig]
-type accessIdentityProviderReplaceResponseAccessYandexScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessYandexScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseAccessOnetimepin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config interface{} `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name string `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type AccessIdentityProviderReplaceResponseAccessOnetimepinType `json:"type,required"`
-	// UUID
-	ID string `json:"id"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig AccessIdentityProviderReplaceResponseAccessOnetimepinScimConfig `json:"scim_config"`
-	JSON       accessIdentityProviderReplaceResponseAccessOnetimepinJSON       `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOnetimepinJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseAccessOnetimepin]
-type accessIdentityProviderReplaceResponseAccessOnetimepinJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	ID          apijson.Field
-	ScimConfig  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r AccessIdentityProviderReplaceResponseAccessOnetimepin) implementsAccessIdentityProviderReplaceResponse() {
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceResponseAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeOnetimepin AccessIdentityProviderReplaceResponseAccessOnetimepinType = "onetimepin"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeAzureAd    AccessIdentityProviderReplaceResponseAccessOnetimepinType = "azureAD"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeSaml       AccessIdentityProviderReplaceResponseAccessOnetimepinType = "saml"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeCentrify   AccessIdentityProviderReplaceResponseAccessOnetimepinType = "centrify"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeFacebook   AccessIdentityProviderReplaceResponseAccessOnetimepinType = "facebook"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeGitHub     AccessIdentityProviderReplaceResponseAccessOnetimepinType = "github"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeGoogleApps AccessIdentityProviderReplaceResponseAccessOnetimepinType = "google-apps"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeGoogle     AccessIdentityProviderReplaceResponseAccessOnetimepinType = "google"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeLinkedin   AccessIdentityProviderReplaceResponseAccessOnetimepinType = "linkedin"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeOidc       AccessIdentityProviderReplaceResponseAccessOnetimepinType = "oidc"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeOkta       AccessIdentityProviderReplaceResponseAccessOnetimepinType = "okta"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeOnelogin   AccessIdentityProviderReplaceResponseAccessOnetimepinType = "onelogin"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypePingone    AccessIdentityProviderReplaceResponseAccessOnetimepinType = "pingone"
-	AccessIdentityProviderReplaceResponseAccessOnetimepinTypeYandex     AccessIdentityProviderReplaceResponseAccessOnetimepinType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceResponseAccessOnetimepinScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled bool `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision bool `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision bool `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret string `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision bool                                                                `json:"user_deprovision"`
-	JSON            accessIdentityProviderReplaceResponseAccessOnetimepinScimConfigJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseAccessOnetimepinScimConfigJSON contains the
-// JSON metadata for the struct
-// [AccessIdentityProviderReplaceResponseAccessOnetimepinScimConfig]
-type accessIdentityProviderReplaceResponseAccessOnetimepinScimConfigJSON struct {
-	Enabled                apijson.Field
-	GroupMemberDeprovision apijson.Field
-	SeatDeprovision        apijson.Field
-	Secret                 apijson.Field
-	UserDeprovision        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseAccessOnetimepinScimConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // This interface is a union satisfied by one of the following:
 // [AccessIdentityProviderNewParamsAccessAzureAd],
 // [AccessIdentityProviderNewParamsAccessCentrify],
@@ -8830,6 +8827,1368 @@ const (
 	AccessIdentityProviderNewResponseEnvelopeSuccessTrue AccessIdentityProviderNewResponseEnvelopeSuccess = true
 )
 
+// This interface is a union satisfied by one of the following:
+// [AccessIdentityProviderUpdateParamsAccessAzureAd],
+// [AccessIdentityProviderUpdateParamsAccessCentrify],
+// [AccessIdentityProviderUpdateParamsAccessFacebook],
+// [AccessIdentityProviderUpdateParamsAccessGitHub],
+// [AccessIdentityProviderUpdateParamsAccessGoogle],
+// [AccessIdentityProviderUpdateParamsAccessGoogleApps],
+// [AccessIdentityProviderUpdateParamsAccessLinkedin],
+// [AccessIdentityProviderUpdateParamsAccessOidc],
+// [AccessIdentityProviderUpdateParamsAccessOkta],
+// [AccessIdentityProviderUpdateParamsAccessOnelogin],
+// [AccessIdentityProviderUpdateParamsAccessPingone],
+// [AccessIdentityProviderUpdateParamsAccessSaml],
+// [AccessIdentityProviderUpdateParamsAccessYandex],
+// [AccessIdentityProviderUpdateParamsAccessOnetimepin].
+type AccessIdentityProviderUpdateParams interface {
+	ImplementsAccessIdentityProviderUpdateParams()
+}
+
+type AccessIdentityProviderUpdateParamsAccessAzureAd struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessAzureAd) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessAzureAdConfig struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// Should Cloudflare try to load authentication contexts from your account
+	ConditionalAccessEnabled param.Field[bool] `json:"conditional_access_enabled"`
+	// Your Azure directory uuid
+	DirectoryID param.Field[string] `json:"directory_id"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Should Cloudflare try to load groups from your account
+	SupportGroups param.Field[bool] `json:"support_groups"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessAzureAdType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderUpdateParamsAccessAzureAdType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderUpdateParamsAccessAzureAdType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeSaml       AccessIdentityProviderUpdateParamsAccessAzureAdType = "saml"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeCentrify   AccessIdentityProviderUpdateParamsAccessAzureAdType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeFacebook   AccessIdentityProviderUpdateParamsAccessAzureAdType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGitHub     AccessIdentityProviderUpdateParamsAccessAzureAdType = "github"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderUpdateParamsAccessAzureAdType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeGoogle     AccessIdentityProviderUpdateParamsAccessAzureAdType = "google"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOidc       AccessIdentityProviderUpdateParamsAccessAzureAdType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOkta       AccessIdentityProviderUpdateParamsAccessAzureAdType = "okta"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderUpdateParamsAccessAzureAdType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypePingone    AccessIdentityProviderUpdateParamsAccessAzureAdType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessAzureAdTypeYandex     AccessIdentityProviderUpdateParamsAccessAzureAdType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessAzureAdScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessCentrify struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessCentrify) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessCentrifyConfig struct {
+	// Your centrify account url
+	CentrifyAccount param.Field[string] `json:"centrify_account"`
+	// Your centrify app id
+	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessCentrifyType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderUpdateParamsAccessCentrifyType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderUpdateParamsAccessCentrifyType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeSaml       AccessIdentityProviderUpdateParamsAccessCentrifyType = "saml"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeCentrify   AccessIdentityProviderUpdateParamsAccessCentrifyType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeFacebook   AccessIdentityProviderUpdateParamsAccessCentrifyType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGitHub     AccessIdentityProviderUpdateParamsAccessCentrifyType = "github"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderUpdateParamsAccessCentrifyType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeGoogle     AccessIdentityProviderUpdateParamsAccessCentrifyType = "google"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOidc       AccessIdentityProviderUpdateParamsAccessCentrifyType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOkta       AccessIdentityProviderUpdateParamsAccessCentrifyType = "okta"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderUpdateParamsAccessCentrifyType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypePingone    AccessIdentityProviderUpdateParamsAccessCentrifyType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessCentrifyTypeYandex     AccessIdentityProviderUpdateParamsAccessCentrifyType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessCentrifyScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessFacebook struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessFacebookConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessFacebookType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessFacebookScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessFacebook) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessFacebookConfig struct {
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessFacebookType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnetimepin AccessIdentityProviderUpdateParamsAccessFacebookType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeAzureAd    AccessIdentityProviderUpdateParamsAccessFacebookType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeSaml       AccessIdentityProviderUpdateParamsAccessFacebookType = "saml"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeCentrify   AccessIdentityProviderUpdateParamsAccessFacebookType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeFacebook   AccessIdentityProviderUpdateParamsAccessFacebookType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGitHub     AccessIdentityProviderUpdateParamsAccessFacebookType = "github"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogleApps AccessIdentityProviderUpdateParamsAccessFacebookType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeGoogle     AccessIdentityProviderUpdateParamsAccessFacebookType = "google"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeLinkedin   AccessIdentityProviderUpdateParamsAccessFacebookType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOidc       AccessIdentityProviderUpdateParamsAccessFacebookType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOkta       AccessIdentityProviderUpdateParamsAccessFacebookType = "okta"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeOnelogin   AccessIdentityProviderUpdateParamsAccessFacebookType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypePingone    AccessIdentityProviderUpdateParamsAccessFacebookType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessFacebookTypeYandex     AccessIdentityProviderUpdateParamsAccessFacebookType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessFacebookScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessFacebookScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessGitHub struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGitHubConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGitHubType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGitHubScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessGitHub) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGitHubConfig struct {
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGitHubType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGitHubType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGitHubType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeSaml       AccessIdentityProviderUpdateParamsAccessGitHubType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeCentrify   AccessIdentityProviderUpdateParamsAccessGitHubType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeFacebook   AccessIdentityProviderUpdateParamsAccessGitHubType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGitHub     AccessIdentityProviderUpdateParamsAccessGitHubType = "github"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGitHubType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeGoogle     AccessIdentityProviderUpdateParamsAccessGitHubType = "google"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGitHubType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOidc       AccessIdentityProviderUpdateParamsAccessGitHubType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOkta       AccessIdentityProviderUpdateParamsAccessGitHubType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGitHubType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypePingone    AccessIdentityProviderUpdateParamsAccessGitHubType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGitHubTypeYandex     AccessIdentityProviderUpdateParamsAccessGitHubType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessGitHubScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGitHubScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessGoogle struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessGoogle) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleConfig struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleType = "github"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleType = "google"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGoogleTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessGoogleScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogleScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessGoogleApps struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessGoogleApps) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig struct {
+	// Your companies TLD
+	AppsDomain param.Field[string] `json:"apps_domain"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessGoogleAppsType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "saml"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "github"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "google"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "okta"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypePingone    AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderUpdateParamsAccessGoogleAppsType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessGoogleAppsScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessLinkedin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessLinkedin) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessLinkedinConfig struct {
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessLinkedinType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessLinkedinType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderUpdateParamsAccessLinkedinType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeSaml       AccessIdentityProviderUpdateParamsAccessLinkedinType = "saml"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeCentrify   AccessIdentityProviderUpdateParamsAccessLinkedinType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeFacebook   AccessIdentityProviderUpdateParamsAccessLinkedinType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGitHub     AccessIdentityProviderUpdateParamsAccessLinkedinType = "github"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderUpdateParamsAccessLinkedinType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeGoogle     AccessIdentityProviderUpdateParamsAccessLinkedinType = "google"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOidc       AccessIdentityProviderUpdateParamsAccessLinkedinType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOkta       AccessIdentityProviderUpdateParamsAccessLinkedinType = "okta"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderUpdateParamsAccessLinkedinType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypePingone    AccessIdentityProviderUpdateParamsAccessLinkedinType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessLinkedinTypeYandex     AccessIdentityProviderUpdateParamsAccessLinkedinType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessLinkedinScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessOidc struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOidcConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOidcType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOidcScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOidc) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessOidc) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOidcConfig struct {
+	// The authorization_endpoint URL of your IdP
+	AuthURL param.Field[string] `json:"auth_url"`
+	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
+	CertsURL param.Field[string] `json:"certs_url"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// OAuth scopes
+	Scopes param.Field[[]string] `json:"scopes"`
+	// The token_endpoint URL of your IdP
+	TokenURL param.Field[string] `json:"token_url"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOidcConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOidcType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOidcType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOidcType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeSaml       AccessIdentityProviderUpdateParamsAccessOidcType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeCentrify   AccessIdentityProviderUpdateParamsAccessOidcType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeFacebook   AccessIdentityProviderUpdateParamsAccessOidcType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGitHub     AccessIdentityProviderUpdateParamsAccessOidcType = "github"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOidcType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeGoogle     AccessIdentityProviderUpdateParamsAccessOidcType = "google"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOidcType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOidc       AccessIdentityProviderUpdateParamsAccessOidcType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOkta       AccessIdentityProviderUpdateParamsAccessOidcType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOidcType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOidcTypePingone    AccessIdentityProviderUpdateParamsAccessOidcType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOidcTypeYandex     AccessIdentityProviderUpdateParamsAccessOidcType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessOidcScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOidcScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessOkta struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOktaConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOktaType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOktaScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOkta) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessOkta) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOktaConfig struct {
+	// Your okta authorization server id
+	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your okta account url
+	OktaAccount param.Field[string] `json:"okta_account"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOktaType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOktaType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOktaType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeSaml       AccessIdentityProviderUpdateParamsAccessOktaType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeCentrify   AccessIdentityProviderUpdateParamsAccessOktaType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeFacebook   AccessIdentityProviderUpdateParamsAccessOktaType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGitHub     AccessIdentityProviderUpdateParamsAccessOktaType = "github"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOktaType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeGoogle     AccessIdentityProviderUpdateParamsAccessOktaType = "google"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOktaType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOidc       AccessIdentityProviderUpdateParamsAccessOktaType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOkta       AccessIdentityProviderUpdateParamsAccessOktaType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOktaType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOktaTypePingone    AccessIdentityProviderUpdateParamsAccessOktaType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOktaTypeYandex     AccessIdentityProviderUpdateParamsAccessOktaType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessOktaScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOktaScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessOnelogin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessOneloginConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOneloginType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOneloginScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessOnelogin) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOneloginConfig struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your OneLogin account url
+	OneloginAccount param.Field[string] `json:"onelogin_account"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOneloginType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOneloginType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOneloginType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeSaml       AccessIdentityProviderUpdateParamsAccessOneloginType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeCentrify   AccessIdentityProviderUpdateParamsAccessOneloginType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeFacebook   AccessIdentityProviderUpdateParamsAccessOneloginType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGitHub     AccessIdentityProviderUpdateParamsAccessOneloginType = "github"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOneloginType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeGoogle     AccessIdentityProviderUpdateParamsAccessOneloginType = "google"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOneloginType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOidc       AccessIdentityProviderUpdateParamsAccessOneloginType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOkta       AccessIdentityProviderUpdateParamsAccessOneloginType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOneloginType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypePingone    AccessIdentityProviderUpdateParamsAccessOneloginType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOneloginTypeYandex     AccessIdentityProviderUpdateParamsAccessOneloginType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessOneloginScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOneloginScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessPingone struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessPingoneConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessPingoneType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessPingoneScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessPingone) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessPingone) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessPingoneConfig struct {
+	// Custom claims
+	Claims param.Field[[]string] `json:"claims"`
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+	// The claim name for email in the id_token response.
+	EmailClaimName param.Field[string] `json:"email_claim_name"`
+	// Your PingOne environment identifier
+	PingEnvID param.Field[string] `json:"ping_env_id"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessPingoneType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnetimepin AccessIdentityProviderUpdateParamsAccessPingoneType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeAzureAd    AccessIdentityProviderUpdateParamsAccessPingoneType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeSaml       AccessIdentityProviderUpdateParamsAccessPingoneType = "saml"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeCentrify   AccessIdentityProviderUpdateParamsAccessPingoneType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeFacebook   AccessIdentityProviderUpdateParamsAccessPingoneType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGitHub     AccessIdentityProviderUpdateParamsAccessPingoneType = "github"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogleApps AccessIdentityProviderUpdateParamsAccessPingoneType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeGoogle     AccessIdentityProviderUpdateParamsAccessPingoneType = "google"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeLinkedin   AccessIdentityProviderUpdateParamsAccessPingoneType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOidc       AccessIdentityProviderUpdateParamsAccessPingoneType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOkta       AccessIdentityProviderUpdateParamsAccessPingoneType = "okta"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeOnelogin   AccessIdentityProviderUpdateParamsAccessPingoneType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypePingone    AccessIdentityProviderUpdateParamsAccessPingoneType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessPingoneTypeYandex     AccessIdentityProviderUpdateParamsAccessPingoneType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessPingoneScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessPingoneScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessSaml struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessSamlConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessSamlType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessSamlScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessSaml) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessSaml) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessSamlConfig struct {
+	// A list of SAML attribute names that will be added to your signed JWT token and
+	// can be used in SAML policy rules.
+	Attributes param.Field[[]string] `json:"attributes"`
+	// The attribute name for email in the SAML response.
+	EmailAttributeName param.Field[string] `json:"email_attribute_name"`
+	// Add a list of attribute names that will be returned in the response header from
+	// the Access callback.
+	HeaderAttributes param.Field[[]AccessIdentityProviderUpdateParamsAccessSamlConfigHeaderAttribute] `json:"header_attributes"`
+	// X509 certificate to verify the signature in the SAML authentication response
+	IdpPublicCerts param.Field[[]string] `json:"idp_public_certs"`
+	// IdP Entity ID or Issuer URL
+	IssuerURL param.Field[string] `json:"issuer_url"`
+	// Sign the SAML authentication request with Access credentials. To verify the
+	// signature, use the public key from the Access certs endpoints.
+	SignRequest param.Field[bool] `json:"sign_request"`
+	// URL to send the SAML authentication requests to
+	SSOTargetURL param.Field[string] `json:"sso_target_url"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessSamlConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessSamlConfigHeaderAttribute struct {
+	// attribute name from the IDP
+	AttributeName param.Field[string] `json:"attribute_name"`
+	// header that will be added on the request to the origin
+	HeaderName param.Field[string] `json:"header_name"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessSamlConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessSamlType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOnetimepin AccessIdentityProviderUpdateParamsAccessSamlType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeAzureAd    AccessIdentityProviderUpdateParamsAccessSamlType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeSaml       AccessIdentityProviderUpdateParamsAccessSamlType = "saml"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeCentrify   AccessIdentityProviderUpdateParamsAccessSamlType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeFacebook   AccessIdentityProviderUpdateParamsAccessSamlType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGitHub     AccessIdentityProviderUpdateParamsAccessSamlType = "github"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogleApps AccessIdentityProviderUpdateParamsAccessSamlType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeGoogle     AccessIdentityProviderUpdateParamsAccessSamlType = "google"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeLinkedin   AccessIdentityProviderUpdateParamsAccessSamlType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOidc       AccessIdentityProviderUpdateParamsAccessSamlType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOkta       AccessIdentityProviderUpdateParamsAccessSamlType = "okta"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeOnelogin   AccessIdentityProviderUpdateParamsAccessSamlType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessSamlTypePingone    AccessIdentityProviderUpdateParamsAccessSamlType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessSamlTypeYandex     AccessIdentityProviderUpdateParamsAccessSamlType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessSamlScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessSamlScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessYandex struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[AccessIdentityProviderUpdateParamsAccessYandexConfig] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessYandexType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessYandexScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessYandex) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessYandex) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The configuration parameters for the identity provider. To view the required
+// parameters for a specific provider, refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessYandexConfig struct {
+	// Your OAuth Client ID
+	ClientID param.Field[string] `json:"client_id"`
+	// Your OAuth Client Secret
+	ClientSecret param.Field[string] `json:"client_secret"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessYandexType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOnetimepin AccessIdentityProviderUpdateParamsAccessYandexType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeAzureAd    AccessIdentityProviderUpdateParamsAccessYandexType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeSaml       AccessIdentityProviderUpdateParamsAccessYandexType = "saml"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeCentrify   AccessIdentityProviderUpdateParamsAccessYandexType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeFacebook   AccessIdentityProviderUpdateParamsAccessYandexType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGitHub     AccessIdentityProviderUpdateParamsAccessYandexType = "github"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogleApps AccessIdentityProviderUpdateParamsAccessYandexType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeGoogle     AccessIdentityProviderUpdateParamsAccessYandexType = "google"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeLinkedin   AccessIdentityProviderUpdateParamsAccessYandexType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOidc       AccessIdentityProviderUpdateParamsAccessYandexType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOkta       AccessIdentityProviderUpdateParamsAccessYandexType = "okta"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeOnelogin   AccessIdentityProviderUpdateParamsAccessYandexType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessYandexTypePingone    AccessIdentityProviderUpdateParamsAccessYandexType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessYandexTypeYandex     AccessIdentityProviderUpdateParamsAccessYandexType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessYandexScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessYandexScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateParamsAccessOnetimepin struct {
+	// The configuration parameters for the identity provider. To view the required
+	// parameters for a specific provider, refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Config param.Field[interface{}] `json:"config,required"`
+	// The name of the identity provider, shown to users on the login page.
+	Name param.Field[string] `json:"name,required"`
+	// The type of identity provider. To determine the value for a specific provider,
+	// refer to our
+	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+	Type param.Field[AccessIdentityProviderUpdateParamsAccessOnetimepinType] `json:"type,required"`
+	// The configuration settings for enabling a System for Cross-Domain Identity
+	// Management (SCIM) with the identity provider.
+	ScimConfig param.Field[AccessIdentityProviderUpdateParamsAccessOnetimepinScimConfig] `json:"scim_config"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (AccessIdentityProviderUpdateParamsAccessOnetimepin) ImplementsAccessIdentityProviderUpdateParams() {
+
+}
+
+// The type of identity provider. To determine the value for a specific provider,
+// refer to our
+// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
+type AccessIdentityProviderUpdateParamsAccessOnetimepinType string
+
+const (
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderUpdateParamsAccessOnetimepinType = "onetimepin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeAzureAd    AccessIdentityProviderUpdateParamsAccessOnetimepinType = "azureAD"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeSaml       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "saml"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeCentrify   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "centrify"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeFacebook   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "facebook"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGitHub     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "github"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGoogleApps AccessIdentityProviderUpdateParamsAccessOnetimepinType = "google-apps"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeGoogle     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "google"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeLinkedin   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "linkedin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOidc       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "oidc"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOkta       AccessIdentityProviderUpdateParamsAccessOnetimepinType = "okta"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeOnelogin   AccessIdentityProviderUpdateParamsAccessOnetimepinType = "onelogin"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypePingone    AccessIdentityProviderUpdateParamsAccessOnetimepinType = "pingone"
+	AccessIdentityProviderUpdateParamsAccessOnetimepinTypeYandex     AccessIdentityProviderUpdateParamsAccessOnetimepinType = "yandex"
+)
+
+// The configuration settings for enabling a System for Cross-Domain Identity
+// Management (SCIM) with the identity provider.
+type AccessIdentityProviderUpdateParamsAccessOnetimepinScimConfig struct {
+	// A flag to enable or disable SCIM for the identity provider.
+	Enabled param.Field[bool] `json:"enabled"`
+	// A flag to revoke a user's session in Access and force a reauthentication on the
+	// user's Gateway session when they have been added or removed from a group in the
+	// Identity Provider.
+	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
+	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
+	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
+	// enabled.
+	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
+	// A read-only token generated when the SCIM integration is enabled for the first
+	// time. It is redacted on subsequent requests. If you lose this you will need to
+	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
+	Secret param.Field[string] `json:"secret"`
+	// A flag to enable revoking a user's session in Access and Gateway when they have
+	// been deprovisioned in the Identity Provider.
+	UserDeprovision param.Field[bool] `json:"user_deprovision"`
+}
+
+func (r AccessIdentityProviderUpdateParamsAccessOnetimepinScimConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessIdentityProviderUpdateResponseEnvelope struct {
+	Errors   []AccessIdentityProviderUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessIdentityProviderUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessIdentityProviderUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessIdentityProviderUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessIdentityProviderUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AccessIdentityProviderUpdateResponseEnvelope]
+type accessIdentityProviderUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    accessIdentityProviderUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseEnvelopeErrors]
+type accessIdentityProviderUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessIdentityProviderUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    accessIdentityProviderUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessIdentityProviderUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessIdentityProviderUpdateResponseEnvelopeMessages]
+type accessIdentityProviderUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessIdentityProviderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessIdentityProviderUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccessIdentityProviderUpdateResponseEnvelopeSuccessTrue AccessIdentityProviderUpdateResponseEnvelopeSuccess = true
+)
+
 type AccessIdentityProviderListResponseEnvelope struct {
 	Errors   []AccessIdentityProviderListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessIdentityProviderListResponseEnvelopeMessages `json:"messages,required"`
@@ -9064,1366 +10423,4 @@ type AccessIdentityProviderGetResponseEnvelopeSuccess bool
 
 const (
 	AccessIdentityProviderGetResponseEnvelopeSuccessTrue AccessIdentityProviderGetResponseEnvelopeSuccess = true
-)
-
-// This interface is a union satisfied by one of the following:
-// [AccessIdentityProviderReplaceParamsAccessAzureAd],
-// [AccessIdentityProviderReplaceParamsAccessCentrify],
-// [AccessIdentityProviderReplaceParamsAccessFacebook],
-// [AccessIdentityProviderReplaceParamsAccessGitHub],
-// [AccessIdentityProviderReplaceParamsAccessGoogle],
-// [AccessIdentityProviderReplaceParamsAccessGoogleApps],
-// [AccessIdentityProviderReplaceParamsAccessLinkedin],
-// [AccessIdentityProviderReplaceParamsAccessOidc],
-// [AccessIdentityProviderReplaceParamsAccessOkta],
-// [AccessIdentityProviderReplaceParamsAccessOnelogin],
-// [AccessIdentityProviderReplaceParamsAccessPingone],
-// [AccessIdentityProviderReplaceParamsAccessSaml],
-// [AccessIdentityProviderReplaceParamsAccessYandex],
-// [AccessIdentityProviderReplaceParamsAccessOnetimepin].
-type AccessIdentityProviderReplaceParams interface {
-	ImplementsAccessIdentityProviderReplaceParams()
-}
-
-type AccessIdentityProviderReplaceParamsAccessAzureAd struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessAzureAdConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessAzureAdType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessAzureAdScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessAzureAd) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessAzureAd) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessAzureAdConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// Should Cloudflare try to load authentication contexts from your account
-	ConditionalAccessEnabled param.Field[bool] `json:"conditional_access_enabled"`
-	// Your Azure directory uuid
-	DirectoryID param.Field[string] `json:"directory_id"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Should Cloudflare try to load groups from your account
-	SupportGroups param.Field[bool] `json:"support_groups"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessAzureAdConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessAzureAdType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeOnetimepin AccessIdentityProviderReplaceParamsAccessAzureAdType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeAzureAd    AccessIdentityProviderReplaceParamsAccessAzureAdType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeSaml       AccessIdentityProviderReplaceParamsAccessAzureAdType = "saml"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeCentrify   AccessIdentityProviderReplaceParamsAccessAzureAdType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeFacebook   AccessIdentityProviderReplaceParamsAccessAzureAdType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeGitHub     AccessIdentityProviderReplaceParamsAccessAzureAdType = "github"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeGoogleApps AccessIdentityProviderReplaceParamsAccessAzureAdType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeGoogle     AccessIdentityProviderReplaceParamsAccessAzureAdType = "google"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeLinkedin   AccessIdentityProviderReplaceParamsAccessAzureAdType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeOidc       AccessIdentityProviderReplaceParamsAccessAzureAdType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeOkta       AccessIdentityProviderReplaceParamsAccessAzureAdType = "okta"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeOnelogin   AccessIdentityProviderReplaceParamsAccessAzureAdType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypePingone    AccessIdentityProviderReplaceParamsAccessAzureAdType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessAzureAdTypeYandex     AccessIdentityProviderReplaceParamsAccessAzureAdType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessAzureAdScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessAzureAdScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessCentrify struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessCentrifyConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessCentrifyType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessCentrifyScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessCentrify) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessCentrify) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessCentrifyConfig struct {
-	// Your centrify account url
-	CentrifyAccount param.Field[string] `json:"centrify_account"`
-	// Your centrify app id
-	CentrifyAppID param.Field[string] `json:"centrify_app_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessCentrifyConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessCentrifyType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeOnetimepin AccessIdentityProviderReplaceParamsAccessCentrifyType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeAzureAd    AccessIdentityProviderReplaceParamsAccessCentrifyType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeSaml       AccessIdentityProviderReplaceParamsAccessCentrifyType = "saml"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeCentrify   AccessIdentityProviderReplaceParamsAccessCentrifyType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeFacebook   AccessIdentityProviderReplaceParamsAccessCentrifyType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeGitHub     AccessIdentityProviderReplaceParamsAccessCentrifyType = "github"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeGoogleApps AccessIdentityProviderReplaceParamsAccessCentrifyType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeGoogle     AccessIdentityProviderReplaceParamsAccessCentrifyType = "google"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeLinkedin   AccessIdentityProviderReplaceParamsAccessCentrifyType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeOidc       AccessIdentityProviderReplaceParamsAccessCentrifyType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeOkta       AccessIdentityProviderReplaceParamsAccessCentrifyType = "okta"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeOnelogin   AccessIdentityProviderReplaceParamsAccessCentrifyType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypePingone    AccessIdentityProviderReplaceParamsAccessCentrifyType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessCentrifyTypeYandex     AccessIdentityProviderReplaceParamsAccessCentrifyType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessCentrifyScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessCentrifyScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessFacebook struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessFacebookConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessFacebookType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessFacebookScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessFacebook) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessFacebook) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessFacebookConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessFacebookConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessFacebookType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeOnetimepin AccessIdentityProviderReplaceParamsAccessFacebookType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeAzureAd    AccessIdentityProviderReplaceParamsAccessFacebookType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeSaml       AccessIdentityProviderReplaceParamsAccessFacebookType = "saml"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeCentrify   AccessIdentityProviderReplaceParamsAccessFacebookType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeFacebook   AccessIdentityProviderReplaceParamsAccessFacebookType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeGitHub     AccessIdentityProviderReplaceParamsAccessFacebookType = "github"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeGoogleApps AccessIdentityProviderReplaceParamsAccessFacebookType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeGoogle     AccessIdentityProviderReplaceParamsAccessFacebookType = "google"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeLinkedin   AccessIdentityProviderReplaceParamsAccessFacebookType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeOidc       AccessIdentityProviderReplaceParamsAccessFacebookType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeOkta       AccessIdentityProviderReplaceParamsAccessFacebookType = "okta"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeOnelogin   AccessIdentityProviderReplaceParamsAccessFacebookType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypePingone    AccessIdentityProviderReplaceParamsAccessFacebookType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessFacebookTypeYandex     AccessIdentityProviderReplaceParamsAccessFacebookType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessFacebookScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessFacebookScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessGitHub struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessGitHubConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessGitHubType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessGitHubScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGitHub) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessGitHub) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGitHubConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGitHubConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGitHubType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeOnetimepin AccessIdentityProviderReplaceParamsAccessGitHubType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeAzureAd    AccessIdentityProviderReplaceParamsAccessGitHubType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeSaml       AccessIdentityProviderReplaceParamsAccessGitHubType = "saml"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeCentrify   AccessIdentityProviderReplaceParamsAccessGitHubType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeFacebook   AccessIdentityProviderReplaceParamsAccessGitHubType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeGitHub     AccessIdentityProviderReplaceParamsAccessGitHubType = "github"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeGoogleApps AccessIdentityProviderReplaceParamsAccessGitHubType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeGoogle     AccessIdentityProviderReplaceParamsAccessGitHubType = "google"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeLinkedin   AccessIdentityProviderReplaceParamsAccessGitHubType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeOidc       AccessIdentityProviderReplaceParamsAccessGitHubType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeOkta       AccessIdentityProviderReplaceParamsAccessGitHubType = "okta"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeOnelogin   AccessIdentityProviderReplaceParamsAccessGitHubType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypePingone    AccessIdentityProviderReplaceParamsAccessGitHubType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessGitHubTypeYandex     AccessIdentityProviderReplaceParamsAccessGitHubType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessGitHubScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGitHubScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessGoogle struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessGoogleConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessGoogleType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessGoogleScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogle) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessGoogle) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGoogleConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogleConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGoogleType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeOnetimepin AccessIdentityProviderReplaceParamsAccessGoogleType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeAzureAd    AccessIdentityProviderReplaceParamsAccessGoogleType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeSaml       AccessIdentityProviderReplaceParamsAccessGoogleType = "saml"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeCentrify   AccessIdentityProviderReplaceParamsAccessGoogleType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeFacebook   AccessIdentityProviderReplaceParamsAccessGoogleType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeGitHub     AccessIdentityProviderReplaceParamsAccessGoogleType = "github"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeGoogleApps AccessIdentityProviderReplaceParamsAccessGoogleType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeGoogle     AccessIdentityProviderReplaceParamsAccessGoogleType = "google"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeLinkedin   AccessIdentityProviderReplaceParamsAccessGoogleType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeOidc       AccessIdentityProviderReplaceParamsAccessGoogleType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeOkta       AccessIdentityProviderReplaceParamsAccessGoogleType = "okta"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeOnelogin   AccessIdentityProviderReplaceParamsAccessGoogleType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypePingone    AccessIdentityProviderReplaceParamsAccessGoogleType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessGoogleTypeYandex     AccessIdentityProviderReplaceParamsAccessGoogleType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessGoogleScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogleScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessGoogleApps struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessGoogleAppsConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessGoogleAppsType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessGoogleAppsScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogleApps) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessGoogleApps) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGoogleAppsConfig struct {
-	// Your companies TLD
-	AppsDomain param.Field[string] `json:"apps_domain"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogleAppsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessGoogleAppsType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeOnetimepin AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeAzureAd    AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeSaml       AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "saml"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeCentrify   AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeFacebook   AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeGitHub     AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "github"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeGoogleApps AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeGoogle     AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "google"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeLinkedin   AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeOidc       AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeOkta       AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "okta"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeOnelogin   AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypePingone    AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessGoogleAppsTypeYandex     AccessIdentityProviderReplaceParamsAccessGoogleAppsType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessGoogleAppsScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessGoogleAppsScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessLinkedin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessLinkedinConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessLinkedinType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessLinkedinScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessLinkedin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessLinkedin) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessLinkedinConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessLinkedinConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessLinkedinType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeOnetimepin AccessIdentityProviderReplaceParamsAccessLinkedinType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeAzureAd    AccessIdentityProviderReplaceParamsAccessLinkedinType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeSaml       AccessIdentityProviderReplaceParamsAccessLinkedinType = "saml"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeCentrify   AccessIdentityProviderReplaceParamsAccessLinkedinType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeFacebook   AccessIdentityProviderReplaceParamsAccessLinkedinType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeGitHub     AccessIdentityProviderReplaceParamsAccessLinkedinType = "github"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeGoogleApps AccessIdentityProviderReplaceParamsAccessLinkedinType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeGoogle     AccessIdentityProviderReplaceParamsAccessLinkedinType = "google"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeLinkedin   AccessIdentityProviderReplaceParamsAccessLinkedinType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeOidc       AccessIdentityProviderReplaceParamsAccessLinkedinType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeOkta       AccessIdentityProviderReplaceParamsAccessLinkedinType = "okta"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeOnelogin   AccessIdentityProviderReplaceParamsAccessLinkedinType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypePingone    AccessIdentityProviderReplaceParamsAccessLinkedinType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessLinkedinTypeYandex     AccessIdentityProviderReplaceParamsAccessLinkedinType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessLinkedinScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessLinkedinScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessOidc struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessOidcConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessOidcType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessOidcScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOidc) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessOidc) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOidcConfig struct {
-	// The authorization_endpoint URL of your IdP
-	AuthURL param.Field[string] `json:"auth_url"`
-	// The jwks_uri endpoint of your IdP to allow the IdP keys to sign the tokens
-	CertsURL param.Field[string] `json:"certs_url"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// OAuth scopes
-	Scopes param.Field[[]string] `json:"scopes"`
-	// The token_endpoint URL of your IdP
-	TokenURL param.Field[string] `json:"token_url"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOidcConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOidcType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessOidcTypeOnetimepin AccessIdentityProviderReplaceParamsAccessOidcType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeAzureAd    AccessIdentityProviderReplaceParamsAccessOidcType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeSaml       AccessIdentityProviderReplaceParamsAccessOidcType = "saml"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeCentrify   AccessIdentityProviderReplaceParamsAccessOidcType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeFacebook   AccessIdentityProviderReplaceParamsAccessOidcType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeGitHub     AccessIdentityProviderReplaceParamsAccessOidcType = "github"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeGoogleApps AccessIdentityProviderReplaceParamsAccessOidcType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeGoogle     AccessIdentityProviderReplaceParamsAccessOidcType = "google"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeLinkedin   AccessIdentityProviderReplaceParamsAccessOidcType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeOidc       AccessIdentityProviderReplaceParamsAccessOidcType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeOkta       AccessIdentityProviderReplaceParamsAccessOidcType = "okta"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeOnelogin   AccessIdentityProviderReplaceParamsAccessOidcType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessOidcTypePingone    AccessIdentityProviderReplaceParamsAccessOidcType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessOidcTypeYandex     AccessIdentityProviderReplaceParamsAccessOidcType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessOidcScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOidcScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessOkta struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessOktaConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessOktaType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessOktaScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOkta) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessOkta) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOktaConfig struct {
-	// Your okta authorization server id
-	AuthorizationServerID param.Field[string] `json:"authorization_server_id"`
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your okta account url
-	OktaAccount param.Field[string] `json:"okta_account"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOktaConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOktaType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessOktaTypeOnetimepin AccessIdentityProviderReplaceParamsAccessOktaType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeAzureAd    AccessIdentityProviderReplaceParamsAccessOktaType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeSaml       AccessIdentityProviderReplaceParamsAccessOktaType = "saml"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeCentrify   AccessIdentityProviderReplaceParamsAccessOktaType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeFacebook   AccessIdentityProviderReplaceParamsAccessOktaType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeGitHub     AccessIdentityProviderReplaceParamsAccessOktaType = "github"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeGoogleApps AccessIdentityProviderReplaceParamsAccessOktaType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeGoogle     AccessIdentityProviderReplaceParamsAccessOktaType = "google"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeLinkedin   AccessIdentityProviderReplaceParamsAccessOktaType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeOidc       AccessIdentityProviderReplaceParamsAccessOktaType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeOkta       AccessIdentityProviderReplaceParamsAccessOktaType = "okta"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeOnelogin   AccessIdentityProviderReplaceParamsAccessOktaType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessOktaTypePingone    AccessIdentityProviderReplaceParamsAccessOktaType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessOktaTypeYandex     AccessIdentityProviderReplaceParamsAccessOktaType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessOktaScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOktaScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessOnelogin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessOneloginConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessOneloginType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessOneloginScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOnelogin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessOnelogin) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOneloginConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your OneLogin account url
-	OneloginAccount param.Field[string] `json:"onelogin_account"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOneloginConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOneloginType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeOnetimepin AccessIdentityProviderReplaceParamsAccessOneloginType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeAzureAd    AccessIdentityProviderReplaceParamsAccessOneloginType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeSaml       AccessIdentityProviderReplaceParamsAccessOneloginType = "saml"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeCentrify   AccessIdentityProviderReplaceParamsAccessOneloginType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeFacebook   AccessIdentityProviderReplaceParamsAccessOneloginType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeGitHub     AccessIdentityProviderReplaceParamsAccessOneloginType = "github"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeGoogleApps AccessIdentityProviderReplaceParamsAccessOneloginType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeGoogle     AccessIdentityProviderReplaceParamsAccessOneloginType = "google"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeLinkedin   AccessIdentityProviderReplaceParamsAccessOneloginType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeOidc       AccessIdentityProviderReplaceParamsAccessOneloginType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeOkta       AccessIdentityProviderReplaceParamsAccessOneloginType = "okta"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeOnelogin   AccessIdentityProviderReplaceParamsAccessOneloginType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypePingone    AccessIdentityProviderReplaceParamsAccessOneloginType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessOneloginTypeYandex     AccessIdentityProviderReplaceParamsAccessOneloginType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessOneloginScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOneloginScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessPingone struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessPingoneConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessPingoneType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessPingoneScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessPingone) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessPingone) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessPingoneConfig struct {
-	// Custom claims
-	Claims param.Field[[]string] `json:"claims"`
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-	// The claim name for email in the id_token response.
-	EmailClaimName param.Field[string] `json:"email_claim_name"`
-	// Your PingOne environment identifier
-	PingEnvID param.Field[string] `json:"ping_env_id"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessPingoneConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessPingoneType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeOnetimepin AccessIdentityProviderReplaceParamsAccessPingoneType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeAzureAd    AccessIdentityProviderReplaceParamsAccessPingoneType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeSaml       AccessIdentityProviderReplaceParamsAccessPingoneType = "saml"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeCentrify   AccessIdentityProviderReplaceParamsAccessPingoneType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeFacebook   AccessIdentityProviderReplaceParamsAccessPingoneType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeGitHub     AccessIdentityProviderReplaceParamsAccessPingoneType = "github"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeGoogleApps AccessIdentityProviderReplaceParamsAccessPingoneType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeGoogle     AccessIdentityProviderReplaceParamsAccessPingoneType = "google"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeLinkedin   AccessIdentityProviderReplaceParamsAccessPingoneType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeOidc       AccessIdentityProviderReplaceParamsAccessPingoneType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeOkta       AccessIdentityProviderReplaceParamsAccessPingoneType = "okta"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeOnelogin   AccessIdentityProviderReplaceParamsAccessPingoneType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypePingone    AccessIdentityProviderReplaceParamsAccessPingoneType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessPingoneTypeYandex     AccessIdentityProviderReplaceParamsAccessPingoneType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessPingoneScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessPingoneScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessSaml struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessSamlConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessSamlType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessSamlScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessSaml) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessSaml) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessSamlConfig struct {
-	// A list of SAML attribute names that will be added to your signed JWT token and
-	// can be used in SAML policy rules.
-	Attributes param.Field[[]string] `json:"attributes"`
-	// The attribute name for email in the SAML response.
-	EmailAttributeName param.Field[string] `json:"email_attribute_name"`
-	// Add a list of attribute names that will be returned in the response header from
-	// the Access callback.
-	HeaderAttributes param.Field[[]AccessIdentityProviderReplaceParamsAccessSamlConfigHeaderAttribute] `json:"header_attributes"`
-	// X509 certificate to verify the signature in the SAML authentication response
-	IdpPublicCerts param.Field[[]string] `json:"idp_public_certs"`
-	// IdP Entity ID or Issuer URL
-	IssuerURL param.Field[string] `json:"issuer_url"`
-	// Sign the SAML authentication request with Access credentials. To verify the
-	// signature, use the public key from the Access certs endpoints.
-	SignRequest param.Field[bool] `json:"sign_request"`
-	// URL to send the SAML authentication requests to
-	SSOTargetURL param.Field[string] `json:"sso_target_url"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessSamlConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessSamlConfigHeaderAttribute struct {
-	// attribute name from the IDP
-	AttributeName param.Field[string] `json:"attribute_name"`
-	// header that will be added on the request to the origin
-	HeaderName param.Field[string] `json:"header_name"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessSamlConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessSamlType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessSamlTypeOnetimepin AccessIdentityProviderReplaceParamsAccessSamlType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeAzureAd    AccessIdentityProviderReplaceParamsAccessSamlType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeSaml       AccessIdentityProviderReplaceParamsAccessSamlType = "saml"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeCentrify   AccessIdentityProviderReplaceParamsAccessSamlType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeFacebook   AccessIdentityProviderReplaceParamsAccessSamlType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeGitHub     AccessIdentityProviderReplaceParamsAccessSamlType = "github"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeGoogleApps AccessIdentityProviderReplaceParamsAccessSamlType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeGoogle     AccessIdentityProviderReplaceParamsAccessSamlType = "google"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeLinkedin   AccessIdentityProviderReplaceParamsAccessSamlType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeOidc       AccessIdentityProviderReplaceParamsAccessSamlType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeOkta       AccessIdentityProviderReplaceParamsAccessSamlType = "okta"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeOnelogin   AccessIdentityProviderReplaceParamsAccessSamlType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessSamlTypePingone    AccessIdentityProviderReplaceParamsAccessSamlType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessSamlTypeYandex     AccessIdentityProviderReplaceParamsAccessSamlType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessSamlScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessSamlScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessYandex struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[AccessIdentityProviderReplaceParamsAccessYandexConfig] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessYandexType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessYandexScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessYandex) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessYandex) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The configuration parameters for the identity provider. To view the required
-// parameters for a specific provider, refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessYandexConfig struct {
-	// Your OAuth Client ID
-	ClientID param.Field[string] `json:"client_id"`
-	// Your OAuth Client Secret
-	ClientSecret param.Field[string] `json:"client_secret"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessYandexConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessYandexType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessYandexTypeOnetimepin AccessIdentityProviderReplaceParamsAccessYandexType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeAzureAd    AccessIdentityProviderReplaceParamsAccessYandexType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeSaml       AccessIdentityProviderReplaceParamsAccessYandexType = "saml"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeCentrify   AccessIdentityProviderReplaceParamsAccessYandexType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeFacebook   AccessIdentityProviderReplaceParamsAccessYandexType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeGitHub     AccessIdentityProviderReplaceParamsAccessYandexType = "github"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeGoogleApps AccessIdentityProviderReplaceParamsAccessYandexType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeGoogle     AccessIdentityProviderReplaceParamsAccessYandexType = "google"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeLinkedin   AccessIdentityProviderReplaceParamsAccessYandexType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeOidc       AccessIdentityProviderReplaceParamsAccessYandexType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeOkta       AccessIdentityProviderReplaceParamsAccessYandexType = "okta"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeOnelogin   AccessIdentityProviderReplaceParamsAccessYandexType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessYandexTypePingone    AccessIdentityProviderReplaceParamsAccessYandexType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessYandexTypeYandex     AccessIdentityProviderReplaceParamsAccessYandexType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessYandexScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessYandexScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceParamsAccessOnetimepin struct {
-	// The configuration parameters for the identity provider. To view the required
-	// parameters for a specific provider, refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Config param.Field[interface{}] `json:"config,required"`
-	// The name of the identity provider, shown to users on the login page.
-	Name param.Field[string] `json:"name,required"`
-	// The type of identity provider. To determine the value for a specific provider,
-	// refer to our
-	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type param.Field[AccessIdentityProviderReplaceParamsAccessOnetimepinType] `json:"type,required"`
-	// The configuration settings for enabling a System for Cross-Domain Identity
-	// Management (SCIM) with the identity provider.
-	ScimConfig param.Field[AccessIdentityProviderReplaceParamsAccessOnetimepinScimConfig] `json:"scim_config"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOnetimepin) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (AccessIdentityProviderReplaceParamsAccessOnetimepin) ImplementsAccessIdentityProviderReplaceParams() {
-
-}
-
-// The type of identity provider. To determine the value for a specific provider,
-// refer to our
-// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-type AccessIdentityProviderReplaceParamsAccessOnetimepinType string
-
-const (
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeOnetimepin AccessIdentityProviderReplaceParamsAccessOnetimepinType = "onetimepin"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeAzureAd    AccessIdentityProviderReplaceParamsAccessOnetimepinType = "azureAD"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeSaml       AccessIdentityProviderReplaceParamsAccessOnetimepinType = "saml"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeCentrify   AccessIdentityProviderReplaceParamsAccessOnetimepinType = "centrify"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeFacebook   AccessIdentityProviderReplaceParamsAccessOnetimepinType = "facebook"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeGitHub     AccessIdentityProviderReplaceParamsAccessOnetimepinType = "github"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeGoogleApps AccessIdentityProviderReplaceParamsAccessOnetimepinType = "google-apps"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeGoogle     AccessIdentityProviderReplaceParamsAccessOnetimepinType = "google"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeLinkedin   AccessIdentityProviderReplaceParamsAccessOnetimepinType = "linkedin"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeOidc       AccessIdentityProviderReplaceParamsAccessOnetimepinType = "oidc"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeOkta       AccessIdentityProviderReplaceParamsAccessOnetimepinType = "okta"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeOnelogin   AccessIdentityProviderReplaceParamsAccessOnetimepinType = "onelogin"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypePingone    AccessIdentityProviderReplaceParamsAccessOnetimepinType = "pingone"
-	AccessIdentityProviderReplaceParamsAccessOnetimepinTypeYandex     AccessIdentityProviderReplaceParamsAccessOnetimepinType = "yandex"
-)
-
-// The configuration settings for enabling a System for Cross-Domain Identity
-// Management (SCIM) with the identity provider.
-type AccessIdentityProviderReplaceParamsAccessOnetimepinScimConfig struct {
-	// A flag to enable or disable SCIM for the identity provider.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A flag to revoke a user's session in Access and force a reauthentication on the
-	// user's Gateway session when they have been added or removed from a group in the
-	// Identity Provider.
-	GroupMemberDeprovision param.Field[bool] `json:"group_member_deprovision"`
-	// A flag to remove a user's seat in Zero Trust when they have been deprovisioned
-	// in the Identity Provider. This cannot be enabled unless user_deprovision is also
-	// enabled.
-	SeatDeprovision param.Field[bool] `json:"seat_deprovision"`
-	// A read-only token generated when the SCIM integration is enabled for the first
-	// time. It is redacted on subsequent requests. If you lose this you will need to
-	// refresh it token at /access/identity_providers/:idpID/refresh_scim_secret.
-	Secret param.Field[string] `json:"secret"`
-	// A flag to enable revoking a user's session in Access and Gateway when they have
-	// been deprovisioned in the Identity Provider.
-	UserDeprovision param.Field[bool] `json:"user_deprovision"`
-}
-
-func (r AccessIdentityProviderReplaceParamsAccessOnetimepinScimConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessIdentityProviderReplaceResponseEnvelope struct {
-	Errors   []AccessIdentityProviderReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessIdentityProviderReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessIdentityProviderReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessIdentityProviderReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessIdentityProviderReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessIdentityProviderReplaceResponseEnvelope]
-type accessIdentityProviderReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessIdentityProviderReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseEnvelopeErrors]
-type accessIdentityProviderReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessIdentityProviderReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    accessIdentityProviderReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessIdentityProviderReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessIdentityProviderReplaceResponseEnvelopeMessages]
-type accessIdentityProviderReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessIdentityProviderReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessIdentityProviderReplaceResponseEnvelopeSuccess bool
-
-const (
-	AccessIdentityProviderReplaceResponseEnvelopeSuccessTrue AccessIdentityProviderReplaceResponseEnvelopeSuccess = true
 )

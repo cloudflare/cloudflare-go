@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingSSLRecommenderUpdateWithOptionalParams(t *testing.T) {
+func TestSettingSSLRecommenderEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestSettingSSLRecommenderUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.SSLRecommender.Update(
+	_, err := client.Settings.SSLRecommender.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingSSLRecommenderUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingSSLRecommenderUpdateParamsValue{
+		cloudflare.SettingSSLRecommenderEditParams{
+			Value: cloudflare.F(cloudflare.SettingSSLRecommenderEditParamsValue{
 				Enabled: cloudflare.F(true),
-				ID:      cloudflare.F(cloudflare.SettingSSLRecommenderUpdateParamsValueIDSSLRecommender),
+				ID:      cloudflare.F(cloudflare.SettingSSLRecommenderEditParamsValueIDSSLRecommender),
 			}),
 		},
 	)

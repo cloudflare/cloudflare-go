@@ -33,9 +33,9 @@ func NewAddressPrefixBGPStatusService(opts ...option.RequestOption) (r *AddressP
 }
 
 // Advertise or withdraw BGP route for a prefix.
-func (r *AddressPrefixBGPStatusService) Update(ctx context.Context, accountID string, prefixID string, body AddressPrefixBGPStatusUpdateParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusUpdateResponse, err error) {
+func (r *AddressPrefixBGPStatusService) Edit(ctx context.Context, accountID string, prefixID string, body AddressPrefixBGPStatusEditParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressPrefixBGPStatusUpdateResponseEnvelope
+	var env AddressPrefixBGPStatusEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -58,25 +58,25 @@ func (r *AddressPrefixBGPStatusService) Get(ctx context.Context, accountID strin
 	return
 }
 
-type AddressPrefixBGPStatusUpdateResponse struct {
+type AddressPrefixBGPStatusEditResponse struct {
 	// Enablement of prefix advertisement to the Internet.
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time                                `json:"advertised_modified_at,nullable" format:"date-time"`
-	JSON                 addressPrefixBGPStatusUpdateResponseJSON `json:"-"`
+	AdvertisedModifiedAt time.Time                              `json:"advertised_modified_at,nullable" format:"date-time"`
+	JSON                 addressPrefixBGPStatusEditResponseJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusUpdateResponseJSON contains the JSON metadata for the
-// struct [AddressPrefixBGPStatusUpdateResponse]
-type addressPrefixBGPStatusUpdateResponseJSON struct {
+// addressPrefixBGPStatusEditResponseJSON contains the JSON metadata for the struct
+// [AddressPrefixBGPStatusEditResponse]
+type addressPrefixBGPStatusEditResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -102,27 +102,27 @@ func (r *AddressPrefixBGPStatusGetResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusUpdateParams struct {
+type AddressPrefixBGPStatusEditParams struct {
 	// Enablement of prefix advertisement to the Internet.
 	Advertised param.Field[bool] `json:"advertised,required"`
 }
 
-func (r AddressPrefixBGPStatusUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r AddressPrefixBGPStatusEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressPrefixBGPStatusUpdateResponseEnvelope struct {
-	Errors   []AddressPrefixBGPStatusUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressPrefixBGPStatusUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressPrefixBGPStatusUpdateResponse                   `json:"result,required"`
+type AddressPrefixBGPStatusEditResponseEnvelope struct {
+	Errors   []AddressPrefixBGPStatusEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressPrefixBGPStatusEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressPrefixBGPStatusEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeJSON    `json:"-"`
+	Success AddressPrefixBGPStatusEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressPrefixBGPStatusEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressPrefixBGPStatusUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AddressPrefixBGPStatusUpdateResponseEnvelope]
-type addressPrefixBGPStatusUpdateResponseEnvelopeJSON struct {
+// addressPrefixBGPStatusEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AddressPrefixBGPStatusEditResponseEnvelope]
+type addressPrefixBGPStatusEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -131,53 +131,53 @@ type addressPrefixBGPStatusUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusUpdateResponseEnvelopeErrors struct {
+type AddressPrefixBGPStatusEditResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    addressPrefixBGPStatusEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// addressPrefixBGPStatusEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AddressPrefixBGPStatusEditResponseEnvelopeErrors]
+type addressPrefixBGPStatusEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixBGPStatusEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixBGPStatusEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
-	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    addressPrefixBGPStatusEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AddressPrefixBGPStatusUpdateResponseEnvelopeErrors]
-type addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON struct {
+// addressPrefixBGPStatusEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AddressPrefixBGPStatusEditResponseEnvelopeMessages]
+type addressPrefixBGPStatusEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixBGPStatusUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AddressPrefixBGPStatusUpdateResponseEnvelopeMessages]
-type addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixBGPStatusUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess bool
+type AddressPrefixBGPStatusEditResponseEnvelopeSuccess bool
 
 const (
-	AddressPrefixBGPStatusUpdateResponseEnvelopeSuccessTrue AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess = true
+	AddressPrefixBGPStatusEditResponseEnvelopeSuccessTrue AddressPrefixBGPStatusEditResponseEnvelopeSuccess = true
 )
 
 type AddressPrefixBGPStatusGetResponseEnvelope struct {

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestCacheRegionalTieredCacheUpdate(t *testing.T) {
+func TestCacheRegionalTieredCacheEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestCacheRegionalTieredCacheUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Cache.RegionalTieredCache.Update(
+	_, err := client.Cache.RegionalTieredCache.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CacheRegionalTieredCacheUpdateParams{
-			Value: cloudflare.F(cloudflare.CacheRegionalTieredCacheUpdateParamsValueOn),
+		cloudflare.CacheRegionalTieredCacheEditParams{
+			Value: cloudflare.F(cloudflare.CacheRegionalTieredCacheEditParamsValueOn),
 		},
 	)
 	if err != nil {

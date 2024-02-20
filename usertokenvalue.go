@@ -32,9 +32,9 @@ func NewUserTokenValueService(opts ...option.RequestOption) (r *UserTokenValueSe
 }
 
 // Roll the token secret.
-func (r *UserTokenValueService) Replace(ctx context.Context, tokenID interface{}, body UserTokenValueReplaceParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *UserTokenValueService) Update(ctx context.Context, tokenID interface{}, body UserTokenValueUpdateParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserTokenValueReplaceResponseEnvelope
+	var env UserTokenValueUpdateResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v/value", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -44,27 +44,27 @@ func (r *UserTokenValueService) Replace(ctx context.Context, tokenID interface{}
 	return
 }
 
-type UserTokenValueReplaceParams struct {
+type UserTokenValueUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r UserTokenValueReplaceParams) MarshalJSON() (data []byte, err error) {
+func (r UserTokenValueUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type UserTokenValueReplaceResponseEnvelope struct {
-	Errors   []UserTokenValueReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserTokenValueReplaceResponseEnvelopeMessages `json:"messages,required"`
+type UserTokenValueUpdateResponseEnvelope struct {
+	Errors   []UserTokenValueUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserTokenValueUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// The token value.
 	Result string `json:"result,required"`
 	// Whether the API call was successful
-	Success UserTokenValueReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userTokenValueReplaceResponseEnvelopeJSON    `json:"-"`
+	Success UserTokenValueUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userTokenValueUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// userTokenValueReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [UserTokenValueReplaceResponseEnvelope]
-type userTokenValueReplaceResponseEnvelopeJSON struct {
+// userTokenValueUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [UserTokenValueUpdateResponseEnvelope]
+type userTokenValueUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -73,51 +73,51 @@ type userTokenValueReplaceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenValueReplaceResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    userTokenValueReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type UserTokenValueUpdateResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    userTokenValueUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userTokenValueReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [UserTokenValueReplaceResponseEnvelopeErrors]
-type userTokenValueReplaceResponseEnvelopeErrorsJSON struct {
+// userTokenValueUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [UserTokenValueUpdateResponseEnvelopeErrors]
+type userTokenValueUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenValueReplaceResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    userTokenValueReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type UserTokenValueUpdateResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    userTokenValueUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userTokenValueReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [UserTokenValueReplaceResponseEnvelopeMessages]
-type userTokenValueReplaceResponseEnvelopeMessagesJSON struct {
+// userTokenValueUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [UserTokenValueUpdateResponseEnvelopeMessages]
+type userTokenValueUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserTokenValueReplaceResponseEnvelopeSuccess bool
+type UserTokenValueUpdateResponseEnvelopeSuccess bool
 
 const (
-	UserTokenValueReplaceResponseEnvelopeSuccessTrue UserTokenValueReplaceResponseEnvelopeSuccess = true
+	UserTokenValueUpdateResponseEnvelopeSuccessTrue UserTokenValueUpdateResponseEnvelopeSuccess = true
 )

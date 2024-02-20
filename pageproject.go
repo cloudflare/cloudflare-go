@@ -52,20 +52,6 @@ func (r *PageProjectService) New(ctx context.Context, accountID string, body Pag
 	return
 }
 
-// Set new attributes for an existing project. Modify environment variables. To
-// delete an environment variable, set the key to null.
-func (r *PageProjectService) Update(ctx context.Context, accountID string, projectName string, body PageProjectUpdateParams, opts ...option.RequestOption) (res *PageProjectUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageProjectUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetch a list of all user projects.
 func (r *PageProjectService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]PageProjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -84,6 +70,20 @@ func (r *PageProjectService) Delete(ctx context.Context, accountID string, proje
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Set new attributes for an existing project. Modify environment variables. To
+// delete an environment variable, set the key to null.
+func (r *PageProjectService) Edit(ctx context.Context, accountID string, projectName string, body PageProjectEditParams, opts ...option.RequestOption) (res *PageProjectEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageProjectEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -128,27 +128,6 @@ func init() {
 type PageProjectNewResponseArray []interface{}
 
 func (r PageProjectNewResponseArray) ImplementsPageProjectNewResponse() {}
-
-// Union satisfied by [PageProjectUpdateResponseUnknown],
-// [PageProjectUpdateResponseArray] or [shared.UnionString].
-type PageProjectUpdateResponse interface {
-	ImplementsPageProjectUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageProjectUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type PageProjectUpdateResponseArray []interface{}
-
-func (r PageProjectUpdateResponseArray) ImplementsPageProjectUpdateResponse() {}
 
 type PageProjectListResponse struct {
 	// Id of the deployment.
@@ -286,6 +265,27 @@ func (r *PageProjectListResponseStage) UnmarshalJSON(data []byte) (err error) {
 }
 
 type PageProjectDeleteResponse = interface{}
+
+// Union satisfied by [PageProjectEditResponseUnknown],
+// [PageProjectEditResponseArray] or [shared.UnionString].
+type PageProjectEditResponse interface {
+	ImplementsPageProjectEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PageProjectEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type PageProjectEditResponseArray []interface{}
+
+func (r PageProjectEditResponseArray) ImplementsPageProjectEditResponse() {}
 
 type PageProjectGetResponse struct {
 	// Id of the project.
@@ -2207,83 +2207,6 @@ const (
 	PageProjectNewResponseEnvelopeSuccessTrue PageProjectNewResponseEnvelopeSuccess = true
 )
 
-type PageProjectUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r PageProjectUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type PageProjectUpdateResponseEnvelope struct {
-	Errors   []PageProjectUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageProjectUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageProjectUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success PageProjectUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageProjectUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// pageProjectUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageProjectUpdateResponseEnvelope]
-type pageProjectUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    pageProjectUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageProjectUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PageProjectUpdateResponseEnvelopeErrors]
-type pageProjectUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    pageProjectUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageProjectUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PageProjectUpdateResponseEnvelopeMessages]
-type pageProjectUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type PageProjectUpdateResponseEnvelopeSuccess bool
-
-const (
-	PageProjectUpdateResponseEnvelopeSuccessTrue PageProjectUpdateResponseEnvelopeSuccess = true
-)
-
 type PageProjectListResponseEnvelope struct {
 	Errors   []PageProjectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectListResponseEnvelopeMessages `json:"messages,required"`
@@ -2377,6 +2300,83 @@ type pageProjectListResponseEnvelopeResultInfoJSON struct {
 func (r *PageProjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type PageProjectEditParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r PageProjectEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type PageProjectEditResponseEnvelope struct {
+	Errors   []PageProjectEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageProjectEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success PageProjectEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageProjectEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageProjectEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageProjectEditResponseEnvelope]
+type pageProjectEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectEditResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    pageProjectEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageProjectEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageProjectEditResponseEnvelopeErrors]
+type pageProjectEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectEditResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    pageProjectEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageProjectEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageProjectEditResponseEnvelopeMessages]
+type pageProjectEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageProjectEditResponseEnvelopeSuccess bool
+
+const (
+	PageProjectEditResponseEnvelopeSuccessTrue PageProjectEditResponseEnvelopeSuccess = true
+)
 
 type PageProjectGetResponseEnvelope struct {
 	Errors   []PageProjectGetResponseEnvelopeErrors   `json:"errors,required"`

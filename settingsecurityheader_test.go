@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingSecurityHeaderUpdateWithOptionalParams(t *testing.T) {
+func TestSettingSecurityHeaderEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestSettingSecurityHeaderUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.SecurityHeaders.Update(
+	_, err := client.Settings.SecurityHeaders.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingSecurityHeaderUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingSecurityHeaderUpdateParamsValue{
-				StrictTransportSecurity: cloudflare.F(cloudflare.SettingSecurityHeaderUpdateParamsValueStrictTransportSecurity{
+		cloudflare.SettingSecurityHeaderEditParams{
+			Value: cloudflare.F(cloudflare.SettingSecurityHeaderEditParamsValue{
+				StrictTransportSecurity: cloudflare.F(cloudflare.SettingSecurityHeaderEditParamsValueStrictTransportSecurity{
 					Enabled:           cloudflare.F(true),
 					IncludeSubdomains: cloudflare.F(true),
 					MaxAge:            cloudflare.F(86400.000000),

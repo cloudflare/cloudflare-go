@@ -41,9 +41,9 @@ func NewSettingWAFService(opts ...option.RequestOption) (r *SettingWAFService) {
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-func (r *SettingWAFService) Update(ctx context.Context, zoneID string, body SettingWAFUpdateParams, opts ...option.RequestOption) (res *SettingWAFUpdateResponse, err error) {
+func (r *SettingWAFService) Edit(ctx context.Context, zoneID string, body SettingWAFEditParams, opts ...option.RequestOption) (res *SettingWAFEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingWAFUpdateResponseEnvelope
+	var env SettingWAFEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -85,22 +85,22 @@ func (r *SettingWAFService) Get(ctx context.Context, zoneID string, opts ...opti
 // Cloudflare's WAF will block any traffic identified as illegitimate before it
 // reaches your origin web server.
 // (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type SettingWAFUpdateResponse struct {
+type SettingWAFEditResponse struct {
 	// ID of the zone setting.
-	ID SettingWAFUpdateResponseID `json:"id,required"`
+	ID SettingWAFEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingWAFUpdateResponseValue `json:"value,required"`
+	Value SettingWAFEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingWAFUpdateResponseEditable `json:"editable"`
+	Editable SettingWAFEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingWAFUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingWAFEditResponseJSON `json:"-"`
 }
 
-// settingWAFUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingWAFUpdateResponse]
-type settingWAFUpdateResponseJSON struct {
+// settingWAFEditResponseJSON contains the JSON metadata for the struct
+// [SettingWAFEditResponse]
+type settingWAFEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -109,32 +109,32 @@ type settingWAFUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWAFUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWAFEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingWAFUpdateResponseID string
+type SettingWAFEditResponseID string
 
 const (
-	SettingWAFUpdateResponseIDWAF SettingWAFUpdateResponseID = "waf"
+	SettingWAFEditResponseIDWAF SettingWAFEditResponseID = "waf"
 )
 
 // Current value of the zone setting.
-type SettingWAFUpdateResponseValue string
+type SettingWAFEditResponseValue string
 
 const (
-	SettingWAFUpdateResponseValueOn  SettingWAFUpdateResponseValue = "on"
-	SettingWAFUpdateResponseValueOff SettingWAFUpdateResponseValue = "off"
+	SettingWAFEditResponseValueOn  SettingWAFEditResponseValue = "on"
+	SettingWAFEditResponseValueOff SettingWAFEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingWAFUpdateResponseEditable bool
+type SettingWAFEditResponseEditable bool
 
 const (
-	SettingWAFUpdateResponseEditableTrue  SettingWAFUpdateResponseEditable = true
-	SettingWAFUpdateResponseEditableFalse SettingWAFUpdateResponseEditable = false
+	SettingWAFEditResponseEditableTrue  SettingWAFEditResponseEditable = true
+	SettingWAFEditResponseEditableFalse SettingWAFEditResponseEditable = false
 )
 
 // The WAF examines HTTP requests to your website. It inspects both GET and POST
@@ -199,26 +199,26 @@ const (
 	SettingWAFGetResponseEditableFalse SettingWAFGetResponseEditable = false
 )
 
-type SettingWAFUpdateParams struct {
+type SettingWAFEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingWAFUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingWAFEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingWAFUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingWAFEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingWAFUpdateParamsValue string
+type SettingWAFEditParamsValue string
 
 const (
-	SettingWAFUpdateParamsValueOn  SettingWAFUpdateParamsValue = "on"
-	SettingWAFUpdateParamsValueOff SettingWAFUpdateParamsValue = "off"
+	SettingWAFEditParamsValueOn  SettingWAFEditParamsValue = "on"
+	SettingWAFEditParamsValueOff SettingWAFEditParamsValue = "off"
 )
 
-type SettingWAFUpdateResponseEnvelope struct {
-	Errors   []SettingWAFUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingWAFUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingWAFEditResponseEnvelope struct {
+	Errors   []SettingWAFEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingWAFEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The WAF examines HTTP requests to your website. It inspects both GET and POST
@@ -231,13 +231,13 @@ type SettingWAFUpdateResponseEnvelope struct {
 	// Cloudflare's WAF will block any traffic identified as illegitimate before it
 	// reaches your origin web server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-	Result SettingWAFUpdateResponse             `json:"result"`
-	JSON   settingWAFUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingWAFEditResponse             `json:"result"`
+	JSON   settingWAFEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingWAFUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingWAFUpdateResponseEnvelope]
-type settingWAFUpdateResponseEnvelopeJSON struct {
+// settingWAFEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingWAFEditResponseEnvelope]
+type settingWAFEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -246,45 +246,45 @@ type settingWAFUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWAFUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWAFEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingWAFUpdateResponseEnvelopeErrors struct {
+type SettingWAFEditResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    settingWAFEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingWAFEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingWAFEditResponseEnvelopeErrors]
+type settingWAFEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingWAFEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingWAFEditResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
-	JSON    settingWAFUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingWAFEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingWAFUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingWAFUpdateResponseEnvelopeErrors]
-type settingWAFUpdateResponseEnvelopeErrorsJSON struct {
+// settingWAFEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingWAFEditResponseEnvelopeMessages]
+type settingWAFEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingWAFUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingWAFUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingWAFUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingWAFUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingWAFUpdateResponseEnvelopeMessages]
-type settingWAFUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingWAFUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingWAFEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -35,9 +35,9 @@ func NewCustomCertificatePrioritizeService(opts ...option.RequestOption) (r *Cus
 // If a zone has multiple SSL certificates, you can set the order in which they
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
-func (r *CustomCertificatePrioritizeService) Replace(ctx context.Context, zoneID string, body CustomCertificatePrioritizeReplaceParams, opts ...option.RequestOption) (res *[]CustomCertificatePrioritizeReplaceResponse, err error) {
+func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, zoneID string, body CustomCertificatePrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificatePrioritizeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CustomCertificatePrioritizeReplaceResponseEnvelope
+	var env CustomCertificatePrioritizeUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -47,14 +47,14 @@ func (r *CustomCertificatePrioritizeService) Replace(ctx context.Context, zoneID
 	return
 }
 
-type CustomCertificatePrioritizeReplaceResponse struct {
+type CustomCertificatePrioritizeUpdateResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CustomCertificatePrioritizeReplaceResponseBundleMethod `json:"bundle_method,required"`
+	BundleMethod CustomCertificatePrioritizeUpdateResponseBundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -70,7 +70,7 @@ type CustomCertificatePrioritizeReplaceResponse struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature,required"`
 	// Status of the zone's custom SSL.
-	Status CustomCertificatePrioritizeReplaceResponseStatus `json:"status,required"`
+	Status CustomCertificatePrioritizeUpdateResponseStatus `json:"status,required"`
 	// When the certificate was uploaded to Cloudflare.
 	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
 	// Identifier
@@ -82,8 +82,8 @@ type CustomCertificatePrioritizeReplaceResponse struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions CustomCertificatePrioritizeReplaceResponseGeoRestrictions `json:"geo_restrictions"`
-	KeylessServer   CustomCertificatePrioritizeReplaceResponseKeylessServer   `json:"keyless_server"`
+	GeoRestrictions CustomCertificatePrioritizeUpdateResponseGeoRestrictions `json:"geo_restrictions"`
+	KeylessServer   CustomCertificatePrioritizeUpdateResponseKeylessServer   `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -93,13 +93,13 @@ type CustomCertificatePrioritizeReplaceResponse struct {
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected.
-	Policy string                                         `json:"policy"`
-	JSON   customCertificatePrioritizeReplaceResponseJSON `json:"-"`
+	Policy string                                        `json:"policy"`
+	JSON   customCertificatePrioritizeUpdateResponseJSON `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseJSON contains the JSON metadata for
-// the struct [CustomCertificatePrioritizeReplaceResponse]
-type customCertificatePrioritizeReplaceResponseJSON struct {
+// customCertificatePrioritizeUpdateResponseJSON contains the JSON metadata for the
+// struct [CustomCertificatePrioritizeUpdateResponse]
+type customCertificatePrioritizeUpdateResponseJSON struct {
 	ID              apijson.Field
 	BundleMethod    apijson.Field
 	ExpiresOn       apijson.Field
@@ -118,7 +118,7 @@ type customCertificatePrioritizeReplaceResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -126,23 +126,23 @@ func (r *CustomCertificatePrioritizeReplaceResponse) UnmarshalJSON(data []byte) 
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type CustomCertificatePrioritizeReplaceResponseBundleMethod string
+type CustomCertificatePrioritizeUpdateResponseBundleMethod string
 
 const (
-	CustomCertificatePrioritizeReplaceResponseBundleMethodUbiquitous CustomCertificatePrioritizeReplaceResponseBundleMethod = "ubiquitous"
-	CustomCertificatePrioritizeReplaceResponseBundleMethodOptimal    CustomCertificatePrioritizeReplaceResponseBundleMethod = "optimal"
-	CustomCertificatePrioritizeReplaceResponseBundleMethodForce      CustomCertificatePrioritizeReplaceResponseBundleMethod = "force"
+	CustomCertificatePrioritizeUpdateResponseBundleMethodUbiquitous CustomCertificatePrioritizeUpdateResponseBundleMethod = "ubiquitous"
+	CustomCertificatePrioritizeUpdateResponseBundleMethodOptimal    CustomCertificatePrioritizeUpdateResponseBundleMethod = "optimal"
+	CustomCertificatePrioritizeUpdateResponseBundleMethodForce      CustomCertificatePrioritizeUpdateResponseBundleMethod = "force"
 )
 
 // Status of the zone's custom SSL.
-type CustomCertificatePrioritizeReplaceResponseStatus string
+type CustomCertificatePrioritizeUpdateResponseStatus string
 
 const (
-	CustomCertificatePrioritizeReplaceResponseStatusActive       CustomCertificatePrioritizeReplaceResponseStatus = "active"
-	CustomCertificatePrioritizeReplaceResponseStatusExpired      CustomCertificatePrioritizeReplaceResponseStatus = "expired"
-	CustomCertificatePrioritizeReplaceResponseStatusDeleted      CustomCertificatePrioritizeReplaceResponseStatus = "deleted"
-	CustomCertificatePrioritizeReplaceResponseStatusPending      CustomCertificatePrioritizeReplaceResponseStatus = "pending"
-	CustomCertificatePrioritizeReplaceResponseStatusInitializing CustomCertificatePrioritizeReplaceResponseStatus = "initializing"
+	CustomCertificatePrioritizeUpdateResponseStatusActive       CustomCertificatePrioritizeUpdateResponseStatus = "active"
+	CustomCertificatePrioritizeUpdateResponseStatusExpired      CustomCertificatePrioritizeUpdateResponseStatus = "expired"
+	CustomCertificatePrioritizeUpdateResponseStatusDeleted      CustomCertificatePrioritizeUpdateResponseStatus = "deleted"
+	CustomCertificatePrioritizeUpdateResponseStatusPending      CustomCertificatePrioritizeUpdateResponseStatus = "pending"
+	CustomCertificatePrioritizeUpdateResponseStatusInitializing CustomCertificatePrioritizeUpdateResponseStatus = "initializing"
 )
 
 // Specify the region where your private key can be held locally for optimal TLS
@@ -152,33 +152,33 @@ const (
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type CustomCertificatePrioritizeReplaceResponseGeoRestrictions struct {
-	Label CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabel `json:"label"`
-	JSON  customCertificatePrioritizeReplaceResponseGeoRestrictionsJSON  `json:"-"`
+type CustomCertificatePrioritizeUpdateResponseGeoRestrictions struct {
+	Label CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel `json:"label"`
+	JSON  customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON  `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseGeoRestrictionsJSON contains the JSON
+// customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON contains the JSON
 // metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseGeoRestrictions]
-type customCertificatePrioritizeReplaceResponseGeoRestrictionsJSON struct {
+// [CustomCertificatePrioritizeUpdateResponseGeoRestrictions]
+type customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabel string
+type CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel string
 
 const (
-	CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabelUs              CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabel = "us"
-	CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabelEu              CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabel = "eu"
-	CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabelHighestSecurity CustomCertificatePrioritizeReplaceResponseGeoRestrictionsLabel = "highest_security"
+	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelUs              CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "us"
+	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelEu              CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "eu"
+	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelHighestSecurity CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "highest_security"
 )
 
-type CustomCertificatePrioritizeReplaceResponseKeylessServer struct {
+type CustomCertificatePrioritizeUpdateResponseKeylessServer struct {
 	// Keyless certificate identifier tag.
 	ID string `json:"id,required"`
 	// When the Keyless SSL was created.
@@ -198,16 +198,15 @@ type CustomCertificatePrioritizeReplaceResponseKeylessServer struct {
 	// Keyless SSL server.
 	Port float64 `json:"port,required"`
 	// Status of the Keyless SSL.
-	Status CustomCertificatePrioritizeReplaceResponseKeylessServerStatus `json:"status,required"`
+	Status CustomCertificatePrioritizeUpdateResponseKeylessServerStatus `json:"status,required"`
 	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel CustomCertificatePrioritizeReplaceResponseKeylessServerTunnel `json:"tunnel"`
-	JSON   customCertificatePrioritizeReplaceResponseKeylessServerJSON   `json:"-"`
+	Tunnel CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel `json:"tunnel"`
+	JSON   customCertificatePrioritizeUpdateResponseKeylessServerJSON   `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseKeylessServerJSON contains the JSON
-// metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseKeylessServer]
-type customCertificatePrioritizeReplaceResponseKeylessServerJSON struct {
+// customCertificatePrioritizeUpdateResponseKeylessServerJSON contains the JSON
+// metadata for the struct [CustomCertificatePrioritizeUpdateResponseKeylessServer]
+type customCertificatePrioritizeUpdateResponseKeylessServerJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Enabled     apijson.Field
@@ -222,51 +221,51 @@ type customCertificatePrioritizeReplaceResponseKeylessServerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseKeylessServer) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseKeylessServer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the Keyless SSL.
-type CustomCertificatePrioritizeReplaceResponseKeylessServerStatus string
+type CustomCertificatePrioritizeUpdateResponseKeylessServerStatus string
 
 const (
-	CustomCertificatePrioritizeReplaceResponseKeylessServerStatusActive  CustomCertificatePrioritizeReplaceResponseKeylessServerStatus = "active"
-	CustomCertificatePrioritizeReplaceResponseKeylessServerStatusDeleted CustomCertificatePrioritizeReplaceResponseKeylessServerStatus = "deleted"
+	CustomCertificatePrioritizeUpdateResponseKeylessServerStatusActive  CustomCertificatePrioritizeUpdateResponseKeylessServerStatus = "active"
+	CustomCertificatePrioritizeUpdateResponseKeylessServerStatusDeleted CustomCertificatePrioritizeUpdateResponseKeylessServerStatus = "deleted"
 )
 
 // Configuration for using Keyless SSL through a Cloudflare Tunnel
-type CustomCertificatePrioritizeReplaceResponseKeylessServerTunnel struct {
+type CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel struct {
 	// Private IP of the Key Server Host
 	PrivateIP string `json:"private_ip,required"`
 	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                                            `json:"vnet_id,required"`
-	JSON   customCertificatePrioritizeReplaceResponseKeylessServerTunnelJSON `json:"-"`
+	VnetID string                                                           `json:"vnet_id,required"`
+	JSON   customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseKeylessServerTunnelJSON contains the
+// customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON contains the
 // JSON metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseKeylessServerTunnel]
-type customCertificatePrioritizeReplaceResponseKeylessServerTunnelJSON struct {
+// [CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel]
+type customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON struct {
 	PrivateIP   apijson.Field
 	VnetID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomCertificatePrioritizeReplaceParams struct {
+type CustomCertificatePrioritizeUpdateParams struct {
 	// Array of ordered certificates.
-	Certificates param.Field[[]CustomCertificatePrioritizeReplaceParamsCertificate] `json:"certificates,required"`
+	Certificates param.Field[[]CustomCertificatePrioritizeUpdateParamsCertificate] `json:"certificates,required"`
 }
 
-func (r CustomCertificatePrioritizeReplaceParams) MarshalJSON() (data []byte, err error) {
+func (r CustomCertificatePrioritizeUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type CustomCertificatePrioritizeReplaceParamsCertificate struct {
+type CustomCertificatePrioritizeUpdateParamsCertificate struct {
 	// The order/priority in which the certificate will be used in a request. The
 	// higher priority will break ties across overlapping 'legacy_custom' certificates,
 	// but 'legacy_custom' certificates will always supercede 'sni_custom'
@@ -274,23 +273,23 @@ type CustomCertificatePrioritizeReplaceParamsCertificate struct {
 	Priority param.Field[float64] `json:"priority"`
 }
 
-func (r CustomCertificatePrioritizeReplaceParamsCertificate) MarshalJSON() (data []byte, err error) {
+func (r CustomCertificatePrioritizeUpdateParamsCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type CustomCertificatePrioritizeReplaceResponseEnvelope struct {
-	Errors   []CustomCertificatePrioritizeReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomCertificatePrioritizeReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomCertificatePrioritizeReplaceResponse                 `json:"result,required,nullable"`
+type CustomCertificatePrioritizeUpdateResponseEnvelope struct {
+	Errors   []CustomCertificatePrioritizeUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomCertificatePrioritizeUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   []CustomCertificatePrioritizeUpdateResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    CustomCertificatePrioritizeReplaceResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo CustomCertificatePrioritizeReplaceResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       customCertificatePrioritizeReplaceResponseEnvelopeJSON       `json:"-"`
+	Success    CustomCertificatePrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       customCertificatePrioritizeUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseEnvelopeJSON contains the JSON
-// metadata for the struct [CustomCertificatePrioritizeReplaceResponseEnvelope]
-type customCertificatePrioritizeReplaceResponseEnvelopeJSON struct {
+// customCertificatePrioritizeUpdateResponseEnvelopeJSON contains the JSON metadata
+// for the struct [CustomCertificatePrioritizeUpdateResponseEnvelope]
+type customCertificatePrioritizeUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -300,58 +299,58 @@ type customCertificatePrioritizeReplaceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomCertificatePrioritizeReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    customCertificatePrioritizeReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type CustomCertificatePrioritizeUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    customCertificatePrioritizeUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseEnvelopeErrorsJSON contains the JSON
+// customCertificatePrioritizeUpdateResponseEnvelopeErrorsJSON contains the JSON
 // metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseEnvelopeErrors]
-type customCertificatePrioritizeReplaceResponseEnvelopeErrorsJSON struct {
+// [CustomCertificatePrioritizeUpdateResponseEnvelopeErrors]
+type customCertificatePrioritizeUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CustomCertificatePrioritizeReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    customCertificatePrioritizeReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type CustomCertificatePrioritizeUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    customCertificatePrioritizeUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseEnvelopeMessagesJSON contains the JSON
+// customCertificatePrioritizeUpdateResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseEnvelopeMessages]
-type customCertificatePrioritizeReplaceResponseEnvelopeMessagesJSON struct {
+// [CustomCertificatePrioritizeUpdateResponseEnvelopeMessages]
+type customCertificatePrioritizeUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CustomCertificatePrioritizeReplaceResponseEnvelopeSuccess bool
+type CustomCertificatePrioritizeUpdateResponseEnvelopeSuccess bool
 
 const (
-	CustomCertificatePrioritizeReplaceResponseEnvelopeSuccessTrue CustomCertificatePrioritizeReplaceResponseEnvelopeSuccess = true
+	CustomCertificatePrioritizeUpdateResponseEnvelopeSuccessTrue CustomCertificatePrioritizeUpdateResponseEnvelopeSuccess = true
 )
 
-type CustomCertificatePrioritizeReplaceResponseEnvelopeResultInfo struct {
+type CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -359,14 +358,14 @@ type CustomCertificatePrioritizeReplaceResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                          `json:"total_count"`
-	JSON       customCertificatePrioritizeReplaceResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                         `json:"total_count"`
+	JSON       customCertificatePrioritizeUpdateResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// customCertificatePrioritizeReplaceResponseEnvelopeResultInfoJSON contains the
+// customCertificatePrioritizeUpdateResponseEnvelopeResultInfoJSON contains the
 // JSON metadata for the struct
-// [CustomCertificatePrioritizeReplaceResponseEnvelopeResultInfo]
-type customCertificatePrioritizeReplaceResponseEnvelopeResultInfoJSON struct {
+// [CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo]
+type customCertificatePrioritizeUpdateResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -375,6 +374,6 @@ type customCertificatePrioritizeReplaceResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificatePrioritizeReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

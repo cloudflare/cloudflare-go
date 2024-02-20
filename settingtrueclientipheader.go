@@ -34,9 +34,9 @@ func NewSettingTrueClientIPHeaderService(opts ...option.RequestOption) (r *Setti
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-func (r *SettingTrueClientIPHeaderService) Update(ctx context.Context, zoneID string, body SettingTrueClientIPHeaderUpdateParams, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderUpdateResponse, err error) {
+func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, zoneID string, body SettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingTrueClientIPHeaderUpdateResponseEnvelope
+	var env SettingTrueClientIPHeaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingTrueClientIPHeaderService) Get(ctx context.Context, zoneID strin
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-type SettingTrueClientIPHeaderUpdateResponse struct {
+type SettingTrueClientIPHeaderEditResponse struct {
 	// ID of the zone setting.
-	ID SettingTrueClientIPHeaderUpdateResponseID `json:"id,required"`
+	ID SettingTrueClientIPHeaderEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingTrueClientIPHeaderUpdateResponseValue `json:"value,required"`
+	Value SettingTrueClientIPHeaderEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingTrueClientIPHeaderUpdateResponseEditable `json:"editable"`
+	Editable SettingTrueClientIPHeaderEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingTrueClientIPHeaderUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingTrueClientIPHeaderEditResponseJSON `json:"-"`
 }
 
-// settingTrueClientIPHeaderUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingTrueClientIPHeaderUpdateResponse]
-type settingTrueClientIPHeaderUpdateResponseJSON struct {
+// settingTrueClientIPHeaderEditResponseJSON contains the JSON metadata for the
+// struct [SettingTrueClientIPHeaderEditResponse]
+type settingTrueClientIPHeaderEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingTrueClientIPHeaderUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTrueClientIPHeaderUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTrueClientIPHeaderEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingTrueClientIPHeaderUpdateResponseID string
+type SettingTrueClientIPHeaderEditResponseID string
 
 const (
-	SettingTrueClientIPHeaderUpdateResponseIDTrueClientIPHeader SettingTrueClientIPHeaderUpdateResponseID = "true_client_ip_header"
+	SettingTrueClientIPHeaderEditResponseIDTrueClientIPHeader SettingTrueClientIPHeaderEditResponseID = "true_client_ip_header"
 )
 
 // Current value of the zone setting.
-type SettingTrueClientIPHeaderUpdateResponseValue string
+type SettingTrueClientIPHeaderEditResponseValue string
 
 const (
-	SettingTrueClientIPHeaderUpdateResponseValueOn  SettingTrueClientIPHeaderUpdateResponseValue = "on"
-	SettingTrueClientIPHeaderUpdateResponseValueOff SettingTrueClientIPHeaderUpdateResponseValue = "off"
+	SettingTrueClientIPHeaderEditResponseValueOn  SettingTrueClientIPHeaderEditResponseValue = "on"
+	SettingTrueClientIPHeaderEditResponseValueOff SettingTrueClientIPHeaderEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingTrueClientIPHeaderUpdateResponseEditable bool
+type SettingTrueClientIPHeaderEditResponseEditable bool
 
 const (
-	SettingTrueClientIPHeaderUpdateResponseEditableTrue  SettingTrueClientIPHeaderUpdateResponseEditable = true
-	SettingTrueClientIPHeaderUpdateResponseEditableFalse SettingTrueClientIPHeaderUpdateResponseEditable = false
+	SettingTrueClientIPHeaderEditResponseEditableTrue  SettingTrueClientIPHeaderEditResponseEditable = true
+	SettingTrueClientIPHeaderEditResponseEditableFalse SettingTrueClientIPHeaderEditResponseEditable = false
 )
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
@@ -168,37 +168,37 @@ const (
 	SettingTrueClientIPHeaderGetResponseEditableFalse SettingTrueClientIPHeaderGetResponseEditable = false
 )
 
-type SettingTrueClientIPHeaderUpdateParams struct {
+type SettingTrueClientIPHeaderEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingTrueClientIPHeaderUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingTrueClientIPHeaderEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingTrueClientIPHeaderUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingTrueClientIPHeaderEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingTrueClientIPHeaderUpdateParamsValue string
+type SettingTrueClientIPHeaderEditParamsValue string
 
 const (
-	SettingTrueClientIPHeaderUpdateParamsValueOn  SettingTrueClientIPHeaderUpdateParamsValue = "on"
-	SettingTrueClientIPHeaderUpdateParamsValueOff SettingTrueClientIPHeaderUpdateParamsValue = "off"
+	SettingTrueClientIPHeaderEditParamsValueOn  SettingTrueClientIPHeaderEditParamsValue = "on"
+	SettingTrueClientIPHeaderEditParamsValueOff SettingTrueClientIPHeaderEditParamsValue = "off"
 )
 
-type SettingTrueClientIPHeaderUpdateResponseEnvelope struct {
-	Errors   []SettingTrueClientIPHeaderUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTrueClientIPHeaderUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingTrueClientIPHeaderEditResponseEnvelope struct {
+	Errors   []SettingTrueClientIPHeaderEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingTrueClientIPHeaderEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
 	// headers we send to the origin. This is limited to Enterprise Zones.
-	Result SettingTrueClientIPHeaderUpdateResponse             `json:"result"`
-	JSON   settingTrueClientIPHeaderUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingTrueClientIPHeaderEditResponse             `json:"result"`
+	JSON   settingTrueClientIPHeaderEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingTrueClientIPHeaderUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SettingTrueClientIPHeaderUpdateResponseEnvelope]
-type settingTrueClientIPHeaderUpdateResponseEnvelopeJSON struct {
+// settingTrueClientIPHeaderEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingTrueClientIPHeaderEditResponseEnvelope]
+type settingTrueClientIPHeaderEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,46 +207,45 @@ type settingTrueClientIPHeaderUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTrueClientIPHeaderUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTrueClientIPHeaderEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingTrueClientIPHeaderUpdateResponseEnvelopeErrors struct {
+type SettingTrueClientIPHeaderEditResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingTrueClientIPHeaderEditResponseEnvelopeErrors]
+type settingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTrueClientIPHeaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingTrueClientIPHeaderEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
-	JSON    settingTrueClientIPHeaderUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingTrueClientIPHeaderUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingTrueClientIPHeaderUpdateResponseEnvelopeErrors]
-type settingTrueClientIPHeaderUpdateResponseEnvelopeErrorsJSON struct {
+// settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingTrueClientIPHeaderEditResponseEnvelopeMessages]
+type settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTrueClientIPHeaderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingTrueClientIPHeaderUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingTrueClientIPHeaderUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTrueClientIPHeaderUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingTrueClientIPHeaderUpdateResponseEnvelopeMessages]
-type settingTrueClientIPHeaderUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTrueClientIPHeaderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTrueClientIPHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

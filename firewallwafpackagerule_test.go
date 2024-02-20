@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestFirewallWAFPackageRuleUpdateWithOptionalParams(t *testing.T) {
+func TestFirewallWAFPackageRuleEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestFirewallWAFPackageRuleUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Firewalls.WAF.Packages.Rules.Update(
+	_, err := client.Firewalls.WAF.Packages.Rules.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
-		cloudflare.FirewallWAFPackageRuleUpdateParams{
-			Mode: cloudflare.F(cloudflare.FirewallWAFPackageRuleUpdateParamsModeOn),
+		cloudflare.FirewallWAFPackageRuleEditParams{
+			Mode: cloudflare.F(cloudflare.FirewallWAFPackageRuleEditParamsModeOn),
 		},
 	)
 	if err != nil {

@@ -51,6 +51,20 @@ func (r *SpectrumAppService) New(ctx context.Context, zone string, body Spectrum
 	return
 }
 
+// Updates a previously existing application's configuration that uses a name for
+// the origin.
+func (r *SpectrumAppService) Update(ctx context.Context, zone string, appID string, body SpectrumAppUpdateParams, opts ...option.RequestOption) (res *SpectrumAppUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SpectrumAppUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retrieves a list of currently existing Spectrum applications inside a zone.
 func (r *SpectrumAppService) List(ctx context.Context, zone string, query SpectrumAppListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[SpectrumAppListResponse], err error) {
 	var raw *http.Response
@@ -93,20 +107,6 @@ func (r *SpectrumAppService) Get(ctx context.Context, zone string, appID string,
 	var env SpectrumAppGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates a previously existing application's configuration that uses a name for
-// the origin.
-func (r *SpectrumAppService) Replace(ctx context.Context, zone string, appID string, body SpectrumAppReplaceParams, opts ...option.RequestOption) (res *SpectrumAppReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SpectrumAppReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/spectrum/apps/%s", zone, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -366,6 +366,258 @@ const (
 	SpectrumAppNewResponseTrafficTypeHTTPS  SpectrumAppNewResponseTrafficType = "https"
 )
 
+type SpectrumAppUpdateResponse struct {
+	// Application identifier.
+	ID string `json:"id"`
+	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
+	// applications with traffic_type set to "direct".
+	ArgoSmartRouting bool `json:"argo_smart_routing"`
+	// When the Application was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// The name and type of DNS record for the Spectrum application.
+	DNS SpectrumAppUpdateResponseDNS `json:"dns"`
+	// The anycast edge IP configuration for the hostname of this application.
+	EdgeIPs SpectrumAppUpdateResponseEdgeIPs `json:"edge_ips"`
+	// Enables IP Access Rules for this application. Notes: Only available for TCP
+	// applications.
+	IPFirewall bool `json:"ip_firewall"`
+	// When the Application was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The name and type of DNS record for the Spectrum application.
+	OriginDNS SpectrumAppUpdateResponseOriginDNS `json:"origin_dns"`
+	// The destination port at the origin. Only specified in conjunction with
+	// origin_dns. May use an integer to specify a single origin port, for example
+	// `1000`, or a string to specify a range of origin ports, for example
+	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
+	// range must match the number of ports specified in the "protocol" field.
+	OriginPort SpectrumAppUpdateResponseOriginPort `json:"origin_port"`
+	// The port configuration at Cloudflare’s edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol string `json:"protocol"`
+	// Enables Proxy Protocol to the origin. Refer to
+	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
+	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
+	// Proxy Protocol.
+	ProxyProtocol SpectrumAppUpdateResponseProxyProtocol `json:"proxy_protocol"`
+	// The type of TLS termination associated with the application.
+	TLS SpectrumAppUpdateResponseTLS `json:"tls"`
+	// Determines how data travels from the edge to your origin. When set to "direct",
+	// Spectrum will send traffic directly to your origin, and the application's type
+	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
+	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
+	// the application type matches this property exactly.
+	TrafficType SpectrumAppUpdateResponseTrafficType `json:"traffic_type"`
+	JSON        spectrumAppUpdateResponseJSON        `json:"-"`
+}
+
+// spectrumAppUpdateResponseJSON contains the JSON metadata for the struct
+// [SpectrumAppUpdateResponse]
+type spectrumAppUpdateResponseJSON struct {
+	ID               apijson.Field
+	ArgoSmartRouting apijson.Field
+	CreatedOn        apijson.Field
+	DNS              apijson.Field
+	EdgeIPs          apijson.Field
+	IPFirewall       apijson.Field
+	ModifiedOn       apijson.Field
+	OriginDNS        apijson.Field
+	OriginPort       apijson.Field
+	Protocol         apijson.Field
+	ProxyProtocol    apijson.Field
+	TLS              apijson.Field
+	TrafficType      apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The name and type of DNS record for the Spectrum application.
+type SpectrumAppUpdateResponseDNS struct {
+	// The name of the DNS record associated with the application.
+	Name string `json:"name" format:"hostname"`
+	// The type of DNS record associated with the application.
+	Type SpectrumAppUpdateResponseDNSType `json:"type"`
+	JSON spectrumAppUpdateResponseDNSJSON `json:"-"`
+}
+
+// spectrumAppUpdateResponseDNSJSON contains the JSON metadata for the struct
+// [SpectrumAppUpdateResponseDNS]
+type spectrumAppUpdateResponseDNSJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseDNS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of DNS record associated with the application.
+type SpectrumAppUpdateResponseDNSType string
+
+const (
+	SpectrumAppUpdateResponseDNSTypeCname   SpectrumAppUpdateResponseDNSType = "CNAME"
+	SpectrumAppUpdateResponseDNSTypeAddress SpectrumAppUpdateResponseDNSType = "ADDRESS"
+)
+
+// The anycast edge IP configuration for the hostname of this application.
+//
+// Union satisfied by [SpectrumAppUpdateResponseEdgeIPsObject] or
+// [SpectrumAppUpdateResponseEdgeIPsObject].
+type SpectrumAppUpdateResponseEdgeIPs interface {
+	implementsSpectrumAppUpdateResponseEdgeIPs()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*SpectrumAppUpdateResponseEdgeIPs)(nil)).Elem(), "")
+}
+
+type SpectrumAppUpdateResponseEdgeIPsObject struct {
+	// The IP versions supported for inbound connections on Spectrum anycast IPs.
+	Connectivity SpectrumAppUpdateResponseEdgeIPsObjectConnectivity `json:"connectivity"`
+	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
+	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
+	// with CNAME DNS names.
+	Type SpectrumAppUpdateResponseEdgeIPsObjectType `json:"type"`
+	JSON spectrumAppUpdateResponseEdgeIPsObjectJSON `json:"-"`
+}
+
+// spectrumAppUpdateResponseEdgeIPsObjectJSON contains the JSON metadata for the
+// struct [SpectrumAppUpdateResponseEdgeIPsObject]
+type spectrumAppUpdateResponseEdgeIPsObjectJSON struct {
+	Connectivity apijson.Field
+	Type         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseEdgeIPsObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r SpectrumAppUpdateResponseEdgeIPsObject) implementsSpectrumAppUpdateResponseEdgeIPs() {}
+
+// The IP versions supported for inbound connections on Spectrum anycast IPs.
+type SpectrumAppUpdateResponseEdgeIPsObjectConnectivity string
+
+const (
+	SpectrumAppUpdateResponseEdgeIPsObjectConnectivityAll  SpectrumAppUpdateResponseEdgeIPsObjectConnectivity = "all"
+	SpectrumAppUpdateResponseEdgeIPsObjectConnectivityIPV4 SpectrumAppUpdateResponseEdgeIPsObjectConnectivity = "ipv4"
+	SpectrumAppUpdateResponseEdgeIPsObjectConnectivityIPV6 SpectrumAppUpdateResponseEdgeIPsObjectConnectivity = "ipv6"
+)
+
+// The type of edge IP configuration specified. Dynamically allocated edge IPs use
+// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
+// with CNAME DNS names.
+type SpectrumAppUpdateResponseEdgeIPsObjectType string
+
+const (
+	SpectrumAppUpdateResponseEdgeIPsObjectTypeDynamic SpectrumAppUpdateResponseEdgeIPsObjectType = "dynamic"
+)
+
+// The name and type of DNS record for the Spectrum application.
+type SpectrumAppUpdateResponseOriginDNS struct {
+	// The name of the DNS record associated with the origin.
+	Name string `json:"name" format:"hostname"`
+	// The TTL of our resolution of your DNS record in seconds.
+	TTL int64 `json:"ttl"`
+	// The type of DNS record associated with the origin. "" is used to specify a
+	// combination of A/AAAA records.
+	Type SpectrumAppUpdateResponseOriginDNSType `json:"type"`
+	JSON spectrumAppUpdateResponseOriginDNSJSON `json:"-"`
+}
+
+// spectrumAppUpdateResponseOriginDNSJSON contains the JSON metadata for the struct
+// [SpectrumAppUpdateResponseOriginDNS]
+type spectrumAppUpdateResponseOriginDNSJSON struct {
+	Name        apijson.Field
+	TTL         apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseOriginDNS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of DNS record associated with the origin. "" is used to specify a
+// combination of A/AAAA records.
+type SpectrumAppUpdateResponseOriginDNSType string
+
+const (
+	SpectrumAppUpdateResponseOriginDNSTypeEmpty SpectrumAppUpdateResponseOriginDNSType = ""
+	SpectrumAppUpdateResponseOriginDNSTypeA     SpectrumAppUpdateResponseOriginDNSType = "A"
+	SpectrumAppUpdateResponseOriginDNSTypeAaaa  SpectrumAppUpdateResponseOriginDNSType = "AAAA"
+	SpectrumAppUpdateResponseOriginDNSTypeSrv   SpectrumAppUpdateResponseOriginDNSType = "SRV"
+)
+
+// The destination port at the origin. Only specified in conjunction with
+// origin_dns. May use an integer to specify a single origin port, for example
+// `1000`, or a string to specify a range of origin ports, for example
+// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
+// range must match the number of ports specified in the "protocol" field.
+//
+// Union satisfied by [shared.UnionInt] or [shared.UnionString].
+type SpectrumAppUpdateResponseOriginPort interface {
+	ImplementsSpectrumAppUpdateResponseOriginPort()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SpectrumAppUpdateResponseOriginPort)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(shared.UnionInt(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Enables Proxy Protocol to the origin. Refer to
+// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
+// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
+// Proxy Protocol.
+type SpectrumAppUpdateResponseProxyProtocol string
+
+const (
+	SpectrumAppUpdateResponseProxyProtocolOff    SpectrumAppUpdateResponseProxyProtocol = "off"
+	SpectrumAppUpdateResponseProxyProtocolV1     SpectrumAppUpdateResponseProxyProtocol = "v1"
+	SpectrumAppUpdateResponseProxyProtocolV2     SpectrumAppUpdateResponseProxyProtocol = "v2"
+	SpectrumAppUpdateResponseProxyProtocolSimple SpectrumAppUpdateResponseProxyProtocol = "simple"
+)
+
+// The type of TLS termination associated with the application.
+type SpectrumAppUpdateResponseTLS string
+
+const (
+	SpectrumAppUpdateResponseTLSOff      SpectrumAppUpdateResponseTLS = "off"
+	SpectrumAppUpdateResponseTLSFlexible SpectrumAppUpdateResponseTLS = "flexible"
+	SpectrumAppUpdateResponseTLSFull     SpectrumAppUpdateResponseTLS = "full"
+	SpectrumAppUpdateResponseTLSStrict   SpectrumAppUpdateResponseTLS = "strict"
+)
+
+// Determines how data travels from the edge to your origin. When set to "direct",
+// Spectrum will send traffic directly to your origin, and the application's type
+// is derived from the `protocol`. When set to "http" or "https", Spectrum will
+// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
+// the application type matches this property exactly.
+type SpectrumAppUpdateResponseTrafficType string
+
+const (
+	SpectrumAppUpdateResponseTrafficTypeDirect SpectrumAppUpdateResponseTrafficType = "direct"
+	SpectrumAppUpdateResponseTrafficTypeHTTP   SpectrumAppUpdateResponseTrafficType = "http"
+	SpectrumAppUpdateResponseTrafficTypeHTTPS  SpectrumAppUpdateResponseTrafficType = "https"
+)
+
 type SpectrumAppListResponse = interface{}
 
 type SpectrumAppDeleteResponse struct {
@@ -401,258 +653,6 @@ func init() {
 		},
 	)
 }
-
-type SpectrumAppReplaceResponse struct {
-	// Application identifier.
-	ID string `json:"id"`
-	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
-	ArgoSmartRouting bool `json:"argo_smart_routing"`
-	// When the Application was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The name and type of DNS record for the Spectrum application.
-	DNS SpectrumAppReplaceResponseDNS `json:"dns"`
-	// The anycast edge IP configuration for the hostname of this application.
-	EdgeIPs SpectrumAppReplaceResponseEdgeIPs `json:"edge_ips"`
-	// Enables IP Access Rules for this application. Notes: Only available for TCP
-	// applications.
-	IPFirewall bool `json:"ip_firewall"`
-	// When the Application was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The name and type of DNS record for the Spectrum application.
-	OriginDNS SpectrumAppReplaceResponseOriginDNS `json:"origin_dns"`
-	// The destination port at the origin. Only specified in conjunction with
-	// origin_dns. May use an integer to specify a single origin port, for example
-	// `1000`, or a string to specify a range of origin ports, for example
-	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
-	// range must match the number of ports specified in the "protocol" field.
-	OriginPort SpectrumAppReplaceResponseOriginPort `json:"origin_port"`
-	// The port configuration at Cloudflare’s edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol string `json:"protocol"`
-	// Enables Proxy Protocol to the origin. Refer to
-	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
-	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
-	// Proxy Protocol.
-	ProxyProtocol SpectrumAppReplaceResponseProxyProtocol `json:"proxy_protocol"`
-	// The type of TLS termination associated with the application.
-	TLS SpectrumAppReplaceResponseTLS `json:"tls"`
-	// Determines how data travels from the edge to your origin. When set to "direct",
-	// Spectrum will send traffic directly to your origin, and the application's type
-	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
-	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
-	TrafficType SpectrumAppReplaceResponseTrafficType `json:"traffic_type"`
-	JSON        spectrumAppReplaceResponseJSON        `json:"-"`
-}
-
-// spectrumAppReplaceResponseJSON contains the JSON metadata for the struct
-// [SpectrumAppReplaceResponse]
-type spectrumAppReplaceResponseJSON struct {
-	ID               apijson.Field
-	ArgoSmartRouting apijson.Field
-	CreatedOn        apijson.Field
-	DNS              apijson.Field
-	EdgeIPs          apijson.Field
-	IPFirewall       apijson.Field
-	ModifiedOn       apijson.Field
-	OriginDNS        apijson.Field
-	OriginPort       apijson.Field
-	Protocol         apijson.Field
-	ProxyProtocol    apijson.Field
-	TLS              apijson.Field
-	TrafficType      apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The name and type of DNS record for the Spectrum application.
-type SpectrumAppReplaceResponseDNS struct {
-	// The name of the DNS record associated with the application.
-	Name string `json:"name" format:"hostname"`
-	// The type of DNS record associated with the application.
-	Type SpectrumAppReplaceResponseDNSType `json:"type"`
-	JSON spectrumAppReplaceResponseDNSJSON `json:"-"`
-}
-
-// spectrumAppReplaceResponseDNSJSON contains the JSON metadata for the struct
-// [SpectrumAppReplaceResponseDNS]
-type spectrumAppReplaceResponseDNSJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseDNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of DNS record associated with the application.
-type SpectrumAppReplaceResponseDNSType string
-
-const (
-	SpectrumAppReplaceResponseDNSTypeCname   SpectrumAppReplaceResponseDNSType = "CNAME"
-	SpectrumAppReplaceResponseDNSTypeAddress SpectrumAppReplaceResponseDNSType = "ADDRESS"
-)
-
-// The anycast edge IP configuration for the hostname of this application.
-//
-// Union satisfied by [SpectrumAppReplaceResponseEdgeIPsObject] or
-// [SpectrumAppReplaceResponseEdgeIPsObject].
-type SpectrumAppReplaceResponseEdgeIPs interface {
-	implementsSpectrumAppReplaceResponseEdgeIPs()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*SpectrumAppReplaceResponseEdgeIPs)(nil)).Elem(), "")
-}
-
-type SpectrumAppReplaceResponseEdgeIPsObject struct {
-	// The IP versions supported for inbound connections on Spectrum anycast IPs.
-	Connectivity SpectrumAppReplaceResponseEdgeIPsObjectConnectivity `json:"connectivity"`
-	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
-	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
-	// with CNAME DNS names.
-	Type SpectrumAppReplaceResponseEdgeIPsObjectType `json:"type"`
-	JSON spectrumAppReplaceResponseEdgeIPsObjectJSON `json:"-"`
-}
-
-// spectrumAppReplaceResponseEdgeIPsObjectJSON contains the JSON metadata for the
-// struct [SpectrumAppReplaceResponseEdgeIPsObject]
-type spectrumAppReplaceResponseEdgeIPsObjectJSON struct {
-	Connectivity apijson.Field
-	Type         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseEdgeIPsObject) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r SpectrumAppReplaceResponseEdgeIPsObject) implementsSpectrumAppReplaceResponseEdgeIPs() {}
-
-// The IP versions supported for inbound connections on Spectrum anycast IPs.
-type SpectrumAppReplaceResponseEdgeIPsObjectConnectivity string
-
-const (
-	SpectrumAppReplaceResponseEdgeIPsObjectConnectivityAll  SpectrumAppReplaceResponseEdgeIPsObjectConnectivity = "all"
-	SpectrumAppReplaceResponseEdgeIPsObjectConnectivityIPV4 SpectrumAppReplaceResponseEdgeIPsObjectConnectivity = "ipv4"
-	SpectrumAppReplaceResponseEdgeIPsObjectConnectivityIPV6 SpectrumAppReplaceResponseEdgeIPsObjectConnectivity = "ipv6"
-)
-
-// The type of edge IP configuration specified. Dynamically allocated edge IPs use
-// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
-// with CNAME DNS names.
-type SpectrumAppReplaceResponseEdgeIPsObjectType string
-
-const (
-	SpectrumAppReplaceResponseEdgeIPsObjectTypeDynamic SpectrumAppReplaceResponseEdgeIPsObjectType = "dynamic"
-)
-
-// The name and type of DNS record for the Spectrum application.
-type SpectrumAppReplaceResponseOriginDNS struct {
-	// The name of the DNS record associated with the origin.
-	Name string `json:"name" format:"hostname"`
-	// The TTL of our resolution of your DNS record in seconds.
-	TTL int64 `json:"ttl"`
-	// The type of DNS record associated with the origin. "" is used to specify a
-	// combination of A/AAAA records.
-	Type SpectrumAppReplaceResponseOriginDNSType `json:"type"`
-	JSON spectrumAppReplaceResponseOriginDNSJSON `json:"-"`
-}
-
-// spectrumAppReplaceResponseOriginDNSJSON contains the JSON metadata for the
-// struct [SpectrumAppReplaceResponseOriginDNS]
-type spectrumAppReplaceResponseOriginDNSJSON struct {
-	Name        apijson.Field
-	TTL         apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseOriginDNS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of DNS record associated with the origin. "" is used to specify a
-// combination of A/AAAA records.
-type SpectrumAppReplaceResponseOriginDNSType string
-
-const (
-	SpectrumAppReplaceResponseOriginDNSTypeEmpty SpectrumAppReplaceResponseOriginDNSType = ""
-	SpectrumAppReplaceResponseOriginDNSTypeA     SpectrumAppReplaceResponseOriginDNSType = "A"
-	SpectrumAppReplaceResponseOriginDNSTypeAaaa  SpectrumAppReplaceResponseOriginDNSType = "AAAA"
-	SpectrumAppReplaceResponseOriginDNSTypeSrv   SpectrumAppReplaceResponseOriginDNSType = "SRV"
-)
-
-// The destination port at the origin. Only specified in conjunction with
-// origin_dns. May use an integer to specify a single origin port, for example
-// `1000`, or a string to specify a range of origin ports, for example
-// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
-// range must match the number of ports specified in the "protocol" field.
-//
-// Union satisfied by [shared.UnionInt] or [shared.UnionString].
-type SpectrumAppReplaceResponseOriginPort interface {
-	ImplementsSpectrumAppReplaceResponseOriginPort()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*SpectrumAppReplaceResponseOriginPort)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(shared.UnionInt(0)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Enables Proxy Protocol to the origin. Refer to
-// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
-// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
-// Proxy Protocol.
-type SpectrumAppReplaceResponseProxyProtocol string
-
-const (
-	SpectrumAppReplaceResponseProxyProtocolOff    SpectrumAppReplaceResponseProxyProtocol = "off"
-	SpectrumAppReplaceResponseProxyProtocolV1     SpectrumAppReplaceResponseProxyProtocol = "v1"
-	SpectrumAppReplaceResponseProxyProtocolV2     SpectrumAppReplaceResponseProxyProtocol = "v2"
-	SpectrumAppReplaceResponseProxyProtocolSimple SpectrumAppReplaceResponseProxyProtocol = "simple"
-)
-
-// The type of TLS termination associated with the application.
-type SpectrumAppReplaceResponseTLS string
-
-const (
-	SpectrumAppReplaceResponseTLSOff      SpectrumAppReplaceResponseTLS = "off"
-	SpectrumAppReplaceResponseTLSFlexible SpectrumAppReplaceResponseTLS = "flexible"
-	SpectrumAppReplaceResponseTLSFull     SpectrumAppReplaceResponseTLS = "full"
-	SpectrumAppReplaceResponseTLSStrict   SpectrumAppReplaceResponseTLS = "strict"
-)
-
-// Determines how data travels from the edge to your origin. When set to "direct",
-// Spectrum will send traffic directly to your origin, and the application's type
-// is derived from the `protocol`. When set to "http" or "https", Spectrum will
-// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
-type SpectrumAppReplaceResponseTrafficType string
-
-const (
-	SpectrumAppReplaceResponseTrafficTypeDirect SpectrumAppReplaceResponseTrafficType = "direct"
-	SpectrumAppReplaceResponseTrafficTypeHTTP   SpectrumAppReplaceResponseTrafficType = "http"
-	SpectrumAppReplaceResponseTrafficTypeHTTPS  SpectrumAppReplaceResponseTrafficType = "https"
-)
 
 type SpectrumAppNewParams struct {
 	// The name and type of DNS record for the Spectrum application.
@@ -898,6 +898,250 @@ const (
 	SpectrumAppNewResponseEnvelopeSuccessTrue SpectrumAppNewResponseEnvelopeSuccess = true
 )
 
+type SpectrumAppUpdateParams struct {
+	// The name and type of DNS record for the Spectrum application.
+	DNS param.Field[SpectrumAppUpdateParamsDNS] `json:"dns,required"`
+	// The name and type of DNS record for the Spectrum application.
+	OriginDNS param.Field[SpectrumAppUpdateParamsOriginDNS] `json:"origin_dns,required"`
+	// The destination port at the origin. Only specified in conjunction with
+	// origin_dns. May use an integer to specify a single origin port, for example
+	// `1000`, or a string to specify a range of origin ports, for example
+	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
+	// range must match the number of ports specified in the "protocol" field.
+	OriginPort param.Field[SpectrumAppUpdateParamsOriginPort] `json:"origin_port,required"`
+	// The port configuration at Cloudflare’s edge. May specify a single port, for
+	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
+	Protocol param.Field[string] `json:"protocol,required"`
+	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
+	// applications with traffic_type set to "direct".
+	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
+	// The anycast edge IP configuration for the hostname of this application.
+	EdgeIPs param.Field[SpectrumAppUpdateParamsEdgeIPs] `json:"edge_ips"`
+	// Enables IP Access Rules for this application. Notes: Only available for TCP
+	// applications.
+	IPFirewall param.Field[bool] `json:"ip_firewall"`
+	// Enables Proxy Protocol to the origin. Refer to
+	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
+	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
+	// Proxy Protocol.
+	ProxyProtocol param.Field[SpectrumAppUpdateParamsProxyProtocol] `json:"proxy_protocol"`
+	// The type of TLS termination associated with the application.
+	TLS param.Field[SpectrumAppUpdateParamsTLS] `json:"tls"`
+	// Determines how data travels from the edge to your origin. When set to "direct",
+	// Spectrum will send traffic directly to your origin, and the application's type
+	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
+	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
+	// the application type matches this property exactly.
+	TrafficType param.Field[SpectrumAppUpdateParamsTrafficType] `json:"traffic_type"`
+}
+
+func (r SpectrumAppUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The name and type of DNS record for the Spectrum application.
+type SpectrumAppUpdateParamsDNS struct {
+	// The name of the DNS record associated with the application.
+	Name param.Field[string] `json:"name" format:"hostname"`
+	// The type of DNS record associated with the application.
+	Type param.Field[SpectrumAppUpdateParamsDNSType] `json:"type"`
+}
+
+func (r SpectrumAppUpdateParamsDNS) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of DNS record associated with the application.
+type SpectrumAppUpdateParamsDNSType string
+
+const (
+	SpectrumAppUpdateParamsDNSTypeCname   SpectrumAppUpdateParamsDNSType = "CNAME"
+	SpectrumAppUpdateParamsDNSTypeAddress SpectrumAppUpdateParamsDNSType = "ADDRESS"
+)
+
+// The name and type of DNS record for the Spectrum application.
+type SpectrumAppUpdateParamsOriginDNS struct {
+	// The name of the DNS record associated with the origin.
+	Name param.Field[string] `json:"name" format:"hostname"`
+	// The TTL of our resolution of your DNS record in seconds.
+	TTL param.Field[int64] `json:"ttl"`
+	// The type of DNS record associated with the origin. "" is used to specify a
+	// combination of A/AAAA records.
+	Type param.Field[SpectrumAppUpdateParamsOriginDNSType] `json:"type"`
+}
+
+func (r SpectrumAppUpdateParamsOriginDNS) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of DNS record associated with the origin. "" is used to specify a
+// combination of A/AAAA records.
+type SpectrumAppUpdateParamsOriginDNSType string
+
+const (
+	SpectrumAppUpdateParamsOriginDNSTypeEmpty SpectrumAppUpdateParamsOriginDNSType = ""
+	SpectrumAppUpdateParamsOriginDNSTypeA     SpectrumAppUpdateParamsOriginDNSType = "A"
+	SpectrumAppUpdateParamsOriginDNSTypeAaaa  SpectrumAppUpdateParamsOriginDNSType = "AAAA"
+	SpectrumAppUpdateParamsOriginDNSTypeSrv   SpectrumAppUpdateParamsOriginDNSType = "SRV"
+)
+
+// The destination port at the origin. Only specified in conjunction with
+// origin_dns. May use an integer to specify a single origin port, for example
+// `1000`, or a string to specify a range of origin ports, for example
+// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
+// range must match the number of ports specified in the "protocol" field.
+//
+// Satisfied by [shared.UnionInt], [shared.UnionString].
+type SpectrumAppUpdateParamsOriginPort interface {
+	ImplementsSpectrumAppUpdateParamsOriginPort()
+}
+
+// The anycast edge IP configuration for the hostname of this application.
+//
+// Satisfied by [SpectrumAppUpdateParamsEdgeIPsObject],
+// [SpectrumAppUpdateParamsEdgeIPsObject].
+type SpectrumAppUpdateParamsEdgeIPs interface {
+	implementsSpectrumAppUpdateParamsEdgeIPs()
+}
+
+type SpectrumAppUpdateParamsEdgeIPsObject struct {
+	// The IP versions supported for inbound connections on Spectrum anycast IPs.
+	Connectivity param.Field[SpectrumAppUpdateParamsEdgeIPsObjectConnectivity] `json:"connectivity"`
+	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
+	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
+	// with CNAME DNS names.
+	Type param.Field[SpectrumAppUpdateParamsEdgeIPsObjectType] `json:"type"`
+}
+
+func (r SpectrumAppUpdateParamsEdgeIPsObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r SpectrumAppUpdateParamsEdgeIPsObject) implementsSpectrumAppUpdateParamsEdgeIPs() {}
+
+// The IP versions supported for inbound connections on Spectrum anycast IPs.
+type SpectrumAppUpdateParamsEdgeIPsObjectConnectivity string
+
+const (
+	SpectrumAppUpdateParamsEdgeIPsObjectConnectivityAll  SpectrumAppUpdateParamsEdgeIPsObjectConnectivity = "all"
+	SpectrumAppUpdateParamsEdgeIPsObjectConnectivityIPV4 SpectrumAppUpdateParamsEdgeIPsObjectConnectivity = "ipv4"
+	SpectrumAppUpdateParamsEdgeIPsObjectConnectivityIPV6 SpectrumAppUpdateParamsEdgeIPsObjectConnectivity = "ipv6"
+)
+
+// The type of edge IP configuration specified. Dynamically allocated edge IPs use
+// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
+// with CNAME DNS names.
+type SpectrumAppUpdateParamsEdgeIPsObjectType string
+
+const (
+	SpectrumAppUpdateParamsEdgeIPsObjectTypeDynamic SpectrumAppUpdateParamsEdgeIPsObjectType = "dynamic"
+)
+
+// Enables Proxy Protocol to the origin. Refer to
+// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
+// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
+// Proxy Protocol.
+type SpectrumAppUpdateParamsProxyProtocol string
+
+const (
+	SpectrumAppUpdateParamsProxyProtocolOff    SpectrumAppUpdateParamsProxyProtocol = "off"
+	SpectrumAppUpdateParamsProxyProtocolV1     SpectrumAppUpdateParamsProxyProtocol = "v1"
+	SpectrumAppUpdateParamsProxyProtocolV2     SpectrumAppUpdateParamsProxyProtocol = "v2"
+	SpectrumAppUpdateParamsProxyProtocolSimple SpectrumAppUpdateParamsProxyProtocol = "simple"
+)
+
+// The type of TLS termination associated with the application.
+type SpectrumAppUpdateParamsTLS string
+
+const (
+	SpectrumAppUpdateParamsTLSOff      SpectrumAppUpdateParamsTLS = "off"
+	SpectrumAppUpdateParamsTLSFlexible SpectrumAppUpdateParamsTLS = "flexible"
+	SpectrumAppUpdateParamsTLSFull     SpectrumAppUpdateParamsTLS = "full"
+	SpectrumAppUpdateParamsTLSStrict   SpectrumAppUpdateParamsTLS = "strict"
+)
+
+// Determines how data travels from the edge to your origin. When set to "direct",
+// Spectrum will send traffic directly to your origin, and the application's type
+// is derived from the `protocol`. When set to "http" or "https", Spectrum will
+// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
+// the application type matches this property exactly.
+type SpectrumAppUpdateParamsTrafficType string
+
+const (
+	SpectrumAppUpdateParamsTrafficTypeDirect SpectrumAppUpdateParamsTrafficType = "direct"
+	SpectrumAppUpdateParamsTrafficTypeHTTP   SpectrumAppUpdateParamsTrafficType = "http"
+	SpectrumAppUpdateParamsTrafficTypeHTTPS  SpectrumAppUpdateParamsTrafficType = "https"
+)
+
+type SpectrumAppUpdateResponseEnvelope struct {
+	Errors   []SpectrumAppUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SpectrumAppUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   SpectrumAppUpdateResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success SpectrumAppUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    spectrumAppUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// spectrumAppUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SpectrumAppUpdateResponseEnvelope]
+type spectrumAppUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpectrumAppUpdateResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    spectrumAppUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// spectrumAppUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SpectrumAppUpdateResponseEnvelopeErrors]
+type spectrumAppUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpectrumAppUpdateResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    spectrumAppUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// spectrumAppUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SpectrumAppUpdateResponseEnvelopeMessages]
+type spectrumAppUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpectrumAppUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SpectrumAppUpdateResponseEnvelopeSuccess bool
+
+const (
+	SpectrumAppUpdateResponseEnvelopeSuccessTrue SpectrumAppUpdateResponseEnvelopeSuccess = true
+)
+
 type SpectrumAppListParams struct {
 	// Sets the direction by which results are ordered.
 	Direction param.Field[SpectrumAppListParamsDirection] `query:"direction"`
@@ -1074,248 +1318,4 @@ type SpectrumAppGetResponseEnvelopeSuccess bool
 
 const (
 	SpectrumAppGetResponseEnvelopeSuccessTrue SpectrumAppGetResponseEnvelopeSuccess = true
-)
-
-type SpectrumAppReplaceParams struct {
-	// The name and type of DNS record for the Spectrum application.
-	DNS param.Field[SpectrumAppReplaceParamsDNS] `json:"dns,required"`
-	// The name and type of DNS record for the Spectrum application.
-	OriginDNS param.Field[SpectrumAppReplaceParamsOriginDNS] `json:"origin_dns,required"`
-	// The destination port at the origin. Only specified in conjunction with
-	// origin_dns. May use an integer to specify a single origin port, for example
-	// `1000`, or a string to specify a range of origin ports, for example
-	// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
-	// range must match the number of ports specified in the "protocol" field.
-	OriginPort param.Field[SpectrumAppReplaceParamsOriginPort] `json:"origin_port,required"`
-	// The port configuration at Cloudflare’s edge. May specify a single port, for
-	// example `"tcp/1000"`, or a range of ports, for example `"tcp/1000-2000"`.
-	Protocol param.Field[string] `json:"protocol,required"`
-	// Enables Argo Smart Routing for this application. Notes: Only available for TCP
-	// applications with traffic_type set to "direct".
-	ArgoSmartRouting param.Field[bool] `json:"argo_smart_routing"`
-	// The anycast edge IP configuration for the hostname of this application.
-	EdgeIPs param.Field[SpectrumAppReplaceParamsEdgeIPs] `json:"edge_ips"`
-	// Enables IP Access Rules for this application. Notes: Only available for TCP
-	// applications.
-	IPFirewall param.Field[bool] `json:"ip_firewall"`
-	// Enables Proxy Protocol to the origin. Refer to
-	// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
-	// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
-	// Proxy Protocol.
-	ProxyProtocol param.Field[SpectrumAppReplaceParamsProxyProtocol] `json:"proxy_protocol"`
-	// The type of TLS termination associated with the application.
-	TLS param.Field[SpectrumAppReplaceParamsTLS] `json:"tls"`
-	// Determines how data travels from the edge to your origin. When set to "direct",
-	// Spectrum will send traffic directly to your origin, and the application's type
-	// is derived from the `protocol`. When set to "http" or "https", Spectrum will
-	// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-	// the application type matches this property exactly.
-	TrafficType param.Field[SpectrumAppReplaceParamsTrafficType] `json:"traffic_type"`
-}
-
-func (r SpectrumAppReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The name and type of DNS record for the Spectrum application.
-type SpectrumAppReplaceParamsDNS struct {
-	// The name of the DNS record associated with the application.
-	Name param.Field[string] `json:"name" format:"hostname"`
-	// The type of DNS record associated with the application.
-	Type param.Field[SpectrumAppReplaceParamsDNSType] `json:"type"`
-}
-
-func (r SpectrumAppReplaceParamsDNS) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of DNS record associated with the application.
-type SpectrumAppReplaceParamsDNSType string
-
-const (
-	SpectrumAppReplaceParamsDNSTypeCname   SpectrumAppReplaceParamsDNSType = "CNAME"
-	SpectrumAppReplaceParamsDNSTypeAddress SpectrumAppReplaceParamsDNSType = "ADDRESS"
-)
-
-// The name and type of DNS record for the Spectrum application.
-type SpectrumAppReplaceParamsOriginDNS struct {
-	// The name of the DNS record associated with the origin.
-	Name param.Field[string] `json:"name" format:"hostname"`
-	// The TTL of our resolution of your DNS record in seconds.
-	TTL param.Field[int64] `json:"ttl"`
-	// The type of DNS record associated with the origin. "" is used to specify a
-	// combination of A/AAAA records.
-	Type param.Field[SpectrumAppReplaceParamsOriginDNSType] `json:"type"`
-}
-
-func (r SpectrumAppReplaceParamsOriginDNS) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of DNS record associated with the origin. "" is used to specify a
-// combination of A/AAAA records.
-type SpectrumAppReplaceParamsOriginDNSType string
-
-const (
-	SpectrumAppReplaceParamsOriginDNSTypeEmpty SpectrumAppReplaceParamsOriginDNSType = ""
-	SpectrumAppReplaceParamsOriginDNSTypeA     SpectrumAppReplaceParamsOriginDNSType = "A"
-	SpectrumAppReplaceParamsOriginDNSTypeAaaa  SpectrumAppReplaceParamsOriginDNSType = "AAAA"
-	SpectrumAppReplaceParamsOriginDNSTypeSrv   SpectrumAppReplaceParamsOriginDNSType = "SRV"
-)
-
-// The destination port at the origin. Only specified in conjunction with
-// origin_dns. May use an integer to specify a single origin port, for example
-// `1000`, or a string to specify a range of origin ports, for example
-// `"1000-2000"`. Notes: If specifying a port range, the number of ports in the
-// range must match the number of ports specified in the "protocol" field.
-//
-// Satisfied by [shared.UnionInt], [shared.UnionString].
-type SpectrumAppReplaceParamsOriginPort interface {
-	ImplementsSpectrumAppReplaceParamsOriginPort()
-}
-
-// The anycast edge IP configuration for the hostname of this application.
-//
-// Satisfied by [SpectrumAppReplaceParamsEdgeIPsObject],
-// [SpectrumAppReplaceParamsEdgeIPsObject].
-type SpectrumAppReplaceParamsEdgeIPs interface {
-	implementsSpectrumAppReplaceParamsEdgeIPs()
-}
-
-type SpectrumAppReplaceParamsEdgeIPsObject struct {
-	// The IP versions supported for inbound connections on Spectrum anycast IPs.
-	Connectivity param.Field[SpectrumAppReplaceParamsEdgeIPsObjectConnectivity] `json:"connectivity"`
-	// The type of edge IP configuration specified. Dynamically allocated edge IPs use
-	// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
-	// with CNAME DNS names.
-	Type param.Field[SpectrumAppReplaceParamsEdgeIPsObjectType] `json:"type"`
-}
-
-func (r SpectrumAppReplaceParamsEdgeIPsObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r SpectrumAppReplaceParamsEdgeIPsObject) implementsSpectrumAppReplaceParamsEdgeIPs() {}
-
-// The IP versions supported for inbound connections on Spectrum anycast IPs.
-type SpectrumAppReplaceParamsEdgeIPsObjectConnectivity string
-
-const (
-	SpectrumAppReplaceParamsEdgeIPsObjectConnectivityAll  SpectrumAppReplaceParamsEdgeIPsObjectConnectivity = "all"
-	SpectrumAppReplaceParamsEdgeIPsObjectConnectivityIPV4 SpectrumAppReplaceParamsEdgeIPsObjectConnectivity = "ipv4"
-	SpectrumAppReplaceParamsEdgeIPsObjectConnectivityIPV6 SpectrumAppReplaceParamsEdgeIPsObjectConnectivity = "ipv6"
-)
-
-// The type of edge IP configuration specified. Dynamically allocated edge IPs use
-// Spectrum anycast IPs in accordance with the connectivity you specify. Only valid
-// with CNAME DNS names.
-type SpectrumAppReplaceParamsEdgeIPsObjectType string
-
-const (
-	SpectrumAppReplaceParamsEdgeIPsObjectTypeDynamic SpectrumAppReplaceParamsEdgeIPsObjectType = "dynamic"
-)
-
-// Enables Proxy Protocol to the origin. Refer to
-// [Enable Proxy protocol](https://developers.cloudflare.com/spectrum/getting-started/proxy-protocol/)
-// for implementation details on PROXY Protocol V1, PROXY Protocol V2, and Simple
-// Proxy Protocol.
-type SpectrumAppReplaceParamsProxyProtocol string
-
-const (
-	SpectrumAppReplaceParamsProxyProtocolOff    SpectrumAppReplaceParamsProxyProtocol = "off"
-	SpectrumAppReplaceParamsProxyProtocolV1     SpectrumAppReplaceParamsProxyProtocol = "v1"
-	SpectrumAppReplaceParamsProxyProtocolV2     SpectrumAppReplaceParamsProxyProtocol = "v2"
-	SpectrumAppReplaceParamsProxyProtocolSimple SpectrumAppReplaceParamsProxyProtocol = "simple"
-)
-
-// The type of TLS termination associated with the application.
-type SpectrumAppReplaceParamsTLS string
-
-const (
-	SpectrumAppReplaceParamsTLSOff      SpectrumAppReplaceParamsTLS = "off"
-	SpectrumAppReplaceParamsTLSFlexible SpectrumAppReplaceParamsTLS = "flexible"
-	SpectrumAppReplaceParamsTLSFull     SpectrumAppReplaceParamsTLS = "full"
-	SpectrumAppReplaceParamsTLSStrict   SpectrumAppReplaceParamsTLS = "strict"
-)
-
-// Determines how data travels from the edge to your origin. When set to "direct",
-// Spectrum will send traffic directly to your origin, and the application's type
-// is derived from the `protocol`. When set to "http" or "https", Spectrum will
-// apply Cloudflare's HTTP/HTTPS features as it sends traffic to your origin, and
-// the application type matches this property exactly.
-type SpectrumAppReplaceParamsTrafficType string
-
-const (
-	SpectrumAppReplaceParamsTrafficTypeDirect SpectrumAppReplaceParamsTrafficType = "direct"
-	SpectrumAppReplaceParamsTrafficTypeHTTP   SpectrumAppReplaceParamsTrafficType = "http"
-	SpectrumAppReplaceParamsTrafficTypeHTTPS  SpectrumAppReplaceParamsTrafficType = "https"
-)
-
-type SpectrumAppReplaceResponseEnvelope struct {
-	Errors   []SpectrumAppReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SpectrumAppReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   SpectrumAppReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success SpectrumAppReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    spectrumAppReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// spectrumAppReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SpectrumAppReplaceResponseEnvelope]
-type spectrumAppReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpectrumAppReplaceResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    spectrumAppReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// spectrumAppReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SpectrumAppReplaceResponseEnvelopeErrors]
-type spectrumAppReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SpectrumAppReplaceResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    spectrumAppReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// spectrumAppReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SpectrumAppReplaceResponseEnvelopeMessages]
-type spectrumAppReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SpectrumAppReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SpectrumAppReplaceResponseEnvelopeSuccess bool
-
-const (
-	SpectrumAppReplaceResponseEnvelopeSuccessTrue SpectrumAppReplaceResponseEnvelopeSuccess = true
 )

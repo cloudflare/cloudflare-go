@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParams(t *testing.T) {
+func TestWorkersForPlatformDispatchNamespaceScriptSettingEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Settings.Update(
+	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Settings.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParams{
-			Errors: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsError{{
+		cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParams{
+			Errors: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsError{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -45,7 +45,7 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Messages: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsMessage{{
+			Messages: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsMessage{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -55,23 +55,23 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Result: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResult{
-				Bindings: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBinding{cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+			Result: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResult{
+				Bindings: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBinding{cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+				}), cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+				}), cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
 				})}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
 				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultMigrations](cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultMigrations](cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrations(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -81,7 +81,7 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -95,11 +95,11 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultPlacement{
-					Mode: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultPlacementModeSmart),
+				Placement: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultPlacement{
+					Mode: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
-				TailConsumers: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsResultTailConsumer{{
+				TailConsumers: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResultTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -114,7 +114,7 @@ func TestWorkersForPlatformDispatchNamespaceScriptSettingUpdateWithOptionalParam
 				}}),
 				UsageModel: cloudflare.F("unbound"),
 			}),
-			Success: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingUpdateParamsSuccessTrue),
+			Success: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptSettingEditParamsSuccessTrue),
 		},
 	)
 	if err != nil {

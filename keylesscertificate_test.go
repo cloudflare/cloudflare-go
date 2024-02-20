@@ -53,46 +53,6 @@ func TestKeylessCertificateNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestKeylessCertificateUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.KeylessCertificates.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.KeylessCertificateUpdateParams{
-			Enabled: cloudflare.F(false),
-			Host:    cloudflare.F("example.com"),
-			Name:    cloudflare.F("example.com Keyless SSL"),
-			Port:    cloudflare.F(24008.000000),
-			Tunnel: cloudflare.F(cloudflare.KeylessCertificateUpdateParamsTunnel{
-				PrivateIP: cloudflare.F("10.0.0.1"),
-				VnetID:    cloudflare.F("7365377a-85a4-4390-9480-531ef7dc7a3c"),
-			}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestKeylessCertificateList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -139,6 +99,46 @@ func TestKeylessCertificateDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestKeylessCertificateEditWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.KeylessCertificates.Edit(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.KeylessCertificateEditParams{
+			Enabled: cloudflare.F(false),
+			Host:    cloudflare.F("example.com"),
+			Name:    cloudflare.F("example.com Keyless SSL"),
+			Port:    cloudflare.F(24008.000000),
+			Tunnel: cloudflare.F(cloudflare.KeylessCertificateEditParamsTunnel{
+				PrivateIP: cloudflare.F("10.0.0.1"),
+				VnetID:    cloudflare.F("7365377a-85a4-4390-9480-531ef7dc7a3c"),
+			}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

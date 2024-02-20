@@ -56,22 +56,6 @@ func (r *CustomHostnameService) New(ctx context.Context, zoneID string, body Cus
 	return
 }
 
-// Modify SSL configuration for a custom hostname. When sent with SSL config that
-// matches existing config, used to indicate that hostname should pass domain
-// control validation (DCV). Can also be used to change validation type, e.g., from
-// 'http' to 'email'.
-func (r *CustomHostnameService) Update(ctx context.Context, zoneID string, customHostnameID string, body CustomHostnameUpdateParams, opts ...option.RequestOption) (res *CustomHostnameUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CustomHostnameUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List, search, sort, and filter all of your custom hostnames.
 func (r *CustomHostnameService) List(ctx context.Context, zoneID string, query CustomHostnameListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomHostnameListResponse], err error) {
 	var raw *http.Response
@@ -100,6 +84,22 @@ func (r *CustomHostnameService) Delete(ctx context.Context, zoneID string, custo
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	return
+}
+
+// Modify SSL configuration for a custom hostname. When sent with SSL config that
+// matches existing config, used to indicate that hostname should pass domain
+// control validation (DCV). Can also be used to change validation type, e.g., from
+// 'http' to 'email'.
+func (r *CustomHostnameService) Edit(ctx context.Context, zoneID string, customHostnameID string, body CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CustomHostnameEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -398,291 +398,6 @@ type customHostnameNewResponseSSLValidationRecordJSON struct {
 }
 
 func (r *CustomHostnameNewResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameUpdateResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The custom hostname that will point to your hostname via CNAME.
-	Hostname string `json:"hostname,required"`
-	// SSL properties for the custom hostname.
-	SSL  CustomHostnameUpdateResponseSSL  `json:"ssl,required"`
-	JSON customHostnameUpdateResponseJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseJSON contains the JSON metadata for the struct
-// [CustomHostnameUpdateResponse]
-type customHostnameUpdateResponseJSON struct {
-	ID          apijson.Field
-	Hostname    apijson.Field
-	SSL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// SSL properties for the custom hostname.
-type CustomHostnameUpdateResponseSSL struct {
-	// Custom hostname SSL identifier tag.
-	ID string `json:"id"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod CustomHostnameUpdateResponseSSLBundleMethod `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority CustomHostnameUpdateResponseSSLCertificateAuthority `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate string `json:"custom_certificate"`
-	// The identifier for the Custom CSR that was used.
-	CustomCsrID string `json:"custom_csr_id"`
-	// The key for a custom uploaded certificate.
-	CustomKey string `json:"custom_key"`
-	// The time the custom certificate expires on.
-	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
-	// A list of Hostnames on a custom uploaded certificate.
-	Hosts []interface{} `json:"hosts"`
-	// The issuer on a custom uploaded certificate.
-	Issuer string `json:"issuer"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method CustomHostnameUpdateResponseSSLMethod `json:"method"`
-	// The serial number on a custom uploaded certificate.
-	SerialNumber string `json:"serial_number"`
-	// SSL specific settings.
-	Settings CustomHostnameUpdateResponseSSLSettings `json:"settings"`
-	// The signature on a custom uploaded certificate.
-	Signature string `json:"signature"`
-	// Status of the hostname's SSL certificates.
-	Status CustomHostnameUpdateResponseSSLStatus `json:"status"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type CustomHostnameUpdateResponseSSLType `json:"type"`
-	// The time the custom certificate was uploaded.
-	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
-	// Domain validation errors that have been received by the certificate authority
-	// (CA).
-	ValidationErrors  []CustomHostnameUpdateResponseSSLValidationError  `json:"validation_errors"`
-	ValidationRecords []CustomHostnameUpdateResponseSSLValidationRecord `json:"validation_records"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard bool                                `json:"wildcard"`
-	JSON     customHostnameUpdateResponseSSLJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseSSLJSON contains the JSON metadata for the struct
-// [CustomHostnameUpdateResponseSSL]
-type customHostnameUpdateResponseSSLJSON struct {
-	ID                   apijson.Field
-	BundleMethod         apijson.Field
-	CertificateAuthority apijson.Field
-	CustomCertificate    apijson.Field
-	CustomCsrID          apijson.Field
-	CustomKey            apijson.Field
-	ExpiresOn            apijson.Field
-	Hosts                apijson.Field
-	Issuer               apijson.Field
-	Method               apijson.Field
-	SerialNumber         apijson.Field
-	Settings             apijson.Field
-	Signature            apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	UploadedOn           apijson.Field
-	ValidationErrors     apijson.Field
-	ValidationRecords    apijson.Field
-	Wildcard             apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomHostnameUpdateResponseSSLBundleMethod string
-
-const (
-	CustomHostnameUpdateResponseSSLBundleMethodUbiquitous CustomHostnameUpdateResponseSSLBundleMethod = "ubiquitous"
-	CustomHostnameUpdateResponseSSLBundleMethodOptimal    CustomHostnameUpdateResponseSSLBundleMethod = "optimal"
-	CustomHostnameUpdateResponseSSLBundleMethodForce      CustomHostnameUpdateResponseSSLBundleMethod = "force"
-)
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameUpdateResponseSSLCertificateAuthority string
-
-const (
-	CustomHostnameUpdateResponseSSLCertificateAuthorityDigicert    CustomHostnameUpdateResponseSSLCertificateAuthority = "digicert"
-	CustomHostnameUpdateResponseSSLCertificateAuthorityGoogle      CustomHostnameUpdateResponseSSLCertificateAuthority = "google"
-	CustomHostnameUpdateResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameUpdateResponseSSLCertificateAuthority = "lets_encrypt"
-)
-
-// Domain control validation (DCV) method used for this hostname.
-type CustomHostnameUpdateResponseSSLMethod string
-
-const (
-	CustomHostnameUpdateResponseSSLMethodHTTP  CustomHostnameUpdateResponseSSLMethod = "http"
-	CustomHostnameUpdateResponseSSLMethodTxt   CustomHostnameUpdateResponseSSLMethod = "txt"
-	CustomHostnameUpdateResponseSSLMethodEmail CustomHostnameUpdateResponseSSLMethod = "email"
-)
-
-// SSL specific settings.
-type CustomHostnameUpdateResponseSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers []string `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints CustomHostnameUpdateResponseSSLSettingsEarlyHints `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 CustomHostnameUpdateResponseSSLSettingsHTTP2 `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion CustomHostnameUpdateResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 CustomHostnameUpdateResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
-	JSON   customHostnameUpdateResponseSSLSettingsJSON   `json:"-"`
-}
-
-// customHostnameUpdateResponseSSLSettingsJSON contains the JSON metadata for the
-// struct [CustomHostnameUpdateResponseSSLSettings]
-type customHostnameUpdateResponseSSLSettingsJSON struct {
-	Ciphers       apijson.Field
-	EarlyHints    apijson.Field
-	HTTP2         apijson.Field
-	MinTLSVersion apijson.Field
-	TLS1_3        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameUpdateResponseSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameUpdateResponseSSLSettingsEarlyHintsOn  CustomHostnameUpdateResponseSSLSettingsEarlyHints = "on"
-	CustomHostnameUpdateResponseSSLSettingsEarlyHintsOff CustomHostnameUpdateResponseSSLSettingsEarlyHints = "off"
-)
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameUpdateResponseSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameUpdateResponseSSLSettingsHTTP2On  CustomHostnameUpdateResponseSSLSettingsHTTP2 = "on"
-	CustomHostnameUpdateResponseSSLSettingsHTTP2Off CustomHostnameUpdateResponseSSLSettingsHTTP2 = "off"
-)
-
-// The minimum TLS version supported.
-type CustomHostnameUpdateResponseSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameUpdateResponseSSLSettingsMinTLSVersion1_0 CustomHostnameUpdateResponseSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameUpdateResponseSSLSettingsMinTLSVersion1_1 CustomHostnameUpdateResponseSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameUpdateResponseSSLSettingsMinTLSVersion1_2 CustomHostnameUpdateResponseSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameUpdateResponseSSLSettingsMinTLSVersion1_3 CustomHostnameUpdateResponseSSLSettingsMinTLSVersion = "1.3"
-)
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameUpdateResponseSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameUpdateResponseSSLSettingsTLS1_3On  CustomHostnameUpdateResponseSSLSettingsTLS1_3 = "on"
-	CustomHostnameUpdateResponseSSLSettingsTLS1_3Off CustomHostnameUpdateResponseSSLSettingsTLS1_3 = "off"
-)
-
-// Status of the hostname's SSL certificates.
-type CustomHostnameUpdateResponseSSLStatus string
-
-const (
-	CustomHostnameUpdateResponseSSLStatusInitializing         CustomHostnameUpdateResponseSSLStatus = "initializing"
-	CustomHostnameUpdateResponseSSLStatusPendingValidation    CustomHostnameUpdateResponseSSLStatus = "pending_validation"
-	CustomHostnameUpdateResponseSSLStatusDeleted              CustomHostnameUpdateResponseSSLStatus = "deleted"
-	CustomHostnameUpdateResponseSSLStatusPendingIssuance      CustomHostnameUpdateResponseSSLStatus = "pending_issuance"
-	CustomHostnameUpdateResponseSSLStatusPendingDeployment    CustomHostnameUpdateResponseSSLStatus = "pending_deployment"
-	CustomHostnameUpdateResponseSSLStatusPendingDeletion      CustomHostnameUpdateResponseSSLStatus = "pending_deletion"
-	CustomHostnameUpdateResponseSSLStatusPendingExpiration    CustomHostnameUpdateResponseSSLStatus = "pending_expiration"
-	CustomHostnameUpdateResponseSSLStatusExpired              CustomHostnameUpdateResponseSSLStatus = "expired"
-	CustomHostnameUpdateResponseSSLStatusActive               CustomHostnameUpdateResponseSSLStatus = "active"
-	CustomHostnameUpdateResponseSSLStatusInitializingTimedOut CustomHostnameUpdateResponseSSLStatus = "initializing_timed_out"
-	CustomHostnameUpdateResponseSSLStatusValidationTimedOut   CustomHostnameUpdateResponseSSLStatus = "validation_timed_out"
-	CustomHostnameUpdateResponseSSLStatusIssuanceTimedOut     CustomHostnameUpdateResponseSSLStatus = "issuance_timed_out"
-	CustomHostnameUpdateResponseSSLStatusDeploymentTimedOut   CustomHostnameUpdateResponseSSLStatus = "deployment_timed_out"
-	CustomHostnameUpdateResponseSSLStatusDeletionTimedOut     CustomHostnameUpdateResponseSSLStatus = "deletion_timed_out"
-	CustomHostnameUpdateResponseSSLStatusPendingCleanup       CustomHostnameUpdateResponseSSLStatus = "pending_cleanup"
-	CustomHostnameUpdateResponseSSLStatusStagingDeployment    CustomHostnameUpdateResponseSSLStatus = "staging_deployment"
-	CustomHostnameUpdateResponseSSLStatusStagingActive        CustomHostnameUpdateResponseSSLStatus = "staging_active"
-	CustomHostnameUpdateResponseSSLStatusDeactivating         CustomHostnameUpdateResponseSSLStatus = "deactivating"
-	CustomHostnameUpdateResponseSSLStatusInactive             CustomHostnameUpdateResponseSSLStatus = "inactive"
-	CustomHostnameUpdateResponseSSLStatusBackupIssued         CustomHostnameUpdateResponseSSLStatus = "backup_issued"
-	CustomHostnameUpdateResponseSSLStatusHoldingDeployment    CustomHostnameUpdateResponseSSLStatus = "holding_deployment"
-)
-
-// Level of validation to be used for this hostname. Domain validation (dv) must be
-// used.
-type CustomHostnameUpdateResponseSSLType string
-
-const (
-	CustomHostnameUpdateResponseSSLTypeDv CustomHostnameUpdateResponseSSLType = "dv"
-)
-
-type CustomHostnameUpdateResponseSSLValidationError struct {
-	// A domain validation error.
-	Message string                                             `json:"message"`
-	JSON    customHostnameUpdateResponseSSLValidationErrorJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseSSLValidationErrorJSON contains the JSON metadata
-// for the struct [CustomHostnameUpdateResponseSSLValidationError]
-type customHostnameUpdateResponseSSLValidationErrorJSON struct {
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Certificate's required validation record.
-type CustomHostnameUpdateResponseSSLValidationRecord struct {
-	// The set of email addresses that the certificate authority (CA) will use to
-	// complete domain validation.
-	Emails []interface{} `json:"emails"`
-	// The content that the certificate authority (CA) will expect to find at the
-	// http_url during the domain validation.
-	HTTPBody string `json:"http_body"`
-	// The url that will be checked during domain validation.
-	HTTPURL string `json:"http_url"`
-	// The hostname that the certificate authority (CA) will check for a TXT record
-	// during domain validation .
-	TxtName string `json:"txt_name"`
-	// The TXT record that the certificate authority (CA) will check during domain
-	// validation.
-	TxtValue string                                              `json:"txt_value"`
-	JSON     customHostnameUpdateResponseSSLValidationRecordJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseSSLValidationRecordJSON contains the JSON metadata
-// for the struct [CustomHostnameUpdateResponseSSLValidationRecord]
-type customHostnameUpdateResponseSSLValidationRecordJSON struct {
-	Emails      apijson.Field
-	HTTPBody    apijson.Field
-	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -986,6 +701,291 @@ type customHostnameDeleteResponseJSON struct {
 }
 
 func (r *CustomHostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomHostnameEditResponse struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// The custom hostname that will point to your hostname via CNAME.
+	Hostname string `json:"hostname,required"`
+	// SSL properties for the custom hostname.
+	SSL  CustomHostnameEditResponseSSL  `json:"ssl,required"`
+	JSON customHostnameEditResponseJSON `json:"-"`
+}
+
+// customHostnameEditResponseJSON contains the JSON metadata for the struct
+// [CustomHostnameEditResponse]
+type customHostnameEditResponseJSON struct {
+	ID          apijson.Field
+	Hostname    apijson.Field
+	SSL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// SSL properties for the custom hostname.
+type CustomHostnameEditResponseSSL struct {
+	// Custom hostname SSL identifier tag.
+	ID string `json:"id"`
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod CustomHostnameEditResponseSSLBundleMethod `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority CustomHostnameEditResponseSSLCertificateAuthority `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate string `json:"custom_certificate"`
+	// The identifier for the Custom CSR that was used.
+	CustomCsrID string `json:"custom_csr_id"`
+	// The key for a custom uploaded certificate.
+	CustomKey string `json:"custom_key"`
+	// The time the custom certificate expires on.
+	ExpiresOn time.Time `json:"expires_on" format:"date-time"`
+	// A list of Hostnames on a custom uploaded certificate.
+	Hosts []interface{} `json:"hosts"`
+	// The issuer on a custom uploaded certificate.
+	Issuer string `json:"issuer"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method CustomHostnameEditResponseSSLMethod `json:"method"`
+	// The serial number on a custom uploaded certificate.
+	SerialNumber string `json:"serial_number"`
+	// SSL specific settings.
+	Settings CustomHostnameEditResponseSSLSettings `json:"settings"`
+	// The signature on a custom uploaded certificate.
+	Signature string `json:"signature"`
+	// Status of the hostname's SSL certificates.
+	Status CustomHostnameEditResponseSSLStatus `json:"status"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type CustomHostnameEditResponseSSLType `json:"type"`
+	// The time the custom certificate was uploaded.
+	UploadedOn time.Time `json:"uploaded_on" format:"date-time"`
+	// Domain validation errors that have been received by the certificate authority
+	// (CA).
+	ValidationErrors  []CustomHostnameEditResponseSSLValidationError  `json:"validation_errors"`
+	ValidationRecords []CustomHostnameEditResponseSSLValidationRecord `json:"validation_records"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard bool                              `json:"wildcard"`
+	JSON     customHostnameEditResponseSSLJSON `json:"-"`
+}
+
+// customHostnameEditResponseSSLJSON contains the JSON metadata for the struct
+// [CustomHostnameEditResponseSSL]
+type customHostnameEditResponseSSLJSON struct {
+	ID                   apijson.Field
+	BundleMethod         apijson.Field
+	CertificateAuthority apijson.Field
+	CustomCertificate    apijson.Field
+	CustomCsrID          apijson.Field
+	CustomKey            apijson.Field
+	ExpiresOn            apijson.Field
+	Hosts                apijson.Field
+	Issuer               apijson.Field
+	Method               apijson.Field
+	SerialNumber         apijson.Field
+	Settings             apijson.Field
+	Signature            apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	UploadedOn           apijson.Field
+	ValidationErrors     apijson.Field
+	ValidationRecords    apijson.Field
+	Wildcard             apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseSSL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type CustomHostnameEditResponseSSLBundleMethod string
+
+const (
+	CustomHostnameEditResponseSSLBundleMethodUbiquitous CustomHostnameEditResponseSSLBundleMethod = "ubiquitous"
+	CustomHostnameEditResponseSSLBundleMethodOptimal    CustomHostnameEditResponseSSLBundleMethod = "optimal"
+	CustomHostnameEditResponseSSLBundleMethodForce      CustomHostnameEditResponseSSLBundleMethod = "force"
+)
+
+// The Certificate Authority that will issue the certificate
+type CustomHostnameEditResponseSSLCertificateAuthority string
+
+const (
+	CustomHostnameEditResponseSSLCertificateAuthorityDigicert    CustomHostnameEditResponseSSLCertificateAuthority = "digicert"
+	CustomHostnameEditResponseSSLCertificateAuthorityGoogle      CustomHostnameEditResponseSSLCertificateAuthority = "google"
+	CustomHostnameEditResponseSSLCertificateAuthorityLetsEncrypt CustomHostnameEditResponseSSLCertificateAuthority = "lets_encrypt"
+)
+
+// Domain control validation (DCV) method used for this hostname.
+type CustomHostnameEditResponseSSLMethod string
+
+const (
+	CustomHostnameEditResponseSSLMethodHTTP  CustomHostnameEditResponseSSLMethod = "http"
+	CustomHostnameEditResponseSSLMethodTxt   CustomHostnameEditResponseSSLMethod = "txt"
+	CustomHostnameEditResponseSSLMethodEmail CustomHostnameEditResponseSSLMethod = "email"
+)
+
+// SSL specific settings.
+type CustomHostnameEditResponseSSLSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers []string `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints CustomHostnameEditResponseSSLSettingsEarlyHints `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	HTTP2 CustomHostnameEditResponseSSLSettingsHTTP2 `json:"http2"`
+	// The minimum TLS version supported.
+	MinTLSVersion CustomHostnameEditResponseSSLSettingsMinTLSVersion `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	TLS1_3 CustomHostnameEditResponseSSLSettingsTLS1_3 `json:"tls_1_3"`
+	JSON   customHostnameEditResponseSSLSettingsJSON   `json:"-"`
+}
+
+// customHostnameEditResponseSSLSettingsJSON contains the JSON metadata for the
+// struct [CustomHostnameEditResponseSSLSettings]
+type customHostnameEditResponseSSLSettingsJSON struct {
+	Ciphers       apijson.Field
+	EarlyHints    apijson.Field
+	HTTP2         apijson.Field
+	MinTLSVersion apijson.Field
+	TLS1_3        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameEditResponseSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameEditResponseSSLSettingsEarlyHintsOn  CustomHostnameEditResponseSSLSettingsEarlyHints = "on"
+	CustomHostnameEditResponseSSLSettingsEarlyHintsOff CustomHostnameEditResponseSSLSettingsEarlyHints = "off"
+)
+
+// Whether or not HTTP2 is enabled.
+type CustomHostnameEditResponseSSLSettingsHTTP2 string
+
+const (
+	CustomHostnameEditResponseSSLSettingsHTTP2On  CustomHostnameEditResponseSSLSettingsHTTP2 = "on"
+	CustomHostnameEditResponseSSLSettingsHTTP2Off CustomHostnameEditResponseSSLSettingsHTTP2 = "off"
+)
+
+// The minimum TLS version supported.
+type CustomHostnameEditResponseSSLSettingsMinTLSVersion string
+
+const (
+	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_0 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.0"
+	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_1 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.1"
+	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_2 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.2"
+	CustomHostnameEditResponseSSLSettingsMinTLSVersion1_3 CustomHostnameEditResponseSSLSettingsMinTLSVersion = "1.3"
+)
+
+// Whether or not TLS 1.3 is enabled.
+type CustomHostnameEditResponseSSLSettingsTLS1_3 string
+
+const (
+	CustomHostnameEditResponseSSLSettingsTLS1_3On  CustomHostnameEditResponseSSLSettingsTLS1_3 = "on"
+	CustomHostnameEditResponseSSLSettingsTLS1_3Off CustomHostnameEditResponseSSLSettingsTLS1_3 = "off"
+)
+
+// Status of the hostname's SSL certificates.
+type CustomHostnameEditResponseSSLStatus string
+
+const (
+	CustomHostnameEditResponseSSLStatusInitializing         CustomHostnameEditResponseSSLStatus = "initializing"
+	CustomHostnameEditResponseSSLStatusPendingValidation    CustomHostnameEditResponseSSLStatus = "pending_validation"
+	CustomHostnameEditResponseSSLStatusDeleted              CustomHostnameEditResponseSSLStatus = "deleted"
+	CustomHostnameEditResponseSSLStatusPendingIssuance      CustomHostnameEditResponseSSLStatus = "pending_issuance"
+	CustomHostnameEditResponseSSLStatusPendingDeployment    CustomHostnameEditResponseSSLStatus = "pending_deployment"
+	CustomHostnameEditResponseSSLStatusPendingDeletion      CustomHostnameEditResponseSSLStatus = "pending_deletion"
+	CustomHostnameEditResponseSSLStatusPendingExpiration    CustomHostnameEditResponseSSLStatus = "pending_expiration"
+	CustomHostnameEditResponseSSLStatusExpired              CustomHostnameEditResponseSSLStatus = "expired"
+	CustomHostnameEditResponseSSLStatusActive               CustomHostnameEditResponseSSLStatus = "active"
+	CustomHostnameEditResponseSSLStatusInitializingTimedOut CustomHostnameEditResponseSSLStatus = "initializing_timed_out"
+	CustomHostnameEditResponseSSLStatusValidationTimedOut   CustomHostnameEditResponseSSLStatus = "validation_timed_out"
+	CustomHostnameEditResponseSSLStatusIssuanceTimedOut     CustomHostnameEditResponseSSLStatus = "issuance_timed_out"
+	CustomHostnameEditResponseSSLStatusDeploymentTimedOut   CustomHostnameEditResponseSSLStatus = "deployment_timed_out"
+	CustomHostnameEditResponseSSLStatusDeletionTimedOut     CustomHostnameEditResponseSSLStatus = "deletion_timed_out"
+	CustomHostnameEditResponseSSLStatusPendingCleanup       CustomHostnameEditResponseSSLStatus = "pending_cleanup"
+	CustomHostnameEditResponseSSLStatusStagingDeployment    CustomHostnameEditResponseSSLStatus = "staging_deployment"
+	CustomHostnameEditResponseSSLStatusStagingActive        CustomHostnameEditResponseSSLStatus = "staging_active"
+	CustomHostnameEditResponseSSLStatusDeactivating         CustomHostnameEditResponseSSLStatus = "deactivating"
+	CustomHostnameEditResponseSSLStatusInactive             CustomHostnameEditResponseSSLStatus = "inactive"
+	CustomHostnameEditResponseSSLStatusBackupIssued         CustomHostnameEditResponseSSLStatus = "backup_issued"
+	CustomHostnameEditResponseSSLStatusHoldingDeployment    CustomHostnameEditResponseSSLStatus = "holding_deployment"
+)
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type CustomHostnameEditResponseSSLType string
+
+const (
+	CustomHostnameEditResponseSSLTypeDv CustomHostnameEditResponseSSLType = "dv"
+)
+
+type CustomHostnameEditResponseSSLValidationError struct {
+	// A domain validation error.
+	Message string                                           `json:"message"`
+	JSON    customHostnameEditResponseSSLValidationErrorJSON `json:"-"`
+}
+
+// customHostnameEditResponseSSLValidationErrorJSON contains the JSON metadata for
+// the struct [CustomHostnameEditResponseSSLValidationError]
+type customHostnameEditResponseSSLValidationErrorJSON struct {
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseSSLValidationError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate's required validation record.
+type CustomHostnameEditResponseSSLValidationRecord struct {
+	// The set of email addresses that the certificate authority (CA) will use to
+	// complete domain validation.
+	Emails []interface{} `json:"emails"`
+	// The content that the certificate authority (CA) will expect to find at the
+	// http_url during the domain validation.
+	HTTPBody string `json:"http_body"`
+	// The url that will be checked during domain validation.
+	HTTPURL string `json:"http_url"`
+	// The hostname that the certificate authority (CA) will check for a TXT record
+	// during domain validation .
+	TxtName string `json:"txt_name"`
+	// The TXT record that the certificate authority (CA) will check during domain
+	// validation.
+	TxtValue string                                            `json:"txt_value"`
+	JSON     customHostnameEditResponseSSLValidationRecordJSON `json:"-"`
+}
+
+// customHostnameEditResponseSSLValidationRecordJSON contains the JSON metadata for
+// the struct [CustomHostnameEditResponseSSLValidationRecord]
+type customHostnameEditResponseSSLValidationRecordJSON struct {
+	Emails      apijson.Field
+	HTTPBody    apijson.Field
+	HTTPURL     apijson.Field
+	TxtName     apijson.Field
+	TxtValue    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1485,224 +1485,6 @@ const (
 	CustomHostnameNewResponseEnvelopeSuccessTrue CustomHostnameNewResponseEnvelopeSuccess = true
 )
 
-type CustomHostnameUpdateParams struct {
-	// These are per-hostname (customer) settings.
-	CustomMetadata param.Field[CustomHostnameUpdateParamsCustomMetadata] `json:"custom_metadata"`
-	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
-	// record.
-	CustomOriginServer param.Field[string] `json:"custom_origin_server"`
-	// A hostname that will be sent to your custom origin server as SNI for TLS
-	// handshake. This can be a valid subdomain of the zone or custom origin server
-	// name or the string ':request_host_header:' which will cause the host header in
-	// the request to be used as SNI. Not configurable with default/fallback origin
-	// server.
-	CustomOriginSni param.Field[string] `json:"custom_origin_sni"`
-	// SSL properties used when creating the custom hostname.
-	SSL param.Field[CustomHostnameUpdateParamsSSL] `json:"ssl"`
-}
-
-func (r CustomHostnameUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// These are per-hostname (customer) settings.
-type CustomHostnameUpdateParamsCustomMetadata struct {
-	// Unique metadata for this hostname.
-	Key param.Field[string] `json:"key"`
-}
-
-func (r CustomHostnameUpdateParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// SSL properties used when creating the custom hostname.
-type CustomHostnameUpdateParamsSSL struct {
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod param.Field[CustomHostnameUpdateParamsSSLBundleMethod] `json:"bundle_method"`
-	// The Certificate Authority that will issue the certificate
-	CertificateAuthority param.Field[CustomHostnameUpdateParamsSSLCertificateAuthority] `json:"certificate_authority"`
-	// If a custom uploaded certificate is used.
-	CustomCertificate param.Field[string] `json:"custom_certificate"`
-	// The key for a custom uploaded certificate.
-	CustomKey param.Field[string] `json:"custom_key"`
-	// Domain control validation (DCV) method used for this hostname.
-	Method param.Field[CustomHostnameUpdateParamsSSLMethod] `json:"method"`
-	// SSL specific settings.
-	Settings param.Field[CustomHostnameUpdateParamsSSLSettings] `json:"settings"`
-	// Level of validation to be used for this hostname. Domain validation (dv) must be
-	// used.
-	Type param.Field[CustomHostnameUpdateParamsSSLType] `json:"type"`
-	// Indicates whether the certificate covers a wildcard.
-	Wildcard param.Field[bool] `json:"wildcard"`
-}
-
-func (r CustomHostnameUpdateParamsSSL) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomHostnameUpdateParamsSSLBundleMethod string
-
-const (
-	CustomHostnameUpdateParamsSSLBundleMethodUbiquitous CustomHostnameUpdateParamsSSLBundleMethod = "ubiquitous"
-	CustomHostnameUpdateParamsSSLBundleMethodOptimal    CustomHostnameUpdateParamsSSLBundleMethod = "optimal"
-	CustomHostnameUpdateParamsSSLBundleMethodForce      CustomHostnameUpdateParamsSSLBundleMethod = "force"
-)
-
-// The Certificate Authority that will issue the certificate
-type CustomHostnameUpdateParamsSSLCertificateAuthority string
-
-const (
-	CustomHostnameUpdateParamsSSLCertificateAuthorityDigicert    CustomHostnameUpdateParamsSSLCertificateAuthority = "digicert"
-	CustomHostnameUpdateParamsSSLCertificateAuthorityGoogle      CustomHostnameUpdateParamsSSLCertificateAuthority = "google"
-	CustomHostnameUpdateParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameUpdateParamsSSLCertificateAuthority = "lets_encrypt"
-)
-
-// Domain control validation (DCV) method used for this hostname.
-type CustomHostnameUpdateParamsSSLMethod string
-
-const (
-	CustomHostnameUpdateParamsSSLMethodHTTP  CustomHostnameUpdateParamsSSLMethod = "http"
-	CustomHostnameUpdateParamsSSLMethodTxt   CustomHostnameUpdateParamsSSLMethod = "txt"
-	CustomHostnameUpdateParamsSSLMethodEmail CustomHostnameUpdateParamsSSLMethod = "email"
-)
-
-// SSL specific settings.
-type CustomHostnameUpdateParamsSSLSettings struct {
-	// An allowlist of ciphers for TLS termination. These ciphers must be in the
-	// BoringSSL format.
-	Ciphers param.Field[[]string] `json:"ciphers"`
-	// Whether or not Early Hints is enabled.
-	EarlyHints param.Field[CustomHostnameUpdateParamsSSLSettingsEarlyHints] `json:"early_hints"`
-	// Whether or not HTTP2 is enabled.
-	HTTP2 param.Field[CustomHostnameUpdateParamsSSLSettingsHTTP2] `json:"http2"`
-	// The minimum TLS version supported.
-	MinTLSVersion param.Field[CustomHostnameUpdateParamsSSLSettingsMinTLSVersion] `json:"min_tls_version"`
-	// Whether or not TLS 1.3 is enabled.
-	TLS1_3 param.Field[CustomHostnameUpdateParamsSSLSettingsTLS1_3] `json:"tls_1_3"`
-}
-
-func (r CustomHostnameUpdateParamsSSLSettings) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Whether or not Early Hints is enabled.
-type CustomHostnameUpdateParamsSSLSettingsEarlyHints string
-
-const (
-	CustomHostnameUpdateParamsSSLSettingsEarlyHintsOn  CustomHostnameUpdateParamsSSLSettingsEarlyHints = "on"
-	CustomHostnameUpdateParamsSSLSettingsEarlyHintsOff CustomHostnameUpdateParamsSSLSettingsEarlyHints = "off"
-)
-
-// Whether or not HTTP2 is enabled.
-type CustomHostnameUpdateParamsSSLSettingsHTTP2 string
-
-const (
-	CustomHostnameUpdateParamsSSLSettingsHTTP2On  CustomHostnameUpdateParamsSSLSettingsHTTP2 = "on"
-	CustomHostnameUpdateParamsSSLSettingsHTTP2Off CustomHostnameUpdateParamsSSLSettingsHTTP2 = "off"
-)
-
-// The minimum TLS version supported.
-type CustomHostnameUpdateParamsSSLSettingsMinTLSVersion string
-
-const (
-	CustomHostnameUpdateParamsSSLSettingsMinTLSVersion1_0 CustomHostnameUpdateParamsSSLSettingsMinTLSVersion = "1.0"
-	CustomHostnameUpdateParamsSSLSettingsMinTLSVersion1_1 CustomHostnameUpdateParamsSSLSettingsMinTLSVersion = "1.1"
-	CustomHostnameUpdateParamsSSLSettingsMinTLSVersion1_2 CustomHostnameUpdateParamsSSLSettingsMinTLSVersion = "1.2"
-	CustomHostnameUpdateParamsSSLSettingsMinTLSVersion1_3 CustomHostnameUpdateParamsSSLSettingsMinTLSVersion = "1.3"
-)
-
-// Whether or not TLS 1.3 is enabled.
-type CustomHostnameUpdateParamsSSLSettingsTLS1_3 string
-
-const (
-	CustomHostnameUpdateParamsSSLSettingsTLS1_3On  CustomHostnameUpdateParamsSSLSettingsTLS1_3 = "on"
-	CustomHostnameUpdateParamsSSLSettingsTLS1_3Off CustomHostnameUpdateParamsSSLSettingsTLS1_3 = "off"
-)
-
-// Level of validation to be used for this hostname. Domain validation (dv) must be
-// used.
-type CustomHostnameUpdateParamsSSLType string
-
-const (
-	CustomHostnameUpdateParamsSSLTypeDv CustomHostnameUpdateParamsSSLType = "dv"
-)
-
-type CustomHostnameUpdateResponseEnvelope struct {
-	Errors   []CustomHostnameUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomHostnameUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomHostnameUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success CustomHostnameUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    customHostnameUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// customHostnameUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CustomHostnameUpdateResponseEnvelope]
-type customHostnameUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    customHostnameUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CustomHostnameUpdateResponseEnvelopeErrors]
-type customHostnameUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    customHostnameUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customHostnameUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CustomHostnameUpdateResponseEnvelopeMessages]
-type customHostnameUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CustomHostnameUpdateResponseEnvelopeSuccess bool
-
-const (
-	CustomHostnameUpdateResponseEnvelopeSuccessTrue CustomHostnameUpdateResponseEnvelopeSuccess = true
-)
-
 type CustomHostnameListParams struct {
 	// Hostname ID to match against. This ID was generated and returned during the
 	// initial custom_hostname creation. This parameter cannot be used with the
@@ -1754,6 +1536,224 @@ type CustomHostnameListParamsSSL float64
 const (
 	CustomHostnameListParamsSSL0 CustomHostnameListParamsSSL = 0
 	CustomHostnameListParamsSSL1 CustomHostnameListParamsSSL = 1
+)
+
+type CustomHostnameEditParams struct {
+	// These are per-hostname (customer) settings.
+	CustomMetadata param.Field[CustomHostnameEditParamsCustomMetadata] `json:"custom_metadata"`
+	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
+	// record.
+	CustomOriginServer param.Field[string] `json:"custom_origin_server"`
+	// A hostname that will be sent to your custom origin server as SNI for TLS
+	// handshake. This can be a valid subdomain of the zone or custom origin server
+	// name or the string ':request_host_header:' which will cause the host header in
+	// the request to be used as SNI. Not configurable with default/fallback origin
+	// server.
+	CustomOriginSni param.Field[string] `json:"custom_origin_sni"`
+	// SSL properties used when creating the custom hostname.
+	SSL param.Field[CustomHostnameEditParamsSSL] `json:"ssl"`
+}
+
+func (r CustomHostnameEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// These are per-hostname (customer) settings.
+type CustomHostnameEditParamsCustomMetadata struct {
+	// Unique metadata for this hostname.
+	Key param.Field[string] `json:"key"`
+}
+
+func (r CustomHostnameEditParamsCustomMetadata) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// SSL properties used when creating the custom hostname.
+type CustomHostnameEditParamsSSL struct {
+	// A ubiquitous bundle has the highest probability of being verified everywhere,
+	// even by clients using outdated or unusual trust stores. An optimal bundle uses
+	// the shortest chain and newest intermediates. And the force bundle verifies the
+	// chain, but does not otherwise modify it.
+	BundleMethod param.Field[CustomHostnameEditParamsSSLBundleMethod] `json:"bundle_method"`
+	// The Certificate Authority that will issue the certificate
+	CertificateAuthority param.Field[CustomHostnameEditParamsSSLCertificateAuthority] `json:"certificate_authority"`
+	// If a custom uploaded certificate is used.
+	CustomCertificate param.Field[string] `json:"custom_certificate"`
+	// The key for a custom uploaded certificate.
+	CustomKey param.Field[string] `json:"custom_key"`
+	// Domain control validation (DCV) method used for this hostname.
+	Method param.Field[CustomHostnameEditParamsSSLMethod] `json:"method"`
+	// SSL specific settings.
+	Settings param.Field[CustomHostnameEditParamsSSLSettings] `json:"settings"`
+	// Level of validation to be used for this hostname. Domain validation (dv) must be
+	// used.
+	Type param.Field[CustomHostnameEditParamsSSLType] `json:"type"`
+	// Indicates whether the certificate covers a wildcard.
+	Wildcard param.Field[bool] `json:"wildcard"`
+}
+
+func (r CustomHostnameEditParamsSSL) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A ubiquitous bundle has the highest probability of being verified everywhere,
+// even by clients using outdated or unusual trust stores. An optimal bundle uses
+// the shortest chain and newest intermediates. And the force bundle verifies the
+// chain, but does not otherwise modify it.
+type CustomHostnameEditParamsSSLBundleMethod string
+
+const (
+	CustomHostnameEditParamsSSLBundleMethodUbiquitous CustomHostnameEditParamsSSLBundleMethod = "ubiquitous"
+	CustomHostnameEditParamsSSLBundleMethodOptimal    CustomHostnameEditParamsSSLBundleMethod = "optimal"
+	CustomHostnameEditParamsSSLBundleMethodForce      CustomHostnameEditParamsSSLBundleMethod = "force"
+)
+
+// The Certificate Authority that will issue the certificate
+type CustomHostnameEditParamsSSLCertificateAuthority string
+
+const (
+	CustomHostnameEditParamsSSLCertificateAuthorityDigicert    CustomHostnameEditParamsSSLCertificateAuthority = "digicert"
+	CustomHostnameEditParamsSSLCertificateAuthorityGoogle      CustomHostnameEditParamsSSLCertificateAuthority = "google"
+	CustomHostnameEditParamsSSLCertificateAuthorityLetsEncrypt CustomHostnameEditParamsSSLCertificateAuthority = "lets_encrypt"
+)
+
+// Domain control validation (DCV) method used for this hostname.
+type CustomHostnameEditParamsSSLMethod string
+
+const (
+	CustomHostnameEditParamsSSLMethodHTTP  CustomHostnameEditParamsSSLMethod = "http"
+	CustomHostnameEditParamsSSLMethodTxt   CustomHostnameEditParamsSSLMethod = "txt"
+	CustomHostnameEditParamsSSLMethodEmail CustomHostnameEditParamsSSLMethod = "email"
+)
+
+// SSL specific settings.
+type CustomHostnameEditParamsSSLSettings struct {
+	// An allowlist of ciphers for TLS termination. These ciphers must be in the
+	// BoringSSL format.
+	Ciphers param.Field[[]string] `json:"ciphers"`
+	// Whether or not Early Hints is enabled.
+	EarlyHints param.Field[CustomHostnameEditParamsSSLSettingsEarlyHints] `json:"early_hints"`
+	// Whether or not HTTP2 is enabled.
+	HTTP2 param.Field[CustomHostnameEditParamsSSLSettingsHTTP2] `json:"http2"`
+	// The minimum TLS version supported.
+	MinTLSVersion param.Field[CustomHostnameEditParamsSSLSettingsMinTLSVersion] `json:"min_tls_version"`
+	// Whether or not TLS 1.3 is enabled.
+	TLS1_3 param.Field[CustomHostnameEditParamsSSLSettingsTLS1_3] `json:"tls_1_3"`
+}
+
+func (r CustomHostnameEditParamsSSLSettings) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether or not Early Hints is enabled.
+type CustomHostnameEditParamsSSLSettingsEarlyHints string
+
+const (
+	CustomHostnameEditParamsSSLSettingsEarlyHintsOn  CustomHostnameEditParamsSSLSettingsEarlyHints = "on"
+	CustomHostnameEditParamsSSLSettingsEarlyHintsOff CustomHostnameEditParamsSSLSettingsEarlyHints = "off"
+)
+
+// Whether or not HTTP2 is enabled.
+type CustomHostnameEditParamsSSLSettingsHTTP2 string
+
+const (
+	CustomHostnameEditParamsSSLSettingsHTTP2On  CustomHostnameEditParamsSSLSettingsHTTP2 = "on"
+	CustomHostnameEditParamsSSLSettingsHTTP2Off CustomHostnameEditParamsSSLSettingsHTTP2 = "off"
+)
+
+// The minimum TLS version supported.
+type CustomHostnameEditParamsSSLSettingsMinTLSVersion string
+
+const (
+	CustomHostnameEditParamsSSLSettingsMinTLSVersion1_0 CustomHostnameEditParamsSSLSettingsMinTLSVersion = "1.0"
+	CustomHostnameEditParamsSSLSettingsMinTLSVersion1_1 CustomHostnameEditParamsSSLSettingsMinTLSVersion = "1.1"
+	CustomHostnameEditParamsSSLSettingsMinTLSVersion1_2 CustomHostnameEditParamsSSLSettingsMinTLSVersion = "1.2"
+	CustomHostnameEditParamsSSLSettingsMinTLSVersion1_3 CustomHostnameEditParamsSSLSettingsMinTLSVersion = "1.3"
+)
+
+// Whether or not TLS 1.3 is enabled.
+type CustomHostnameEditParamsSSLSettingsTLS1_3 string
+
+const (
+	CustomHostnameEditParamsSSLSettingsTLS1_3On  CustomHostnameEditParamsSSLSettingsTLS1_3 = "on"
+	CustomHostnameEditParamsSSLSettingsTLS1_3Off CustomHostnameEditParamsSSLSettingsTLS1_3 = "off"
+)
+
+// Level of validation to be used for this hostname. Domain validation (dv) must be
+// used.
+type CustomHostnameEditParamsSSLType string
+
+const (
+	CustomHostnameEditParamsSSLTypeDv CustomHostnameEditParamsSSLType = "dv"
+)
+
+type CustomHostnameEditResponseEnvelope struct {
+	Errors   []CustomHostnameEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomHostnameEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   CustomHostnameEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CustomHostnameEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    customHostnameEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// customHostnameEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CustomHostnameEditResponseEnvelope]
+type customHostnameEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomHostnameEditResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    customHostnameEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// customHostnameEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [CustomHostnameEditResponseEnvelopeErrors]
+type customHostnameEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomHostnameEditResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    customHostnameEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// customHostnameEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CustomHostnameEditResponseEnvelopeMessages]
+type customHostnameEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CustomHostnameEditResponseEnvelopeSuccess bool
+
+const (
+	CustomHostnameEditResponseEnvelopeSuccessTrue CustomHostnameEditResponseEnvelopeSuccess = true
 )
 
 type CustomHostnameGetResponseEnvelope struct {

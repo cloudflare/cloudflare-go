@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingTLS1_3Update(t *testing.T) {
+func TestSettingTLS1_3Edit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestSettingTLS1_3Update(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.TLS1_3.Update(
+	_, err := client.Settings.TLS1_3.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingTLS1_3UpdateParams{
-			Value: cloudflare.F(cloudflare.SettingTls1_3UpdateParamsValueOn),
+		cloudflare.SettingTLS1_3EditParams{
+			Value: cloudflare.F(cloudflare.SettingTls1_3EditParamsValueOn),
 		},
 	)
 	if err != nil {

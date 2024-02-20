@@ -34,6 +34,19 @@ func NewCustomHostnameFallbackOriginService(opts ...option.RequestOption) (r *Cu
 	return
 }
 
+// Update Fallback Origin for Custom Hostnames
+func (r *CustomHostnameFallbackOriginService) Update(ctx context.Context, zoneID string, body CustomHostnameFallbackOriginUpdateParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CustomHostnameFallbackOriginUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Delete Fallback Origin for Custom Hostnames
 func (r *CustomHostnameFallbackOriginService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -60,17 +73,21 @@ func (r *CustomHostnameFallbackOriginService) Get(ctx context.Context, zoneID st
 	return
 }
 
-// Update Fallback Origin for Custom Hostnames
-func (r *CustomHostnameFallbackOriginService) Replace(ctx context.Context, zoneID string, body CustomHostnameFallbackOriginReplaceParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CustomHostnameFallbackOriginReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [CustomHostnameFallbackOriginUpdateResponseUnknown] or
+// [shared.UnionString].
+type CustomHostnameFallbackOriginUpdateResponse interface {
+	ImplementsCustomHostnameFallbackOriginUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomHostnameFallbackOriginUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [CustomHostnameFallbackOriginDeleteResponseUnknown] or
@@ -107,22 +124,85 @@ func init() {
 	)
 }
 
-// Union satisfied by [CustomHostnameFallbackOriginReplaceResponseUnknown] or
-// [shared.UnionString].
-type CustomHostnameFallbackOriginReplaceResponse interface {
-	ImplementsCustomHostnameFallbackOriginReplaceResponse()
+type CustomHostnameFallbackOriginUpdateParams struct {
+	// Your origin hostname that requests to your custom hostnames will be sent to.
+	Origin param.Field[string] `json:"origin,required"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomHostnameFallbackOriginReplaceResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r CustomHostnameFallbackOriginUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
+
+type CustomHostnameFallbackOriginUpdateResponseEnvelope struct {
+	Errors   []CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   CustomHostnameFallbackOriginUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    customHostnameFallbackOriginUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// customHostnameFallbackOriginUpdateResponseEnvelopeJSON contains the JSON
+// metadata for the struct [CustomHostnameFallbackOriginUpdateResponseEnvelope]
+type customHostnameFallbackOriginUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameFallbackOriginUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    customHostnameFallbackOriginUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// customHostnameFallbackOriginUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors]
+type customHostnameFallbackOriginUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    customHostnameFallbackOriginUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// customHostnameFallbackOriginUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages]
+type customHostnameFallbackOriginUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccess bool
+
+const (
+	CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccessTrue CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccess = true
+)
 
 type CustomHostnameFallbackOriginDeleteResponseEnvelope struct {
 	Errors   []CustomHostnameFallbackOriginDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -263,84 +343,4 @@ type CustomHostnameFallbackOriginGetResponseEnvelopeSuccess bool
 
 const (
 	CustomHostnameFallbackOriginGetResponseEnvelopeSuccessTrue CustomHostnameFallbackOriginGetResponseEnvelopeSuccess = true
-)
-
-type CustomHostnameFallbackOriginReplaceParams struct {
-	// Your origin hostname that requests to your custom hostnames will be sent to.
-	Origin param.Field[string] `json:"origin,required"`
-}
-
-func (r CustomHostnameFallbackOriginReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CustomHostnameFallbackOriginReplaceResponseEnvelope struct {
-	Errors   []CustomHostnameFallbackOriginReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CustomHostnameFallbackOriginReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   CustomHostnameFallbackOriginReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success CustomHostnameFallbackOriginReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    customHostnameFallbackOriginReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// customHostnameFallbackOriginReplaceResponseEnvelopeJSON contains the JSON
-// metadata for the struct [CustomHostnameFallbackOriginReplaceResponseEnvelope]
-type customHostnameFallbackOriginReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameFallbackOriginReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameFallbackOriginReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    customHostnameFallbackOriginReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// customHostnameFallbackOriginReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [CustomHostnameFallbackOriginReplaceResponseEnvelopeErrors]
-type customHostnameFallbackOriginReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameFallbackOriginReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomHostnameFallbackOriginReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    customHostnameFallbackOriginReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// customHostnameFallbackOriginReplaceResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [CustomHostnameFallbackOriginReplaceResponseEnvelopeMessages]
-type customHostnameFallbackOriginReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomHostnameFallbackOriginReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CustomHostnameFallbackOriginReplaceResponseEnvelopeSuccess bool
-
-const (
-	CustomHostnameFallbackOriginReplaceResponseEnvelopeSuccessTrue CustomHostnameFallbackOriginReplaceResponseEnvelopeSuccess = true
 )

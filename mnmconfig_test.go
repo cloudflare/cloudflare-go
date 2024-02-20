@@ -117,7 +117,7 @@ func TestMnmConfigDelete(t *testing.T) {
 	}
 }
 
-func TestMnmConfigReplace(t *testing.T) {
+func TestMnmConfigEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -133,7 +133,7 @@ func TestMnmConfigReplace(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Mnms.Configs.Replace(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.Mnms.Configs.Edit(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

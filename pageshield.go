@@ -36,6 +36,19 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 	return
 }
 
+// Updates Page Shield settings.
+func (r *PageShieldService) Update(ctx context.Context, zoneID string, body PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageShieldUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/page_shield", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the Page Shield settings.
 func (r *PageShieldService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *PageShieldListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -49,17 +62,32 @@ func (r *PageShieldService) List(ctx context.Context, zoneID string, opts ...opt
 	return
 }
 
-// Updates Page Shield settings.
-func (r *PageShieldService) Replace(ctx context.Context, zoneID string, body PageShieldReplaceParams, opts ...option.RequestOption) (res *PageShieldReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageShieldReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type PageShieldUpdateResponse struct {
+	// When true, indicates that Page Shield is enabled.
+	Enabled bool `json:"enabled"`
+	// The timestamp of when Page Shield was last updated.
+	UpdatedAt string `json:"updated_at"`
+	// When true, CSP reports will be sent to
+	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
+	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	// When true, the paths associated with connections URLs will also be analyzed.
+	UseConnectionURLPath bool                         `json:"use_connection_url_path"`
+	JSON                 pageShieldUpdateResponseJSON `json:"-"`
+}
+
+// pageShieldUpdateResponseJSON contains the JSON metadata for the struct
+// [PageShieldUpdateResponse]
+type pageShieldUpdateResponseJSON struct {
+	Enabled                        apijson.Field
+	UpdatedAt                      apijson.Field
+	UseCloudflareReportingEndpoint apijson.Field
+	UseConnectionURLPath           apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *PageShieldUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type PageShieldListResponse struct {
@@ -90,33 +118,88 @@ func (r *PageShieldListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldReplaceResponse struct {
+type PageShieldUpdateParams struct {
 	// When true, indicates that Page Shield is enabled.
-	Enabled bool `json:"enabled"`
-	// The timestamp of when Page Shield was last updated.
-	UpdatedAt string `json:"updated_at"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// When true, CSP reports will be sent to
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
+	UseCloudflareReportingEndpoint param.Field[bool] `json:"use_cloudflare_reporting_endpoint"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                          `json:"use_connection_url_path"`
-	JSON                 pageShieldReplaceResponseJSON `json:"-"`
+	UseConnectionURLPath param.Field[bool] `json:"use_connection_url_path"`
 }
 
-// pageShieldReplaceResponseJSON contains the JSON metadata for the struct
-// [PageShieldReplaceResponse]
-type pageShieldReplaceResponseJSON struct {
-	Enabled                        apijson.Field
-	UpdatedAt                      apijson.Field
-	UseCloudflareReportingEndpoint apijson.Field
-	UseConnectionURLPath           apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
+func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *PageShieldReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+type PageShieldUpdateResponseEnvelope struct {
+	Errors   []PageShieldUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageShieldUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageShieldUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageShieldUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageShieldUpdateResponseEnvelope]
+type pageShieldUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type PageShieldUpdateResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    pageShieldUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageShieldUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageShieldUpdateResponseEnvelopeErrors]
+type pageShieldUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldUpdateResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    pageShieldUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageShieldUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageShieldUpdateResponseEnvelopeMessages]
+type pageShieldUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageShieldUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageShieldUpdateResponseEnvelopeSuccess bool
+
+const (
+	PageShieldUpdateResponseEnvelopeSuccessTrue PageShieldUpdateResponseEnvelopeSuccess = true
+)
 
 type PageShieldListResponseEnvelope struct {
 	Errors   []PageShieldListResponseEnvelopeErrors   `json:"errors,required"`
@@ -185,87 +268,4 @@ type PageShieldListResponseEnvelopeSuccess bool
 
 const (
 	PageShieldListResponseEnvelopeSuccessTrue PageShieldListResponseEnvelopeSuccess = true
-)
-
-type PageShieldReplaceParams struct {
-	// When true, indicates that Page Shield is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// When true, CSP reports will be sent to
-	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
-	UseCloudflareReportingEndpoint param.Field[bool] `json:"use_cloudflare_reporting_endpoint"`
-	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath param.Field[bool] `json:"use_connection_url_path"`
-}
-
-func (r PageShieldReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type PageShieldReplaceResponseEnvelope struct {
-	Errors   []PageShieldReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageShieldReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageShieldReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success PageShieldReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// pageShieldReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PageShieldReplaceResponseEnvelope]
-type pageShieldReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldReplaceResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    pageShieldReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageShieldReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PageShieldReplaceResponseEnvelopeErrors]
-type pageShieldReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldReplaceResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    pageShieldReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageShieldReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PageShieldReplaceResponseEnvelopeMessages]
-type pageShieldReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageShieldReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type PageShieldReplaceResponseEnvelopeSuccess bool
-
-const (
-	PageShieldReplaceResponseEnvelopeSuccessTrue PageShieldReplaceResponseEnvelopeSuccess = true
 )

@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerScriptContentReplaceWithOptionalParams(t *testing.T) {
+func TestWorkerScriptContentUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,13 +31,13 @@ func TestWorkerScriptContentReplaceWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.WorkerScripts.Content.Replace(
+	_, err := client.WorkerScripts.Content.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
-		cloudflare.WorkerScriptContentReplaceParams{
+		cloudflare.WorkerScriptContentUpdateParams{
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Metadata: cloudflare.F(cloudflare.WorkerScriptContentReplaceParamsMetadata{
+			Metadata: cloudflare.F(cloudflare.WorkerScriptContentUpdateParamsMetadata{
 				BodyPart:   cloudflare.F("worker.js"),
 				MainModule: cloudflare.F("worker.js"),
 			}),

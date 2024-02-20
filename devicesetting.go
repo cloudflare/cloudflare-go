@@ -31,6 +31,19 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 	return
 }
 
+// Updates the current device settings for a Zero Trust account.
+func (r *DeviceSettingService) Update(ctx context.Context, identifier interface{}, body DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettingUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DeviceSettingUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Describes the current device settings for a Zero Trust account.
 func (r *DeviceSettingService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *DeviceSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -44,17 +57,31 @@ func (r *DeviceSettingService) List(ctx context.Context, identifier interface{},
 	return
 }
 
-// Updates the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) Replace(ctx context.Context, identifier interface{}, body DeviceSettingReplaceParams, opts ...option.RequestOption) (res *DeviceSettingReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceSettingReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type DeviceSettingUpdateResponse struct {
+	// Enable gateway proxy filtering on TCP.
+	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
+	// Enable gateway proxy filtering on UDP.
+	GatewayUdpProxyEnabled bool `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP bool                            `json:"use_zt_virtual_ip"`
+	JSON           deviceSettingUpdateResponseJSON `json:"-"`
+}
+
+// deviceSettingUpdateResponseJSON contains the JSON metadata for the struct
+// [DeviceSettingUpdateResponse]
+type deviceSettingUpdateResponseJSON struct {
+	GatewayProxyEnabled                apijson.Field
+	GatewayUdpProxyEnabled             apijson.Field
+	RootCertificateInstallationEnabled apijson.Field
+	UseZtVirtualIP                     apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DeviceSettingListResponse struct {
@@ -84,32 +111,89 @@ func (r *DeviceSettingListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingReplaceResponse struct {
+type DeviceSettingUpdateParams struct {
 	// Enable gateway proxy filtering on TCP.
-	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
+	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
-	GatewayUdpProxyEnabled bool `json:"gateway_udp_proxy_enabled"`
+	GatewayUdpProxyEnabled param.Field[bool] `json:"gateway_udp_proxy_enabled"`
 	// Enable installation of cloudflare managed root certificate.
-	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	RootCertificateInstallationEnabled param.Field[bool] `json:"root_certificate_installation_enabled"`
 	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP bool                             `json:"use_zt_virtual_ip"`
-	JSON           deviceSettingReplaceResponseJSON `json:"-"`
+	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
 }
 
-// deviceSettingReplaceResponseJSON contains the JSON metadata for the struct
-// [DeviceSettingReplaceResponse]
-type deviceSettingReplaceResponseJSON struct {
-	GatewayProxyEnabled                apijson.Field
-	GatewayUdpProxyEnabled             apijson.Field
-	RootCertificateInstallationEnabled apijson.Field
-	UseZtVirtualIP                     apijson.Field
-	raw                                string
-	ExtraFields                        map[string]apijson.Field
+func (r DeviceSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *DeviceSettingReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+type DeviceSettingUpdateResponseEnvelope struct {
+	Errors   []DeviceSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettingUpdateResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceSettingUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceSettingUpdateResponseEnvelope]
+type deviceSettingUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type DeviceSettingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceSettingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceSettingUpdateResponseEnvelopeErrors]
+type deviceSettingUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceSettingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    deviceSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceSettingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceSettingUpdateResponseEnvelopeMessages]
+type deviceSettingUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DeviceSettingUpdateResponseEnvelopeSuccess bool
+
+const (
+	DeviceSettingUpdateResponseEnvelopeSuccessTrue DeviceSettingUpdateResponseEnvelopeSuccess = true
+)
 
 type DeviceSettingListResponseEnvelope struct {
 	Errors   []DeviceSettingListResponseEnvelopeErrors   `json:"errors,required"`
@@ -178,88 +262,4 @@ type DeviceSettingListResponseEnvelopeSuccess bool
 
 const (
 	DeviceSettingListResponseEnvelopeSuccessTrue DeviceSettingListResponseEnvelopeSuccess = true
-)
-
-type DeviceSettingReplaceParams struct {
-	// Enable gateway proxy filtering on TCP.
-	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
-	// Enable gateway proxy filtering on UDP.
-	GatewayUdpProxyEnabled param.Field[bool] `json:"gateway_udp_proxy_enabled"`
-	// Enable installation of cloudflare managed root certificate.
-	RootCertificateInstallationEnabled param.Field[bool] `json:"root_certificate_installation_enabled"`
-	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
-}
-
-func (r DeviceSettingReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DeviceSettingReplaceResponseEnvelope struct {
-	Errors   []DeviceSettingReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceSettingReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceSettingReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DeviceSettingReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceSettingReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// deviceSettingReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DeviceSettingReplaceResponseEnvelope]
-type deviceSettingReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceSettingReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceSettingReplaceResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    deviceSettingReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceSettingReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DeviceSettingReplaceResponseEnvelopeErrors]
-type deviceSettingReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceSettingReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceSettingReplaceResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    deviceSettingReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceSettingReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DeviceSettingReplaceResponseEnvelopeMessages]
-type deviceSettingReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceSettingReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DeviceSettingReplaceResponseEnvelopeSuccess bool
-
-const (
-	DeviceSettingReplaceResponseEnvelopeSuccessTrue DeviceSettingReplaceResponseEnvelopeSuccess = true
 )

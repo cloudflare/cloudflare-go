@@ -35,9 +35,9 @@ func NewSettingIPGeolocationService(opts ...option.RequestOption) (r *SettingIPG
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-func (r *SettingIPGeolocationService) Update(ctx context.Context, zoneID string, body SettingIPGeolocationUpdateParams, opts ...option.RequestOption) (res *SettingIPGeolocationUpdateResponse, err error) {
+func (r *SettingIPGeolocationService) Edit(ctx context.Context, zoneID string, body SettingIPGeolocationEditParams, opts ...option.RequestOption) (res *SettingIPGeolocationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingIPGeolocationUpdateResponseEnvelope
+	var env SettingIPGeolocationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -65,22 +65,22 @@ func (r *SettingIPGeolocationService) Get(ctx context.Context, zoneID string, op
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-type SettingIPGeolocationUpdateResponse struct {
+type SettingIPGeolocationEditResponse struct {
 	// ID of the zone setting.
-	ID SettingIPGeolocationUpdateResponseID `json:"id,required"`
+	ID SettingIPGeolocationEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingIPGeolocationUpdateResponseValue `json:"value,required"`
+	Value SettingIPGeolocationEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingIPGeolocationUpdateResponseEditable `json:"editable"`
+	Editable SettingIPGeolocationEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingIPGeolocationUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingIPGeolocationEditResponseJSON `json:"-"`
 }
 
-// settingIPGeolocationUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingIPGeolocationUpdateResponse]
-type settingIPGeolocationUpdateResponseJSON struct {
+// settingIPGeolocationEditResponseJSON contains the JSON metadata for the struct
+// [SettingIPGeolocationEditResponse]
+type settingIPGeolocationEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,32 +89,32 @@ type settingIPGeolocationUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPGeolocationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPGeolocationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingIPGeolocationUpdateResponseID string
+type SettingIPGeolocationEditResponseID string
 
 const (
-	SettingIPGeolocationUpdateResponseIDIPGeolocation SettingIPGeolocationUpdateResponseID = "ip_geolocation"
+	SettingIPGeolocationEditResponseIDIPGeolocation SettingIPGeolocationEditResponseID = "ip_geolocation"
 )
 
 // Current value of the zone setting.
-type SettingIPGeolocationUpdateResponseValue string
+type SettingIPGeolocationEditResponseValue string
 
 const (
-	SettingIPGeolocationUpdateResponseValueOn  SettingIPGeolocationUpdateResponseValue = "on"
-	SettingIPGeolocationUpdateResponseValueOff SettingIPGeolocationUpdateResponseValue = "off"
+	SettingIPGeolocationEditResponseValueOn  SettingIPGeolocationEditResponseValue = "on"
+	SettingIPGeolocationEditResponseValueOff SettingIPGeolocationEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingIPGeolocationUpdateResponseEditable bool
+type SettingIPGeolocationEditResponseEditable bool
 
 const (
-	SettingIPGeolocationUpdateResponseEditableTrue  SettingIPGeolocationUpdateResponseEditable = true
-	SettingIPGeolocationUpdateResponseEditableFalse SettingIPGeolocationUpdateResponseEditable = false
+	SettingIPGeolocationEditResponseEditableTrue  SettingIPGeolocationEditResponseEditable = true
+	SettingIPGeolocationEditResponseEditableFalse SettingIPGeolocationEditResponseEditable = false
 )
 
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
@@ -172,38 +172,38 @@ const (
 	SettingIPGeolocationGetResponseEditableFalse SettingIPGeolocationGetResponseEditable = false
 )
 
-type SettingIPGeolocationUpdateParams struct {
+type SettingIPGeolocationEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingIPGeolocationUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingIPGeolocationEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingIPGeolocationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingIPGeolocationEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingIPGeolocationUpdateParamsValue string
+type SettingIPGeolocationEditParamsValue string
 
 const (
-	SettingIPGeolocationUpdateParamsValueOn  SettingIPGeolocationUpdateParamsValue = "on"
-	SettingIPGeolocationUpdateParamsValueOff SettingIPGeolocationUpdateParamsValue = "off"
+	SettingIPGeolocationEditParamsValueOn  SettingIPGeolocationEditParamsValue = "on"
+	SettingIPGeolocationEditParamsValueOff SettingIPGeolocationEditParamsValue = "off"
 )
 
-type SettingIPGeolocationUpdateResponseEnvelope struct {
-	Errors   []SettingIPGeolocationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingIPGeolocationUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingIPGeolocationEditResponseEnvelope struct {
+	Errors   []SettingIPGeolocationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingIPGeolocationEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 	// pass the country code to you.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
-	Result SettingIPGeolocationUpdateResponse             `json:"result"`
-	JSON   settingIPGeolocationUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingIPGeolocationEditResponse             `json:"result"`
+	JSON   settingIPGeolocationEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingIPGeolocationUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingIPGeolocationUpdateResponseEnvelope]
-type settingIPGeolocationUpdateResponseEnvelopeJSON struct {
+// settingIPGeolocationEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingIPGeolocationEditResponseEnvelope]
+type settingIPGeolocationEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -212,45 +212,45 @@ type settingIPGeolocationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPGeolocationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPGeolocationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingIPGeolocationUpdateResponseEnvelopeErrors struct {
+type SettingIPGeolocationEditResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    settingIPGeolocationEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingIPGeolocationEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingIPGeolocationEditResponseEnvelopeErrors]
+type settingIPGeolocationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingIPGeolocationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingIPGeolocationEditResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
-	JSON    settingIPGeolocationUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingIPGeolocationEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingIPGeolocationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingIPGeolocationUpdateResponseEnvelopeErrors]
-type settingIPGeolocationUpdateResponseEnvelopeErrorsJSON struct {
+// settingIPGeolocationEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingIPGeolocationEditResponseEnvelopeMessages]
+type settingIPGeolocationEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingIPGeolocationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingIPGeolocationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingIPGeolocationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingIPGeolocationUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingIPGeolocationUpdateResponseEnvelopeMessages]
-type settingIPGeolocationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingIPGeolocationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingIPGeolocationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

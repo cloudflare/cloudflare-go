@@ -58,19 +58,6 @@ func (r *TunnelService) New(ctx context.Context, accountID string, body TunnelNe
 	return
 }
 
-// Updates an existing Cloudflare Tunnel.
-func (r *TunnelService) Update(ctx context.Context, accountID string, tunnelID string, body TunnelUpdateParams, opts ...option.RequestOption) (res *TunnelUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env TunnelUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists and filters all types of Tunnels in an account.
 func (r *TunnelService) List(ctx context.Context, accountID string, query TunnelListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TunnelListResponse], err error) {
 	var raw *http.Response
@@ -100,6 +87,19 @@ func (r *TunnelService) Delete(ctx context.Context, accountID string, tunnelID s
 	var env TunnelDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", accountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates an existing Cloudflare Tunnel.
+func (r *TunnelService) Edit(ctx context.Context, accountID string, tunnelID string, body TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env TunnelEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", accountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -177,243 +177,6 @@ type tunnelNewResponseConnectionJSON struct {
 func (r *TunnelNewResponseConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-//
-// Union satisfied by [TunnelUpdateResponseTunnelCfdTunnel] or
-// [TunnelUpdateResponseTunnelWarpConnectorTunnel].
-type TunnelUpdateResponse interface {
-	implementsTunnelUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*TunnelUpdateResponse)(nil)).Elem(), "")
-}
-
-// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-type TunnelUpdateResponseTunnelCfdTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelUpdateResponseTunnelCfdTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
-	// If `false`, the tunnel must be configured locally on the origin machine.
-	RemoteConfig bool `json:"remote_config"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType TunnelUpdateResponseTunnelCfdTunnelTunType `json:"tun_type"`
-	JSON    tunnelUpdateResponseTunnelCfdTunnelJSON    `json:"-"`
-}
-
-// tunnelUpdateResponseTunnelCfdTunnelJSON contains the JSON metadata for the
-// struct [TunnelUpdateResponseTunnelCfdTunnel]
-type tunnelUpdateResponseTunnelCfdTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	RemoteConfig    apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r TunnelUpdateResponseTunnelCfdTunnel) implementsTunnelUpdateResponse() {}
-
-type TunnelUpdateResponseTunnelCfdTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                            `json:"uuid"`
-	JSON tunnelUpdateResponseTunnelCfdTunnelConnectionJSON `json:"-"`
-}
-
-// tunnelUpdateResponseTunnelCfdTunnelConnectionJSON contains the JSON metadata for
-// the struct [TunnelUpdateResponseTunnelCfdTunnelConnection]
-type tunnelUpdateResponseTunnelCfdTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type TunnelUpdateResponseTunnelCfdTunnelTunType string
-
-const (
-	TunnelUpdateResponseTunnelCfdTunnelTunTypeCfdTunnel     TunnelUpdateResponseTunnelCfdTunnelTunType = "cfd_tunnel"
-	TunnelUpdateResponseTunnelCfdTunnelTunTypeWarpConnector TunnelUpdateResponseTunnelCfdTunnelTunType = "warp_connector"
-	TunnelUpdateResponseTunnelCfdTunnelTunTypeIPSec         TunnelUpdateResponseTunnelCfdTunnelTunType = "ip_sec"
-	TunnelUpdateResponseTunnelCfdTunnelTunTypeGre           TunnelUpdateResponseTunnelCfdTunnelTunType = "gre"
-	TunnelUpdateResponseTunnelCfdTunnelTunTypeCni           TunnelUpdateResponseTunnelCfdTunnelTunType = "cni"
-)
-
-// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
-type TunnelUpdateResponseTunnelWarpConnectorTunnel struct {
-	// UUID of the tunnel.
-	ID string `json:"id"`
-	// Cloudflare account ID
-	AccountTag string `json:"account_tag"`
-	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelUpdateResponseTunnelWarpConnectorTunnelConnection `json:"connections"`
-	// Timestamp of when the tunnel established at least one connection to Cloudflare's
-	// edge. If `null`, the tunnel is inactive.
-	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
-	// edge). If `null`, the tunnel is active.
-	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
-	// Timestamp of when the tunnel was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// Metadata associated with the tunnel.
-	Metadata interface{} `json:"metadata"`
-	// A user-friendly name for the tunnel.
-	Name string `json:"name"`
-	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
-	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
-	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
-	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
-	Status string `json:"status"`
-	// The type of tunnel.
-	TunType TunnelUpdateResponseTunnelWarpConnectorTunnelTunType `json:"tun_type"`
-	JSON    tunnelUpdateResponseTunnelWarpConnectorTunnelJSON    `json:"-"`
-}
-
-// tunnelUpdateResponseTunnelWarpConnectorTunnelJSON contains the JSON metadata for
-// the struct [TunnelUpdateResponseTunnelWarpConnectorTunnel]
-type tunnelUpdateResponseTunnelWarpConnectorTunnelJSON struct {
-	ID              apijson.Field
-	AccountTag      apijson.Field
-	Connections     apijson.Field
-	ConnsActiveAt   apijson.Field
-	ConnsInactiveAt apijson.Field
-	CreatedAt       apijson.Field
-	DeletedAt       apijson.Field
-	Metadata        apijson.Field
-	Name            apijson.Field
-	Status          apijson.Field
-	TunType         apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseTunnelWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r TunnelUpdateResponseTunnelWarpConnectorTunnel) implementsTunnelUpdateResponse() {}
-
-type TunnelUpdateResponseTunnelWarpConnectorTunnelConnection struct {
-	// UUID of the Cloudflare Tunnel connection.
-	ID string `json:"id"`
-	// UUID of the cloudflared instance.
-	ClientID interface{} `json:"client_id"`
-	// The cloudflared version used to establish this connection.
-	ClientVersion string `json:"client_version"`
-	// The Cloudflare data center used for this connection.
-	ColoName string `json:"colo_name"`
-	// Cloudflare continues to track connections for several minutes after they
-	// disconnect. This is an optimization to improve latency and reliability of
-	// reconnecting. If `true`, the connection has disconnected but is still being
-	// tracked. If `false`, the connection is actively serving traffic.
-	IsPendingReconnect bool `json:"is_pending_reconnect"`
-	// Timestamp of when the connection was established.
-	OpenedAt time.Time `json:"opened_at" format:"date-time"`
-	// The public IP address of the host running cloudflared.
-	OriginIP string `json:"origin_ip"`
-	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                                                      `json:"uuid"`
-	JSON tunnelUpdateResponseTunnelWarpConnectorTunnelConnectionJSON `json:"-"`
-}
-
-// tunnelUpdateResponseTunnelWarpConnectorTunnelConnectionJSON contains the JSON
-// metadata for the struct
-// [TunnelUpdateResponseTunnelWarpConnectorTunnelConnection]
-type tunnelUpdateResponseTunnelWarpConnectorTunnelConnectionJSON struct {
-	ID                 apijson.Field
-	ClientID           apijson.Field
-	ClientVersion      apijson.Field
-	ColoName           apijson.Field
-	IsPendingReconnect apijson.Field
-	OpenedAt           apijson.Field
-	OriginIP           apijson.Field
-	Uuid               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseTunnelWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type TunnelUpdateResponseTunnelWarpConnectorTunnelTunType string
-
-const (
-	TunnelUpdateResponseTunnelWarpConnectorTunnelTunTypeCfdTunnel     TunnelUpdateResponseTunnelWarpConnectorTunnelTunType = "cfd_tunnel"
-	TunnelUpdateResponseTunnelWarpConnectorTunnelTunTypeWarpConnector TunnelUpdateResponseTunnelWarpConnectorTunnelTunType = "warp_connector"
-	TunnelUpdateResponseTunnelWarpConnectorTunnelTunTypeIPSec         TunnelUpdateResponseTunnelWarpConnectorTunnelTunType = "ip_sec"
-	TunnelUpdateResponseTunnelWarpConnectorTunnelTunTypeGre           TunnelUpdateResponseTunnelWarpConnectorTunnelTunType = "gre"
-	TunnelUpdateResponseTunnelWarpConnectorTunnelTunTypeCni           TunnelUpdateResponseTunnelWarpConnectorTunnelTunType = "cni"
-)
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
@@ -709,6 +472,242 @@ func (r *TunnelDeleteResponseConnection) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+//
+// Union satisfied by [TunnelEditResponseTunnelCfdTunnel] or
+// [TunnelEditResponseTunnelWarpConnectorTunnel].
+type TunnelEditResponse interface {
+	implementsTunnelEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*TunnelEditResponse)(nil)).Elem(), "")
+}
+
+// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+type TunnelEditResponseTunnelCfdTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []TunnelEditResponseTunnelCfdTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// If `true`, the tunnel can be configured remotely from the Zero Trust dashboard.
+	// If `false`, the tunnel must be configured locally on the origin machine.
+	RemoteConfig bool `json:"remote_config"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType TunnelEditResponseTunnelCfdTunnelTunType `json:"tun_type"`
+	JSON    tunnelEditResponseTunnelCfdTunnelJSON    `json:"-"`
+}
+
+// tunnelEditResponseTunnelCfdTunnelJSON contains the JSON metadata for the struct
+// [TunnelEditResponseTunnelCfdTunnel]
+type tunnelEditResponseTunnelCfdTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	RemoteConfig    apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r TunnelEditResponseTunnelCfdTunnel) implementsTunnelEditResponse() {}
+
+type TunnelEditResponseTunnelCfdTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                          `json:"uuid"`
+	JSON tunnelEditResponseTunnelCfdTunnelConnectionJSON `json:"-"`
+}
+
+// tunnelEditResponseTunnelCfdTunnelConnectionJSON contains the JSON metadata for
+// the struct [TunnelEditResponseTunnelCfdTunnelConnection]
+type tunnelEditResponseTunnelCfdTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type TunnelEditResponseTunnelCfdTunnelTunType string
+
+const (
+	TunnelEditResponseTunnelCfdTunnelTunTypeCfdTunnel     TunnelEditResponseTunnelCfdTunnelTunType = "cfd_tunnel"
+	TunnelEditResponseTunnelCfdTunnelTunTypeWarpConnector TunnelEditResponseTunnelCfdTunnelTunType = "warp_connector"
+	TunnelEditResponseTunnelCfdTunnelTunTypeIPSec         TunnelEditResponseTunnelCfdTunnelTunType = "ip_sec"
+	TunnelEditResponseTunnelCfdTunnelTunTypeGre           TunnelEditResponseTunnelCfdTunnelTunType = "gre"
+	TunnelEditResponseTunnelCfdTunnelTunTypeCni           TunnelEditResponseTunnelCfdTunnelTunType = "cni"
+)
+
+// A Warp Connector Tunnel that connects your origin to Cloudflare's edge.
+type TunnelEditResponseTunnelWarpConnectorTunnel struct {
+	// UUID of the tunnel.
+	ID string `json:"id"`
+	// Cloudflare account ID
+	AccountTag string `json:"account_tag"`
+	// The Cloudflare Tunnel connections between your origin and Cloudflare's edge.
+	Connections []TunnelEditResponseTunnelWarpConnectorTunnelConnection `json:"connections"`
+	// Timestamp of when the tunnel established at least one connection to Cloudflare's
+	// edge. If `null`, the tunnel is inactive.
+	ConnsActiveAt time.Time `json:"conns_active_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel became inactive (no connections to Cloudflare's
+	// edge). If `null`, the tunnel is active.
+	ConnsInactiveAt time.Time `json:"conns_inactive_at,nullable" format:"date-time"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// Metadata associated with the tunnel.
+	Metadata interface{} `json:"metadata"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name"`
+	// The status of the tunnel. Valid values are `inactive` (tunnel has never been
+	// run), `degraded` (tunnel is active and able to serve traffic but in an unhealthy
+	// state), `healthy` (tunnel is active and able to serve traffic), or `down`
+	// (tunnel can not serve traffic as it has no connections to the Cloudflare Edge).
+	Status string `json:"status"`
+	// The type of tunnel.
+	TunType TunnelEditResponseTunnelWarpConnectorTunnelTunType `json:"tun_type"`
+	JSON    tunnelEditResponseTunnelWarpConnectorTunnelJSON    `json:"-"`
+}
+
+// tunnelEditResponseTunnelWarpConnectorTunnelJSON contains the JSON metadata for
+// the struct [TunnelEditResponseTunnelWarpConnectorTunnel]
+type tunnelEditResponseTunnelWarpConnectorTunnelJSON struct {
+	ID              apijson.Field
+	AccountTag      apijson.Field
+	Connections     apijson.Field
+	ConnsActiveAt   apijson.Field
+	ConnsInactiveAt apijson.Field
+	CreatedAt       apijson.Field
+	DeletedAt       apijson.Field
+	Metadata        apijson.Field
+	Name            apijson.Field
+	Status          apijson.Field
+	TunType         apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseTunnelWarpConnectorTunnel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r TunnelEditResponseTunnelWarpConnectorTunnel) implementsTunnelEditResponse() {}
+
+type TunnelEditResponseTunnelWarpConnectorTunnelConnection struct {
+	// UUID of the Cloudflare Tunnel connection.
+	ID string `json:"id"`
+	// UUID of the cloudflared instance.
+	ClientID interface{} `json:"client_id"`
+	// The cloudflared version used to establish this connection.
+	ClientVersion string `json:"client_version"`
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// Timestamp of when the connection was established.
+	OpenedAt time.Time `json:"opened_at" format:"date-time"`
+	// The public IP address of the host running cloudflared.
+	OriginIP string `json:"origin_ip"`
+	// UUID of the Cloudflare Tunnel connection.
+	Uuid string                                                    `json:"uuid"`
+	JSON tunnelEditResponseTunnelWarpConnectorTunnelConnectionJSON `json:"-"`
+}
+
+// tunnelEditResponseTunnelWarpConnectorTunnelConnectionJSON contains the JSON
+// metadata for the struct [TunnelEditResponseTunnelWarpConnectorTunnelConnection]
+type tunnelEditResponseTunnelWarpConnectorTunnelConnectionJSON struct {
+	ID                 apijson.Field
+	ClientID           apijson.Field
+	ClientVersion      apijson.Field
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	OpenedAt           apijson.Field
+	OriginIP           apijson.Field
+	Uuid               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseTunnelWarpConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of tunnel.
+type TunnelEditResponseTunnelWarpConnectorTunnelTunType string
+
+const (
+	TunnelEditResponseTunnelWarpConnectorTunnelTunTypeCfdTunnel     TunnelEditResponseTunnelWarpConnectorTunnelTunType = "cfd_tunnel"
+	TunnelEditResponseTunnelWarpConnectorTunnelTunTypeWarpConnector TunnelEditResponseTunnelWarpConnectorTunnelTunType = "warp_connector"
+	TunnelEditResponseTunnelWarpConnectorTunnelTunTypeIPSec         TunnelEditResponseTunnelWarpConnectorTunnelTunType = "ip_sec"
+	TunnelEditResponseTunnelWarpConnectorTunnelTunTypeGre           TunnelEditResponseTunnelWarpConnectorTunnelTunType = "gre"
+	TunnelEditResponseTunnelWarpConnectorTunnelTunTypeCni           TunnelEditResponseTunnelWarpConnectorTunnelTunType = "cni"
+)
+
 type TunnelGetResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id,required"`
@@ -848,88 +847,6 @@ const (
 	TunnelNewResponseEnvelopeSuccessTrue TunnelNewResponseEnvelopeSuccess = true
 )
 
-type TunnelUpdateParams struct {
-	// A user-friendly name for the tunnel.
-	Name param.Field[string] `json:"name"`
-	// Sets the password required to run a locally-managed tunnel. Must be at least 32
-	// bytes and encoded as a base64 string.
-	TunnelSecret param.Field[string] `json:"tunnel_secret"`
-}
-
-func (r TunnelUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type TunnelUpdateResponseEnvelope struct {
-	Errors   []TunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
-	Result TunnelUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success TunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    tunnelUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// tunnelUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [TunnelUpdateResponseEnvelope]
-type tunnelUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    tunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// tunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [TunnelUpdateResponseEnvelopeErrors]
-type tunnelUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TunnelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    tunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// tunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [TunnelUpdateResponseEnvelopeMessages]
-type tunnelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TunnelUpdateResponseEnvelopeSuccess bool
-
-const (
-	TunnelUpdateResponseEnvelopeSuccessTrue TunnelUpdateResponseEnvelopeSuccess = true
-)
-
 type TunnelListParams struct {
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only tunnels that were created (and not deleted) before
@@ -1034,6 +951,88 @@ type TunnelDeleteResponseEnvelopeSuccess bool
 
 const (
 	TunnelDeleteResponseEnvelopeSuccessTrue TunnelDeleteResponseEnvelopeSuccess = true
+)
+
+type TunnelEditParams struct {
+	// A user-friendly name for the tunnel.
+	Name param.Field[string] `json:"name"`
+	// Sets the password required to run a locally-managed tunnel. Must be at least 32
+	// bytes and encoded as a base64 string.
+	TunnelSecret param.Field[string] `json:"tunnel_secret"`
+}
+
+func (r TunnelEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type TunnelEditResponseEnvelope struct {
+	Errors   []TunnelEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []TunnelEditResponseEnvelopeMessages `json:"messages,required"`
+	// A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
+	Result TunnelEditResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success TunnelEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    tunnelEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// tunnelEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [TunnelEditResponseEnvelope]
+type tunnelEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelEditResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    tunnelEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// tunnelEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [TunnelEditResponseEnvelopeErrors]
+type tunnelEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelEditResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    tunnelEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// tunnelEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [TunnelEditResponseEnvelopeMessages]
+type tunnelEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TunnelEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type TunnelEditResponseEnvelopeSuccess bool
+
+const (
+	TunnelEditResponseEnvelopeSuccessTrue TunnelEditResponseEnvelopeSuccess = true
 )
 
 type TunnelGetResponseEnvelope struct {

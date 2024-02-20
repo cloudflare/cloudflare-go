@@ -33,9 +33,9 @@ func NewSettingAutomaticHTTPSRewriteService(opts ...option.RequestOption) (r *Se
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-func (r *SettingAutomaticHTTPSRewriteService) Update(ctx context.Context, zoneID string, body SettingAutomaticHTTPSRewriteUpdateParams, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteUpdateResponse, err error) {
+func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, zoneID string, body SettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingAutomaticHTTPSRewriteUpdateResponseEnvelope
+	var env SettingAutomaticHTTPSRewriteEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingAutomaticHTTPSRewriteService) Get(ctx context.Context, zoneID st
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type SettingAutomaticHTTPSRewriteUpdateResponse struct {
+type SettingAutomaticHTTPSRewriteEditResponse struct {
 	// ID of the zone setting.
-	ID SettingAutomaticHTTPSRewriteUpdateResponseID `json:"id,required"`
+	ID SettingAutomaticHTTPSRewriteEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingAutomaticHTTPSRewriteUpdateResponseValue `json:"value,required"`
+	Value SettingAutomaticHTTPSRewriteEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingAutomaticHTTPSRewriteUpdateResponseEditable `json:"editable"`
+	Editable SettingAutomaticHTTPSRewriteEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingAutomaticHTTPSRewriteUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingAutomaticHTTPSRewriteEditResponseJSON `json:"-"`
 }
 
-// settingAutomaticHTTPSRewriteUpdateResponseJSON contains the JSON metadata for
-// the struct [SettingAutomaticHTTPSRewriteUpdateResponse]
-type settingAutomaticHTTPSRewriteUpdateResponseJSON struct {
+// settingAutomaticHTTPSRewriteEditResponseJSON contains the JSON metadata for the
+// struct [SettingAutomaticHTTPSRewriteEditResponse]
+type settingAutomaticHTTPSRewriteEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,32 +83,32 @@ type settingAutomaticHTTPSRewriteUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAutomaticHTTPSRewriteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticHTTPSRewriteEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingAutomaticHTTPSRewriteUpdateResponseID string
+type SettingAutomaticHTTPSRewriteEditResponseID string
 
 const (
-	SettingAutomaticHTTPSRewriteUpdateResponseIDAutomaticHTTPSRewrites SettingAutomaticHTTPSRewriteUpdateResponseID = "automatic_https_rewrites"
+	SettingAutomaticHTTPSRewriteEditResponseIDAutomaticHTTPSRewrites SettingAutomaticHTTPSRewriteEditResponseID = "automatic_https_rewrites"
 )
 
 // Current value of the zone setting.
-type SettingAutomaticHTTPSRewriteUpdateResponseValue string
+type SettingAutomaticHTTPSRewriteEditResponseValue string
 
 const (
-	SettingAutomaticHTTPSRewriteUpdateResponseValueOn  SettingAutomaticHTTPSRewriteUpdateResponseValue = "on"
-	SettingAutomaticHTTPSRewriteUpdateResponseValueOff SettingAutomaticHTTPSRewriteUpdateResponseValue = "off"
+	SettingAutomaticHTTPSRewriteEditResponseValueOn  SettingAutomaticHTTPSRewriteEditResponseValue = "on"
+	SettingAutomaticHTTPSRewriteEditResponseValueOff SettingAutomaticHTTPSRewriteEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingAutomaticHTTPSRewriteUpdateResponseEditable bool
+type SettingAutomaticHTTPSRewriteEditResponseEditable bool
 
 const (
-	SettingAutomaticHTTPSRewriteUpdateResponseEditableTrue  SettingAutomaticHTTPSRewriteUpdateResponseEditable = true
-	SettingAutomaticHTTPSRewriteUpdateResponseEditableFalse SettingAutomaticHTTPSRewriteUpdateResponseEditable = false
+	SettingAutomaticHTTPSRewriteEditResponseEditableTrue  SettingAutomaticHTTPSRewriteEditResponseEditable = true
+	SettingAutomaticHTTPSRewriteEditResponseEditableFalse SettingAutomaticHTTPSRewriteEditResponseEditable = false
 )
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
@@ -164,38 +164,38 @@ const (
 	SettingAutomaticHTTPSRewriteGetResponseEditableFalse SettingAutomaticHTTPSRewriteGetResponseEditable = false
 )
 
-type SettingAutomaticHTTPSRewriteUpdateParams struct {
+type SettingAutomaticHTTPSRewriteEditParams struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
-	Value param.Field[SettingAutomaticHTTPSRewriteUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingAutomaticHTTPSRewriteEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingAutomaticHTTPSRewriteUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingAutomaticHTTPSRewriteEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
-type SettingAutomaticHTTPSRewriteUpdateParamsValue string
+type SettingAutomaticHTTPSRewriteEditParamsValue string
 
 const (
-	SettingAutomaticHTTPSRewriteUpdateParamsValueOn  SettingAutomaticHTTPSRewriteUpdateParamsValue = "on"
-	SettingAutomaticHTTPSRewriteUpdateParamsValueOff SettingAutomaticHTTPSRewriteUpdateParamsValue = "off"
+	SettingAutomaticHTTPSRewriteEditParamsValueOn  SettingAutomaticHTTPSRewriteEditParamsValue = "on"
+	SettingAutomaticHTTPSRewriteEditParamsValueOff SettingAutomaticHTTPSRewriteEditParamsValue = "off"
 )
 
-type SettingAutomaticHTTPSRewriteUpdateResponseEnvelope struct {
-	Errors   []SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingAutomaticHTTPSRewriteEditResponseEnvelope struct {
+	Errors   []SettingAutomaticHTTPSRewriteEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingAutomaticHTTPSRewriteEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
-	Result SettingAutomaticHTTPSRewriteUpdateResponse             `json:"result"`
-	JSON   settingAutomaticHTTPSRewriteUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingAutomaticHTTPSRewriteEditResponse             `json:"result"`
+	JSON   settingAutomaticHTTPSRewriteEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingAutomaticHTTPSRewriteUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [SettingAutomaticHTTPSRewriteUpdateResponseEnvelope]
-type settingAutomaticHTTPSRewriteUpdateResponseEnvelopeJSON struct {
+// settingAutomaticHTTPSRewriteEditResponseEnvelopeJSON contains the JSON metadata
+// for the struct [SettingAutomaticHTTPSRewriteEditResponseEnvelope]
+type settingAutomaticHTTPSRewriteEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -204,47 +204,46 @@ type settingAutomaticHTTPSRewriteUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAutomaticHTTPSRewriteUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticHTTPSRewriteEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrors struct {
+type SettingAutomaticHTTPSRewriteEditResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    settingAutomaticHTTPSRewriteEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingAutomaticHTTPSRewriteEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingAutomaticHTTPSRewriteEditResponseEnvelopeErrors]
+type settingAutomaticHTTPSRewriteEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingAutomaticHTTPSRewriteEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAutomaticHTTPSRewriteEditResponseEnvelopeMessages struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
-	JSON    settingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingAutomaticHTTPSRewriteEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrorsJSON contains the JSON
+// settingAutomaticHTTPSRewriteEditResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrors]
-type settingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrorsJSON struct {
+// [SettingAutomaticHTTPSRewriteEditResponseEnvelopeMessages]
+type settingAutomaticHTTPSRewriteEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    settingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessages]
-type settingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingAutomaticHTTPSRewriteUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingAutomaticHTTPSRewriteEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

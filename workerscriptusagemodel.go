@@ -31,6 +31,20 @@ func NewWorkerScriptUsageModelService(opts ...option.RequestOption) (r *WorkerSc
 	return
 }
 
+// Updates the Usage Model for a given Worker. Requires a Workers Paid
+// subscription.
+func (r *WorkerScriptUsageModelService) Update(ctx context.Context, accountID string, scriptName string, body WorkerScriptUsageModelUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUsageModelUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerScriptUsageModelUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the Usage Model for a given Worker.
 func (r *WorkerScriptUsageModelService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptUsageModelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -44,18 +58,21 @@ func (r *WorkerScriptUsageModelService) Get(ctx context.Context, accountID strin
 	return
 }
 
-// Updates the Usage Model for a given Worker. Requires a Workers Paid
-// subscription.
-func (r *WorkerScriptUsageModelService) Replace(ctx context.Context, accountID string, scriptName string, body WorkerScriptUsageModelReplaceParams, opts ...option.RequestOption) (res *WorkerScriptUsageModelReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerScriptUsageModelReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type WorkerScriptUsageModelUpdateResponse struct {
+	UsageModel interface{}                              `json:"usage_model"`
+	JSON       workerScriptUsageModelUpdateResponseJSON `json:"-"`
+}
+
+// workerScriptUsageModelUpdateResponseJSON contains the JSON metadata for the
+// struct [WorkerScriptUsageModelUpdateResponse]
+type workerScriptUsageModelUpdateResponseJSON struct {
+	UsageModel  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptUsageModelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerScriptUsageModelGetResponse struct {
@@ -75,22 +92,82 @@ func (r *WorkerScriptUsageModelGetResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptUsageModelReplaceResponse struct {
-	UsageModel interface{}                               `json:"usage_model"`
-	JSON       workerScriptUsageModelReplaceResponseJSON `json:"-"`
+type WorkerScriptUsageModelUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
 }
 
-// workerScriptUsageModelReplaceResponseJSON contains the JSON metadata for the
-// struct [WorkerScriptUsageModelReplaceResponse]
-type workerScriptUsageModelReplaceResponseJSON struct {
-	UsageModel  apijson.Field
+func (r WorkerScriptUsageModelUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type WorkerScriptUsageModelUpdateResponseEnvelope struct {
+	Errors   []WorkerScriptUsageModelUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptUsageModelUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptUsageModelUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerScriptUsageModelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptUsageModelUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerScriptUsageModelUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [WorkerScriptUsageModelUpdateResponseEnvelope]
+type workerScriptUsageModelUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptUsageModelReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptUsageModelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type WorkerScriptUsageModelUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    workerScriptUsageModelUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerScriptUsageModelUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [WorkerScriptUsageModelUpdateResponseEnvelopeErrors]
+type workerScriptUsageModelUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptUsageModelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptUsageModelUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    workerScriptUsageModelUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerScriptUsageModelUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [WorkerScriptUsageModelUpdateResponseEnvelopeMessages]
+type workerScriptUsageModelUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptUsageModelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerScriptUsageModelUpdateResponseEnvelopeSuccess bool
+
+const (
+	WorkerScriptUsageModelUpdateResponseEnvelopeSuccessTrue WorkerScriptUsageModelUpdateResponseEnvelopeSuccess = true
+)
 
 type WorkerScriptUsageModelGetResponseEnvelope struct {
 	Errors   []WorkerScriptUsageModelGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -159,81 +236,4 @@ type WorkerScriptUsageModelGetResponseEnvelopeSuccess bool
 
 const (
 	WorkerScriptUsageModelGetResponseEnvelopeSuccessTrue WorkerScriptUsageModelGetResponseEnvelopeSuccess = true
-)
-
-type WorkerScriptUsageModelReplaceParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r WorkerScriptUsageModelReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type WorkerScriptUsageModelReplaceResponseEnvelope struct {
-	Errors   []WorkerScriptUsageModelReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptUsageModelReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptUsageModelReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerScriptUsageModelReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptUsageModelReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerScriptUsageModelReplaceResponseEnvelopeJSON contains the JSON metadata for
-// the struct [WorkerScriptUsageModelReplaceResponseEnvelope]
-type workerScriptUsageModelReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptUsageModelReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptUsageModelReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    workerScriptUsageModelReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerScriptUsageModelReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [WorkerScriptUsageModelReplaceResponseEnvelopeErrors]
-type workerScriptUsageModelReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptUsageModelReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptUsageModelReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    workerScriptUsageModelReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerScriptUsageModelReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [WorkerScriptUsageModelReplaceResponseEnvelopeMessages]
-type workerScriptUsageModelReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptUsageModelReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerScriptUsageModelReplaceResponseEnvelopeSuccess bool
-
-const (
-	WorkerScriptUsageModelReplaceResponseEnvelopeSuccessTrue WorkerScriptUsageModelReplaceResponseEnvelopeSuccess = true
 )

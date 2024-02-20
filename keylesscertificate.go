@@ -45,20 +45,6 @@ func (r *KeylessCertificateService) New(ctx context.Context, zoneID string, body
 	return
 }
 
-// This will update attributes of a Keyless SSL. Consists of one or more of the
-// following: host,name,port.
-func (r *KeylessCertificateService) Update(ctx context.Context, zoneID string, keylessCertificateID string, body KeylessCertificateUpdateParams, opts ...option.RequestOption) (res *KeylessCertificateUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env KeylessCertificateUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneID, keylessCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List all Keyless SSL configurations for a given zone.
 func (r *KeylessCertificateService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]KeylessCertificateListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -78,6 +64,20 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, zoneID string, k
 	var env KeylessCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneID, keylessCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// This will update attributes of a Keyless SSL. Consists of one or more of the
+// following: host,name,port.
+func (r *KeylessCertificateService) Edit(ctx context.Context, zoneID string, keylessCertificateID string, body KeylessCertificateEditParams, opts ...option.RequestOption) (res *KeylessCertificateEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env KeylessCertificateEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", zoneID, keylessCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -175,83 +175,6 @@ func (r *KeylessCertificateNewResponseTunnel) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KeylessCertificateUpdateResponse struct {
-	// Keyless certificate identifier tag.
-	ID string `json:"id,required"`
-	// When the Keyless SSL was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Whether or not the Keyless SSL is on or off.
-	Enabled bool `json:"enabled,required"`
-	// The keyless SSL name.
-	Host string `json:"host,required" format:"hostname"`
-	// When the Keyless SSL was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The keyless SSL name.
-	Name string `json:"name,required"`
-	// Available permissions for the Keyless SSL for the current user requesting the
-	// item.
-	Permissions []interface{} `json:"permissions,required"`
-	// The keyless SSL port used to communicate between Cloudflare and the client's
-	// Keyless SSL server.
-	Port float64 `json:"port,required"`
-	// Status of the Keyless SSL.
-	Status KeylessCertificateUpdateResponseStatus `json:"status,required"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel KeylessCertificateUpdateResponseTunnel `json:"tunnel"`
-	JSON   keylessCertificateUpdateResponseJSON   `json:"-"`
-}
-
-// keylessCertificateUpdateResponseJSON contains the JSON metadata for the struct
-// [KeylessCertificateUpdateResponse]
-type keylessCertificateUpdateResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Enabled     apijson.Field
-	Host        apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Port        apijson.Field
-	Status      apijson.Field
-	Tunnel      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the Keyless SSL.
-type KeylessCertificateUpdateResponseStatus string
-
-const (
-	KeylessCertificateUpdateResponseStatusActive  KeylessCertificateUpdateResponseStatus = "active"
-	KeylessCertificateUpdateResponseStatusDeleted KeylessCertificateUpdateResponseStatus = "deleted"
-)
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessCertificateUpdateResponseTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP string `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                     `json:"vnet_id,required"`
-	JSON   keylessCertificateUpdateResponseTunnelJSON `json:"-"`
-}
-
-// keylessCertificateUpdateResponseTunnelJSON contains the JSON metadata for the
-// struct [KeylessCertificateUpdateResponseTunnel]
-type keylessCertificateUpdateResponseTunnelJSON struct {
-	PrivateIP   apijson.Field
-	VnetID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateUpdateResponseTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type KeylessCertificateListResponse struct {
 	// Keyless certificate identifier tag.
 	ID string `json:"id,required"`
@@ -344,6 +267,83 @@ type keylessCertificateDeleteResponseJSON struct {
 }
 
 func (r *KeylessCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type KeylessCertificateEditResponse struct {
+	// Keyless certificate identifier tag.
+	ID string `json:"id,required"`
+	// When the Keyless SSL was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// Whether or not the Keyless SSL is on or off.
+	Enabled bool `json:"enabled,required"`
+	// The keyless SSL name.
+	Host string `json:"host,required" format:"hostname"`
+	// When the Keyless SSL was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The keyless SSL name.
+	Name string `json:"name,required"`
+	// Available permissions for the Keyless SSL for the current user requesting the
+	// item.
+	Permissions []interface{} `json:"permissions,required"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port float64 `json:"port,required"`
+	// Status of the Keyless SSL.
+	Status KeylessCertificateEditResponseStatus `json:"status,required"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel KeylessCertificateEditResponseTunnel `json:"tunnel"`
+	JSON   keylessCertificateEditResponseJSON   `json:"-"`
+}
+
+// keylessCertificateEditResponseJSON contains the JSON metadata for the struct
+// [KeylessCertificateEditResponse]
+type keylessCertificateEditResponseJSON struct {
+	ID          apijson.Field
+	CreatedOn   apijson.Field
+	Enabled     apijson.Field
+	Host        apijson.Field
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Port        apijson.Field
+	Status      apijson.Field
+	Tunnel      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the Keyless SSL.
+type KeylessCertificateEditResponseStatus string
+
+const (
+	KeylessCertificateEditResponseStatusActive  KeylessCertificateEditResponseStatus = "active"
+	KeylessCertificateEditResponseStatusDeleted KeylessCertificateEditResponseStatus = "deleted"
+)
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type KeylessCertificateEditResponseTunnel struct {
+	// Private IP of the Key Server Host
+	PrivateIP string `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID string                                   `json:"vnet_id,required"`
+	JSON   keylessCertificateEditResponseTunnelJSON `json:"-"`
+}
+
+// keylessCertificateEditResponseTunnelJSON contains the JSON metadata for the
+// struct [KeylessCertificateEditResponseTunnel]
+type keylessCertificateEditResponseTunnelJSON struct {
+	PrivateIP   apijson.Field
+	VnetID      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -540,105 +540,6 @@ const (
 	KeylessCertificateNewResponseEnvelopeSuccessTrue KeylessCertificateNewResponseEnvelopeSuccess = true
 )
 
-type KeylessCertificateUpdateParams struct {
-	// Whether or not the Keyless SSL is on or off.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The keyless SSL name.
-	Host param.Field[string] `json:"host" format:"hostname"`
-	// The keyless SSL name.
-	Name param.Field[string] `json:"name"`
-	// The keyless SSL port used to communicate between Cloudflare and the client's
-	// Keyless SSL server.
-	Port param.Field[float64] `json:"port"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel param.Field[KeylessCertificateUpdateParamsTunnel] `json:"tunnel"`
-}
-
-func (r KeylessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type KeylessCertificateUpdateParamsTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP param.Field[string] `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID param.Field[string] `json:"vnet_id,required"`
-}
-
-func (r KeylessCertificateUpdateParamsTunnel) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type KeylessCertificateUpdateResponseEnvelope struct {
-	Errors   []KeylessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []KeylessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   KeylessCertificateUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success KeylessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    keylessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// keylessCertificateUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [KeylessCertificateUpdateResponseEnvelope]
-type keylessCertificateUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessCertificateUpdateResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    keylessCertificateUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// keylessCertificateUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [KeylessCertificateUpdateResponseEnvelopeErrors]
-type keylessCertificateUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type KeylessCertificateUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    keylessCertificateUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// keylessCertificateUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [KeylessCertificateUpdateResponseEnvelopeMessages]
-type keylessCertificateUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *KeylessCertificateUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type KeylessCertificateUpdateResponseEnvelopeSuccess bool
-
-const (
-	KeylessCertificateUpdateResponseEnvelopeSuccessTrue KeylessCertificateUpdateResponseEnvelopeSuccess = true
-)
-
 type KeylessCertificateListResponseEnvelope struct {
 	Errors   []KeylessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []KeylessCertificateListResponseEnvelopeMessages `json:"messages,required"`
@@ -804,6 +705,105 @@ type KeylessCertificateDeleteResponseEnvelopeSuccess bool
 
 const (
 	KeylessCertificateDeleteResponseEnvelopeSuccessTrue KeylessCertificateDeleteResponseEnvelopeSuccess = true
+)
+
+type KeylessCertificateEditParams struct {
+	// Whether or not the Keyless SSL is on or off.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The keyless SSL name.
+	Host param.Field[string] `json:"host" format:"hostname"`
+	// The keyless SSL name.
+	Name param.Field[string] `json:"name"`
+	// The keyless SSL port used to communicate between Cloudflare and the client's
+	// Keyless SSL server.
+	Port param.Field[float64] `json:"port"`
+	// Configuration for using Keyless SSL through a Cloudflare Tunnel
+	Tunnel param.Field[KeylessCertificateEditParamsTunnel] `json:"tunnel"`
+}
+
+func (r KeylessCertificateEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configuration for using Keyless SSL through a Cloudflare Tunnel
+type KeylessCertificateEditParamsTunnel struct {
+	// Private IP of the Key Server Host
+	PrivateIP param.Field[string] `json:"private_ip,required"`
+	// Cloudflare Tunnel Virtual Network ID
+	VnetID param.Field[string] `json:"vnet_id,required"`
+}
+
+func (r KeylessCertificateEditParamsTunnel) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type KeylessCertificateEditResponseEnvelope struct {
+	Errors   []KeylessCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []KeylessCertificateEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   KeylessCertificateEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success KeylessCertificateEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    keylessCertificateEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [KeylessCertificateEditResponseEnvelope]
+type keylessCertificateEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type KeylessCertificateEditResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    keylessCertificateEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [KeylessCertificateEditResponseEnvelopeErrors]
+type keylessCertificateEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type KeylessCertificateEditResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    keylessCertificateEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// keylessCertificateEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [KeylessCertificateEditResponseEnvelopeMessages]
+type keylessCertificateEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *KeylessCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type KeylessCertificateEditResponseEnvelopeSuccess bool
+
+const (
+	KeylessCertificateEditResponseEnvelopeSuccessTrue KeylessCertificateEditResponseEnvelopeSuccess = true
 )
 
 type KeylessCertificateGetResponseEnvelope struct {

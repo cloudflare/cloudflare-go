@@ -33,9 +33,9 @@ func NewAccessSeatService(opts ...option.RequestOption) (r *AccessSeatService) {
 
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
-func (r *AccessSeatService) Update(ctx context.Context, identifier string, body AccessSeatUpdateParams, opts ...option.RequestOption) (res *[]AccessSeatUpdateResponse, err error) {
+func (r *AccessSeatService) Edit(ctx context.Context, identifier string, body AccessSeatEditParams, opts ...option.RequestOption) (res *[]AccessSeatEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessSeatUpdateResponseEnvelope
+	var env AccessSeatEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -45,21 +45,21 @@ func (r *AccessSeatService) Update(ctx context.Context, identifier string, body 
 	return
 }
 
-type AccessSeatUpdateResponse struct {
+type AccessSeatEditResponse struct {
 	// True if the seat is part of Access.
 	AccessSeat bool      `json:"access_seat"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
 	// Identifier
-	SeatUid   string                       `json:"seat_uid"`
-	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
-	JSON      accessSeatUpdateResponseJSON `json:"-"`
+	SeatUid   string                     `json:"seat_uid"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      accessSeatEditResponseJSON `json:"-"`
 }
 
-// accessSeatUpdateResponseJSON contains the JSON metadata for the struct
-// [AccessSeatUpdateResponse]
-type accessSeatUpdateResponseJSON struct {
+// accessSeatEditResponseJSON contains the JSON metadata for the struct
+// [AccessSeatEditResponse]
+type accessSeatEditResponseJSON struct {
 	AccessSeat  apijson.Field
 	CreatedAt   apijson.Field
 	GatewaySeat apijson.Field
@@ -69,42 +69,42 @@ type accessSeatUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessSeatUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSeatEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessSeatUpdateParams struct {
-	Body param.Field[[]AccessSeatUpdateParamsBody] `json:"body,required"`
+type AccessSeatEditParams struct {
+	Body param.Field[[]AccessSeatEditParamsBody] `json:"body,required"`
 }
 
-func (r AccessSeatUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r AccessSeatEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type AccessSeatUpdateParamsBody struct {
+type AccessSeatEditParamsBody struct {
 	// True if the seat is part of Access.
 	AccessSeat param.Field[bool] `json:"access_seat,required"`
 	// True if the seat is part of Gateway.
 	GatewaySeat param.Field[bool] `json:"gateway_seat,required"`
 }
 
-func (r AccessSeatUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r AccessSeatEditParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AccessSeatUpdateResponseEnvelope struct {
-	Errors   []AccessSeatUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessSeatUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessSeatUpdateResponse                 `json:"result,required,nullable"`
+type AccessSeatEditResponseEnvelope struct {
+	Errors   []AccessSeatEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessSeatEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessSeatEditResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    AccessSeatUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessSeatUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessSeatUpdateResponseEnvelopeJSON       `json:"-"`
+	Success    AccessSeatEditResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessSeatEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessSeatEditResponseEnvelopeJSON       `json:"-"`
 }
 
-// accessSeatUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [AccessSeatUpdateResponseEnvelope]
-type accessSeatUpdateResponseEnvelopeJSON struct {
+// accessSeatEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessSeatEditResponseEnvelope]
+type accessSeatEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -114,56 +114,56 @@ type accessSeatUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessSeatUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSeatEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessSeatUpdateResponseEnvelopeErrors struct {
+type AccessSeatEditResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    accessSeatEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessSeatEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessSeatEditResponseEnvelopeErrors]
+type accessSeatEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessSeatEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessSeatEditResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
-	JSON    accessSeatUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    accessSeatEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessSeatUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [AccessSeatUpdateResponseEnvelopeErrors]
-type accessSeatUpdateResponseEnvelopeErrorsJSON struct {
+// accessSeatEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessSeatEditResponseEnvelopeMessages]
+type accessSeatEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessSeatUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessSeatUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    accessSeatUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessSeatUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [AccessSeatUpdateResponseEnvelopeMessages]
-type accessSeatUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessSeatUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSeatEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessSeatUpdateResponseEnvelopeSuccess bool
+type AccessSeatEditResponseEnvelopeSuccess bool
 
 const (
-	AccessSeatUpdateResponseEnvelopeSuccessTrue AccessSeatUpdateResponseEnvelopeSuccess = true
+	AccessSeatEditResponseEnvelopeSuccessTrue AccessSeatEditResponseEnvelopeSuccess = true
 )
 
-type AccessSeatUpdateResponseEnvelopeResultInfo struct {
+type AccessSeatEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -171,13 +171,13 @@ type AccessSeatUpdateResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                        `json:"total_count"`
-	JSON       accessSeatUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                      `json:"total_count"`
+	JSON       accessSeatEditResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// accessSeatUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [AccessSeatUpdateResponseEnvelopeResultInfo]
-type accessSeatUpdateResponseEnvelopeResultInfoJSON struct {
+// accessSeatEditResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [AccessSeatEditResponseEnvelopeResultInfo]
+type accessSeatEditResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -186,6 +186,6 @@ type accessSeatUpdateResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessSeatUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSeatEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

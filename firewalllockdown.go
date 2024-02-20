@@ -49,6 +49,19 @@ func (r *FirewallLockdownService) New(ctx context.Context, zoneIdentifier string
 	return
 }
 
+// Updates an existing Zone Lockdown rule.
+func (r *FirewallLockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallLockdownUpdateParams, opts ...option.RequestOption) (res *FirewallLockdownUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FirewallLockdownUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
 func (r *FirewallLockdownService) List(ctx context.Context, zoneIdentifier string, query FirewallLockdownListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallLockdownListResponse], err error) {
@@ -93,19 +106,6 @@ func (r *FirewallLockdownService) Get(ctx context.Context, zoneIdentifier string
 	var env FirewallLockdownGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates an existing Zone Lockdown rule.
-func (r *FirewallLockdownService) Replace(ctx context.Context, zoneIdentifier string, id string, body FirewallLockdownReplaceParams, opts ...option.RequestOption) (res *FirewallLockdownReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallLockdownReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -235,6 +235,130 @@ type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationT
 
 const (
 	FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
+)
+
+type FirewallLockdownUpdateResponse struct {
+	// The unique identifier of the Zone Lockdown rule.
+	ID string `json:"id,required"`
+	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+	// specified in the Zone Lockdown rule. You can include any number of `ip` or
+	// `ip_range` configurations.
+	Configurations FirewallLockdownUpdateResponseConfigurations `json:"configurations,required"`
+	// The timestamp of when the rule was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// An informative summary of the rule.
+	Description string `json:"description,required"`
+	// The timestamp of when the rule was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool `json:"paused,required"`
+	// The URLs to include in the rule definition. You can use wildcards. Each entered
+	// URL will be escaped before use, which means you can only use simple wildcard
+	// patterns.
+	URLs []string                           `json:"urls,required"`
+	JSON firewallLockdownUpdateResponseJSON `json:"-"`
+}
+
+// firewallLockdownUpdateResponseJSON contains the JSON metadata for the struct
+// [FirewallLockdownUpdateResponse]
+type firewallLockdownUpdateResponseJSON struct {
+	ID             apijson.Field
+	Configurations apijson.Field
+	CreatedOn      apijson.Field
+	Description    apijson.Field
+	ModifiedOn     apijson.Field
+	Paused         apijson.Field
+	URLs           apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
+// specified in the Zone Lockdown rule. You can include any number of `ip` or
+// `ip_range` configurations.
+//
+// Union satisfied by
+// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration] or
+// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
+type FirewallLockdownUpdateResponseConfigurations interface {
+	implementsFirewallLockdownUpdateResponseConfigurations()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownUpdateResponseConfigurations)(nil)).Elem(), "")
+}
+
+type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
+	// The configuration target. You must set the target to `ip` when specifying an IP
+	// address in the Zone Lockdown rule.
+	Target FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
+	// The IP address to match. This address will be compared to the IP address of
+	// incoming requests.
+	Value string                                                                          `json:"value"`
+	JSON  firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
+}
+
+// firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
+// contains the JSON metadata for the struct
+// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration]
+type firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
+}
+
+// The configuration target. You must set the target to `ip` when specifying an IP
+// address in the Zone Lockdown rule.
+type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
+
+const (
+	FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
+)
+
+type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
+	// The configuration target. You must set the target to `ip_range` when specifying
+	// an IP address range in the Zone Lockdown rule.
+	Target FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
+	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
+	Value string                                                                            `json:"value"`
+	JSON  firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
+}
+
+// firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
+// contains the JSON metadata for the struct
+// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
+type firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
+}
+
+// The configuration target. You must set the target to `ip_range` when specifying
+// an IP address range in the Zone Lockdown rule.
+type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
+
+const (
+	FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
 )
 
 type FirewallLockdownListResponse struct {
@@ -503,131 +627,6 @@ const (
 	FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
 )
 
-type FirewallLockdownReplaceResponse struct {
-	// The unique identifier of the Zone Lockdown rule.
-	ID string `json:"id,required"`
-	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-	// specified in the Zone Lockdown rule. You can include any number of `ip` or
-	// `ip_range` configurations.
-	Configurations FirewallLockdownReplaceResponseConfigurations `json:"configurations,required"`
-	// The timestamp of when the rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// An informative summary of the rule.
-	Description string `json:"description,required"`
-	// The timestamp of when the rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// The URLs to include in the rule definition. You can use wildcards. Each entered
-	// URL will be escaped before use, which means you can only use simple wildcard
-	// patterns.
-	URLs []string                            `json:"urls,required"`
-	JSON firewallLockdownReplaceResponseJSON `json:"-"`
-}
-
-// firewallLockdownReplaceResponseJSON contains the JSON metadata for the struct
-// [FirewallLockdownReplaceResponse]
-type firewallLockdownReplaceResponseJSON struct {
-	ID             apijson.Field
-	Configurations apijson.Field
-	CreatedOn      apijson.Field
-	Description    apijson.Field
-	ModifiedOn     apijson.Field
-	Paused         apijson.Field
-	URLs           apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Union satisfied by
-// [FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-// or
-// [FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
-type FirewallLockdownReplaceResponseConfigurations interface {
-	implementsFirewallLockdownReplaceResponseConfigurations()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownReplaceResponseConfigurations)(nil)).Elem(), "")
-}
-
-type FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string                                                                           `json:"value"`
-	JSON  firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-type firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownReplaceResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the Zone Lockdown rule.
-type FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
-
-const (
-	FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
-)
-
-type FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                                                                             `json:"value"`
-	JSON  firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
-type firewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownReplaceResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the Zone Lockdown rule.
-type FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
-
-const (
-	FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownReplaceResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
-)
-
 type FirewallLockdownNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -703,6 +702,83 @@ type FirewallLockdownNewResponseEnvelopeSuccess bool
 
 const (
 	FirewallLockdownNewResponseEnvelopeSuccessTrue FirewallLockdownNewResponseEnvelopeSuccess = true
+)
+
+type FirewallLockdownUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FirewallLockdownUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FirewallLockdownUpdateResponseEnvelope struct {
+	Errors   []FirewallLockdownUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallLockdownUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallLockdownUpdateResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success FirewallLockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallLockdownUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// firewallLockdownUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [FirewallLockdownUpdateResponseEnvelope]
+type firewallLockdownUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallLockdownUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    firewallLockdownUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// firewallLockdownUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [FirewallLockdownUpdateResponseEnvelopeErrors]
+type firewallLockdownUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallLockdownUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    firewallLockdownUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// firewallLockdownUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [FirewallLockdownUpdateResponseEnvelopeMessages]
+type firewallLockdownUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallLockdownUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FirewallLockdownUpdateResponseEnvelopeSuccess bool
+
+const (
+	FirewallLockdownUpdateResponseEnvelopeSuccessTrue FirewallLockdownUpdateResponseEnvelopeSuccess = true
 )
 
 type FirewallLockdownListParams struct {
@@ -822,81 +898,4 @@ type FirewallLockdownGetResponseEnvelopeSuccess bool
 
 const (
 	FirewallLockdownGetResponseEnvelopeSuccessTrue FirewallLockdownGetResponseEnvelopeSuccess = true
-)
-
-type FirewallLockdownReplaceParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FirewallLockdownReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FirewallLockdownReplaceResponseEnvelope struct {
-	Errors   []FirewallLockdownReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallLockdownReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallLockdownReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success FirewallLockdownReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallLockdownReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// firewallLockdownReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FirewallLockdownReplaceResponseEnvelope]
-type firewallLockdownReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallLockdownReplaceResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    firewallLockdownReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallLockdownReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallLockdownReplaceResponseEnvelopeErrors]
-type firewallLockdownReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallLockdownReplaceResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    firewallLockdownReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallLockdownReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FirewallLockdownReplaceResponseEnvelopeMessages]
-type firewallLockdownReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallLockdownReplaceResponseEnvelopeSuccess bool
-
-const (
-	FirewallLockdownReplaceResponseEnvelopeSuccessTrue FirewallLockdownReplaceResponseEnvelopeSuccess = true
 )

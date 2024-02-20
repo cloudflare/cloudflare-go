@@ -47,6 +47,19 @@ func (r *AccessCertificateService) New(ctx context.Context, accountOrZone string
 	return
 }
 
+// Updates a configured mTLS certificate.
+func (r *AccessCertificateService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificateUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessCertificateUpdateResponseEnvelope
+	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists all mTLS root certificates.
 func (r *AccessCertificateService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessCertificateListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -86,19 +99,6 @@ func (r *AccessCertificateService) Get(ctx context.Context, accountOrZone string
 	return
 }
 
-// Updates a configured mTLS certificate.
-func (r *AccessCertificateService) Replace(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessCertificateReplaceParams, opts ...option.RequestOption) (res *AccessCertificateReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AccessCertificateReplaceResponseEnvelope
-	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type AccessCertificateNewResponse struct {
 	// The ID of the application that will use this certificate.
 	ID interface{} `json:"id"`
@@ -129,6 +129,39 @@ type accessCertificateNewResponseJSON struct {
 }
 
 func (r *AccessCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessCertificateUpdateResponse struct {
+	// The ID of the application that will use this certificate.
+	ID interface{} `json:"id"`
+	// The hostnames of the applications that will use this certificate.
+	AssociatedHostnames []string  `json:"associated_hostnames"`
+	CreatedAt           time.Time `json:"created_at" format:"date-time"`
+	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
+	// The MD5 fingerprint of the certificate.
+	Fingerprint string `json:"fingerprint"`
+	// The name of the certificate.
+	Name      string                              `json:"name"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      accessCertificateUpdateResponseJSON `json:"-"`
+}
+
+// accessCertificateUpdateResponseJSON contains the JSON metadata for the struct
+// [AccessCertificateUpdateResponse]
+type accessCertificateUpdateResponseJSON struct {
+	ID                  apijson.Field
+	AssociatedHostnames apijson.Field
+	CreatedAt           apijson.Field
+	ExpiresOn           apijson.Field
+	Fingerprint         apijson.Field
+	Name                apijson.Field
+	UpdatedAt           apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *AccessCertificateUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -216,39 +249,6 @@ func (r *AccessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessCertificateReplaceResponse struct {
-	// The ID of the application that will use this certificate.
-	ID interface{} `json:"id"`
-	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []string  `json:"associated_hostnames"`
-	CreatedAt           time.Time `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
-	// The MD5 fingerprint of the certificate.
-	Fingerprint string `json:"fingerprint"`
-	// The name of the certificate.
-	Name      string                               `json:"name"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      accessCertificateReplaceResponseJSON `json:"-"`
-}
-
-// accessCertificateReplaceResponseJSON contains the JSON metadata for the struct
-// [AccessCertificateReplaceResponse]
-type accessCertificateReplaceResponseJSON struct {
-	ID                  apijson.Field
-	AssociatedHostnames apijson.Field
-	CreatedAt           apijson.Field
-	ExpiresOn           apijson.Field
-	Fingerprint         apijson.Field
-	Name                apijson.Field
-	UpdatedAt           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *AccessCertificateReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type AccessCertificateNewParams struct {
 	// The certificate content.
 	Certificate param.Field[string] `json:"certificate,required"`
@@ -329,6 +329,86 @@ type AccessCertificateNewResponseEnvelopeSuccess bool
 
 const (
 	AccessCertificateNewResponseEnvelopeSuccessTrue AccessCertificateNewResponseEnvelopeSuccess = true
+)
+
+type AccessCertificateUpdateParams struct {
+	// The hostnames of the applications that will use this certificate.
+	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames,required"`
+	// The name of the certificate.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AccessCertificateUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessCertificateUpdateResponseEnvelope struct {
+	Errors   []AccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessCertificateUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessCertificateUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AccessCertificateUpdateResponseEnvelope]
+type accessCertificateUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessCertificateUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessCertificateUpdateResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    accessCertificateUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessCertificateUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AccessCertificateUpdateResponseEnvelopeErrors]
+type accessCertificateUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessCertificateUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessCertificateUpdateResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    accessCertificateUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessCertificateUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AccessCertificateUpdateResponseEnvelopeMessages]
+type accessCertificateUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessCertificateUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessCertificateUpdateResponseEnvelopeSuccess bool
+
+const (
+	AccessCertificateUpdateResponseEnvelopeSuccessTrue AccessCertificateUpdateResponseEnvelopeSuccess = true
 )
 
 type AccessCertificateListResponseEnvelope struct {
@@ -565,84 +645,4 @@ type AccessCertificateGetResponseEnvelopeSuccess bool
 
 const (
 	AccessCertificateGetResponseEnvelopeSuccessTrue AccessCertificateGetResponseEnvelopeSuccess = true
-)
-
-type AccessCertificateReplaceParams struct {
-	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames,required"`
-	// The name of the certificate.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AccessCertificateReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessCertificateReplaceResponseEnvelope struct {
-	Errors   []AccessCertificateReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessCertificateReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AccessCertificateReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessCertificateReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// accessCertificateReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AccessCertificateReplaceResponseEnvelope]
-type accessCertificateReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessCertificateReplaceResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    accessCertificateReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// accessCertificateReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [AccessCertificateReplaceResponseEnvelopeErrors]
-type accessCertificateReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AccessCertificateReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    accessCertificateReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// accessCertificateReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AccessCertificateReplaceResponseEnvelopeMessages]
-type accessCertificateReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCertificateReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AccessCertificateReplaceResponseEnvelopeSuccess bool
-
-const (
-	AccessCertificateReplaceResponseEnvelopeSuccessTrue AccessCertificateReplaceResponseEnvelopeSuccess = true
 )

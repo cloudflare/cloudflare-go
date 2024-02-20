@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
+func TestWorkerServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Services.Environments.Settings.Update(
+	_, err := client.Workers.Services.Environments.Settings.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-worker",
 		"production",
-		cloudflare.WorkerServiceEnvironmentSettingUpdateParams{
-			Errors: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsError{{
+		cloudflare.WorkerServiceEnvironmentSettingEditParams{
+			Errors: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsError{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -45,7 +45,7 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Messages: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsMessage{{
+			Messages: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsMessage{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}, {
@@ -55,23 +55,23 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
 			}}),
-			Result: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResult{
-				Bindings: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBinding{cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+			Result: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResult{
+				Bindings: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBinding{cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
 				})}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),
 				Logpush:            cloudflare.F(false),
-				Migrations: cloudflare.F[cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultMigrations](cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[cloudflare.WorkerServiceEnvironmentSettingEditParamsResultMigrations](cloudflare.WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -81,7 +81,7 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -95,11 +95,11 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultPlacement{
-					Mode: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultPlacementModeSmart),
+				Placement: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultPlacement{
+					Mode: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"my-tag", "my-tag", "my-tag"}),
-				TailConsumers: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingUpdateParamsResultTailConsumer{{
+				TailConsumers: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -114,7 +114,7 @@ func TestWorkerServiceEnvironmentSettingUpdateWithOptionalParams(t *testing.T) {
 				}}),
 				UsageModel: cloudflare.F("unbound"),
 			}),
-			Success: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingUpdateParamsSuccessTrue),
+			Success: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsSuccessTrue),
 		},
 	)
 	if err != nil {

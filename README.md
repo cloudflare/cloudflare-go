@@ -206,10 +206,10 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Zones.Update(
+client.Zones.Edit(
 	ctx,
 	"023e105f4ecef8ad9ca31a8372d0c353",
-	cloudflare.ZoneUpdateParams{},
+	cloudflare.ZoneEditParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )

@@ -34,9 +34,9 @@ func NewSettingEmailObfuscationService(opts ...option.RequestOption) (r *Setting
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
 // humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-func (r *SettingEmailObfuscationService) Update(ctx context.Context, zoneID string, body SettingEmailObfuscationUpdateParams, opts ...option.RequestOption) (res *SettingEmailObfuscationUpdateResponse, err error) {
+func (r *SettingEmailObfuscationService) Edit(ctx context.Context, zoneID string, body SettingEmailObfuscationEditParams, opts ...option.RequestOption) (res *SettingEmailObfuscationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingEmailObfuscationUpdateResponseEnvelope
+	var env SettingEmailObfuscationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingEmailObfuscationService) Get(ctx context.Context, zoneID string,
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
 // humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-type SettingEmailObfuscationUpdateResponse struct {
+type SettingEmailObfuscationEditResponse struct {
 	// ID of the zone setting.
-	ID SettingEmailObfuscationUpdateResponseID `json:"id,required"`
+	ID SettingEmailObfuscationEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingEmailObfuscationUpdateResponseValue `json:"value,required"`
+	Value SettingEmailObfuscationEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingEmailObfuscationUpdateResponseEditable `json:"editable"`
+	Editable SettingEmailObfuscationEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingEmailObfuscationUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingEmailObfuscationEditResponseJSON `json:"-"`
 }
 
-// settingEmailObfuscationUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingEmailObfuscationUpdateResponse]
-type settingEmailObfuscationUpdateResponseJSON struct {
+// settingEmailObfuscationEditResponseJSON contains the JSON metadata for the
+// struct [SettingEmailObfuscationEditResponse]
+type settingEmailObfuscationEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingEmailObfuscationUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingEmailObfuscationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEmailObfuscationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingEmailObfuscationUpdateResponseID string
+type SettingEmailObfuscationEditResponseID string
 
 const (
-	SettingEmailObfuscationUpdateResponseIDEmailObfuscation SettingEmailObfuscationUpdateResponseID = "email_obfuscation"
+	SettingEmailObfuscationEditResponseIDEmailObfuscation SettingEmailObfuscationEditResponseID = "email_obfuscation"
 )
 
 // Current value of the zone setting.
-type SettingEmailObfuscationUpdateResponseValue string
+type SettingEmailObfuscationEditResponseValue string
 
 const (
-	SettingEmailObfuscationUpdateResponseValueOn  SettingEmailObfuscationUpdateResponseValue = "on"
-	SettingEmailObfuscationUpdateResponseValueOff SettingEmailObfuscationUpdateResponseValue = "off"
+	SettingEmailObfuscationEditResponseValueOn  SettingEmailObfuscationEditResponseValue = "on"
+	SettingEmailObfuscationEditResponseValueOff SettingEmailObfuscationEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingEmailObfuscationUpdateResponseEditable bool
+type SettingEmailObfuscationEditResponseEditable bool
 
 const (
-	SettingEmailObfuscationUpdateResponseEditableTrue  SettingEmailObfuscationUpdateResponseEditable = true
-	SettingEmailObfuscationUpdateResponseEditableFalse SettingEmailObfuscationUpdateResponseEditable = false
+	SettingEmailObfuscationEditResponseEditableTrue  SettingEmailObfuscationEditResponseEditable = true
+	SettingEmailObfuscationEditResponseEditableFalse SettingEmailObfuscationEditResponseEditable = false
 )
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
@@ -168,37 +168,37 @@ const (
 	SettingEmailObfuscationGetResponseEditableFalse SettingEmailObfuscationGetResponseEditable = false
 )
 
-type SettingEmailObfuscationUpdateParams struct {
+type SettingEmailObfuscationEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingEmailObfuscationUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingEmailObfuscationEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingEmailObfuscationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingEmailObfuscationEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingEmailObfuscationUpdateParamsValue string
+type SettingEmailObfuscationEditParamsValue string
 
 const (
-	SettingEmailObfuscationUpdateParamsValueOn  SettingEmailObfuscationUpdateParamsValue = "on"
-	SettingEmailObfuscationUpdateParamsValueOff SettingEmailObfuscationUpdateParamsValue = "off"
+	SettingEmailObfuscationEditParamsValueOn  SettingEmailObfuscationEditParamsValue = "on"
+	SettingEmailObfuscationEditParamsValueOff SettingEmailObfuscationEditParamsValue = "off"
 )
 
-type SettingEmailObfuscationUpdateResponseEnvelope struct {
-	Errors   []SettingEmailObfuscationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingEmailObfuscationUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingEmailObfuscationEditResponseEnvelope struct {
+	Errors   []SettingEmailObfuscationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingEmailObfuscationEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Encrypt email adresses on your web page from bots, while keeping them visible to
 	// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-	Result SettingEmailObfuscationUpdateResponse             `json:"result"`
-	JSON   settingEmailObfuscationUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingEmailObfuscationEditResponse             `json:"result"`
+	JSON   settingEmailObfuscationEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingEmailObfuscationUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingEmailObfuscationUpdateResponseEnvelope]
-type settingEmailObfuscationUpdateResponseEnvelopeJSON struct {
+// settingEmailObfuscationEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingEmailObfuscationEditResponseEnvelope]
+type settingEmailObfuscationEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,45 +207,45 @@ type settingEmailObfuscationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingEmailObfuscationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEmailObfuscationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingEmailObfuscationUpdateResponseEnvelopeErrors struct {
+type SettingEmailObfuscationEditResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    settingEmailObfuscationEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingEmailObfuscationEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingEmailObfuscationEditResponseEnvelopeErrors]
+type settingEmailObfuscationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingEmailObfuscationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingEmailObfuscationEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
-	JSON    settingEmailObfuscationUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingEmailObfuscationEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingEmailObfuscationUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingEmailObfuscationUpdateResponseEnvelopeErrors]
-type settingEmailObfuscationUpdateResponseEnvelopeErrorsJSON struct {
+// settingEmailObfuscationEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingEmailObfuscationEditResponseEnvelopeMessages]
+type settingEmailObfuscationEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingEmailObfuscationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingEmailObfuscationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    settingEmailObfuscationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingEmailObfuscationUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingEmailObfuscationUpdateResponseEnvelopeMessages]
-type settingEmailObfuscationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingEmailObfuscationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingEmailObfuscationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

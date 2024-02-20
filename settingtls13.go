@@ -33,9 +33,9 @@ func NewSettingTLS1_3Service(opts ...option.RequestOption) (r *SettingTLS1_3Serv
 }
 
 // Changes TLS 1.3 setting.
-func (r *SettingTLS1_3Service) Update(ctx context.Context, zoneID string, body SettingTLS1_3UpdateParams, opts ...option.RequestOption) (res *SettingTls1_3UpdateResponse, err error) {
+func (r *SettingTLS1_3Service) Edit(ctx context.Context, zoneID string, body SettingTLS1_3EditParams, opts ...option.RequestOption) (res *SettingTls1_3EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingTls1_3UpdateResponseEnvelope
+	var env SettingTls1_3EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_1_3", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingTLS1_3Service) Get(ctx context.Context, zoneID string, opts ...o
 }
 
 // Enables Crypto TLS 1.3 feature for a zone.
-type SettingTls1_3UpdateResponse struct {
+type SettingTls1_3EditResponse struct {
 	// ID of the zone setting.
-	ID SettingTls1_3UpdateResponseID `json:"id,required"`
+	ID SettingTls1_3EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingTls1_3UpdateResponseValue `json:"value,required"`
+	Value SettingTls1_3EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingTls1_3UpdateResponseEditable `json:"editable"`
+	Editable SettingTls1_3EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingTls1_3UpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingTls1_3EditResponseJSON `json:"-"`
 }
 
-// settingTls1_3UpdateResponseJSON contains the JSON metadata for the struct
-// [SettingTls1_3UpdateResponse]
-type settingTls1_3UpdateResponseJSON struct {
+// settingTls1_3EditResponseJSON contains the JSON metadata for the struct
+// [SettingTls1_3EditResponse]
+type settingTls1_3EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,33 +83,33 @@ type settingTls1_3UpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTls1_3UpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTls1_3EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingTls1_3UpdateResponseID string
+type SettingTls1_3EditResponseID string
 
 const (
-	SettingTls1_3UpdateResponseIDTLS1_3 SettingTls1_3UpdateResponseID = "tls_1_3"
+	SettingTls1_3EditResponseIDTLS1_3 SettingTls1_3EditResponseID = "tls_1_3"
 )
 
 // Current value of the zone setting.
-type SettingTls1_3UpdateResponseValue string
+type SettingTls1_3EditResponseValue string
 
 const (
-	SettingTls1_3UpdateResponseValueOn  SettingTls1_3UpdateResponseValue = "on"
-	SettingTls1_3UpdateResponseValueOff SettingTls1_3UpdateResponseValue = "off"
-	SettingTls1_3UpdateResponseValueZrt SettingTls1_3UpdateResponseValue = "zrt"
+	SettingTls1_3EditResponseValueOn  SettingTls1_3EditResponseValue = "on"
+	SettingTls1_3EditResponseValueOff SettingTls1_3EditResponseValue = "off"
+	SettingTls1_3EditResponseValueZrt SettingTls1_3EditResponseValue = "zrt"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingTls1_3UpdateResponseEditable bool
+type SettingTls1_3EditResponseEditable bool
 
 const (
-	SettingTls1_3UpdateResponseEditableTrue  SettingTls1_3UpdateResponseEditable = true
-	SettingTls1_3UpdateResponseEditableFalse SettingTls1_3UpdateResponseEditable = false
+	SettingTls1_3EditResponseEditableTrue  SettingTls1_3EditResponseEditable = true
+	SettingTls1_3EditResponseEditableFalse SettingTls1_3EditResponseEditable = false
 )
 
 // Enables Crypto TLS 1.3 feature for a zone.
@@ -166,39 +166,39 @@ const (
 	SettingTls1_3GetResponseEditableFalse SettingTls1_3GetResponseEditable = false
 )
 
-type SettingTLS1_3UpdateParams struct {
+type SettingTLS1_3EditParams struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
-	Value param.Field[SettingTls1_3UpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingTls1_3EditParamsValue] `json:"value,required"`
 }
 
-func (r SettingTLS1_3UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingTLS1_3EditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
-type SettingTls1_3UpdateParamsValue string
+type SettingTls1_3EditParamsValue string
 
 const (
-	SettingTls1_3UpdateParamsValueOn  SettingTls1_3UpdateParamsValue = "on"
-	SettingTls1_3UpdateParamsValueOff SettingTls1_3UpdateParamsValue = "off"
-	SettingTls1_3UpdateParamsValueZrt SettingTls1_3UpdateParamsValue = "zrt"
+	SettingTls1_3EditParamsValueOn  SettingTls1_3EditParamsValue = "on"
+	SettingTls1_3EditParamsValueOff SettingTls1_3EditParamsValue = "off"
+	SettingTls1_3EditParamsValueZrt SettingTls1_3EditParamsValue = "zrt"
 )
 
-type SettingTls1_3UpdateResponseEnvelope struct {
-	Errors   []SettingTls1_3UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingTls1_3UpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingTls1_3EditResponseEnvelope struct {
+	Errors   []SettingTls1_3EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingTls1_3EditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables Crypto TLS 1.3 feature for a zone.
-	Result SettingTls1_3UpdateResponse             `json:"result"`
-	JSON   settingTls1_3UpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingTls1_3EditResponse             `json:"result"`
+	JSON   settingTls1_3EditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingTls1_3UpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingTls1_3UpdateResponseEnvelope]
-type settingTls1_3UpdateResponseEnvelopeJSON struct {
+// settingTls1_3EditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingTls1_3EditResponseEnvelope]
+type settingTls1_3EditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,45 +207,45 @@ type settingTls1_3UpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTls1_3UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTls1_3EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingTls1_3UpdateResponseEnvelopeErrors struct {
+type SettingTls1_3EditResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    settingTls1_3EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingTls1_3EditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingTls1_3EditResponseEnvelopeErrors]
+type settingTls1_3EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingTls1_3EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingTls1_3EditResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    settingTls1_3UpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingTls1_3EditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingTls1_3UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingTls1_3UpdateResponseEnvelopeErrors]
-type settingTls1_3UpdateResponseEnvelopeErrorsJSON struct {
+// settingTls1_3EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingTls1_3EditResponseEnvelopeMessages]
+type settingTls1_3EditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingTls1_3UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingTls1_3UpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    settingTls1_3UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingTls1_3UpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingTls1_3UpdateResponseEnvelopeMessages]
-type settingTls1_3UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingTls1_3UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingTls1_3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

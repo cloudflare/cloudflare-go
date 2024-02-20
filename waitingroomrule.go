@@ -46,12 +46,13 @@ func (r *WaitingRoomRuleService) New(ctx context.Context, zoneIdentifier string,
 	return
 }
 
-// Patches a rule for a waiting room.
-func (r *WaitingRoomRuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body WaitingRoomRuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRuleUpdateResponse, err error) {
+// Only available for the Waiting Room Advanced subscription. Replaces all rules
+// for a waiting room.
+func (r *WaitingRoomRuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomRuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingRoomRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -85,13 +86,12 @@ func (r *WaitingRoomRuleService) Delete(ctx context.Context, zoneIdentifier stri
 	return
 }
 
-// Only available for the Waiting Room Advanced subscription. Replaces all rules
-// for a waiting room.
-func (r *WaitingRoomRuleService) Replace(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomRuleReplaceParams, opts ...option.RequestOption) (res *[]WaitingRoomRuleReplaceResponse, err error) {
+// Patches a rule for a waiting room.
+func (r *WaitingRoomRuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body WaitingRoomRuleEditParams, opts ...option.RequestOption) (res *[]WaitingRoomRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WaitingRoomRuleReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env WaitingRoomRuleEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -267,11 +267,11 @@ const (
 	WaitingRoomRuleDeleteResponseActionBypassWaitingRoom WaitingRoomRuleDeleteResponseAction = "bypass_waiting_room"
 )
 
-type WaitingRoomRuleReplaceResponse struct {
+type WaitingRoomRuleEditResponse struct {
 	// The ID of the rule.
 	ID string `json:"id"`
 	// The action to take when the expression matches.
-	Action WaitingRoomRuleReplaceResponseAction `json:"action"`
+	Action WaitingRoomRuleEditResponseAction `json:"action"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// When set to true, the rule is enabled.
@@ -280,13 +280,13 @@ type WaitingRoomRuleReplaceResponse struct {
 	Expression  string    `json:"expression"`
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the rule.
-	Version string                             `json:"version"`
-	JSON    waitingRoomRuleReplaceResponseJSON `json:"-"`
+	Version string                          `json:"version"`
+	JSON    waitingRoomRuleEditResponseJSON `json:"-"`
 }
 
-// waitingRoomRuleReplaceResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomRuleReplaceResponse]
-type waitingRoomRuleReplaceResponseJSON struct {
+// waitingRoomRuleEditResponseJSON contains the JSON metadata for the struct
+// [WaitingRoomRuleEditResponse]
+type waitingRoomRuleEditResponseJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -298,15 +298,15 @@ type waitingRoomRuleReplaceResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomRuleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to take when the expression matches.
-type WaitingRoomRuleReplaceResponseAction string
+type WaitingRoomRuleEditResponseAction string
 
 const (
-	WaitingRoomRuleReplaceResponseActionBypassWaitingRoom WaitingRoomRuleReplaceResponseAction = "bypass_waiting_room"
+	WaitingRoomRuleEditResponseActionBypassWaitingRoom WaitingRoomRuleEditResponseAction = "bypass_waiting_room"
 )
 
 type WaitingRoomRuleNewParams struct {
@@ -430,51 +430,34 @@ func (r *WaitingRoomRuleNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte
 }
 
 type WaitingRoomRuleUpdateParams struct {
+	Body param.Field[[]WaitingRoomRuleUpdateParamsBody] `json:"body,required"`
+}
+
+func (r WaitingRoomRuleUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type WaitingRoomRuleUpdateParamsBody struct {
 	// The action to take when the expression matches.
-	Action param.Field[WaitingRoomRuleUpdateParamsAction] `json:"action,required"`
+	Action param.Field[WaitingRoomRuleUpdateParamsBodyAction] `json:"action,required"`
 	// Criteria defining when there is a match for the current rule.
 	Expression param.Field[string] `json:"expression,required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
 	// When set to true, the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
-	// Reorder the position of a rule
-	Position param.Field[WaitingRoomRuleUpdateParamsPosition] `json:"position"`
 }
 
-func (r WaitingRoomRuleUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r WaitingRoomRuleUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to take when the expression matches.
-type WaitingRoomRuleUpdateParamsAction string
+type WaitingRoomRuleUpdateParamsBodyAction string
 
 const (
-	WaitingRoomRuleUpdateParamsActionBypassWaitingRoom WaitingRoomRuleUpdateParamsAction = "bypass_waiting_room"
+	WaitingRoomRuleUpdateParamsBodyActionBypassWaitingRoom WaitingRoomRuleUpdateParamsBodyAction = "bypass_waiting_room"
 )
-
-// Reorder the position of a rule
-//
-// Satisfied by [WaitingRoomRuleUpdateParamsPositionObject],
-// [WaitingRoomRuleUpdateParamsPositionObject],
-// [WaitingRoomRuleUpdateParamsPositionObject].
-type WaitingRoomRuleUpdateParamsPosition interface {
-	implementsWaitingRoomRuleUpdateParamsPosition()
-}
-
-type WaitingRoomRuleUpdateParamsPositionObject struct {
-	// Places the rule in the exact position specified by the integer number
-	// <POSITION_NUMBER>. Position numbers start with 1. Existing rules in the ruleset
-	// from the specified position number onward are shifted one position (no rule is
-	// overwritten).
-	Index param.Field[int64] `json:"index"`
-}
-
-func (r WaitingRoomRuleUpdateParamsPositionObject) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r WaitingRoomRuleUpdateParamsPositionObject) implementsWaitingRoomRuleUpdateParamsPosition() {}
 
 type WaitingRoomRuleUpdateResponseEnvelope struct {
 	Errors   []WaitingRoomRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -770,49 +753,66 @@ func (r *WaitingRoomRuleDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomRuleReplaceParams struct {
-	Body param.Field[[]WaitingRoomRuleReplaceParamsBody] `json:"body,required"`
-}
-
-func (r WaitingRoomRuleReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type WaitingRoomRuleReplaceParamsBody struct {
+type WaitingRoomRuleEditParams struct {
 	// The action to take when the expression matches.
-	Action param.Field[WaitingRoomRuleReplaceParamsBodyAction] `json:"action,required"`
+	Action param.Field[WaitingRoomRuleEditParamsAction] `json:"action,required"`
 	// Criteria defining when there is a match for the current rule.
 	Expression param.Field[string] `json:"expression,required"`
 	// The description of the rule.
 	Description param.Field[string] `json:"description"`
 	// When set to true, the rule is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
+	// Reorder the position of a rule
+	Position param.Field[WaitingRoomRuleEditParamsPosition] `json:"position"`
 }
 
-func (r WaitingRoomRuleReplaceParamsBody) MarshalJSON() (data []byte, err error) {
+func (r WaitingRoomRuleEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to take when the expression matches.
-type WaitingRoomRuleReplaceParamsBodyAction string
+type WaitingRoomRuleEditParamsAction string
 
 const (
-	WaitingRoomRuleReplaceParamsBodyActionBypassWaitingRoom WaitingRoomRuleReplaceParamsBodyAction = "bypass_waiting_room"
+	WaitingRoomRuleEditParamsActionBypassWaitingRoom WaitingRoomRuleEditParamsAction = "bypass_waiting_room"
 )
 
-type WaitingRoomRuleReplaceResponseEnvelope struct {
-	Errors   []WaitingRoomRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WaitingRoomRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingRoomRuleReplaceResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    WaitingRoomRuleReplaceResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo WaitingRoomRuleReplaceResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       waitingRoomRuleReplaceResponseEnvelopeJSON       `json:"-"`
+// Reorder the position of a rule
+//
+// Satisfied by [WaitingRoomRuleEditParamsPositionObject],
+// [WaitingRoomRuleEditParamsPositionObject],
+// [WaitingRoomRuleEditParamsPositionObject].
+type WaitingRoomRuleEditParamsPosition interface {
+	implementsWaitingRoomRuleEditParamsPosition()
 }
 
-// waitingRoomRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WaitingRoomRuleReplaceResponseEnvelope]
-type waitingRoomRuleReplaceResponseEnvelopeJSON struct {
+type WaitingRoomRuleEditParamsPositionObject struct {
+	// Places the rule in the exact position specified by the integer number
+	// <POSITION_NUMBER>. Position numbers start with 1. Existing rules in the ruleset
+	// from the specified position number onward are shifted one position (no rule is
+	// overwritten).
+	Index param.Field[int64] `json:"index"`
+}
+
+func (r WaitingRoomRuleEditParamsPositionObject) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r WaitingRoomRuleEditParamsPositionObject) implementsWaitingRoomRuleEditParamsPosition() {}
+
+type WaitingRoomRuleEditResponseEnvelope struct {
+	Errors   []WaitingRoomRuleEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WaitingRoomRuleEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   []WaitingRoomRuleEditResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    WaitingRoomRuleEditResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo WaitingRoomRuleEditResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       waitingRoomRuleEditResponseEnvelopeJSON       `json:"-"`
+}
+
+// waitingRoomRuleEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomRuleEditResponseEnvelope]
+type waitingRoomRuleEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -822,56 +822,56 @@ type waitingRoomRuleReplaceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomRuleReplaceResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    waitingRoomRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type WaitingRoomRuleEditResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    waitingRoomRuleEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// waitingRoomRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [WaitingRoomRuleReplaceResponseEnvelopeErrors]
-type waitingRoomRuleReplaceResponseEnvelopeErrorsJSON struct {
+// waitingRoomRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WaitingRoomRuleEditResponseEnvelopeErrors]
+type waitingRoomRuleEditResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomRuleReplaceResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    waitingRoomRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type WaitingRoomRuleEditResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    waitingRoomRuleEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// waitingRoomRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WaitingRoomRuleReplaceResponseEnvelopeMessages]
-type waitingRoomRuleReplaceResponseEnvelopeMessagesJSON struct {
+// waitingRoomRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WaitingRoomRuleEditResponseEnvelopeMessages]
+type waitingRoomRuleEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WaitingRoomRuleReplaceResponseEnvelopeSuccess bool
+type WaitingRoomRuleEditResponseEnvelopeSuccess bool
 
 const (
-	WaitingRoomRuleReplaceResponseEnvelopeSuccessTrue WaitingRoomRuleReplaceResponseEnvelopeSuccess = true
+	WaitingRoomRuleEditResponseEnvelopeSuccessTrue WaitingRoomRuleEditResponseEnvelopeSuccess = true
 )
 
-type WaitingRoomRuleReplaceResponseEnvelopeResultInfo struct {
+type WaitingRoomRuleEditResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -879,13 +879,13 @@ type WaitingRoomRuleReplaceResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       waitingRoomRuleReplaceResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                           `json:"total_count"`
+	JSON       waitingRoomRuleEditResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// waitingRoomRuleReplaceResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [WaitingRoomRuleReplaceResponseEnvelopeResultInfo]
-type waitingRoomRuleReplaceResponseEnvelopeResultInfoJSON struct {
+// waitingRoomRuleEditResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [WaitingRoomRuleEditResponseEnvelopeResultInfo]
+type waitingRoomRuleEditResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -894,6 +894,6 @@ type waitingRoomRuleReplaceResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomRuleReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomRuleEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

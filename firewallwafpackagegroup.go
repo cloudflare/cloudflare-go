@@ -36,23 +36,6 @@ func NewFirewallWAFPackageGroupService(opts ...option.RequestOption) (r *Firewal
 	return
 }
 
-// Updates a WAF rule group. You can update the state (`mode` parameter) of a rule
-// group.
-//
-// **Note:** Applies only to the
-// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) Update(ctx context.Context, zoneID string, packageID string, groupID string, body FirewallWAFPackageGroupUpdateParams, opts ...option.RequestOption) (res *FirewallWAFPackageGroupUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallWAFPackageGroupUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches the WAF rule groups in a WAF package.
 //
 // **Note:** Applies only to the
@@ -82,6 +65,23 @@ func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, zon
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, packageID, query, opts...))
 }
 
+// Updates a WAF rule group. You can update the state (`mode` parameter) of a rule
+// group.
+//
+// **Note:** Applies only to the
+// [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
+func (r *FirewallWAFPackageGroupService) Edit(ctx context.Context, zoneID string, packageID string, groupID string, body FirewallWAFPackageGroupEditParams, opts ...option.RequestOption) (res *FirewallWAFPackageGroupEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FirewallWAFPackageGroupEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the details of a WAF rule group.
 //
 // **Note:** Applies only to the
@@ -96,28 +96,6 @@ func (r *FirewallWAFPackageGroupService) Get(ctx context.Context, zoneID string,
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [FirewallWAFPackageGroupUpdateResponseUnknown],
-// [FirewallWAFPackageGroupUpdateResponseArray] or [shared.UnionString].
-type FirewallWAFPackageGroupUpdateResponse interface {
-	ImplementsFirewallWAFPackageGroupUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallWAFPackageGroupUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type FirewallWAFPackageGroupUpdateResponseArray []interface{}
-
-func (r FirewallWAFPackageGroupUpdateResponseArray) ImplementsFirewallWAFPackageGroupUpdateResponse() {
 }
 
 type FirewallWAFPackageGroupListResponse struct {
@@ -179,6 +157,27 @@ const (
 	FirewallWAFPackageGroupListResponseAllowedModeOff FirewallWAFPackageGroupListResponseAllowedMode = "off"
 )
 
+// Union satisfied by [FirewallWAFPackageGroupEditResponseUnknown],
+// [FirewallWAFPackageGroupEditResponseArray] or [shared.UnionString].
+type FirewallWAFPackageGroupEditResponse interface {
+	ImplementsFirewallWAFPackageGroupEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageGroupEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type FirewallWAFPackageGroupEditResponseArray []interface{}
+
+func (r FirewallWAFPackageGroupEditResponseArray) ImplementsFirewallWAFPackageGroupEditResponse() {}
+
 // Union satisfied by [FirewallWAFPackageGroupGetResponseUnknown],
 // [FirewallWAFPackageGroupGetResponseArray] or [shared.UnionString].
 type FirewallWAFPackageGroupGetResponse interface {
@@ -199,94 +198,6 @@ func init() {
 type FirewallWAFPackageGroupGetResponseArray []interface{}
 
 func (r FirewallWAFPackageGroupGetResponseArray) ImplementsFirewallWAFPackageGroupGetResponse() {}
-
-type FirewallWAFPackageGroupUpdateParams struct {
-	// The state of the rules contained in the rule group. When `on`, the rules in the
-	// group are configurable/usable.
-	Mode param.Field[FirewallWAFPackageGroupUpdateParamsMode] `json:"mode"`
-}
-
-func (r FirewallWAFPackageGroupUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The state of the rules contained in the rule group. When `on`, the rules in the
-// group are configurable/usable.
-type FirewallWAFPackageGroupUpdateParamsMode string
-
-const (
-	FirewallWAFPackageGroupUpdateParamsModeOn  FirewallWAFPackageGroupUpdateParamsMode = "on"
-	FirewallWAFPackageGroupUpdateParamsModeOff FirewallWAFPackageGroupUpdateParamsMode = "off"
-)
-
-type FirewallWAFPackageGroupUpdateResponseEnvelope struct {
-	Errors   []FirewallWAFPackageGroupUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallWAFPackageGroupUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallWAFPackageGroupUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success FirewallWAFPackageGroupUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallWAFPackageGroupUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// firewallWAFPackageGroupUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [FirewallWAFPackageGroupUpdateResponseEnvelope]
-type firewallWAFPackageGroupUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallWAFPackageGroupUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallWAFPackageGroupUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    firewallWAFPackageGroupUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallWAFPackageGroupUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [FirewallWAFPackageGroupUpdateResponseEnvelopeErrors]
-type firewallWAFPackageGroupUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallWAFPackageGroupUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallWAFPackageGroupUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    firewallWAFPackageGroupUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallWAFPackageGroupUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [FirewallWAFPackageGroupUpdateResponseEnvelopeMessages]
-type firewallWAFPackageGroupUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallWAFPackageGroupUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallWAFPackageGroupUpdateResponseEnvelopeSuccess bool
-
-const (
-	FirewallWAFPackageGroupUpdateResponseEnvelopeSuccessTrue FirewallWAFPackageGroupUpdateResponseEnvelopeSuccess = true
-)
 
 type FirewallWAFPackageGroupListParams struct {
 	// The direction used to sort returned rule groups.
@@ -346,6 +257,94 @@ type FirewallWAFPackageGroupListParamsOrder string
 const (
 	FirewallWAFPackageGroupListParamsOrderMode       FirewallWAFPackageGroupListParamsOrder = "mode"
 	FirewallWAFPackageGroupListParamsOrderRulesCount FirewallWAFPackageGroupListParamsOrder = "rules_count"
+)
+
+type FirewallWAFPackageGroupEditParams struct {
+	// The state of the rules contained in the rule group. When `on`, the rules in the
+	// group are configurable/usable.
+	Mode param.Field[FirewallWAFPackageGroupEditParamsMode] `json:"mode"`
+}
+
+func (r FirewallWAFPackageGroupEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The state of the rules contained in the rule group. When `on`, the rules in the
+// group are configurable/usable.
+type FirewallWAFPackageGroupEditParamsMode string
+
+const (
+	FirewallWAFPackageGroupEditParamsModeOn  FirewallWAFPackageGroupEditParamsMode = "on"
+	FirewallWAFPackageGroupEditParamsModeOff FirewallWAFPackageGroupEditParamsMode = "off"
+)
+
+type FirewallWAFPackageGroupEditResponseEnvelope struct {
+	Errors   []FirewallWAFPackageGroupEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallWAFPackageGroupEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallWAFPackageGroupEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success FirewallWAFPackageGroupEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallWAFPackageGroupEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// firewallWAFPackageGroupEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [FirewallWAFPackageGroupEditResponseEnvelope]
+type firewallWAFPackageGroupEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallWAFPackageGroupEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallWAFPackageGroupEditResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    firewallWAFPackageGroupEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// firewallWAFPackageGroupEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [FirewallWAFPackageGroupEditResponseEnvelopeErrors]
+type firewallWAFPackageGroupEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallWAFPackageGroupEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallWAFPackageGroupEditResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    firewallWAFPackageGroupEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// firewallWAFPackageGroupEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [FirewallWAFPackageGroupEditResponseEnvelopeMessages]
+type firewallWAFPackageGroupEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallWAFPackageGroupEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FirewallWAFPackageGroupEditResponseEnvelopeSuccess bool
+
+const (
+	FirewallWAFPackageGroupEditResponseEnvelopeSuccessTrue FirewallWAFPackageGroupEditResponseEnvelopeSuccess = true
 )
 
 type FirewallWAFPackageGroupGetResponseEnvelope struct {

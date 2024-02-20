@@ -50,19 +50,6 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	return
 }
 
-// Edit part of your user details.
-func (r *UserService) Update(ctx context.Context, body UserUpdateParams, opts ...option.RequestOption) (res *UserUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserUpdateResponseEnvelope
-	path := "user"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // User Details
 func (r *UserService) List(ctx context.Context, opts ...option.RequestOption) (res *UserListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -76,20 +63,17 @@ func (r *UserService) List(ctx context.Context, opts ...option.RequestOption) (r
 	return
 }
 
-// Union satisfied by [UserUpdateResponseUnknown] or [shared.UnionString].
-type UserUpdateResponse interface {
-	ImplementsUserUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// Edit part of your user details.
+func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserEditResponseEnvelope
+	path := "user"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 // Union satisfied by [UserListResponseUnknown] or [shared.UnionString].
@@ -108,91 +92,21 @@ func init() {
 	)
 }
 
-type UserUpdateParams struct {
-	// The country in which the user lives.
-	Country param.Field[string] `json:"country"`
-	// User's first name
-	FirstName param.Field[string] `json:"first_name"`
-	// User's last name
-	LastName param.Field[string] `json:"last_name"`
-	// User's telephone number
-	Telephone param.Field[string] `json:"telephone"`
-	// The zipcode or postal code where the user lives.
-	Zipcode param.Field[string] `json:"zipcode"`
+// Union satisfied by [UserEditResponseUnknown] or [shared.UnionString].
+type UserEditResponse interface {
+	ImplementsUserEditResponse()
 }
 
-func (r UserUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
-
-type UserUpdateResponseEnvelope struct {
-	Errors   []UserUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success UserUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// userUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [UserUpdateResponseEnvelope]
-type userUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserUpdateResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    userUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UserUpdateResponseEnvelopeErrors]
-type userUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserUpdateResponseEnvelopeMessages struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    userUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UserUpdateResponseEnvelopeMessages]
-type userUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserUpdateResponseEnvelopeSuccess bool
-
-const (
-	UserUpdateResponseEnvelopeSuccessTrue UserUpdateResponseEnvelopeSuccess = true
-)
 
 type UserListResponseEnvelope struct {
 	Errors   []UserListResponseEnvelopeErrors   `json:"errors,required"`
@@ -261,4 +175,90 @@ type UserListResponseEnvelopeSuccess bool
 
 const (
 	UserListResponseEnvelopeSuccessTrue UserListResponseEnvelopeSuccess = true
+)
+
+type UserEditParams struct {
+	// The country in which the user lives.
+	Country param.Field[string] `json:"country"`
+	// User's first name
+	FirstName param.Field[string] `json:"first_name"`
+	// User's last name
+	LastName param.Field[string] `json:"last_name"`
+	// User's telephone number
+	Telephone param.Field[string] `json:"telephone"`
+	// The zipcode or postal code where the user lives.
+	Zipcode param.Field[string] `json:"zipcode"`
+}
+
+func (r UserEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserEditResponseEnvelope struct {
+	Errors   []UserEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// userEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [UserEditResponseEnvelope]
+type userEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserEditResponseEnvelopeErrors struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    userEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [UserEditResponseEnvelopeErrors]
+type userEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserEditResponseEnvelopeMessages struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    userEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [UserEditResponseEnvelopeMessages]
+type userEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserEditResponseEnvelopeSuccess bool
+
+const (
+	UserEditResponseEnvelopeSuccessTrue UserEditResponseEnvelopeSuccess = true
 )

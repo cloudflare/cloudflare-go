@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingPseudoIPV4Update(t *testing.T) {
+func TestSettingPseudoIPV4Edit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestSettingPseudoIPV4Update(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.PseudoIPV4.Update(
+	_, err := client.Settings.PseudoIPV4.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingPseudoIPV4UpdateParams{
-			Value: cloudflare.F(cloudflare.SettingPseudoIPV4UpdateParamsValueOff),
+		cloudflare.SettingPseudoIPV4EditParams{
+			Value: cloudflare.F(cloudflare.SettingPseudoIPV4EditParamsValueOff),
 		},
 	)
 	if err != nil {

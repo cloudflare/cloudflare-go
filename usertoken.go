@@ -53,6 +53,19 @@ func (r *UserTokenService) New(ctx context.Context, body UserTokenNewParams, opt
 	return
 }
 
+// Update an existing token.
+func (r *UserTokenService) Update(ctx context.Context, tokenID interface{}, body UserTokenUpdateParams, opts ...option.RequestOption) (res *UserTokenUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserTokenUpdateResponseEnvelope
+	path := fmt.Sprintf("user/tokens/%v", tokenID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List all access tokens you created.
 func (r *UserTokenService) List(ctx context.Context, query UserTokenListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[UserTokenListResponse], err error) {
 	var raw *http.Response
@@ -102,19 +115,6 @@ func (r *UserTokenService) Get(ctx context.Context, tokenID interface{}, opts ..
 	return
 }
 
-// Update an existing token.
-func (r *UserTokenService) Replace(ctx context.Context, tokenID interface{}, body UserTokenReplaceParams, opts ...option.RequestOption) (res *UserTokenReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserTokenReplaceResponseEnvelope
-	path := fmt.Sprintf("user/tokens/%v", tokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Test whether a token works.
 func (r *UserTokenService) Verify(ctx context.Context, opts ...option.RequestOption) (res *UserTokenVerifyResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -146,6 +146,22 @@ func (r *UserTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Union satisfied by [UserTokenUpdateResponseUnknown] or [shared.UnionString].
+type UserTokenUpdateResponse interface {
+	ImplementsUserTokenUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserTokenUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type UserTokenListResponse = interface{}
 
 type UserTokenDeleteResponse struct {
@@ -174,22 +190,6 @@ type UserTokenGetResponse interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*UserTokenGetResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Union satisfied by [UserTokenReplaceResponseUnknown] or [shared.UnionString].
-type UserTokenReplaceResponse interface {
-	ImplementsUserTokenReplaceResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserTokenReplaceResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -372,6 +372,154 @@ const (
 	UserTokenNewResponseEnvelopeSuccessTrue UserTokenNewResponseEnvelopeSuccess = true
 )
 
+type UserTokenUpdateParams struct {
+	// Token name.
+	Name param.Field[string] `json:"name,required"`
+	// List of access policies assigned to the token.
+	Policies param.Field[[]UserTokenUpdateParamsPolicy] `json:"policies,required"`
+	// Status of the token.
+	Status    param.Field[UserTokenUpdateParamsStatus]    `json:"status,required"`
+	Condition param.Field[UserTokenUpdateParamsCondition] `json:"condition"`
+	// The expiration time on or after which the JWT MUST NOT be accepted for
+	// processing.
+	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
+	// The time before which the token MUST NOT be accepted for processing.
+	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
+}
+
+func (r UserTokenUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserTokenUpdateParamsPolicy struct {
+	// Allow or deny operations against the resources.
+	Effect param.Field[UserTokenUpdateParamsPoliciesEffect] `json:"effect,required"`
+	// A set of permission groups that are specified to the policy.
+	PermissionGroups param.Field[[]UserTokenUpdateParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
+	// A list of resource names that the policy applies to.
+	Resources param.Field[interface{}] `json:"resources,required"`
+}
+
+func (r UserTokenUpdateParamsPolicy) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Allow or deny operations against the resources.
+type UserTokenUpdateParamsPoliciesEffect string
+
+const (
+	UserTokenUpdateParamsPoliciesEffectAllow UserTokenUpdateParamsPoliciesEffect = "allow"
+	UserTokenUpdateParamsPoliciesEffectDeny  UserTokenUpdateParamsPoliciesEffect = "deny"
+)
+
+// A named group of permissions that map to a group of operations against
+// resources.
+type UserTokenUpdateParamsPoliciesPermissionGroup struct {
+}
+
+func (r UserTokenUpdateParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Status of the token.
+type UserTokenUpdateParamsStatus string
+
+const (
+	UserTokenUpdateParamsStatusActive   UserTokenUpdateParamsStatus = "active"
+	UserTokenUpdateParamsStatusDisabled UserTokenUpdateParamsStatus = "disabled"
+	UserTokenUpdateParamsStatusExpired  UserTokenUpdateParamsStatus = "expired"
+)
+
+type UserTokenUpdateParamsCondition struct {
+	// Client IP restrictions.
+	RequestIP param.Field[UserTokenUpdateParamsConditionRequestIP] `json:"request_ip"`
+}
+
+func (r UserTokenUpdateParamsCondition) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Client IP restrictions.
+type UserTokenUpdateParamsConditionRequestIP struct {
+	// List of IPv4/IPv6 CIDR addresses.
+	In param.Field[[]string] `json:"in"`
+	// List of IPv4/IPv6 CIDR addresses.
+	NotIn param.Field[[]string] `json:"not_in"`
+}
+
+func (r UserTokenUpdateParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserTokenUpdateResponseEnvelope struct {
+	Errors   []UserTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserTokenUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userTokenUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// userTokenUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [UserTokenUpdateResponseEnvelope]
+type userTokenUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserTokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserTokenUpdateResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    userTokenUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userTokenUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [UserTokenUpdateResponseEnvelopeErrors]
+type userTokenUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserTokenUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserTokenUpdateResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    userTokenUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userTokenUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [UserTokenUpdateResponseEnvelopeMessages]
+type userTokenUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserTokenUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserTokenUpdateResponseEnvelopeSuccess bool
+
+const (
+	UserTokenUpdateResponseEnvelopeSuccessTrue UserTokenUpdateResponseEnvelopeSuccess = true
+)
+
 type UserTokenListParams struct {
 	// Direction to order results.
 	Direction param.Field[UserTokenListParamsDirection] `query:"direction"`
@@ -533,154 +681,6 @@ type UserTokenGetResponseEnvelopeSuccess bool
 
 const (
 	UserTokenGetResponseEnvelopeSuccessTrue UserTokenGetResponseEnvelopeSuccess = true
-)
-
-type UserTokenReplaceParams struct {
-	// Token name.
-	Name param.Field[string] `json:"name,required"`
-	// List of access policies assigned to the token.
-	Policies param.Field[[]UserTokenReplaceParamsPolicy] `json:"policies,required"`
-	// Status of the token.
-	Status    param.Field[UserTokenReplaceParamsStatus]    `json:"status,required"`
-	Condition param.Field[UserTokenReplaceParamsCondition] `json:"condition"`
-	// The expiration time on or after which the JWT MUST NOT be accepted for
-	// processing.
-	ExpiresOn param.Field[time.Time] `json:"expires_on" format:"date-time"`
-	// The time before which the token MUST NOT be accepted for processing.
-	NotBefore param.Field[time.Time] `json:"not_before" format:"date-time"`
-}
-
-func (r UserTokenReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type UserTokenReplaceParamsPolicy struct {
-	// Allow or deny operations against the resources.
-	Effect param.Field[UserTokenReplaceParamsPoliciesEffect] `json:"effect,required"`
-	// A set of permission groups that are specified to the policy.
-	PermissionGroups param.Field[[]UserTokenReplaceParamsPoliciesPermissionGroup] `json:"permission_groups,required"`
-	// A list of resource names that the policy applies to.
-	Resources param.Field[interface{}] `json:"resources,required"`
-}
-
-func (r UserTokenReplaceParamsPolicy) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Allow or deny operations against the resources.
-type UserTokenReplaceParamsPoliciesEffect string
-
-const (
-	UserTokenReplaceParamsPoliciesEffectAllow UserTokenReplaceParamsPoliciesEffect = "allow"
-	UserTokenReplaceParamsPoliciesEffectDeny  UserTokenReplaceParamsPoliciesEffect = "deny"
-)
-
-// A named group of permissions that map to a group of operations against
-// resources.
-type UserTokenReplaceParamsPoliciesPermissionGroup struct {
-}
-
-func (r UserTokenReplaceParamsPoliciesPermissionGroup) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Status of the token.
-type UserTokenReplaceParamsStatus string
-
-const (
-	UserTokenReplaceParamsStatusActive   UserTokenReplaceParamsStatus = "active"
-	UserTokenReplaceParamsStatusDisabled UserTokenReplaceParamsStatus = "disabled"
-	UserTokenReplaceParamsStatusExpired  UserTokenReplaceParamsStatus = "expired"
-)
-
-type UserTokenReplaceParamsCondition struct {
-	// Client IP restrictions.
-	RequestIP param.Field[UserTokenReplaceParamsConditionRequestIP] `json:"request_ip"`
-}
-
-func (r UserTokenReplaceParamsCondition) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Client IP restrictions.
-type UserTokenReplaceParamsConditionRequestIP struct {
-	// List of IPv4/IPv6 CIDR addresses.
-	In param.Field[[]string] `json:"in"`
-	// List of IPv4/IPv6 CIDR addresses.
-	NotIn param.Field[[]string] `json:"not_in"`
-}
-
-func (r UserTokenReplaceParamsConditionRequestIP) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type UserTokenReplaceResponseEnvelope struct {
-	Errors   []UserTokenReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserTokenReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserTokenReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success UserTokenReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userTokenReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// userTokenReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [UserTokenReplaceResponseEnvelope]
-type userTokenReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserTokenReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserTokenReplaceResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    userTokenReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userTokenReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [UserTokenReplaceResponseEnvelopeErrors]
-type userTokenReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserTokenReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserTokenReplaceResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    userTokenReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userTokenReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [UserTokenReplaceResponseEnvelopeMessages]
-type userTokenReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserTokenReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserTokenReplaceResponseEnvelopeSuccess bool
-
-const (
-	UserTokenReplaceResponseEnvelopeSuccessTrue UserTokenReplaceResponseEnvelopeSuccess = true
 )
 
 type UserTokenVerifyResponseEnvelope struct {

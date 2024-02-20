@@ -32,9 +32,9 @@ func NewSSLUniversalSettingService(opts ...option.RequestOption) (r *SSLUniversa
 }
 
 // Patch Universal SSL Settings for a Zone.
-func (r *SSLUniversalSettingService) Update(ctx context.Context, zoneID string, body SSLUniversalSettingUpdateParams, opts ...option.RequestOption) (res *SSLUniversalSettingUpdateResponse, err error) {
+func (r *SSLUniversalSettingService) Edit(ctx context.Context, zoneID string, body SSLUniversalSettingEditParams, opts ...option.RequestOption) (res *SSLUniversalSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLUniversalSettingUpdateResponseEnvelope
+	var env SSLUniversalSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (r *SSLUniversalSettingService) Get(ctx context.Context, zoneID string, opt
 	return
 }
 
-type SSLUniversalSettingUpdateResponse struct {
+type SSLUniversalSettingEditResponse struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -83,19 +83,19 @@ type SSLUniversalSettingUpdateResponse struct {
 	// and are unsure if any of the above Cloudflare settings are enabled, or if any
 	// HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for
 	// your domain.
-	Enabled bool                                  `json:"enabled"`
-	JSON    sslUniversalSettingUpdateResponseJSON `json:"-"`
+	Enabled bool                                `json:"enabled"`
+	JSON    sslUniversalSettingEditResponseJSON `json:"-"`
 }
 
-// sslUniversalSettingUpdateResponseJSON contains the JSON metadata for the struct
-// [SSLUniversalSettingUpdateResponse]
-type sslUniversalSettingUpdateResponseJSON struct {
+// sslUniversalSettingEditResponseJSON contains the JSON metadata for the struct
+// [SSLUniversalSettingEditResponse]
+type sslUniversalSettingEditResponseJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLUniversalSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLUniversalSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -141,7 +141,7 @@ func (r *SSLUniversalSettingGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLUniversalSettingUpdateParams struct {
+type SSLUniversalSettingEditParams struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -170,22 +170,22 @@ type SSLUniversalSettingUpdateParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r SSLUniversalSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SSLUniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type SSLUniversalSettingUpdateResponseEnvelope struct {
-	Errors   []SSLUniversalSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLUniversalSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLUniversalSettingUpdateResponse                   `json:"result,required"`
+type SSLUniversalSettingEditResponseEnvelope struct {
+	Errors   []SSLUniversalSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLUniversalSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLUniversalSettingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SSLUniversalSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslUniversalSettingUpdateResponseEnvelopeJSON    `json:"-"`
+	Success SSLUniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslUniversalSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// sslUniversalSettingUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SSLUniversalSettingUpdateResponseEnvelope]
-type sslUniversalSettingUpdateResponseEnvelopeJSON struct {
+// sslUniversalSettingEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLUniversalSettingEditResponseEnvelope]
+type sslUniversalSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -194,53 +194,53 @@ type sslUniversalSettingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLUniversalSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLUniversalSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLUniversalSettingUpdateResponseEnvelopeErrors struct {
+type SSLUniversalSettingEditResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    sslUniversalSettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sslUniversalSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SSLUniversalSettingEditResponseEnvelopeErrors]
+type sslUniversalSettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLUniversalSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLUniversalSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
-	JSON    sslUniversalSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    sslUniversalSettingEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// sslUniversalSettingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SSLUniversalSettingUpdateResponseEnvelopeErrors]
-type sslUniversalSettingUpdateResponseEnvelopeErrorsJSON struct {
+// sslUniversalSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SSLUniversalSettingEditResponseEnvelopeMessages]
+type sslUniversalSettingEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLUniversalSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLUniversalSettingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    sslUniversalSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sslUniversalSettingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SSLUniversalSettingUpdateResponseEnvelopeMessages]
-type sslUniversalSettingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLUniversalSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLUniversalSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SSLUniversalSettingUpdateResponseEnvelopeSuccess bool
+type SSLUniversalSettingEditResponseEnvelopeSuccess bool
 
 const (
-	SSLUniversalSettingUpdateResponseEnvelopeSuccessTrue SSLUniversalSettingUpdateResponseEnvelopeSuccess = true
+	SSLUniversalSettingEditResponseEnvelopeSuccessTrue SSLUniversalSettingEditResponseEnvelopeSuccess = true
 )
 
 type SSLUniversalSettingGetResponseEnvelope struct {

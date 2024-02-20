@@ -44,12 +44,13 @@ func (r *MnmConfigService) New(ctx context.Context, accountIdentifier interface{
 	return
 }
 
-// Update fields in an existing network monitoring configuration.
+// Update an existing network monitoring configuration, requires the entire
+// configuration to be updated at once.
 func (r *MnmConfigService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MnmConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -83,13 +84,12 @@ func (r *MnmConfigService) Delete(ctx context.Context, accountIdentifier interfa
 	return
 }
 
-// Update an existing network monitoring configuration, requires the entire
-// configuration to be updated at once.
-func (r *MnmConfigService) Replace(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigReplaceResponse, err error) {
+// Update fields in an existing network monitoring configuration.
+func (r *MnmConfigService) Edit(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MnmConfigReplaceResponseEnvelope
+	var env MnmConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -193,19 +193,19 @@ func (r *MnmConfigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigReplaceResponse struct {
+type MnmConfigEditResponse struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name      string                       `json:"name,required"`
-	RouterIPs []string                     `json:"router_ips,required"`
-	JSON      mnmConfigReplaceResponseJSON `json:"-"`
+	Name      string                    `json:"name,required"`
+	RouterIPs []string                  `json:"router_ips,required"`
+	JSON      mnmConfigEditResponseJSON `json:"-"`
 }
 
-// mnmConfigReplaceResponseJSON contains the JSON metadata for the struct
-// [MnmConfigReplaceResponse]
-type mnmConfigReplaceResponseJSON struct {
+// mnmConfigEditResponseJSON contains the JSON metadata for the struct
+// [MnmConfigEditResponse]
+type mnmConfigEditResponseJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
@@ -213,7 +213,7 @@ type mnmConfigReplaceResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MnmConfigReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -493,18 +493,18 @@ const (
 	MnmConfigDeleteResponseEnvelopeSuccessTrue MnmConfigDeleteResponseEnvelopeSuccess = true
 )
 
-type MnmConfigReplaceResponseEnvelope struct {
-	Errors   []MnmConfigReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmConfigReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmConfigReplaceResponse                   `json:"result,required"`
+type MnmConfigEditResponseEnvelope struct {
+	Errors   []MnmConfigEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmConfigEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmConfigEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MnmConfigReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmConfigReplaceResponseEnvelopeJSON    `json:"-"`
+	Success MnmConfigEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmConfigEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// mnmConfigReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MnmConfigReplaceResponseEnvelope]
-type mnmConfigReplaceResponseEnvelopeJSON struct {
+// mnmConfigEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmConfigEditResponseEnvelope]
+type mnmConfigEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -513,51 +513,51 @@ type mnmConfigReplaceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigReplaceResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    mnmConfigReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type MnmConfigEditResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    mnmConfigEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// mnmConfigReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MnmConfigReplaceResponseEnvelopeErrors]
-type mnmConfigReplaceResponseEnvelopeErrorsJSON struct {
+// mnmConfigEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MnmConfigEditResponseEnvelopeErrors]
+type mnmConfigEditResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigReplaceResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    mnmConfigReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type MnmConfigEditResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    mnmConfigEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// mnmConfigReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MnmConfigReplaceResponseEnvelopeMessages]
-type mnmConfigReplaceResponseEnvelopeMessagesJSON struct {
+// mnmConfigEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmConfigEditResponseEnvelopeMessages]
+type mnmConfigEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MnmConfigReplaceResponseEnvelopeSuccess bool
+type MnmConfigEditResponseEnvelopeSuccess bool
 
 const (
-	MnmConfigReplaceResponseEnvelopeSuccessTrue MnmConfigReplaceResponseEnvelopeSuccess = true
+	MnmConfigEditResponseEnvelopeSuccessTrue MnmConfigEditResponseEnvelopeSuccess = true
 )

@@ -49,7 +49,7 @@ func TestWaitingRoomRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWaitingRoomRuleUpdateWithOptionalParams(t *testing.T) {
+func TestWaitingRoomRuleUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -69,15 +69,23 @@ func TestWaitingRoomRuleUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
-		"25756b2dfe6e378a06b033b670413757",
 		cloudflare.WaitingRoomRuleUpdateParams{
-			Action:      cloudflare.F(cloudflare.WaitingRoomRuleUpdateParamsActionBypassWaitingRoom),
-			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-			Enabled:     cloudflare.F(true),
-			Position: cloudflare.F[cloudflare.WaitingRoomRuleUpdateParamsPosition](cloudflare.WaitingRoomRuleUpdateParamsPositionObject(cloudflare.WaitingRoomRuleUpdateParamsPositionObject{
-				Index: cloudflare.F(int64(0)),
-			})),
+			Body: cloudflare.F([]cloudflare.WaitingRoomRuleUpdateParamsBody{{
+				Action:      cloudflare.F(cloudflare.WaitingRoomRuleUpdateParamsBodyActionBypassWaitingRoom),
+				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
+				Enabled:     cloudflare.F(true),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
+			}, {
+				Action:      cloudflare.F(cloudflare.WaitingRoomRuleUpdateParamsBodyActionBypassWaitingRoom),
+				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
+				Enabled:     cloudflare.F(true),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
+			}, {
+				Action:      cloudflare.F(cloudflare.WaitingRoomRuleUpdateParamsBodyActionBypassWaitingRoom),
+				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
+				Enabled:     cloudflare.F(true),
+				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
+			}}),
 		},
 	)
 	if err != nil {
@@ -150,7 +158,7 @@ func TestWaitingRoomRuleDelete(t *testing.T) {
 	}
 }
 
-func TestWaitingRoomRuleReplace(t *testing.T) {
+func TestWaitingRoomRuleEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -166,27 +174,19 @@ func TestWaitingRoomRuleReplace(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.WaitingRooms.Rules.Replace(
+	_, err := client.WaitingRooms.Rules.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.WaitingRoomRuleReplaceParams{
-			Body: cloudflare.F([]cloudflare.WaitingRoomRuleReplaceParamsBody{{
-				Action:      cloudflare.F(cloudflare.WaitingRoomRuleReplaceParamsBodyActionBypassWaitingRoom),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			}, {
-				Action:      cloudflare.F(cloudflare.WaitingRoomRuleReplaceParamsBodyActionBypassWaitingRoom),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			}, {
-				Action:      cloudflare.F(cloudflare.WaitingRoomRuleReplaceParamsBodyActionBypassWaitingRoom),
-				Description: cloudflare.F("allow all traffic from 10.20.30.40"),
-				Enabled:     cloudflare.F(true),
-				Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
-			}}),
+		"25756b2dfe6e378a06b033b670413757",
+		cloudflare.WaitingRoomRuleEditParams{
+			Action:      cloudflare.F(cloudflare.WaitingRoomRuleEditParamsActionBypassWaitingRoom),
+			Expression:  cloudflare.F("ip.src in {10.20.30.40}"),
+			Description: cloudflare.F("allow all traffic from 10.20.30.40"),
+			Enabled:     cloudflare.F(true),
+			Position: cloudflare.F[cloudflare.WaitingRoomRuleEditParamsPosition](cloudflare.WaitingRoomRuleEditParamsPositionObject(cloudflare.WaitingRoomRuleEditParamsPositionObject{
+				Index: cloudflare.F(int64(0)),
+			})),
 		},
 	)
 	if err != nil {

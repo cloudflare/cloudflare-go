@@ -43,9 +43,9 @@ func NewZarazService(opts ...option.RequestOption) (r *ZarazService) {
 }
 
 // Updates Zaraz workflow for a zone.
-func (r *ZarazService) Replace(ctx context.Context, zoneID string, body ZarazReplaceParams, opts ...option.RequestOption) (res *ZarazReplaceResponse, err error) {
+func (r *ZarazService) Update(ctx context.Context, zoneID string, body ZarazUpdateParams, opts ...option.RequestOption) (res *ZarazUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZarazReplaceResponseEnvelope
+	var env ZarazUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/zaraz/workflow", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -56,43 +56,43 @@ func (r *ZarazService) Replace(ctx context.Context, zoneID string, body ZarazRep
 }
 
 // Zaraz workflow
-type ZarazReplaceResponse string
+type ZarazUpdateResponse string
 
 const (
-	ZarazReplaceResponseRealtime ZarazReplaceResponse = "realtime"
-	ZarazReplaceResponsePreview  ZarazReplaceResponse = "preview"
+	ZarazUpdateResponseRealtime ZarazUpdateResponse = "realtime"
+	ZarazUpdateResponsePreview  ZarazUpdateResponse = "preview"
 )
 
-type ZarazReplaceParams struct {
+type ZarazUpdateParams struct {
 	// Zaraz workflow
-	Body param.Field[ZarazReplaceParamsBody] `json:"body,required"`
+	Body param.Field[ZarazUpdateParamsBody] `json:"body,required"`
 }
 
-func (r ZarazReplaceParams) MarshalJSON() (data []byte, err error) {
+func (r ZarazUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
 // Zaraz workflow
-type ZarazReplaceParamsBody string
+type ZarazUpdateParamsBody string
 
 const (
-	ZarazReplaceParamsBodyRealtime ZarazReplaceParamsBody = "realtime"
-	ZarazReplaceParamsBodyPreview  ZarazReplaceParamsBody = "preview"
+	ZarazUpdateParamsBodyRealtime ZarazUpdateParamsBody = "realtime"
+	ZarazUpdateParamsBodyPreview  ZarazUpdateParamsBody = "preview"
 )
 
-type ZarazReplaceResponseEnvelope struct {
-	Errors   []ZarazReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZarazReplaceResponseEnvelopeMessages `json:"messages,required"`
+type ZarazUpdateResponseEnvelope struct {
+	Errors   []ZarazUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Zaraz workflow
-	Result ZarazReplaceResponse `json:"result,required"`
+	Result ZarazUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success bool                             `json:"success,required"`
-	JSON    zarazReplaceResponseEnvelopeJSON `json:"-"`
+	Success bool                            `json:"success,required"`
+	JSON    zarazUpdateResponseEnvelopeJSON `json:"-"`
 }
 
-// zarazReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZarazReplaceResponseEnvelope]
-type zarazReplaceResponseEnvelopeJSON struct {
+// zarazUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZarazUpdateResponseEnvelope]
+type zarazUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -101,44 +101,44 @@ type zarazReplaceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazReplaceResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    zarazReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type ZarazUpdateResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zarazUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zarazReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ZarazReplaceResponseEnvelopeErrors]
-type zarazReplaceResponseEnvelopeErrorsJSON struct {
+// zarazUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ZarazUpdateResponseEnvelopeErrors]
+type zarazUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazReplaceResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    zarazReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type ZarazUpdateResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zarazUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zarazReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ZarazReplaceResponseEnvelopeMessages]
-type zarazReplaceResponseEnvelopeMessagesJSON struct {
+// zarazUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZarazUpdateResponseEnvelopeMessages]
+type zarazUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

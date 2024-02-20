@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingImageResizingUpdateWithOptionalParams(t *testing.T) {
+func TestSettingImageResizingEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestSettingImageResizingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.ImageResizing.Update(
+	_, err := client.Settings.ImageResizing.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingImageResizingUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingImageResizingUpdateParamsValue{
-				ID:    cloudflare.F(cloudflare.SettingImageResizingUpdateParamsValueIDImageResizing),
-				Value: cloudflare.F(cloudflare.SettingImageResizingUpdateParamsValueValueOn),
+		cloudflare.SettingImageResizingEditParams{
+			Value: cloudflare.F(cloudflare.SettingImageResizingEditParamsValue{
+				ID:    cloudflare.F(cloudflare.SettingImageResizingEditParamsValueIDImageResizing),
+				Value: cloudflare.F(cloudflare.SettingImageResizingEditParamsValueValueOn),
 			}),
 		},
 	)

@@ -38,9 +38,9 @@ func NewSettingOriginMaxHTTPVersionService(opts ...option.RequestOption) (r *Set
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except ENT
 // where it is "1"
-func (r *SettingOriginMaxHTTPVersionService) Update(ctx context.Context, zoneID string, body SettingOriginMaxHTTPVersionUpdateParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionUpdateResponse, err error) {
+func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, zoneID string, body SettingOriginMaxHTTPVersionEditParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingOriginMaxHTTPVersionUpdateResponseEnvelope
+	var env SettingOriginMaxHTTPVersionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -74,19 +74,19 @@ func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, zoneID str
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except ENT
 // where it is "1"
-type SettingOriginMaxHTTPVersionUpdateResponse struct {
+type SettingOriginMaxHTTPVersionEditResponse struct {
 	// Value of the zone setting.
-	ID SettingOriginMaxHTTPVersionUpdateResponseID `json:"id,required"`
+	ID SettingOriginMaxHTTPVersionEditResponseID `json:"id,required"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
 	// Value of the Origin Max HTTP Version Setting.
-	Value SettingOriginMaxHTTPVersionUpdateResponseValue `json:"value,required"`
-	JSON  settingOriginMaxHTTPVersionUpdateResponseJSON  `json:"-"`
+	Value SettingOriginMaxHTTPVersionEditResponseValue `json:"value,required"`
+	JSON  settingOriginMaxHTTPVersionEditResponseJSON  `json:"-"`
 }
 
-// settingOriginMaxHTTPVersionUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingOriginMaxHTTPVersionUpdateResponse]
-type settingOriginMaxHTTPVersionUpdateResponseJSON struct {
+// settingOriginMaxHTTPVersionEditResponseJSON contains the JSON metadata for the
+// struct [SettingOriginMaxHTTPVersionEditResponse]
+type settingOriginMaxHTTPVersionEditResponseJSON struct {
 	ID          apijson.Field
 	ModifiedOn  apijson.Field
 	Value       apijson.Field
@@ -94,23 +94,23 @@ type settingOriginMaxHTTPVersionUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOriginMaxHTTPVersionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOriginMaxHTTPVersionEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Value of the zone setting.
-type SettingOriginMaxHTTPVersionUpdateResponseID string
+type SettingOriginMaxHTTPVersionEditResponseID string
 
 const (
-	SettingOriginMaxHTTPVersionUpdateResponseIDOriginMaxHTTPVersion SettingOriginMaxHTTPVersionUpdateResponseID = "origin_max_http_version"
+	SettingOriginMaxHTTPVersionEditResponseIDOriginMaxHTTPVersion SettingOriginMaxHTTPVersionEditResponseID = "origin_max_http_version"
 )
 
 // Value of the Origin Max HTTP Version Setting.
-type SettingOriginMaxHTTPVersionUpdateResponseValue string
+type SettingOriginMaxHTTPVersionEditResponseValue string
 
 const (
-	SettingOriginMaxHTTPVersionUpdateResponseValue2 SettingOriginMaxHTTPVersionUpdateResponseValue = "2"
-	SettingOriginMaxHTTPVersionUpdateResponseValue1 SettingOriginMaxHTTPVersionUpdateResponseValue = "1"
+	SettingOriginMaxHTTPVersionEditResponseValue2 SettingOriginMaxHTTPVersionEditResponseValue = "2"
+	SettingOriginMaxHTTPVersionEditResponseValue1 SettingOriginMaxHTTPVersionEditResponseValue = "1"
 )
 
 // Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
@@ -158,41 +158,41 @@ const (
 	SettingOriginMaxHTTPVersionGetResponseValue1 SettingOriginMaxHTTPVersionGetResponseValue = "1"
 )
 
-type SettingOriginMaxHTTPVersionUpdateParams struct {
+type SettingOriginMaxHTTPVersionEditParams struct {
 	// Value of the Origin Max HTTP Version Setting.
-	Value param.Field[SettingOriginMaxHTTPVersionUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingOriginMaxHTTPVersionEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingOriginMaxHTTPVersionUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingOriginMaxHTTPVersionEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the Origin Max HTTP Version Setting.
-type SettingOriginMaxHTTPVersionUpdateParamsValue string
+type SettingOriginMaxHTTPVersionEditParamsValue string
 
 const (
-	SettingOriginMaxHTTPVersionUpdateParamsValue2 SettingOriginMaxHTTPVersionUpdateParamsValue = "2"
-	SettingOriginMaxHTTPVersionUpdateParamsValue1 SettingOriginMaxHTTPVersionUpdateParamsValue = "1"
+	SettingOriginMaxHTTPVersionEditParamsValue2 SettingOriginMaxHTTPVersionEditParamsValue = "2"
+	SettingOriginMaxHTTPVersionEditParamsValue1 SettingOriginMaxHTTPVersionEditParamsValue = "1"
 )
 
-type SettingOriginMaxHTTPVersionUpdateResponseEnvelope struct {
-	Errors   []SettingOriginMaxHTTPVersionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOriginMaxHTTPVersionUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingOriginMaxHTTPVersionEditResponseEnvelope struct {
+	Errors   []SettingOriginMaxHTTPVersionEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingOriginMaxHTTPVersionEditResponseEnvelopeMessages `json:"messages,required"`
 	// Origin Max HTTP Setting Version sets the highest HTTP version Cloudflare will
 	// attempt to use with your origin. This setting allows Cloudflare to make HTTP/2
 	// requests to your origin. (Refer to
 	// [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 	// for more information.). The default value is "2" for all plan types except ENT
 	// where it is "1"
-	Result SettingOriginMaxHTTPVersionUpdateResponse `json:"result,required"`
+	Result SettingOriginMaxHTTPVersionEditResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success SettingOriginMaxHTTPVersionUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    settingOriginMaxHTTPVersionUpdateResponseEnvelopeJSON    `json:"-"`
+	Success SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    settingOriginMaxHTTPVersionEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// settingOriginMaxHTTPVersionUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SettingOriginMaxHTTPVersionUpdateResponseEnvelope]
-type settingOriginMaxHTTPVersionUpdateResponseEnvelopeJSON struct {
+// settingOriginMaxHTTPVersionEditResponseEnvelopeJSON contains the JSON metadata
+// for the struct [SettingOriginMaxHTTPVersionEditResponseEnvelope]
+type settingOriginMaxHTTPVersionEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -201,55 +201,54 @@ type settingOriginMaxHTTPVersionUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOriginMaxHTTPVersionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOriginMaxHTTPVersionEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingOriginMaxHTTPVersionUpdateResponseEnvelopeErrors struct {
+type SettingOriginMaxHTTPVersionEditResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    settingOriginMaxHTTPVersionEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingOriginMaxHTTPVersionEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingOriginMaxHTTPVersionEditResponseEnvelopeErrors]
+type settingOriginMaxHTTPVersionEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingOriginMaxHTTPVersionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOriginMaxHTTPVersionEditResponseEnvelopeMessages struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
-	JSON    settingOriginMaxHTTPVersionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingOriginMaxHTTPVersionEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingOriginMaxHTTPVersionUpdateResponseEnvelopeErrorsJSON contains the JSON
+// settingOriginMaxHTTPVersionEditResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [SettingOriginMaxHTTPVersionUpdateResponseEnvelopeErrors]
-type settingOriginMaxHTTPVersionUpdateResponseEnvelopeErrorsJSON struct {
+// [SettingOriginMaxHTTPVersionEditResponseEnvelopeMessages]
+type settingOriginMaxHTTPVersionEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOriginMaxHTTPVersionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingOriginMaxHTTPVersionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    settingOriginMaxHTTPVersionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOriginMaxHTTPVersionUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOriginMaxHTTPVersionUpdateResponseEnvelopeMessages]
-type settingOriginMaxHTTPVersionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOriginMaxHTTPVersionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOriginMaxHTTPVersionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SettingOriginMaxHTTPVersionUpdateResponseEnvelopeSuccess bool
+type SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess bool
 
 const (
-	SettingOriginMaxHTTPVersionUpdateResponseEnvelopeSuccessTrue SettingOriginMaxHTTPVersionUpdateResponseEnvelopeSuccess = true
+	SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccessTrue SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess = true
 )
 
 type SettingOriginMaxHTTPVersionGetResponseEnvelope struct {

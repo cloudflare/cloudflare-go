@@ -31,6 +31,14 @@ func NewURLNormalizationService(opts ...option.RequestOption) (r *URLNormalizati
 	return
 }
 
+// Updates the URL normalization settings.
+func (r *URLNormalizationService) Update(ctx context.Context, zoneID string, body URLNormalizationUpdateParams, opts ...option.RequestOption) (res *URLNormalizationUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("zones/%s/url_normalization", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	return
+}
+
 // Fetches the current URL normalization settings.
 func (r *URLNormalizationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -39,12 +47,25 @@ func (r *URLNormalizationService) Get(ctx context.Context, zoneID string, opts .
 	return
 }
 
-// Updates the URL normalization settings.
-func (r *URLNormalizationService) Replace(ctx context.Context, zoneID string, body URLNormalizationReplaceParams, opts ...option.RequestOption) (res *URLNormalizationReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/url_normalization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
-	return
+type URLNormalizationUpdateResponse struct {
+	// The scope of the URL normalization.
+	Scope string `json:"scope"`
+	// The type of URL normalization performed by Cloudflare.
+	Type string                             `json:"type"`
+	JSON urlNormalizationUpdateResponseJSON `json:"-"`
+}
+
+// urlNormalizationUpdateResponseJSON contains the JSON metadata for the struct
+// [URLNormalizationUpdateResponse]
+type urlNormalizationUpdateResponseJSON struct {
+	Scope       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *URLNormalizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type URLNormalizationGetResponse struct {
@@ -68,34 +89,13 @@ func (r *URLNormalizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type URLNormalizationReplaceResponse struct {
-	// The scope of the URL normalization.
-	Scope string `json:"scope"`
-	// The type of URL normalization performed by Cloudflare.
-	Type string                              `json:"type"`
-	JSON urlNormalizationReplaceResponseJSON `json:"-"`
-}
-
-// urlNormalizationReplaceResponseJSON contains the JSON metadata for the struct
-// [URLNormalizationReplaceResponse]
-type urlNormalizationReplaceResponseJSON struct {
-	Scope       apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *URLNormalizationReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type URLNormalizationReplaceParams struct {
+type URLNormalizationUpdateParams struct {
 	// The scope of the URL normalization.
 	Scope param.Field[string] `json:"scope"`
 	// The type of URL normalization performed by Cloudflare.
 	Type param.Field[string] `json:"type"`
 }
 
-func (r URLNormalizationReplaceParams) MarshalJSON() (data []byte, err error) {
+func (r URLNormalizationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

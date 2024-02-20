@@ -44,6 +44,19 @@ func (r *WorkerFilterService) New(ctx context.Context, zoneID string, body Worke
 	return
 }
 
+// Update Filter
+func (r *WorkerFilterService) Update(ctx context.Context, zoneID string, filterID string, body WorkerFilterUpdateParams, opts ...option.RequestOption) (res *WorkerFilterUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerFilterUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List Filters
 func (r *WorkerFilterService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerFilterListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -70,19 +83,6 @@ func (r *WorkerFilterService) Delete(ctx context.Context, zoneID string, filterI
 	return
 }
 
-// Update Filter
-func (r *WorkerFilterService) Replace(ctx context.Context, zoneID string, filterID string, body WorkerFilterReplaceParams, opts ...option.RequestOption) (res *WorkerFilterReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerFilterReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type WorkerFilterNewResponse struct {
 	// Identifier
 	ID   string                      `json:"id,required"`
@@ -98,6 +98,28 @@ type workerFilterNewResponseJSON struct {
 }
 
 func (r *WorkerFilterNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerFilterUpdateResponse struct {
+	// Identifier
+	ID      string                         `json:"id,required"`
+	Enabled bool                           `json:"enabled,required"`
+	Pattern string                         `json:"pattern,required"`
+	JSON    workerFilterUpdateResponseJSON `json:"-"`
+}
+
+// workerFilterUpdateResponseJSON contains the JSON metadata for the struct
+// [WorkerFilterUpdateResponse]
+type workerFilterUpdateResponseJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Pattern     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerFilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -138,28 +160,6 @@ type workerFilterDeleteResponseJSON struct {
 }
 
 func (r *WorkerFilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerFilterReplaceResponse struct {
-	// Identifier
-	ID      string                          `json:"id,required"`
-	Enabled bool                            `json:"enabled,required"`
-	Pattern string                          `json:"pattern,required"`
-	JSON    workerFilterReplaceResponseJSON `json:"-"`
-}
-
-// workerFilterReplaceResponseJSON contains the JSON metadata for the struct
-// [WorkerFilterReplaceResponse]
-type workerFilterReplaceResponseJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Pattern     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerFilterReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -239,6 +239,84 @@ type WorkerFilterNewResponseEnvelopeSuccess bool
 
 const (
 	WorkerFilterNewResponseEnvelopeSuccessTrue WorkerFilterNewResponseEnvelopeSuccess = true
+)
+
+type WorkerFilterUpdateParams struct {
+	Enabled param.Field[bool]   `json:"enabled,required"`
+	Pattern param.Field[string] `json:"pattern,required"`
+}
+
+func (r WorkerFilterUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WorkerFilterUpdateResponseEnvelope struct {
+	Errors   []WorkerFilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerFilterUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerFilterUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerFilterUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerFilterUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerFilterUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerFilterUpdateResponseEnvelope]
+type workerFilterUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerFilterUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerFilterUpdateResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    workerFilterUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerFilterUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerFilterUpdateResponseEnvelopeErrors]
+type workerFilterUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerFilterUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerFilterUpdateResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    workerFilterUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerFilterUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerFilterUpdateResponseEnvelopeMessages]
+type workerFilterUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerFilterUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerFilterUpdateResponseEnvelopeSuccess bool
+
+const (
+	WorkerFilterUpdateResponseEnvelopeSuccessTrue WorkerFilterUpdateResponseEnvelopeSuccess = true
 )
 
 type WorkerFilterListResponseEnvelope struct {
@@ -377,82 +455,4 @@ type WorkerFilterDeleteResponseEnvelopeSuccess bool
 
 const (
 	WorkerFilterDeleteResponseEnvelopeSuccessTrue WorkerFilterDeleteResponseEnvelopeSuccess = true
-)
-
-type WorkerFilterReplaceParams struct {
-	Enabled param.Field[bool]   `json:"enabled,required"`
-	Pattern param.Field[string] `json:"pattern,required"`
-}
-
-func (r WorkerFilterReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type WorkerFilterReplaceResponseEnvelope struct {
-	Errors   []WorkerFilterReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerFilterReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerFilterReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerFilterReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerFilterReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerFilterReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerFilterReplaceResponseEnvelope]
-type workerFilterReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerFilterReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerFilterReplaceResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    workerFilterReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerFilterReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WorkerFilterReplaceResponseEnvelopeErrors]
-type workerFilterReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerFilterReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerFilterReplaceResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    workerFilterReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerFilterReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WorkerFilterReplaceResponseEnvelopeMessages]
-type workerFilterReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerFilterReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerFilterReplaceResponseEnvelopeSuccess bool
-
-const (
-	WorkerFilterReplaceResponseEnvelopeSuccessTrue WorkerFilterReplaceResponseEnvelopeSuccess = true
 )

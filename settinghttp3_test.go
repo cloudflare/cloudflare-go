@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingHTTP3Update(t *testing.T) {
+func TestSettingHTTP3Edit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestSettingHTTP3Update(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.HTTP3.Update(
+	_, err := client.Settings.HTTP3.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingHTTP3UpdateParams{
-			Value: cloudflare.F(cloudflare.SettingHTTP3UpdateParamsValueOn),
+		cloudflare.SettingHTTP3EditParams{
+			Value: cloudflare.F(cloudflare.SettingHTTP3EditParamsValueOn),
 		},
 	)
 	if err != nil {

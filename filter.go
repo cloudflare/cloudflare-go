@@ -46,6 +46,19 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 	return
 }
 
+// Updates an existing filter.
+func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FilterUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FilterUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
 func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FilterListResponse], err error) {
@@ -97,19 +110,6 @@ func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-// Updates an existing filter.
-func (r *FilterService) Replace(ctx context.Context, zoneIdentifier string, id string, body FilterReplaceParams, opts ...option.RequestOption) (res *FilterReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FilterReplaceResponseEnvelope
-	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type FilterNewResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
@@ -138,6 +138,37 @@ type filterNewResponseJSON struct {
 }
 
 func (r *FilterNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterUpdateResponse struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression,required"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                   `json:"ref"`
+	JSON filterUpdateResponseJSON `json:"-"`
+}
+
+// filterUpdateResponseJSON contains the JSON metadata for the struct
+// [FilterUpdateResponse]
+type filterUpdateResponseJSON struct {
+	ID          apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -231,37 +262,6 @@ type filterGetResponseJSON struct {
 }
 
 func (r *FilterGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterReplaceResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                    `json:"ref"`
-	JSON filterReplaceResponseJSON `json:"-"`
-}
-
-// filterReplaceResponseJSON contains the JSON metadata for the struct
-// [FilterReplaceResponse]
-type filterReplaceResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -370,6 +370,83 @@ type filterNewResponseEnvelopeResultInfoJSON struct {
 func (r *FilterNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type FilterUpdateParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FilterUpdateResponseEnvelope struct {
+	Errors   []FilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FilterUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   FilterUpdateResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// filterUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FilterUpdateResponseEnvelope]
+type filterUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterUpdateResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    filterUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// filterUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [FilterUpdateResponseEnvelopeErrors]
+type filterUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterUpdateResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    filterUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// filterUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [FilterUpdateResponseEnvelopeMessages]
+type filterUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FilterUpdateResponseEnvelopeSuccess bool
+
+const (
+	FilterUpdateResponseEnvelopeSuccessTrue FilterUpdateResponseEnvelopeSuccess = true
+)
 
 type FilterListParams struct {
 	// A case-insensitive string to find in the description.
@@ -530,81 +607,4 @@ type FilterGetResponseEnvelopeSuccess bool
 
 const (
 	FilterGetResponseEnvelopeSuccessTrue FilterGetResponseEnvelopeSuccess = true
-)
-
-type FilterReplaceParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FilterReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FilterReplaceResponseEnvelope struct {
-	Errors   []FilterReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FilterReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   FilterReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success FilterReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    filterReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// filterReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FilterReplaceResponseEnvelope]
-type filterReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterReplaceResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    filterReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// filterReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [FilterReplaceResponseEnvelopeErrors]
-type filterReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterReplaceResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    filterReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// filterReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [FilterReplaceResponseEnvelopeMessages]
-type filterReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FilterReplaceResponseEnvelopeSuccess bool
-
-const (
-	FilterReplaceResponseEnvelopeSuccessTrue FilterReplaceResponseEnvelopeSuccess = true
 )

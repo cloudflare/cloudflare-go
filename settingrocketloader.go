@@ -42,9 +42,9 @@ func NewSettingRocketLoaderService(opts ...option.RequestOption) (r *SettingRock
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Update(ctx context.Context, zoneID string, body SettingRocketLoaderUpdateParams, opts ...option.RequestOption) (res *SettingRocketLoaderUpdateResponse, err error) {
+func (r *SettingRocketLoaderService) Edit(ctx context.Context, zoneID string, body SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *SettingRocketLoaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingRocketLoaderUpdateResponseEnvelope
+	var env SettingRocketLoaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/rocket_loader", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -86,22 +86,22 @@ func (r *SettingRocketLoaderService) Get(ctx context.Context, zoneID string, opt
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type SettingRocketLoaderUpdateResponse struct {
+type SettingRocketLoaderEditResponse struct {
 	// ID of the zone setting.
-	ID SettingRocketLoaderUpdateResponseID `json:"id,required"`
+	ID SettingRocketLoaderEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingRocketLoaderUpdateResponseValue `json:"value,required"`
+	Value SettingRocketLoaderEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingRocketLoaderUpdateResponseEditable `json:"editable"`
+	Editable SettingRocketLoaderEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingRocketLoaderUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingRocketLoaderEditResponseJSON `json:"-"`
 }
 
-// settingRocketLoaderUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingRocketLoaderUpdateResponse]
-type settingRocketLoaderUpdateResponseJSON struct {
+// settingRocketLoaderEditResponseJSON contains the JSON metadata for the struct
+// [SettingRocketLoaderEditResponse]
+type settingRocketLoaderEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -110,32 +110,32 @@ type settingRocketLoaderUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingRocketLoaderUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingRocketLoaderEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingRocketLoaderUpdateResponseID string
+type SettingRocketLoaderEditResponseID string
 
 const (
-	SettingRocketLoaderUpdateResponseIDRocketLoader SettingRocketLoaderUpdateResponseID = "rocket_loader"
+	SettingRocketLoaderEditResponseIDRocketLoader SettingRocketLoaderEditResponseID = "rocket_loader"
 )
 
 // Current value of the zone setting.
-type SettingRocketLoaderUpdateResponseValue string
+type SettingRocketLoaderEditResponseValue string
 
 const (
-	SettingRocketLoaderUpdateResponseValueOn  SettingRocketLoaderUpdateResponseValue = "on"
-	SettingRocketLoaderUpdateResponseValueOff SettingRocketLoaderUpdateResponseValue = "off"
+	SettingRocketLoaderEditResponseValueOn  SettingRocketLoaderEditResponseValue = "on"
+	SettingRocketLoaderEditResponseValueOff SettingRocketLoaderEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingRocketLoaderUpdateResponseEditable bool
+type SettingRocketLoaderEditResponseEditable bool
 
 const (
-	SettingRocketLoaderUpdateResponseEditableTrue  SettingRocketLoaderUpdateResponseEditable = true
-	SettingRocketLoaderUpdateResponseEditableFalse SettingRocketLoaderUpdateResponseEditable = false
+	SettingRocketLoaderEditResponseEditableTrue  SettingRocketLoaderEditResponseEditable = true
+	SettingRocketLoaderEditResponseEditableFalse SettingRocketLoaderEditResponseEditable = false
 )
 
 // Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -200,7 +200,7 @@ const (
 	SettingRocketLoaderGetResponseEditableFalse SettingRocketLoaderGetResponseEditable = false
 )
 
-type SettingRocketLoaderUpdateParams struct {
+type SettingRocketLoaderEditParams struct {
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
 	// prioritises rendering your content while loading your site's Javascript
 	// asynchronously. Turning on Rocket Loader will immediately improve a web page's
@@ -211,10 +211,10 @@ type SettingRocketLoaderUpdateParams struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Value param.Field[SettingRocketLoaderUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingRocketLoaderEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingRocketLoaderUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -228,44 +228,44 @@ func (r SettingRocketLoaderUpdateParams) MarshalJSON() (data []byte, err error) 
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type SettingRocketLoaderUpdateParamsValue struct {
+type SettingRocketLoaderEditParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[SettingRocketLoaderUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[SettingRocketLoaderEditParamsValueID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingRocketLoaderUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[SettingRocketLoaderEditParamsValueValue] `json:"value,required"`
 }
 
-func (r SettingRocketLoaderUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r SettingRocketLoaderEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // ID of the zone setting.
-type SettingRocketLoaderUpdateParamsValueID string
+type SettingRocketLoaderEditParamsValueID string
 
 const (
-	SettingRocketLoaderUpdateParamsValueIDRocketLoader SettingRocketLoaderUpdateParamsValueID = "rocket_loader"
+	SettingRocketLoaderEditParamsValueIDRocketLoader SettingRocketLoaderEditParamsValueID = "rocket_loader"
 )
 
 // Current value of the zone setting.
-type SettingRocketLoaderUpdateParamsValueValue string
+type SettingRocketLoaderEditParamsValueValue string
 
 const (
-	SettingRocketLoaderUpdateParamsValueValueOn  SettingRocketLoaderUpdateParamsValueValue = "on"
-	SettingRocketLoaderUpdateParamsValueValueOff SettingRocketLoaderUpdateParamsValueValue = "off"
+	SettingRocketLoaderEditParamsValueValueOn  SettingRocketLoaderEditParamsValueValue = "on"
+	SettingRocketLoaderEditParamsValueValueOff SettingRocketLoaderEditParamsValueValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingRocketLoaderUpdateParamsValueEditable bool
+type SettingRocketLoaderEditParamsValueEditable bool
 
 const (
-	SettingRocketLoaderUpdateParamsValueEditableTrue  SettingRocketLoaderUpdateParamsValueEditable = true
-	SettingRocketLoaderUpdateParamsValueEditableFalse SettingRocketLoaderUpdateParamsValueEditable = false
+	SettingRocketLoaderEditParamsValueEditableTrue  SettingRocketLoaderEditParamsValueEditable = true
+	SettingRocketLoaderEditParamsValueEditableFalse SettingRocketLoaderEditParamsValueEditable = false
 )
 
-type SettingRocketLoaderUpdateResponseEnvelope struct {
-	Errors   []SettingRocketLoaderUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingRocketLoaderUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingRocketLoaderEditResponseEnvelope struct {
+	Errors   []SettingRocketLoaderEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingRocketLoaderEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -278,13 +278,13 @@ type SettingRocketLoaderUpdateResponseEnvelope struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Result SettingRocketLoaderUpdateResponse             `json:"result"`
-	JSON   settingRocketLoaderUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingRocketLoaderEditResponse             `json:"result"`
+	JSON   settingRocketLoaderEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingRocketLoaderUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingRocketLoaderUpdateResponseEnvelope]
-type settingRocketLoaderUpdateResponseEnvelopeJSON struct {
+// settingRocketLoaderEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingRocketLoaderEditResponseEnvelope]
+type settingRocketLoaderEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -293,45 +293,45 @@ type settingRocketLoaderUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingRocketLoaderUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingRocketLoaderEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingRocketLoaderUpdateResponseEnvelopeErrors struct {
+type SettingRocketLoaderEditResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    settingRocketLoaderEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingRocketLoaderEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingRocketLoaderEditResponseEnvelopeErrors]
+type settingRocketLoaderEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingRocketLoaderEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingRocketLoaderEditResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
-	JSON    settingRocketLoaderUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingRocketLoaderEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingRocketLoaderUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderUpdateResponseEnvelopeErrors]
-type settingRocketLoaderUpdateResponseEnvelopeErrorsJSON struct {
+// settingRocketLoaderEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingRocketLoaderEditResponseEnvelopeMessages]
+type settingRocketLoaderEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingRocketLoaderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingRocketLoaderUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingRocketLoaderUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingRocketLoaderUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingRocketLoaderUpdateResponseEnvelopeMessages]
-type settingRocketLoaderUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingRocketLoaderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingRocketLoaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -59,20 +59,6 @@ func (r *ImageV1Service) New(ctx context.Context, accountID string, body ImageV1
 	return
 }
 
-// Update image access control. On access control change, all copies of the image
-// are purged from cache.
-func (r *ImageV1Service) Update(ctx context.Context, accountID string, imageID string, body ImageV1UpdateParams, opts ...option.RequestOption) (res *ImageV1UpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ImageV1UpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
 func (r *ImageV1Service) List(ctx context.Context, accountID string, query ImageV1ListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[ImageV1ListResponse], err error) {
@@ -105,6 +91,20 @@ func (r *ImageV1Service) Delete(ctx context.Context, accountID string, imageID s
 	var env ImageV1DeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Update image access control. On access control change, all copies of the image
+// are purged from cache.
+func (r *ImageV1Service) Edit(ctx context.Context, accountID string, imageID string, body ImageV1EditParams, opts ...option.RequestOption) (res *ImageV1EditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ImageV1EditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -171,68 +171,6 @@ type ImageV1NewResponseVariant interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ImageV1NewResponseVariant)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type ImageV1UpdateResponse struct {
-	// Image unique identifier.
-	ID string `json:"id"`
-	// Image file name.
-	Filename string `json:"filename"`
-	// User modifiable key-value store. Can be used for keeping references to another
-	// system of record for managing images. Metadata must not exceed 1024 bytes.
-	Meta interface{} `json:"meta"`
-	// Indicates whether the image can be a accessed only using it's UID. If set to
-	// true, a signed token needs to be generated with a signing key to view the image.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// When the media item was uploaded.
-	Uploaded time.Time `json:"uploaded" format:"date-time"`
-	// Object specifying available variants for an image.
-	Variants []ImageV1UpdateResponseVariant `json:"variants" format:"uri"`
-	JSON     imageV1UpdateResponseJSON      `json:"-"`
-}
-
-// imageV1UpdateResponseJSON contains the JSON metadata for the struct
-// [ImageV1UpdateResponse]
-type imageV1UpdateResponseJSON struct {
-	ID                apijson.Field
-	Filename          apijson.Field
-	Meta              apijson.Field
-	RequireSignedURLs apijson.Field
-	Uploaded          apijson.Field
-	Variants          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ImageV1UpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// URI to thumbnail variant for an image.
-//
-// Union satisfied by [shared.UnionString], [shared.UnionString] or
-// [shared.UnionString].
-type ImageV1UpdateResponseVariant interface {
-	ImplementsImageV1UpdateResponseVariant()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ImageV1UpdateResponseVariant)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -413,6 +351,68 @@ func init() {
 	)
 }
 
+type ImageV1EditResponse struct {
+	// Image unique identifier.
+	ID string `json:"id"`
+	// Image file name.
+	Filename string `json:"filename"`
+	// User modifiable key-value store. Can be used for keeping references to another
+	// system of record for managing images. Metadata must not exceed 1024 bytes.
+	Meta interface{} `json:"meta"`
+	// Indicates whether the image can be a accessed only using it's UID. If set to
+	// true, a signed token needs to be generated with a signing key to view the image.
+	RequireSignedURLs bool `json:"requireSignedURLs"`
+	// When the media item was uploaded.
+	Uploaded time.Time `json:"uploaded" format:"date-time"`
+	// Object specifying available variants for an image.
+	Variants []ImageV1EditResponseVariant `json:"variants" format:"uri"`
+	JSON     imageV1EditResponseJSON      `json:"-"`
+}
+
+// imageV1EditResponseJSON contains the JSON metadata for the struct
+// [ImageV1EditResponse]
+type imageV1EditResponseJSON struct {
+	ID                apijson.Field
+	Filename          apijson.Field
+	Meta              apijson.Field
+	RequireSignedURLs apijson.Field
+	Uploaded          apijson.Field
+	Variants          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ImageV1EditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// URI to thumbnail variant for an image.
+//
+// Union satisfied by [shared.UnionString], [shared.UnionString] or
+// [shared.UnionString].
+type ImageV1EditResponseVariant interface {
+	ImplementsImageV1EditResponseVariant()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ImageV1EditResponseVariant)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
 type ImageV1GetResponse struct {
 	// Image unique identifier.
 	ID string `json:"id"`
@@ -577,89 +577,6 @@ const (
 	ImageV1NewResponseEnvelopeSuccessTrue ImageV1NewResponseEnvelopeSuccess = true
 )
 
-type ImageV1UpdateParams struct {
-	// User modifiable key-value store. Can be used for keeping references to another
-	// system of record for managing images. No change if not specified.
-	Metadata param.Field[interface{}] `json:"metadata"`
-	// Indicates whether the image can be accessed using only its UID. If set to
-	// `true`, a signed token needs to be generated with a signing key to view the
-	// image. Returns a new UID on a change. No change if not specified.
-	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
-}
-
-func (r ImageV1UpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type ImageV1UpdateResponseEnvelope struct {
-	Errors   []ImageV1UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ImageV1UpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImageV1UpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success ImageV1UpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    imageV1UpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// imageV1UpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ImageV1UpdateResponseEnvelope]
-type imageV1UpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImageV1UpdateResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    imageV1UpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// imageV1UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ImageV1UpdateResponseEnvelopeErrors]
-type imageV1UpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImageV1UpdateResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    imageV1UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// imageV1UpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ImageV1UpdateResponseEnvelopeMessages]
-type imageV1UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImageV1UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ImageV1UpdateResponseEnvelopeSuccess bool
-
-const (
-	ImageV1UpdateResponseEnvelopeSuccessTrue ImageV1UpdateResponseEnvelopeSuccess = true
-)
-
 type ImageV1ListParams struct {
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
@@ -742,6 +659,89 @@ type ImageV1DeleteResponseEnvelopeSuccess bool
 
 const (
 	ImageV1DeleteResponseEnvelopeSuccessTrue ImageV1DeleteResponseEnvelopeSuccess = true
+)
+
+type ImageV1EditParams struct {
+	// User modifiable key-value store. Can be used for keeping references to another
+	// system of record for managing images. No change if not specified.
+	Metadata param.Field[interface{}] `json:"metadata"`
+	// Indicates whether the image can be accessed using only its UID. If set to
+	// `true`, a signed token needs to be generated with a signing key to view the
+	// image. Returns a new UID on a change. No change if not specified.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
+}
+
+func (r ImageV1EditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type ImageV1EditResponseEnvelope struct {
+	Errors   []ImageV1EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ImageV1EditResponseEnvelopeMessages `json:"messages,required"`
+	Result   ImageV1EditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success ImageV1EditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    imageV1EditResponseEnvelopeJSON    `json:"-"`
+}
+
+// imageV1EditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ImageV1EditResponseEnvelope]
+type imageV1EditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1EditResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    imageV1EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// imageV1EditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ImageV1EditResponseEnvelopeErrors]
+type imageV1EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1EditResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    imageV1EditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// imageV1EditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ImageV1EditResponseEnvelopeMessages]
+type imageV1EditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV1EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ImageV1EditResponseEnvelopeSuccess bool
+
+const (
+	ImageV1EditResponseEnvelopeSuccessTrue ImageV1EditResponseEnvelopeSuccess = true
 )
 
 type ImageV1GetResponseEnvelope struct {

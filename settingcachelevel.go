@@ -37,9 +37,9 @@ func NewSettingCacheLevelService(opts ...option.RequestOption) (r *SettingCacheL
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *SettingCacheLevelService) Update(ctx context.Context, zoneID string, body SettingCacheLevelUpdateParams, opts ...option.RequestOption) (res *SettingCacheLevelUpdateResponse, err error) {
+func (r *SettingCacheLevelService) Edit(ctx context.Context, zoneID string, body SettingCacheLevelEditParams, opts ...option.RequestOption) (res *SettingCacheLevelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingCacheLevelUpdateResponseEnvelope
+	var env SettingCacheLevelEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -71,22 +71,22 @@ func (r *SettingCacheLevelService) Get(ctx context.Context, zoneID string, opts 
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type SettingCacheLevelUpdateResponse struct {
+type SettingCacheLevelEditResponse struct {
 	// ID of the zone setting.
-	ID SettingCacheLevelUpdateResponseID `json:"id,required"`
+	ID SettingCacheLevelEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingCacheLevelUpdateResponseValue `json:"value,required"`
+	Value SettingCacheLevelEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingCacheLevelUpdateResponseEditable `json:"editable"`
+	Editable SettingCacheLevelEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingCacheLevelUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingCacheLevelEditResponseJSON `json:"-"`
 }
 
-// settingCacheLevelUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingCacheLevelUpdateResponse]
-type settingCacheLevelUpdateResponseJSON struct {
+// settingCacheLevelEditResponseJSON contains the JSON metadata for the struct
+// [SettingCacheLevelEditResponse]
+type settingCacheLevelEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,33 +95,33 @@ type settingCacheLevelUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCacheLevelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCacheLevelEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingCacheLevelUpdateResponseID string
+type SettingCacheLevelEditResponseID string
 
 const (
-	SettingCacheLevelUpdateResponseIDCacheLevel SettingCacheLevelUpdateResponseID = "cache_level"
+	SettingCacheLevelEditResponseIDCacheLevel SettingCacheLevelEditResponseID = "cache_level"
 )
 
 // Current value of the zone setting.
-type SettingCacheLevelUpdateResponseValue string
+type SettingCacheLevelEditResponseValue string
 
 const (
-	SettingCacheLevelUpdateResponseValueAggressive SettingCacheLevelUpdateResponseValue = "aggressive"
-	SettingCacheLevelUpdateResponseValueBasic      SettingCacheLevelUpdateResponseValue = "basic"
-	SettingCacheLevelUpdateResponseValueSimplified SettingCacheLevelUpdateResponseValue = "simplified"
+	SettingCacheLevelEditResponseValueAggressive SettingCacheLevelEditResponseValue = "aggressive"
+	SettingCacheLevelEditResponseValueBasic      SettingCacheLevelEditResponseValue = "basic"
+	SettingCacheLevelEditResponseValueSimplified SettingCacheLevelEditResponseValue = "simplified"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingCacheLevelUpdateResponseEditable bool
+type SettingCacheLevelEditResponseEditable bool
 
 const (
-	SettingCacheLevelUpdateResponseEditableTrue  SettingCacheLevelUpdateResponseEditable = true
-	SettingCacheLevelUpdateResponseEditableFalse SettingCacheLevelUpdateResponseEditable = false
+	SettingCacheLevelEditResponseEditableTrue  SettingCacheLevelEditResponseEditable = true
+	SettingCacheLevelEditResponseEditableFalse SettingCacheLevelEditResponseEditable = false
 )
 
 // Cache Level functions based off the setting level. The basic setting will cache
@@ -182,27 +182,27 @@ const (
 	SettingCacheLevelGetResponseEditableFalse SettingCacheLevelGetResponseEditable = false
 )
 
-type SettingCacheLevelUpdateParams struct {
+type SettingCacheLevelEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingCacheLevelUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingCacheLevelEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingCacheLevelUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingCacheLevelEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingCacheLevelUpdateParamsValue string
+type SettingCacheLevelEditParamsValue string
 
 const (
-	SettingCacheLevelUpdateParamsValueAggressive SettingCacheLevelUpdateParamsValue = "aggressive"
-	SettingCacheLevelUpdateParamsValueBasic      SettingCacheLevelUpdateParamsValue = "basic"
-	SettingCacheLevelUpdateParamsValueSimplified SettingCacheLevelUpdateParamsValue = "simplified"
+	SettingCacheLevelEditParamsValueAggressive SettingCacheLevelEditParamsValue = "aggressive"
+	SettingCacheLevelEditParamsValueBasic      SettingCacheLevelEditParamsValue = "basic"
+	SettingCacheLevelEditParamsValueSimplified SettingCacheLevelEditParamsValue = "simplified"
 )
 
-type SettingCacheLevelUpdateResponseEnvelope struct {
-	Errors   []SettingCacheLevelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingCacheLevelUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingCacheLevelEditResponseEnvelope struct {
+	Errors   []SettingCacheLevelEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingCacheLevelEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cache Level functions based off the setting level. The basic setting will cache
@@ -210,13 +210,13 @@ type SettingCacheLevelUpdateResponseEnvelope struct {
 	// setting will ignore the query string when delivering a cached resource. The
 	// aggressive setting will cache all static resources, including ones with a query
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-	Result SettingCacheLevelUpdateResponse             `json:"result"`
-	JSON   settingCacheLevelUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingCacheLevelEditResponse             `json:"result"`
+	JSON   settingCacheLevelEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingCacheLevelUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingCacheLevelUpdateResponseEnvelope]
-type settingCacheLevelUpdateResponseEnvelopeJSON struct {
+// settingCacheLevelEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingCacheLevelEditResponseEnvelope]
+type settingCacheLevelEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -225,45 +225,45 @@ type settingCacheLevelUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCacheLevelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCacheLevelEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingCacheLevelUpdateResponseEnvelopeErrors struct {
+type SettingCacheLevelEditResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    settingCacheLevelEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingCacheLevelEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingCacheLevelEditResponseEnvelopeErrors]
+type settingCacheLevelEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingCacheLevelEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingCacheLevelEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
-	JSON    settingCacheLevelUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingCacheLevelEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingCacheLevelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingCacheLevelUpdateResponseEnvelopeErrors]
-type settingCacheLevelUpdateResponseEnvelopeErrorsJSON struct {
+// settingCacheLevelEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingCacheLevelEditResponseEnvelopeMessages]
+type settingCacheLevelEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingCacheLevelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingCacheLevelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingCacheLevelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingCacheLevelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingCacheLevelUpdateResponseEnvelopeMessages]
-type settingCacheLevelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingCacheLevelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingCacheLevelEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

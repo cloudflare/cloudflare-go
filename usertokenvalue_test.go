@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserTokenValueReplace(t *testing.T) {
+func TestUserTokenValueUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestUserTokenValueReplace(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.Tokens.Values.Replace(
+	_, err := client.Users.Tokens.Values.Update(
 		context.TODO(),
 		map[string]interface{}{},
-		cloudflare.UserTokenValueReplaceParams{
+		cloudflare.UserTokenValueUpdateParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)

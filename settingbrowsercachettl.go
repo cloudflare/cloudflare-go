@@ -36,9 +36,9 @@ func NewSettingBrowserCacheTTLService(opts ...option.RequestOption) (r *SettingB
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-func (r *SettingBrowserCacheTTLService) Update(ctx context.Context, zoneID string, body SettingBrowserCacheTTLUpdateParams, opts ...option.RequestOption) (res *SettingBrowserCacheTTLUpdateResponse, err error) {
+func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, zoneID string, body SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *SettingBrowserCacheTTLEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingBrowserCacheTTLUpdateResponseEnvelope
+	var env SettingBrowserCacheTTLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -68,22 +68,22 @@ func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, zoneID string, 
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-type SettingBrowserCacheTTLUpdateResponse struct {
+type SettingBrowserCacheTTLEditResponse struct {
 	// ID of the zone setting.
-	ID SettingBrowserCacheTTLUpdateResponseID `json:"id,required"`
+	ID SettingBrowserCacheTTLEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingBrowserCacheTTLUpdateResponseValue `json:"value,required"`
+	Value SettingBrowserCacheTTLEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingBrowserCacheTTLUpdateResponseEditable `json:"editable"`
+	Editable SettingBrowserCacheTTLEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingBrowserCacheTTLUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingBrowserCacheTTLEditResponseJSON `json:"-"`
 }
 
-// settingBrowserCacheTTLUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingBrowserCacheTTLUpdateResponse]
-type settingBrowserCacheTTLUpdateResponseJSON struct {
+// settingBrowserCacheTTLEditResponseJSON contains the JSON metadata for the struct
+// [SettingBrowserCacheTTLEditResponse]
+type settingBrowserCacheTTLEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,58 +92,58 @@ type settingBrowserCacheTTLUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCacheTTLUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCacheTTLEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingBrowserCacheTTLUpdateResponseID string
+type SettingBrowserCacheTTLEditResponseID string
 
 const (
-	SettingBrowserCacheTTLUpdateResponseIDBrowserCacheTTL SettingBrowserCacheTTLUpdateResponseID = "browser_cache_ttl"
+	SettingBrowserCacheTTLEditResponseIDBrowserCacheTTL SettingBrowserCacheTTLEditResponseID = "browser_cache_ttl"
 )
 
 // Current value of the zone setting.
-type SettingBrowserCacheTTLUpdateResponseValue float64
+type SettingBrowserCacheTTLEditResponseValue float64
 
 const (
-	SettingBrowserCacheTTLUpdateResponseValue0        SettingBrowserCacheTTLUpdateResponseValue = 0
-	SettingBrowserCacheTTLUpdateResponseValue30       SettingBrowserCacheTTLUpdateResponseValue = 30
-	SettingBrowserCacheTTLUpdateResponseValue60       SettingBrowserCacheTTLUpdateResponseValue = 60
-	SettingBrowserCacheTTLUpdateResponseValue120      SettingBrowserCacheTTLUpdateResponseValue = 120
-	SettingBrowserCacheTTLUpdateResponseValue300      SettingBrowserCacheTTLUpdateResponseValue = 300
-	SettingBrowserCacheTTLUpdateResponseValue1200     SettingBrowserCacheTTLUpdateResponseValue = 1200
-	SettingBrowserCacheTTLUpdateResponseValue1800     SettingBrowserCacheTTLUpdateResponseValue = 1800
-	SettingBrowserCacheTTLUpdateResponseValue3600     SettingBrowserCacheTTLUpdateResponseValue = 3600
-	SettingBrowserCacheTTLUpdateResponseValue7200     SettingBrowserCacheTTLUpdateResponseValue = 7200
-	SettingBrowserCacheTTLUpdateResponseValue10800    SettingBrowserCacheTTLUpdateResponseValue = 10800
-	SettingBrowserCacheTTLUpdateResponseValue14400    SettingBrowserCacheTTLUpdateResponseValue = 14400
-	SettingBrowserCacheTTLUpdateResponseValue18000    SettingBrowserCacheTTLUpdateResponseValue = 18000
-	SettingBrowserCacheTTLUpdateResponseValue28800    SettingBrowserCacheTTLUpdateResponseValue = 28800
-	SettingBrowserCacheTTLUpdateResponseValue43200    SettingBrowserCacheTTLUpdateResponseValue = 43200
-	SettingBrowserCacheTTLUpdateResponseValue57600    SettingBrowserCacheTTLUpdateResponseValue = 57600
-	SettingBrowserCacheTTLUpdateResponseValue72000    SettingBrowserCacheTTLUpdateResponseValue = 72000
-	SettingBrowserCacheTTLUpdateResponseValue86400    SettingBrowserCacheTTLUpdateResponseValue = 86400
-	SettingBrowserCacheTTLUpdateResponseValue172800   SettingBrowserCacheTTLUpdateResponseValue = 172800
-	SettingBrowserCacheTTLUpdateResponseValue259200   SettingBrowserCacheTTLUpdateResponseValue = 259200
-	SettingBrowserCacheTTLUpdateResponseValue345600   SettingBrowserCacheTTLUpdateResponseValue = 345600
-	SettingBrowserCacheTTLUpdateResponseValue432000   SettingBrowserCacheTTLUpdateResponseValue = 432000
-	SettingBrowserCacheTTLUpdateResponseValue691200   SettingBrowserCacheTTLUpdateResponseValue = 691200
-	SettingBrowserCacheTTLUpdateResponseValue1382400  SettingBrowserCacheTTLUpdateResponseValue = 1382400
-	SettingBrowserCacheTTLUpdateResponseValue2073600  SettingBrowserCacheTTLUpdateResponseValue = 2073600
-	SettingBrowserCacheTTLUpdateResponseValue2678400  SettingBrowserCacheTTLUpdateResponseValue = 2678400
-	SettingBrowserCacheTTLUpdateResponseValue5356800  SettingBrowserCacheTTLUpdateResponseValue = 5356800
-	SettingBrowserCacheTTLUpdateResponseValue16070400 SettingBrowserCacheTTLUpdateResponseValue = 16070400
-	SettingBrowserCacheTTLUpdateResponseValue31536000 SettingBrowserCacheTTLUpdateResponseValue = 31536000
+	SettingBrowserCacheTTLEditResponseValue0        SettingBrowserCacheTTLEditResponseValue = 0
+	SettingBrowserCacheTTLEditResponseValue30       SettingBrowserCacheTTLEditResponseValue = 30
+	SettingBrowserCacheTTLEditResponseValue60       SettingBrowserCacheTTLEditResponseValue = 60
+	SettingBrowserCacheTTLEditResponseValue120      SettingBrowserCacheTTLEditResponseValue = 120
+	SettingBrowserCacheTTLEditResponseValue300      SettingBrowserCacheTTLEditResponseValue = 300
+	SettingBrowserCacheTTLEditResponseValue1200     SettingBrowserCacheTTLEditResponseValue = 1200
+	SettingBrowserCacheTTLEditResponseValue1800     SettingBrowserCacheTTLEditResponseValue = 1800
+	SettingBrowserCacheTTLEditResponseValue3600     SettingBrowserCacheTTLEditResponseValue = 3600
+	SettingBrowserCacheTTLEditResponseValue7200     SettingBrowserCacheTTLEditResponseValue = 7200
+	SettingBrowserCacheTTLEditResponseValue10800    SettingBrowserCacheTTLEditResponseValue = 10800
+	SettingBrowserCacheTTLEditResponseValue14400    SettingBrowserCacheTTLEditResponseValue = 14400
+	SettingBrowserCacheTTLEditResponseValue18000    SettingBrowserCacheTTLEditResponseValue = 18000
+	SettingBrowserCacheTTLEditResponseValue28800    SettingBrowserCacheTTLEditResponseValue = 28800
+	SettingBrowserCacheTTLEditResponseValue43200    SettingBrowserCacheTTLEditResponseValue = 43200
+	SettingBrowserCacheTTLEditResponseValue57600    SettingBrowserCacheTTLEditResponseValue = 57600
+	SettingBrowserCacheTTLEditResponseValue72000    SettingBrowserCacheTTLEditResponseValue = 72000
+	SettingBrowserCacheTTLEditResponseValue86400    SettingBrowserCacheTTLEditResponseValue = 86400
+	SettingBrowserCacheTTLEditResponseValue172800   SettingBrowserCacheTTLEditResponseValue = 172800
+	SettingBrowserCacheTTLEditResponseValue259200   SettingBrowserCacheTTLEditResponseValue = 259200
+	SettingBrowserCacheTTLEditResponseValue345600   SettingBrowserCacheTTLEditResponseValue = 345600
+	SettingBrowserCacheTTLEditResponseValue432000   SettingBrowserCacheTTLEditResponseValue = 432000
+	SettingBrowserCacheTTLEditResponseValue691200   SettingBrowserCacheTTLEditResponseValue = 691200
+	SettingBrowserCacheTTLEditResponseValue1382400  SettingBrowserCacheTTLEditResponseValue = 1382400
+	SettingBrowserCacheTTLEditResponseValue2073600  SettingBrowserCacheTTLEditResponseValue = 2073600
+	SettingBrowserCacheTTLEditResponseValue2678400  SettingBrowserCacheTTLEditResponseValue = 2678400
+	SettingBrowserCacheTTLEditResponseValue5356800  SettingBrowserCacheTTLEditResponseValue = 5356800
+	SettingBrowserCacheTTLEditResponseValue16070400 SettingBrowserCacheTTLEditResponseValue = 16070400
+	SettingBrowserCacheTTLEditResponseValue31536000 SettingBrowserCacheTTLEditResponseValue = 31536000
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingBrowserCacheTTLUpdateResponseEditable bool
+type SettingBrowserCacheTTLEditResponseEditable bool
 
 const (
-	SettingBrowserCacheTTLUpdateResponseEditableTrue  SettingBrowserCacheTTLUpdateResponseEditable = true
-	SettingBrowserCacheTTLUpdateResponseEditableFalse SettingBrowserCacheTTLUpdateResponseEditable = false
+	SettingBrowserCacheTTLEditResponseEditableTrue  SettingBrowserCacheTTLEditResponseEditable = true
+	SettingBrowserCacheTTLEditResponseEditableFalse SettingBrowserCacheTTLEditResponseEditable = false
 )
 
 // Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
@@ -228,67 +228,67 @@ const (
 	SettingBrowserCacheTTLGetResponseEditableFalse SettingBrowserCacheTTLGetResponseEditable = false
 )
 
-type SettingBrowserCacheTTLUpdateParams struct {
+type SettingBrowserCacheTTLEditParams struct {
 	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 	// `Respect Existing Headers`
-	Value param.Field[SettingBrowserCacheTTLUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingBrowserCacheTTLEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingBrowserCacheTTLUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingBrowserCacheTTLEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 // `Respect Existing Headers`
-type SettingBrowserCacheTTLUpdateParamsValue float64
+type SettingBrowserCacheTTLEditParamsValue float64
 
 const (
-	SettingBrowserCacheTTLUpdateParamsValue0        SettingBrowserCacheTTLUpdateParamsValue = 0
-	SettingBrowserCacheTTLUpdateParamsValue30       SettingBrowserCacheTTLUpdateParamsValue = 30
-	SettingBrowserCacheTTLUpdateParamsValue60       SettingBrowserCacheTTLUpdateParamsValue = 60
-	SettingBrowserCacheTTLUpdateParamsValue120      SettingBrowserCacheTTLUpdateParamsValue = 120
-	SettingBrowserCacheTTLUpdateParamsValue300      SettingBrowserCacheTTLUpdateParamsValue = 300
-	SettingBrowserCacheTTLUpdateParamsValue1200     SettingBrowserCacheTTLUpdateParamsValue = 1200
-	SettingBrowserCacheTTLUpdateParamsValue1800     SettingBrowserCacheTTLUpdateParamsValue = 1800
-	SettingBrowserCacheTTLUpdateParamsValue3600     SettingBrowserCacheTTLUpdateParamsValue = 3600
-	SettingBrowserCacheTTLUpdateParamsValue7200     SettingBrowserCacheTTLUpdateParamsValue = 7200
-	SettingBrowserCacheTTLUpdateParamsValue10800    SettingBrowserCacheTTLUpdateParamsValue = 10800
-	SettingBrowserCacheTTLUpdateParamsValue14400    SettingBrowserCacheTTLUpdateParamsValue = 14400
-	SettingBrowserCacheTTLUpdateParamsValue18000    SettingBrowserCacheTTLUpdateParamsValue = 18000
-	SettingBrowserCacheTTLUpdateParamsValue28800    SettingBrowserCacheTTLUpdateParamsValue = 28800
-	SettingBrowserCacheTTLUpdateParamsValue43200    SettingBrowserCacheTTLUpdateParamsValue = 43200
-	SettingBrowserCacheTTLUpdateParamsValue57600    SettingBrowserCacheTTLUpdateParamsValue = 57600
-	SettingBrowserCacheTTLUpdateParamsValue72000    SettingBrowserCacheTTLUpdateParamsValue = 72000
-	SettingBrowserCacheTTLUpdateParamsValue86400    SettingBrowserCacheTTLUpdateParamsValue = 86400
-	SettingBrowserCacheTTLUpdateParamsValue172800   SettingBrowserCacheTTLUpdateParamsValue = 172800
-	SettingBrowserCacheTTLUpdateParamsValue259200   SettingBrowserCacheTTLUpdateParamsValue = 259200
-	SettingBrowserCacheTTLUpdateParamsValue345600   SettingBrowserCacheTTLUpdateParamsValue = 345600
-	SettingBrowserCacheTTLUpdateParamsValue432000   SettingBrowserCacheTTLUpdateParamsValue = 432000
-	SettingBrowserCacheTTLUpdateParamsValue691200   SettingBrowserCacheTTLUpdateParamsValue = 691200
-	SettingBrowserCacheTTLUpdateParamsValue1382400  SettingBrowserCacheTTLUpdateParamsValue = 1382400
-	SettingBrowserCacheTTLUpdateParamsValue2073600  SettingBrowserCacheTTLUpdateParamsValue = 2073600
-	SettingBrowserCacheTTLUpdateParamsValue2678400  SettingBrowserCacheTTLUpdateParamsValue = 2678400
-	SettingBrowserCacheTTLUpdateParamsValue5356800  SettingBrowserCacheTTLUpdateParamsValue = 5356800
-	SettingBrowserCacheTTLUpdateParamsValue16070400 SettingBrowserCacheTTLUpdateParamsValue = 16070400
-	SettingBrowserCacheTTLUpdateParamsValue31536000 SettingBrowserCacheTTLUpdateParamsValue = 31536000
+	SettingBrowserCacheTTLEditParamsValue0        SettingBrowserCacheTTLEditParamsValue = 0
+	SettingBrowserCacheTTLEditParamsValue30       SettingBrowserCacheTTLEditParamsValue = 30
+	SettingBrowserCacheTTLEditParamsValue60       SettingBrowserCacheTTLEditParamsValue = 60
+	SettingBrowserCacheTTLEditParamsValue120      SettingBrowserCacheTTLEditParamsValue = 120
+	SettingBrowserCacheTTLEditParamsValue300      SettingBrowserCacheTTLEditParamsValue = 300
+	SettingBrowserCacheTTLEditParamsValue1200     SettingBrowserCacheTTLEditParamsValue = 1200
+	SettingBrowserCacheTTLEditParamsValue1800     SettingBrowserCacheTTLEditParamsValue = 1800
+	SettingBrowserCacheTTLEditParamsValue3600     SettingBrowserCacheTTLEditParamsValue = 3600
+	SettingBrowserCacheTTLEditParamsValue7200     SettingBrowserCacheTTLEditParamsValue = 7200
+	SettingBrowserCacheTTLEditParamsValue10800    SettingBrowserCacheTTLEditParamsValue = 10800
+	SettingBrowserCacheTTLEditParamsValue14400    SettingBrowserCacheTTLEditParamsValue = 14400
+	SettingBrowserCacheTTLEditParamsValue18000    SettingBrowserCacheTTLEditParamsValue = 18000
+	SettingBrowserCacheTTLEditParamsValue28800    SettingBrowserCacheTTLEditParamsValue = 28800
+	SettingBrowserCacheTTLEditParamsValue43200    SettingBrowserCacheTTLEditParamsValue = 43200
+	SettingBrowserCacheTTLEditParamsValue57600    SettingBrowserCacheTTLEditParamsValue = 57600
+	SettingBrowserCacheTTLEditParamsValue72000    SettingBrowserCacheTTLEditParamsValue = 72000
+	SettingBrowserCacheTTLEditParamsValue86400    SettingBrowserCacheTTLEditParamsValue = 86400
+	SettingBrowserCacheTTLEditParamsValue172800   SettingBrowserCacheTTLEditParamsValue = 172800
+	SettingBrowserCacheTTLEditParamsValue259200   SettingBrowserCacheTTLEditParamsValue = 259200
+	SettingBrowserCacheTTLEditParamsValue345600   SettingBrowserCacheTTLEditParamsValue = 345600
+	SettingBrowserCacheTTLEditParamsValue432000   SettingBrowserCacheTTLEditParamsValue = 432000
+	SettingBrowserCacheTTLEditParamsValue691200   SettingBrowserCacheTTLEditParamsValue = 691200
+	SettingBrowserCacheTTLEditParamsValue1382400  SettingBrowserCacheTTLEditParamsValue = 1382400
+	SettingBrowserCacheTTLEditParamsValue2073600  SettingBrowserCacheTTLEditParamsValue = 2073600
+	SettingBrowserCacheTTLEditParamsValue2678400  SettingBrowserCacheTTLEditParamsValue = 2678400
+	SettingBrowserCacheTTLEditParamsValue5356800  SettingBrowserCacheTTLEditParamsValue = 5356800
+	SettingBrowserCacheTTLEditParamsValue16070400 SettingBrowserCacheTTLEditParamsValue = 16070400
+	SettingBrowserCacheTTLEditParamsValue31536000 SettingBrowserCacheTTLEditParamsValue = 31536000
 )
 
-type SettingBrowserCacheTTLUpdateResponseEnvelope struct {
-	Errors   []SettingBrowserCacheTTLUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCacheTTLUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingBrowserCacheTTLEditResponseEnvelope struct {
+	Errors   []SettingBrowserCacheTTLEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBrowserCacheTTLEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
 	// will remain on your visitors' computers. Cloudflare will honor any larger times
 	// specified by your server.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-	Result SettingBrowserCacheTTLUpdateResponse             `json:"result"`
-	JSON   settingBrowserCacheTTLUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingBrowserCacheTTLEditResponse             `json:"result"`
+	JSON   settingBrowserCacheTTLEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingBrowserCacheTTLUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingBrowserCacheTTLUpdateResponseEnvelope]
-type settingBrowserCacheTTLUpdateResponseEnvelopeJSON struct {
+// settingBrowserCacheTTLEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingBrowserCacheTTLEditResponseEnvelope]
+type settingBrowserCacheTTLEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -297,45 +297,45 @@ type settingBrowserCacheTTLUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCacheTTLUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCacheTTLEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingBrowserCacheTTLUpdateResponseEnvelopeErrors struct {
+type SettingBrowserCacheTTLEditResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingBrowserCacheTTLEditResponseEnvelopeErrors]
+type settingBrowserCacheTTLEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBrowserCacheTTLEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingBrowserCacheTTLEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
-	JSON    settingBrowserCacheTTLUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingBrowserCacheTTLUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingBrowserCacheTTLUpdateResponseEnvelopeErrors]
-type settingBrowserCacheTTLUpdateResponseEnvelopeErrorsJSON struct {
+// settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingBrowserCacheTTLEditResponseEnvelopeMessages]
+type settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCacheTTLUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingBrowserCacheTTLUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingBrowserCacheTTLUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCacheTTLUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingBrowserCacheTTLUpdateResponseEnvelopeMessages]
-type settingBrowserCacheTTLUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCacheTTLUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCacheTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

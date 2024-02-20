@@ -32,7 +32,7 @@ func NewWaitingRoomSettingService(opts ...option.RequestOption) (r *WaitingRoomS
 }
 
 // Patch zone-level Waiting Room settings
-func (r *WaitingRoomSettingService) Update(ctx context.Context, zoneIdentifier string, body WaitingRoomSettingUpdateParams, opts ...option.RequestOption) (res *WaitingRoomSettingUpdateResponse, err error) {
+func (r *WaitingRoomSettingService) Edit(ctx context.Context, zoneIdentifier string, body WaitingRoomSettingEditParams, opts ...option.RequestOption) (res *WaitingRoomSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingroomZoneSettingsResponse
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
@@ -94,23 +94,23 @@ func (r *WaitingroomZoneSettingsResponseResult) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomSettingUpdateResponse struct {
+type WaitingRoomSettingEditResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool                                 `json:"search_engine_crawler_bypass,required"`
-	JSON                      waitingRoomSettingUpdateResponseJSON `json:"-"`
+	SearchEngineCrawlerBypass bool                               `json:"search_engine_crawler_bypass,required"`
+	JSON                      waitingRoomSettingEditResponseJSON `json:"-"`
 }
 
-// waitingRoomSettingUpdateResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomSettingUpdateResponse]
-type waitingRoomSettingUpdateResponseJSON struct {
+// waitingRoomSettingEditResponseJSON contains the JSON metadata for the struct
+// [WaitingRoomSettingEditResponse]
+type waitingRoomSettingEditResponseJSON struct {
 	SearchEngineCrawlerBypass apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *WaitingRoomSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -134,13 +134,13 @@ func (r *WaitingRoomSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomSettingUpdateParams struct {
+type WaitingRoomSettingEditParams struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
 	SearchEngineCrawlerBypass param.Field[bool] `json:"search_engine_crawler_bypass"`
 }
 
-func (r WaitingRoomSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r WaitingRoomSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }

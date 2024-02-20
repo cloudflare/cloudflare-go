@@ -31,6 +31,19 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 	return
 }
 
+// Sets the list of routes excluded from the WARP client's tunnel.
+func (r *DevicePolicyExcludeService) Update(ctx context.Context, identifier interface{}, body DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePolicyExcludeUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the list of routes excluded from the WARP client's tunnel.
 func (r *DevicePolicyExcludeService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyExcludeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -44,17 +57,30 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, identifier interf
 	return
 }
 
-// Sets the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) Replace(ctx context.Context, identifier interface{}, body DevicePolicyExcludeReplaceParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyExcludeReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type DevicePolicyExcludeUpdateResponse struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host string                                `json:"host"`
+	JSON devicePolicyExcludeUpdateResponseJSON `json:"-"`
+}
+
+// devicePolicyExcludeUpdateResponseJSON contains the JSON metadata for the struct
+// [DevicePolicyExcludeUpdateResponse]
+type devicePolicyExcludeUpdateResponseJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DevicePolicyExcludeListResponse struct {
@@ -83,29 +109,124 @@ func (r *DevicePolicyExcludeListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyExcludeReplaceResponse struct {
-	// The address in CIDR format to exclude from the tunnel. If `address` is present,
-	// `host` must not be present.
-	Address string `json:"address,required"`
-	// A description of the Split Tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to exclude from the tunnel. If `host` is present, `address` must
-	// not be present.
-	Host string                                 `json:"host"`
-	JSON devicePolicyExcludeReplaceResponseJSON `json:"-"`
+type DevicePolicyExcludeUpdateParams struct {
+	Body param.Field[[]DevicePolicyExcludeUpdateParamsBody] `json:"body,required"`
 }
 
-// devicePolicyExcludeReplaceResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyExcludeReplaceResponse]
-type devicePolicyExcludeReplaceResponseJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
+func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type DevicePolicyExcludeUpdateParamsBody struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address param.Field[string] `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description param.Field[string] `json:"description,required"`
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host param.Field[string] `json:"host"`
+}
+
+func (r DevicePolicyExcludeUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyExcludeUpdateResponseEnvelope struct {
+	Errors   []DevicePolicyExcludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyExcludeUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyExcludeUpdateResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePolicyExcludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyExcludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyExcludeUpdateResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePolicyExcludeUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DevicePolicyExcludeUpdateResponseEnvelope]
+type devicePolicyExcludeUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyExcludeReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyExcludeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeUpdateResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    devicePolicyExcludeUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePolicyExcludeUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DevicePolicyExcludeUpdateResponseEnvelopeErrors]
+type devicePolicyExcludeUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    devicePolicyExcludeUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePolicyExcludeUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DevicePolicyExcludeUpdateResponseEnvelopeMessages]
+type devicePolicyExcludeUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePolicyExcludeUpdateResponseEnvelopeSuccess bool
+
+const (
+	DevicePolicyExcludeUpdateResponseEnvelopeSuccessTrue DevicePolicyExcludeUpdateResponseEnvelopeSuccess = true
+)
+
+type DevicePolicyExcludeUpdateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                 `json:"total_count"`
+	JSON       devicePolicyExcludeUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePolicyExcludeUpdateResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [DevicePolicyExcludeUpdateResponseEnvelopeResultInfo]
+type devicePolicyExcludeUpdateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -204,126 +325,5 @@ type devicePolicyExcludeListResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *DevicePolicyExcludeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyExcludeReplaceParams struct {
-	Body param.Field[[]DevicePolicyExcludeReplaceParamsBody] `json:"body,required"`
-}
-
-func (r DevicePolicyExcludeReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type DevicePolicyExcludeReplaceParamsBody struct {
-	// The address in CIDR format to exclude from the tunnel. If `address` is present,
-	// `host` must not be present.
-	Address param.Field[string] `json:"address,required"`
-	// A description of the Split Tunnel item, displayed in the client UI.
-	Description param.Field[string] `json:"description,required"`
-	// The domain name to exclude from the tunnel. If `host` is present, `address` must
-	// not be present.
-	Host param.Field[string] `json:"host"`
-}
-
-func (r DevicePolicyExcludeReplaceParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyExcludeReplaceResponseEnvelope struct {
-	Errors   []DevicePolicyExcludeReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyExcludeReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyExcludeReplaceResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyExcludeReplaceResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyExcludeReplaceResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyExcludeReplaceResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyExcludeReplaceResponseEnvelopeJSON contains the JSON metadata for
-// the struct [DevicePolicyExcludeReplaceResponseEnvelope]
-type devicePolicyExcludeReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyExcludeReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyExcludeReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    devicePolicyExcludeReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyExcludeReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DevicePolicyExcludeReplaceResponseEnvelopeErrors]
-type devicePolicyExcludeReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyExcludeReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyExcludeReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    devicePolicyExcludeReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyExcludeReplaceResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DevicePolicyExcludeReplaceResponseEnvelopeMessages]
-type devicePolicyExcludeReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyExcludeReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyExcludeReplaceResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyExcludeReplaceResponseEnvelopeSuccessTrue DevicePolicyExcludeReplaceResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyExcludeReplaceResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                  `json:"total_count"`
-	JSON       devicePolicyExcludeReplaceResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyExcludeReplaceResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [DevicePolicyExcludeReplaceResponseEnvelopeResultInfo]
-type devicePolicyExcludeReplaceResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyExcludeReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -43,9 +43,9 @@ func NewSettingServerSideExcludeService(opts ...option.RequestOption) (r *Settin
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-func (r *SettingServerSideExcludeService) Update(ctx context.Context, zoneID string, body SettingServerSideExcludeUpdateParams, opts ...option.RequestOption) (res *SettingServerSideExcludeUpdateResponse, err error) {
+func (r *SettingServerSideExcludeService) Edit(ctx context.Context, zoneID string, body SettingServerSideExcludeEditParams, opts ...option.RequestOption) (res *SettingServerSideExcludeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingServerSideExcludeUpdateResponseEnvelope
+	var env SettingServerSideExcludeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/server_side_exclude", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -89,22 +89,22 @@ func (r *SettingServerSideExcludeService) Get(ctx context.Context, zoneID string
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingServerSideExcludeUpdateResponse struct {
+type SettingServerSideExcludeEditResponse struct {
 	// ID of the zone setting.
-	ID SettingServerSideExcludeUpdateResponseID `json:"id,required"`
+	ID SettingServerSideExcludeEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingServerSideExcludeUpdateResponseValue `json:"value,required"`
+	Value SettingServerSideExcludeEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingServerSideExcludeUpdateResponseEditable `json:"editable"`
+	Editable SettingServerSideExcludeEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingServerSideExcludeUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingServerSideExcludeEditResponseJSON `json:"-"`
 }
 
-// settingServerSideExcludeUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingServerSideExcludeUpdateResponse]
-type settingServerSideExcludeUpdateResponseJSON struct {
+// settingServerSideExcludeEditResponseJSON contains the JSON metadata for the
+// struct [SettingServerSideExcludeEditResponse]
+type settingServerSideExcludeEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -113,32 +113,32 @@ type settingServerSideExcludeUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingServerSideExcludeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingServerSideExcludeEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingServerSideExcludeUpdateResponseID string
+type SettingServerSideExcludeEditResponseID string
 
 const (
-	SettingServerSideExcludeUpdateResponseIDServerSideExclude SettingServerSideExcludeUpdateResponseID = "server_side_exclude"
+	SettingServerSideExcludeEditResponseIDServerSideExclude SettingServerSideExcludeEditResponseID = "server_side_exclude"
 )
 
 // Current value of the zone setting.
-type SettingServerSideExcludeUpdateResponseValue string
+type SettingServerSideExcludeEditResponseValue string
 
 const (
-	SettingServerSideExcludeUpdateResponseValueOn  SettingServerSideExcludeUpdateResponseValue = "on"
-	SettingServerSideExcludeUpdateResponseValueOff SettingServerSideExcludeUpdateResponseValue = "off"
+	SettingServerSideExcludeEditResponseValueOn  SettingServerSideExcludeEditResponseValue = "on"
+	SettingServerSideExcludeEditResponseValueOff SettingServerSideExcludeEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingServerSideExcludeUpdateResponseEditable bool
+type SettingServerSideExcludeEditResponseEditable bool
 
 const (
-	SettingServerSideExcludeUpdateResponseEditableTrue  SettingServerSideExcludeUpdateResponseEditable = true
-	SettingServerSideExcludeUpdateResponseEditableFalse SettingServerSideExcludeUpdateResponseEditable = false
+	SettingServerSideExcludeEditResponseEditableTrue  SettingServerSideExcludeEditResponseEditable = true
+	SettingServerSideExcludeEditResponseEditableFalse SettingServerSideExcludeEditResponseEditable = false
 )
 
 // If there is sensitive content on your website that you want visible to real
@@ -204,26 +204,26 @@ const (
 	SettingServerSideExcludeGetResponseEditableFalse SettingServerSideExcludeGetResponseEditable = false
 )
 
-type SettingServerSideExcludeUpdateParams struct {
+type SettingServerSideExcludeEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingServerSideExcludeUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingServerSideExcludeEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingServerSideExcludeUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingServerSideExcludeEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingServerSideExcludeUpdateParamsValue string
+type SettingServerSideExcludeEditParamsValue string
 
 const (
-	SettingServerSideExcludeUpdateParamsValueOn  SettingServerSideExcludeUpdateParamsValue = "on"
-	SettingServerSideExcludeUpdateParamsValueOff SettingServerSideExcludeUpdateParamsValue = "off"
+	SettingServerSideExcludeEditParamsValueOn  SettingServerSideExcludeEditParamsValue = "on"
+	SettingServerSideExcludeEditParamsValueOff SettingServerSideExcludeEditParamsValue = "off"
 )
 
-type SettingServerSideExcludeUpdateResponseEnvelope struct {
-	Errors   []SettingServerSideExcludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingServerSideExcludeUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingServerSideExcludeEditResponseEnvelope struct {
+	Errors   []SettingServerSideExcludeEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingServerSideExcludeEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// If there is sensitive content on your website that you want visible to real
@@ -237,13 +237,13 @@ type SettingServerSideExcludeUpdateResponseEnvelope struct {
 	// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 	// resource moves through our network to the visitor's computer.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-	Result SettingServerSideExcludeUpdateResponse             `json:"result"`
-	JSON   settingServerSideExcludeUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingServerSideExcludeEditResponse             `json:"result"`
+	JSON   settingServerSideExcludeEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingServerSideExcludeUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SettingServerSideExcludeUpdateResponseEnvelope]
-type settingServerSideExcludeUpdateResponseEnvelopeJSON struct {
+// settingServerSideExcludeEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingServerSideExcludeEditResponseEnvelope]
+type settingServerSideExcludeEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -252,45 +252,45 @@ type settingServerSideExcludeUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingServerSideExcludeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingServerSideExcludeEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingServerSideExcludeUpdateResponseEnvelopeErrors struct {
+type SettingServerSideExcludeEditResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    settingServerSideExcludeEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingServerSideExcludeEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingServerSideExcludeEditResponseEnvelopeErrors]
+type settingServerSideExcludeEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingServerSideExcludeEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingServerSideExcludeEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
-	JSON    settingServerSideExcludeUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingServerSideExcludeEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingServerSideExcludeUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingServerSideExcludeUpdateResponseEnvelopeErrors]
-type settingServerSideExcludeUpdateResponseEnvelopeErrorsJSON struct {
+// settingServerSideExcludeEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingServerSideExcludeEditResponseEnvelopeMessages]
+type settingServerSideExcludeEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingServerSideExcludeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingServerSideExcludeUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    settingServerSideExcludeUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingServerSideExcludeUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingServerSideExcludeUpdateResponseEnvelopeMessages]
-type settingServerSideExcludeUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingServerSideExcludeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingServerSideExcludeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -34,9 +34,9 @@ func NewSettingPrefetchPreloadService(opts ...option.RequestOption) (r *SettingP
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-func (r *SettingPrefetchPreloadService) Update(ctx context.Context, zoneID string, body SettingPrefetchPreloadUpdateParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadUpdateResponse, err error) {
+func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, zoneID string, body SettingPrefetchPreloadEditParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingPrefetchPreloadUpdateResponseEnvelope
+	var env SettingPrefetchPreloadEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingPrefetchPreloadService) Get(ctx context.Context, zoneID string, 
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-type SettingPrefetchPreloadUpdateResponse struct {
+type SettingPrefetchPreloadEditResponse struct {
 	// ID of the zone setting.
-	ID SettingPrefetchPreloadUpdateResponseID `json:"id,required"`
+	ID SettingPrefetchPreloadEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPrefetchPreloadUpdateResponseValue `json:"value,required"`
+	Value SettingPrefetchPreloadEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingPrefetchPreloadUpdateResponseEditable `json:"editable"`
+	Editable SettingPrefetchPreloadEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPrefetchPreloadUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingPrefetchPreloadEditResponseJSON `json:"-"`
 }
 
-// settingPrefetchPreloadUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingPrefetchPreloadUpdateResponse]
-type settingPrefetchPreloadUpdateResponseJSON struct {
+// settingPrefetchPreloadEditResponseJSON contains the JSON metadata for the struct
+// [SettingPrefetchPreloadEditResponse]
+type settingPrefetchPreloadEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingPrefetchPreloadUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPrefetchPreloadUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPrefetchPreloadEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingPrefetchPreloadUpdateResponseID string
+type SettingPrefetchPreloadEditResponseID string
 
 const (
-	SettingPrefetchPreloadUpdateResponseIDPrefetchPreload SettingPrefetchPreloadUpdateResponseID = "prefetch_preload"
+	SettingPrefetchPreloadEditResponseIDPrefetchPreload SettingPrefetchPreloadEditResponseID = "prefetch_preload"
 )
 
 // Current value of the zone setting.
-type SettingPrefetchPreloadUpdateResponseValue string
+type SettingPrefetchPreloadEditResponseValue string
 
 const (
-	SettingPrefetchPreloadUpdateResponseValueOn  SettingPrefetchPreloadUpdateResponseValue = "on"
-	SettingPrefetchPreloadUpdateResponseValueOff SettingPrefetchPreloadUpdateResponseValue = "off"
+	SettingPrefetchPreloadEditResponseValueOn  SettingPrefetchPreloadEditResponseValue = "on"
+	SettingPrefetchPreloadEditResponseValueOff SettingPrefetchPreloadEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingPrefetchPreloadUpdateResponseEditable bool
+type SettingPrefetchPreloadEditResponseEditable bool
 
 const (
-	SettingPrefetchPreloadUpdateResponseEditableTrue  SettingPrefetchPreloadUpdateResponseEditable = true
-	SettingPrefetchPreloadUpdateResponseEditableFalse SettingPrefetchPreloadUpdateResponseEditable = false
+	SettingPrefetchPreloadEditResponseEditableTrue  SettingPrefetchPreloadEditResponseEditable = true
+	SettingPrefetchPreloadEditResponseEditableFalse SettingPrefetchPreloadEditResponseEditable = false
 )
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
@@ -168,37 +168,37 @@ const (
 	SettingPrefetchPreloadGetResponseEditableFalse SettingPrefetchPreloadGetResponseEditable = false
 )
 
-type SettingPrefetchPreloadUpdateParams struct {
+type SettingPrefetchPreloadEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingPrefetchPreloadUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingPrefetchPreloadEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingPrefetchPreloadUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingPrefetchPreloadEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingPrefetchPreloadUpdateParamsValue string
+type SettingPrefetchPreloadEditParamsValue string
 
 const (
-	SettingPrefetchPreloadUpdateParamsValueOn  SettingPrefetchPreloadUpdateParamsValue = "on"
-	SettingPrefetchPreloadUpdateParamsValueOff SettingPrefetchPreloadUpdateParamsValue = "off"
+	SettingPrefetchPreloadEditParamsValueOn  SettingPrefetchPreloadEditParamsValue = "on"
+	SettingPrefetchPreloadEditParamsValueOff SettingPrefetchPreloadEditParamsValue = "off"
 )
 
-type SettingPrefetchPreloadUpdateResponseEnvelope struct {
-	Errors   []SettingPrefetchPreloadUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPrefetchPreloadUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingPrefetchPreloadEditResponseEnvelope struct {
+	Errors   []SettingPrefetchPreloadEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingPrefetchPreloadEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
 	// This is limited to Enterprise Zones.
-	Result SettingPrefetchPreloadUpdateResponse             `json:"result"`
-	JSON   settingPrefetchPreloadUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingPrefetchPreloadEditResponse             `json:"result"`
+	JSON   settingPrefetchPreloadEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingPrefetchPreloadUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingPrefetchPreloadUpdateResponseEnvelope]
-type settingPrefetchPreloadUpdateResponseEnvelopeJSON struct {
+// settingPrefetchPreloadEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingPrefetchPreloadEditResponseEnvelope]
+type settingPrefetchPreloadEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -207,45 +207,45 @@ type settingPrefetchPreloadUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPrefetchPreloadUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPrefetchPreloadEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingPrefetchPreloadUpdateResponseEnvelopeErrors struct {
+type SettingPrefetchPreloadEditResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    settingPrefetchPreloadEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingPrefetchPreloadEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingPrefetchPreloadEditResponseEnvelopeErrors]
+type settingPrefetchPreloadEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingPrefetchPreloadEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingPrefetchPreloadEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
-	JSON    settingPrefetchPreloadUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingPrefetchPreloadEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingPrefetchPreloadUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingPrefetchPreloadUpdateResponseEnvelopeErrors]
-type settingPrefetchPreloadUpdateResponseEnvelopeErrorsJSON struct {
+// settingPrefetchPreloadEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingPrefetchPreloadEditResponseEnvelopeMessages]
+type settingPrefetchPreloadEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPrefetchPreloadUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingPrefetchPreloadUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingPrefetchPreloadUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPrefetchPreloadUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingPrefetchPreloadUpdateResponseEnvelopeMessages]
-type settingPrefetchPreloadUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPrefetchPreloadUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPrefetchPreloadEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

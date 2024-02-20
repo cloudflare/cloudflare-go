@@ -48,6 +48,19 @@ func (r *AlertingV3DestinationWebhookService) New(ctx context.Context, accountID
 	return
 }
 
+// Update a webhook destination.
+func (r *AlertingV3DestinationWebhookService) Update(ctx context.Context, accountID string, webhookID string, body AlertingV3DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AlertingV3DestinationWebhookUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Gets a list of all configured webhook destinations.
 func (r *AlertingV3DestinationWebhookService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AlertingV3DestinationWebhookListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -87,19 +100,6 @@ func (r *AlertingV3DestinationWebhookService) Get(ctx context.Context, accountID
 	return
 }
 
-// Update a webhook destination.
-func (r *AlertingV3DestinationWebhookService) Replace(ctx context.Context, accountID string, webhookID string, body AlertingV3DestinationWebhookReplaceParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AlertingV3DestinationWebhookReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type AlertingV3DestinationWebhookNewResponse struct {
 	// UUID
 	ID   string                                      `json:"id"`
@@ -115,6 +115,24 @@ type alertingV3DestinationWebhookNewResponseJSON struct {
 }
 
 func (r *AlertingV3DestinationWebhookNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3DestinationWebhookUpdateResponse struct {
+	// UUID
+	ID   string                                         `json:"id"`
+	JSON alertingV3DestinationWebhookUpdateResponseJSON `json:"-"`
+}
+
+// alertingV3DestinationWebhookUpdateResponseJSON contains the JSON metadata for
+// the struct [AlertingV3DestinationWebhookUpdateResponse]
+type alertingV3DestinationWebhookUpdateResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3DestinationWebhookUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -246,24 +264,6 @@ const (
 	AlertingV3DestinationWebhookGetResponseTypeGchat   AlertingV3DestinationWebhookGetResponseType = "gchat"
 )
 
-type AlertingV3DestinationWebhookReplaceResponse struct {
-	// UUID
-	ID   string                                          `json:"id"`
-	JSON alertingV3DestinationWebhookReplaceResponseJSON `json:"-"`
-}
-
-// alertingV3DestinationWebhookReplaceResponseJSON contains the JSON metadata for
-// the struct [AlertingV3DestinationWebhookReplaceResponse]
-type alertingV3DestinationWebhookReplaceResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3DestinationWebhookReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type AlertingV3DestinationWebhookNewParams struct {
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
@@ -348,6 +348,93 @@ type AlertingV3DestinationWebhookNewResponseEnvelopeSuccess bool
 
 const (
 	AlertingV3DestinationWebhookNewResponseEnvelopeSuccessTrue AlertingV3DestinationWebhookNewResponseEnvelopeSuccess = true
+)
+
+type AlertingV3DestinationWebhookUpdateParams struct {
+	// The name of the webhook destination. This will be included in the request body
+	// when you receive a webhook notification.
+	Name param.Field[string] `json:"name,required"`
+	// The POST endpoint to call when dispatching a notification.
+	URL param.Field[string] `json:"url,required"`
+	// Optional secret that will be passed in the `cf-webhook-auth` header when
+	// dispatching generic webhook notifications or formatted for supported
+	// destinations. Secrets are not returned in any API response body.
+	Secret param.Field[string] `json:"secret"`
+}
+
+func (r AlertingV3DestinationWebhookUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AlertingV3DestinationWebhookUpdateResponseEnvelope struct {
+	Errors   []AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AlertingV3DestinationWebhookUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    alertingV3DestinationWebhookUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// alertingV3DestinationWebhookUpdateResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AlertingV3DestinationWebhookUpdateResponseEnvelope]
+type alertingV3DestinationWebhookUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3DestinationWebhookUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    alertingV3DestinationWebhookUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// alertingV3DestinationWebhookUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors]
+type alertingV3DestinationWebhookUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    alertingV3DestinationWebhookUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// alertingV3DestinationWebhookUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages]
+type alertingV3DestinationWebhookUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccess bool
+
+const (
+	AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccessTrue AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccess = true
 )
 
 type AlertingV3DestinationWebhookListResponseEnvelope struct {
@@ -619,91 +706,4 @@ type AlertingV3DestinationWebhookGetResponseEnvelopeSuccess bool
 
 const (
 	AlertingV3DestinationWebhookGetResponseEnvelopeSuccessTrue AlertingV3DestinationWebhookGetResponseEnvelopeSuccess = true
-)
-
-type AlertingV3DestinationWebhookReplaceParams struct {
-	// The name of the webhook destination. This will be included in the request body
-	// when you receive a webhook notification.
-	Name param.Field[string] `json:"name,required"`
-	// The POST endpoint to call when dispatching a notification.
-	URL param.Field[string] `json:"url,required"`
-	// Optional secret that will be passed in the `cf-webhook-auth` header when
-	// dispatching generic webhook notifications or formatted for supported
-	// destinations. Secrets are not returned in any API response body.
-	Secret param.Field[string] `json:"secret"`
-}
-
-func (r AlertingV3DestinationWebhookReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AlertingV3DestinationWebhookReplaceResponseEnvelope struct {
-	Errors   []AlertingV3DestinationWebhookReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AlertingV3DestinationWebhookReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   AlertingV3DestinationWebhookReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AlertingV3DestinationWebhookReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    alertingV3DestinationWebhookReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// alertingV3DestinationWebhookReplaceResponseEnvelopeJSON contains the JSON
-// metadata for the struct [AlertingV3DestinationWebhookReplaceResponseEnvelope]
-type alertingV3DestinationWebhookReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3DestinationWebhookReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3DestinationWebhookReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    alertingV3DestinationWebhookReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// alertingV3DestinationWebhookReplaceResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [AlertingV3DestinationWebhookReplaceResponseEnvelopeErrors]
-type alertingV3DestinationWebhookReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3DestinationWebhookReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3DestinationWebhookReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    alertingV3DestinationWebhookReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// alertingV3DestinationWebhookReplaceResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [AlertingV3DestinationWebhookReplaceResponseEnvelopeMessages]
-type alertingV3DestinationWebhookReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3DestinationWebhookReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AlertingV3DestinationWebhookReplaceResponseEnvelopeSuccess bool
-
-const (
-	AlertingV3DestinationWebhookReplaceResponseEnvelopeSuccessTrue AlertingV3DestinationWebhookReplaceResponseEnvelopeSuccess = true
 )

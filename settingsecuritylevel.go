@@ -36,9 +36,9 @@ func NewSettingSecurityLevelService(opts ...option.RequestOption) (r *SettingSec
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-func (r *SettingSecurityLevelService) Update(ctx context.Context, zoneID string, body SettingSecurityLevelUpdateParams, opts ...option.RequestOption) (res *SettingSecurityLevelUpdateResponse, err error) {
+func (r *SettingSecurityLevelService) Edit(ctx context.Context, zoneID string, body SettingSecurityLevelEditParams, opts ...option.RequestOption) (res *SettingSecurityLevelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingSecurityLevelUpdateResponseEnvelope
+	var env SettingSecurityLevelEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_level", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -68,22 +68,22 @@ func (r *SettingSecurityLevelService) Get(ctx context.Context, zoneID string, op
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-type SettingSecurityLevelUpdateResponse struct {
+type SettingSecurityLevelEditResponse struct {
 	// ID of the zone setting.
-	ID SettingSecurityLevelUpdateResponseID `json:"id,required"`
+	ID SettingSecurityLevelEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSecurityLevelUpdateResponseValue `json:"value,required"`
+	Value SettingSecurityLevelEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingSecurityLevelUpdateResponseEditable `json:"editable"`
+	Editable SettingSecurityLevelEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSecurityLevelUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingSecurityLevelEditResponseJSON `json:"-"`
 }
 
-// settingSecurityLevelUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingSecurityLevelUpdateResponse]
-type settingSecurityLevelUpdateResponseJSON struct {
+// settingSecurityLevelEditResponseJSON contains the JSON metadata for the struct
+// [SettingSecurityLevelEditResponse]
+type settingSecurityLevelEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,36 +92,36 @@ type settingSecurityLevelUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSecurityLevelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSecurityLevelEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingSecurityLevelUpdateResponseID string
+type SettingSecurityLevelEditResponseID string
 
 const (
-	SettingSecurityLevelUpdateResponseIDSecurityLevel SettingSecurityLevelUpdateResponseID = "security_level"
+	SettingSecurityLevelEditResponseIDSecurityLevel SettingSecurityLevelEditResponseID = "security_level"
 )
 
 // Current value of the zone setting.
-type SettingSecurityLevelUpdateResponseValue string
+type SettingSecurityLevelEditResponseValue string
 
 const (
-	SettingSecurityLevelUpdateResponseValueOff            SettingSecurityLevelUpdateResponseValue = "off"
-	SettingSecurityLevelUpdateResponseValueEssentiallyOff SettingSecurityLevelUpdateResponseValue = "essentially_off"
-	SettingSecurityLevelUpdateResponseValueLow            SettingSecurityLevelUpdateResponseValue = "low"
-	SettingSecurityLevelUpdateResponseValueMedium         SettingSecurityLevelUpdateResponseValue = "medium"
-	SettingSecurityLevelUpdateResponseValueHigh           SettingSecurityLevelUpdateResponseValue = "high"
-	SettingSecurityLevelUpdateResponseValueUnderAttack    SettingSecurityLevelUpdateResponseValue = "under_attack"
+	SettingSecurityLevelEditResponseValueOff            SettingSecurityLevelEditResponseValue = "off"
+	SettingSecurityLevelEditResponseValueEssentiallyOff SettingSecurityLevelEditResponseValue = "essentially_off"
+	SettingSecurityLevelEditResponseValueLow            SettingSecurityLevelEditResponseValue = "low"
+	SettingSecurityLevelEditResponseValueMedium         SettingSecurityLevelEditResponseValue = "medium"
+	SettingSecurityLevelEditResponseValueHigh           SettingSecurityLevelEditResponseValue = "high"
+	SettingSecurityLevelEditResponseValueUnderAttack    SettingSecurityLevelEditResponseValue = "under_attack"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingSecurityLevelUpdateResponseEditable bool
+type SettingSecurityLevelEditResponseEditable bool
 
 const (
-	SettingSecurityLevelUpdateResponseEditableTrue  SettingSecurityLevelUpdateResponseEditable = true
-	SettingSecurityLevelUpdateResponseEditableFalse SettingSecurityLevelUpdateResponseEditable = false
+	SettingSecurityLevelEditResponseEditableTrue  SettingSecurityLevelEditResponseEditable = true
+	SettingSecurityLevelEditResponseEditableFalse SettingSecurityLevelEditResponseEditable = false
 )
 
 // Choose the appropriate security profile for your website, which will
@@ -184,43 +184,43 @@ const (
 	SettingSecurityLevelGetResponseEditableFalse SettingSecurityLevelGetResponseEditable = false
 )
 
-type SettingSecurityLevelUpdateParams struct {
+type SettingSecurityLevelEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingSecurityLevelUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingSecurityLevelEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingSecurityLevelUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingSecurityLevelEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingSecurityLevelUpdateParamsValue string
+type SettingSecurityLevelEditParamsValue string
 
 const (
-	SettingSecurityLevelUpdateParamsValueOff            SettingSecurityLevelUpdateParamsValue = "off"
-	SettingSecurityLevelUpdateParamsValueEssentiallyOff SettingSecurityLevelUpdateParamsValue = "essentially_off"
-	SettingSecurityLevelUpdateParamsValueLow            SettingSecurityLevelUpdateParamsValue = "low"
-	SettingSecurityLevelUpdateParamsValueMedium         SettingSecurityLevelUpdateParamsValue = "medium"
-	SettingSecurityLevelUpdateParamsValueHigh           SettingSecurityLevelUpdateParamsValue = "high"
-	SettingSecurityLevelUpdateParamsValueUnderAttack    SettingSecurityLevelUpdateParamsValue = "under_attack"
+	SettingSecurityLevelEditParamsValueOff            SettingSecurityLevelEditParamsValue = "off"
+	SettingSecurityLevelEditParamsValueEssentiallyOff SettingSecurityLevelEditParamsValue = "essentially_off"
+	SettingSecurityLevelEditParamsValueLow            SettingSecurityLevelEditParamsValue = "low"
+	SettingSecurityLevelEditParamsValueMedium         SettingSecurityLevelEditParamsValue = "medium"
+	SettingSecurityLevelEditParamsValueHigh           SettingSecurityLevelEditParamsValue = "high"
+	SettingSecurityLevelEditParamsValueUnderAttack    SettingSecurityLevelEditParamsValue = "under_attack"
 )
 
-type SettingSecurityLevelUpdateResponseEnvelope struct {
-	Errors   []SettingSecurityLevelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingSecurityLevelUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingSecurityLevelEditResponseEnvelope struct {
+	Errors   []SettingSecurityLevelEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingSecurityLevelEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Choose the appropriate security profile for your website, which will
 	// automatically adjust each of the security settings. If you choose to customize
 	// an individual security setting, the profile will become Custom.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170056).
-	Result SettingSecurityLevelUpdateResponse             `json:"result"`
-	JSON   settingSecurityLevelUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingSecurityLevelEditResponse             `json:"result"`
+	JSON   settingSecurityLevelEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingSecurityLevelUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingSecurityLevelUpdateResponseEnvelope]
-type settingSecurityLevelUpdateResponseEnvelopeJSON struct {
+// settingSecurityLevelEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingSecurityLevelEditResponseEnvelope]
+type settingSecurityLevelEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -229,45 +229,45 @@ type settingSecurityLevelUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSecurityLevelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSecurityLevelEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingSecurityLevelUpdateResponseEnvelopeErrors struct {
+type SettingSecurityLevelEditResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    settingSecurityLevelEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingSecurityLevelEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingSecurityLevelEditResponseEnvelopeErrors]
+type settingSecurityLevelEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingSecurityLevelEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSecurityLevelEditResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
-	JSON    settingSecurityLevelUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingSecurityLevelEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingSecurityLevelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingSecurityLevelUpdateResponseEnvelopeErrors]
-type settingSecurityLevelUpdateResponseEnvelopeErrorsJSON struct {
+// settingSecurityLevelEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingSecurityLevelEditResponseEnvelopeMessages]
+type settingSecurityLevelEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSecurityLevelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingSecurityLevelUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    settingSecurityLevelUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingSecurityLevelUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingSecurityLevelUpdateResponseEnvelopeMessages]
-type settingSecurityLevelUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingSecurityLevelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingSecurityLevelEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

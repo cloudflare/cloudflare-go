@@ -38,9 +38,9 @@ func NewSettingDevelopmentModeService(opts ...option.RequestOption) (r *SettingD
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-func (r *SettingDevelopmentModeService) Update(ctx context.Context, zoneID string, body SettingDevelopmentModeUpdateParams, opts ...option.RequestOption) (res *SettingDevelopmentModeUpdateResponse, err error) {
+func (r *SettingDevelopmentModeService) Edit(ctx context.Context, zoneID string, body SettingDevelopmentModeEditParams, opts ...option.RequestOption) (res *SettingDevelopmentModeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingDevelopmentModeUpdateResponseEnvelope
+	var env SettingDevelopmentModeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/development_mode", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -74,26 +74,26 @@ func (r *SettingDevelopmentModeService) Get(ctx context.Context, zoneID string, 
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-type SettingDevelopmentModeUpdateResponse struct {
+type SettingDevelopmentModeEditResponse struct {
 	// ID of the zone setting.
-	ID SettingDevelopmentModeUpdateResponseID `json:"id,required"`
+	ID SettingDevelopmentModeEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingDevelopmentModeUpdateResponseValue `json:"value,required"`
+	Value SettingDevelopmentModeEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingDevelopmentModeUpdateResponseEditable `json:"editable"`
+	Editable SettingDevelopmentModeEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                  `json:"time_remaining"`
-	JSON          settingDevelopmentModeUpdateResponseJSON `json:"-"`
+	TimeRemaining float64                                `json:"time_remaining"`
+	JSON          settingDevelopmentModeEditResponseJSON `json:"-"`
 }
 
-// settingDevelopmentModeUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingDevelopmentModeUpdateResponse]
-type settingDevelopmentModeUpdateResponseJSON struct {
+// settingDevelopmentModeEditResponseJSON contains the JSON metadata for the struct
+// [SettingDevelopmentModeEditResponse]
+type settingDevelopmentModeEditResponseJSON struct {
 	ID            apijson.Field
 	Value         apijson.Field
 	Editable      apijson.Field
@@ -103,32 +103,32 @@ type settingDevelopmentModeUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *SettingDevelopmentModeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingDevelopmentModeEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingDevelopmentModeUpdateResponseID string
+type SettingDevelopmentModeEditResponseID string
 
 const (
-	SettingDevelopmentModeUpdateResponseIDDevelopmentMode SettingDevelopmentModeUpdateResponseID = "development_mode"
+	SettingDevelopmentModeEditResponseIDDevelopmentMode SettingDevelopmentModeEditResponseID = "development_mode"
 )
 
 // Current value of the zone setting.
-type SettingDevelopmentModeUpdateResponseValue string
+type SettingDevelopmentModeEditResponseValue string
 
 const (
-	SettingDevelopmentModeUpdateResponseValueOn  SettingDevelopmentModeUpdateResponseValue = "on"
-	SettingDevelopmentModeUpdateResponseValueOff SettingDevelopmentModeUpdateResponseValue = "off"
+	SettingDevelopmentModeEditResponseValueOn  SettingDevelopmentModeEditResponseValue = "on"
+	SettingDevelopmentModeEditResponseValueOff SettingDevelopmentModeEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingDevelopmentModeUpdateResponseEditable bool
+type SettingDevelopmentModeEditResponseEditable bool
 
 const (
-	SettingDevelopmentModeUpdateResponseEditableTrue  SettingDevelopmentModeUpdateResponseEditable = true
-	SettingDevelopmentModeUpdateResponseEditableFalse SettingDevelopmentModeUpdateResponseEditable = false
+	SettingDevelopmentModeEditResponseEditableTrue  SettingDevelopmentModeEditResponseEditable = true
+	SettingDevelopmentModeEditResponseEditableFalse SettingDevelopmentModeEditResponseEditable = false
 )
 
 // Development Mode temporarily allows you to enter development mode for your
@@ -194,26 +194,26 @@ const (
 	SettingDevelopmentModeGetResponseEditableFalse SettingDevelopmentModeGetResponseEditable = false
 )
 
-type SettingDevelopmentModeUpdateParams struct {
+type SettingDevelopmentModeEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingDevelopmentModeUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingDevelopmentModeEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingDevelopmentModeUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingDevelopmentModeEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingDevelopmentModeUpdateParamsValue string
+type SettingDevelopmentModeEditParamsValue string
 
 const (
-	SettingDevelopmentModeUpdateParamsValueOn  SettingDevelopmentModeUpdateParamsValue = "on"
-	SettingDevelopmentModeUpdateParamsValueOff SettingDevelopmentModeUpdateParamsValue = "off"
+	SettingDevelopmentModeEditParamsValueOn  SettingDevelopmentModeEditParamsValue = "on"
+	SettingDevelopmentModeEditParamsValueOff SettingDevelopmentModeEditParamsValue = "off"
 )
 
-type SettingDevelopmentModeUpdateResponseEnvelope struct {
-	Errors   []SettingDevelopmentModeUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingDevelopmentModeUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingDevelopmentModeEditResponseEnvelope struct {
+	Errors   []SettingDevelopmentModeEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingDevelopmentModeEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Development Mode temporarily allows you to enter development mode for your
@@ -222,13 +222,13 @@ type SettingDevelopmentModeUpdateResponseEnvelope struct {
 	// changes to cacheable content (like images, css, or JavaScript) and would like to
 	// see those changes right away. Once entered, development mode will last for 3
 	// hours and then automatically toggle off.
-	Result SettingDevelopmentModeUpdateResponse             `json:"result"`
-	JSON   settingDevelopmentModeUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingDevelopmentModeEditResponse             `json:"result"`
+	JSON   settingDevelopmentModeEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingDevelopmentModeUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingDevelopmentModeUpdateResponseEnvelope]
-type settingDevelopmentModeUpdateResponseEnvelopeJSON struct {
+// settingDevelopmentModeEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingDevelopmentModeEditResponseEnvelope]
+type settingDevelopmentModeEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -237,45 +237,45 @@ type settingDevelopmentModeUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingDevelopmentModeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingDevelopmentModeEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingDevelopmentModeUpdateResponseEnvelopeErrors struct {
+type SettingDevelopmentModeEditResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    settingDevelopmentModeEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingDevelopmentModeEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingDevelopmentModeEditResponseEnvelopeErrors]
+type settingDevelopmentModeEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingDevelopmentModeEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingDevelopmentModeEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
-	JSON    settingDevelopmentModeUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingDevelopmentModeEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingDevelopmentModeUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingDevelopmentModeUpdateResponseEnvelopeErrors]
-type settingDevelopmentModeUpdateResponseEnvelopeErrorsJSON struct {
+// settingDevelopmentModeEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingDevelopmentModeEditResponseEnvelopeMessages]
+type settingDevelopmentModeEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingDevelopmentModeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingDevelopmentModeUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    settingDevelopmentModeUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingDevelopmentModeUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingDevelopmentModeUpdateResponseEnvelopeMessages]
-type settingDevelopmentModeUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingDevelopmentModeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingDevelopmentModeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

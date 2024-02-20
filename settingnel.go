@@ -34,9 +34,9 @@ func NewSettingNELService(opts ...option.RequestOption) (r *SettingNELService) {
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/nel-solving-mobile-speed)
 // for more information.
-func (r *SettingNELService) Update(ctx context.Context, zoneID string, body SettingNELUpdateParams, opts ...option.RequestOption) (res *SettingNELUpdateResponse, err error) {
+func (r *SettingNELService) Edit(ctx context.Context, zoneID string, body SettingNELEditParams, opts ...option.RequestOption) (res *SettingNELEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingNELUpdateResponseEnvelope
+	var env SettingNELEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/nel", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -60,22 +60,22 @@ func (r *SettingNELService) Get(ctx context.Context, zoneID string, opts ...opti
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-type SettingNELUpdateResponse struct {
+type SettingNELEditResponse struct {
 	// Zone setting identifier.
-	ID SettingNELUpdateResponseID `json:"id,required"`
+	ID SettingNELEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingNELUpdateResponseValue `json:"value,required"`
+	Value SettingNELEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingNELUpdateResponseEditable `json:"editable"`
+	Editable SettingNELEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingNELUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingNELEditResponseJSON `json:"-"`
 }
 
-// settingNELUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingNELUpdateResponse]
-type settingNELUpdateResponseJSON struct {
+// settingNELEditResponseJSON contains the JSON metadata for the struct
+// [SettingNELEditResponse]
+type settingNELEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -84,42 +84,42 @@ type settingNELUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingNELUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingNELEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Zone setting identifier.
-type SettingNELUpdateResponseID string
+type SettingNELEditResponseID string
 
 const (
-	SettingNELUpdateResponseIDNEL SettingNELUpdateResponseID = "nel"
+	SettingNELEditResponseIDNEL SettingNELEditResponseID = "nel"
 )
 
 // Current value of the zone setting.
-type SettingNELUpdateResponseValue struct {
-	Enabled bool                              `json:"enabled"`
-	JSON    settingNELUpdateResponseValueJSON `json:"-"`
+type SettingNELEditResponseValue struct {
+	Enabled bool                            `json:"enabled"`
+	JSON    settingNELEditResponseValueJSON `json:"-"`
 }
 
-// settingNELUpdateResponseValueJSON contains the JSON metadata for the struct
-// [SettingNELUpdateResponseValue]
-type settingNELUpdateResponseValueJSON struct {
+// settingNELEditResponseValueJSON contains the JSON metadata for the struct
+// [SettingNELEditResponseValue]
+type settingNELEditResponseValueJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingNELUpdateResponseValue) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingNELEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingNELUpdateResponseEditable bool
+type SettingNELEditResponseEditable bool
 
 const (
-	SettingNELUpdateResponseEditableTrue  SettingNELUpdateResponseEditable = true
-	SettingNELUpdateResponseEditableFalse SettingNELUpdateResponseEditable = false
+	SettingNELEditResponseEditableTrue  SettingNELEditResponseEditable = true
+	SettingNELEditResponseEditableFalse SettingNELEditResponseEditable = false
 )
 
 // Enable Network Error Logging reporting on your zone. (Beta)
@@ -185,65 +185,65 @@ const (
 	SettingNELGetResponseEditableFalse SettingNELGetResponseEditable = false
 )
 
-type SettingNELUpdateParams struct {
+type SettingNELEditParams struct {
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Value param.Field[SettingNELUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingNELEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingNELUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingNELEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-type SettingNELUpdateParamsValue struct {
+type SettingNELEditParamsValue struct {
 	// Zone setting identifier.
-	ID param.Field[SettingNELUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[SettingNELEditParamsValueID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingNELUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[SettingNELEditParamsValueValue] `json:"value,required"`
 }
 
-func (r SettingNELUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r SettingNELEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Zone setting identifier.
-type SettingNELUpdateParamsValueID string
+type SettingNELEditParamsValueID string
 
 const (
-	SettingNELUpdateParamsValueIDNEL SettingNELUpdateParamsValueID = "nel"
+	SettingNELEditParamsValueIDNEL SettingNELEditParamsValueID = "nel"
 )
 
 // Current value of the zone setting.
-type SettingNELUpdateParamsValueValue struct {
+type SettingNELEditParamsValueValue struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r SettingNELUpdateParamsValueValue) MarshalJSON() (data []byte, err error) {
+func (r SettingNELEditParamsValueValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingNELUpdateParamsValueEditable bool
+type SettingNELEditParamsValueEditable bool
 
 const (
-	SettingNELUpdateParamsValueEditableTrue  SettingNELUpdateParamsValueEditable = true
-	SettingNELUpdateParamsValueEditableFalse SettingNELUpdateParamsValueEditable = false
+	SettingNELEditParamsValueEditableTrue  SettingNELEditParamsValueEditable = true
+	SettingNELEditParamsValueEditableFalse SettingNELEditParamsValueEditable = false
 )
 
-type SettingNELUpdateResponseEnvelope struct {
-	Errors   []SettingNELUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingNELUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingNELEditResponseEnvelope struct {
+	Errors   []SettingNELEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingNELEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
-	Result SettingNELUpdateResponse             `json:"result"`
-	JSON   settingNELUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingNELEditResponse             `json:"result"`
+	JSON   settingNELEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingNELUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingNELUpdateResponseEnvelope]
-type settingNELUpdateResponseEnvelopeJSON struct {
+// settingNELEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingNELEditResponseEnvelope]
+type settingNELEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -252,45 +252,45 @@ type settingNELUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingNELUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingNELEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingNELUpdateResponseEnvelopeErrors struct {
+type SettingNELEditResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    settingNELEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingNELEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingNELEditResponseEnvelopeErrors]
+type settingNELEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingNELEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingNELEditResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
-	JSON    settingNELUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingNELEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingNELUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingNELUpdateResponseEnvelopeErrors]
-type settingNELUpdateResponseEnvelopeErrorsJSON struct {
+// settingNELEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingNELEditResponseEnvelopeMessages]
+type settingNELEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingNELUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingNELUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    settingNELUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingNELUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingNELUpdateResponseEnvelopeMessages]
-type settingNELUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingNELUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingNELEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

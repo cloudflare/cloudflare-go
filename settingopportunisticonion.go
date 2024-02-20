@@ -34,9 +34,9 @@ func NewSettingOpportunisticOnionService(opts ...option.RequestOption) (r *Setti
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-func (r *SettingOpportunisticOnionService) Update(ctx context.Context, zoneID string, body SettingOpportunisticOnionUpdateParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionUpdateResponse, err error) {
+func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, zoneID string, body SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingOpportunisticOnionUpdateResponseEnvelope
+	var env SettingOpportunisticOnionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingOpportunisticOnionService) Get(ctx context.Context, zoneID strin
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-type SettingOpportunisticOnionUpdateResponse struct {
+type SettingOpportunisticOnionEditResponse struct {
 	// ID of the zone setting.
-	ID SettingOpportunisticOnionUpdateResponseID `json:"id,required"`
+	ID SettingOpportunisticOnionEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOpportunisticOnionUpdateResponseValue `json:"value,required"`
+	Value SettingOpportunisticOnionEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingOpportunisticOnionUpdateResponseEditable `json:"editable"`
+	Editable SettingOpportunisticOnionEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOpportunisticOnionUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingOpportunisticOnionEditResponseJSON `json:"-"`
 }
 
-// settingOpportunisticOnionUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingOpportunisticOnionUpdateResponse]
-type settingOpportunisticOnionUpdateResponseJSON struct {
+// settingOpportunisticOnionEditResponseJSON contains the JSON metadata for the
+// struct [SettingOpportunisticOnionEditResponse]
+type settingOpportunisticOnionEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingOpportunisticOnionUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOpportunisticOnionUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOpportunisticOnionEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingOpportunisticOnionUpdateResponseID string
+type SettingOpportunisticOnionEditResponseID string
 
 const (
-	SettingOpportunisticOnionUpdateResponseIDOpportunisticOnion SettingOpportunisticOnionUpdateResponseID = "opportunistic_onion"
+	SettingOpportunisticOnionEditResponseIDOpportunisticOnion SettingOpportunisticOnionEditResponseID = "opportunistic_onion"
 )
 
 // Current value of the zone setting.
-type SettingOpportunisticOnionUpdateResponseValue string
+type SettingOpportunisticOnionEditResponseValue string
 
 const (
-	SettingOpportunisticOnionUpdateResponseValueOn  SettingOpportunisticOnionUpdateResponseValue = "on"
-	SettingOpportunisticOnionUpdateResponseValueOff SettingOpportunisticOnionUpdateResponseValue = "off"
+	SettingOpportunisticOnionEditResponseValueOn  SettingOpportunisticOnionEditResponseValue = "on"
+	SettingOpportunisticOnionEditResponseValueOff SettingOpportunisticOnionEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingOpportunisticOnionUpdateResponseEditable bool
+type SettingOpportunisticOnionEditResponseEditable bool
 
 const (
-	SettingOpportunisticOnionUpdateResponseEditableTrue  SettingOpportunisticOnionUpdateResponseEditable = true
-	SettingOpportunisticOnionUpdateResponseEditableFalse SettingOpportunisticOnionUpdateResponseEditable = false
+	SettingOpportunisticOnionEditResponseEditableTrue  SettingOpportunisticOnionEditResponseEditable = true
+	SettingOpportunisticOnionEditResponseEditableFalse SettingOpportunisticOnionEditResponseEditable = false
 )
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
@@ -168,39 +168,39 @@ const (
 	SettingOpportunisticOnionGetResponseEditableFalse SettingOpportunisticOnionGetResponseEditable = false
 )
 
-type SettingOpportunisticOnionUpdateParams struct {
+type SettingOpportunisticOnionEditParams struct {
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
-	Value param.Field[SettingOpportunisticOnionUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingOpportunisticOnionEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingOpportunisticOnionUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingOpportunisticOnionEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting. Notes: Default value depends on the zone's plan
 // level.
-type SettingOpportunisticOnionUpdateParamsValue string
+type SettingOpportunisticOnionEditParamsValue string
 
 const (
-	SettingOpportunisticOnionUpdateParamsValueOn  SettingOpportunisticOnionUpdateParamsValue = "on"
-	SettingOpportunisticOnionUpdateParamsValueOff SettingOpportunisticOnionUpdateParamsValue = "off"
+	SettingOpportunisticOnionEditParamsValueOn  SettingOpportunisticOnionEditParamsValue = "on"
+	SettingOpportunisticOnionEditParamsValueOff SettingOpportunisticOnionEditParamsValue = "off"
 )
 
-type SettingOpportunisticOnionUpdateResponseEnvelope struct {
-	Errors   []SettingOpportunisticOnionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOpportunisticOnionUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingOpportunisticOnionEditResponseEnvelope struct {
+	Errors   []SettingOpportunisticOnionEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingOpportunisticOnionEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 	// connection to use our onion services instead of exit nodes.
-	Result SettingOpportunisticOnionUpdateResponse             `json:"result"`
-	JSON   settingOpportunisticOnionUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingOpportunisticOnionEditResponse             `json:"result"`
+	JSON   settingOpportunisticOnionEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingOpportunisticOnionUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [SettingOpportunisticOnionUpdateResponseEnvelope]
-type settingOpportunisticOnionUpdateResponseEnvelopeJSON struct {
+// settingOpportunisticOnionEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SettingOpportunisticOnionEditResponseEnvelope]
+type settingOpportunisticOnionEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -209,46 +209,45 @@ type settingOpportunisticOnionUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOpportunisticOnionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOpportunisticOnionEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingOpportunisticOnionUpdateResponseEnvelopeErrors struct {
+type SettingOpportunisticOnionEditResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    settingOpportunisticOnionEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingOpportunisticOnionEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SettingOpportunisticOnionEditResponseEnvelopeErrors]
+type settingOpportunisticOnionEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingOpportunisticOnionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOpportunisticOnionEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
-	JSON    settingOpportunisticOnionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingOpportunisticOnionEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingOpportunisticOnionUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [SettingOpportunisticOnionUpdateResponseEnvelopeErrors]
-type settingOpportunisticOnionUpdateResponseEnvelopeErrorsJSON struct {
+// settingOpportunisticOnionEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SettingOpportunisticOnionEditResponseEnvelopeMessages]
+type settingOpportunisticOnionEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOpportunisticOnionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingOpportunisticOnionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    settingOpportunisticOnionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOpportunisticOnionUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [SettingOpportunisticOnionUpdateResponseEnvelopeMessages]
-type settingOpportunisticOnionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOpportunisticOnionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOpportunisticOnionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -34,6 +34,20 @@ func NewStreamCaptionService(opts ...option.RequestOption) (r *StreamCaptionServ
 	return
 }
 
+// Uploads the caption or subtitle file to the endpoint for a specific BCP47
+// language. One caption or subtitle file per language is allowed.
+func (r *StreamCaptionService) Update(ctx context.Context, accountID string, identifier string, language string, body StreamCaptionUpdateParams, opts ...option.RequestOption) (res *StreamCaptionUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamCaptionUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", accountID, identifier, language)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Lists the available captions or subtitles for a specific video.
 func (r *StreamCaptionService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *[]StreamCaptionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -60,18 +74,20 @@ func (r *StreamCaptionService) Delete(ctx context.Context, accountID string, ide
 	return
 }
 
-// Uploads the caption or subtitle file to the endpoint for a specific BCP47
-// language. One caption or subtitle file per language is allowed.
-func (r *StreamCaptionService) Replace(ctx context.Context, accountID string, identifier string, language string, body StreamCaptionReplaceParams, opts ...option.RequestOption) (res *StreamCaptionReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamCaptionReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", accountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [StreamCaptionUpdateResponseUnknown] or [shared.UnionString].
+type StreamCaptionUpdateResponse interface {
+	ImplementsStreamCaptionUpdateResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamCaptionUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type StreamCaptionListResponse struct {
@@ -116,22 +132,83 @@ type StreamCaptionDeleteResponseArray []interface{}
 
 func (r StreamCaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponse() {}
 
-// Union satisfied by [StreamCaptionReplaceResponseUnknown] or
-// [shared.UnionString].
-type StreamCaptionReplaceResponse interface {
-	ImplementsStreamCaptionReplaceResponse()
+type StreamCaptionUpdateParams struct {
+	// The WebVTT file containing the caption or subtitle content.
+	File param.Field[string] `json:"file,required"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamCaptionReplaceResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r StreamCaptionUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
+
+type StreamCaptionUpdateResponseEnvelope struct {
+	Errors   []StreamCaptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamCaptionUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamCaptionUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamCaptionUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamCaptionUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamCaptionUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StreamCaptionUpdateResponseEnvelope]
+type streamCaptionUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamCaptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamCaptionUpdateResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    streamCaptionUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamCaptionUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamCaptionUpdateResponseEnvelopeErrors]
+type streamCaptionUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamCaptionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamCaptionUpdateResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    streamCaptionUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamCaptionUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StreamCaptionUpdateResponseEnvelopeMessages]
+type streamCaptionUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamCaptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamCaptionUpdateResponseEnvelopeSuccess bool
+
+const (
+	StreamCaptionUpdateResponseEnvelopeSuccessTrue StreamCaptionUpdateResponseEnvelopeSuccess = true
+)
 
 type StreamCaptionListResponseEnvelope struct {
 	Errors   []StreamCaptionListResponseEnvelopeErrors   `json:"errors,required"`
@@ -269,82 +346,4 @@ type StreamCaptionDeleteResponseEnvelopeSuccess bool
 
 const (
 	StreamCaptionDeleteResponseEnvelopeSuccessTrue StreamCaptionDeleteResponseEnvelopeSuccess = true
-)
-
-type StreamCaptionReplaceParams struct {
-	// The WebVTT file containing the caption or subtitle content.
-	File param.Field[string] `json:"file,required"`
-}
-
-func (r StreamCaptionReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type StreamCaptionReplaceResponseEnvelope struct {
-	Errors   []StreamCaptionReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamCaptionReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamCaptionReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamCaptionReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamCaptionReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamCaptionReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StreamCaptionReplaceResponseEnvelope]
-type streamCaptionReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamCaptionReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamCaptionReplaceResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    streamCaptionReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamCaptionReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StreamCaptionReplaceResponseEnvelopeErrors]
-type streamCaptionReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamCaptionReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamCaptionReplaceResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    streamCaptionReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamCaptionReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [StreamCaptionReplaceResponseEnvelopeMessages]
-type streamCaptionReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamCaptionReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamCaptionReplaceResponseEnvelopeSuccess bool
-
-const (
-	StreamCaptionReplaceResponseEnvelopeSuccessTrue StreamCaptionReplaceResponseEnvelopeSuccess = true
 )

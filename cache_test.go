@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAccessSeatEdit(t *testing.T) {
+func TestCachePurgeWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,20 +29,13 @@ func TestAccessSeatEdit(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Access.Seats.Edit(
+	_, err := client.Cache.Purge(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccessSeatEditParams{
-			Body: cloudflare.F([]cloudflare.AccessSeatEditParamsBody{{
-				AccessSeat:  cloudflare.F(false),
-				GatewaySeat: cloudflare.F(false),
-			}, {
-				AccessSeat:  cloudflare.F(false),
-				GatewaySeat: cloudflare.F(false),
-			}, {
-				AccessSeat:  cloudflare.F(false),
-				GatewaySeat: cloudflare.F(false),
-			}}),
+		"string",
+		cloudflare.CachePurgeParamsCachePurgeFlex{
+			Hosts:    cloudflare.F([]string{"www.example.com", "images.example.com"}),
+			Prefixes: cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
+			Tags:     cloudflare.F([]string{"some-tag", "another-tag"}),
 		},
 	)
 	if err != nil {

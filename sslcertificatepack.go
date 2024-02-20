@@ -40,21 +40,6 @@ func NewSSLCertificatePackService(opts ...option.RequestOption) (r *SSLCertifica
 	return
 }
 
-// For a given zone, restart validation for an advanced certificate pack. This is
-// only a validation operation for a Certificate Pack in a validation_timed_out
-// status.
-func (r *SSLCertificatePackService) Update(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SSLCertificatePackUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // For a given zone, list all active certificate packs.
 func (r *SSLCertificatePackService) List(ctx context.Context, zoneID string, query SSLCertificatePackListParams, opts ...option.RequestOption) (res *[]SSLCertificatePackListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -81,6 +66,21 @@ func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, c
 	return
 }
 
+// For a given zone, restart validation for an advanced certificate pack. This is
+// only a validation operation for a Certificate Pack in a validation_timed_out
+// status.
+func (r *SSLCertificatePackService) Edit(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SSLCertificatePackEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // For a given zone, get a certificate pack.
 func (r *SSLCertificatePackService) Get(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -93,112 +93,6 @@ func (r *SSLCertificatePackService) Get(ctx context.Context, zoneID string, cert
 	res = &env.Result
 	return
 }
-
-type SSLCertificatePackUpdateResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Certificate Authority selected for the order. For information on any certificate
-	// authority specific details or restrictions
-	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-	CertificateAuthority SSLCertificatePackUpdateResponseCertificateAuthority `json:"certificate_authority"`
-	// Whether or not to add Cloudflare Branding for the order. This will add
-	// sni.cloudflaressl.com as the Common Name if set true.
-	CloudflareBranding bool `json:"cloudflare_branding"`
-	// Comma separated list of valid host names for the certificate packs. Must contain
-	// the zone apex, may not contain more than 50 hosts, and may not be empty.
-	Hosts []string `json:"hosts"`
-	// Status of certificate pack.
-	Status SSLCertificatePackUpdateResponseStatus `json:"status"`
-	// Type of certificate pack.
-	Type SSLCertificatePackUpdateResponseType `json:"type"`
-	// Validation Method selected for the order.
-	ValidationMethod SSLCertificatePackUpdateResponseValidationMethod `json:"validation_method"`
-	// Validity Days selected for the order.
-	ValidityDays SSLCertificatePackUpdateResponseValidityDays `json:"validity_days"`
-	JSON         sslCertificatePackUpdateResponseJSON         `json:"-"`
-}
-
-// sslCertificatePackUpdateResponseJSON contains the JSON metadata for the struct
-// [SSLCertificatePackUpdateResponse]
-type sslCertificatePackUpdateResponseJSON struct {
-	ID                   apijson.Field
-	CertificateAuthority apijson.Field
-	CloudflareBranding   apijson.Field
-	Hosts                apijson.Field
-	Status               apijson.Field
-	Type                 apijson.Field
-	ValidationMethod     apijson.Field
-	ValidityDays         apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Certificate Authority selected for the order. For information on any certificate
-// authority specific details or restrictions
-// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
-type SSLCertificatePackUpdateResponseCertificateAuthority string
-
-const (
-	SSLCertificatePackUpdateResponseCertificateAuthorityGoogle      SSLCertificatePackUpdateResponseCertificateAuthority = "google"
-	SSLCertificatePackUpdateResponseCertificateAuthorityLetsEncrypt SSLCertificatePackUpdateResponseCertificateAuthority = "lets_encrypt"
-)
-
-// Status of certificate pack.
-type SSLCertificatePackUpdateResponseStatus string
-
-const (
-	SSLCertificatePackUpdateResponseStatusInitializing         SSLCertificatePackUpdateResponseStatus = "initializing"
-	SSLCertificatePackUpdateResponseStatusPendingValidation    SSLCertificatePackUpdateResponseStatus = "pending_validation"
-	SSLCertificatePackUpdateResponseStatusDeleted              SSLCertificatePackUpdateResponseStatus = "deleted"
-	SSLCertificatePackUpdateResponseStatusPendingIssuance      SSLCertificatePackUpdateResponseStatus = "pending_issuance"
-	SSLCertificatePackUpdateResponseStatusPendingDeployment    SSLCertificatePackUpdateResponseStatus = "pending_deployment"
-	SSLCertificatePackUpdateResponseStatusPendingDeletion      SSLCertificatePackUpdateResponseStatus = "pending_deletion"
-	SSLCertificatePackUpdateResponseStatusPendingExpiration    SSLCertificatePackUpdateResponseStatus = "pending_expiration"
-	SSLCertificatePackUpdateResponseStatusExpired              SSLCertificatePackUpdateResponseStatus = "expired"
-	SSLCertificatePackUpdateResponseStatusActive               SSLCertificatePackUpdateResponseStatus = "active"
-	SSLCertificatePackUpdateResponseStatusInitializingTimedOut SSLCertificatePackUpdateResponseStatus = "initializing_timed_out"
-	SSLCertificatePackUpdateResponseStatusValidationTimedOut   SSLCertificatePackUpdateResponseStatus = "validation_timed_out"
-	SSLCertificatePackUpdateResponseStatusIssuanceTimedOut     SSLCertificatePackUpdateResponseStatus = "issuance_timed_out"
-	SSLCertificatePackUpdateResponseStatusDeploymentTimedOut   SSLCertificatePackUpdateResponseStatus = "deployment_timed_out"
-	SSLCertificatePackUpdateResponseStatusDeletionTimedOut     SSLCertificatePackUpdateResponseStatus = "deletion_timed_out"
-	SSLCertificatePackUpdateResponseStatusPendingCleanup       SSLCertificatePackUpdateResponseStatus = "pending_cleanup"
-	SSLCertificatePackUpdateResponseStatusStagingDeployment    SSLCertificatePackUpdateResponseStatus = "staging_deployment"
-	SSLCertificatePackUpdateResponseStatusStagingActive        SSLCertificatePackUpdateResponseStatus = "staging_active"
-	SSLCertificatePackUpdateResponseStatusDeactivating         SSLCertificatePackUpdateResponseStatus = "deactivating"
-	SSLCertificatePackUpdateResponseStatusInactive             SSLCertificatePackUpdateResponseStatus = "inactive"
-	SSLCertificatePackUpdateResponseStatusBackupIssued         SSLCertificatePackUpdateResponseStatus = "backup_issued"
-	SSLCertificatePackUpdateResponseStatusHoldingDeployment    SSLCertificatePackUpdateResponseStatus = "holding_deployment"
-)
-
-// Type of certificate pack.
-type SSLCertificatePackUpdateResponseType string
-
-const (
-	SSLCertificatePackUpdateResponseTypeAdvanced SSLCertificatePackUpdateResponseType = "advanced"
-)
-
-// Validation Method selected for the order.
-type SSLCertificatePackUpdateResponseValidationMethod string
-
-const (
-	SSLCertificatePackUpdateResponseValidationMethodTxt   SSLCertificatePackUpdateResponseValidationMethod = "txt"
-	SSLCertificatePackUpdateResponseValidationMethodHTTP  SSLCertificatePackUpdateResponseValidationMethod = "http"
-	SSLCertificatePackUpdateResponseValidationMethodEmail SSLCertificatePackUpdateResponseValidationMethod = "email"
-)
-
-// Validity Days selected for the order.
-type SSLCertificatePackUpdateResponseValidityDays int64
-
-const (
-	SSLCertificatePackUpdateResponseValidityDays14  SSLCertificatePackUpdateResponseValidityDays = 14
-	SSLCertificatePackUpdateResponseValidityDays30  SSLCertificatePackUpdateResponseValidityDays = 30
-	SSLCertificatePackUpdateResponseValidityDays90  SSLCertificatePackUpdateResponseValidityDays = 90
-	SSLCertificatePackUpdateResponseValidityDays365 SSLCertificatePackUpdateResponseValidityDays = 365
-)
 
 type SSLCertificatePackListResponse = interface{}
 
@@ -220,6 +114,112 @@ func (r *SSLCertificatePackDeleteResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SSLCertificatePackEditResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Certificate Authority selected for the order. For information on any certificate
+	// authority specific details or restrictions
+	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+	CertificateAuthority SSLCertificatePackEditResponseCertificateAuthority `json:"certificate_authority"`
+	// Whether or not to add Cloudflare Branding for the order. This will add
+	// sni.cloudflaressl.com as the Common Name if set true.
+	CloudflareBranding bool `json:"cloudflare_branding"`
+	// Comma separated list of valid host names for the certificate packs. Must contain
+	// the zone apex, may not contain more than 50 hosts, and may not be empty.
+	Hosts []string `json:"hosts"`
+	// Status of certificate pack.
+	Status SSLCertificatePackEditResponseStatus `json:"status"`
+	// Type of certificate pack.
+	Type SSLCertificatePackEditResponseType `json:"type"`
+	// Validation Method selected for the order.
+	ValidationMethod SSLCertificatePackEditResponseValidationMethod `json:"validation_method"`
+	// Validity Days selected for the order.
+	ValidityDays SSLCertificatePackEditResponseValidityDays `json:"validity_days"`
+	JSON         sslCertificatePackEditResponseJSON         `json:"-"`
+}
+
+// sslCertificatePackEditResponseJSON contains the JSON metadata for the struct
+// [SSLCertificatePackEditResponse]
+type sslCertificatePackEditResponseJSON struct {
+	ID                   apijson.Field
+	CertificateAuthority apijson.Field
+	CloudflareBranding   apijson.Field
+	Hosts                apijson.Field
+	Status               apijson.Field
+	Type                 apijson.Field
+	ValidationMethod     apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate Authority selected for the order. For information on any certificate
+// authority specific details or restrictions
+// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
+type SSLCertificatePackEditResponseCertificateAuthority string
+
+const (
+	SSLCertificatePackEditResponseCertificateAuthorityGoogle      SSLCertificatePackEditResponseCertificateAuthority = "google"
+	SSLCertificatePackEditResponseCertificateAuthorityLetsEncrypt SSLCertificatePackEditResponseCertificateAuthority = "lets_encrypt"
+)
+
+// Status of certificate pack.
+type SSLCertificatePackEditResponseStatus string
+
+const (
+	SSLCertificatePackEditResponseStatusInitializing         SSLCertificatePackEditResponseStatus = "initializing"
+	SSLCertificatePackEditResponseStatusPendingValidation    SSLCertificatePackEditResponseStatus = "pending_validation"
+	SSLCertificatePackEditResponseStatusDeleted              SSLCertificatePackEditResponseStatus = "deleted"
+	SSLCertificatePackEditResponseStatusPendingIssuance      SSLCertificatePackEditResponseStatus = "pending_issuance"
+	SSLCertificatePackEditResponseStatusPendingDeployment    SSLCertificatePackEditResponseStatus = "pending_deployment"
+	SSLCertificatePackEditResponseStatusPendingDeletion      SSLCertificatePackEditResponseStatus = "pending_deletion"
+	SSLCertificatePackEditResponseStatusPendingExpiration    SSLCertificatePackEditResponseStatus = "pending_expiration"
+	SSLCertificatePackEditResponseStatusExpired              SSLCertificatePackEditResponseStatus = "expired"
+	SSLCertificatePackEditResponseStatusActive               SSLCertificatePackEditResponseStatus = "active"
+	SSLCertificatePackEditResponseStatusInitializingTimedOut SSLCertificatePackEditResponseStatus = "initializing_timed_out"
+	SSLCertificatePackEditResponseStatusValidationTimedOut   SSLCertificatePackEditResponseStatus = "validation_timed_out"
+	SSLCertificatePackEditResponseStatusIssuanceTimedOut     SSLCertificatePackEditResponseStatus = "issuance_timed_out"
+	SSLCertificatePackEditResponseStatusDeploymentTimedOut   SSLCertificatePackEditResponseStatus = "deployment_timed_out"
+	SSLCertificatePackEditResponseStatusDeletionTimedOut     SSLCertificatePackEditResponseStatus = "deletion_timed_out"
+	SSLCertificatePackEditResponseStatusPendingCleanup       SSLCertificatePackEditResponseStatus = "pending_cleanup"
+	SSLCertificatePackEditResponseStatusStagingDeployment    SSLCertificatePackEditResponseStatus = "staging_deployment"
+	SSLCertificatePackEditResponseStatusStagingActive        SSLCertificatePackEditResponseStatus = "staging_active"
+	SSLCertificatePackEditResponseStatusDeactivating         SSLCertificatePackEditResponseStatus = "deactivating"
+	SSLCertificatePackEditResponseStatusInactive             SSLCertificatePackEditResponseStatus = "inactive"
+	SSLCertificatePackEditResponseStatusBackupIssued         SSLCertificatePackEditResponseStatus = "backup_issued"
+	SSLCertificatePackEditResponseStatusHoldingDeployment    SSLCertificatePackEditResponseStatus = "holding_deployment"
+)
+
+// Type of certificate pack.
+type SSLCertificatePackEditResponseType string
+
+const (
+	SSLCertificatePackEditResponseTypeAdvanced SSLCertificatePackEditResponseType = "advanced"
+)
+
+// Validation Method selected for the order.
+type SSLCertificatePackEditResponseValidationMethod string
+
+const (
+	SSLCertificatePackEditResponseValidationMethodTxt   SSLCertificatePackEditResponseValidationMethod = "txt"
+	SSLCertificatePackEditResponseValidationMethodHTTP  SSLCertificatePackEditResponseValidationMethod = "http"
+	SSLCertificatePackEditResponseValidationMethodEmail SSLCertificatePackEditResponseValidationMethod = "email"
+)
+
+// Validity Days selected for the order.
+type SSLCertificatePackEditResponseValidityDays int64
+
+const (
+	SSLCertificatePackEditResponseValidityDays14  SSLCertificatePackEditResponseValidityDays = 14
+	SSLCertificatePackEditResponseValidityDays30  SSLCertificatePackEditResponseValidityDays = 30
+	SSLCertificatePackEditResponseValidityDays90  SSLCertificatePackEditResponseValidityDays = 90
+	SSLCertificatePackEditResponseValidityDays365 SSLCertificatePackEditResponseValidityDays = 365
+)
+
 // Union satisfied by [SSLCertificatePackGetResponseUnknown] or
 // [shared.UnionString].
 type SSLCertificatePackGetResponse interface {
@@ -236,75 +236,6 @@ func init() {
 		},
 	)
 }
-
-type SSLCertificatePackUpdateResponseEnvelope struct {
-	Errors   []SSLCertificatePackUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLCertificatePackUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLCertificatePackUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success SSLCertificatePackUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslCertificatePackUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// sslCertificatePackUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SSLCertificatePackUpdateResponseEnvelope]
-type sslCertificatePackUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLCertificatePackUpdateResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    sslCertificatePackUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// sslCertificatePackUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SSLCertificatePackUpdateResponseEnvelopeErrors]
-type sslCertificatePackUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SSLCertificatePackUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    sslCertificatePackUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// sslCertificatePackUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SSLCertificatePackUpdateResponseEnvelopeMessages]
-type sslCertificatePackUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SSLCertificatePackUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SSLCertificatePackUpdateResponseEnvelopeSuccess bool
-
-const (
-	SSLCertificatePackUpdateResponseEnvelopeSuccessTrue SSLCertificatePackUpdateResponseEnvelopeSuccess = true
-)
 
 type SSLCertificatePackListParams struct {
 	// Include Certificate Packs of all statuses, not just active ones.
@@ -492,6 +423,75 @@ type SSLCertificatePackDeleteResponseEnvelopeSuccess bool
 
 const (
 	SSLCertificatePackDeleteResponseEnvelopeSuccessTrue SSLCertificatePackDeleteResponseEnvelopeSuccess = true
+)
+
+type SSLCertificatePackEditResponseEnvelope struct {
+	Errors   []SSLCertificatePackEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLCertificatePackEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLCertificatePackEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success SSLCertificatePackEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslCertificatePackEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// sslCertificatePackEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLCertificatePackEditResponseEnvelope]
+type sslCertificatePackEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLCertificatePackEditResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    sslCertificatePackEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// sslCertificatePackEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SSLCertificatePackEditResponseEnvelopeErrors]
+type sslCertificatePackEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLCertificatePackEditResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    sslCertificatePackEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// sslCertificatePackEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SSLCertificatePackEditResponseEnvelopeMessages]
+type sslCertificatePackEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SSLCertificatePackEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SSLCertificatePackEditResponseEnvelopeSuccess bool
+
+const (
+	SSLCertificatePackEditResponseEnvelopeSuccessTrue SSLCertificatePackEditResponseEnvelopeSuccess = true
 )
 
 type SSLCertificatePackGetResponseEnvelope struct {

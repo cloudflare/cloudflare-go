@@ -48,6 +48,19 @@ func (r *AlertingV3PolicyService) New(ctx context.Context, accountID string, bod
 	return
 }
 
+// Update a Notification policy.
+func (r *AlertingV3PolicyService) Update(ctx context.Context, accountID string, policyID string, body AlertingV3PolicyUpdateParams, opts ...option.RequestOption) (res *AlertingV3PolicyUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AlertingV3PolicyUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", accountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a list of all Notification policies.
 func (r *AlertingV3PolicyService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AlertingV3PolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -87,19 +100,6 @@ func (r *AlertingV3PolicyService) Get(ctx context.Context, accountID string, pol
 	return
 }
 
-// Update a Notification policy.
-func (r *AlertingV3PolicyService) Replace(ctx context.Context, accountID string, policyID string, body AlertingV3PolicyReplaceParams, opts ...option.RequestOption) (res *AlertingV3PolicyReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AlertingV3PolicyReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 type AlertingV3PolicyNewResponse struct {
 	// UUID
 	ID   string                          `json:"id"`
@@ -115,6 +115,24 @@ type alertingV3PolicyNewResponseJSON struct {
 }
 
 func (r *AlertingV3PolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3PolicyUpdateResponse struct {
+	// UUID
+	ID   string                             `json:"id"`
+	JSON alertingV3PolicyUpdateResponseJSON `json:"-"`
+}
+
+// alertingV3PolicyUpdateResponseJSON contains the JSON metadata for the struct
+// [AlertingV3PolicyUpdateResponse]
+type alertingV3PolicyUpdateResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3PolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -755,24 +773,6 @@ func init() {
 	)
 }
 
-type AlertingV3PolicyReplaceResponse struct {
-	// UUID
-	ID   string                              `json:"id"`
-	JSON alertingV3PolicyReplaceResponseJSON `json:"-"`
-}
-
-// alertingV3PolicyReplaceResponseJSON contains the JSON metadata for the struct
-// [AlertingV3PolicyReplaceResponse]
-type alertingV3PolicyReplaceResponseJSON struct {
-	ID          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3PolicyReplaceResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type AlertingV3PolicyNewParams struct {
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
@@ -1057,6 +1057,290 @@ const (
 	AlertingV3PolicyNewResponseEnvelopeSuccessTrue AlertingV3PolicyNewResponseEnvelopeSuccess = true
 )
 
+type AlertingV3PolicyUpdateParams struct {
+	// Refers to which event will trigger a Notification dispatch. You can use the
+	// endpoint to get available alert types which then will give you a list of
+	// possible values.
+	AlertType param.Field[AlertingV3PolicyUpdateParamsAlertType] `json:"alert_type"`
+	// Optional description for the Notification policy.
+	Description param.Field[string] `json:"description"`
+	// Whether or not the Notification policy is enabled.
+	Enabled param.Field[bool] `json:"enabled"`
+	// Optional filters that allow you to be alerted only on a subset of events for
+	// that alert type based on some criteria. This is only available for select alert
+	// types. See alert type documentation for more details.
+	Filters param.Field[AlertingV3PolicyUpdateParamsFilters] `json:"filters"`
+	// List of IDs that will be used when dispatching a notification. IDs for email
+	// type will be the email address.
+	Mechanisms param.Field[map[string][]AlertingV3PolicyUpdateParamsMechanisms] `json:"mechanisms"`
+	// Name of the policy.
+	Name param.Field[string] `json:"name"`
+}
+
+func (r AlertingV3PolicyUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Refers to which event will trigger a Notification dispatch. You can use the
+// endpoint to get available alert types which then will give you a list of
+// possible values.
+type AlertingV3PolicyUpdateParamsAlertType string
+
+const (
+	AlertingV3PolicyUpdateParamsAlertTypeAccessCustomCertificateExpirationType         AlertingV3PolicyUpdateParamsAlertType = "access_custom_certificate_expiration_type"
+	AlertingV3PolicyUpdateParamsAlertTypeAdvancedDDOSAttackL4Alert                     AlertingV3PolicyUpdateParamsAlertType = "advanced_ddos_attack_l4_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeAdvancedDDOSAttackL7Alert                     AlertingV3PolicyUpdateParamsAlertType = "advanced_ddos_attack_l7_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeAdvancedHTTPAlertError                        AlertingV3PolicyUpdateParamsAlertType = "advanced_http_alert_error"
+	AlertingV3PolicyUpdateParamsAlertTypeBGPHijackNotification                         AlertingV3PolicyUpdateParamsAlertType = "bgp_hijack_notification"
+	AlertingV3PolicyUpdateParamsAlertTypeBillingUsageAlert                             AlertingV3PolicyUpdateParamsAlertType = "billing_usage_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeBlockNotificationBlockRemoved                 AlertingV3PolicyUpdateParamsAlertType = "block_notification_block_removed"
+	AlertingV3PolicyUpdateParamsAlertTypeBlockNotificationNewBlock                     AlertingV3PolicyUpdateParamsAlertType = "block_notification_new_block"
+	AlertingV3PolicyUpdateParamsAlertTypeBlockNotificationReviewRejected               AlertingV3PolicyUpdateParamsAlertType = "block_notification_review_rejected"
+	AlertingV3PolicyUpdateParamsAlertTypeBrandProtectionAlert                          AlertingV3PolicyUpdateParamsAlertType = "brand_protection_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeBrandProtectionDigest                         AlertingV3PolicyUpdateParamsAlertType = "brand_protection_digest"
+	AlertingV3PolicyUpdateParamsAlertTypeClickhouseAlertFwAnomaly                      AlertingV3PolicyUpdateParamsAlertType = "clickhouse_alert_fw_anomaly"
+	AlertingV3PolicyUpdateParamsAlertTypeClickhouseAlertFwEntAnomaly                   AlertingV3PolicyUpdateParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
+	AlertingV3PolicyUpdateParamsAlertTypeCustomSSLCertificateEventType                 AlertingV3PolicyUpdateParamsAlertType = "custom_ssl_certificate_event_type"
+	AlertingV3PolicyUpdateParamsAlertTypeDedicatedSSLCertificateEventType              AlertingV3PolicyUpdateParamsAlertType = "dedicated_ssl_certificate_event_type"
+	AlertingV3PolicyUpdateParamsAlertTypeDosAttackL4                                   AlertingV3PolicyUpdateParamsAlertType = "dos_attack_l4"
+	AlertingV3PolicyUpdateParamsAlertTypeDosAttackL7                                   AlertingV3PolicyUpdateParamsAlertType = "dos_attack_l7"
+	AlertingV3PolicyUpdateParamsAlertTypeExpiringServiceTokenAlert                     AlertingV3PolicyUpdateParamsAlertType = "expiring_service_token_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeFailingLogpushJobDisabledAlert                AlertingV3PolicyUpdateParamsAlertType = "failing_logpush_job_disabled_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeFbmAutoAdvertisement                          AlertingV3PolicyUpdateParamsAlertType = "fbm_auto_advertisement"
+	AlertingV3PolicyUpdateParamsAlertTypeFbmDosdAttack                                 AlertingV3PolicyUpdateParamsAlertType = "fbm_dosd_attack"
+	AlertingV3PolicyUpdateParamsAlertTypeFbmVolumetricAttack                           AlertingV3PolicyUpdateParamsAlertType = "fbm_volumetric_attack"
+	AlertingV3PolicyUpdateParamsAlertTypeHealthCheckStatusNotification                 AlertingV3PolicyUpdateParamsAlertType = "health_check_status_notification"
+	AlertingV3PolicyUpdateParamsAlertTypeHostnameAopCustomCertificateExpirationType    AlertingV3PolicyUpdateParamsAlertType = "hostname_aop_custom_certificate_expiration_type"
+	AlertingV3PolicyUpdateParamsAlertTypeHTTPAlertEdgeError                            AlertingV3PolicyUpdateParamsAlertType = "http_alert_edge_error"
+	AlertingV3PolicyUpdateParamsAlertTypeHTTPAlertOriginError                          AlertingV3PolicyUpdateParamsAlertType = "http_alert_origin_error"
+	AlertingV3PolicyUpdateParamsAlertTypeIncidentAlert                                 AlertingV3PolicyUpdateParamsAlertType = "incident_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeLoadBalancingHealthAlert                      AlertingV3PolicyUpdateParamsAlertType = "load_balancing_health_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeLoadBalancingPoolEnablementAlert              AlertingV3PolicyUpdateParamsAlertType = "load_balancing_pool_enablement_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeLogoMatchAlert                                AlertingV3PolicyUpdateParamsAlertType = "logo_match_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyUpdateParamsAlertType = "magic_tunnel_health_check_event"
+	AlertingV3PolicyUpdateParamsAlertTypeMaintenanceEventNotification                  AlertingV3PolicyUpdateParamsAlertType = "maintenance_event_notification"
+	AlertingV3PolicyUpdateParamsAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyUpdateParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingV3PolicyUpdateParamsAlertTypePagesEventAlert                               AlertingV3PolicyUpdateParamsAlertType = "pages_event_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeRadarNotification                             AlertingV3PolicyUpdateParamsAlertType = "radar_notification"
+	AlertingV3PolicyUpdateParamsAlertTypeRealOriginMonitoring                          AlertingV3PolicyUpdateParamsAlertType = "real_origin_monitoring"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections     AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_code_change_detections"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewHosts                    AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_hosts"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousHosts           AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_malicious_hosts"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousScripts         AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_malicious_scripts"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaliciousURL             AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_malicious_url"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL     AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_max_length_resource_url"
+	AlertingV3PolicyUpdateParamsAlertTypeScriptmonitorAlertNewResources                AlertingV3PolicyUpdateParamsAlertType = "scriptmonitor_alert_new_resources"
+	AlertingV3PolicyUpdateParamsAlertTypeSecondaryDNSAllPrimariesFailing               AlertingV3PolicyUpdateParamsAlertType = "secondary_dns_all_primaries_failing"
+	AlertingV3PolicyUpdateParamsAlertTypeSecondaryDNSPrimariesFailing                  AlertingV3PolicyUpdateParamsAlertType = "secondary_dns_primaries_failing"
+	AlertingV3PolicyUpdateParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           AlertingV3PolicyUpdateParamsAlertType = "secondary_dns_zone_successfully_updated"
+	AlertingV3PolicyUpdateParamsAlertTypeSecondaryDNSZoneValidationWarning             AlertingV3PolicyUpdateParamsAlertType = "secondary_dns_zone_validation_warning"
+	AlertingV3PolicyUpdateParamsAlertTypeSentinelAlert                                 AlertingV3PolicyUpdateParamsAlertType = "sentinel_alert"
+	AlertingV3PolicyUpdateParamsAlertTypeStreamLiveNotifications                       AlertingV3PolicyUpdateParamsAlertType = "stream_live_notifications"
+	AlertingV3PolicyUpdateParamsAlertTypeTunnelHealthEvent                             AlertingV3PolicyUpdateParamsAlertType = "tunnel_health_event"
+	AlertingV3PolicyUpdateParamsAlertTypeTunnelUpdateEvent                             AlertingV3PolicyUpdateParamsAlertType = "tunnel_update_event"
+	AlertingV3PolicyUpdateParamsAlertTypeUniversalSSLEventType                         AlertingV3PolicyUpdateParamsAlertType = "universal_ssl_event_type"
+	AlertingV3PolicyUpdateParamsAlertTypeWebAnalyticsMetricsUpdate                     AlertingV3PolicyUpdateParamsAlertType = "web_analytics_metrics_update"
+	AlertingV3PolicyUpdateParamsAlertTypeZoneAopCustomCertificateExpirationType        AlertingV3PolicyUpdateParamsAlertType = "zone_aop_custom_certificate_expiration_type"
+)
+
+// Optional filters that allow you to be alerted only on a subset of events for
+// that alert type based on some criteria. This is only available for select alert
+// types. See alert type documentation for more details.
+type AlertingV3PolicyUpdateParamsFilters struct {
+	// Usage depends on specific alert type
+	Actions param.Field[[]string] `json:"actions"`
+	// Used for configuring radar_notification
+	AffectedAsns param.Field[[]string] `json:"affected_asns"`
+	// Used for configuring incident_alert
+	AffectedComponents param.Field[[]string] `json:"affected_components"`
+	// Used for configuring radar_notification
+	AffectedLocations param.Field[[]string] `json:"affected_locations"`
+	// Used for configuring maintenance_event_notification
+	AirportCode param.Field[[]string] `json:"airport_code"`
+	// Usage depends on specific alert type
+	AlertTriggerPreferences param.Field[[]string] `json:"alert_trigger_preferences"`
+	// Used for configuring magic_tunnel_health_check_event
+	AlertTriggerPreferencesValue param.Field[[]AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue] `json:"alert_trigger_preferences_value"`
+	// Used for configuring load_balancing_pool_enablement_alert
+	Enabled param.Field[[]string] `json:"enabled"`
+	// Used for configuring pages_event_alert
+	Environment param.Field[[]string] `json:"environment"`
+	// Used for configuring pages_event_alert
+	Event param.Field[[]string] `json:"event"`
+	// Used for configuring load_balancing_health_alert
+	EventSource param.Field[[]string] `json:"event_source"`
+	// Usage depends on specific alert type
+	EventType param.Field[[]string] `json:"event_type"`
+	// Usage depends on specific alert type
+	GroupBy param.Field[[]string] `json:"group_by"`
+	// Used for configuring health_check_status_notification
+	HealthCheckID param.Field[[]string] `json:"health_check_id"`
+	// Used for configuring incident_alert
+	IncidentImpact param.Field[[]AlertingV3PolicyUpdateParamsFiltersIncidentImpact] `json:"incident_impact"`
+	// Used for configuring stream_live_notifications
+	InputID param.Field[[]string] `json:"input_id"`
+	// Used for configuring billing_usage_alert
+	Limit param.Field[[]string] `json:"limit"`
+	// Used for configuring logo_match_alert
+	LogoTag param.Field[[]string] `json:"logo_tag"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	MegabitsPerSecond param.Field[[]string] `json:"megabits_per_second"`
+	// Used for configuring load_balancing_health_alert
+	NewHealth param.Field[[]string] `json:"new_health"`
+	// Used for configuring tunnel_health_event
+	NewStatus param.Field[[]string] `json:"new_status"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	PacketsPerSecond param.Field[[]string] `json:"packets_per_second"`
+	// Usage depends on specific alert type
+	PoolID param.Field[[]string] `json:"pool_id"`
+	// Used for configuring billing_usage_alert
+	Product param.Field[[]string] `json:"product"`
+	// Used for configuring pages_event_alert
+	ProjectID param.Field[[]string] `json:"project_id"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	Protocol param.Field[[]string] `json:"protocol"`
+	// Usage depends on specific alert type
+	QueryTag param.Field[[]string] `json:"query_tag"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	RequestsPerSecond param.Field[[]string] `json:"requests_per_second"`
+	// Usage depends on specific alert type
+	Selectors param.Field[[]string] `json:"selectors"`
+	// Used for configuring clickhouse_alert_fw_ent_anomaly
+	Services param.Field[[]string] `json:"services"`
+	// Usage depends on specific alert type
+	Slo param.Field[[]string] `json:"slo"`
+	// Used for configuring health_check_status_notification
+	Status param.Field[[]string] `json:"status"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetHostname param.Field[[]string] `json:"target_hostname"`
+	// Used for configuring advanced_ddos_attack_l4_alert
+	TargetIP param.Field[[]string] `json:"target_ip"`
+	// Used for configuring advanced_ddos_attack_l7_alert
+	TargetZoneName param.Field[[]string] `json:"target_zone_name"`
+	// Used for configuring traffic_anomalies_alert
+	TrafficExclusions param.Field[[]AlertingV3PolicyUpdateParamsFiltersTrafficExclusion] `json:"traffic_exclusions"`
+	// Used for configuring tunnel_health_event
+	TunnelID param.Field[[]string] `json:"tunnel_id"`
+	// Used for configuring magic_tunnel_health_check_event
+	TunnelName param.Field[[]string] `json:"tunnel_name"`
+	// Usage depends on specific alert type
+	Where param.Field[[]string] `json:"where"`
+	// Usage depends on specific alert type
+	Zones param.Field[[]string] `json:"zones"`
+}
+
+func (r AlertingV3PolicyUpdateParamsFilters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue string
+
+const (
+	AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue99_0 AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue = "99.0"
+	AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue98_0 AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue = "98.0"
+	AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue97_0 AlertingV3PolicyUpdateParamsFiltersAlertTriggerPreferencesValue = "97.0"
+)
+
+type AlertingV3PolicyUpdateParamsFiltersIncidentImpact string
+
+const (
+	AlertingV3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactNone     AlertingV3PolicyUpdateParamsFiltersIncidentImpact = "INCIDENT_IMPACT_NONE"
+	AlertingV3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMinor    AlertingV3PolicyUpdateParamsFiltersIncidentImpact = "INCIDENT_IMPACT_MINOR"
+	AlertingV3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactMajor    AlertingV3PolicyUpdateParamsFiltersIncidentImpact = "INCIDENT_IMPACT_MAJOR"
+	AlertingV3PolicyUpdateParamsFiltersIncidentImpactIncidentImpactCritical AlertingV3PolicyUpdateParamsFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
+)
+
+type AlertingV3PolicyUpdateParamsFiltersTrafficExclusion string
+
+const (
+	AlertingV3PolicyUpdateParamsFiltersTrafficExclusionSecurityEvents AlertingV3PolicyUpdateParamsFiltersTrafficExclusion = "security_events"
+)
+
+type AlertingV3PolicyUpdateParamsMechanisms struct {
+	// UUID
+	ID param.Field[AlertingV3PolicyUpdateParamsMechanismsID] `json:"id"`
+}
+
+func (r AlertingV3PolicyUpdateParamsMechanisms) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// UUID
+//
+// Satisfied by [shared.UnionString], [shared.UnionString].
+type AlertingV3PolicyUpdateParamsMechanismsID interface {
+	ImplementsAlertingV3PolicyUpdateParamsMechanismsID()
+}
+
+type AlertingV3PolicyUpdateResponseEnvelope struct {
+	Errors   []AlertingV3PolicyUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AlertingV3PolicyUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AlertingV3PolicyUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AlertingV3PolicyUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    alertingV3PolicyUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// alertingV3PolicyUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AlertingV3PolicyUpdateResponseEnvelope]
+type alertingV3PolicyUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3PolicyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3PolicyUpdateResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    alertingV3PolicyUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// alertingV3PolicyUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AlertingV3PolicyUpdateResponseEnvelopeErrors]
+type alertingV3PolicyUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3PolicyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3PolicyUpdateResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    alertingV3PolicyUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// alertingV3PolicyUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AlertingV3PolicyUpdateResponseEnvelopeMessages]
+type alertingV3PolicyUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3PolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AlertingV3PolicyUpdateResponseEnvelopeSuccess bool
+
+const (
+	AlertingV3PolicyUpdateResponseEnvelopeSuccessTrue AlertingV3PolicyUpdateResponseEnvelopeSuccess = true
+)
+
 type AlertingV3PolicyListResponseEnvelope struct {
 	Errors   []AlertingV3PolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3PolicyListResponseEnvelopeMessages `json:"messages,required"`
@@ -1320,288 +1604,4 @@ type AlertingV3PolicyGetResponseEnvelopeSuccess bool
 
 const (
 	AlertingV3PolicyGetResponseEnvelopeSuccessTrue AlertingV3PolicyGetResponseEnvelopeSuccess = true
-)
-
-type AlertingV3PolicyReplaceParams struct {
-	// Refers to which event will trigger a Notification dispatch. You can use the
-	// endpoint to get available alert types which then will give you a list of
-	// possible values.
-	AlertType param.Field[AlertingV3PolicyReplaceParamsAlertType] `json:"alert_type"`
-	// Optional description for the Notification policy.
-	Description param.Field[string] `json:"description"`
-	// Whether or not the Notification policy is enabled.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Optional filters that allow you to be alerted only on a subset of events for
-	// that alert type based on some criteria. This is only available for select alert
-	// types. See alert type documentation for more details.
-	Filters param.Field[AlertingV3PolicyReplaceParamsFilters] `json:"filters"`
-	// List of IDs that will be used when dispatching a notification. IDs for email
-	// type will be the email address.
-	Mechanisms param.Field[map[string][]AlertingV3PolicyReplaceParamsMechanisms] `json:"mechanisms"`
-	// Name of the policy.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r AlertingV3PolicyReplaceParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Refers to which event will trigger a Notification dispatch. You can use the
-// endpoint to get available alert types which then will give you a list of
-// possible values.
-type AlertingV3PolicyReplaceParamsAlertType string
-
-const (
-	AlertingV3PolicyReplaceParamsAlertTypeAccessCustomCertificateExpirationType         AlertingV3PolicyReplaceParamsAlertType = "access_custom_certificate_expiration_type"
-	AlertingV3PolicyReplaceParamsAlertTypeAdvancedDDOSAttackL4Alert                     AlertingV3PolicyReplaceParamsAlertType = "advanced_ddos_attack_l4_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeAdvancedDDOSAttackL7Alert                     AlertingV3PolicyReplaceParamsAlertType = "advanced_ddos_attack_l7_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeAdvancedHTTPAlertError                        AlertingV3PolicyReplaceParamsAlertType = "advanced_http_alert_error"
-	AlertingV3PolicyReplaceParamsAlertTypeBGPHijackNotification                         AlertingV3PolicyReplaceParamsAlertType = "bgp_hijack_notification"
-	AlertingV3PolicyReplaceParamsAlertTypeBillingUsageAlert                             AlertingV3PolicyReplaceParamsAlertType = "billing_usage_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeBlockNotificationBlockRemoved                 AlertingV3PolicyReplaceParamsAlertType = "block_notification_block_removed"
-	AlertingV3PolicyReplaceParamsAlertTypeBlockNotificationNewBlock                     AlertingV3PolicyReplaceParamsAlertType = "block_notification_new_block"
-	AlertingV3PolicyReplaceParamsAlertTypeBlockNotificationReviewRejected               AlertingV3PolicyReplaceParamsAlertType = "block_notification_review_rejected"
-	AlertingV3PolicyReplaceParamsAlertTypeBrandProtectionAlert                          AlertingV3PolicyReplaceParamsAlertType = "brand_protection_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeBrandProtectionDigest                         AlertingV3PolicyReplaceParamsAlertType = "brand_protection_digest"
-	AlertingV3PolicyReplaceParamsAlertTypeClickhouseAlertFwAnomaly                      AlertingV3PolicyReplaceParamsAlertType = "clickhouse_alert_fw_anomaly"
-	AlertingV3PolicyReplaceParamsAlertTypeClickhouseAlertFwEntAnomaly                   AlertingV3PolicyReplaceParamsAlertType = "clickhouse_alert_fw_ent_anomaly"
-	AlertingV3PolicyReplaceParamsAlertTypeCustomSSLCertificateEventType                 AlertingV3PolicyReplaceParamsAlertType = "custom_ssl_certificate_event_type"
-	AlertingV3PolicyReplaceParamsAlertTypeDedicatedSSLCertificateEventType              AlertingV3PolicyReplaceParamsAlertType = "dedicated_ssl_certificate_event_type"
-	AlertingV3PolicyReplaceParamsAlertTypeDosAttackL4                                   AlertingV3PolicyReplaceParamsAlertType = "dos_attack_l4"
-	AlertingV3PolicyReplaceParamsAlertTypeDosAttackL7                                   AlertingV3PolicyReplaceParamsAlertType = "dos_attack_l7"
-	AlertingV3PolicyReplaceParamsAlertTypeExpiringServiceTokenAlert                     AlertingV3PolicyReplaceParamsAlertType = "expiring_service_token_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeFailingLogpushJobDisabledAlert                AlertingV3PolicyReplaceParamsAlertType = "failing_logpush_job_disabled_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeFbmAutoAdvertisement                          AlertingV3PolicyReplaceParamsAlertType = "fbm_auto_advertisement"
-	AlertingV3PolicyReplaceParamsAlertTypeFbmDosdAttack                                 AlertingV3PolicyReplaceParamsAlertType = "fbm_dosd_attack"
-	AlertingV3PolicyReplaceParamsAlertTypeFbmVolumetricAttack                           AlertingV3PolicyReplaceParamsAlertType = "fbm_volumetric_attack"
-	AlertingV3PolicyReplaceParamsAlertTypeHealthCheckStatusNotification                 AlertingV3PolicyReplaceParamsAlertType = "health_check_status_notification"
-	AlertingV3PolicyReplaceParamsAlertTypeHostnameAopCustomCertificateExpirationType    AlertingV3PolicyReplaceParamsAlertType = "hostname_aop_custom_certificate_expiration_type"
-	AlertingV3PolicyReplaceParamsAlertTypeHTTPAlertEdgeError                            AlertingV3PolicyReplaceParamsAlertType = "http_alert_edge_error"
-	AlertingV3PolicyReplaceParamsAlertTypeHTTPAlertOriginError                          AlertingV3PolicyReplaceParamsAlertType = "http_alert_origin_error"
-	AlertingV3PolicyReplaceParamsAlertTypeIncidentAlert                                 AlertingV3PolicyReplaceParamsAlertType = "incident_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeLoadBalancingHealthAlert                      AlertingV3PolicyReplaceParamsAlertType = "load_balancing_health_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeLoadBalancingPoolEnablementAlert              AlertingV3PolicyReplaceParamsAlertType = "load_balancing_pool_enablement_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeLogoMatchAlert                                AlertingV3PolicyReplaceParamsAlertType = "logo_match_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyReplaceParamsAlertType = "magic_tunnel_health_check_event"
-	AlertingV3PolicyReplaceParamsAlertTypeMaintenanceEventNotification                  AlertingV3PolicyReplaceParamsAlertType = "maintenance_event_notification"
-	AlertingV3PolicyReplaceParamsAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyReplaceParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
-	AlertingV3PolicyReplaceParamsAlertTypePagesEventAlert                               AlertingV3PolicyReplaceParamsAlertType = "pages_event_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeRadarNotification                             AlertingV3PolicyReplaceParamsAlertType = "radar_notification"
-	AlertingV3PolicyReplaceParamsAlertTypeRealOriginMonitoring                          AlertingV3PolicyReplaceParamsAlertType = "real_origin_monitoring"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewCodeChangeDetections     AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_code_change_detections"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewHosts                    AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_hosts"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewMaliciousHosts           AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_malicious_hosts"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewMaliciousScripts         AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_malicious_scripts"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewMaliciousURL             AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_malicious_url"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewMaxLengthResourceURL     AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_max_length_resource_url"
-	AlertingV3PolicyReplaceParamsAlertTypeScriptmonitorAlertNewResources                AlertingV3PolicyReplaceParamsAlertType = "scriptmonitor_alert_new_resources"
-	AlertingV3PolicyReplaceParamsAlertTypeSecondaryDNSAllPrimariesFailing               AlertingV3PolicyReplaceParamsAlertType = "secondary_dns_all_primaries_failing"
-	AlertingV3PolicyReplaceParamsAlertTypeSecondaryDNSPrimariesFailing                  AlertingV3PolicyReplaceParamsAlertType = "secondary_dns_primaries_failing"
-	AlertingV3PolicyReplaceParamsAlertTypeSecondaryDNSZoneSuccessfullyUpdated           AlertingV3PolicyReplaceParamsAlertType = "secondary_dns_zone_successfully_updated"
-	AlertingV3PolicyReplaceParamsAlertTypeSecondaryDNSZoneValidationWarning             AlertingV3PolicyReplaceParamsAlertType = "secondary_dns_zone_validation_warning"
-	AlertingV3PolicyReplaceParamsAlertTypeSentinelAlert                                 AlertingV3PolicyReplaceParamsAlertType = "sentinel_alert"
-	AlertingV3PolicyReplaceParamsAlertTypeStreamLiveNotifications                       AlertingV3PolicyReplaceParamsAlertType = "stream_live_notifications"
-	AlertingV3PolicyReplaceParamsAlertTypeTunnelHealthEvent                             AlertingV3PolicyReplaceParamsAlertType = "tunnel_health_event"
-	AlertingV3PolicyReplaceParamsAlertTypeTunnelUpdateEvent                             AlertingV3PolicyReplaceParamsAlertType = "tunnel_update_event"
-	AlertingV3PolicyReplaceParamsAlertTypeUniversalSSLEventType                         AlertingV3PolicyReplaceParamsAlertType = "universal_ssl_event_type"
-	AlertingV3PolicyReplaceParamsAlertTypeWebAnalyticsMetricsUpdate                     AlertingV3PolicyReplaceParamsAlertType = "web_analytics_metrics_update"
-	AlertingV3PolicyReplaceParamsAlertTypeZoneAopCustomCertificateExpirationType        AlertingV3PolicyReplaceParamsAlertType = "zone_aop_custom_certificate_expiration_type"
-)
-
-// Optional filters that allow you to be alerted only on a subset of events for
-// that alert type based on some criteria. This is only available for select alert
-// types. See alert type documentation for more details.
-type AlertingV3PolicyReplaceParamsFilters struct {
-	// Usage depends on specific alert type
-	Actions param.Field[[]string] `json:"actions"`
-	// Used for configuring radar_notification
-	AffectedAsns param.Field[[]string] `json:"affected_asns"`
-	// Used for configuring incident_alert
-	AffectedComponents param.Field[[]string] `json:"affected_components"`
-	// Used for configuring radar_notification
-	AffectedLocations param.Field[[]string] `json:"affected_locations"`
-	// Used for configuring maintenance_event_notification
-	AirportCode param.Field[[]string] `json:"airport_code"`
-	// Usage depends on specific alert type
-	AlertTriggerPreferences param.Field[[]string] `json:"alert_trigger_preferences"`
-	// Used for configuring magic_tunnel_health_check_event
-	AlertTriggerPreferencesValue param.Field[[]AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue] `json:"alert_trigger_preferences_value"`
-	// Used for configuring load_balancing_pool_enablement_alert
-	Enabled param.Field[[]string] `json:"enabled"`
-	// Used for configuring pages_event_alert
-	Environment param.Field[[]string] `json:"environment"`
-	// Used for configuring pages_event_alert
-	Event param.Field[[]string] `json:"event"`
-	// Used for configuring load_balancing_health_alert
-	EventSource param.Field[[]string] `json:"event_source"`
-	// Usage depends on specific alert type
-	EventType param.Field[[]string] `json:"event_type"`
-	// Usage depends on specific alert type
-	GroupBy param.Field[[]string] `json:"group_by"`
-	// Used for configuring health_check_status_notification
-	HealthCheckID param.Field[[]string] `json:"health_check_id"`
-	// Used for configuring incident_alert
-	IncidentImpact param.Field[[]AlertingV3PolicyReplaceParamsFiltersIncidentImpact] `json:"incident_impact"`
-	// Used for configuring stream_live_notifications
-	InputID param.Field[[]string] `json:"input_id"`
-	// Used for configuring billing_usage_alert
-	Limit param.Field[[]string] `json:"limit"`
-	// Used for configuring logo_match_alert
-	LogoTag param.Field[[]string] `json:"logo_tag"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	MegabitsPerSecond param.Field[[]string] `json:"megabits_per_second"`
-	// Used for configuring load_balancing_health_alert
-	NewHealth param.Field[[]string] `json:"new_health"`
-	// Used for configuring tunnel_health_event
-	NewStatus param.Field[[]string] `json:"new_status"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	PacketsPerSecond param.Field[[]string] `json:"packets_per_second"`
-	// Usage depends on specific alert type
-	PoolID param.Field[[]string] `json:"pool_id"`
-	// Used for configuring billing_usage_alert
-	Product param.Field[[]string] `json:"product"`
-	// Used for configuring pages_event_alert
-	ProjectID param.Field[[]string] `json:"project_id"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	Protocol param.Field[[]string] `json:"protocol"`
-	// Usage depends on specific alert type
-	QueryTag param.Field[[]string] `json:"query_tag"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	RequestsPerSecond param.Field[[]string] `json:"requests_per_second"`
-	// Usage depends on specific alert type
-	Selectors param.Field[[]string] `json:"selectors"`
-	// Used for configuring clickhouse_alert_fw_ent_anomaly
-	Services param.Field[[]string] `json:"services"`
-	// Usage depends on specific alert type
-	Slo param.Field[[]string] `json:"slo"`
-	// Used for configuring health_check_status_notification
-	Status param.Field[[]string] `json:"status"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetHostname param.Field[[]string] `json:"target_hostname"`
-	// Used for configuring advanced_ddos_attack_l4_alert
-	TargetIP param.Field[[]string] `json:"target_ip"`
-	// Used for configuring advanced_ddos_attack_l7_alert
-	TargetZoneName param.Field[[]string] `json:"target_zone_name"`
-	// Used for configuring traffic_anomalies_alert
-	TrafficExclusions param.Field[[]AlertingV3PolicyReplaceParamsFiltersTrafficExclusion] `json:"traffic_exclusions"`
-	// Used for configuring tunnel_health_event
-	TunnelID param.Field[[]string] `json:"tunnel_id"`
-	// Used for configuring magic_tunnel_health_check_event
-	TunnelName param.Field[[]string] `json:"tunnel_name"`
-	// Usage depends on specific alert type
-	Where param.Field[[]string] `json:"where"`
-	// Usage depends on specific alert type
-	Zones param.Field[[]string] `json:"zones"`
-}
-
-func (r AlertingV3PolicyReplaceParamsFilters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue string
-
-const (
-	AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue99_0 AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue = "99.0"
-	AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue98_0 AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue = "98.0"
-	AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue97_0 AlertingV3PolicyReplaceParamsFiltersAlertTriggerPreferencesValue = "97.0"
-)
-
-type AlertingV3PolicyReplaceParamsFiltersIncidentImpact string
-
-const (
-	AlertingV3PolicyReplaceParamsFiltersIncidentImpactIncidentImpactNone     AlertingV3PolicyReplaceParamsFiltersIncidentImpact = "INCIDENT_IMPACT_NONE"
-	AlertingV3PolicyReplaceParamsFiltersIncidentImpactIncidentImpactMinor    AlertingV3PolicyReplaceParamsFiltersIncidentImpact = "INCIDENT_IMPACT_MINOR"
-	AlertingV3PolicyReplaceParamsFiltersIncidentImpactIncidentImpactMajor    AlertingV3PolicyReplaceParamsFiltersIncidentImpact = "INCIDENT_IMPACT_MAJOR"
-	AlertingV3PolicyReplaceParamsFiltersIncidentImpactIncidentImpactCritical AlertingV3PolicyReplaceParamsFiltersIncidentImpact = "INCIDENT_IMPACT_CRITICAL"
-)
-
-type AlertingV3PolicyReplaceParamsFiltersTrafficExclusion string
-
-const (
-	AlertingV3PolicyReplaceParamsFiltersTrafficExclusionSecurityEvents AlertingV3PolicyReplaceParamsFiltersTrafficExclusion = "security_events"
-)
-
-type AlertingV3PolicyReplaceParamsMechanisms struct {
-	// UUID
-	ID param.Field[AlertingV3PolicyReplaceParamsMechanismsID] `json:"id"`
-}
-
-func (r AlertingV3PolicyReplaceParamsMechanisms) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// UUID
-//
-// Satisfied by [shared.UnionString], [shared.UnionString].
-type AlertingV3PolicyReplaceParamsMechanismsID interface {
-	ImplementsAlertingV3PolicyReplaceParamsMechanismsID()
-}
-
-type AlertingV3PolicyReplaceResponseEnvelope struct {
-	Errors   []AlertingV3PolicyReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AlertingV3PolicyReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   AlertingV3PolicyReplaceResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AlertingV3PolicyReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    alertingV3PolicyReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// alertingV3PolicyReplaceResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AlertingV3PolicyReplaceResponseEnvelope]
-type alertingV3PolicyReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3PolicyReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3PolicyReplaceResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    alertingV3PolicyReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// alertingV3PolicyReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AlertingV3PolicyReplaceResponseEnvelopeErrors]
-type alertingV3PolicyReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3PolicyReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3PolicyReplaceResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    alertingV3PolicyReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// alertingV3PolicyReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [AlertingV3PolicyReplaceResponseEnvelopeMessages]
-type alertingV3PolicyReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3PolicyReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AlertingV3PolicyReplaceResponseEnvelopeSuccess bool
-
-const (
-	AlertingV3PolicyReplaceResponseEnvelopeSuccessTrue AlertingV3PolicyReplaceResponseEnvelopeSuccess = true
 )

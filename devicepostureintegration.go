@@ -47,12 +47,12 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, identifier in
 	return
 }
 
-// Updates a configured device posture integration.
-func (r *DevicePostureIntegrationService) Update(ctx context.Context, identifier interface{}, uuid string, body DevicePostureIntegrationUpdateParams, opts ...option.RequestOption) (res *DevicePostureIntegrationUpdateResponse, err error) {
+// Delete a configured device posture integration.
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DevicePostureIntegrationUpdateResponseEnvelope
+	var env DevicePostureIntegrationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,12 +60,12 @@ func (r *DevicePostureIntegrationService) Update(ctx context.Context, identifier
 	return
 }
 
-// Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponse, err error) {
+// Updates a configured device posture integration.
+func (r *DevicePostureIntegrationService) Edit(ctx context.Context, identifier interface{}, uuid string, body DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *DevicePostureIntegrationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DevicePostureIntegrationDeleteResponseEnvelope
+	var env DevicePostureIntegrationEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -155,75 +155,6 @@ const (
 	DevicePostureIntegrationNewResponseTypeSentineloneS2s DevicePostureIntegrationNewResponseType = "sentinelone_s2s"
 )
 
-type DevicePostureIntegrationUpdateResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The configuration object containing third-party integration information.
-	Config DevicePostureIntegrationUpdateResponseConfig `json:"config"`
-	// The interval between each posture check with the third-party API. Use `m` for
-	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval string `json:"interval"`
-	// The name of the device posture integration.
-	Name string `json:"name"`
-	// The type of device posture integration.
-	Type DevicePostureIntegrationUpdateResponseType `json:"type"`
-	JSON devicePostureIntegrationUpdateResponseJSON `json:"-"`
-}
-
-// devicePostureIntegrationUpdateResponseJSON contains the JSON metadata for the
-// struct [DevicePostureIntegrationUpdateResponse]
-type devicePostureIntegrationUpdateResponseJSON struct {
-	ID          apijson.Field
-	Config      apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing third-party integration information.
-type DevicePostureIntegrationUpdateResponseConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL string `json:"api_url,required"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL string `json:"auth_url,required"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                           `json:"client_id,required"`
-	JSON     devicePostureIntegrationUpdateResponseConfigJSON `json:"-"`
-}
-
-// devicePostureIntegrationUpdateResponseConfigJSON contains the JSON metadata for
-// the struct [DevicePostureIntegrationUpdateResponseConfig]
-type devicePostureIntegrationUpdateResponseConfigJSON struct {
-	APIURL      apijson.Field
-	AuthURL     apijson.Field
-	ClientID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device posture integration.
-type DevicePostureIntegrationUpdateResponseType string
-
-const (
-	DevicePostureIntegrationUpdateResponseTypeWorkspaceOne   DevicePostureIntegrationUpdateResponseType = "workspace_one"
-	DevicePostureIntegrationUpdateResponseTypeCrowdstrikeS2s DevicePostureIntegrationUpdateResponseType = "crowdstrike_s2s"
-	DevicePostureIntegrationUpdateResponseTypeUptycs         DevicePostureIntegrationUpdateResponseType = "uptycs"
-	DevicePostureIntegrationUpdateResponseTypeIntune         DevicePostureIntegrationUpdateResponseType = "intune"
-	DevicePostureIntegrationUpdateResponseTypeKolide         DevicePostureIntegrationUpdateResponseType = "kolide"
-	DevicePostureIntegrationUpdateResponseTypeTanium         DevicePostureIntegrationUpdateResponseType = "tanium"
-	DevicePostureIntegrationUpdateResponseTypeSentineloneS2s DevicePostureIntegrationUpdateResponseType = "sentinelone_s2s"
-)
-
 // Union satisfied by [DevicePostureIntegrationDeleteResponseUnknown] or
 // [shared.UnionString].
 type DevicePostureIntegrationDeleteResponse interface {
@@ -240,6 +171,75 @@ func init() {
 		},
 	)
 }
+
+type DevicePostureIntegrationEditResponse struct {
+	// API UUID.
+	ID string `json:"id"`
+	// The configuration object containing third-party integration information.
+	Config DevicePostureIntegrationEditResponseConfig `json:"config"`
+	// The interval between each posture check with the third-party API. Use `m` for
+	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
+	Interval string `json:"interval"`
+	// The name of the device posture integration.
+	Name string `json:"name"`
+	// The type of device posture integration.
+	Type DevicePostureIntegrationEditResponseType `json:"type"`
+	JSON devicePostureIntegrationEditResponseJSON `json:"-"`
+}
+
+// devicePostureIntegrationEditResponseJSON contains the JSON metadata for the
+// struct [DevicePostureIntegrationEditResponse]
+type devicePostureIntegrationEditResponseJSON struct {
+	ID          apijson.Field
+	Config      apijson.Field
+	Interval    apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureIntegrationEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object containing third-party integration information.
+type DevicePostureIntegrationEditResponseConfig struct {
+	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
+	APIURL string `json:"api_url,required"`
+	// The Workspace One Authorization URL depending on your region.
+	AuthURL string `json:"auth_url,required"`
+	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
+	ClientID string                                         `json:"client_id,required"`
+	JSON     devicePostureIntegrationEditResponseConfigJSON `json:"-"`
+}
+
+// devicePostureIntegrationEditResponseConfigJSON contains the JSON metadata for
+// the struct [DevicePostureIntegrationEditResponseConfig]
+type devicePostureIntegrationEditResponseConfigJSON struct {
+	APIURL      apijson.Field
+	AuthURL     apijson.Field
+	ClientID    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureIntegrationEditResponseConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device posture integration.
+type DevicePostureIntegrationEditResponseType string
+
+const (
+	DevicePostureIntegrationEditResponseTypeWorkspaceOne   DevicePostureIntegrationEditResponseType = "workspace_one"
+	DevicePostureIntegrationEditResponseTypeCrowdstrikeS2s DevicePostureIntegrationEditResponseType = "crowdstrike_s2s"
+	DevicePostureIntegrationEditResponseTypeUptycs         DevicePostureIntegrationEditResponseType = "uptycs"
+	DevicePostureIntegrationEditResponseTypeIntune         DevicePostureIntegrationEditResponseType = "intune"
+	DevicePostureIntegrationEditResponseTypeKolide         DevicePostureIntegrationEditResponseType = "kolide"
+	DevicePostureIntegrationEditResponseTypeTanium         DevicePostureIntegrationEditResponseType = "tanium"
+	DevicePostureIntegrationEditResponseTypeSentineloneS2s DevicePostureIntegrationEditResponseType = "sentinelone_s2s"
+)
 
 type DevicePostureIntegrationGetResponse struct {
 	// API UUID.
@@ -540,236 +540,6 @@ const (
 	DevicePostureIntegrationNewResponseEnvelopeSuccessTrue DevicePostureIntegrationNewResponseEnvelopeSuccess = true
 )
 
-type DevicePostureIntegrationUpdateParams struct {
-	// The configuration object containing third-party integration information.
-	Config param.Field[DevicePostureIntegrationUpdateParamsConfig] `json:"config"`
-	// The interval between each posture check with the third-party API. Use `m` for
-	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval param.Field[string] `json:"interval"`
-	// The name of the device posture integration.
-	Name param.Field[string] `json:"name"`
-	// The type of device posture integration.
-	Type param.Field[DevicePostureIntegrationUpdateParamsType] `json:"type"`
-}
-
-func (r DevicePostureIntegrationUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration object containing third-party integration information.
-//
-// Satisfied by
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesWorkspaceOneConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesCrowdstrikeConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesUptycsConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesIntuneConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesKolideConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesTaniumConfigRequest],
-// [DevicePostureIntegrationUpdateParamsConfigTeamsDevicesSentineloneS2sConfigRequest].
-type DevicePostureIntegrationUpdateParamsConfig interface {
-	implementsDevicePostureIntegrationUpdateParamsConfig()
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL param.Field[string] `json:"api_url,required"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL param.Field[string] `json:"auth_url,required"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesWorkspaceOneConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
-	// The Crowdstrike API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-	// The Crowdstrike client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// The Crowdstrike client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The Crowdstrike customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesCrowdstrikeConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesUptycsConfigRequest struct {
-	// The Uptycs API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-	// The Uptycs client secret.
-	ClientKey param.Field[string] `json:"client_key,required"`
-	// The Uptycs client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The Uptycs customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesUptycsConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesUptycsConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesIntuneConfigRequest struct {
-	// The Intune client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// The Intune client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// The Intune customer ID.
-	CustomerID param.Field[string] `json:"customer_id,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesIntuneConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesIntuneConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesKolideConfigRequest struct {
-	// The Kolide client ID.
-	ClientID param.Field[string] `json:"client_id,required"`
-	// The Kolide client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesKolideConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesKolideConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesTaniumConfigRequest struct {
-	// The Tanium API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-	// The Tanium client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-	// If present, this id will be passed in the `CF-Access-Client-ID` header when
-	// hitting the `api_url`
-	AccessClientID param.Field[string] `json:"access_client_id"`
-	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
-	// when hitting the `api_url`
-	AccessClientSecret param.Field[string] `json:"access_client_secret"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesTaniumConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesTaniumConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-type DevicePostureIntegrationUpdateParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
-	// The SentinelOne S2S API URL.
-	APIURL param.Field[string] `json:"api_url,required"`
-	// The SentinelOne S2S client secret.
-	ClientSecret param.Field[string] `json:"client_secret,required"`
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesSentineloneS2sConfigRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureIntegrationUpdateParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsDevicePostureIntegrationUpdateParamsConfig() {
-}
-
-// The type of device posture integration.
-type DevicePostureIntegrationUpdateParamsType string
-
-const (
-	DevicePostureIntegrationUpdateParamsTypeWorkspaceOne   DevicePostureIntegrationUpdateParamsType = "workspace_one"
-	DevicePostureIntegrationUpdateParamsTypeCrowdstrikeS2s DevicePostureIntegrationUpdateParamsType = "crowdstrike_s2s"
-	DevicePostureIntegrationUpdateParamsTypeUptycs         DevicePostureIntegrationUpdateParamsType = "uptycs"
-	DevicePostureIntegrationUpdateParamsTypeIntune         DevicePostureIntegrationUpdateParamsType = "intune"
-	DevicePostureIntegrationUpdateParamsTypeKolide         DevicePostureIntegrationUpdateParamsType = "kolide"
-	DevicePostureIntegrationUpdateParamsTypeTanium         DevicePostureIntegrationUpdateParamsType = "tanium"
-	DevicePostureIntegrationUpdateParamsTypeSentineloneS2s DevicePostureIntegrationUpdateParamsType = "sentinelone_s2s"
-)
-
-type DevicePostureIntegrationUpdateResponseEnvelope struct {
-	Errors   []DevicePostureIntegrationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureIntegrationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureIntegrationUpdateResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DevicePostureIntegrationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    devicePostureIntegrationUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// devicePostureIntegrationUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DevicePostureIntegrationUpdateResponseEnvelope]
-type devicePostureIntegrationUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureIntegrationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    devicePostureIntegrationUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureIntegrationUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DevicePostureIntegrationUpdateResponseEnvelopeErrors]
-type devicePostureIntegrationUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureIntegrationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    devicePostureIntegrationUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureIntegrationUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DevicePostureIntegrationUpdateResponseEnvelopeMessages]
-type devicePostureIntegrationUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureIntegrationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePostureIntegrationUpdateResponseEnvelopeSuccess bool
-
-const (
-	DevicePostureIntegrationUpdateResponseEnvelopeSuccessTrue DevicePostureIntegrationUpdateResponseEnvelopeSuccess = true
-)
-
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -837,6 +607,236 @@ type DevicePostureIntegrationDeleteResponseEnvelopeSuccess bool
 
 const (
 	DevicePostureIntegrationDeleteResponseEnvelopeSuccessTrue DevicePostureIntegrationDeleteResponseEnvelopeSuccess = true
+)
+
+type DevicePostureIntegrationEditParams struct {
+	// The configuration object containing third-party integration information.
+	Config param.Field[DevicePostureIntegrationEditParamsConfig] `json:"config"`
+	// The interval between each posture check with the third-party API. Use `m` for
+	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
+	Interval param.Field[string] `json:"interval"`
+	// The name of the device posture integration.
+	Name param.Field[string] `json:"name"`
+	// The type of device posture integration.
+	Type param.Field[DevicePostureIntegrationEditParamsType] `json:"type"`
+}
+
+func (r DevicePostureIntegrationEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The configuration object containing third-party integration information.
+//
+// Satisfied by
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest],
+// [DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest].
+type DevicePostureIntegrationEditParamsConfig interface {
+	implementsDevicePostureIntegrationEditParamsConfig()
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest struct {
+	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
+	APIURL param.Field[string] `json:"api_url,required"`
+	// The Workspace One Authorization URL depending on your region.
+	AuthURL param.Field[string] `json:"auth_url,required"`
+	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// The Workspace One client secret provided in the Workspace One Admin Dashboard.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest struct {
+	// The Crowdstrike API URL.
+	APIURL param.Field[string] `json:"api_url,required"`
+	// The Crowdstrike client ID.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// The Crowdstrike client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The Crowdstrike customer ID.
+	CustomerID param.Field[string] `json:"customer_id,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesCrowdstrikeConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest struct {
+	// The Uptycs API URL.
+	APIURL param.Field[string] `json:"api_url,required"`
+	// The Uptycs client secret.
+	ClientKey param.Field[string] `json:"client_key,required"`
+	// The Uptycs client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The Uptycs customer ID.
+	CustomerID param.Field[string] `json:"customer_id,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesUptycsConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest struct {
+	// The Intune client ID.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// The Intune client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// The Intune customer ID.
+	CustomerID param.Field[string] `json:"customer_id,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesIntuneConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest struct {
+	// The Kolide client ID.
+	ClientID param.Field[string] `json:"client_id,required"`
+	// The Kolide client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesKolideConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest struct {
+	// The Tanium API URL.
+	APIURL param.Field[string] `json:"api_url,required"`
+	// The Tanium client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+	// If present, this id will be passed in the `CF-Access-Client-ID` header when
+	// hitting the `api_url`
+	AccessClientID param.Field[string] `json:"access_client_id"`
+	// If present, this secret will be passed in the `CF-Access-Client-Secret` header
+	// when hitting the `api_url`
+	AccessClientSecret param.Field[string] `json:"access_client_secret"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesTaniumConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+type DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest struct {
+	// The SentinelOne S2S API URL.
+	APIURL param.Field[string] `json:"api_url,required"`
+	// The SentinelOne S2S client secret.
+	ClientSecret param.Field[string] `json:"client_secret,required"`
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureIntegrationEditParamsConfigTeamsDevicesSentineloneS2sConfigRequest) implementsDevicePostureIntegrationEditParamsConfig() {
+}
+
+// The type of device posture integration.
+type DevicePostureIntegrationEditParamsType string
+
+const (
+	DevicePostureIntegrationEditParamsTypeWorkspaceOne   DevicePostureIntegrationEditParamsType = "workspace_one"
+	DevicePostureIntegrationEditParamsTypeCrowdstrikeS2s DevicePostureIntegrationEditParamsType = "crowdstrike_s2s"
+	DevicePostureIntegrationEditParamsTypeUptycs         DevicePostureIntegrationEditParamsType = "uptycs"
+	DevicePostureIntegrationEditParamsTypeIntune         DevicePostureIntegrationEditParamsType = "intune"
+	DevicePostureIntegrationEditParamsTypeKolide         DevicePostureIntegrationEditParamsType = "kolide"
+	DevicePostureIntegrationEditParamsTypeTanium         DevicePostureIntegrationEditParamsType = "tanium"
+	DevicePostureIntegrationEditParamsTypeSentineloneS2s DevicePostureIntegrationEditParamsType = "sentinelone_s2s"
+)
+
+type DevicePostureIntegrationEditResponseEnvelope struct {
+	Errors   []DevicePostureIntegrationEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureIntegrationEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureIntegrationEditResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePostureIntegrationEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// devicePostureIntegrationEditResponseEnvelopeJSON contains the JSON metadata for
+// the struct [DevicePostureIntegrationEditResponseEnvelope]
+type devicePostureIntegrationEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureIntegrationEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureIntegrationEditResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    devicePostureIntegrationEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureIntegrationEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DevicePostureIntegrationEditResponseEnvelopeErrors]
+type devicePostureIntegrationEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureIntegrationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureIntegrationEditResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    devicePostureIntegrationEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureIntegrationEditResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DevicePostureIntegrationEditResponseEnvelopeMessages]
+type devicePostureIntegrationEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureIntegrationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePostureIntegrationEditResponseEnvelopeSuccess bool
+
+const (
+	DevicePostureIntegrationEditResponseEnvelopeSuccessTrue DevicePostureIntegrationEditResponseEnvelopeSuccess = true
 )
 
 type DevicePostureIntegrationGetResponseEnvelope struct {

@@ -45,12 +45,12 @@ func (r *MnmRuleService) New(ctx context.Context, accountIdentifier interface{},
 	return
 }
 
-// Update a network monitoring rule for account.
-func (r *MnmRuleService) Update(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleUpdateResponse, err error) {
+// Update network monitoring rules for account.
+func (r *MnmRuleService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MnmRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/mnm/rules", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -84,12 +84,12 @@ func (r *MnmRuleService) Delete(ctx context.Context, accountIdentifier interface
 	return
 }
 
-// List a single network monitoring rule for account.
-func (r *MnmRuleService) Get(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleGetResponse, err error) {
+// Update a network monitoring rule for account.
+func (r *MnmRuleService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MnmRuleGetResponseEnvelope
+	var env MnmRuleEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -97,12 +97,12 @@ func (r *MnmRuleService) Get(ctx context.Context, accountIdentifier interface{},
 	return
 }
 
-// Update network monitoring rules for account.
-func (r *MnmRuleService) Replace(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleReplaceResponse, err error) {
+// List a single network monitoring rule for account.
+func (r *MnmRuleService) Get(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MnmRuleReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/rules", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	var env MnmRuleGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/mnm/rules/%v", accountIdentifier, ruleIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -286,6 +286,50 @@ func (r *MnmRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type MnmRuleEditResponse struct {
+	// Toggle on if you would like Cloudflare to automatically advertise the IP
+	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
+	// available for users of Magic Transit.
+	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
+	// The amount of time that the rule threshold must be exceeded to send an alert
+	// notification. The final value must be equivalent to one of the following 8
+	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
+	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
+	// least one unit must be provided.
+	Duration string `json:"duration,required"`
+	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
+	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
+	// the rule name. Max 256 characters.
+	Name     string      `json:"name,required"`
+	Prefixes []string    `json:"prefixes,required"`
+	ID       interface{} `json:"id"`
+	// The number of bits per second for the rule. When this value is exceeded for the
+	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	BandwidthThreshold float64 `json:"bandwidth_threshold"`
+	// The number of packets per second for the rule. When this value is exceeded for
+	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
+	PacketThreshold float64                 `json:"packet_threshold"`
+	JSON            mnmRuleEditResponseJSON `json:"-"`
+}
+
+// mnmRuleEditResponseJSON contains the JSON metadata for the struct
+// [MnmRuleEditResponse]
+type mnmRuleEditResponseJSON struct {
+	AutomaticAdvertisement apijson.Field
+	Duration               apijson.Field
+	Name                   apijson.Field
+	Prefixes               apijson.Field
+	ID                     apijson.Field
+	BandwidthThreshold     apijson.Field
+	PacketThreshold        apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *MnmRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type MnmRuleGetResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
@@ -327,50 +371,6 @@ type mnmRuleGetResponseJSON struct {
 }
 
 func (r *MnmRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmRuleReplaceResponse struct {
-	// Toggle on if you would like Cloudflare to automatically advertise the IP
-	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
-	// available for users of Magic Transit.
-	AutomaticAdvertisement bool `json:"automatic_advertisement,required,nullable"`
-	// The amount of time that the rule threshold must be exceeded to send an alert
-	// notification. The final value must be equivalent to one of the following 8
-	// values ["1m","5m","10m","15m","20m","30m","45m","60m"]. The format is
-	// AhBmCsDmsEusFns where A, B, C, D, E and F durations are optional; however at
-	// least one unit must be provided.
-	Duration string `json:"duration,required"`
-	// The name of the rule. Must be unique. Supports characters A-Z, a-z, 0-9,
-	// underscore (\_), dash (-), period (.), and tilde (~). You can’t have a space in
-	// the rule name. Max 256 characters.
-	Name     string      `json:"name,required"`
-	Prefixes []string    `json:"prefixes,required"`
-	ID       interface{} `json:"id"`
-	// The number of bits per second for the rule. When this value is exceeded for the
-	// set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	BandwidthThreshold float64 `json:"bandwidth_threshold"`
-	// The number of packets per second for the rule. When this value is exceeded for
-	// the set duration, an alert notification is sent. Minimum of 1 and no maximum.
-	PacketThreshold float64                    `json:"packet_threshold"`
-	JSON            mnmRuleReplaceResponseJSON `json:"-"`
-}
-
-// mnmRuleReplaceResponseJSON contains the JSON metadata for the struct
-// [MnmRuleReplaceResponse]
-type mnmRuleReplaceResponseJSON struct {
-	AutomaticAdvertisement apijson.Field
-	Duration               apijson.Field
-	Name                   apijson.Field
-	Prefixes               apijson.Field
-	ID                     apijson.Field
-	BandwidthThreshold     apijson.Field
-	PacketThreshold        apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *MnmRuleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -679,6 +679,75 @@ const (
 	MnmRuleDeleteResponseEnvelopeSuccessTrue MnmRuleDeleteResponseEnvelopeSuccess = true
 )
 
+type MnmRuleEditResponseEnvelope struct {
+	Errors   []MnmRuleEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmRuleEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmRuleEditResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success MnmRuleEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmRuleEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// mnmRuleEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmRuleEditResponseEnvelope]
+type mnmRuleEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmRuleEditResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    mnmRuleEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// mnmRuleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [MnmRuleEditResponseEnvelopeErrors]
+type mnmRuleEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmRuleEditResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    mnmRuleEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// mnmRuleEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmRuleEditResponseEnvelopeMessages]
+type mnmRuleEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MnmRuleEditResponseEnvelopeSuccess bool
+
+const (
+	MnmRuleEditResponseEnvelopeSuccessTrue MnmRuleEditResponseEnvelopeSuccess = true
+)
+
 type MnmRuleGetResponseEnvelope struct {
 	Errors   []MnmRuleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MnmRuleGetResponseEnvelopeMessages `json:"messages,required"`
@@ -746,73 +815,4 @@ type MnmRuleGetResponseEnvelopeSuccess bool
 
 const (
 	MnmRuleGetResponseEnvelopeSuccessTrue MnmRuleGetResponseEnvelopeSuccess = true
-)
-
-type MnmRuleReplaceResponseEnvelope struct {
-	Errors   []MnmRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmRuleReplaceResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success MnmRuleReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmRuleReplaceResponseEnvelopeJSON    `json:"-"`
-}
-
-// mnmRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MnmRuleReplaceResponseEnvelope]
-type mnmRuleReplaceResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmRuleReplaceResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    mnmRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mnmRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MnmRuleReplaceResponseEnvelopeErrors]
-type mnmRuleReplaceResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmRuleReplaceResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    mnmRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mnmRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MnmRuleReplaceResponseEnvelopeMessages]
-type mnmRuleReplaceResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MnmRuleReplaceResponseEnvelopeSuccess bool
-
-const (
-	MnmRuleReplaceResponseEnvelopeSuccessTrue MnmRuleReplaceResponseEnvelopeSuccess = true
 )

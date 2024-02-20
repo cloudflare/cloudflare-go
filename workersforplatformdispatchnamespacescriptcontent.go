@@ -37,6 +37,19 @@ func NewWorkersForPlatformDispatchNamespaceScriptContentService(opts ...option.R
 	return
 }
 
+// Put script content for a script uploaded to a Workers for Platforms namespace.
+func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetch script content from a script uploaded to a Workers for Platforms
 // namespace.
 func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
@@ -47,20 +60,7 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx contex
 	return
 }
 
-// Put script content for a script uploaded to a Workers for Platforms namespace.
-func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Replace(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentReplaceParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse struct {
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -76,16 +76,16 @@ type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse struct {
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                                              `json:"usage_model"`
-	JSON       workersForPlatformDispatchNamespaceScriptContentReplaceResponseJSON `json:"-"`
+	UsageModel string                                                             `json:"usage_model"`
+	JSON       workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentReplaceResponseJSON contains the
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON contains the
 // JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse]
-type workersForPlatformDispatchNamespaceScriptContentReplaceResponseJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
@@ -99,25 +99,25 @@ type workersForPlatformDispatchNamespaceScriptContentReplaceResponseJSON struct 
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumer struct {
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                                          `json:"namespace"`
-	JSON      workersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumerJSON `json:"-"`
+	Namespace string                                                                         `json:"namespace"`
+	JSON      workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumerJSON
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON
 // contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumer]
-type workersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumerJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -125,11 +125,11 @@ type workersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumer
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceParams struct {
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateParams struct {
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
@@ -137,12 +137,12 @@ type WorkersForPlatformDispatchNamespaceScriptContentReplaceParams struct {
 	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[WorkersForPlatformDispatchNamespaceScriptContentReplaceParamsMetadata] `json:"metadata"`
-	CfWorkerBodyPart       param.Field[string]                                                                `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                                                                `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata               param.Field[WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata] `json:"metadata"`
+	CfWorkerBodyPart       param.Field[string]                                                               `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]                                                               `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
-func (r WorkersForPlatformDispatchNamespaceScriptContentReplaceParams) MarshalMultipart() (data []byte, contentType string, err error) {
+func (r WorkersForPlatformDispatchNamespaceScriptContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
 	err = apiform.MarshalRoot(r, writer)
@@ -158,7 +158,7 @@ func (r WorkersForPlatformDispatchNamespaceScriptContentReplaceParams) MarshalMu
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceParamsMetadata struct {
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata struct {
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -168,23 +168,23 @@ type WorkersForPlatformDispatchNamespaceScriptContentReplaceParamsMetadata struc
 	MainModule param.Field[string] `json:"main_module"`
 }
 
-func (r WorkersForPlatformDispatchNamespaceScriptContentReplaceParamsMetadata) MarshalJSON() (data []byte, err error) {
+func (r WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelope struct {
-	Errors   []WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersForPlatformDispatchNamespaceScriptContentReplaceResponse                   `json:"result,required"`
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope struct {
+	Errors   []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeJSON    `json:"-"`
+	Success WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeJSON
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON
 // contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelope]
-type workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -193,53 +193,53 @@ type workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrorsJSON `json:"-"`
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                                            `json:"code,required"`
+	Message string                                                                           `json:"message,required"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrorsJSON
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON
 // contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrors]
-type workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrorsJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessagesJSON `json:"-"`
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                                              `json:"code,required"`
+	Message string                                                                             `json:"message,required"`
+	JSON    workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessagesJSON
+// workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON
 // contains the JSON metadata for the struct
-// [WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessages]
-type workersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessagesJSON struct {
+// [WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages]
+type workersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeSuccess bool
+type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess bool
 
 const (
-	WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeSuccessTrue WorkersForPlatformDispatchNamespaceScriptContentReplaceResponseEnvelopeSuccess = true
+	WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccessTrue WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess = true
 )

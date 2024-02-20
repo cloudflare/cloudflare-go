@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingPolishUpdateWithOptionalParams(t *testing.T) {
+func TestSettingPolishEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestSettingPolishUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.Polish.Update(
+	_, err := client.Settings.Polish.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingPolishUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingPolishUpdateParamsValue{
-				ID:    cloudflare.F(cloudflare.SettingPolishUpdateParamsValueIDPolish),
-				Value: cloudflare.F(cloudflare.SettingPolishUpdateParamsValueValueOff),
+		cloudflare.SettingPolishEditParams{
+			Value: cloudflare.F(cloudflare.SettingPolishEditParamsValue{
+				ID:    cloudflare.F(cloudflare.SettingPolishEditParamsValueIDPolish),
+				Value: cloudflare.F(cloudflare.SettingPolishEditParamsValueValueOff),
 			}),
 		},
 	)

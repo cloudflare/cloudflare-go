@@ -37,9 +37,9 @@ func NewSettingBrowserCheckService(opts ...option.RequestOption) (r *SettingBrow
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Update(ctx context.Context, zoneID string, body SettingBrowserCheckUpdateParams, opts ...option.RequestOption) (res *SettingBrowserCheckUpdateResponse, err error) {
+func (r *SettingBrowserCheckService) Edit(ctx context.Context, zoneID string, body SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *SettingBrowserCheckEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingBrowserCheckUpdateResponseEnvelope
+	var env SettingBrowserCheckEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_check", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -71,22 +71,22 @@ func (r *SettingBrowserCheckService) Get(ctx context.Context, zoneID string, opt
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type SettingBrowserCheckUpdateResponse struct {
+type SettingBrowserCheckEditResponse struct {
 	// ID of the zone setting.
-	ID SettingBrowserCheckUpdateResponseID `json:"id,required"`
+	ID SettingBrowserCheckEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingBrowserCheckUpdateResponseValue `json:"value,required"`
+	Value SettingBrowserCheckEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingBrowserCheckUpdateResponseEditable `json:"editable"`
+	Editable SettingBrowserCheckEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingBrowserCheckUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingBrowserCheckEditResponseJSON `json:"-"`
 }
 
-// settingBrowserCheckUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingBrowserCheckUpdateResponse]
-type settingBrowserCheckUpdateResponseJSON struct {
+// settingBrowserCheckEditResponseJSON contains the JSON metadata for the struct
+// [SettingBrowserCheckEditResponse]
+type settingBrowserCheckEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,32 +95,32 @@ type settingBrowserCheckUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCheckUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCheckEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingBrowserCheckUpdateResponseID string
+type SettingBrowserCheckEditResponseID string
 
 const (
-	SettingBrowserCheckUpdateResponseIDBrowserCheck SettingBrowserCheckUpdateResponseID = "browser_check"
+	SettingBrowserCheckEditResponseIDBrowserCheck SettingBrowserCheckEditResponseID = "browser_check"
 )
 
 // Current value of the zone setting.
-type SettingBrowserCheckUpdateResponseValue string
+type SettingBrowserCheckEditResponseValue string
 
 const (
-	SettingBrowserCheckUpdateResponseValueOn  SettingBrowserCheckUpdateResponseValue = "on"
-	SettingBrowserCheckUpdateResponseValueOff SettingBrowserCheckUpdateResponseValue = "off"
+	SettingBrowserCheckEditResponseValueOn  SettingBrowserCheckEditResponseValue = "on"
+	SettingBrowserCheckEditResponseValueOff SettingBrowserCheckEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingBrowserCheckUpdateResponseEditable bool
+type SettingBrowserCheckEditResponseEditable bool
 
 const (
-	SettingBrowserCheckUpdateResponseEditableTrue  SettingBrowserCheckUpdateResponseEditable = true
-	SettingBrowserCheckUpdateResponseEditableFalse SettingBrowserCheckUpdateResponseEditable = false
+	SettingBrowserCheckEditResponseEditableTrue  SettingBrowserCheckEditResponseEditable = true
+	SettingBrowserCheckEditResponseEditableFalse SettingBrowserCheckEditResponseEditable = false
 )
 
 // Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -180,26 +180,26 @@ const (
 	SettingBrowserCheckGetResponseEditableFalse SettingBrowserCheckGetResponseEditable = false
 )
 
-type SettingBrowserCheckUpdateParams struct {
+type SettingBrowserCheckEditParams struct {
 	// Value of the zone setting.
-	Value param.Field[SettingBrowserCheckUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingBrowserCheckEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingBrowserCheckUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingBrowserCheckEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the zone setting.
-type SettingBrowserCheckUpdateParamsValue string
+type SettingBrowserCheckEditParamsValue string
 
 const (
-	SettingBrowserCheckUpdateParamsValueOn  SettingBrowserCheckUpdateParamsValue = "on"
-	SettingBrowserCheckUpdateParamsValueOff SettingBrowserCheckUpdateParamsValue = "off"
+	SettingBrowserCheckEditParamsValueOn  SettingBrowserCheckEditParamsValue = "on"
+	SettingBrowserCheckEditParamsValueOff SettingBrowserCheckEditParamsValue = "off"
 )
 
-type SettingBrowserCheckUpdateResponseEnvelope struct {
-	Errors   []SettingBrowserCheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingBrowserCheckUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingBrowserCheckEditResponseEnvelope struct {
+	Errors   []SettingBrowserCheckEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingBrowserCheckEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -207,13 +207,13 @@ type SettingBrowserCheckUpdateResponseEnvelope struct {
 	// also challenge visitors that do not have a user agent or a non standard user
 	// agent (also commonly used by abuse bots, crawlers or visitors).
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result SettingBrowserCheckUpdateResponse             `json:"result"`
-	JSON   settingBrowserCheckUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingBrowserCheckEditResponse             `json:"result"`
+	JSON   settingBrowserCheckEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingBrowserCheckUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingBrowserCheckUpdateResponseEnvelope]
-type settingBrowserCheckUpdateResponseEnvelopeJSON struct {
+// settingBrowserCheckEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingBrowserCheckEditResponseEnvelope]
+type settingBrowserCheckEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -222,45 +222,45 @@ type settingBrowserCheckUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCheckUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCheckEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingBrowserCheckUpdateResponseEnvelopeErrors struct {
+type SettingBrowserCheckEditResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    settingBrowserCheckEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingBrowserCheckEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingBrowserCheckEditResponseEnvelopeErrors]
+type settingBrowserCheckEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingBrowserCheckEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingBrowserCheckEditResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
-	JSON    settingBrowserCheckUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingBrowserCheckEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingBrowserCheckUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckUpdateResponseEnvelopeErrors]
-type settingBrowserCheckUpdateResponseEnvelopeErrorsJSON struct {
+// settingBrowserCheckEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingBrowserCheckEditResponseEnvelopeMessages]
+type settingBrowserCheckEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCheckUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingBrowserCheckUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    settingBrowserCheckUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingBrowserCheckUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingBrowserCheckUpdateResponseEnvelopeMessages]
-type settingBrowserCheckUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingBrowserCheckUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingBrowserCheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

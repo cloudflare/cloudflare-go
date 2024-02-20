@@ -33,9 +33,9 @@ func NewWorkerServiceEnvironmentSettingService(opts ...option.RequestOption) (r 
 }
 
 // Patch script metadata, such as bindings
-func (r *WorkerServiceEnvironmentSettingService) Update(ctx context.Context, accountID string, serviceName string, environmentName string, body WorkerServiceEnvironmentSettingUpdateParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingUpdateResponse, err error) {
+func (r *WorkerServiceEnvironmentSettingService) Edit(ctx context.Context, accountID string, serviceName string, environmentName string, body WorkerServiceEnvironmentSettingEditParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerServiceEnvironmentSettingUpdateResponseEnvelope
+	var env WorkerServiceEnvironmentSettingEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", accountID, serviceName, environmentName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -58,9 +58,9 @@ func (r *WorkerServiceEnvironmentSettingService) Get(ctx context.Context, accoun
 	return
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponse struct {
+type WorkerServiceEnvironmentSettingEditResponse struct {
 	// List of bindings attached to this Worker
-	Bindings []WorkerServiceEnvironmentSettingUpdateResponseBinding `json:"bindings"`
+	Bindings []WorkerServiceEnvironmentSettingEditResponseBinding `json:"bindings"`
 	// Opt your Worker into changes after this date
 	CompatibilityDate string `json:"compatibility_date"`
 	// Opt your Worker into specific changes
@@ -68,20 +68,20 @@ type WorkerServiceEnvironmentSettingUpdateResponse struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush bool `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations WorkerServiceEnvironmentSettingUpdateResponseMigrations `json:"migrations"`
-	Placement  WorkerServiceEnvironmentSettingUpdateResponsePlacement  `json:"placement"`
+	Migrations WorkerServiceEnvironmentSettingEditResponseMigrations `json:"migrations"`
+	Placement  WorkerServiceEnvironmentSettingEditResponsePlacement  `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags []string `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerServiceEnvironmentSettingUpdateResponseTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkerServiceEnvironmentSettingEditResponseTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                            `json:"usage_model"`
-	JSON       workerServiceEnvironmentSettingUpdateResponseJSON `json:"-"`
+	UsageModel string                                          `json:"usage_model"`
+	JSON       workerServiceEnvironmentSettingEditResponseJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseJSON contains the JSON metadata for
-// the struct [WorkerServiceEnvironmentSettingUpdateResponse]
-type workerServiceEnvironmentSettingUpdateResponseJSON struct {
+// workerServiceEnvironmentSettingEditResponseJSON contains the JSON metadata for
+// the struct [WorkerServiceEnvironmentSettingEditResponse]
+type workerServiceEnvironmentSettingEditResponseJSON struct {
 	Bindings           apijson.Field
 	CompatibilityDate  apijson.Field
 	CompatibilityFlags apijson.Field
@@ -95,44 +95,43 @@ type workerServiceEnvironmentSettingUpdateResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBinding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBinding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2Binding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBinding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding],
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBinding]
-// or
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding].
-type WorkerServiceEnvironmentSettingUpdateResponseBinding interface {
-	implementsWorkerServiceEnvironmentSettingUpdateResponseBinding()
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBinding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding],
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding]
+// or [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBinding].
+type WorkerServiceEnvironmentSettingEditResponseBinding interface {
+	implementsWorkerServiceEnvironmentSettingEditResponseBinding()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerServiceEnvironmentSettingUpdateResponseBinding)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerServiceEnvironmentSettingEditResponseBinding)(nil)).Elem(), "")
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingType `json:"type,required"`
-	JSON workerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingJSON `json:"-"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingType `json:"type,required"`
+	JSON workerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -140,21 +139,21 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBind
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersKvNamespaceBindingType = "kv_namespace"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerServiceEnvironmentSettingEditResponseBindingsWorkersKvNamespaceBindingType = "kv_namespace"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment,required"`
 	// A JavaScript variable name for the binding.
@@ -162,14 +161,14 @@ type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding 
 	// Name of Worker to bind to
 	Service string `json:"service,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingType `json:"type,required"`
-	JSON workerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingJSON `json:"-"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType `json:"type,required"`
+	JSON workerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingJSON struct {
 	Environment apijson.Field
 	Name        apijson.Field
 	Service     apijson.Field
@@ -178,40 +177,40 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingTypeService WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersServiceBindingType = "service"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingTypeService WorkerServiceEnvironmentSettingEditResponseBindingsWorkersServiceBindingType = "service"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
 	ClassName string `json:"class_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingType `json:"type,required"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingType `json:"type,required"`
 	// The environment of the script_name to bind to
 	Environment string `json:"environment"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id"`
 	// The script where the Durable Object is defined, if it is external to this Worker
-	ScriptName string                                                                    `json:"script_name"`
-	JSON       workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingJSON `json:"-"`
+	ScriptName string                                                                  `json:"script_name"`
+	JSON       workerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingJSON
-// contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingJSON struct {
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingJSON contains
+// the JSON metadata for the struct
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingJSON struct {
 	ClassName   apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -222,34 +221,34 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDoBindingType = "durable_object_namespace"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2Binding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName string `json:"bucket_name,required"`
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingType `json:"type,required"`
-	JSON workerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingJSON `json:"-"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingType `json:"type,required"`
+	JSON workerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingJSON
-// contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2Binding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingJSON struct {
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingJSON contains
+// the JSON metadata for the struct
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingJSON struct {
 	BucketName  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -257,34 +256,34 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2Binding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2Binding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingTypeR2Bucket WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersR2BindingType = "r2_bucket"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingTypeR2Bucket WorkerServiceEnvironmentSettingEditResponseBindingsWorkersR2BindingType = "r2_bucket"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Name of the Queue to bind to
 	QueueName string `json:"queue_name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingType `json:"type,required"`
-	JSON workerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingJSON `json:"-"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType `json:"type,required"`
+	JSON workerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingJSON struct {
 	Name        apijson.Field
 	QueueName   apijson.Field
 	Type        apijson.Field
@@ -292,21 +291,21 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingTypeQueue WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersQueueBindingType = "queue"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingTypeQueue WorkerServiceEnvironmentSettingEditResponseBindingsWorkersQueueBindingType = "queue"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
 	ID string `json:"id,required"`
 	// A JavaScript variable name for the binding.
@@ -314,14 +313,14 @@ type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding struc
 	// The name of the D1 database associated with the 'id' provided.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingType `json:"type,required"`
-	JSON workerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingJSON `json:"-"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingType `json:"type,required"`
+	JSON workerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingJSON
-// contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingJSON struct {
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingJSON contains
+// the JSON metadata for the struct
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingJSON struct {
 	ID          apijson.Field
 	Binding     apijson.Field
 	Name        apijson.Field
@@ -330,36 +329,36 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1Binding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1Binding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingTypeD1 WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersD1BindingType = "d1"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingTypeD1 WorkerServiceEnvironmentSettingEditResponseBindingsWorkersD1BindingType = "d1"
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace to bind to
 	Namespace string `json:"namespace,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingType `json:"type,required"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingType `json:"type,required"`
 	// Outbound worker
-	Outbound WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
-	JSON     workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingJSON     `json:"-"`
+	Outbound WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound `json:"outbound"`
+	JSON     workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingJSON     `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingJSON struct {
 	Name        apijson.Field
 	Namespace   apijson.Field
 	Type        apijson.Field
@@ -368,81 +367,81 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespa
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
 
 // Outbound worker
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters
 	Params []string `json:"params"`
 	// Outbound worker
-	Worker WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
-	JSON   workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
+	Worker WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker `json:"worker"`
+	JSON   workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON   `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutbound]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON struct {
 	Params      apijson.Field
 	Worker      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutbound) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Outbound worker
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
 	Environment string `json:"environment"`
 	// Name of the outbound worker
-	Service string                                                                                                 `json:"service"`
-	JSON    workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
+	Service string                                                                                               `json:"service"`
+	JSON    workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON struct {
 	Environment apijson.Field
 	Service     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding struct {
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingType `json:"type,required"`
+	Type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingType `json:"type,required"`
 	// ID of the certificate to bind to
-	CertificateID string                                                                          `json:"certificate_id"`
-	JSON          workerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingJSON `json:"-"`
+	CertificateID string                                                                        `json:"certificate_id"`
+	JSON          workerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingJSON
+// workerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding]
-type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBinding]
+type workerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingJSON struct {
 	Name          apijson.Field
 	Type          apijson.Field
 	CertificateID apijson.Field
@@ -450,36 +449,36 @@ type workerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBinding) implementsWorkerServiceEnvironmentSettingUpdateResponseBinding() {
+func (r WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBinding) implementsWorkerServiceEnvironmentSettingEditResponseBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingType string
+type WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerServiceEnvironmentSettingUpdateResponseBindingsWorkersMtlsCertBindingType = "mtls_certificate"
+	WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerServiceEnvironmentSettingEditResponseBindingsWorkersMtlsCertBindingType = "mtls_certificate"
 )
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Union satisfied by
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrations]
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrations]
 // or
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrations].
-type WorkerServiceEnvironmentSettingUpdateResponseMigrations interface {
-	implementsWorkerServiceEnvironmentSettingUpdateResponseMigrations()
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrations].
+type WorkerServiceEnvironmentSettingEditResponseMigrations interface {
+	implementsWorkerServiceEnvironmentSettingEditResponseMigrations()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerServiceEnvironmentSettingUpdateResponseMigrations)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerServiceEnvironmentSettingEditResponseMigrations)(nil)).Elem(), "")
 }
 
 // A single set of migrations to apply.
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrations struct {
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrations struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses []string `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
@@ -490,17 +489,17 @@ type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMig
 	// don't match, the upload is rejected.
 	OldTag string `json:"old_tag"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClass `json:"renamed_classes"`
+	RenamedClasses []WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClass `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses []WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClass `json:"transferred_classes"`
-	JSON               workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsJSON               `json:"-"`
+	TransferredClasses []WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass `json:"transferred_classes"`
+	JSON               workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsJSON               `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrations]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrations]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	NewTag             apijson.Field
@@ -511,44 +510,44 @@ type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMig
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrations) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrations) implementsWorkerServiceEnvironmentSettingUpdateResponseMigrations() {
+func (r WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrations) implementsWorkerServiceEnvironmentSettingEditResponseMigrations() {
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClass struct {
-	From string                                                                                             `json:"from"`
-	To   string                                                                                             `json:"to"`
-	JSON workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON `json:"-"`
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+	From string                                                                                           `json:"from"`
+	To   string                                                                                           `json:"to"`
+	JSON workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClass]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClass]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON struct {
 	From        apijson.Field
 	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
-	From       string                                                                                                 `json:"from"`
-	FromScript string                                                                                                 `json:"from_script"`
-	To         string                                                                                                 `json:"to"`
-	JSON       workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON `json:"-"`
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+	From       string                                                                                               `json:"from"`
+	FromScript string                                                                                               `json:"from_script"`
+	To         string                                                                                               `json:"to"`
+	JSON       workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClass]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON struct {
 	From        apijson.Field
 	FromScript  apijson.Field
 	To          apijson.Field
@@ -556,25 +555,25 @@ type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMig
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrations struct {
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag string `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag string `json:"old_tag"`
 	// Migrations to apply in order.
-	Steps []WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStep `json:"steps"`
-	JSON  workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsJSON   `json:"-"`
+	Steps []WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStep `json:"steps"`
+	JSON  workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsJSON   `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrations]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrations]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsJSON struct {
 	NewTag      apijson.Field
 	OldTag      apijson.Field
 	Steps       apijson.Field
@@ -582,30 +581,30 @@ type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrat
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrations) implementsWorkerServiceEnvironmentSettingUpdateResponseMigrations() {
+func (r WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrations) implementsWorkerServiceEnvironmentSettingEditResponseMigrations() {
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStep struct {
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStep struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses []string `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses []string `json:"new_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses []WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass `json:"renamed_classes"`
+	RenamedClasses []WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses []WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass `json:"transferred_classes"`
-	JSON               workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepJSON                `json:"-"`
+	TransferredClasses []WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass `json:"transferred_classes"`
+	JSON               workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepJSON                `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStep]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStep]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepJSON struct {
 	DeletedClasses     apijson.Field
 	NewClasses         apijson.Field
 	RenamedClasses     apijson.Field
@@ -614,41 +613,41 @@ type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrat
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStep) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStep) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
-	From string                                                                                               `json:"from"`
-	To   string                                                                                               `json:"to"`
-	JSON workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON `json:"-"`
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+	From string                                                                                             `json:"from"`
+	To   string                                                                                             `json:"to"`
+	JSON workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON struct {
 	From        apijson.Field
 	To          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
-	From       string                                                                                                   `json:"from"`
-	FromScript string                                                                                                   `json:"from_script"`
-	To         string                                                                                                   `json:"to"`
-	JSON       workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON `json:"-"`
+type WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+	From       string                                                                                                 `json:"from"`
+	FromScript string                                                                                                 `json:"from_script"`
+	To         string                                                                                                 `json:"to"`
+	JSON       workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON
+// workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON
 // contains the JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass]
-type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass]
+type workerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON struct {
 	From        apijson.Field
 	FromScript  apijson.Field
 	To          apijson.Field
@@ -656,54 +655,54 @@ type workerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrat
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponsePlacement struct {
+type WorkerServiceEnvironmentSettingEditResponsePlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	// Only `"smart"` is currently supported
-	Mode WorkerServiceEnvironmentSettingUpdateResponsePlacementMode `json:"mode"`
-	JSON workerServiceEnvironmentSettingUpdateResponsePlacementJSON `json:"-"`
+	Mode WorkerServiceEnvironmentSettingEditResponsePlacementMode `json:"mode"`
+	JSON workerServiceEnvironmentSettingEditResponsePlacementJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponsePlacementJSON contains the JSON
-// metadata for the struct [WorkerServiceEnvironmentSettingUpdateResponsePlacement]
-type workerServiceEnvironmentSettingUpdateResponsePlacementJSON struct {
+// workerServiceEnvironmentSettingEditResponsePlacementJSON contains the JSON
+// metadata for the struct [WorkerServiceEnvironmentSettingEditResponsePlacement]
+type workerServiceEnvironmentSettingEditResponsePlacementJSON struct {
 	Mode        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponsePlacement) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponsePlacement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 // Only `"smart"` is currently supported
-type WorkerServiceEnvironmentSettingUpdateResponsePlacementMode string
+type WorkerServiceEnvironmentSettingEditResponsePlacementMode string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponsePlacementModeSmart WorkerServiceEnvironmentSettingUpdateResponsePlacementMode = "smart"
+	WorkerServiceEnvironmentSettingEditResponsePlacementModeSmart WorkerServiceEnvironmentSettingEditResponsePlacementMode = "smart"
 )
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkerServiceEnvironmentSettingUpdateResponseTailConsumer struct {
+type WorkerServiceEnvironmentSettingEditResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                        `json:"namespace"`
-	JSON      workerServiceEnvironmentSettingUpdateResponseTailConsumerJSON `json:"-"`
+	Namespace string                                                      `json:"namespace"`
+	JSON      workerServiceEnvironmentSettingEditResponseTailConsumerJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseTailConsumerJSON contains the JSON
+// workerServiceEnvironmentSettingEditResponseTailConsumerJSON contains the JSON
 // metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseTailConsumer]
-type workerServiceEnvironmentSettingUpdateResponseTailConsumerJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseTailConsumer]
+type workerServiceEnvironmentSettingEditResponseTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -711,7 +710,7 @@ type workerServiceEnvironmentSettingUpdateResponseTailConsumerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1370,39 +1369,39 @@ func (r *WorkerServiceEnvironmentSettingGetResponseTailConsumer) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParams struct {
-	Errors   param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsError]   `json:"errors,required"`
-	Messages param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsMessage] `json:"messages,required"`
-	Result   param.Field[WorkerServiceEnvironmentSettingUpdateParamsResult]    `json:"result,required"`
+type WorkerServiceEnvironmentSettingEditParams struct {
+	Errors   param.Field[[]WorkerServiceEnvironmentSettingEditParamsError]   `json:"errors,required"`
+	Messages param.Field[[]WorkerServiceEnvironmentSettingEditParamsMessage] `json:"messages,required"`
+	Result   param.Field[WorkerServiceEnvironmentSettingEditParamsResult]    `json:"result,required"`
 	// Whether the API call was successful
-	Success param.Field[WorkerServiceEnvironmentSettingUpdateParamsSuccess] `json:"success,required"`
+	Success param.Field[WorkerServiceEnvironmentSettingEditParamsSuccess] `json:"success,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsError struct {
+type WorkerServiceEnvironmentSettingEditParamsError struct {
 	Code    param.Field[int64]  `json:"code,required"`
 	Message param.Field[string] `json:"message,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsError) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsError) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsMessage struct {
+type WorkerServiceEnvironmentSettingEditParamsMessage struct {
 	Code    param.Field[int64]  `json:"code,required"`
 	Message param.Field[string] `json:"message,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsMessage) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsMessage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResult struct {
+type WorkerServiceEnvironmentSettingEditParamsResult struct {
 	// List of bindings attached to this Worker
-	Bindings param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultBinding] `json:"bindings"`
+	Bindings param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultBinding] `json:"bindings"`
 	// Opt your Worker into changes after this date
 	CompatibilityDate param.Field[string] `json:"compatibility_date"`
 	// Opt your Worker into specific changes
@@ -1410,247 +1409,247 @@ type WorkerServiceEnvironmentSettingUpdateParamsResult struct {
 	// Whether Logpush is turned on for the Worker.
 	Logpush param.Field[bool] `json:"logpush"`
 	// Migrations to apply for Durable Objects associated with this Worker.
-	Migrations param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultMigrations] `json:"migrations"`
-	Placement  param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultPlacement]  `json:"placement"`
+	Migrations param.Field[WorkerServiceEnvironmentSettingEditParamsResultMigrations] `json:"migrations"`
+	Placement  param.Field[WorkerServiceEnvironmentSettingEditParamsResultPlacement]  `json:"placement"`
 	// Tags to help you manage your Workers
 	Tags param.Field[[]string] `json:"tags"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultTailConsumer] `json:"tail_consumers"`
+	TailConsumers param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultTailConsumer] `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
 	UsageModel param.Field[string] `json:"usage_model"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResult) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResult) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A binding to allow the Worker to communicate with resources
 //
 // Satisfied by
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBinding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBinding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2Binding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBinding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1Binding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBinding],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBinding].
-type WorkerServiceEnvironmentSettingUpdateParamsResultBinding interface {
-	implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding()
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBinding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBinding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2Binding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBinding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1Binding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding],
+// [WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBinding].
+type WorkerServiceEnvironmentSettingEditParamsResultBinding interface {
+	implementsWorkerServiceEnvironmentSettingEditParamsResultBinding()
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding struct {
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingType] `json:"type,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersKvNamespaceBindingType = "kv_namespace"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingType = "kv_namespace"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBinding struct {
 	// Optional environment if the Worker utilizes one.
 	Environment param.Field[string] `json:"environment,required"`
 	// Name of Worker to bind to
 	Service param.Field[string] `json:"service,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType] `json:"type,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBindingTypeService WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersServiceBindingType = "service"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingTypeService WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersServiceBindingType = "service"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBinding struct {
 	// The exported class name of the Durable Object
 	ClassName param.Field[string] `json:"class_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingType] `json:"type,required"`
 	// The environment of the script_name to bind to
 	Environment param.Field[string] `json:"environment"`
 	// The script where the Durable Object is defined, if it is external to this Worker
 	ScriptName param.Field[string] `json:"script_name"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDoBindingType = "durable_object_namespace"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingTypeDurableObjectNamespace WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDoBindingType = "durable_object_namespace"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2Binding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2Binding struct {
 	// R2 bucket to bind to
 	BucketName param.Field[string] `json:"bucket_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2BindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingType] `json:"type,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2Binding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2Binding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2Binding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2Binding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2BindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2BindingTypeR2Bucket WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersR2BindingType = "r2_bucket"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingTypeR2Bucket WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersR2BindingType = "r2_bucket"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBinding struct {
 	// Name of the Queue to bind to
 	QueueName param.Field[string] `json:"queue_name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType] `json:"type,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBindingTypeQueue WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersQueueBindingType = "queue"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingTypeQueue WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersQueueBindingType = "queue"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1Binding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1Binding struct {
 	// ID of the D1 database to bind to
 	ID param.Field[string] `json:"id,required"`
 	// The name of the D1 database associated with the 'id' provided.
 	Name param.Field[string] `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1BindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingType] `json:"type,required"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1Binding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1Binding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1Binding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1Binding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1BindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1BindingTypeD1 WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersD1BindingType = "d1"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingTypeD1 WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersD1BindingType = "d1"
 )
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding struct {
 	// Namespace to bind to
 	Namespace param.Field[string] `json:"namespace,required"`
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingType] `json:"type,required"`
 	// Outbound worker
-	Outbound param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutbound] `json:"outbound"`
+	Outbound param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutbound] `json:"outbound"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingTypeDispatchNamespace WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingType = "dispatch_namespace"
 )
 
 // Outbound worker
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutbound struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutbound struct {
 	// Pass information from the Dispatch Worker to the Outbound Worker through the
 	// parameters
 	Params param.Field[[]string] `json:"params"`
 	// Outbound worker
-	Worker param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker] `json:"worker"`
+	Worker param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker] `json:"worker"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutbound) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutbound) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Outbound worker
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
 	Environment param.Field[string] `json:"environment"`
 	// Name of the outbound worker
 	Service param.Field[string] `json:"service"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersDispatchNamespaceBindingOutboundWorker) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBinding struct {
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBinding struct {
 	// The class of resource that the binding provides.
-	Type param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBindingType] `json:"type,required"`
+	Type param.Field[WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBindingType] `json:"type,required"`
 	// ID of the certificate to bind to
 	CertificateID param.Field[string] `json:"certificate_id"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBinding) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBinding) implementsWorkerServiceEnvironmentSettingUpdateParamsResultBinding() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBinding) implementsWorkerServiceEnvironmentSettingEditParamsResultBinding() {
 }
 
 // The class of resource that the binding provides.
-type WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBindingType string
+type WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBindingType string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerServiceEnvironmentSettingUpdateParamsResultBindingsWorkersMtlsCertBindingType = "mtls_certificate"
+	WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBindingTypeMtlsCertificate WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersMtlsCertBindingType = "mtls_certificate"
 )
 
 // Migrations to apply for Durable Objects associated with this Worker.
 //
 // Satisfied by
-// [WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations],
-// [WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrations].
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrations interface {
-	implementsWorkerServiceEnvironmentSettingUpdateParamsResultMigrations()
+// [WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations],
+// [WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrations].
+type WorkerServiceEnvironmentSettingEditParamsResultMigrations interface {
+	implementsWorkerServiceEnvironmentSettingEditParamsResultMigrations()
 }
 
 // A single set of migrations to apply.
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
@@ -1661,112 +1660,112 @@ type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleSte
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrations) implementsWorkerServiceEnvironmentSettingUpdateParamsResultMigrations() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrations) implementsWorkerServiceEnvironmentSettingEditParamsResultMigrations() {
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSingleStepMigrationsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrations struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrations struct {
 	// Tag to set as the latest migration tag.
 	NewTag param.Field[string] `json:"new_tag"`
 	// Tag used to verify against the latest migration tag for this Worker. If they
 	// don't match, the upload is rejected.
 	OldTag param.Field[string] `json:"old_tag"`
 	// Migrations to apply in order.
-	Steps param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
+	Steps param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStep] `json:"steps"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrations) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrations) implementsWorkerServiceEnvironmentSettingUpdateParamsResultMigrations() {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrations) implementsWorkerServiceEnvironmentSettingEditParamsResultMigrations() {
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStep struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStep struct {
 	// A list of classes to delete Durable Object namespaces from.
 	DeletedClasses param.Field[[]string] `json:"deleted_classes"`
 	// A list of classes to create Durable Object namespaces from.
 	NewClasses param.Field[[]string] `json:"new_classes"`
 	// A list of classes with Durable Object namespaces that were renamed.
-	RenamedClasses param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
+	RenamedClasses param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass] `json:"renamed_classes"`
 	// A list of transfers for Durable Object namespaces from a different Worker and
 	// class to a class defined in this Worker.
-	TransferredClasses param.Field[[]WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
+	TransferredClasses param.Field[[]WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass] `json:"transferred_classes"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStep) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
 	From param.Field[string] `json:"from"`
 	To   param.Field[string] `json:"to"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsRenamedClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
+type WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
 	From       param.Field[string] `json:"from"`
 	FromScript param.Field[string] `json:"from_script"`
 	To         param.Field[string] `json:"to"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultMigrationsWorkersSteppedMigrationsStepsTransferredClass) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateParamsResultPlacement struct {
+type WorkerServiceEnvironmentSettingEditParamsResultPlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 	// Only `"smart"` is currently supported
-	Mode param.Field[WorkerServiceEnvironmentSettingUpdateParamsResultPlacementMode] `json:"mode"`
+	Mode param.Field[WorkerServiceEnvironmentSettingEditParamsResultPlacementMode] `json:"mode"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultPlacement) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultPlacement) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables
 // [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
 // Only `"smart"` is currently supported
-type WorkerServiceEnvironmentSettingUpdateParamsResultPlacementMode string
+type WorkerServiceEnvironmentSettingEditParamsResultPlacementMode string
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsResultPlacementModeSmart WorkerServiceEnvironmentSettingUpdateParamsResultPlacementMode = "smart"
+	WorkerServiceEnvironmentSettingEditParamsResultPlacementModeSmart WorkerServiceEnvironmentSettingEditParamsResultPlacementMode = "smart"
 )
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkerServiceEnvironmentSettingUpdateParamsResultTailConsumer struct {
+type WorkerServiceEnvironmentSettingEditParamsResultTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service param.Field[string] `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
@@ -1775,29 +1774,29 @@ type WorkerServiceEnvironmentSettingUpdateParamsResultTailConsumer struct {
 	Namespace param.Field[string] `json:"namespace"`
 }
 
-func (r WorkerServiceEnvironmentSettingUpdateParamsResultTailConsumer) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentSettingEditParamsResultTailConsumer) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Whether the API call was successful
-type WorkerServiceEnvironmentSettingUpdateParamsSuccess bool
+type WorkerServiceEnvironmentSettingEditParamsSuccess bool
 
 const (
-	WorkerServiceEnvironmentSettingUpdateParamsSuccessTrue WorkerServiceEnvironmentSettingUpdateParamsSuccess = true
+	WorkerServiceEnvironmentSettingEditParamsSuccessTrue WorkerServiceEnvironmentSettingEditParamsSuccess = true
 )
 
-type WorkerServiceEnvironmentSettingUpdateResponseEnvelope struct {
-	Errors   []WorkerServiceEnvironmentSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerServiceEnvironmentSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerServiceEnvironmentSettingUpdateResponse                   `json:"result,required"`
+type WorkerServiceEnvironmentSettingEditResponseEnvelope struct {
+	Errors   []WorkerServiceEnvironmentSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerServiceEnvironmentSettingEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerServiceEnvironmentSettingEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerServiceEnvironmentSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerServiceEnvironmentSettingUpdateResponseEnvelopeJSON    `json:"-"`
+	Success WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerServiceEnvironmentSettingEditResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [WorkerServiceEnvironmentSettingUpdateResponseEnvelope]
-type workerServiceEnvironmentSettingUpdateResponseEnvelopeJSON struct {
+// workerServiceEnvironmentSettingEditResponseEnvelopeJSON contains the JSON
+// metadata for the struct [WorkerServiceEnvironmentSettingEditResponseEnvelope]
+type workerServiceEnvironmentSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1806,55 +1805,55 @@ type workerServiceEnvironmentSettingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentSettingUpdateResponseEnvelopeErrors struct {
+type WorkerServiceEnvironmentSettingEditResponseEnvelopeErrors struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    workerServiceEnvironmentSettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerServiceEnvironmentSettingEditResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [WorkerServiceEnvironmentSettingEditResponseEnvelopeErrors]
+type workerServiceEnvironmentSettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerServiceEnvironmentSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerServiceEnvironmentSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
-	JSON    workerServiceEnvironmentSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    workerServiceEnvironmentSettingEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerServiceEnvironmentSettingUpdateResponseEnvelopeErrorsJSON contains the
+// workerServiceEnvironmentSettingEditResponseEnvelopeMessagesJSON contains the
 // JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseEnvelopeErrors]
-type workerServiceEnvironmentSettingUpdateResponseEnvelopeErrorsJSON struct {
+// [WorkerServiceEnvironmentSettingEditResponseEnvelopeMessages]
+type workerServiceEnvironmentSettingEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerServiceEnvironmentSettingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    workerServiceEnvironmentSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerServiceEnvironmentSettingUpdateResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [WorkerServiceEnvironmentSettingUpdateResponseEnvelopeMessages]
-type workerServiceEnvironmentSettingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerServiceEnvironmentSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerServiceEnvironmentSettingUpdateResponseEnvelopeSuccess bool
+type WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccess bool
 
 const (
-	WorkerServiceEnvironmentSettingUpdateResponseEnvelopeSuccessTrue WorkerServiceEnvironmentSettingUpdateResponseEnvelopeSuccess = true
+	WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccess = true
 )
 
 type WorkerServiceEnvironmentSettingGetResponseEnvelope struct {

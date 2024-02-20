@@ -166,58 +166,6 @@ func TestPageProjectNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageProjectUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Pages.Projects.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"this-is-my-project-01",
-		cloudflare.PageProjectUpdateParams{
-			Body: cloudflare.F[any](map[string]interface{}{
-				"deployment_configs": map[string]interface{}{
-					"production": map[string]interface{}{
-						"compatibility_date": "2022-01-01",
-						"compatibility_flags": map[string]interface{}{
-							"0": "url_standard",
-						},
-						"env_vars": map[string]interface{}{
-							"BUILD_VERSION": map[string]interface{}{
-								"value": "3.3",
-							},
-							"delete_this_env_var": nil,
-							"secret_var": map[string]interface{}{
-								"type":  "secret_text",
-								"value": "A_CMS_API_TOKEN",
-							},
-						},
-					},
-				},
-			}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestPageProjectList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -264,6 +212,58 @@ func TestPageProjectDelete(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPageProjectEdit(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Pages.Projects.Edit(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"this-is-my-project-01",
+		cloudflare.PageProjectEditParams{
+			Body: cloudflare.F[any](map[string]interface{}{
+				"deployment_configs": map[string]interface{}{
+					"production": map[string]interface{}{
+						"compatibility_date": "2022-01-01",
+						"compatibility_flags": map[string]interface{}{
+							"0": "url_standard",
+						},
+						"env_vars": map[string]interface{}{
+							"BUILD_VERSION": map[string]interface{}{
+								"value": "3.3",
+							},
+							"delete_this_env_var": nil,
+							"secret_var": map[string]interface{}{
+								"type":  "secret_text",
+								"value": "A_CMS_API_TOKEN",
+							},
+						},
+					},
+				},
+			}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

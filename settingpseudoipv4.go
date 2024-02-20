@@ -33,9 +33,9 @@ func NewSettingPseudoIPV4Service(opts ...option.RequestOption) (r *SettingPseudo
 }
 
 // Value of the Pseudo IPv4 setting.
-func (r *SettingPseudoIPV4Service) Update(ctx context.Context, zoneID string, body SettingPseudoIPV4UpdateParams, opts ...option.RequestOption) (res *SettingPseudoIPV4UpdateResponse, err error) {
+func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, zoneID string, body SettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *SettingPseudoIPV4EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingPseudoIPV4UpdateResponseEnvelope
+	var env SettingPseudoIPV4EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingPseudoIPV4Service) Get(ctx context.Context, zoneID string, opts 
 }
 
 // The value set for the Pseudo IPv4 setting.
-type SettingPseudoIPV4UpdateResponse struct {
+type SettingPseudoIPV4EditResponse struct {
 	// Value of the Pseudo IPv4 setting.
-	ID SettingPseudoIPV4UpdateResponseID `json:"id,required"`
+	ID SettingPseudoIPV4EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPseudoIPV4UpdateResponseValue `json:"value,required"`
+	Value SettingPseudoIPV4EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingPseudoIPV4UpdateResponseEditable `json:"editable"`
+	Editable SettingPseudoIPV4EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPseudoIPV4UpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingPseudoIPV4EditResponseJSON `json:"-"`
 }
 
-// settingPseudoIPV4UpdateResponseJSON contains the JSON metadata for the struct
-// [SettingPseudoIPV4UpdateResponse]
-type settingPseudoIPV4UpdateResponseJSON struct {
+// settingPseudoIPV4EditResponseJSON contains the JSON metadata for the struct
+// [SettingPseudoIPV4EditResponse]
+type settingPseudoIPV4EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,33 +83,33 @@ type settingPseudoIPV4UpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPseudoIPV4UpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPseudoIPV4EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Value of the Pseudo IPv4 setting.
-type SettingPseudoIPV4UpdateResponseID string
+type SettingPseudoIPV4EditResponseID string
 
 const (
-	SettingPseudoIPV4UpdateResponseIDPseudoIPV4 SettingPseudoIPV4UpdateResponseID = "pseudo_ipv4"
+	SettingPseudoIPV4EditResponseIDPseudoIPV4 SettingPseudoIPV4EditResponseID = "pseudo_ipv4"
 )
 
 // Current value of the zone setting.
-type SettingPseudoIPV4UpdateResponseValue string
+type SettingPseudoIPV4EditResponseValue string
 
 const (
-	SettingPseudoIPV4UpdateResponseValueOff             SettingPseudoIPV4UpdateResponseValue = "off"
-	SettingPseudoIPV4UpdateResponseValueAddHeader       SettingPseudoIPV4UpdateResponseValue = "add_header"
-	SettingPseudoIPV4UpdateResponseValueOverwriteHeader SettingPseudoIPV4UpdateResponseValue = "overwrite_header"
+	SettingPseudoIPV4EditResponseValueOff             SettingPseudoIPV4EditResponseValue = "off"
+	SettingPseudoIPV4EditResponseValueAddHeader       SettingPseudoIPV4EditResponseValue = "add_header"
+	SettingPseudoIPV4EditResponseValueOverwriteHeader SettingPseudoIPV4EditResponseValue = "overwrite_header"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingPseudoIPV4UpdateResponseEditable bool
+type SettingPseudoIPV4EditResponseEditable bool
 
 const (
-	SettingPseudoIPV4UpdateResponseEditableTrue  SettingPseudoIPV4UpdateResponseEditable = true
-	SettingPseudoIPV4UpdateResponseEditableFalse SettingPseudoIPV4UpdateResponseEditable = false
+	SettingPseudoIPV4EditResponseEditableTrue  SettingPseudoIPV4EditResponseEditable = true
+	SettingPseudoIPV4EditResponseEditableFalse SettingPseudoIPV4EditResponseEditable = false
 )
 
 // The value set for the Pseudo IPv4 setting.
@@ -166,37 +166,37 @@ const (
 	SettingPseudoIPV4GetResponseEditableFalse SettingPseudoIPV4GetResponseEditable = false
 )
 
-type SettingPseudoIPV4UpdateParams struct {
+type SettingPseudoIPV4EditParams struct {
 	// Value of the Pseudo IPv4 setting.
-	Value param.Field[SettingPseudoIPV4UpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingPseudoIPV4EditParamsValue] `json:"value,required"`
 }
 
-func (r SettingPseudoIPV4UpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingPseudoIPV4EditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the Pseudo IPv4 setting.
-type SettingPseudoIPV4UpdateParamsValue string
+type SettingPseudoIPV4EditParamsValue string
 
 const (
-	SettingPseudoIPV4UpdateParamsValueOff             SettingPseudoIPV4UpdateParamsValue = "off"
-	SettingPseudoIPV4UpdateParamsValueAddHeader       SettingPseudoIPV4UpdateParamsValue = "add_header"
-	SettingPseudoIPV4UpdateParamsValueOverwriteHeader SettingPseudoIPV4UpdateParamsValue = "overwrite_header"
+	SettingPseudoIPV4EditParamsValueOff             SettingPseudoIPV4EditParamsValue = "off"
+	SettingPseudoIPV4EditParamsValueAddHeader       SettingPseudoIPV4EditParamsValue = "add_header"
+	SettingPseudoIPV4EditParamsValueOverwriteHeader SettingPseudoIPV4EditParamsValue = "overwrite_header"
 )
 
-type SettingPseudoIPV4UpdateResponseEnvelope struct {
-	Errors   []SettingPseudoIPV4UpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingPseudoIPV4UpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingPseudoIPV4EditResponseEnvelope struct {
+	Errors   []SettingPseudoIPV4EditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingPseudoIPV4EditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
-	Result SettingPseudoIPV4UpdateResponse             `json:"result"`
-	JSON   settingPseudoIPV4UpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingPseudoIPV4EditResponse             `json:"result"`
+	JSON   settingPseudoIPV4EditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingPseudoIPV4UpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingPseudoIPV4UpdateResponseEnvelope]
-type settingPseudoIPV4UpdateResponseEnvelopeJSON struct {
+// settingPseudoIPV4EditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingPseudoIPV4EditResponseEnvelope]
+type settingPseudoIPV4EditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -205,45 +205,45 @@ type settingPseudoIPV4UpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPseudoIPV4UpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPseudoIPV4EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingPseudoIPV4UpdateResponseEnvelopeErrors struct {
+type SettingPseudoIPV4EditResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    settingPseudoIPV4EditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingPseudoIPV4EditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingPseudoIPV4EditResponseEnvelopeErrors]
+type settingPseudoIPV4EditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingPseudoIPV4EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingPseudoIPV4EditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
-	JSON    settingPseudoIPV4UpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingPseudoIPV4EditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingPseudoIPV4UpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SettingPseudoIPV4UpdateResponseEnvelopeErrors]
-type settingPseudoIPV4UpdateResponseEnvelopeErrorsJSON struct {
+// settingPseudoIPV4EditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingPseudoIPV4EditResponseEnvelopeMessages]
+type settingPseudoIPV4EditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPseudoIPV4UpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingPseudoIPV4UpdateResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    settingPseudoIPV4UpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingPseudoIPV4UpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingPseudoIPV4UpdateResponseEnvelopeMessages]
-type settingPseudoIPV4UpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingPseudoIPV4UpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingPseudoIPV4EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

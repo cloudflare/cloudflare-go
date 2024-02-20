@@ -35,9 +35,9 @@ func NewSettingFontSettingService(opts ...option.RequestOption) (r *SettingFontS
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *SettingFontSettingService) Update(ctx context.Context, zoneID string, body SettingFontSettingUpdateParams, opts ...option.RequestOption) (res *SettingFontSettingUpdateResponse, err error) {
+func (r *SettingFontSettingService) Edit(ctx context.Context, zoneID string, body SettingFontSettingEditParams, opts ...option.RequestOption) (res *SettingFontSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingFontSettingUpdateResponseEnvelope
+	var env SettingFontSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -65,22 +65,22 @@ func (r *SettingFontSettingService) Get(ctx context.Context, zoneID string, opts
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-type SettingFontSettingUpdateResponse struct {
+type SettingFontSettingEditResponse struct {
 	// ID of the zone setting.
-	ID SettingFontSettingUpdateResponseID `json:"id,required"`
+	ID SettingFontSettingEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingFontSettingUpdateResponseValue `json:"value,required"`
+	Value SettingFontSettingEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingFontSettingUpdateResponseEditable `json:"editable"`
+	Editable SettingFontSettingEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingFontSettingUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingFontSettingEditResponseJSON `json:"-"`
 }
 
-// settingFontSettingUpdateResponseJSON contains the JSON metadata for the struct
-// [SettingFontSettingUpdateResponse]
-type settingFontSettingUpdateResponseJSON struct {
+// settingFontSettingEditResponseJSON contains the JSON metadata for the struct
+// [SettingFontSettingEditResponse]
+type settingFontSettingEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,32 +89,32 @@ type settingFontSettingUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingFontSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingFontSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingFontSettingUpdateResponseID string
+type SettingFontSettingEditResponseID string
 
 const (
-	SettingFontSettingUpdateResponseIDFonts SettingFontSettingUpdateResponseID = "fonts"
+	SettingFontSettingEditResponseIDFonts SettingFontSettingEditResponseID = "fonts"
 )
 
 // Current value of the zone setting.
-type SettingFontSettingUpdateResponseValue string
+type SettingFontSettingEditResponseValue string
 
 const (
-	SettingFontSettingUpdateResponseValueOn  SettingFontSettingUpdateResponseValue = "on"
-	SettingFontSettingUpdateResponseValueOff SettingFontSettingUpdateResponseValue = "off"
+	SettingFontSettingEditResponseValueOn  SettingFontSettingEditResponseValue = "on"
+	SettingFontSettingEditResponseValueOff SettingFontSettingEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingFontSettingUpdateResponseEditable bool
+type SettingFontSettingEditResponseEditable bool
 
 const (
-	SettingFontSettingUpdateResponseEditableTrue  SettingFontSettingUpdateResponseEditable = true
-	SettingFontSettingUpdateResponseEditableFalse SettingFontSettingUpdateResponseEditable = false
+	SettingFontSettingEditResponseEditableTrue  SettingFontSettingEditResponseEditable = true
+	SettingFontSettingEditResponseEditableFalse SettingFontSettingEditResponseEditable = false
 )
 
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
@@ -172,38 +172,38 @@ const (
 	SettingFontSettingGetResponseEditableFalse SettingFontSettingGetResponseEditable = false
 )
 
-type SettingFontSettingUpdateParams struct {
+type SettingFontSettingEditParams struct {
 	// Whether the feature is enabled or disabled.
-	Value param.Field[SettingFontSettingUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingFontSettingEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingFontSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingFontSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Whether the feature is enabled or disabled.
-type SettingFontSettingUpdateParamsValue string
+type SettingFontSettingEditParamsValue string
 
 const (
-	SettingFontSettingUpdateParamsValueOn  SettingFontSettingUpdateParamsValue = "on"
-	SettingFontSettingUpdateParamsValueOff SettingFontSettingUpdateParamsValue = "off"
+	SettingFontSettingEditParamsValueOn  SettingFontSettingEditParamsValue = "on"
+	SettingFontSettingEditParamsValueOff SettingFontSettingEditParamsValue = "off"
 )
 
-type SettingFontSettingUpdateResponseEnvelope struct {
-	Errors   []SettingFontSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingFontSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingFontSettingEditResponseEnvelope struct {
+	Errors   []SettingFontSettingEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingFontSettingEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 	// Hosted fonts from your own domain, boost performance, and enhance user privacy.
 	// Refer to the Cloudflare Fonts documentation for more information.
-	Result SettingFontSettingUpdateResponse             `json:"result"`
-	JSON   settingFontSettingUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingFontSettingEditResponse             `json:"result"`
+	JSON   settingFontSettingEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingFontSettingUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SettingFontSettingUpdateResponseEnvelope]
-type settingFontSettingUpdateResponseEnvelopeJSON struct {
+// settingFontSettingEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingFontSettingEditResponseEnvelope]
+type settingFontSettingEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -212,45 +212,45 @@ type settingFontSettingUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingFontSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingFontSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingFontSettingUpdateResponseEnvelopeErrors struct {
+type SettingFontSettingEditResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    settingFontSettingEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingFontSettingEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SettingFontSettingEditResponseEnvelopeErrors]
+type settingFontSettingEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingFontSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingFontSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
-	JSON    settingFontSettingUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingFontSettingEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingFontSettingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingFontSettingUpdateResponseEnvelopeErrors]
-type settingFontSettingUpdateResponseEnvelopeErrorsJSON struct {
+// settingFontSettingEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingFontSettingEditResponseEnvelopeMessages]
+type settingFontSettingEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingFontSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingFontSettingUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    settingFontSettingUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingFontSettingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [SettingFontSettingUpdateResponseEnvelopeMessages]
-type settingFontSettingUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingFontSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingFontSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

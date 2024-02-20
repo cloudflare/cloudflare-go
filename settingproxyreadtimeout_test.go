@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingProxyReadTimeoutUpdateWithOptionalParams(t *testing.T) {
+func TestSettingProxyReadTimeoutEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestSettingProxyReadTimeoutUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.ProxyReadTimeout.Update(
+	_, err := client.Settings.ProxyReadTimeout.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingProxyReadTimeoutUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingProxyReadTimeoutUpdateParamsValue{
-				ID:    cloudflare.F(cloudflare.SettingProxyReadTimeoutUpdateParamsValueIDProxyReadTimeout),
+		cloudflare.SettingProxyReadTimeoutEditParams{
+			Value: cloudflare.F(cloudflare.SettingProxyReadTimeoutEditParamsValue{
+				ID:    cloudflare.F(cloudflare.SettingProxyReadTimeoutEditParamsValueIDProxyReadTimeout),
 				Value: cloudflare.F(0.000000),
 			}),
 		},

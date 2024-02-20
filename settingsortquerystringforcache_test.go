@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSettingSortQueryStringForCacheUpdate(t *testing.T) {
+func TestSettingSortQueryStringForCacheEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestSettingSortQueryStringForCacheUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.SortQueryStringForCache.Update(
+	_, err := client.Settings.SortQueryStringForCache.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SettingSortQueryStringForCacheUpdateParams{
-			Value: cloudflare.F(cloudflare.SettingSortQueryStringForCacheUpdateParamsValueOn),
+		cloudflare.SettingSortQueryStringForCacheEditParams{
+			Value: cloudflare.F(cloudflare.SettingSortQueryStringForCacheEditParamsValueOn),
 		},
 	)
 	if err != nil {

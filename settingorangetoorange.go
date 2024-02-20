@@ -34,9 +34,9 @@ func NewSettingOrangeToOrangeService(opts ...option.RequestOption) (r *SettingOr
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-func (r *SettingOrangeToOrangeService) Update(ctx context.Context, zoneID string, body SettingOrangeToOrangeUpdateParams, opts ...option.RequestOption) (res *SettingOrangeToOrangeUpdateResponse, err error) {
+func (r *SettingOrangeToOrangeService) Edit(ctx context.Context, zoneID string, body SettingOrangeToOrangeEditParams, opts ...option.RequestOption) (res *SettingOrangeToOrangeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingOrangeToOrangeUpdateResponseEnvelope
+	var env SettingOrangeToOrangeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,22 +62,22 @@ func (r *SettingOrangeToOrangeService) Get(ctx context.Context, zoneID string, o
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-type SettingOrangeToOrangeUpdateResponse struct {
+type SettingOrangeToOrangeEditResponse struct {
 	// ID of the zone setting.
-	ID SettingOrangeToOrangeUpdateResponseID `json:"id,required"`
+	ID SettingOrangeToOrangeEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOrangeToOrangeUpdateResponseValue `json:"value,required"`
+	Value SettingOrangeToOrangeEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingOrangeToOrangeUpdateResponseEditable `json:"editable"`
+	Editable SettingOrangeToOrangeEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOrangeToOrangeUpdateResponseJSON `json:"-"`
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       settingOrangeToOrangeEditResponseJSON `json:"-"`
 }
 
-// settingOrangeToOrangeUpdateResponseJSON contains the JSON metadata for the
-// struct [SettingOrangeToOrangeUpdateResponse]
-type settingOrangeToOrangeUpdateResponseJSON struct {
+// settingOrangeToOrangeEditResponseJSON contains the JSON metadata for the struct
+// [SettingOrangeToOrangeEditResponse]
+type settingOrangeToOrangeEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,32 +86,32 @@ type settingOrangeToOrangeUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOrangeToOrangeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOrangeToOrangeEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingOrangeToOrangeUpdateResponseID string
+type SettingOrangeToOrangeEditResponseID string
 
 const (
-	SettingOrangeToOrangeUpdateResponseIDOrangeToOrange SettingOrangeToOrangeUpdateResponseID = "orange_to_orange"
+	SettingOrangeToOrangeEditResponseIDOrangeToOrange SettingOrangeToOrangeEditResponseID = "orange_to_orange"
 )
 
 // Current value of the zone setting.
-type SettingOrangeToOrangeUpdateResponseValue string
+type SettingOrangeToOrangeEditResponseValue string
 
 const (
-	SettingOrangeToOrangeUpdateResponseValueOn  SettingOrangeToOrangeUpdateResponseValue = "on"
-	SettingOrangeToOrangeUpdateResponseValueOff SettingOrangeToOrangeUpdateResponseValue = "off"
+	SettingOrangeToOrangeEditResponseValueOn  SettingOrangeToOrangeEditResponseValue = "on"
+	SettingOrangeToOrangeEditResponseValueOff SettingOrangeToOrangeEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingOrangeToOrangeUpdateResponseEditable bool
+type SettingOrangeToOrangeEditResponseEditable bool
 
 const (
-	SettingOrangeToOrangeUpdateResponseEditableTrue  SettingOrangeToOrangeUpdateResponseEditable = true
-	SettingOrangeToOrangeUpdateResponseEditableFalse SettingOrangeToOrangeUpdateResponseEditable = false
+	SettingOrangeToOrangeEditResponseEditableTrue  SettingOrangeToOrangeEditResponseEditable = true
+	SettingOrangeToOrangeEditResponseEditableFalse SettingOrangeToOrangeEditResponseEditable = false
 )
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
@@ -168,67 +168,67 @@ const (
 	SettingOrangeToOrangeGetResponseEditableFalse SettingOrangeToOrangeGetResponseEditable = false
 )
 
-type SettingOrangeToOrangeUpdateParams struct {
+type SettingOrangeToOrangeEditParams struct {
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
-	Value param.Field[SettingOrangeToOrangeUpdateParamsValue] `json:"value,required"`
+	Value param.Field[SettingOrangeToOrangeEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingOrangeToOrangeUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r SettingOrangeToOrangeEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-type SettingOrangeToOrangeUpdateParamsValue struct {
+type SettingOrangeToOrangeEditParamsValue struct {
 	// ID of the zone setting.
-	ID param.Field[SettingOrangeToOrangeUpdateParamsValueID] `json:"id,required"`
+	ID param.Field[SettingOrangeToOrangeEditParamsValueID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[SettingOrangeToOrangeUpdateParamsValueValue] `json:"value,required"`
+	Value param.Field[SettingOrangeToOrangeEditParamsValueValue] `json:"value,required"`
 }
 
-func (r SettingOrangeToOrangeUpdateParamsValue) MarshalJSON() (data []byte, err error) {
+func (r SettingOrangeToOrangeEditParamsValue) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // ID of the zone setting.
-type SettingOrangeToOrangeUpdateParamsValueID string
+type SettingOrangeToOrangeEditParamsValueID string
 
 const (
-	SettingOrangeToOrangeUpdateParamsValueIDOrangeToOrange SettingOrangeToOrangeUpdateParamsValueID = "orange_to_orange"
+	SettingOrangeToOrangeEditParamsValueIDOrangeToOrange SettingOrangeToOrangeEditParamsValueID = "orange_to_orange"
 )
 
 // Current value of the zone setting.
-type SettingOrangeToOrangeUpdateParamsValueValue string
+type SettingOrangeToOrangeEditParamsValueValue string
 
 const (
-	SettingOrangeToOrangeUpdateParamsValueValueOn  SettingOrangeToOrangeUpdateParamsValueValue = "on"
-	SettingOrangeToOrangeUpdateParamsValueValueOff SettingOrangeToOrangeUpdateParamsValueValue = "off"
+	SettingOrangeToOrangeEditParamsValueValueOn  SettingOrangeToOrangeEditParamsValueValue = "on"
+	SettingOrangeToOrangeEditParamsValueValueOff SettingOrangeToOrangeEditParamsValueValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingOrangeToOrangeUpdateParamsValueEditable bool
+type SettingOrangeToOrangeEditParamsValueEditable bool
 
 const (
-	SettingOrangeToOrangeUpdateParamsValueEditableTrue  SettingOrangeToOrangeUpdateParamsValueEditable = true
-	SettingOrangeToOrangeUpdateParamsValueEditableFalse SettingOrangeToOrangeUpdateParamsValueEditable = false
+	SettingOrangeToOrangeEditParamsValueEditableTrue  SettingOrangeToOrangeEditParamsValueEditable = true
+	SettingOrangeToOrangeEditParamsValueEditableFalse SettingOrangeToOrangeEditParamsValueEditable = false
 )
 
-type SettingOrangeToOrangeUpdateResponseEnvelope struct {
-	Errors   []SettingOrangeToOrangeUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingOrangeToOrangeUpdateResponseEnvelopeMessages `json:"messages,required"`
+type SettingOrangeToOrangeEditResponseEnvelope struct {
+	Errors   []SettingOrangeToOrangeEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingOrangeToOrangeEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
-	Result SettingOrangeToOrangeUpdateResponse             `json:"result"`
-	JSON   settingOrangeToOrangeUpdateResponseEnvelopeJSON `json:"-"`
+	Result SettingOrangeToOrangeEditResponse             `json:"result"`
+	JSON   settingOrangeToOrangeEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingOrangeToOrangeUpdateResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SettingOrangeToOrangeUpdateResponseEnvelope]
-type settingOrangeToOrangeUpdateResponseEnvelopeJSON struct {
+// settingOrangeToOrangeEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SettingOrangeToOrangeEditResponseEnvelope]
+type settingOrangeToOrangeEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -237,45 +237,45 @@ type settingOrangeToOrangeUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOrangeToOrangeUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOrangeToOrangeEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingOrangeToOrangeUpdateResponseEnvelopeErrors struct {
+type SettingOrangeToOrangeEditResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    settingOrangeToOrangeEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// settingOrangeToOrangeEditResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SettingOrangeToOrangeEditResponseEnvelopeErrors]
+type settingOrangeToOrangeEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SettingOrangeToOrangeEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOrangeToOrangeEditResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
-	JSON    settingOrangeToOrangeUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingOrangeToOrangeEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingOrangeToOrangeUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SettingOrangeToOrangeUpdateResponseEnvelopeErrors]
-type settingOrangeToOrangeUpdateResponseEnvelopeErrorsJSON struct {
+// settingOrangeToOrangeEditResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SettingOrangeToOrangeEditResponseEnvelopeMessages]
+type settingOrangeToOrangeEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOrangeToOrangeUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SettingOrangeToOrangeUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    settingOrangeToOrangeUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// settingOrangeToOrangeUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SettingOrangeToOrangeUpdateResponseEnvelopeMessages]
-type settingOrangeToOrangeUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SettingOrangeToOrangeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingOrangeToOrangeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
