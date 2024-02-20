@@ -34,7 +34,7 @@ type SettingService struct {
 	ChallengeTTL                  *SettingChallengeTTLService
 	Ciphers                       *SettingCipherService
 	DevelopmentMode               *SettingDevelopmentModeService
-	EarlyHint                     *SettingEarlyHintService
+	EarlyHints                    *SettingEarlyHintService
 	EmailObfuscation              *SettingEmailObfuscationService
 	H2Prioritization              *SettingH2PrioritizationService
 	HotlinkProtection             *SettingHotlinkProtectionService
@@ -71,6 +71,7 @@ type SettingService struct {
 	WAF                           *SettingWAFService
 	Webp                          *SettingWebpService
 	Websocket                     *SettingWebsocketService
+	FontSettings                  *SettingFontSettingService
 }
 
 // NewSettingService generates a new service that applies the given options to each
@@ -92,7 +93,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.ChallengeTTL = NewSettingChallengeTTLService(opts...)
 	r.Ciphers = NewSettingCipherService(opts...)
 	r.DevelopmentMode = NewSettingDevelopmentModeService(opts...)
-	r.EarlyHint = NewSettingEarlyHintService(opts...)
+	r.EarlyHints = NewSettingEarlyHintService(opts...)
 	r.EmailObfuscation = NewSettingEmailObfuscationService(opts...)
 	r.H2Prioritization = NewSettingH2PrioritizationService(opts...)
 	r.HotlinkProtection = NewSettingHotlinkProtectionService(opts...)
@@ -129,6 +130,7 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r.WAF = NewSettingWAFService(opts...)
 	r.Webp = NewSettingWebpService(opts...)
 	r.Websocket = NewSettingWebsocketService(opts...)
+	r.FontSettings = NewSettingFontSettingService(opts...)
 	return
 }
 

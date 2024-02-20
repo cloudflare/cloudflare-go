@@ -36,17 +36,42 @@ func NewFirewallUaRuleService(opts ...option.RequestOption) (r *FirewallUaRuleSe
 	return
 }
 
-// Updates an existing User Agent Blocking rule.
-func (r *FirewallUaRuleService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallUaRuleUpdateParams, opts ...option.RequestOption) (res *FirewallUaRuleUpdateResponse, err error) {
+// Creates a new User Agent Blocking rule in a zone.
+func (r *FirewallUaRuleService) New(ctx context.Context, zoneIdentifier string, body FirewallUaRuleNewParams, opts ...option.RequestOption) (res *FirewallUaRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FirewallUaRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env FirewallUaRuleNewResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+// Fetches User Agent Blocking rules in a zone. You can filter the results using
+// several optional parameters.
+func (r *FirewallUaRuleService) List(ctx context.Context, zoneIdentifier string, query FirewallUaRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallUaRuleListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches User Agent Blocking rules in a zone. You can filter the results using
+// several optional parameters.
+func (r *FirewallUaRuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FirewallUaRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallUaRuleListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing User Agent Blocking rule.
@@ -75,12 +100,12 @@ func (r *FirewallUaRuleService) Get(ctx context.Context, zoneIdentifier string, 
 	return
 }
 
-// Creates a new User Agent Blocking rule in a zone.
-func (r *FirewallUaRuleService) UserAgentBlockingRulesNewAUserAgentBlockingRule(ctx context.Context, zoneIdentifier string, body FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleParams, opts ...option.RequestOption) (res *FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponse, err error) {
+// Updates an existing User Agent Blocking rule.
+func (r *FirewallUaRuleService) Replace(ctx context.Context, zoneIdentifier string, id string, body FirewallUaRuleReplaceParams, opts ...option.RequestOption) (res *FirewallUaRuleReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env FirewallUaRuleReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/ua_rules/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,29 +113,14 @@ func (r *FirewallUaRuleService) UserAgentBlockingRulesNewAUserAgentBlockingRule(
 	return
 }
 
-// Fetches User Agent Blocking rules in a zone. You can filter the results using
-// several optional parameters.
-func (r *FirewallUaRuleService) UserAgentBlockingRulesListUserAgentBlockingRules(ctx context.Context, zoneIdentifier string, query FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesParams, opts ...option.RequestOption) (res *[]FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/ua_rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Union satisfied by [FirewallUaRuleUpdateResponseUnknown] or
-// [shared.UnionString].
-type FirewallUaRuleUpdateResponse interface {
-	ImplementsFirewallUaRuleUpdateResponse()
+// Union satisfied by [FirewallUaRuleNewResponseUnknown] or [shared.UnionString].
+type FirewallUaRuleNewResponse interface {
+	ImplementsFirewallUaRuleNewResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallUaRuleUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*FirewallUaRuleNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -118,6 +128,70 @@ func init() {
 		},
 	)
 }
+
+type FirewallUaRuleListResponse struct {
+	// The unique identifier of the User Agent Blocking rule.
+	ID string `json:"id"`
+	// The configuration object for the current rule.
+	Configuration FirewallUaRuleListResponseConfiguration `json:"configuration"`
+	// An informative summary of the rule.
+	Description string `json:"description"`
+	// The action to apply to a matched request.
+	Mode FirewallUaRuleListResponseMode `json:"mode"`
+	// When true, indicates that the rule is currently paused.
+	Paused bool                           `json:"paused"`
+	JSON   firewallUaRuleListResponseJSON `json:"-"`
+}
+
+// firewallUaRuleListResponseJSON contains the JSON metadata for the struct
+// [FirewallUaRuleListResponse]
+type firewallUaRuleListResponseJSON struct {
+	ID            apijson.Field
+	Configuration apijson.Field
+	Description   apijson.Field
+	Mode          apijson.Field
+	Paused        apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *FirewallUaRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object for the current rule.
+type FirewallUaRuleListResponseConfiguration struct {
+	// The configuration target for this rule. You must set the target to `ua` for User
+	// Agent Blocking rules.
+	Target string `json:"target"`
+	// The exact user agent string to match. This value will be compared to the
+	// received `User-Agent` HTTP header value.
+	Value string                                      `json:"value"`
+	JSON  firewallUaRuleListResponseConfigurationJSON `json:"-"`
+}
+
+// firewallUaRuleListResponseConfigurationJSON contains the JSON metadata for the
+// struct [FirewallUaRuleListResponseConfiguration]
+type firewallUaRuleListResponseConfigurationJSON struct {
+	Target      apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallUaRuleListResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to apply to a matched request.
+type FirewallUaRuleListResponseMode string
+
+const (
+	FirewallUaRuleListResponseModeBlock            FirewallUaRuleListResponseMode = "block"
+	FirewallUaRuleListResponseModeChallenge        FirewallUaRuleListResponseMode = "challenge"
+	FirewallUaRuleListResponseModeJsChallenge      FirewallUaRuleListResponseMode = "js_challenge"
+	FirewallUaRuleListResponseModeManagedChallenge FirewallUaRuleListResponseMode = "managed_challenge"
+)
 
 type FirewallUaRuleDeleteResponse struct {
 	// The unique identifier of the User Agent Blocking rule.
@@ -153,16 +227,15 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseUnknown]
-// or [shared.UnionString].
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponse interface {
-	ImplementsFirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponse()
+// Union satisfied by [FirewallUaRuleReplaceResponseUnknown] or
+// [shared.UnionString].
+type FirewallUaRuleReplaceResponse interface {
+	ImplementsFirewallUaRuleReplaceResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponse)(nil)).Elem(),
+		reflect.TypeOf((*FirewallUaRuleReplaceResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -171,92 +244,26 @@ func init() {
 	)
 }
 
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponse struct {
-	// The unique identifier of the User Agent Blocking rule.
-	ID string `json:"id"`
-	// The configuration object for the current rule.
-	Configuration FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfiguration `json:"configuration"`
-	// An informative summary of the rule.
-	Description string `json:"description"`
-	// The action to apply to a matched request.
-	Mode FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode `json:"mode"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool                                                                       `json:"paused"`
-	JSON   firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseJSON `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponse]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseJSON struct {
-	ID            apijson.Field
-	Configuration apijson.Field
-	Description   apijson.Field
-	Mode          apijson.Field
-	Paused        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object for the current rule.
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfiguration struct {
-	// The configuration target for this rule. You must set the target to `ua` for User
-	// Agent Blocking rules.
-	Target string `json:"target"`
-	// The exact user agent string to match. This value will be compared to the
-	// received `User-Agent` HTTP header value.
-	Value string                                                                                  `json:"value"`
-	JSON  firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfigurationJSON `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfiguration]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to apply to a matched request.
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode string
-
-const (
-	FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseModeBlock            FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode = "block"
-	FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseModeChallenge        FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode = "challenge"
-	FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseModeJsChallenge      FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode = "js_challenge"
-	FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseModeManagedChallenge FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseMode = "managed_challenge"
-)
-
-type FirewallUaRuleUpdateParams struct {
+type FirewallUaRuleNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r FirewallUaRuleUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r FirewallUaRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type FirewallUaRuleUpdateResponseEnvelope struct {
-	Errors   []FirewallUaRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallUaRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallUaRuleUpdateResponse                   `json:"result,required,nullable"`
+type FirewallUaRuleNewResponseEnvelope struct {
+	Errors   []FirewallUaRuleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallUaRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallUaRuleNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success FirewallUaRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallUaRuleUpdateResponseEnvelopeJSON    `json:"-"`
+	Success FirewallUaRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallUaRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallUaRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FirewallUaRuleUpdateResponseEnvelope]
-type firewallUaRuleUpdateResponseEnvelopeJSON struct {
+// firewallUaRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FirewallUaRuleNewResponseEnvelope]
+type firewallUaRuleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -265,54 +272,77 @@ type firewallUaRuleUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FirewallUaRuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    firewallUaRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type FirewallUaRuleNewResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    firewallUaRuleNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// firewallUaRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FirewallUaRuleUpdateResponseEnvelopeErrors]
-type firewallUaRuleUpdateResponseEnvelopeErrorsJSON struct {
+// firewallUaRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [FirewallUaRuleNewResponseEnvelopeErrors]
+type firewallUaRuleNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FirewallUaRuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    firewallUaRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type FirewallUaRuleNewResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    firewallUaRuleNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// firewallUaRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [FirewallUaRuleUpdateResponseEnvelopeMessages]
-type firewallUaRuleUpdateResponseEnvelopeMessagesJSON struct {
+// firewallUaRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [FirewallUaRuleNewResponseEnvelopeMessages]
+type firewallUaRuleNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FirewallUaRuleUpdateResponseEnvelopeSuccess bool
+type FirewallUaRuleNewResponseEnvelopeSuccess bool
 
 const (
-	FirewallUaRuleUpdateResponseEnvelopeSuccessTrue FirewallUaRuleUpdateResponseEnvelopeSuccess = true
+	FirewallUaRuleNewResponseEnvelopeSuccessTrue FirewallUaRuleNewResponseEnvelopeSuccess = true
 )
+
+type FirewallUaRuleListParams struct {
+	// A string to search for in the description of existing rules.
+	Description param.Field[string] `query:"description"`
+	// A string to search for in the description of existing rules.
+	DescriptionSearch param.Field[string] `query:"description_search"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// The maximum number of results per page. You can only set the value to `1` or to
+	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
+	PerPage param.Field[float64] `query:"per_page"`
+	// A string to search for in the user agent values of existing rules.
+	UaSearch param.Field[string] `query:"ua_search"`
+}
+
+// URLQuery serializes [FirewallUaRuleListParams]'s query parameters as
+// `url.Values`.
+func (r FirewallUaRuleListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
 
 type FirewallUaRuleDeleteResponseEnvelope struct {
 	Errors   []FirewallUaRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -452,27 +482,26 @@ const (
 	FirewallUaRuleGetResponseEnvelopeSuccessTrue FirewallUaRuleGetResponseEnvelopeSuccess = true
 )
 
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleParams struct {
+type FirewallUaRuleReplaceParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleParams) MarshalJSON() (data []byte, err error) {
+func (r FirewallUaRuleReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelope struct {
-	Errors   []FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponse                   `json:"result,required,nullable"`
+type FirewallUaRuleReplaceResponseEnvelope struct {
+	Errors   []FirewallUaRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallUaRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallUaRuleReplaceResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeJSON    `json:"-"`
+	Success FirewallUaRuleReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallUaRuleReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelope]
-type firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeJSON struct {
+// firewallUaRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [FirewallUaRuleReplaceResponseEnvelope]
+type firewallUaRuleReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -481,179 +510,51 @@ type firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelo
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrors struct {
-	Code    int64                                                                                   `json:"code,required"`
-	Message string                                                                                  `json:"message,required"`
-	JSON    firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrorsJSON `json:"-"`
+type FirewallUaRuleReplaceResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    firewallUaRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrors]
-type firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrorsJSON struct {
+// firewallUaRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [FirewallUaRuleReplaceResponseEnvelopeErrors]
+type firewallUaRuleReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessages struct {
-	Code    int64                                                                                     `json:"code,required"`
-	Message string                                                                                    `json:"message,required"`
-	JSON    firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessagesJSON `json:"-"`
+type FirewallUaRuleReplaceResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    firewallUaRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessages]
-type firewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessagesJSON struct {
+// firewallUaRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [FirewallUaRuleReplaceResponseEnvelopeMessages]
+type firewallUaRuleReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallUaRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeSuccess bool
+type FirewallUaRuleReplaceResponseEnvelopeSuccess bool
 
 const (
-	FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeSuccessTrue FirewallUaRuleUserAgentBlockingRulesNewAUserAgentBlockingRuleResponseEnvelopeSuccess = true
+	FirewallUaRuleReplaceResponseEnvelopeSuccessTrue FirewallUaRuleReplaceResponseEnvelopeSuccess = true
 )
-
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesParams struct {
-	// A string to search for in the description of existing rules.
-	Description param.Field[string] `query:"description"`
-	// A string to search for in the description of existing rules.
-	DescriptionSearch param.Field[string] `query:"description_search"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// The maximum number of results per page. You can only set the value to `1` or to
-	// a multiple of 5 such as `5`, `10`, `15`, or `20`.
-	PerPage param.Field[float64] `query:"per_page"`
-	// A string to search for in the user agent values of existing rules.
-	UaSearch param.Field[string] `query:"ua_search"`
-}
-
-// URLQuery serializes
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesParams]'s query
-// parameters as `url.Values`.
-func (r FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelope struct {
-	Errors   []FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelope]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                                    `json:"code,required"`
-	Message string                                                                                   `json:"message,required"`
-	JSON    firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrors]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                                      `json:"code,required"`
-	Message string                                                                                     `json:"message,required"`
-	JSON    firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessages]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeSuccess bool
-
-const (
-	FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeSuccessTrue FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeSuccess = true
-)
-
-type FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                      `json:"total_count"`
-	JSON       firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfo]
-type firewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallUaRuleUserAgentBlockingRulesListUserAgentBlockingRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

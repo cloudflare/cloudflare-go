@@ -33,6 +33,19 @@ func NewPageShieldScriptService(opts ...option.RequestOption) (r *PageShieldScri
 	return
 }
 
+// Lists all scripts detected by Page Shield.
+func (r *PageShieldScriptService) List(ctx context.Context, zoneID string, query PageShieldScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScriptListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageShieldScriptListResponseEnvelope
+	path := fmt.Sprintf("zones/%s/page_shield/scripts", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches a script detected by Page Shield by script ID.
 func (r *PageShieldScriptService) Get(ctx context.Context, zoneID string, scriptID string, opts ...option.RequestOption) (res *PageShieldScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -41,17 +54,45 @@ func (r *PageShieldScriptService) Get(ctx context.Context, zoneID string, script
 	return
 }
 
-// Lists all scripts detected by Page Shield.
-func (r *PageShieldScriptService) PageShieldListPageShieldScripts(ctx context.Context, zoneID string, query PageShieldScriptPageShieldListPageShieldScriptsParams, opts ...option.RequestOption) (res *[]PageShieldScriptPageShieldListPageShieldScriptsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield/scripts", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type PageShieldScriptListResponse struct {
+	ID                      interface{}                      `json:"id"`
+	AddedAt                 interface{}                      `json:"added_at"`
+	DomainReportedMalicious interface{}                      `json:"domain_reported_malicious"`
+	FetchedAt               interface{}                      `json:"fetched_at"`
+	FirstPageURL            interface{}                      `json:"first_page_url"`
+	FirstSeenAt             interface{}                      `json:"first_seen_at"`
+	Hash                    interface{}                      `json:"hash"`
+	Host                    interface{}                      `json:"host"`
+	JsIntegrityScore        interface{}                      `json:"js_integrity_score"`
+	LastSeenAt              interface{}                      `json:"last_seen_at"`
+	PageURLs                interface{}                      `json:"page_urls"`
+	URL                     interface{}                      `json:"url"`
+	URLContainsCdnCgiPath   interface{}                      `json:"url_contains_cdn_cgi_path"`
+	JSON                    pageShieldScriptListResponseJSON `json:"-"`
+}
+
+// pageShieldScriptListResponseJSON contains the JSON metadata for the struct
+// [PageShieldScriptListResponse]
+type pageShieldScriptListResponseJSON struct {
+	ID                      apijson.Field
+	AddedAt                 apijson.Field
+	DomainReportedMalicious apijson.Field
+	FetchedAt               apijson.Field
+	FirstPageURL            apijson.Field
+	FirstSeenAt             apijson.Field
+	Hash                    apijson.Field
+	Host                    apijson.Field
+	JsIntegrityScore        apijson.Field
+	LastSeenAt              apijson.Field
+	PageURLs                apijson.Field
+	URL                     apijson.Field
+	URLContainsCdnCgiPath   apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *PageShieldScriptListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type PageShieldScriptGetResponse struct {
@@ -122,51 +163,9 @@ func (r *PageShieldScriptGetResponseVersion) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldScriptPageShieldListPageShieldScriptsResponse struct {
-	ID                      interface{}                                                 `json:"id"`
-	AddedAt                 interface{}                                                 `json:"added_at"`
-	DomainReportedMalicious interface{}                                                 `json:"domain_reported_malicious"`
-	FetchedAt               interface{}                                                 `json:"fetched_at"`
-	FirstPageURL            interface{}                                                 `json:"first_page_url"`
-	FirstSeenAt             interface{}                                                 `json:"first_seen_at"`
-	Hash                    interface{}                                                 `json:"hash"`
-	Host                    interface{}                                                 `json:"host"`
-	JsIntegrityScore        interface{}                                                 `json:"js_integrity_score"`
-	LastSeenAt              interface{}                                                 `json:"last_seen_at"`
-	PageURLs                interface{}                                                 `json:"page_urls"`
-	URL                     interface{}                                                 `json:"url"`
-	URLContainsCdnCgiPath   interface{}                                                 `json:"url_contains_cdn_cgi_path"`
-	JSON                    pageShieldScriptPageShieldListPageShieldScriptsResponseJSON `json:"-"`
-}
-
-// pageShieldScriptPageShieldListPageShieldScriptsResponseJSON contains the JSON
-// metadata for the struct
-// [PageShieldScriptPageShieldListPageShieldScriptsResponse]
-type pageShieldScriptPageShieldListPageShieldScriptsResponseJSON struct {
-	ID                      apijson.Field
-	AddedAt                 apijson.Field
-	DomainReportedMalicious apijson.Field
-	FetchedAt               apijson.Field
-	FirstPageURL            apijson.Field
-	FirstSeenAt             apijson.Field
-	Hash                    apijson.Field
-	Host                    apijson.Field
-	JsIntegrityScore        apijson.Field
-	LastSeenAt              apijson.Field
-	PageURLs                apijson.Field
-	URL                     apijson.Field
-	URLContainsCdnCgiPath   apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *PageShieldScriptPageShieldListPageShieldScriptsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageShieldScriptPageShieldListPageShieldScriptsParams struct {
+type PageShieldScriptListParams struct {
 	// The direction used to sort returned scripts.
-	Direction param.Field[PageShieldScriptPageShieldListPageShieldScriptsParamsDirection] `query:"direction"`
+	Direction param.Field[PageShieldScriptListParamsDirection] `query:"direction"`
 	// When true, excludes scripts seen in a `/cdn-cgi` path from the returned scripts.
 	// The default value is true.
 	ExcludeCdnCgi param.Field[bool] `query:"exclude_cdn_cgi"`
@@ -180,7 +179,7 @@ type PageShieldScriptPageShieldListPageShieldScriptsParams struct {
 	ExcludeURLs param.Field[string] `query:"exclude_urls"`
 	// Export the list of scripts as a file. Cannot be used with per_page or page
 	// options.
-	Export param.Field[PageShieldScriptPageShieldListPageShieldScriptsParamsExport] `query:"export"`
+	Export param.Field[PageShieldScriptListParamsExport] `query:"export"`
 	// Includes scripts that match one or more URL-encoded hostnames separated by
 	// commas.
 	//
@@ -189,7 +188,7 @@ type PageShieldScriptPageShieldListPageShieldScriptsParams struct {
 	// by exact match
 	Hosts param.Field[string] `query:"hosts"`
 	// The field used to sort returned scripts.
-	OrderBy param.Field[PageShieldScriptPageShieldListPageShieldScriptsParamsOrderBy] `query:"order_by"`
+	OrderBy param.Field[PageShieldScriptListParamsOrderBy] `query:"order_by"`
 	// The current page number of the paginated results.
 	//
 	// We additionally support a special value "all". When "all" is used, the API will
@@ -218,9 +217,9 @@ type PageShieldScriptPageShieldListPageShieldScriptsParams struct {
 	URLs param.Field[string] `query:"urls"`
 }
 
-// URLQuery serializes [PageShieldScriptPageShieldListPageShieldScriptsParams]'s
-// query parameters as `url.Values`.
-func (r PageShieldScriptPageShieldListPageShieldScriptsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [PageShieldScriptListParams]'s query parameters as
+// `url.Values`.
+func (r PageShieldScriptListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -228,43 +227,42 @@ func (r PageShieldScriptPageShieldListPageShieldScriptsParams) URLQuery() (v url
 }
 
 // The direction used to sort returned scripts.
-type PageShieldScriptPageShieldListPageShieldScriptsParamsDirection string
+type PageShieldScriptListParamsDirection string
 
 const (
-	PageShieldScriptPageShieldListPageShieldScriptsParamsDirectionAsc  PageShieldScriptPageShieldListPageShieldScriptsParamsDirection = "asc"
-	PageShieldScriptPageShieldListPageShieldScriptsParamsDirectionDesc PageShieldScriptPageShieldListPageShieldScriptsParamsDirection = "desc"
+	PageShieldScriptListParamsDirectionAsc  PageShieldScriptListParamsDirection = "asc"
+	PageShieldScriptListParamsDirectionDesc PageShieldScriptListParamsDirection = "desc"
 )
 
 // Export the list of scripts as a file. Cannot be used with per_page or page
 // options.
-type PageShieldScriptPageShieldListPageShieldScriptsParamsExport string
+type PageShieldScriptListParamsExport string
 
 const (
-	PageShieldScriptPageShieldListPageShieldScriptsParamsExportCsv PageShieldScriptPageShieldListPageShieldScriptsParamsExport = "csv"
+	PageShieldScriptListParamsExportCsv PageShieldScriptListParamsExport = "csv"
 )
 
 // The field used to sort returned scripts.
-type PageShieldScriptPageShieldListPageShieldScriptsParamsOrderBy string
+type PageShieldScriptListParamsOrderBy string
 
 const (
-	PageShieldScriptPageShieldListPageShieldScriptsParamsOrderByFirstSeenAt PageShieldScriptPageShieldListPageShieldScriptsParamsOrderBy = "first_seen_at"
-	PageShieldScriptPageShieldListPageShieldScriptsParamsOrderByLastSeenAt  PageShieldScriptPageShieldListPageShieldScriptsParamsOrderBy = "last_seen_at"
+	PageShieldScriptListParamsOrderByFirstSeenAt PageShieldScriptListParamsOrderBy = "first_seen_at"
+	PageShieldScriptListParamsOrderByLastSeenAt  PageShieldScriptListParamsOrderBy = "last_seen_at"
 )
 
-type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelope struct {
-	Errors   []PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldScriptPageShieldListPageShieldScriptsResponse                 `json:"result,required,nullable"`
+type PageShieldScriptListResponseEnvelope struct {
+	Errors   []PageShieldScriptListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageShieldScriptListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []PageShieldScriptListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeJSON       `json:"-"`
+	Success    PageShieldScriptListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PageShieldScriptListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       pageShieldScriptListResponseEnvelopeJSON       `json:"-"`
 }
 
-// pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelope]
-type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeJSON struct {
+// pageShieldScriptListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PageShieldScriptListResponseEnvelope]
+type pageShieldScriptListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -274,58 +272,56 @@ type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeJSON struct 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrors struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrorsJSON `json:"-"`
+type PageShieldScriptListResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    pageShieldScriptListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrors]
-type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrorsJSON struct {
+// pageShieldScriptListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PageShieldScriptListResponseEnvelopeErrors]
+type pageShieldScriptListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessages struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessagesJSON `json:"-"`
+type PageShieldScriptListResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    pageShieldScriptListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessages]
-type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessagesJSON struct {
+// pageShieldScriptListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PageShieldScriptListResponseEnvelopeMessages]
+type pageShieldScriptListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeSuccess bool
+type PageShieldScriptListResponseEnvelopeSuccess bool
 
 const (
-	PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeSuccessTrue PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeSuccess = true
+	PageShieldScriptListResponseEnvelopeSuccessTrue PageShieldScriptListResponseEnvelopeSuccess = true
 )
 
-type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfo struct {
+type PageShieldScriptListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -333,14 +329,13 @@ type PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfo s
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                       `json:"total_count"`
-	JSON       pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                            `json:"total_count"`
+	JSON       pageShieldScriptListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfo]
-type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfoJSON struct {
+// pageShieldScriptListResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [PageShieldScriptListResponseEnvelopeResultInfo]
+type pageShieldScriptListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -349,6 +344,6 @@ type pageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfoJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldScriptPageShieldListPageShieldScriptsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldScriptListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestGatewayZeroTrustAccountsNewZeroTrustAccount(t *testing.T) {
+func TestGatewayNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestGatewayZeroTrustAccountsNewZeroTrustAccount(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Gateways.ZeroTrustAccountsNewZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.New(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestGatewayZeroTrustAccountsNewZeroTrustAccount(t *testing.T) {
 	}
 }
 
-func TestGatewayZeroTrustAccountsGetZeroTrustAccountInformation(t *testing.T) {
+func TestGatewayList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +55,7 @@ func TestGatewayZeroTrustAccountsGetZeroTrustAccountInformation(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Gateways.ZeroTrustAccountsGetZeroTrustAccountInformation(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

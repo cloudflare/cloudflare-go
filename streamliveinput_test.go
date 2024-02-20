@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamLiveInputUpdateWithOptionalParams(t *testing.T) {
+func TestStreamLiveInputNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,22 +29,53 @@ func TestStreamLiveInputUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.LiveInputs.Update(
+	_, err := client.Stream.LiveInputs.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"66be4bf738797e01e1fca35a7bdecdcd",
-		cloudflare.StreamLiveInputUpdateParams{
+		cloudflare.StreamLiveInputNewParams{
 			DefaultCreator:           cloudflare.F("string"),
 			DeleteRecordingAfterDays: cloudflare.F(45.000000),
 			Meta: cloudflare.F[any](map[string]interface{}{
 				"name": "test stream 1",
 			}),
-			Recording: cloudflare.F(cloudflare.StreamLiveInputUpdateParamsRecording{
+			Recording: cloudflare.F(cloudflare.StreamLiveInputNewParamsRecording{
 				AllowedOrigins:    cloudflare.F([]string{"example.com"}),
-				Mode:              cloudflare.F(cloudflare.StreamLiveInputUpdateParamsRecordingModeOff),
+				Mode:              cloudflare.F(cloudflare.StreamLiveInputNewParamsRecordingModeOff),
 				RequireSignedURLs: cloudflare.F(false),
 				TimeoutSeconds:    cloudflare.F(int64(0)),
 			}),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestStreamLiveInputListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Stream.LiveInputs.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.StreamLiveInputListParams{
+			IncludeCounts: cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -116,7 +147,7 @@ func TestStreamLiveInputGet(t *testing.T) {
 	}
 }
 
-func TestStreamLiveInputStreamLiveInputsNewALiveInputWithOptionalParams(t *testing.T) {
+func TestStreamLiveInputReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -132,53 +163,22 @@ func TestStreamLiveInputStreamLiveInputsNewALiveInputWithOptionalParams(t *testi
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.LiveInputs.StreamLiveInputsNewALiveInput(
+	_, err := client.Stream.LiveInputs.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamLiveInputStreamLiveInputsNewALiveInputParams{
+		"66be4bf738797e01e1fca35a7bdecdcd",
+		cloudflare.StreamLiveInputReplaceParams{
 			DefaultCreator:           cloudflare.F("string"),
 			DeleteRecordingAfterDays: cloudflare.F(45.000000),
 			Meta: cloudflare.F[any](map[string]interface{}{
 				"name": "test stream 1",
 			}),
-			Recording: cloudflare.F(cloudflare.StreamLiveInputStreamLiveInputsNewALiveInputParamsRecording{
+			Recording: cloudflare.F(cloudflare.StreamLiveInputReplaceParamsRecording{
 				AllowedOrigins:    cloudflare.F([]string{"example.com"}),
-				Mode:              cloudflare.F(cloudflare.StreamLiveInputStreamLiveInputsNewALiveInputParamsRecordingModeOff),
+				Mode:              cloudflare.F(cloudflare.StreamLiveInputReplaceParamsRecordingModeOff),
 				RequireSignedURLs: cloudflare.F(false),
 				TimeoutSeconds:    cloudflare.F(int64(0)),
 			}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestStreamLiveInputStreamLiveInputsListLiveInputsWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Stream.LiveInputs.StreamLiveInputsListLiveInputs(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamLiveInputStreamLiveInputsListLiveInputsParams{
-			IncludeCounts: cloudflare.F(true),
 		},
 	)
 	if err != nil {

@@ -34,12 +34,25 @@ func NewHealthcheckService(opts ...option.RequestOption) (r *HealthcheckService)
 	return
 }
 
-// Update a configured health check.
-func (r *HealthcheckService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HealthcheckUpdateParams, opts ...option.RequestOption) (res *HealthcheckUpdateResponse, err error) {
+// Create a new health check.
+func (r *HealthcheckService) New(ctx context.Context, zoneIdentifier string, body HealthcheckNewParams, opts ...option.RequestOption) (res *HealthcheckNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env HealthcheckUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env HealthcheckNewResponseEnvelope
+	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// List configured health checks.
+func (r *HealthcheckService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]HealthcheckListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HealthcheckListResponseEnvelope
+	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,12 +86,12 @@ func (r *HealthcheckService) Get(ctx context.Context, zoneIdentifier string, ide
 	return
 }
 
-// Create a new health check.
-func (r *HealthcheckService) HealthChecksNewHealthCheck(ctx context.Context, zoneIdentifier string, body HealthcheckHealthChecksNewHealthCheckParams, opts ...option.RequestOption) (res *HealthcheckHealthChecksNewHealthCheckResponse, err error) {
+// Update a configured health check.
+func (r *HealthcheckService) Replace(ctx context.Context, zoneIdentifier string, identifier string, body HealthcheckReplaceParams, opts ...option.RequestOption) (res *HealthcheckReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env HealthcheckHealthChecksNewHealthCheckResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env HealthcheckReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/healthchecks/%s", zoneIdentifier, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,27 +99,14 @@ func (r *HealthcheckService) HealthChecksNewHealthCheck(ctx context.Context, zon
 	return
 }
 
-// List configured health checks.
-func (r *HealthcheckService) HealthChecksListHealthChecks(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]HealthcheckHealthChecksListHealthChecksResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env HealthcheckHealthChecksListHealthChecksResponseEnvelope
-	path := fmt.Sprintf("zones/%s/healthchecks", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type HealthcheckUpdateResponse struct {
+type HealthcheckNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []HealthcheckUpdateResponseCheckRegion `json:"check_regions,nullable"`
+	CheckRegions []HealthcheckNewResponseCheckRegion `json:"check_regions,nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -119,7 +119,7 @@ type HealthcheckUpdateResponse struct {
 	// The current failure reason if status is unhealthy.
 	FailureReason string `json:"failure_reason"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig HealthcheckUpdateResponseHTTPConfig `json:"http_config,nullable"`
+	HTTPConfig HealthcheckNewResponseHTTPConfig `json:"http_config,nullable"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -132,22 +132,22 @@ type HealthcheckUpdateResponse struct {
 	// as unhealthy. Retries are attempted immediately.
 	Retries int64 `json:"retries"`
 	// The current status of the origin server according to the health check.
-	Status HealthcheckUpdateResponseStatus `json:"status"`
+	Status HealthcheckNewResponseStatus `json:"status"`
 	// If suspended, no health checks are sent to the origin.
 	Suspended bool `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig HealthcheckUpdateResponseTcpConfig `json:"tcp_config,nullable"`
+	TcpConfig HealthcheckNewResponseTcpConfig `json:"tcp_config,nullable"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type string                        `json:"type"`
-	JSON healthcheckUpdateResponseJSON `json:"-"`
+	Type string                     `json:"type"`
+	JSON healthcheckNewResponseJSON `json:"-"`
 }
 
-// healthcheckUpdateResponseJSON contains the JSON metadata for the struct
-// [HealthcheckUpdateResponse]
-type healthcheckUpdateResponseJSON struct {
+// healthcheckNewResponseJSON contains the JSON metadata for the struct
+// [HealthcheckNewResponse]
+type healthcheckNewResponseJSON struct {
 	ID                   apijson.Field
 	Address              apijson.Field
 	CheckRegions         apijson.Field
@@ -170,7 +170,7 @@ type healthcheckUpdateResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -179,27 +179,27 @@ func (r *HealthcheckUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type HealthcheckUpdateResponseCheckRegion string
+type HealthcheckNewResponseCheckRegion string
 
 const (
-	HealthcheckUpdateResponseCheckRegionWnam       HealthcheckUpdateResponseCheckRegion = "WNAM"
-	HealthcheckUpdateResponseCheckRegionEnam       HealthcheckUpdateResponseCheckRegion = "ENAM"
-	HealthcheckUpdateResponseCheckRegionWeu        HealthcheckUpdateResponseCheckRegion = "WEU"
-	HealthcheckUpdateResponseCheckRegionEeu        HealthcheckUpdateResponseCheckRegion = "EEU"
-	HealthcheckUpdateResponseCheckRegionNsam       HealthcheckUpdateResponseCheckRegion = "NSAM"
-	HealthcheckUpdateResponseCheckRegionSsam       HealthcheckUpdateResponseCheckRegion = "SSAM"
-	HealthcheckUpdateResponseCheckRegionOc         HealthcheckUpdateResponseCheckRegion = "OC"
-	HealthcheckUpdateResponseCheckRegionMe         HealthcheckUpdateResponseCheckRegion = "ME"
-	HealthcheckUpdateResponseCheckRegionNaf        HealthcheckUpdateResponseCheckRegion = "NAF"
-	HealthcheckUpdateResponseCheckRegionSaf        HealthcheckUpdateResponseCheckRegion = "SAF"
-	HealthcheckUpdateResponseCheckRegionIn         HealthcheckUpdateResponseCheckRegion = "IN"
-	HealthcheckUpdateResponseCheckRegionSeas       HealthcheckUpdateResponseCheckRegion = "SEAS"
-	HealthcheckUpdateResponseCheckRegionNeas       HealthcheckUpdateResponseCheckRegion = "NEAS"
-	HealthcheckUpdateResponseCheckRegionAllRegions HealthcheckUpdateResponseCheckRegion = "ALL_REGIONS"
+	HealthcheckNewResponseCheckRegionWnam       HealthcheckNewResponseCheckRegion = "WNAM"
+	HealthcheckNewResponseCheckRegionEnam       HealthcheckNewResponseCheckRegion = "ENAM"
+	HealthcheckNewResponseCheckRegionWeu        HealthcheckNewResponseCheckRegion = "WEU"
+	HealthcheckNewResponseCheckRegionEeu        HealthcheckNewResponseCheckRegion = "EEU"
+	HealthcheckNewResponseCheckRegionNsam       HealthcheckNewResponseCheckRegion = "NSAM"
+	HealthcheckNewResponseCheckRegionSsam       HealthcheckNewResponseCheckRegion = "SSAM"
+	HealthcheckNewResponseCheckRegionOc         HealthcheckNewResponseCheckRegion = "OC"
+	HealthcheckNewResponseCheckRegionMe         HealthcheckNewResponseCheckRegion = "ME"
+	HealthcheckNewResponseCheckRegionNaf        HealthcheckNewResponseCheckRegion = "NAF"
+	HealthcheckNewResponseCheckRegionSaf        HealthcheckNewResponseCheckRegion = "SAF"
+	HealthcheckNewResponseCheckRegionIn         HealthcheckNewResponseCheckRegion = "IN"
+	HealthcheckNewResponseCheckRegionSeas       HealthcheckNewResponseCheckRegion = "SEAS"
+	HealthcheckNewResponseCheckRegionNeas       HealthcheckNewResponseCheckRegion = "NEAS"
+	HealthcheckNewResponseCheckRegionAllRegions HealthcheckNewResponseCheckRegion = "ALL_REGIONS"
 )
 
 // Parameters specific to an HTTP or HTTPS health check.
-type HealthcheckUpdateResponseHTTPConfig struct {
+type HealthcheckNewResponseHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
 	AllowInsecure bool `json:"allow_insecure"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -214,18 +214,18 @@ type HealthcheckUpdateResponseHTTPConfig struct {
 	// a Host header by default. The User-Agent header cannot be overridden.
 	Header interface{} `json:"header,nullable"`
 	// The HTTP method to use for the health check.
-	Method HealthcheckUpdateResponseHTTPConfigMethod `json:"method"`
+	Method HealthcheckNewResponseHTTPConfigMethod `json:"method"`
 	// The endpoint path to health check against.
 	Path string `json:"path"`
 	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
 	// or 443 if type is HTTPS.
-	Port int64                                   `json:"port"`
-	JSON healthcheckUpdateResponseHTTPConfigJSON `json:"-"`
+	Port int64                                `json:"port"`
+	JSON healthcheckNewResponseHTTPConfigJSON `json:"-"`
 }
 
-// healthcheckUpdateResponseHTTPConfigJSON contains the JSON metadata for the
-// struct [HealthcheckUpdateResponseHTTPConfig]
-type healthcheckUpdateResponseHTTPConfigJSON struct {
+// healthcheckNewResponseHTTPConfigJSON contains the JSON metadata for the struct
+// [HealthcheckNewResponseHTTPConfig]
+type healthcheckNewResponseHTTPConfigJSON struct {
 	AllowInsecure   apijson.Field
 	ExpectedBody    apijson.Field
 	ExpectedCodes   apijson.Field
@@ -238,55 +238,245 @@ type healthcheckUpdateResponseHTTPConfigJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The HTTP method to use for the health check.
-type HealthcheckUpdateResponseHTTPConfigMethod string
+type HealthcheckNewResponseHTTPConfigMethod string
 
 const (
-	HealthcheckUpdateResponseHTTPConfigMethodGet  HealthcheckUpdateResponseHTTPConfigMethod = "GET"
-	HealthcheckUpdateResponseHTTPConfigMethodHead HealthcheckUpdateResponseHTTPConfigMethod = "HEAD"
+	HealthcheckNewResponseHTTPConfigMethodGet  HealthcheckNewResponseHTTPConfigMethod = "GET"
+	HealthcheckNewResponseHTTPConfigMethodHead HealthcheckNewResponseHTTPConfigMethod = "HEAD"
 )
 
 // The current status of the origin server according to the health check.
-type HealthcheckUpdateResponseStatus string
+type HealthcheckNewResponseStatus string
 
 const (
-	HealthcheckUpdateResponseStatusUnknown   HealthcheckUpdateResponseStatus = "unknown"
-	HealthcheckUpdateResponseStatusHealthy   HealthcheckUpdateResponseStatus = "healthy"
-	HealthcheckUpdateResponseStatusUnhealthy HealthcheckUpdateResponseStatus = "unhealthy"
-	HealthcheckUpdateResponseStatusSuspended HealthcheckUpdateResponseStatus = "suspended"
+	HealthcheckNewResponseStatusUnknown   HealthcheckNewResponseStatus = "unknown"
+	HealthcheckNewResponseStatusHealthy   HealthcheckNewResponseStatus = "healthy"
+	HealthcheckNewResponseStatusUnhealthy HealthcheckNewResponseStatus = "unhealthy"
+	HealthcheckNewResponseStatusSuspended HealthcheckNewResponseStatus = "suspended"
 )
 
 // Parameters specific to TCP health check.
-type HealthcheckUpdateResponseTcpConfig struct {
+type HealthcheckNewResponseTcpConfig struct {
 	// The TCP connection method to use for the health check.
-	Method HealthcheckUpdateResponseTcpConfigMethod `json:"method"`
+	Method HealthcheckNewResponseTcpConfigMethod `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
-	Port int64                                  `json:"port"`
-	JSON healthcheckUpdateResponseTcpConfigJSON `json:"-"`
+	Port int64                               `json:"port"`
+	JSON healthcheckNewResponseTcpConfigJSON `json:"-"`
 }
 
-// healthcheckUpdateResponseTcpConfigJSON contains the JSON metadata for the struct
-// [HealthcheckUpdateResponseTcpConfig]
-type healthcheckUpdateResponseTcpConfigJSON struct {
+// healthcheckNewResponseTcpConfigJSON contains the JSON metadata for the struct
+// [HealthcheckNewResponseTcpConfig]
+type healthcheckNewResponseTcpConfigJSON struct {
 	Method      apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The TCP connection method to use for the health check.
-type HealthcheckUpdateResponseTcpConfigMethod string
+type HealthcheckNewResponseTcpConfigMethod string
 
 const (
-	HealthcheckUpdateResponseTcpConfigMethodConnectionEstablished HealthcheckUpdateResponseTcpConfigMethod = "connection_established"
+	HealthcheckNewResponseTcpConfigMethodConnectionEstablished HealthcheckNewResponseTcpConfigMethod = "connection_established"
+)
+
+type HealthcheckListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The hostname or IP address of the origin server to run health checks on.
+	Address string `json:"address"`
+	// A list of regions from which to run health checks. Null means Cloudflare will
+	// pick a default region.
+	CheckRegions []HealthcheckListResponseCheckRegion `json:"check_regions,nullable"`
+	// The number of consecutive fails required from a health check before changing the
+	// health to unhealthy.
+	ConsecutiveFails int64 `json:"consecutive_fails"`
+	// The number of consecutive successes required from a health check before changing
+	// the health to healthy.
+	ConsecutiveSuccesses int64     `json:"consecutive_successes"`
+	CreatedOn            time.Time `json:"created_on" format:"date-time"`
+	// A human-readable description of the health check.
+	Description string `json:"description"`
+	// The current failure reason if status is unhealthy.
+	FailureReason string `json:"failure_reason"`
+	// Parameters specific to an HTTP or HTTPS health check.
+	HTTPConfig HealthcheckListResponseHTTPConfig `json:"http_config,nullable"`
+	// The interval between each health check. Shorter intervals may give quicker
+	// notifications if the origin status changes, but will increase load on the origin
+	// as we check from multiple locations.
+	Interval   int64     `json:"interval"`
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// A short name to identify the health check. Only alphanumeric characters, hyphens
+	// and underscores are allowed.
+	Name string `json:"name"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries int64 `json:"retries"`
+	// The current status of the origin server according to the health check.
+	Status HealthcheckListResponseStatus `json:"status"`
+	// If suspended, no health checks are sent to the origin.
+	Suspended bool `json:"suspended"`
+	// Parameters specific to TCP health check.
+	TcpConfig HealthcheckListResponseTcpConfig `json:"tcp_config,nullable"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout int64 `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP', 'HTTPS' and 'TCP'.
+	Type string                      `json:"type"`
+	JSON healthcheckListResponseJSON `json:"-"`
+}
+
+// healthcheckListResponseJSON contains the JSON metadata for the struct
+// [HealthcheckListResponse]
+type healthcheckListResponseJSON struct {
+	ID                   apijson.Field
+	Address              apijson.Field
+	CheckRegions         apijson.Field
+	ConsecutiveFails     apijson.Field
+	ConsecutiveSuccesses apijson.Field
+	CreatedOn            apijson.Field
+	Description          apijson.Field
+	FailureReason        apijson.Field
+	HTTPConfig           apijson.Field
+	Interval             apijson.Field
+	ModifiedOn           apijson.Field
+	Name                 apijson.Field
+	Retries              apijson.Field
+	Status               apijson.Field
+	Suspended            apijson.Field
+	TcpConfig            apijson.Field
+	Timeout              apijson.Field
+	Type                 apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
+// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
+// and ENTERPRISE customers only).
+type HealthcheckListResponseCheckRegion string
+
+const (
+	HealthcheckListResponseCheckRegionWnam       HealthcheckListResponseCheckRegion = "WNAM"
+	HealthcheckListResponseCheckRegionEnam       HealthcheckListResponseCheckRegion = "ENAM"
+	HealthcheckListResponseCheckRegionWeu        HealthcheckListResponseCheckRegion = "WEU"
+	HealthcheckListResponseCheckRegionEeu        HealthcheckListResponseCheckRegion = "EEU"
+	HealthcheckListResponseCheckRegionNsam       HealthcheckListResponseCheckRegion = "NSAM"
+	HealthcheckListResponseCheckRegionSsam       HealthcheckListResponseCheckRegion = "SSAM"
+	HealthcheckListResponseCheckRegionOc         HealthcheckListResponseCheckRegion = "OC"
+	HealthcheckListResponseCheckRegionMe         HealthcheckListResponseCheckRegion = "ME"
+	HealthcheckListResponseCheckRegionNaf        HealthcheckListResponseCheckRegion = "NAF"
+	HealthcheckListResponseCheckRegionSaf        HealthcheckListResponseCheckRegion = "SAF"
+	HealthcheckListResponseCheckRegionIn         HealthcheckListResponseCheckRegion = "IN"
+	HealthcheckListResponseCheckRegionSeas       HealthcheckListResponseCheckRegion = "SEAS"
+	HealthcheckListResponseCheckRegionNeas       HealthcheckListResponseCheckRegion = "NEAS"
+	HealthcheckListResponseCheckRegionAllRegions HealthcheckListResponseCheckRegion = "ALL_REGIONS"
+)
+
+// Parameters specific to an HTTP or HTTPS health check.
+type HealthcheckListResponseHTTPConfig struct {
+	// Do not validate the certificate when the health check uses HTTPS.
+	AllowInsecure bool `json:"allow_insecure"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy.
+	ExpectedBody string `json:"expected_body"`
+	// The expected HTTP response codes (e.g. "200") or code ranges (e.g. "2xx" for all
+	// codes starting with 2) of the health check.
+	ExpectedCodes []string `json:"expected_codes,nullable"`
+	// Follow redirects if the origin returns a 3xx status code.
+	FollowRedirects bool `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden.
+	Header interface{} `json:"header,nullable"`
+	// The HTTP method to use for the health check.
+	Method HealthcheckListResponseHTTPConfigMethod `json:"method"`
+	// The endpoint path to health check against.
+	Path string `json:"path"`
+	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
+	// or 443 if type is HTTPS.
+	Port int64                                 `json:"port"`
+	JSON healthcheckListResponseHTTPConfigJSON `json:"-"`
+}
+
+// healthcheckListResponseHTTPConfigJSON contains the JSON metadata for the struct
+// [HealthcheckListResponseHTTPConfig]
+type healthcheckListResponseHTTPConfigJSON struct {
+	AllowInsecure   apijson.Field
+	ExpectedBody    apijson.Field
+	ExpectedCodes   apijson.Field
+	FollowRedirects apijson.Field
+	Header          apijson.Field
+	Method          apijson.Field
+	Path            apijson.Field
+	Port            apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The HTTP method to use for the health check.
+type HealthcheckListResponseHTTPConfigMethod string
+
+const (
+	HealthcheckListResponseHTTPConfigMethodGet  HealthcheckListResponseHTTPConfigMethod = "GET"
+	HealthcheckListResponseHTTPConfigMethodHead HealthcheckListResponseHTTPConfigMethod = "HEAD"
+)
+
+// The current status of the origin server according to the health check.
+type HealthcheckListResponseStatus string
+
+const (
+	HealthcheckListResponseStatusUnknown   HealthcheckListResponseStatus = "unknown"
+	HealthcheckListResponseStatusHealthy   HealthcheckListResponseStatus = "healthy"
+	HealthcheckListResponseStatusUnhealthy HealthcheckListResponseStatus = "unhealthy"
+	HealthcheckListResponseStatusSuspended HealthcheckListResponseStatus = "suspended"
+)
+
+// Parameters specific to TCP health check.
+type HealthcheckListResponseTcpConfig struct {
+	// The TCP connection method to use for the health check.
+	Method HealthcheckListResponseTcpConfigMethod `json:"method"`
+	// Port number to connect to for the health check. Defaults to 80.
+	Port int64                                `json:"port"`
+	JSON healthcheckListResponseTcpConfigJSON `json:"-"`
+}
+
+// healthcheckListResponseTcpConfigJSON contains the JSON metadata for the struct
+// [HealthcheckListResponseTcpConfig]
+type healthcheckListResponseTcpConfigJSON struct {
+	Method      apijson.Field
+	Port        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The TCP connection method to use for the health check.
+type HealthcheckListResponseTcpConfigMethod string
+
+const (
+	HealthcheckListResponseTcpConfigMethodConnectionEstablished HealthcheckListResponseTcpConfigMethod = "connection_established"
 )
 
 type HealthcheckDeleteResponse struct {
@@ -497,14 +687,14 @@ const (
 	HealthcheckGetResponseTcpConfigMethodConnectionEstablished HealthcheckGetResponseTcpConfigMethod = "connection_established"
 )
 
-type HealthcheckHealthChecksNewHealthCheckResponse struct {
+type HealthcheckReplaceResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// The hostname or IP address of the origin server to run health checks on.
 	Address string `json:"address"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions []HealthcheckHealthChecksNewHealthCheckResponseCheckRegion `json:"check_regions,nullable"`
+	CheckRegions []HealthcheckReplaceResponseCheckRegion `json:"check_regions,nullable"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails int64 `json:"consecutive_fails"`
@@ -517,7 +707,7 @@ type HealthcheckHealthChecksNewHealthCheckResponse struct {
 	// The current failure reason if status is unhealthy.
 	FailureReason string `json:"failure_reason"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig HealthcheckHealthChecksNewHealthCheckResponseHTTPConfig `json:"http_config,nullable"`
+	HTTPConfig HealthcheckReplaceResponseHTTPConfig `json:"http_config,nullable"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -530,22 +720,22 @@ type HealthcheckHealthChecksNewHealthCheckResponse struct {
 	// as unhealthy. Retries are attempted immediately.
 	Retries int64 `json:"retries"`
 	// The current status of the origin server according to the health check.
-	Status HealthcheckHealthChecksNewHealthCheckResponseStatus `json:"status"`
+	Status HealthcheckReplaceResponseStatus `json:"status"`
 	// If suspended, no health checks are sent to the origin.
 	Suspended bool `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig HealthcheckHealthChecksNewHealthCheckResponseTcpConfig `json:"tcp_config,nullable"`
+	TcpConfig HealthcheckReplaceResponseTcpConfig `json:"tcp_config,nullable"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout int64 `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type string                                            `json:"type"`
-	JSON healthcheckHealthChecksNewHealthCheckResponseJSON `json:"-"`
+	Type string                         `json:"type"`
+	JSON healthcheckReplaceResponseJSON `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseJSON contains the JSON metadata for
-// the struct [HealthcheckHealthChecksNewHealthCheckResponse]
-type healthcheckHealthChecksNewHealthCheckResponseJSON struct {
+// healthcheckReplaceResponseJSON contains the JSON metadata for the struct
+// [HealthcheckReplaceResponse]
+type healthcheckReplaceResponseJSON struct {
 	ID                   apijson.Field
 	Address              apijson.Field
 	CheckRegions         apijson.Field
@@ -568,7 +758,7 @@ type healthcheckHealthChecksNewHealthCheckResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -577,27 +767,27 @@ func (r *HealthcheckHealthChecksNewHealthCheckResponse) UnmarshalJSON(data []byt
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type HealthcheckHealthChecksNewHealthCheckResponseCheckRegion string
+type HealthcheckReplaceResponseCheckRegion string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionWnam       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "WNAM"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionEnam       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "ENAM"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionWeu        HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "WEU"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionEeu        HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "EEU"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionNsam       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "NSAM"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionSsam       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "SSAM"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionOc         HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "OC"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionMe         HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "ME"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionNaf        HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "NAF"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionSaf        HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "SAF"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionIn         HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "IN"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionSeas       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "SEAS"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionNeas       HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "NEAS"
-	HealthcheckHealthChecksNewHealthCheckResponseCheckRegionAllRegions HealthcheckHealthChecksNewHealthCheckResponseCheckRegion = "ALL_REGIONS"
+	HealthcheckReplaceResponseCheckRegionWnam       HealthcheckReplaceResponseCheckRegion = "WNAM"
+	HealthcheckReplaceResponseCheckRegionEnam       HealthcheckReplaceResponseCheckRegion = "ENAM"
+	HealthcheckReplaceResponseCheckRegionWeu        HealthcheckReplaceResponseCheckRegion = "WEU"
+	HealthcheckReplaceResponseCheckRegionEeu        HealthcheckReplaceResponseCheckRegion = "EEU"
+	HealthcheckReplaceResponseCheckRegionNsam       HealthcheckReplaceResponseCheckRegion = "NSAM"
+	HealthcheckReplaceResponseCheckRegionSsam       HealthcheckReplaceResponseCheckRegion = "SSAM"
+	HealthcheckReplaceResponseCheckRegionOc         HealthcheckReplaceResponseCheckRegion = "OC"
+	HealthcheckReplaceResponseCheckRegionMe         HealthcheckReplaceResponseCheckRegion = "ME"
+	HealthcheckReplaceResponseCheckRegionNaf        HealthcheckReplaceResponseCheckRegion = "NAF"
+	HealthcheckReplaceResponseCheckRegionSaf        HealthcheckReplaceResponseCheckRegion = "SAF"
+	HealthcheckReplaceResponseCheckRegionIn         HealthcheckReplaceResponseCheckRegion = "IN"
+	HealthcheckReplaceResponseCheckRegionSeas       HealthcheckReplaceResponseCheckRegion = "SEAS"
+	HealthcheckReplaceResponseCheckRegionNeas       HealthcheckReplaceResponseCheckRegion = "NEAS"
+	HealthcheckReplaceResponseCheckRegionAllRegions HealthcheckReplaceResponseCheckRegion = "ALL_REGIONS"
 )
 
 // Parameters specific to an HTTP or HTTPS health check.
-type HealthcheckHealthChecksNewHealthCheckResponseHTTPConfig struct {
+type HealthcheckReplaceResponseHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
 	AllowInsecure bool `json:"allow_insecure"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -612,19 +802,18 @@ type HealthcheckHealthChecksNewHealthCheckResponseHTTPConfig struct {
 	// a Host header by default. The User-Agent header cannot be overridden.
 	Header interface{} `json:"header,nullable"`
 	// The HTTP method to use for the health check.
-	Method HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethod `json:"method"`
+	Method HealthcheckReplaceResponseHTTPConfigMethod `json:"method"`
 	// The endpoint path to health check against.
 	Path string `json:"path"`
 	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
 	// or 443 if type is HTTPS.
-	Port int64                                                       `json:"port"`
-	JSON healthcheckHealthChecksNewHealthCheckResponseHTTPConfigJSON `json:"-"`
+	Port int64                                    `json:"port"`
+	JSON healthcheckReplaceResponseHTTPConfigJSON `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseHTTPConfigJSON contains the JSON
-// metadata for the struct
-// [HealthcheckHealthChecksNewHealthCheckResponseHTTPConfig]
-type healthcheckHealthChecksNewHealthCheckResponseHTTPConfigJSON struct {
+// healthcheckReplaceResponseHTTPConfigJSON contains the JSON metadata for the
+// struct [HealthcheckReplaceResponseHTTPConfig]
+type healthcheckReplaceResponseHTTPConfigJSON struct {
 	AllowInsecure   apijson.Field
 	ExpectedBody    apijson.Field
 	ExpectedCodes   apijson.Field
@@ -637,250 +826,58 @@ type healthcheckHealthChecksNewHealthCheckResponseHTTPConfigJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The HTTP method to use for the health check.
-type HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethod string
+type HealthcheckReplaceResponseHTTPConfigMethod string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethodGet  HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethod = "GET"
-	HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethodHead HealthcheckHealthChecksNewHealthCheckResponseHTTPConfigMethod = "HEAD"
+	HealthcheckReplaceResponseHTTPConfigMethodGet  HealthcheckReplaceResponseHTTPConfigMethod = "GET"
+	HealthcheckReplaceResponseHTTPConfigMethodHead HealthcheckReplaceResponseHTTPConfigMethod = "HEAD"
 )
 
 // The current status of the origin server according to the health check.
-type HealthcheckHealthChecksNewHealthCheckResponseStatus string
+type HealthcheckReplaceResponseStatus string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckResponseStatusUnknown   HealthcheckHealthChecksNewHealthCheckResponseStatus = "unknown"
-	HealthcheckHealthChecksNewHealthCheckResponseStatusHealthy   HealthcheckHealthChecksNewHealthCheckResponseStatus = "healthy"
-	HealthcheckHealthChecksNewHealthCheckResponseStatusUnhealthy HealthcheckHealthChecksNewHealthCheckResponseStatus = "unhealthy"
-	HealthcheckHealthChecksNewHealthCheckResponseStatusSuspended HealthcheckHealthChecksNewHealthCheckResponseStatus = "suspended"
+	HealthcheckReplaceResponseStatusUnknown   HealthcheckReplaceResponseStatus = "unknown"
+	HealthcheckReplaceResponseStatusHealthy   HealthcheckReplaceResponseStatus = "healthy"
+	HealthcheckReplaceResponseStatusUnhealthy HealthcheckReplaceResponseStatus = "unhealthy"
+	HealthcheckReplaceResponseStatusSuspended HealthcheckReplaceResponseStatus = "suspended"
 )
 
 // Parameters specific to TCP health check.
-type HealthcheckHealthChecksNewHealthCheckResponseTcpConfig struct {
+type HealthcheckReplaceResponseTcpConfig struct {
 	// The TCP connection method to use for the health check.
-	Method HealthcheckHealthChecksNewHealthCheckResponseTcpConfigMethod `json:"method"`
+	Method HealthcheckReplaceResponseTcpConfigMethod `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
-	Port int64                                                      `json:"port"`
-	JSON healthcheckHealthChecksNewHealthCheckResponseTcpConfigJSON `json:"-"`
+	Port int64                                   `json:"port"`
+	JSON healthcheckReplaceResponseTcpConfigJSON `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseTcpConfigJSON contains the JSON
-// metadata for the struct [HealthcheckHealthChecksNewHealthCheckResponseTcpConfig]
-type healthcheckHealthChecksNewHealthCheckResponseTcpConfigJSON struct {
+// healthcheckReplaceResponseTcpConfigJSON contains the JSON metadata for the
+// struct [HealthcheckReplaceResponseTcpConfig]
+type healthcheckReplaceResponseTcpConfigJSON struct {
 	Method      apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The TCP connection method to use for the health check.
-type HealthcheckHealthChecksNewHealthCheckResponseTcpConfigMethod string
+type HealthcheckReplaceResponseTcpConfigMethod string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckResponseTcpConfigMethodConnectionEstablished HealthcheckHealthChecksNewHealthCheckResponseTcpConfigMethod = "connection_established"
+	HealthcheckReplaceResponseTcpConfigMethodConnectionEstablished HealthcheckReplaceResponseTcpConfigMethod = "connection_established"
 )
 
-type HealthcheckHealthChecksListHealthChecksResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// The hostname or IP address of the origin server to run health checks on.
-	Address string `json:"address"`
-	// A list of regions from which to run health checks. Null means Cloudflare will
-	// pick a default region.
-	CheckRegions []HealthcheckHealthChecksListHealthChecksResponseCheckRegion `json:"check_regions,nullable"`
-	// The number of consecutive fails required from a health check before changing the
-	// health to unhealthy.
-	ConsecutiveFails int64 `json:"consecutive_fails"`
-	// The number of consecutive successes required from a health check before changing
-	// the health to healthy.
-	ConsecutiveSuccesses int64     `json:"consecutive_successes"`
-	CreatedOn            time.Time `json:"created_on" format:"date-time"`
-	// A human-readable description of the health check.
-	Description string `json:"description"`
-	// The current failure reason if status is unhealthy.
-	FailureReason string `json:"failure_reason"`
-	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig HealthcheckHealthChecksListHealthChecksResponseHTTPConfig `json:"http_config,nullable"`
-	// The interval between each health check. Shorter intervals may give quicker
-	// notifications if the origin status changes, but will increase load on the origin
-	// as we check from multiple locations.
-	Interval   int64     `json:"interval"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// A short name to identify the health check. Only alphanumeric characters, hyphens
-	// and underscores are allowed.
-	Name string `json:"name"`
-	// The number of retries to attempt in case of a timeout before marking the origin
-	// as unhealthy. Retries are attempted immediately.
-	Retries int64 `json:"retries"`
-	// The current status of the origin server according to the health check.
-	Status HealthcheckHealthChecksListHealthChecksResponseStatus `json:"status"`
-	// If suspended, no health checks are sent to the origin.
-	Suspended bool `json:"suspended"`
-	// Parameters specific to TCP health check.
-	TcpConfig HealthcheckHealthChecksListHealthChecksResponseTcpConfig `json:"tcp_config,nullable"`
-	// The timeout (in seconds) before marking the health check as failed.
-	Timeout int64 `json:"timeout"`
-	// The protocol to use for the health check. Currently supported protocols are
-	// 'HTTP', 'HTTPS' and 'TCP'.
-	Type string                                              `json:"type"`
-	JSON healthcheckHealthChecksListHealthChecksResponseJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseJSON contains the JSON metadata
-// for the struct [HealthcheckHealthChecksListHealthChecksResponse]
-type healthcheckHealthChecksListHealthChecksResponseJSON struct {
-	ID                   apijson.Field
-	Address              apijson.Field
-	CheckRegions         apijson.Field
-	ConsecutiveFails     apijson.Field
-	ConsecutiveSuccesses apijson.Field
-	CreatedOn            apijson.Field
-	Description          apijson.Field
-	FailureReason        apijson.Field
-	HTTPConfig           apijson.Field
-	Interval             apijson.Field
-	ModifiedOn           apijson.Field
-	Name                 apijson.Field
-	Retries              apijson.Field
-	Status               apijson.Field
-	Suspended            apijson.Field
-	TcpConfig            apijson.Field
-	Timeout              apijson.Field
-	Type                 apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
-// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
-// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
-// SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
-// and ENTERPRISE customers only).
-type HealthcheckHealthChecksListHealthChecksResponseCheckRegion string
-
-const (
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionWnam       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "WNAM"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionEnam       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "ENAM"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionWeu        HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "WEU"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionEeu        HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "EEU"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionNsam       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "NSAM"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionSsam       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "SSAM"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionOc         HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "OC"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionMe         HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "ME"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionNaf        HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "NAF"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionSaf        HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "SAF"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionIn         HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "IN"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionSeas       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "SEAS"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionNeas       HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "NEAS"
-	HealthcheckHealthChecksListHealthChecksResponseCheckRegionAllRegions HealthcheckHealthChecksListHealthChecksResponseCheckRegion = "ALL_REGIONS"
-)
-
-// Parameters specific to an HTTP or HTTPS health check.
-type HealthcheckHealthChecksListHealthChecksResponseHTTPConfig struct {
-	// Do not validate the certificate when the health check uses HTTPS.
-	AllowInsecure bool `json:"allow_insecure"`
-	// A case-insensitive sub-string to look for in the response body. If this string
-	// is not found, the origin will be marked as unhealthy.
-	ExpectedBody string `json:"expected_body"`
-	// The expected HTTP response codes (e.g. "200") or code ranges (e.g. "2xx" for all
-	// codes starting with 2) of the health check.
-	ExpectedCodes []string `json:"expected_codes,nullable"`
-	// Follow redirects if the origin returns a 3xx status code.
-	FollowRedirects bool `json:"follow_redirects"`
-	// The HTTP request headers to send in the health check. It is recommended you set
-	// a Host header by default. The User-Agent header cannot be overridden.
-	Header interface{} `json:"header,nullable"`
-	// The HTTP method to use for the health check.
-	Method HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethod `json:"method"`
-	// The endpoint path to health check against.
-	Path string `json:"path"`
-	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
-	// or 443 if type is HTTPS.
-	Port int64                                                         `json:"port"`
-	JSON healthcheckHealthChecksListHealthChecksResponseHTTPConfigJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseHTTPConfigJSON contains the JSON
-// metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseHTTPConfig]
-type healthcheckHealthChecksListHealthChecksResponseHTTPConfigJSON struct {
-	AllowInsecure   apijson.Field
-	ExpectedBody    apijson.Field
-	ExpectedCodes   apijson.Field
-	FollowRedirects apijson.Field
-	Header          apijson.Field
-	Method          apijson.Field
-	Path            apijson.Field
-	Port            apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseHTTPConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The HTTP method to use for the health check.
-type HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethod string
-
-const (
-	HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethodGet  HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethod = "GET"
-	HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethodHead HealthcheckHealthChecksListHealthChecksResponseHTTPConfigMethod = "HEAD"
-)
-
-// The current status of the origin server according to the health check.
-type HealthcheckHealthChecksListHealthChecksResponseStatus string
-
-const (
-	HealthcheckHealthChecksListHealthChecksResponseStatusUnknown   HealthcheckHealthChecksListHealthChecksResponseStatus = "unknown"
-	HealthcheckHealthChecksListHealthChecksResponseStatusHealthy   HealthcheckHealthChecksListHealthChecksResponseStatus = "healthy"
-	HealthcheckHealthChecksListHealthChecksResponseStatusUnhealthy HealthcheckHealthChecksListHealthChecksResponseStatus = "unhealthy"
-	HealthcheckHealthChecksListHealthChecksResponseStatusSuspended HealthcheckHealthChecksListHealthChecksResponseStatus = "suspended"
-)
-
-// Parameters specific to TCP health check.
-type HealthcheckHealthChecksListHealthChecksResponseTcpConfig struct {
-	// The TCP connection method to use for the health check.
-	Method HealthcheckHealthChecksListHealthChecksResponseTcpConfigMethod `json:"method"`
-	// Port number to connect to for the health check. Defaults to 80.
-	Port int64                                                        `json:"port"`
-	JSON healthcheckHealthChecksListHealthChecksResponseTcpConfigJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseTcpConfigJSON contains the JSON
-// metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseTcpConfig]
-type healthcheckHealthChecksListHealthChecksResponseTcpConfigJSON struct {
-	Method      apijson.Field
-	Port        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The TCP connection method to use for the health check.
-type HealthcheckHealthChecksListHealthChecksResponseTcpConfigMethod string
-
-const (
-	HealthcheckHealthChecksListHealthChecksResponseTcpConfigMethodConnectionEstablished HealthcheckHealthChecksListHealthChecksResponseTcpConfigMethod = "connection_established"
-)
-
-type HealthcheckUpdateParams struct {
+type HealthcheckNewParams struct {
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -888,7 +885,7 @@ type HealthcheckUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]HealthcheckUpdateParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]HealthcheckNewParamsCheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -898,7 +895,7 @@ type HealthcheckUpdateParams struct {
 	// A human-readable description of the health check.
 	Description param.Field[string] `json:"description"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[HealthcheckUpdateParamsHTTPConfig] `json:"http_config"`
+	HTTPConfig param.Field[HealthcheckNewParamsHTTPConfig] `json:"http_config"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -909,7 +906,7 @@ type HealthcheckUpdateParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[HealthcheckUpdateParamsTcpConfig] `json:"tcp_config"`
+	TcpConfig param.Field[HealthcheckNewParamsTcpConfig] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -917,7 +914,7 @@ type HealthcheckUpdateParams struct {
 	Type param.Field[string] `json:"type"`
 }
 
-func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -926,27 +923,27 @@ func (r HealthcheckUpdateParams) MarshalJSON() (data []byte, err error) {
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type HealthcheckUpdateParamsCheckRegion string
+type HealthcheckNewParamsCheckRegion string
 
 const (
-	HealthcheckUpdateParamsCheckRegionWnam       HealthcheckUpdateParamsCheckRegion = "WNAM"
-	HealthcheckUpdateParamsCheckRegionEnam       HealthcheckUpdateParamsCheckRegion = "ENAM"
-	HealthcheckUpdateParamsCheckRegionWeu        HealthcheckUpdateParamsCheckRegion = "WEU"
-	HealthcheckUpdateParamsCheckRegionEeu        HealthcheckUpdateParamsCheckRegion = "EEU"
-	HealthcheckUpdateParamsCheckRegionNsam       HealthcheckUpdateParamsCheckRegion = "NSAM"
-	HealthcheckUpdateParamsCheckRegionSsam       HealthcheckUpdateParamsCheckRegion = "SSAM"
-	HealthcheckUpdateParamsCheckRegionOc         HealthcheckUpdateParamsCheckRegion = "OC"
-	HealthcheckUpdateParamsCheckRegionMe         HealthcheckUpdateParamsCheckRegion = "ME"
-	HealthcheckUpdateParamsCheckRegionNaf        HealthcheckUpdateParamsCheckRegion = "NAF"
-	HealthcheckUpdateParamsCheckRegionSaf        HealthcheckUpdateParamsCheckRegion = "SAF"
-	HealthcheckUpdateParamsCheckRegionIn         HealthcheckUpdateParamsCheckRegion = "IN"
-	HealthcheckUpdateParamsCheckRegionSeas       HealthcheckUpdateParamsCheckRegion = "SEAS"
-	HealthcheckUpdateParamsCheckRegionNeas       HealthcheckUpdateParamsCheckRegion = "NEAS"
-	HealthcheckUpdateParamsCheckRegionAllRegions HealthcheckUpdateParamsCheckRegion = "ALL_REGIONS"
+	HealthcheckNewParamsCheckRegionWnam       HealthcheckNewParamsCheckRegion = "WNAM"
+	HealthcheckNewParamsCheckRegionEnam       HealthcheckNewParamsCheckRegion = "ENAM"
+	HealthcheckNewParamsCheckRegionWeu        HealthcheckNewParamsCheckRegion = "WEU"
+	HealthcheckNewParamsCheckRegionEeu        HealthcheckNewParamsCheckRegion = "EEU"
+	HealthcheckNewParamsCheckRegionNsam       HealthcheckNewParamsCheckRegion = "NSAM"
+	HealthcheckNewParamsCheckRegionSsam       HealthcheckNewParamsCheckRegion = "SSAM"
+	HealthcheckNewParamsCheckRegionOc         HealthcheckNewParamsCheckRegion = "OC"
+	HealthcheckNewParamsCheckRegionMe         HealthcheckNewParamsCheckRegion = "ME"
+	HealthcheckNewParamsCheckRegionNaf        HealthcheckNewParamsCheckRegion = "NAF"
+	HealthcheckNewParamsCheckRegionSaf        HealthcheckNewParamsCheckRegion = "SAF"
+	HealthcheckNewParamsCheckRegionIn         HealthcheckNewParamsCheckRegion = "IN"
+	HealthcheckNewParamsCheckRegionSeas       HealthcheckNewParamsCheckRegion = "SEAS"
+	HealthcheckNewParamsCheckRegionNeas       HealthcheckNewParamsCheckRegion = "NEAS"
+	HealthcheckNewParamsCheckRegionAllRegions HealthcheckNewParamsCheckRegion = "ALL_REGIONS"
 )
 
 // Parameters specific to an HTTP or HTTPS health check.
-type HealthcheckUpdateParamsHTTPConfig struct {
+type HealthcheckNewParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -961,7 +958,7 @@ type HealthcheckUpdateParamsHTTPConfig struct {
 	// a Host header by default. The User-Agent header cannot be overridden.
 	Header param.Field[interface{}] `json:"header"`
 	// The HTTP method to use for the health check.
-	Method param.Field[HealthcheckUpdateParamsHTTPConfigMethod] `json:"method"`
+	Method param.Field[HealthcheckNewParamsHTTPConfigMethod] `json:"method"`
 	// The endpoint path to health check against.
 	Path param.Field[string] `json:"path"`
 	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
@@ -969,49 +966,49 @@ type HealthcheckUpdateParamsHTTPConfig struct {
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r HealthcheckUpdateParamsHTTPConfig) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckNewParamsHTTPConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The HTTP method to use for the health check.
-type HealthcheckUpdateParamsHTTPConfigMethod string
+type HealthcheckNewParamsHTTPConfigMethod string
 
 const (
-	HealthcheckUpdateParamsHTTPConfigMethodGet  HealthcheckUpdateParamsHTTPConfigMethod = "GET"
-	HealthcheckUpdateParamsHTTPConfigMethodHead HealthcheckUpdateParamsHTTPConfigMethod = "HEAD"
+	HealthcheckNewParamsHTTPConfigMethodGet  HealthcheckNewParamsHTTPConfigMethod = "GET"
+	HealthcheckNewParamsHTTPConfigMethodHead HealthcheckNewParamsHTTPConfigMethod = "HEAD"
 )
 
 // Parameters specific to TCP health check.
-type HealthcheckUpdateParamsTcpConfig struct {
+type HealthcheckNewParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
-	Method param.Field[HealthcheckUpdateParamsTcpConfigMethod] `json:"method"`
+	Method param.Field[HealthcheckNewParamsTcpConfigMethod] `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r HealthcheckUpdateParamsTcpConfig) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckNewParamsTcpConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The TCP connection method to use for the health check.
-type HealthcheckUpdateParamsTcpConfigMethod string
+type HealthcheckNewParamsTcpConfigMethod string
 
 const (
-	HealthcheckUpdateParamsTcpConfigMethodConnectionEstablished HealthcheckUpdateParamsTcpConfigMethod = "connection_established"
+	HealthcheckNewParamsTcpConfigMethodConnectionEstablished HealthcheckNewParamsTcpConfigMethod = "connection_established"
 )
 
-type HealthcheckUpdateResponseEnvelope struct {
-	Errors   []HealthcheckUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthcheckUpdateResponse                   `json:"result,required"`
+type HealthcheckNewResponseEnvelope struct {
+	Errors   []HealthcheckNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HealthcheckNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   HealthcheckNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HealthcheckUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    healthcheckUpdateResponseEnvelopeJSON    `json:"-"`
+	Success HealthcheckNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    healthcheckNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// healthcheckUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [HealthcheckUpdateResponseEnvelope]
-type healthcheckUpdateResponseEnvelopeJSON struct {
+// healthcheckNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [HealthcheckNewResponseEnvelope]
+type healthcheckNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1020,54 +1017,152 @@ type healthcheckUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthcheckUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    healthcheckUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type HealthcheckNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    healthcheckNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// healthcheckUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [HealthcheckUpdateResponseEnvelopeErrors]
-type healthcheckUpdateResponseEnvelopeErrorsJSON struct {
+// healthcheckNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HealthcheckNewResponseEnvelopeErrors]
+type healthcheckNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthcheckUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    healthcheckUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type HealthcheckNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    healthcheckNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// healthcheckUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [HealthcheckUpdateResponseEnvelopeMessages]
-type healthcheckUpdateResponseEnvelopeMessagesJSON struct {
+// healthcheckNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [HealthcheckNewResponseEnvelopeMessages]
+type healthcheckNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type HealthcheckUpdateResponseEnvelopeSuccess bool
+type HealthcheckNewResponseEnvelopeSuccess bool
 
 const (
-	HealthcheckUpdateResponseEnvelopeSuccessTrue HealthcheckUpdateResponseEnvelopeSuccess = true
+	HealthcheckNewResponseEnvelopeSuccessTrue HealthcheckNewResponseEnvelopeSuccess = true
 )
+
+type HealthcheckListResponseEnvelope struct {
+	Errors   []HealthcheckListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HealthcheckListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []HealthcheckListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    HealthcheckListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo HealthcheckListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       healthcheckListResponseEnvelopeJSON       `json:"-"`
+}
+
+// healthcheckListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [HealthcheckListResponseEnvelope]
+type healthcheckListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HealthcheckListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    healthcheckListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// healthcheckListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HealthcheckListResponseEnvelopeErrors]
+type healthcheckListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HealthcheckListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    healthcheckListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// healthcheckListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [HealthcheckListResponseEnvelopeMessages]
+type healthcheckListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HealthcheckListResponseEnvelopeSuccess bool
+
+const (
+	HealthcheckListResponseEnvelopeSuccessTrue HealthcheckListResponseEnvelopeSuccess = true
+)
+
+type HealthcheckListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       healthcheckListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// healthcheckListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [HealthcheckListResponseEnvelopeResultInfo]
+type healthcheckListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HealthcheckListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type HealthcheckDeleteResponseEnvelope struct {
 	Errors   []HealthcheckDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1207,7 +1302,7 @@ const (
 	HealthcheckGetResponseEnvelopeSuccessTrue HealthcheckGetResponseEnvelopeSuccess = true
 )
 
-type HealthcheckHealthChecksNewHealthCheckParams struct {
+type HealthcheckReplaceParams struct {
 	// The hostname or IP address of the origin server to run health checks on.
 	Address param.Field[string] `json:"address,required"`
 	// A short name to identify the health check. Only alphanumeric characters, hyphens
@@ -1215,7 +1310,7 @@ type HealthcheckHealthChecksNewHealthCheckParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// A list of regions from which to run health checks. Null means Cloudflare will
 	// pick a default region.
-	CheckRegions param.Field[[]HealthcheckHealthChecksNewHealthCheckParamsCheckRegion] `json:"check_regions"`
+	CheckRegions param.Field[[]HealthcheckReplaceParamsCheckRegion] `json:"check_regions"`
 	// The number of consecutive fails required from a health check before changing the
 	// health to unhealthy.
 	ConsecutiveFails param.Field[int64] `json:"consecutive_fails"`
@@ -1225,7 +1320,7 @@ type HealthcheckHealthChecksNewHealthCheckParams struct {
 	// A human-readable description of the health check.
 	Description param.Field[string] `json:"description"`
 	// Parameters specific to an HTTP or HTTPS health check.
-	HTTPConfig param.Field[HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig] `json:"http_config"`
+	HTTPConfig param.Field[HealthcheckReplaceParamsHTTPConfig] `json:"http_config"`
 	// The interval between each health check. Shorter intervals may give quicker
 	// notifications if the origin status changes, but will increase load on the origin
 	// as we check from multiple locations.
@@ -1236,7 +1331,7 @@ type HealthcheckHealthChecksNewHealthCheckParams struct {
 	// If suspended, no health checks are sent to the origin.
 	Suspended param.Field[bool] `json:"suspended"`
 	// Parameters specific to TCP health check.
-	TcpConfig param.Field[HealthcheckHealthChecksNewHealthCheckParamsTcpConfig] `json:"tcp_config"`
+	TcpConfig param.Field[HealthcheckReplaceParamsTcpConfig] `json:"tcp_config"`
 	// The timeout (in seconds) before marking the health check as failed.
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
@@ -1244,7 +1339,7 @@ type HealthcheckHealthChecksNewHealthCheckParams struct {
 	Type param.Field[string] `json:"type"`
 }
 
-func (r HealthcheckHealthChecksNewHealthCheckParams) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1253,27 +1348,27 @@ func (r HealthcheckHealthChecksNewHealthCheckParams) MarshalJSON() (data []byte,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
 // SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all regions (BUSINESS
 // and ENTERPRISE customers only).
-type HealthcheckHealthChecksNewHealthCheckParamsCheckRegion string
+type HealthcheckReplaceParamsCheckRegion string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionWnam       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "WNAM"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionEnam       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "ENAM"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionWeu        HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "WEU"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionEeu        HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "EEU"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionNsam       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "NSAM"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionSsam       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "SSAM"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionOc         HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "OC"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionMe         HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "ME"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionNaf        HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "NAF"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionSaf        HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "SAF"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionIn         HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "IN"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionSeas       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "SEAS"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionNeas       HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "NEAS"
-	HealthcheckHealthChecksNewHealthCheckParamsCheckRegionAllRegions HealthcheckHealthChecksNewHealthCheckParamsCheckRegion = "ALL_REGIONS"
+	HealthcheckReplaceParamsCheckRegionWnam       HealthcheckReplaceParamsCheckRegion = "WNAM"
+	HealthcheckReplaceParamsCheckRegionEnam       HealthcheckReplaceParamsCheckRegion = "ENAM"
+	HealthcheckReplaceParamsCheckRegionWeu        HealthcheckReplaceParamsCheckRegion = "WEU"
+	HealthcheckReplaceParamsCheckRegionEeu        HealthcheckReplaceParamsCheckRegion = "EEU"
+	HealthcheckReplaceParamsCheckRegionNsam       HealthcheckReplaceParamsCheckRegion = "NSAM"
+	HealthcheckReplaceParamsCheckRegionSsam       HealthcheckReplaceParamsCheckRegion = "SSAM"
+	HealthcheckReplaceParamsCheckRegionOc         HealthcheckReplaceParamsCheckRegion = "OC"
+	HealthcheckReplaceParamsCheckRegionMe         HealthcheckReplaceParamsCheckRegion = "ME"
+	HealthcheckReplaceParamsCheckRegionNaf        HealthcheckReplaceParamsCheckRegion = "NAF"
+	HealthcheckReplaceParamsCheckRegionSaf        HealthcheckReplaceParamsCheckRegion = "SAF"
+	HealthcheckReplaceParamsCheckRegionIn         HealthcheckReplaceParamsCheckRegion = "IN"
+	HealthcheckReplaceParamsCheckRegionSeas       HealthcheckReplaceParamsCheckRegion = "SEAS"
+	HealthcheckReplaceParamsCheckRegionNeas       HealthcheckReplaceParamsCheckRegion = "NEAS"
+	HealthcheckReplaceParamsCheckRegionAllRegions HealthcheckReplaceParamsCheckRegion = "ALL_REGIONS"
 )
 
 // Parameters specific to an HTTP or HTTPS health check.
-type HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig struct {
+type HealthcheckReplaceParamsHTTPConfig struct {
 	// Do not validate the certificate when the health check uses HTTPS.
 	AllowInsecure param.Field[bool] `json:"allow_insecure"`
 	// A case-insensitive sub-string to look for in the response body. If this string
@@ -1288,7 +1383,7 @@ type HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig struct {
 	// a Host header by default. The User-Agent header cannot be overridden.
 	Header param.Field[interface{}] `json:"header"`
 	// The HTTP method to use for the health check.
-	Method param.Field[HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethod] `json:"method"`
+	Method param.Field[HealthcheckReplaceParamsHTTPConfigMethod] `json:"method"`
 	// The endpoint path to health check against.
 	Path param.Field[string] `json:"path"`
 	// Port number to connect to for the health check. Defaults to 80 if type is HTTP
@@ -1296,49 +1391,49 @@ type HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig struct {
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckReplaceParamsHTTPConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The HTTP method to use for the health check.
-type HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethod string
+type HealthcheckReplaceParamsHTTPConfigMethod string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethodGet  HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethod = "GET"
-	HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethodHead HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethod = "HEAD"
+	HealthcheckReplaceParamsHTTPConfigMethodGet  HealthcheckReplaceParamsHTTPConfigMethod = "GET"
+	HealthcheckReplaceParamsHTTPConfigMethodHead HealthcheckReplaceParamsHTTPConfigMethod = "HEAD"
 )
 
 // Parameters specific to TCP health check.
-type HealthcheckHealthChecksNewHealthCheckParamsTcpConfig struct {
+type HealthcheckReplaceParamsTcpConfig struct {
 	// The TCP connection method to use for the health check.
-	Method param.Field[HealthcheckHealthChecksNewHealthCheckParamsTcpConfigMethod] `json:"method"`
+	Method param.Field[HealthcheckReplaceParamsTcpConfigMethod] `json:"method"`
 	// Port number to connect to for the health check. Defaults to 80.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r HealthcheckHealthChecksNewHealthCheckParamsTcpConfig) MarshalJSON() (data []byte, err error) {
+func (r HealthcheckReplaceParamsTcpConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The TCP connection method to use for the health check.
-type HealthcheckHealthChecksNewHealthCheckParamsTcpConfigMethod string
+type HealthcheckReplaceParamsTcpConfigMethod string
 
 const (
-	HealthcheckHealthChecksNewHealthCheckParamsTcpConfigMethodConnectionEstablished HealthcheckHealthChecksNewHealthCheckParamsTcpConfigMethod = "connection_established"
+	HealthcheckReplaceParamsTcpConfigMethodConnectionEstablished HealthcheckReplaceParamsTcpConfigMethod = "connection_established"
 )
 
-type HealthcheckHealthChecksNewHealthCheckResponseEnvelope struct {
-	Errors   []HealthcheckHealthChecksNewHealthCheckResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckHealthChecksNewHealthCheckResponseEnvelopeMessages `json:"messages,required"`
-	Result   HealthcheckHealthChecksNewHealthCheckResponse                   `json:"result,required"`
+type HealthcheckReplaceResponseEnvelope struct {
+	Errors   []HealthcheckReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HealthcheckReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   HealthcheckReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success HealthcheckHealthChecksNewHealthCheckResponseEnvelopeSuccess `json:"success,required"`
-	JSON    healthcheckHealthChecksNewHealthCheckResponseEnvelopeJSON    `json:"-"`
+	Success HealthcheckReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    healthcheckReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseEnvelopeJSON contains the JSON
-// metadata for the struct [HealthcheckHealthChecksNewHealthCheckResponseEnvelope]
-type healthcheckHealthChecksNewHealthCheckResponseEnvelopeJSON struct {
+// healthcheckReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [HealthcheckReplaceResponseEnvelope]
+type healthcheckReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1347,155 +1442,51 @@ type healthcheckHealthChecksNewHealthCheckResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthcheckHealthChecksNewHealthCheckResponseEnvelopeErrors struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    healthcheckHealthChecksNewHealthCheckResponseEnvelopeErrorsJSON `json:"-"`
+type HealthcheckReplaceResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    healthcheckReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [HealthcheckHealthChecksNewHealthCheckResponseEnvelopeErrors]
-type healthcheckHealthChecksNewHealthCheckResponseEnvelopeErrorsJSON struct {
+// healthcheckReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [HealthcheckReplaceResponseEnvelopeErrors]
+type healthcheckReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type HealthcheckHealthChecksNewHealthCheckResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    healthcheckHealthChecksNewHealthCheckResponseEnvelopeMessagesJSON `json:"-"`
+type HealthcheckReplaceResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    healthcheckReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// healthcheckHealthChecksNewHealthCheckResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [HealthcheckHealthChecksNewHealthCheckResponseEnvelopeMessages]
-type healthcheckHealthChecksNewHealthCheckResponseEnvelopeMessagesJSON struct {
+// healthcheckReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [HealthcheckReplaceResponseEnvelopeMessages]
+type healthcheckReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HealthcheckHealthChecksNewHealthCheckResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *HealthcheckReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type HealthcheckHealthChecksNewHealthCheckResponseEnvelopeSuccess bool
+type HealthcheckReplaceResponseEnvelopeSuccess bool
 
 const (
-	HealthcheckHealthChecksNewHealthCheckResponseEnvelopeSuccessTrue HealthcheckHealthChecksNewHealthCheckResponseEnvelopeSuccess = true
+	HealthcheckReplaceResponseEnvelopeSuccessTrue HealthcheckReplaceResponseEnvelopeSuccess = true
 )
-
-type HealthcheckHealthChecksListHealthChecksResponseEnvelope struct {
-	Errors   []HealthcheckHealthChecksListHealthChecksResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HealthcheckHealthChecksListHealthChecksResponseEnvelopeMessages `json:"messages,required"`
-	Result   []HealthcheckHealthChecksListHealthChecksResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    HealthcheckHealthChecksListHealthChecksResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo HealthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       healthcheckHealthChecksListHealthChecksResponseEnvelopeJSON       `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseEnvelope]
-type healthcheckHealthChecksListHealthChecksResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HealthcheckHealthChecksListHealthChecksResponseEnvelopeErrors struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    healthcheckHealthChecksListHealthChecksResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseEnvelopeErrors]
-type healthcheckHealthChecksListHealthChecksResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type HealthcheckHealthChecksListHealthChecksResponseEnvelopeMessages struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    healthcheckHealthChecksListHealthChecksResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseEnvelopeMessages]
-type healthcheckHealthChecksListHealthChecksResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type HealthcheckHealthChecksListHealthChecksResponseEnvelopeSuccess bool
-
-const (
-	HealthcheckHealthChecksListHealthChecksResponseEnvelopeSuccessTrue HealthcheckHealthChecksListHealthChecksResponseEnvelopeSuccess = true
-)
-
-type HealthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                               `json:"total_count"`
-	JSON       healthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// healthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [HealthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfo]
-type healthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HealthcheckHealthChecksListHealthChecksResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

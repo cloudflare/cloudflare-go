@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
+func TestHealthcheckNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,18 +29,17 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Healthchecks.Update(
+	_, err := client.Healthchecks.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.HealthcheckUpdateParams{
+		cloudflare.HealthcheckNewParams{
 			Address:              cloudflare.F("www.example.com"),
 			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]cloudflare.HealthcheckUpdateParamsCheckRegion{cloudflare.HealthcheckUpdateParamsCheckRegionWeu, cloudflare.HealthcheckUpdateParamsCheckRegionEnam}),
+			CheckRegions:         cloudflare.F([]cloudflare.HealthcheckNewParamsCheckRegion{cloudflare.HealthcheckNewParamsCheckRegionWeu, cloudflare.HealthcheckNewParamsCheckRegionEnam}),
 			ConsecutiveFails:     cloudflare.F(int64(0)),
 			ConsecutiveSuccesses: cloudflare.F(int64(0)),
 			Description:          cloudflare.F("Health check for www.example.com"),
-			HTTPConfig: cloudflare.F(cloudflare.HealthcheckUpdateParamsHTTPConfig{
+			HTTPConfig: cloudflare.F(cloudflare.HealthcheckNewParamsHTTPConfig{
 				AllowInsecure:   cloudflare.F(true),
 				ExpectedBody:    cloudflare.F("success"),
 				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
@@ -53,21 +52,47 @@ func TestHealthcheckUpdateWithOptionalParams(t *testing.T) {
 						"0": "abc123",
 					},
 				}),
-				Method: cloudflare.F(cloudflare.HealthcheckUpdateParamsHTTPConfigMethodGet),
+				Method: cloudflare.F(cloudflare.HealthcheckNewParamsHTTPConfigMethodGet),
 				Path:   cloudflare.F("/health"),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Interval:  cloudflare.F(int64(0)),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(cloudflare.HealthcheckUpdateParamsTcpConfig{
-				Method: cloudflare.F(cloudflare.HealthcheckUpdateParamsTcpConfigMethodConnectionEstablished),
+			TcpConfig: cloudflare.F(cloudflare.HealthcheckNewParamsTcpConfig{
+				Method: cloudflare.F(cloudflare.HealthcheckNewParamsTcpConfigMethodConnectionEstablished),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Timeout: cloudflare.F(int64(0)),
 			Type:    cloudflare.F("HTTPS"),
 		},
 	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestHealthcheckList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Healthchecks.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -137,7 +162,7 @@ func TestHealthcheckGet(t *testing.T) {
 	}
 }
 
-func TestHealthcheckHealthChecksNewHealthCheckWithOptionalParams(t *testing.T) {
+func TestHealthcheckReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -153,17 +178,18 @@ func TestHealthcheckHealthChecksNewHealthCheckWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Healthchecks.HealthChecksNewHealthCheck(
+	_, err := client.Healthchecks.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.HealthcheckHealthChecksNewHealthCheckParams{
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.HealthcheckReplaceParams{
 			Address:              cloudflare.F("www.example.com"),
 			Name:                 cloudflare.F("server-1"),
-			CheckRegions:         cloudflare.F([]cloudflare.HealthcheckHealthChecksNewHealthCheckParamsCheckRegion{cloudflare.HealthcheckHealthChecksNewHealthCheckParamsCheckRegionWeu, cloudflare.HealthcheckHealthChecksNewHealthCheckParamsCheckRegionEnam}),
+			CheckRegions:         cloudflare.F([]cloudflare.HealthcheckReplaceParamsCheckRegion{cloudflare.HealthcheckReplaceParamsCheckRegionWeu, cloudflare.HealthcheckReplaceParamsCheckRegionEnam}),
 			ConsecutiveFails:     cloudflare.F(int64(0)),
 			ConsecutiveSuccesses: cloudflare.F(int64(0)),
 			Description:          cloudflare.F("Health check for www.example.com"),
-			HTTPConfig: cloudflare.F(cloudflare.HealthcheckHealthChecksNewHealthCheckParamsHTTPConfig{
+			HTTPConfig: cloudflare.F(cloudflare.HealthcheckReplaceParamsHTTPConfig{
 				AllowInsecure:   cloudflare.F(true),
 				ExpectedBody:    cloudflare.F("success"),
 				ExpectedCodes:   cloudflare.F([]string{"2xx", "302"}),
@@ -176,47 +202,21 @@ func TestHealthcheckHealthChecksNewHealthCheckWithOptionalParams(t *testing.T) {
 						"0": "abc123",
 					},
 				}),
-				Method: cloudflare.F(cloudflare.HealthcheckHealthChecksNewHealthCheckParamsHTTPConfigMethodGet),
+				Method: cloudflare.F(cloudflare.HealthcheckReplaceParamsHTTPConfigMethodGet),
 				Path:   cloudflare.F("/health"),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Interval:  cloudflare.F(int64(0)),
 			Retries:   cloudflare.F(int64(0)),
 			Suspended: cloudflare.F(true),
-			TcpConfig: cloudflare.F(cloudflare.HealthcheckHealthChecksNewHealthCheckParamsTcpConfig{
-				Method: cloudflare.F(cloudflare.HealthcheckHealthChecksNewHealthCheckParamsTcpConfigMethodConnectionEstablished),
+			TcpConfig: cloudflare.F(cloudflare.HealthcheckReplaceParamsTcpConfig{
+				Method: cloudflare.F(cloudflare.HealthcheckReplaceParamsTcpConfigMethodConnectionEstablished),
 				Port:   cloudflare.F(int64(0)),
 			}),
 			Timeout: cloudflare.F(int64(0)),
 			Type:    cloudflare.F("HTTPS"),
 		},
 	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestHealthcheckHealthChecksListHealthChecks(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Healthchecks.HealthChecksListHealthChecks(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -31,9 +31,9 @@ func NewUserLoadBalancerPoolReferenceService(opts ...option.RequestOption) (r *U
 }
 
 // Get the list of resources that reference the provided pool.
-func (r *UserLoadBalancerPoolReferenceService) LoadBalancerPoolsListPoolReferences(ctx context.Context, poolID string, opts ...option.RequestOption) (res *[]UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponse, err error) {
+func (r *UserLoadBalancerPoolReferenceService) List(ctx context.Context, poolID string, opts ...option.RequestOption) (res *[]UserLoadBalancerPoolReferenceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelope
+	var env UserLoadBalancerPoolReferenceListResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/references", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -43,18 +43,17 @@ func (r *UserLoadBalancerPoolReferenceService) LoadBalancerPoolsListPoolReferenc
 	return
 }
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponse struct {
-	ReferenceType UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                                                                `json:"resource_id"`
-	ResourceName  string                                                                                `json:"resource_name"`
-	ResourceType  string                                                                                `json:"resource_type"`
-	JSON          userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseJSON          `json:"-"`
+type UserLoadBalancerPoolReferenceListResponse struct {
+	ReferenceType UserLoadBalancerPoolReferenceListResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                                 `json:"resource_id"`
+	ResourceName  string                                                 `json:"resource_name"`
+	ResourceType  string                                                 `json:"resource_type"`
+	JSON          userLoadBalancerPoolReferenceListResponseJSON          `json:"-"`
 }
 
-// userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponse]
-type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseJSON struct {
+// userLoadBalancerPoolReferenceListResponseJSON contains the JSON metadata for the
+// struct [UserLoadBalancerPoolReferenceListResponse]
+type userLoadBalancerPoolReferenceListResponseJSON struct {
 	ReferenceType apijson.Field
 	ResourceID    apijson.Field
 	ResourceName  apijson.Field
@@ -63,33 +62,32 @@ type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseJSO
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolReferenceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceType string
+type UserLoadBalancerPoolReferenceListResponseReferenceType string
 
 const (
-	UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceTypeStar     UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceType = "*"
-	UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceTypeReferral UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceType = "referral"
-	UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceTypeReferrer UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseReferenceType = "referrer"
+	UserLoadBalancerPoolReferenceListResponseReferenceTypeStar     UserLoadBalancerPoolReferenceListResponseReferenceType = "*"
+	UserLoadBalancerPoolReferenceListResponseReferenceTypeReferral UserLoadBalancerPoolReferenceListResponseReferenceType = "referral"
+	UserLoadBalancerPoolReferenceListResponseReferenceTypeReferrer UserLoadBalancerPoolReferenceListResponseReferenceType = "referrer"
 )
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelope struct {
-	Errors   []UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages `json:"messages,required"`
+type UserLoadBalancerPoolReferenceListResponseEnvelope struct {
+	Errors   []UserLoadBalancerPoolReferenceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancerPoolReferenceListResponseEnvelopeMessages `json:"messages,required"`
 	// List of resources that reference a given pool.
-	Result []UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponse `json:"result,required,nullable"`
+	Result []UserLoadBalancerPoolReferenceListResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON       `json:"-"`
+	Success    UserLoadBalancerPoolReferenceListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo UserLoadBalancerPoolReferenceListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       userLoadBalancerPoolReferenceListResponseEnvelopeJSON       `json:"-"`
 }
 
-// userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelope]
-type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeJSON struct {
+// userLoadBalancerPoolReferenceListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolReferenceListResponseEnvelope]
+type userLoadBalancerPoolReferenceListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -99,58 +97,58 @@ type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnv
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolReferenceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors struct {
-	Code    int64                                                                                      `json:"code,required"`
-	Message string                                                                                     `json:"message,required"`
-	JSON    userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrorsJSON `json:"-"`
+type UserLoadBalancerPoolReferenceListResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    userLoadBalancerPoolReferenceListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors]
-type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrorsJSON struct {
+// userLoadBalancerPoolReferenceListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerPoolReferenceListResponseEnvelopeErrors]
+type userLoadBalancerPoolReferenceListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolReferenceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages struct {
-	Code    int64                                                                                        `json:"code,required"`
-	Message string                                                                                       `json:"message,required"`
-	JSON    userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessagesJSON `json:"-"`
+type UserLoadBalancerPoolReferenceListResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    userLoadBalancerPoolReferenceListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages]
-type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessagesJSON struct {
+// userLoadBalancerPoolReferenceListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerPoolReferenceListResponseEnvelopeMessages]
+type userLoadBalancerPoolReferenceListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolReferenceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess bool
+type UserLoadBalancerPoolReferenceListResponseEnvelopeSuccess bool
 
 const (
-	UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccessTrue UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeSuccess = true
+	UserLoadBalancerPoolReferenceListResponseEnvelopeSuccessTrue UserLoadBalancerPoolReferenceListResponseEnvelopeSuccess = true
 )
 
-type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo struct {
+type UserLoadBalancerPoolReferenceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -158,14 +156,14 @@ type UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnv
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                        `json:"total_count"`
-	JSON       userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                         `json:"total_count"`
+	JSON       userLoadBalancerPoolReferenceListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo]
-type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfoJSON struct {
+// userLoadBalancerPoolReferenceListResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [UserLoadBalancerPoolReferenceListResponseEnvelopeResultInfo]
+type userLoadBalancerPoolReferenceListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -174,6 +172,6 @@ type userLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnv
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolReferenceLoadBalancerPoolsListPoolReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolReferenceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

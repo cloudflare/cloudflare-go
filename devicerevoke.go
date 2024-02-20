@@ -35,9 +35,9 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 }
 
 // Revokes a list of devices.
-func (r *DeviceRevokeService) DevicesRevokeDevices(ctx context.Context, identifier interface{}, body DeviceRevokeDevicesRevokeDevicesParams, opts ...option.RequestOption) (res *DeviceRevokeDevicesRevokeDevicesResponse, err error) {
+func (r *DeviceRevokeService) New(ctx context.Context, identifier interface{}, body DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DeviceRevokeDevicesRevokeDevicesResponseEnvelope
+	var env DeviceRevokeNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/revoke", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -47,15 +47,14 @@ func (r *DeviceRevokeService) DevicesRevokeDevices(ctx context.Context, identifi
 	return
 }
 
-// Union satisfied by [DeviceRevokeDevicesRevokeDevicesResponseUnknown] or
-// [shared.UnionString].
-type DeviceRevokeDevicesRevokeDevicesResponse interface {
-	ImplementsDeviceRevokeDevicesRevokeDevicesResponse()
+// Union satisfied by [DeviceRevokeNewResponseUnknown] or [shared.UnionString].
+type DeviceRevokeNewResponse interface {
+	ImplementsDeviceRevokeNewResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DeviceRevokeDevicesRevokeDevicesResponse)(nil)).Elem(),
+		reflect.TypeOf((*DeviceRevokeNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -64,27 +63,27 @@ func init() {
 	)
 }
 
-type DeviceRevokeDevicesRevokeDevicesParams struct {
+type DeviceRevokeNewParams struct {
 	// A list of device ids to revoke.
 	Body param.Field[[]string] `json:"body,required"`
 }
 
-func (r DeviceRevokeDevicesRevokeDevicesParams) MarshalJSON() (data []byte, err error) {
+func (r DeviceRevokeNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type DeviceRevokeDevicesRevokeDevicesResponseEnvelope struct {
-	Errors   []DeviceRevokeDevicesRevokeDevicesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceRevokeDevicesRevokeDevicesResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceRevokeDevicesRevokeDevicesResponse                   `json:"result,required,nullable"`
+type DeviceRevokeNewResponseEnvelope struct {
+	Errors   []DeviceRevokeNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceRevokeNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceRevokeNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceRevokeDevicesRevokeDevicesResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceRevokeDevicesRevokeDevicesResponseEnvelopeJSON    `json:"-"`
+	Success DeviceRevokeNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceRevokeNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// deviceRevokeDevicesRevokeDevicesResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DeviceRevokeDevicesRevokeDevicesResponseEnvelope]
-type deviceRevokeDevicesRevokeDevicesResponseEnvelopeJSON struct {
+// deviceRevokeNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceRevokeNewResponseEnvelope]
+type deviceRevokeNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -93,52 +92,51 @@ type deviceRevokeDevicesRevokeDevicesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceRevokeDevicesRevokeDevicesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceRevokeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceRevokeDevicesRevokeDevicesResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    deviceRevokeDevicesRevokeDevicesResponseEnvelopeErrorsJSON `json:"-"`
+type DeviceRevokeNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    deviceRevokeNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// deviceRevokeDevicesRevokeDevicesResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DeviceRevokeDevicesRevokeDevicesResponseEnvelopeErrors]
-type deviceRevokeDevicesRevokeDevicesResponseEnvelopeErrorsJSON struct {
+// deviceRevokeNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceRevokeNewResponseEnvelopeErrors]
+type deviceRevokeNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceRevokeDevicesRevokeDevicesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceRevokeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceRevokeDevicesRevokeDevicesResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    deviceRevokeDevicesRevokeDevicesResponseEnvelopeMessagesJSON `json:"-"`
+type DeviceRevokeNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    deviceRevokeNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// deviceRevokeDevicesRevokeDevicesResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [DeviceRevokeDevicesRevokeDevicesResponseEnvelopeMessages]
-type deviceRevokeDevicesRevokeDevicesResponseEnvelopeMessagesJSON struct {
+// deviceRevokeNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceRevokeNewResponseEnvelopeMessages]
+type deviceRevokeNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceRevokeDevicesRevokeDevicesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceRevokeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DeviceRevokeDevicesRevokeDevicesResponseEnvelopeSuccess bool
+type DeviceRevokeNewResponseEnvelopeSuccess bool
 
 const (
-	DeviceRevokeDevicesRevokeDevicesResponseEnvelopeSuccessTrue DeviceRevokeDevicesRevokeDevicesResponseEnvelopeSuccess = true
+	DeviceRevokeNewResponseEnvelopeSuccessTrue DeviceRevokeNewResponseEnvelopeSuccess = true
 )

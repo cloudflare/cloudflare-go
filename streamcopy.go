@@ -32,9 +32,9 @@ func NewStreamCopyService(opts ...option.RequestOption) (r *StreamCopyService) {
 }
 
 // Uploads a video to Stream from a provided URL.
-func (r *StreamCopyService) StreamVideosUploadVideosFromAURL(ctx context.Context, accountID string, params StreamCopyStreamVideosUploadVideosFromAURLParams, opts ...option.RequestOption) (res *StreamCopyStreamVideosUploadVideosFromAurlResponse, err error) {
+func (r *StreamCopyService) New(ctx context.Context, accountID string, params StreamCopyNewParams, opts ...option.RequestOption) (res *StreamCopyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelope
+	var env StreamCopyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/copy", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
@@ -44,7 +44,7 @@ func (r *StreamCopyService) StreamVideosUploadVideosFromAURL(ctx context.Context
 	return
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponse struct {
+type StreamCopyNewResponse struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -56,8 +56,8 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponse struct {
 	// The duration of the video in seconds. A value of `-1` means the duration is
 	// unknown. The duration becomes available after the upload and before the video is
 	// ready.
-	Duration float64                                                 `json:"duration"`
-	Input    StreamCopyStreamVideosUploadVideosFromAurlResponseInput `json:"input"`
+	Duration float64                    `json:"duration"`
+	Input    StreamCopyNewResponseInput `json:"input"`
 	// The live input ID used to upload a video with Stream Live.
 	LiveInput string `json:"liveInput"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
@@ -69,8 +69,8 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponse struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the media item was last modified.
-	Modified time.Time                                                  `json:"modified" format:"date-time"`
-	Playback StreamCopyStreamVideosUploadVideosFromAurlResponsePlayback `json:"playback"`
+	Modified time.Time                     `json:"modified" format:"date-time"`
+	Playback StreamCopyNewResponsePlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video is playable. The field is empty if the video is not
@@ -93,7 +93,7 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponse struct {
 	// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 	// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 	// and `errorReasonText` provide additional details.
-	Status StreamCopyStreamVideosUploadVideosFromAurlResponseStatus `json:"status"`
+	Status StreamCopyNewResponseStatus `json:"status"`
 	// The media item's thumbnail URI. This field is omitted until encoding is
 	// complete.
 	Thumbnail string `json:"thumbnail" format:"uri"`
@@ -108,14 +108,14 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponse struct {
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
-	UploadExpiry time.Time                                                   `json:"uploadExpiry" format:"date-time"`
-	Watermark    StreamCopyStreamVideosUploadVideosFromAurlResponseWatermark `json:"watermark"`
-	JSON         streamCopyStreamVideosUploadVideosFromAurlResponseJSON      `json:"-"`
+	UploadExpiry time.Time                      `json:"uploadExpiry" format:"date-time"`
+	Watermark    StreamCopyNewResponseWatermark `json:"watermark"`
+	JSON         streamCopyNewResponseJSON      `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseJSON contains the JSON
-// metadata for the struct [StreamCopyStreamVideosUploadVideosFromAurlResponse]
-type streamCopyStreamVideosUploadVideosFromAurlResponseJSON struct {
+// streamCopyNewResponseJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponse]
+type streamCopyNewResponseJSON struct {
 	AllowedOrigins        apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
@@ -143,53 +143,51 @@ type streamCopyStreamVideosUploadVideosFromAurlResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponseInput struct {
+type StreamCopyNewResponseInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
 	Height int64 `json:"height"`
 	// The video width in pixels. A value of `-1` means the width is unknown. The value
 	// becomes available after the upload and before the video is ready.
-	Width int64                                                       `json:"width"`
-	JSON  streamCopyStreamVideosUploadVideosFromAurlResponseInputJSON `json:"-"`
+	Width int64                          `json:"width"`
+	JSON  streamCopyNewResponseInputJSON `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseInputJSON contains the JSON
-// metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseInput]
-type streamCopyStreamVideosUploadVideosFromAurlResponseInputJSON struct {
+// streamCopyNewResponseInputJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponseInput]
+type streamCopyNewResponseInputJSON struct {
 	Height      apijson.Field
 	Width       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseInput) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponsePlayback struct {
+type StreamCopyNewResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                                                         `json:"hls"`
-	JSON streamCopyStreamVideosUploadVideosFromAurlResponsePlaybackJSON `json:"-"`
+	Hls  string                            `json:"hls"`
+	JSON streamCopyNewResponsePlaybackJSON `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponsePlaybackJSON contains the JSON
-// metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponsePlayback]
-type streamCopyStreamVideosUploadVideosFromAurlResponsePlaybackJSON struct {
+// streamCopyNewResponsePlaybackJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponsePlayback]
+type streamCopyNewResponsePlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponsePlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -198,7 +196,7 @@ func (r *StreamCopyStreamVideosUploadVideosFromAurlResponsePlayback) UnmarshalJS
 // `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 // approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 // and `errorReasonText` provide additional details.
-type StreamCopyStreamVideosUploadVideosFromAurlResponseStatus struct {
+type StreamCopyNewResponseStatus struct {
 	// Specifies why the video failed to encode. This field is empty if the video is
 	// not in an `error` state. Preferred for programmatic use.
 	ErrorReasonCode string `json:"errorReasonCode"`
@@ -209,14 +207,13 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponseStatus struct {
 	// non-negative integer.
 	PctComplete string `json:"pctComplete"`
 	// Specifies the processing status for all quality levels for a video.
-	State StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState `json:"state"`
-	JSON  streamCopyStreamVideosUploadVideosFromAurlResponseStatusJSON  `json:"-"`
+	State StreamCopyNewResponseStatusState `json:"state"`
+	JSON  streamCopyNewResponseStatusJSON  `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseStatusJSON contains the JSON
-// metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseStatus]
-type streamCopyStreamVideosUploadVideosFromAurlResponseStatusJSON struct {
+// streamCopyNewResponseStatusJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponseStatus]
+type streamCopyNewResponseStatusJSON struct {
 	ErrorReasonCode apijson.Field
 	ErrorReasonText apijson.Field
 	PctComplete     apijson.Field
@@ -225,23 +222,23 @@ type streamCopyStreamVideosUploadVideosFromAurlResponseStatusJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the processing status for all quality levels for a video.
-type StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState string
+type StreamCopyNewResponseStatusState string
 
 const (
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStatePendingupload StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "pendingupload"
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStateDownloading   StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "downloading"
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStateQueued        StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "queued"
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStateInprogress    StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "inprogress"
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStateReady         StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "ready"
-	StreamCopyStreamVideosUploadVideosFromAurlResponseStatusStateError         StreamCopyStreamVideosUploadVideosFromAurlResponseStatusState = "error"
+	StreamCopyNewResponseStatusStatePendingupload StreamCopyNewResponseStatusState = "pendingupload"
+	StreamCopyNewResponseStatusStateDownloading   StreamCopyNewResponseStatusState = "downloading"
+	StreamCopyNewResponseStatusStateQueued        StreamCopyNewResponseStatusState = "queued"
+	StreamCopyNewResponseStatusStateInprogress    StreamCopyNewResponseStatusState = "inprogress"
+	StreamCopyNewResponseStatusStateReady         StreamCopyNewResponseStatusState = "ready"
+	StreamCopyNewResponseStatusStateError         StreamCopyNewResponseStatusState = "error"
 )
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponseWatermark struct {
+type StreamCopyNewResponseWatermark struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -273,14 +270,13 @@ type StreamCopyStreamVideosUploadVideosFromAurlResponseWatermark struct {
 	// The unique identifier for a watermark profile.
 	Uid string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                                                           `json:"width"`
-	JSON  streamCopyStreamVideosUploadVideosFromAurlResponseWatermarkJSON `json:"-"`
+	Width int64                              `json:"width"`
+	JSON  streamCopyNewResponseWatermarkJSON `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseWatermarkJSON contains the
-// JSON metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseWatermark]
-type streamCopyStreamVideosUploadVideosFromAurlResponseWatermarkJSON struct {
+// streamCopyNewResponseWatermarkJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponseWatermark]
+type streamCopyNewResponseWatermarkJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -296,11 +292,11 @@ type streamCopyStreamVideosUploadVideosFromAurlResponseWatermarkJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseWatermark) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAURLParams struct {
+type StreamCopyNewParams struct {
 	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
 	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
 	// requests with a `content-range` header that includes the size of the file.
@@ -325,8 +321,8 @@ type StreamCopyStreamVideosUploadVideosFromAURLParams struct {
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct param.Field[float64]                                                   `json:"thumbnailTimestampPct"`
-	Watermark             param.Field[StreamCopyStreamVideosUploadVideosFromAurlParamsWatermark] `json:"watermark"`
+	ThumbnailTimestampPct param.Field[float64]                      `json:"thumbnailTimestampPct"`
+	Watermark             param.Field[StreamCopyNewParamsWatermark] `json:"watermark"`
 	// A user-defined identifier for the media creator.
 	UploadCreator param.Field[string] `header:"Upload-Creator"`
 	// Comma-separated key-value pairs following the TUS protocol specification. Values
@@ -335,32 +331,31 @@ type StreamCopyStreamVideosUploadVideosFromAURLParams struct {
 	UploadMetadata param.Field[string] `header:"Upload-Metadata"`
 }
 
-func (r StreamCopyStreamVideosUploadVideosFromAURLParams) MarshalJSON() (data []byte, err error) {
+func (r StreamCopyNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlParamsWatermark struct {
+type StreamCopyNewParamsWatermark struct {
 	// The unique identifier for the watermark profile.
 	Uid param.Field[string] `json:"uid"`
 }
 
-func (r StreamCopyStreamVideosUploadVideosFromAurlParamsWatermark) MarshalJSON() (data []byte, err error) {
+func (r StreamCopyNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelope struct {
-	Errors   []StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamCopyStreamVideosUploadVideosFromAurlResponse                   `json:"result,required"`
+type StreamCopyNewResponseEnvelope struct {
+	Errors   []StreamCopyNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamCopyNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamCopyNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeJSON    `json:"-"`
+	Success StreamCopyNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamCopyNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelope]
-type streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeJSON struct {
+// streamCopyNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamCopyNewResponseEnvelope]
+type streamCopyNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -369,53 +364,51 @@ type streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrors struct {
-	Code    int64                                                                `json:"code,required"`
-	Message string                                                               `json:"message,required"`
-	JSON    streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrorsJSON `json:"-"`
+type StreamCopyNewResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    streamCopyNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrors]
-type streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrorsJSON struct {
+// streamCopyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamCopyNewResponseEnvelopeErrors]
+type streamCopyNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessages struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessagesJSON `json:"-"`
+type StreamCopyNewResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    streamCopyNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessages]
-type streamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessagesJSON struct {
+// streamCopyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StreamCopyNewResponseEnvelopeMessages]
+type streamCopyNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamCopyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeSuccess bool
+type StreamCopyNewResponseEnvelopeSuccess bool
 
 const (
-	StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeSuccessTrue StreamCopyStreamVideosUploadVideosFromAurlResponseEnvelopeSuccess = true
+	StreamCopyNewResponseEnvelopeSuccessTrue StreamCopyNewResponseEnvelopeSuccess = true
 )

@@ -20,6 +20,7 @@ import (
 // instead.
 type DevicePolicyService struct {
 	Options         []option.RequestOption
+	DefaultPolicy   *DevicePolicyDefaultPolicyService
 	Excludes        *DevicePolicyExcludeService
 	FallbackDomains *DevicePolicyFallbackDomainService
 	Includes        *DevicePolicyIncludeService
@@ -31,9 +32,24 @@ type DevicePolicyService struct {
 func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyService) {
 	r = &DevicePolicyService{}
 	r.Options = opts
+	r.DefaultPolicy = NewDevicePolicyDefaultPolicyService(opts...)
 	r.Excludes = NewDevicePolicyExcludeService(opts...)
 	r.FallbackDomains = NewDevicePolicyFallbackDomainService(opts...)
 	r.Includes = NewDevicePolicyIncludeService(opts...)
+	return
+}
+
+// Creates a device settings profile to be applied to certain devices matching the
+// criteria.
+func (r *DevicePolicyService) New(ctx context.Context, identifier interface{}, body DevicePolicyNewParams, opts ...option.RequestOption) (res *[]DevicePolicyNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePolicyNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/policy", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -43,6 +59,19 @@ func (r *DevicePolicyService) Update(ctx context.Context, identifier interface{}
 	var env DevicePolicyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches a list of the device settings profiles for an account.
+func (r *DevicePolicyService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePolicyListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/policies", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,59 +93,6 @@ func (r *DevicePolicyService) Delete(ctx context.Context, identifier interface{}
 	return
 }
 
-// Creates a device settings profile to be applied to certain devices matching the
-// criteria.
-func (r *DevicePolicyService) DevicesNewDeviceSettingsPolicy(ctx context.Context, identifier interface{}, body DevicePolicyDevicesNewDeviceSettingsPolicyParams, opts ...option.RequestOption) (res *[]DevicePolicyDevicesNewDeviceSettingsPolicyResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches the default device settings profile for an account.
-func (r *DevicePolicyService) DevicesGetDefaultDeviceSettingsPolicy(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyService) DevicesListDeviceSettingsPolicies(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyDevicesListDeviceSettingsPoliciesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policies", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates the default device settings profile for an account.
-func (r *DevicePolicyService) DevicesUpdateDefaultDeviceSettingsPolicy(ctx context.Context, identifier interface{}, body DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParams, opts ...option.RequestOption) (res *[]DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches a device settings profile by ID.
 func (r *DevicePolicyService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *[]DevicePolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -130,7 +106,193 @@ func (r *DevicePolicyService) Get(ctx context.Context, identifier interface{}, u
 	return
 }
 
+type DevicePolicyNewResponse = interface{}
+
 type DevicePolicyUpdateResponse = interface{}
+
+type DevicePolicyListResponse struct {
+	// Whether to allow the user to switch WARP between modes.
+	AllowModeSwitch bool `json:"allow_mode_switch"`
+	// Whether to receive update notifications when a new version of the client is
+	// available.
+	AllowUpdates bool `json:"allow_updates"`
+	// Whether to allow devices to leave the organization.
+	AllowedToLeave bool `json:"allowed_to_leave"`
+	// The amount of time in minutes to reconnect after having been disabled.
+	AutoConnect float64 `json:"auto_connect"`
+	// Turn on the captive portal after the specified amount of time.
+	CaptivePortal float64 `json:"captive_portal"`
+	// Whether the policy is the default policy for an account.
+	Default bool `json:"default"`
+	// A description of the policy.
+	Description string `json:"description"`
+	// If the `dns_server` field of a fallback domain is not present, the client will
+	// fall back to a best guess of the default/system DNS resolvers unless this policy
+	// option is set to `true`.
+	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// Whether the policy will be applied to matching devices.
+	Enabled bool                              `json:"enabled"`
+	Exclude []DevicePolicyListResponseExclude `json:"exclude"`
+	// Whether to add Microsoft IPs to Split Tunnel exclusions.
+	ExcludeOfficeIPs bool                                     `json:"exclude_office_ips"`
+	FallbackDomains  []DevicePolicyListResponseFallbackDomain `json:"fallback_domains"`
+	GatewayUniqueID  string                                   `json:"gateway_unique_id"`
+	Include          []DevicePolicyListResponseInclude        `json:"include"`
+	// The amount of time in minutes a user is allowed access to their LAN. A value of
+	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
+	// laptop waking from sleep. Note that this field is omitted from the response if
+	// null or unset.
+	LanAllowMinutes float64 `json:"lan_allow_minutes"`
+	// The size of the subnet for the local access network. Note that this field is
+	// omitted from the response if null or unset.
+	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
+	// The wirefilter expression to match devices.
+	Match string `json:"match"`
+	// The name of the device settings profile.
+	Name string `json:"name"`
+	// Device ID.
+	PolicyID string `json:"policy_id"`
+	// The precedence of the policy. Lower values indicate higher precedence. Policies
+	// will be evaluated in ascending order of this field.
+	Precedence    float64                               `json:"precedence"`
+	ServiceModeV2 DevicePolicyListResponseServiceModeV2 `json:"service_mode_v2"`
+	// The URL to launch when the Send Feedback button is clicked.
+	SupportURL string `json:"support_url"`
+	// Whether to allow the user to turn off the WARP switch and disconnect the client.
+	SwitchLocked bool                         `json:"switch_locked"`
+	JSON         devicePolicyListResponseJSON `json:"-"`
+}
+
+// devicePolicyListResponseJSON contains the JSON metadata for the struct
+// [DevicePolicyListResponse]
+type devicePolicyListResponseJSON struct {
+	AllowModeSwitch     apijson.Field
+	AllowUpdates        apijson.Field
+	AllowedToLeave      apijson.Field
+	AutoConnect         apijson.Field
+	CaptivePortal       apijson.Field
+	Default             apijson.Field
+	Description         apijson.Field
+	DisableAutoFallback apijson.Field
+	Enabled             apijson.Field
+	Exclude             apijson.Field
+	ExcludeOfficeIPs    apijson.Field
+	FallbackDomains     apijson.Field
+	GatewayUniqueID     apijson.Field
+	Include             apijson.Field
+	LanAllowMinutes     apijson.Field
+	LanAllowSubnetSize  apijson.Field
+	Match               apijson.Field
+	Name                apijson.Field
+	PolicyID            apijson.Field
+	Precedence          apijson.Field
+	ServiceModeV2       apijson.Field
+	SupportURL          apijson.Field
+	SwitchLocked        apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseExclude struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host string                              `json:"host"`
+	JSON devicePolicyListResponseExcludeJSON `json:"-"`
+}
+
+// devicePolicyListResponseExcludeJSON contains the JSON metadata for the struct
+// [DevicePolicyListResponseExclude]
+type devicePolicyListResponseExcludeJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseFallbackDomain struct {
+	// The domain suffix to match when resolving locally.
+	Suffix string `json:"suffix,required"`
+	// A description of the fallback domain, displayed in the client UI.
+	Description string `json:"description"`
+	// A list of IP addresses to handle domain resolution.
+	DNSServer []interface{}                              `json:"dns_server"`
+	JSON      devicePolicyListResponseFallbackDomainJSON `json:"-"`
+}
+
+// devicePolicyListResponseFallbackDomainJSON contains the JSON metadata for the
+// struct [DevicePolicyListResponseFallbackDomain]
+type devicePolicyListResponseFallbackDomainJSON struct {
+	Suffix      apijson.Field
+	Description apijson.Field
+	DNSServer   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseFallbackDomain) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseInclude struct {
+	// The address in CIDR format to include in the tunnel. If address is present, host
+	// must not be present.
+	Address string `json:"address,required"`
+	// A description of the split tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to include in the tunnel. If host is present, address must not
+	// be present.
+	Host string                              `json:"host"`
+	JSON devicePolicyListResponseIncludeJSON `json:"-"`
+}
+
+// devicePolicyListResponseIncludeJSON contains the JSON metadata for the struct
+// [DevicePolicyListResponseInclude]
+type devicePolicyListResponseIncludeJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseInclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseServiceModeV2 struct {
+	// The mode to run the WARP client under.
+	Mode string `json:"mode"`
+	// The port number when used with proxy mode.
+	Port float64                                   `json:"port"`
+	JSON devicePolicyListResponseServiceModeV2JSON `json:"-"`
+}
+
+// devicePolicyListResponseServiceModeV2JSON contains the JSON metadata for the
+// struct [DevicePolicyListResponseServiceModeV2]
+type devicePolicyListResponseServiceModeV2JSON struct {
+	Mode        apijson.Field
+	Port        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseServiceModeV2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type DevicePolicyDeleteResponse struct {
 	// Whether to allow the user to switch WARP between modes.
@@ -316,201 +478,164 @@ func (r *DevicePolicyDeleteResponseServiceModeV2) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponse = interface{}
+type DevicePolicyGetResponse = interface{}
 
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponse = interface{}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponse struct {
+type DevicePolicyNewParams struct {
+	// The wirefilter expression to match devices.
+	Match param.Field[string] `json:"match,required"`
+	// The name of the device settings profile.
+	Name param.Field[string] `json:"name,required"`
+	// The precedence of the policy. Lower values indicate higher precedence. Policies
+	// will be evaluated in ascending order of this field.
+	Precedence param.Field[float64] `json:"precedence,required"`
 	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch bool `json:"allow_mode_switch"`
+	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
 	// Whether to receive update notifications when a new version of the client is
 	// available.
-	AllowUpdates bool `json:"allow_updates"`
+	AllowUpdates param.Field[bool] `json:"allow_updates"`
 	// Whether to allow devices to leave the organization.
-	AllowedToLeave bool `json:"allowed_to_leave"`
+	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
 	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect float64 `json:"auto_connect"`
+	AutoConnect param.Field[float64] `json:"auto_connect"`
 	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal float64 `json:"captive_portal"`
-	// Whether the policy is the default policy for an account.
-	Default bool `json:"default"`
+	CaptivePortal param.Field[float64] `json:"captive_portal"`
 	// A description of the policy.
-	Description string `json:"description"`
+	Description param.Field[string] `json:"description"`
 	// If the `dns_server` field of a fallback domain is not present, the client will
 	// fall back to a best guess of the default/system DNS resolvers unless this policy
 	// option is set to `true`.
-	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
 	// Whether the policy will be applied to matching devices.
-	Enabled bool                                                           `json:"enabled"`
-	Exclude []DevicePolicyDevicesListDeviceSettingsPoliciesResponseExclude `json:"exclude"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                                                                  `json:"exclude_office_ips"`
-	FallbackDomains  []DevicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomain `json:"fallback_domains"`
-	GatewayUniqueID  string                                                                `json:"gateway_unique_id"`
-	Include          []DevicePolicyDevicesListDeviceSettingsPoliciesResponseInclude        `json:"include"`
+	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
 	// The amount of time in minutes a user is allowed access to their LAN. A value of
 	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
 	// laptop waking from sleep. Note that this field is omitted from the response if
 	// null or unset.
-	LanAllowMinutes float64 `json:"lan_allow_minutes"`
+	LanAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
 	// The size of the subnet for the local access network. Note that this field is
 	// omitted from the response if null or unset.
-	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
-	// The wirefilter expression to match devices.
-	Match string `json:"match"`
-	// The name of the device settings profile.
-	Name string `json:"name"`
-	// Device ID.
-	PolicyID string `json:"policy_id"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence    float64                                                            `json:"precedence"`
-	ServiceModeV2 DevicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2 `json:"service_mode_v2"`
+	LanAllowSubnetSize param.Field[float64]                            `json:"lan_allow_subnet_size"`
+	ServiceModeV2      param.Field[DevicePolicyNewParamsServiceModeV2] `json:"service_mode_v2"`
 	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL string `json:"support_url"`
+	SupportURL param.Field[string] `json:"support_url"`
 	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool                                                      `json:"switch_locked"`
-	JSON         devicePolicyDevicesListDeviceSettingsPoliciesResponseJSON `json:"-"`
+	SwitchLocked param.Field[bool] `json:"switch_locked"`
 }
 
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseJSON contains the JSON
-// metadata for the struct [DevicePolicyDevicesListDeviceSettingsPoliciesResponse]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	Description         apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	LanAllowMinutes     apijson.Field
-	LanAllowSubnetSize  apijson.Field
-	Match               apijson.Field
-	Name                apijson.Field
-	PolicyID            apijson.Field
-	Precedence          apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
+func (r DevicePolicyNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseExclude struct {
-	// The address in CIDR format to exclude from the tunnel. If `address` is present,
-	// `host` must not be present.
-	Address string `json:"address,required"`
-	// A description of the Split Tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to exclude from the tunnel. If `host` is present, `address` must
-	// not be present.
-	Host string                                                           `json:"host"`
-	JSON devicePolicyDevicesListDeviceSettingsPoliciesResponseExcludeJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseExcludeJSON contains the
-// JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseExclude]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseExcludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomain struct {
-	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description string `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                                           `json:"dns_server"`
-	JSON      devicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomainJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomainJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomain]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomainJSON struct {
-	Suffix      apijson.Field
-	Description apijson.Field
-	DNSServer   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseFallbackDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseInclude struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                                                           `json:"host"`
-	JSON devicePolicyDevicesListDeviceSettingsPoliciesResponseIncludeJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseIncludeJSON contains the
-// JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseInclude]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseIncludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseInclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2 struct {
+type DevicePolicyNewParamsServiceModeV2 struct {
 	// The mode to run the WARP client under.
-	Mode string `json:"mode"`
+	Mode param.Field[string] `json:"mode"`
 	// The port number when used with proxy mode.
-	Port float64                                                                `json:"port"`
-	JSON devicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2JSON `json:"-"`
+	Port param.Field[float64] `json:"port"`
 }
 
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2JSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2JSON struct {
-	Mode        apijson.Field
-	Port        apijson.Field
+func (r DevicePolicyNewParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyNewResponseEnvelope struct {
+	Errors   []DevicePolicyNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyNewResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePolicyNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyNewResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePolicyNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DevicePolicyNewResponseEnvelope]
+type devicePolicyNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseServiceModeV2) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponse = interface{}
+type DevicePolicyNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    devicePolicyNewResponseEnvelopeErrorsJSON `json:"-"`
+}
 
-type DevicePolicyGetResponse = interface{}
+// devicePolicyNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePolicyNewResponseEnvelopeErrors]
+type devicePolicyNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    devicePolicyNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePolicyNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePolicyNewResponseEnvelopeMessages]
+type devicePolicyNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePolicyNewResponseEnvelopeSuccess bool
+
+const (
+	DevicePolicyNewResponseEnvelopeSuccessTrue DevicePolicyNewResponseEnvelopeSuccess = true
+)
+
+type DevicePolicyNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       devicePolicyNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePolicyNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [DevicePolicyNewResponseEnvelopeResultInfo]
+type devicePolicyNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type DevicePolicyUpdateParams struct {
 	// Whether to allow the user to switch WARP between modes.
@@ -661,6 +786,104 @@ func (r *DevicePolicyUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePolicyListResponseEnvelope struct {
+	Errors   []DevicePolicyListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePolicyListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyListResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePolicyListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DevicePolicyListResponseEnvelope]
+type devicePolicyListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    devicePolicyListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePolicyListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePolicyListResponseEnvelopeErrors]
+type devicePolicyListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyListResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    devicePolicyListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePolicyListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePolicyListResponseEnvelopeMessages]
+type devicePolicyListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePolicyListResponseEnvelopeSuccess bool
+
+const (
+	DevicePolicyListResponseEnvelopeSuccessTrue DevicePolicyListResponseEnvelopeSuccess = true
+)
+
+type DevicePolicyListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	JSON       devicePolicyListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePolicyListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [DevicePolicyListResponseEnvelopeResultInfo]
+type devicePolicyListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type DevicePolicyDeleteResponseEnvelope struct {
 	Errors   []DevicePolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -756,513 +979,6 @@ type devicePolicyDeleteResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *DevicePolicyDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyParams struct {
-	// The wirefilter expression to match devices.
-	Match param.Field[string] `json:"match,required"`
-	// The name of the device settings profile.
-	Name param.Field[string] `json:"name,required"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence param.Field[float64] `json:"precedence,required"`
-	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
-	// Whether to receive update notifications when a new version of the client is
-	// available.
-	AllowUpdates param.Field[bool] `json:"allow_updates"`
-	// Whether to allow devices to leave the organization.
-	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect param.Field[float64] `json:"auto_connect"`
-	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal param.Field[float64] `json:"captive_portal"`
-	// A description of the policy.
-	Description param.Field[string] `json:"description"`
-	// If the `dns_server` field of a fallback domain is not present, the client will
-	// fall back to a best guess of the default/system DNS resolvers unless this policy
-	// option is set to `true`.
-	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Whether the policy will be applied to matching devices.
-	Enabled param.Field[bool] `json:"enabled"`
-	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs param.Field[bool] `json:"exclude_office_ips"`
-	// The amount of time in minutes a user is allowed access to their LAN. A value of
-	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
-	// laptop waking from sleep. Note that this field is omitted from the response if
-	// null or unset.
-	LanAllowMinutes param.Field[float64] `json:"lan_allow_minutes"`
-	// The size of the subnet for the local access network. Note that this field is
-	// omitted from the response if null or unset.
-	LanAllowSubnetSize param.Field[float64]                                                       `json:"lan_allow_subnet_size"`
-	ServiceModeV2      param.Field[DevicePolicyDevicesNewDeviceSettingsPolicyParamsServiceModeV2] `json:"service_mode_v2"`
-	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL param.Field[string] `json:"support_url"`
-	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked param.Field[bool] `json:"switch_locked"`
-}
-
-func (r DevicePolicyDevicesNewDeviceSettingsPolicyParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyParamsServiceModeV2 struct {
-	// The mode to run the WARP client under.
-	Mode param.Field[string] `json:"mode"`
-	// The port number when used with proxy mode.
-	Port param.Field[float64] `json:"port"`
-}
-
-func (r DevicePolicyDevicesNewDeviceSettingsPolicyParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelope struct {
-	Errors   []DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyDevicesNewDeviceSettingsPolicyResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelope]
-type devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrors struct {
-	Code    int64                                                                `json:"code,required"`
-	Message string                                                               `json:"message,required"`
-	JSON    devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrors]
-type devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessages struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessages]
-type devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeSuccessTrue DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                  `json:"total_count"`
-	JSON       devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfo]
-type devicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesNewDeviceSettingsPolicyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelope struct {
-	Errors   []DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelope]
-type devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrors struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrors]
-type devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessages struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessages]
-type devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeSuccessTrue DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                         `json:"total_count"`
-	JSON       devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo]
-type devicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesGetDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelope struct {
-	Errors   []DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyDevicesListDeviceSettingsPoliciesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelope]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrors struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrors]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessages struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessages]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeSuccessTrue DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                     `json:"total_count"`
-	JSON       devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfo]
-type devicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesListDeviceSettingsPoliciesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParams struct {
-	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch param.Field[bool] `json:"allow_mode_switch"`
-	// Whether to receive update notifications when a new version of the client is
-	// available.
-	AllowUpdates param.Field[bool] `json:"allow_updates"`
-	// Whether to allow devices to leave the organization.
-	AllowedToLeave param.Field[bool] `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect param.Field[float64] `json:"auto_connect"`
-	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal param.Field[float64] `json:"captive_portal"`
-	// If the `dns_server` field of a fallback domain is not present, the client will
-	// fall back to a best guess of the default/system DNS resolvers unless this policy
-	// option is set to `true`.
-	DisableAutoFallback param.Field[bool] `json:"disable_auto_fallback"`
-	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs param.Field[bool]                                                                    `json:"exclude_office_ips"`
-	ServiceModeV2    param.Field[DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParamsServiceModeV2] `json:"service_mode_v2"`
-	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL param.Field[string] `json:"support_url"`
-	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked param.Field[bool] `json:"switch_locked"`
-}
-
-func (r DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParamsServiceModeV2 struct {
-	// The mode to run the WARP client under.
-	Mode param.Field[string] `json:"mode"`
-	// The port number when used with proxy mode.
-	Port param.Field[float64] `json:"port"`
-}
-
-func (r DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyParamsServiceModeV2) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelope struct {
-	Errors   []DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelope]
-type devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrors struct {
-	Code    int64                                                                          `json:"code,required"`
-	Message string                                                                         `json:"message,required"`
-	JSON    devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrors]
-type devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessages struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessages]
-type devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeSuccessTrue DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                            `json:"total_count"`
-	JSON       devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo]
-type devicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDevicesUpdateDefaultDeviceSettingsPolicyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -46,22 +46,21 @@ func NewLogReceivedService(opts ...option.RequestOption) (r *LogReceivedService)
 // `start=2018-05-20T10:00:00Z&end=2018-05-20T10:01:00Z`, then
 // `start=2018-05-20T10:01:00Z&end=2018-05-20T10:02:00Z` and so on; the overlap
 // will be handled properly.
-func (r *LogReceivedService) ReceivedGetLogsReceived(ctx context.Context, zoneIdentifier string, query LogReceivedReceivedGetLogsReceivedParams, opts ...option.RequestOption) (res *LogReceivedReceivedGetLogsReceivedResponse, err error) {
+func (r *LogReceivedService) Get(ctx context.Context, zoneIdentifier string, query LogReceivedGetParams, opts ...option.RequestOption) (res *LogReceivedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/received", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// Union satisfied by [shared.UnionString] or
-// [LogReceivedReceivedGetLogsReceivedResponseUnknown].
-type LogReceivedReceivedGetLogsReceivedResponse interface {
-	ImplementsLogReceivedReceivedGetLogsReceivedResponse()
+// Union satisfied by [shared.UnionString] or [LogReceivedGetResponseUnknown].
+type LogReceivedGetResponse interface {
+	ImplementsLogReceivedGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*LogReceivedReceivedGetLogsReceivedResponse)(nil)).Elem(),
+		reflect.TypeOf((*LogReceivedGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -70,13 +69,13 @@ func init() {
 	)
 }
 
-type LogReceivedReceivedGetLogsReceivedParams struct {
+type LogReceivedGetParams struct {
 	// Sets the (exclusive) end of the requested time frame. This can be a unix
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to
 	// RFC 3339. `end` must be at least five minutes earlier than now and must be later
 	// than `start`. Difference between `start` and `end` must be not greater than one
 	// hour.
-	End param.Field[LogReceivedReceivedGetLogsReceivedParamsEnd] `query:"end,required"`
+	End param.Field[LogReceivedGetParamsEnd] `query:"end,required"`
 	// When `?count=` is provided, the response will contain up to `count` results.
 	// Since results are not sorted, you are likely to get different data for repeated
 	// requests. `count` must be an integer > 0.
@@ -106,18 +105,17 @@ type LogReceivedReceivedGetLogsReceivedParams struct {
 	// timestamp (in seconds or nanoseconds), or an absolute timestamp that conforms to
 	// RFC 3339. At this point in time, it cannot exceed a time in the past greater
 	// than seven days.
-	Start param.Field[LogReceivedReceivedGetLogsReceivedParamsStart] `query:"start"`
+	Start param.Field[LogReceivedGetParamsStart] `query:"start"`
 	// By default, timestamps in responses are returned as Unix nanosecond integers.
 	// The `?timestamps=` argument can be set to change the format in which response
 	// timestamps are returned. Possible values are: `unix`, `unixnano`, `rfc3339`.
 	// Note that `unix` and `unixnano` return timestamps as integers; `rfc3339` returns
 	// timestamps as strings.
-	Timestamps param.Field[LogReceivedReceivedGetLogsReceivedParamsTimestamps] `query:"timestamps"`
+	Timestamps param.Field[LogReceivedGetParamsTimestamps] `query:"timestamps"`
 }
 
-// URLQuery serializes [LogReceivedReceivedGetLogsReceivedParams]'s query
-// parameters as `url.Values`.
-func (r LogReceivedReceivedGetLogsReceivedParams) URLQuery() (v url.Values) {
+// URLQuery serializes [LogReceivedGetParams]'s query parameters as `url.Values`.
+func (r LogReceivedGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -131,8 +129,8 @@ func (r LogReceivedReceivedGetLogsReceivedParams) URLQuery() (v url.Values) {
 // hour.
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
-type LogReceivedReceivedGetLogsReceivedParamsEnd interface {
-	ImplementsLogReceivedReceivedGetLogsReceivedParamsEnd()
+type LogReceivedGetParamsEnd interface {
+	ImplementsLogReceivedGetParamsEnd()
 }
 
 // Sets the (inclusive) beginning of the requested time frame. This can be a unix
@@ -141,8 +139,8 @@ type LogReceivedReceivedGetLogsReceivedParamsEnd interface {
 // than seven days.
 //
 // Satisfied by [shared.UnionString], [shared.UnionInt].
-type LogReceivedReceivedGetLogsReceivedParamsStart interface {
-	ImplementsLogReceivedReceivedGetLogsReceivedParamsStart()
+type LogReceivedGetParamsStart interface {
+	ImplementsLogReceivedGetParamsStart()
 }
 
 // By default, timestamps in responses are returned as Unix nanosecond integers.
@@ -150,10 +148,10 @@ type LogReceivedReceivedGetLogsReceivedParamsStart interface {
 // timestamps are returned. Possible values are: `unix`, `unixnano`, `rfc3339`.
 // Note that `unix` and `unixnano` return timestamps as integers; `rfc3339` returns
 // timestamps as strings.
-type LogReceivedReceivedGetLogsReceivedParamsTimestamps string
+type LogReceivedGetParamsTimestamps string
 
 const (
-	LogReceivedReceivedGetLogsReceivedParamsTimestampsUnix     LogReceivedReceivedGetLogsReceivedParamsTimestamps = "unix"
-	LogReceivedReceivedGetLogsReceivedParamsTimestampsUnixnano LogReceivedReceivedGetLogsReceivedParamsTimestamps = "unixnano"
-	LogReceivedReceivedGetLogsReceivedParamsTimestampsRfc3339  LogReceivedReceivedGetLogsReceivedParamsTimestamps = "rfc3339"
+	LogReceivedGetParamsTimestampsUnix     LogReceivedGetParamsTimestamps = "unix"
+	LogReceivedGetParamsTimestampsUnixnano LogReceivedGetParamsTimestamps = "unixnano"
+	LogReceivedGetParamsTimestampsRfc3339  LogReceivedGetParamsTimestamps = "rfc3339"
 )

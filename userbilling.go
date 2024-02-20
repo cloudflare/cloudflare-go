@@ -12,9 +12,9 @@ import (
 // this service directly, and instead use the [NewUserBillingService] method
 // instead.
 type UserBillingService struct {
-	Options   []option.RequestOption
-	Histories *UserBillingHistoryService
-	Profiles  *UserBillingProfileService
+	Options  []option.RequestOption
+	History  *UserBillingHistoryService
+	Profiles *UserBillingProfileService
 }
 
 // NewUserBillingService generates a new service that applies the given options to
@@ -23,7 +23,7 @@ type UserBillingService struct {
 func NewUserBillingService(opts ...option.RequestOption) (r *UserBillingService) {
 	r = &UserBillingService{}
 	r.Options = opts
-	r.Histories = NewUserBillingHistoryService(opts...)
+	r.History = NewUserBillingHistoryService(opts...)
 	r.Profiles = NewUserBillingProfileService(opts...)
 	return
 }

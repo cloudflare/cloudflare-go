@@ -14,8 +14,8 @@ import (
 type SecondaryDNSService struct {
 	Options    []option.RequestOption
 	ForceAxfrs *SecondaryDNSForceAxfrService
-	Incomings  *SecondaryDNSIncomingService
-	Outgoings  *SecondaryDNSOutgoingService
+	Incoming   *SecondaryDNSIncomingService
+	Outgoing   *SecondaryDNSOutgoingService
 	ACLs       *SecondaryDNSACLService
 	Peers      *SecondaryDNSPeerService
 	Tsigs      *SecondaryDNSTsigService
@@ -28,8 +28,8 @@ func NewSecondaryDNSService(opts ...option.RequestOption) (r *SecondaryDNSServic
 	r = &SecondaryDNSService{}
 	r.Options = opts
 	r.ForceAxfrs = NewSecondaryDNSForceAxfrService(opts...)
-	r.Incomings = NewSecondaryDNSIncomingService(opts...)
-	r.Outgoings = NewSecondaryDNSOutgoingService(opts...)
+	r.Incoming = NewSecondaryDNSIncomingService(opts...)
+	r.Outgoing = NewSecondaryDNSOutgoingService(opts...)
 	r.ACLs = NewSecondaryDNSACLService(opts...)
 	r.Peers = NewSecondaryDNSPeerService(opts...)
 	r.Tsigs = NewSecondaryDNSTsigService(opts...)

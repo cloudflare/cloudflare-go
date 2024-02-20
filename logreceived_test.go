@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestLogReceivedReceivedGetLogsReceivedWithOptionalParams(t *testing.T) {
+func TestLogReceivedGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,16 +30,16 @@ func TestLogReceivedReceivedGetLogsReceivedWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Logs.Receiveds.ReceivedGetLogsReceived(
+	_, err := client.Logs.Received.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.LogReceivedReceivedGetLogsReceivedParams{
-			End:        cloudflare.F[cloudflare.LogReceivedReceivedGetLogsReceivedParamsEnd](shared.UnionString("2018-05-20T10:01:00Z")),
+		cloudflare.LogReceivedGetParams{
+			End:        cloudflare.F[cloudflare.LogReceivedGetParamsEnd](shared.UnionString("2018-05-20T10:01:00Z")),
 			Count:      cloudflare.F(int64(1)),
 			Fields:     cloudflare.F("ClientIP,RayID,EdgeStartTimestamp"),
 			Sample:     cloudflare.F(0.100000),
-			Start:      cloudflare.F[cloudflare.LogReceivedReceivedGetLogsReceivedParamsStart](shared.UnionString("2018-05-20T10:00:00Z")),
-			Timestamps: cloudflare.F(cloudflare.LogReceivedReceivedGetLogsReceivedParamsTimestampsUnixnano),
+			Start:      cloudflare.F[cloudflare.LogReceivedGetParamsStart](shared.UnionString("2018-05-20T10:00:00Z")),
+			Timestamps: cloudflare.F(cloudflare.LogReceivedGetParamsTimestampsUnixnano),
 		},
 	)
 	if err != nil {

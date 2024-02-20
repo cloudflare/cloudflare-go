@@ -54,9 +54,9 @@ func (r *StorageKvNamespaceBulkService) Delete(ctx context.Context, accountID st
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
-func (r *StorageKvNamespaceBulkService) WorkersKvNamespaceWriteMultipleKeyValuePairs(ctx context.Context, accountID string, namespaceID string, body StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParams, opts ...option.RequestOption) (res *StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponse, err error) {
+func (r *StorageKvNamespaceBulkService) Replace(ctx context.Context, accountID string, namespaceID string, body StorageKvNamespaceBulkReplaceParams, opts ...option.RequestOption) (res *StorageKvNamespaceBulkReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelope
+	var env StorageKvNamespaceBulkReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", accountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -83,16 +83,15 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseUnknown]
-// or [shared.UnionString].
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponse interface {
-	ImplementsStorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponse()
+// Union satisfied by [StorageKvNamespaceBulkReplaceResponseUnknown] or
+// [shared.UnionString].
+type StorageKvNamespaceBulkReplaceResponse interface {
+	ImplementsStorageKvNamespaceBulkReplaceResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponse)(nil)).Elem(),
+		reflect.TypeOf((*StorageKvNamespaceBulkReplaceResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -178,15 +177,15 @@ const (
 	StorageKvNamespaceBulkDeleteResponseEnvelopeSuccessTrue StorageKvNamespaceBulkDeleteResponseEnvelopeSuccess = true
 )
 
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParams struct {
-	Body param.Field[[]StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParamsBody] `json:"body,required"`
+type StorageKvNamespaceBulkReplaceParams struct {
+	Body param.Field[[]StorageKvNamespaceBulkReplaceParamsBody] `json:"body,required"`
 }
 
-func (r StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParams) MarshalJSON() (data []byte, err error) {
+func (r StorageKvNamespaceBulkReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParamsBody struct {
+type StorageKvNamespaceBulkReplaceParamsBody struct {
 	// Whether or not the server should base64 decode the value before storing it.
 	// Useful for writing values that wouldn't otherwise be valid JSON strings, such as
 	// images.
@@ -206,23 +205,22 @@ type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParamsBod
 	Value param.Field[string] `json:"value"`
 }
 
-func (r StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParamsBody) MarshalJSON() (data []byte, err error) {
+func (r StorageKvNamespaceBulkReplaceParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelope struct {
-	Errors   []StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessages `json:"messages,required"`
-	Result   StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponse                   `json:"result,required"`
+type StorageKvNamespaceBulkReplaceResponseEnvelope struct {
+	Errors   []StorageKvNamespaceBulkReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StorageKvNamespaceBulkReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   StorageKvNamespaceBulkReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeJSON    `json:"-"`
+	Success StorageKvNamespaceBulkReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    storageKvNamespaceBulkReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelope]
-type storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeJSON struct {
+// storageKvNamespaceBulkReplaceResponseEnvelopeJSON contains the JSON metadata for
+// the struct [StorageKvNamespaceBulkReplaceResponseEnvelope]
+type storageKvNamespaceBulkReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -231,53 +229,51 @@ type storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKvNamespaceBulkReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrors struct {
-	Code    int64                                                                                        `json:"code,required"`
-	Message string                                                                                       `json:"message,required"`
-	JSON    storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrorsJSON `json:"-"`
+type StorageKvNamespaceBulkReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    storageKvNamespaceBulkReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrors]
-type storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrorsJSON struct {
+// storageKvNamespaceBulkReplaceResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [StorageKvNamespaceBulkReplaceResponseEnvelopeErrors]
+type storageKvNamespaceBulkReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKvNamespaceBulkReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessages struct {
-	Code    int64                                                                                          `json:"code,required"`
-	Message string                                                                                         `json:"message,required"`
-	JSON    storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessagesJSON `json:"-"`
+type StorageKvNamespaceBulkReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    storageKvNamespaceBulkReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessages]
-type storageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessagesJSON struct {
+// storageKvNamespaceBulkReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [StorageKvNamespaceBulkReplaceResponseEnvelopeMessages]
+type storageKvNamespaceBulkReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKvNamespaceBulkReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeSuccess bool
+type StorageKvNamespaceBulkReplaceResponseEnvelopeSuccess bool
 
 const (
-	StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeSuccessTrue StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsResponseEnvelopeSuccess = true
+	StorageKvNamespaceBulkReplaceResponseEnvelopeSuccessTrue StorageKvNamespaceBulkReplaceResponseEnvelopeSuccess = true
 )

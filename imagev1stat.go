@@ -31,9 +31,9 @@ func NewImageV1StatService(opts ...option.RequestOption) (r *ImageV1StatService)
 }
 
 // Fetch usage statistics details for Cloudflare Images.
-func (r *ImageV1StatService) CloudflareImagesImagesUsageStatistics(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1StatCloudflareImagesImagesUsageStatisticsResponse, err error) {
+func (r *ImageV1StatService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1StatGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelope
+	var env ImageV1StatGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/stats", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -43,59 +43,56 @@ func (r *ImageV1StatService) CloudflareImagesImagesUsageStatistics(ctx context.C
 	return
 }
 
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponse struct {
-	Count ImageV1StatCloudflareImagesImagesUsageStatisticsResponseCount `json:"count"`
-	JSON  imageV1StatCloudflareImagesImagesUsageStatisticsResponseJSON  `json:"-"`
+type ImageV1StatGetResponse struct {
+	Count ImageV1StatGetResponseCount `json:"count"`
+	JSON  imageV1StatGetResponseJSON  `json:"-"`
 }
 
-// imageV1StatCloudflareImagesImagesUsageStatisticsResponseJSON contains the JSON
-// metadata for the struct
-// [ImageV1StatCloudflareImagesImagesUsageStatisticsResponse]
-type imageV1StatCloudflareImagesImagesUsageStatisticsResponseJSON struct {
+// imageV1StatGetResponseJSON contains the JSON metadata for the struct
+// [ImageV1StatGetResponse]
+type imageV1StatGetResponseJSON struct {
 	Count       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1StatCloudflareImagesImagesUsageStatisticsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1StatGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponseCount struct {
+type ImageV1StatGetResponseCount struct {
 	// Cloudflare Images allowed usage.
 	Allowed float64 `json:"allowed"`
 	// Cloudflare Images current usage.
-	Current float64                                                           `json:"current"`
-	JSON    imageV1StatCloudflareImagesImagesUsageStatisticsResponseCountJSON `json:"-"`
+	Current float64                         `json:"current"`
+	JSON    imageV1StatGetResponseCountJSON `json:"-"`
 }
 
-// imageV1StatCloudflareImagesImagesUsageStatisticsResponseCountJSON contains the
-// JSON metadata for the struct
-// [ImageV1StatCloudflareImagesImagesUsageStatisticsResponseCount]
-type imageV1StatCloudflareImagesImagesUsageStatisticsResponseCountJSON struct {
+// imageV1StatGetResponseCountJSON contains the JSON metadata for the struct
+// [ImageV1StatGetResponseCount]
+type imageV1StatGetResponseCountJSON struct {
 	Allowed     apijson.Field
 	Current     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1StatCloudflareImagesImagesUsageStatisticsResponseCount) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1StatGetResponseCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelope struct {
-	Errors   []ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImageV1StatCloudflareImagesImagesUsageStatisticsResponse                   `json:"result,required"`
+type ImageV1StatGetResponseEnvelope struct {
+	Errors   []ImageV1StatGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ImageV1StatGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ImageV1StatGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeJSON    `json:"-"`
+	Success ImageV1StatGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    imageV1StatGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelope]
-type imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeJSON struct {
+// imageV1StatGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ImageV1StatGetResponseEnvelope]
+type imageV1StatGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -104,53 +101,51 @@ type imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1StatGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrors struct {
-	Code    int64                                                                      `json:"code,required"`
-	Message string                                                                     `json:"message,required"`
-	JSON    imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrorsJSON `json:"-"`
+type ImageV1StatGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    imageV1StatGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrors]
-type imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrorsJSON struct {
+// imageV1StatGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ImageV1StatGetResponseEnvelopeErrors]
+type imageV1StatGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1StatGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessages struct {
-	Code    int64                                                                        `json:"code,required"`
-	Message string                                                                       `json:"message,required"`
-	JSON    imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessagesJSON `json:"-"`
+type ImageV1StatGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    imageV1StatGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessages]
-type imageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessagesJSON struct {
+// imageV1StatGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ImageV1StatGetResponseEnvelopeMessages]
+type imageV1StatGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1StatGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeSuccess bool
+type ImageV1StatGetResponseEnvelopeSuccess bool
 
 const (
-	ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeSuccessTrue ImageV1StatCloudflareImagesImagesUsageStatisticsResponseEnvelopeSuccess = true
+	ImageV1StatGetResponseEnvelopeSuccessTrue ImageV1StatGetResponseEnvelopeSuccess = true
 )

@@ -32,14 +32,12 @@ func NewMagicCfInterconnectService(opts ...option.RequestOption) (r *MagicCfInte
 	return
 }
 
-// Updates a specific interconnect associated with an account. Use
-// `?validate_only=true` as an optional query parameter to only run validation
-// without persisting changes.
-func (r *MagicCfInterconnectService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicCfInterconnectUpdateParams, opts ...option.RequestOption) (res *MagicCfInterconnectUpdateResponse, err error) {
+// Lists interconnects associated with an account.
+func (r *MagicCfInterconnectService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MagicCfInterconnectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicCfInterconnectUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", accountIdentifier, tunnelIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env MagicCfInterconnectListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,26 +58,13 @@ func (r *MagicCfInterconnectService) Get(ctx context.Context, accountIdentifier 
 	return
 }
 
-// Lists interconnects associated with an account.
-func (r *MagicCfInterconnectService) MagicInterconnectsListInterconnects(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MagicCfInterconnectMagicInterconnectsListInterconnectsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates multiple interconnects associated with an account. Use
+// Updates a specific interconnect associated with an account. Use
 // `?validate_only=true` as an optional query parameter to only run validation
 // without persisting changes.
-func (r *MagicCfInterconnectService) MagicInterconnectsUpdateMultipleInterconnects(ctx context.Context, accountIdentifier string, body MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsParams, opts ...option.RequestOption) (res *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponse, err error) {
+func (r *MagicCfInterconnectService) Replace(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicCfInterconnectReplaceParams, opts ...option.RequestOption) (res *MagicCfInterconnectReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects", accountIdentifier)
+	var env MagicCfInterconnectReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/cf_interconnects/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -88,24 +73,136 @@ func (r *MagicCfInterconnectService) MagicInterconnectsUpdateMultipleInterconnec
 	return
 }
 
-type MagicCfInterconnectUpdateResponse struct {
-	Modified             bool                                  `json:"modified"`
-	ModifiedInterconnect interface{}                           `json:"modified_interconnect"`
-	JSON                 magicCfInterconnectUpdateResponseJSON `json:"-"`
+type MagicCfInterconnectListResponse struct {
+	Interconnects []MagicCfInterconnectListResponseInterconnect `json:"interconnects"`
+	JSON          magicCfInterconnectListResponseJSON           `json:"-"`
 }
 
-// magicCfInterconnectUpdateResponseJSON contains the JSON metadata for the struct
-// [MagicCfInterconnectUpdateResponse]
-type magicCfInterconnectUpdateResponseJSON struct {
-	Modified             apijson.Field
-	ModifiedInterconnect apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+// magicCfInterconnectListResponseJSON contains the JSON metadata for the struct
+// [MagicCfInterconnectListResponse]
+type magicCfInterconnectListResponseJSON struct {
+	Interconnects apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type MagicCfInterconnectListResponseInterconnect struct {
+	// Tunnel identifier tag.
+	ID string `json:"id"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	ColoName string `json:"colo_name"`
+	// The date and time the tunnel was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// An optional description of the interconnect.
+	Description string `json:"description"`
+	// The configuration specific to GRE interconnects.
+	Gre         MagicCfInterconnectListResponseInterconnectsGre         `json:"gre"`
+	HealthCheck MagicCfInterconnectListResponseInterconnectsHealthCheck `json:"health_check"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress string `json:"interface_address"`
+	// The date and time the tunnel was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
+	// value is 576.
+	Mtu int64 `json:"mtu"`
+	// The name of the interconnect. The name cannot share a name with other tunnels.
+	Name string                                          `json:"name"`
+	JSON magicCfInterconnectListResponseInterconnectJSON `json:"-"`
+}
+
+// magicCfInterconnectListResponseInterconnectJSON contains the JSON metadata for
+// the struct [MagicCfInterconnectListResponseInterconnect]
+type magicCfInterconnectListResponseInterconnectJSON struct {
+	ID               apijson.Field
+	ColoName         apijson.Field
+	CreatedOn        apijson.Field
+	Description      apijson.Field
+	Gre              apijson.Field
+	HealthCheck      apijson.Field
+	InterfaceAddress apijson.Field
+	ModifiedOn       apijson.Field
+	Mtu              apijson.Field
+	Name             apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *MagicCfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration specific to GRE interconnects.
+type MagicCfInterconnectListResponseInterconnectsGre struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
+	// of the Interconnect.
+	CloudflareEndpoint string                                              `json:"cloudflare_endpoint"`
+	JSON               magicCfInterconnectListResponseInterconnectsGreJSON `json:"-"`
+}
+
+// magicCfInterconnectListResponseInterconnectsGreJSON contains the JSON metadata
+// for the struct [MagicCfInterconnectListResponseInterconnectsGre]
+type magicCfInterconnectListResponseInterconnectsGreJSON struct {
+	CloudflareEndpoint apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *MagicCfInterconnectListResponseInterconnectsGre) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicCfInterconnectListResponseInterconnectsHealthCheck struct {
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled bool `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate MagicCfInterconnectListResponseInterconnectsHealthCheckRate `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`.
+	Target string `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type MagicCfInterconnectListResponseInterconnectsHealthCheckType `json:"type"`
+	JSON magicCfInterconnectListResponseInterconnectsHealthCheckJSON `json:"-"`
+}
+
+// magicCfInterconnectListResponseInterconnectsHealthCheckJSON contains the JSON
+// metadata for the struct
+// [MagicCfInterconnectListResponseInterconnectsHealthCheck]
+type magicCfInterconnectListResponseInterconnectsHealthCheckJSON struct {
+	Enabled     apijson.Field
+	Rate        apijson.Field
+	Target      apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicCfInterconnectListResponseInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// How frequent the health check is run. The default value is `mid`.
+type MagicCfInterconnectListResponseInterconnectsHealthCheckRate string
+
+const (
+	MagicCfInterconnectListResponseInterconnectsHealthCheckRateLow  MagicCfInterconnectListResponseInterconnectsHealthCheckRate = "low"
+	MagicCfInterconnectListResponseInterconnectsHealthCheckRateMid  MagicCfInterconnectListResponseInterconnectsHealthCheckRate = "mid"
+	MagicCfInterconnectListResponseInterconnectsHealthCheckRateHigh MagicCfInterconnectListResponseInterconnectsHealthCheckRate = "high"
+)
+
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type MagicCfInterconnectListResponseInterconnectsHealthCheckType string
+
+const (
+	MagicCfInterconnectListResponseInterconnectsHealthCheckTypeReply   MagicCfInterconnectListResponseInterconnectsHealthCheckType = "reply"
+	MagicCfInterconnectListResponseInterconnectsHealthCheckTypeRequest MagicCfInterconnectListResponseInterconnectsHealthCheckType = "request"
+)
 
 type MagicCfInterconnectGetResponse struct {
 	Interconnect interface{}                        `json:"interconnect"`
@@ -124,352 +221,37 @@ func (r *MagicCfInterconnectGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponse struct {
-	Interconnects []MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnect `json:"interconnects"`
-	JSON          magicCfInterconnectMagicInterconnectsListInterconnectsResponseJSON           `json:"-"`
+type MagicCfInterconnectReplaceResponse struct {
+	Modified             bool                                   `json:"modified"`
+	ModifiedInterconnect interface{}                            `json:"modified_interconnect"`
+	JSON                 magicCfInterconnectReplaceResponseJSON `json:"-"`
 }
 
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseJSON contains the
-// JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponse]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseJSON struct {
-	Interconnects apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+// magicCfInterconnectReplaceResponseJSON contains the JSON metadata for the struct
+// [MagicCfInterconnectReplaceResponse]
+type magicCfInterconnectReplaceResponseJSON struct {
+	Modified             apijson.Field
+	ModifiedInterconnect apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnect struct {
-	// Tunnel identifier tag.
-	ID string `json:"id"`
-	// The name of the interconnect. The name cannot share a name with other tunnels.
-	ColoName string `json:"colo_name"`
-	// The date and time the tunnel was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the interconnect.
-	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	Gre         MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGre         `json:"gre"`
-	HealthCheck MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheck `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address"`
-	// The date and time the tunnel was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
-	// value is 576.
-	Mtu int64 `json:"mtu"`
-	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                                                         `json:"name"`
-	JSON magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnect]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	Gre              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration specific to GRE interconnects.
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGre struct {
-	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
-	// of the Interconnect.
-	CloudflareEndpoint string                                                                             `json:"cloudflare_endpoint"`
-	JSON               magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGreJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGreJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGre]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGreJSON struct {
-	CloudflareEndpoint apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsGre) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheck struct {
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRate `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`.
-	Target string `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckType `json:"type"`
-	JSON magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheck]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckJSON struct {
-	Enabled     apijson.Field
-	Rate        apijson.Field
-	Target      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRate string
-
-const (
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRateLow  MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRate = "low"
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRateMid  MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRate = "mid"
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRateHigh MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckRate = "high"
-)
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckType string
-
-const (
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckTypeReply   MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckType = "reply"
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckTypeRequest MagicCfInterconnectMagicInterconnectsListInterconnectsResponseInterconnectsHealthCheckType = "request"
-)
-
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponse struct {
-	Modified              bool                                                                                           `json:"modified"`
-	ModifiedInterconnects []MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnect `json:"modified_interconnects"`
-	JSON                  magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseJSON                   `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponse]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseJSON struct {
-	Modified              apijson.Field
-	ModifiedInterconnects apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnect struct {
-	// Tunnel identifier tag.
-	ID string `json:"id"`
-	// The name of the interconnect. The name cannot share a name with other tunnels.
-	ColoName string `json:"colo_name"`
-	// The date and time the tunnel was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the interconnect.
-	Description string `json:"description"`
-	// The configuration specific to GRE interconnects.
-	Gre         MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGre         `json:"gre"`
-	HealthCheck MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheck `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress string `json:"interface_address"`
-	// The date and time the tunnel was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
-	// value is 576.
-	Mtu int64 `json:"mtu"`
-	// The name of the interconnect. The name cannot share a name with other tunnels.
-	Name string                                                                                           `json:"name"`
-	JSON magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnect]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectJSON struct {
-	ID               apijson.Field
-	ColoName         apijson.Field
-	CreatedOn        apijson.Field
-	Description      apijson.Field
-	Gre              apijson.Field
-	HealthCheck      apijson.Field
-	InterfaceAddress apijson.Field
-	ModifiedOn       apijson.Field
-	Mtu              apijson.Field
-	Name             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration specific to GRE interconnects.
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGre struct {
-	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
-	// of the Interconnect.
-	CloudflareEndpoint string                                                                                               `json:"cloudflare_endpoint"`
-	JSON               magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGreJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGreJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGre]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGreJSON struct {
-	CloudflareEndpoint apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsGre) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheck struct {
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled bool `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRate `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`.
-	Target string `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckType `json:"type"`
-	JSON magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheck]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckJSON struct {
-	Enabled     apijson.Field
-	Rate        apijson.Field
-	Target      apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRate string
-
-const (
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRateLow  MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRate = "low"
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRateMid  MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRate = "mid"
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRateHigh MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckRate = "high"
-)
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckType string
-
-const (
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckTypeReply   MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckType = "reply"
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckTypeRequest MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseModifiedInterconnectsHealthCheckType = "request"
-)
-
-type MagicCfInterconnectUpdateParams struct {
-	// An optional description of the interconnect.
-	Description param.Field[string] `json:"description"`
-	// The configuration specific to GRE interconnects.
-	Gre         param.Field[MagicCfInterconnectUpdateParamsGre]         `json:"gre"`
-	HealthCheck param.Field[MagicCfInterconnectUpdateParamsHealthCheck] `json:"health_check"`
-	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
-	// of the tunnel. Select the subnet from the following private IP space:
-	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
-	InterfaceAddress param.Field[string] `json:"interface_address"`
-	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
-	// value is 576.
-	Mtu param.Field[int64] `json:"mtu"`
-}
-
-func (r MagicCfInterconnectUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration specific to GRE interconnects.
-type MagicCfInterconnectUpdateParamsGre struct {
-	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
-	// of the Interconnect.
-	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint"`
-}
-
-func (r MagicCfInterconnectUpdateParamsGre) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type MagicCfInterconnectUpdateParamsHealthCheck struct {
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[MagicCfInterconnectUpdateParamsHealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[MagicCfInterconnectUpdateParamsHealthCheckType] `json:"type"`
-}
-
-func (r MagicCfInterconnectUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// How frequent the health check is run. The default value is `mid`.
-type MagicCfInterconnectUpdateParamsHealthCheckRate string
-
-const (
-	MagicCfInterconnectUpdateParamsHealthCheckRateLow  MagicCfInterconnectUpdateParamsHealthCheckRate = "low"
-	MagicCfInterconnectUpdateParamsHealthCheckRateMid  MagicCfInterconnectUpdateParamsHealthCheckRate = "mid"
-	MagicCfInterconnectUpdateParamsHealthCheckRateHigh MagicCfInterconnectUpdateParamsHealthCheckRate = "high"
-)
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicCfInterconnectUpdateParamsHealthCheckType string
-
-const (
-	MagicCfInterconnectUpdateParamsHealthCheckTypeReply   MagicCfInterconnectUpdateParamsHealthCheckType = "reply"
-	MagicCfInterconnectUpdateParamsHealthCheckTypeRequest MagicCfInterconnectUpdateParamsHealthCheckType = "request"
-)
-
-type MagicCfInterconnectUpdateResponseEnvelope struct {
-	Errors   []MagicCfInterconnectUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicCfInterconnectUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicCfInterconnectUpdateResponse                   `json:"result,required"`
+type MagicCfInterconnectListResponseEnvelope struct {
+	Errors   []MagicCfInterconnectListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicCfInterconnectListResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicCfInterconnectListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicCfInterconnectUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicCfInterconnectUpdateResponseEnvelopeJSON    `json:"-"`
+	Success MagicCfInterconnectListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicCfInterconnectListResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicCfInterconnectUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MagicCfInterconnectUpdateResponseEnvelope]
-type magicCfInterconnectUpdateResponseEnvelopeJSON struct {
+// magicCfInterconnectListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [MagicCfInterconnectListResponseEnvelope]
+type magicCfInterconnectListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -478,53 +260,53 @@ type magicCfInterconnectUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicCfInterconnectUpdateResponseEnvelopeErrors struct {
+type MagicCfInterconnectListResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    magicCfInterconnectListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// magicCfInterconnectListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [MagicCfInterconnectListResponseEnvelopeErrors]
+type magicCfInterconnectListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicCfInterconnectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicCfInterconnectListResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
-	JSON    magicCfInterconnectUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicCfInterconnectListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicCfInterconnectUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [MagicCfInterconnectUpdateResponseEnvelopeErrors]
-type magicCfInterconnectUpdateResponseEnvelopeErrorsJSON struct {
+// magicCfInterconnectListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [MagicCfInterconnectListResponseEnvelopeMessages]
+type magicCfInterconnectListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicCfInterconnectUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    magicCfInterconnectUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// magicCfInterconnectUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [MagicCfInterconnectUpdateResponseEnvelopeMessages]
-type magicCfInterconnectUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicCfInterconnectUpdateResponseEnvelopeSuccess bool
+type MagicCfInterconnectListResponseEnvelopeSuccess bool
 
 const (
-	MagicCfInterconnectUpdateResponseEnvelopeSuccessTrue MagicCfInterconnectUpdateResponseEnvelopeSuccess = true
+	MagicCfInterconnectListResponseEnvelopeSuccessTrue MagicCfInterconnectListResponseEnvelopeSuccess = true
 )
 
 type MagicCfInterconnectGetResponseEnvelope struct {
@@ -596,99 +378,82 @@ const (
 	MagicCfInterconnectGetResponseEnvelopeSuccessTrue MagicCfInterconnectGetResponseEnvelopeSuccess = true
 )
 
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelope struct {
-	Errors   []MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicCfInterconnectMagicInterconnectsListInterconnectsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeJSON    `json:"-"`
+type MagicCfInterconnectReplaceParams struct {
+	// An optional description of the interconnect.
+	Description param.Field[string] `json:"description"`
+	// The configuration specific to GRE interconnects.
+	Gre         param.Field[MagicCfInterconnectReplaceParamsGre]         `json:"gre"`
+	HealthCheck param.Field[MagicCfInterconnectReplaceParamsHealthCheck] `json:"health_check"`
+	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
+	// of the tunnel. Select the subnet from the following private IP space:
+	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
+	InterfaceAddress param.Field[string] `json:"interface_address"`
+	// The Maximum Transmission Unit (MTU) in bytes for the interconnect. The minimum
+	// value is 576.
+	Mtu param.Field[int64] `json:"mtu"`
 }
 
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelope]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r MagicCfInterconnectReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// The configuration specific to GRE interconnects.
+type MagicCfInterconnectReplaceParamsGre struct {
+	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
+	// of the Interconnect.
+	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint"`
 }
 
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrors struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrorsJSON `json:"-"`
+func (r MagicCfInterconnectReplaceParamsGre) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrors]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+type MagicCfInterconnectReplaceParamsHealthCheck struct {
+	// Determines whether to run healthchecks for a tunnel.
+	Enabled param.Field[bool] `json:"enabled"`
+	// How frequent the health check is run. The default value is `mid`.
+	Rate param.Field[MagicCfInterconnectReplaceParamsHealthCheckRate] `json:"rate"`
+	// The destination address in a request type health check. After the healthcheck is
+	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
+	// to this address. This field defaults to `customer_gre_endpoint address`.
+	Target param.Field[string] `json:"target"`
+	// The type of healthcheck to run, reply or request. The default value is `reply`.
+	Type param.Field[MagicCfInterconnectReplaceParamsHealthCheckType] `json:"type"`
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r MagicCfInterconnectReplaceParamsHealthCheck) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessages struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessages]
-type magicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeSuccess bool
+// How frequent the health check is run. The default value is `mid`.
+type MagicCfInterconnectReplaceParamsHealthCheckRate string
 
 const (
-	MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeSuccessTrue MagicCfInterconnectMagicInterconnectsListInterconnectsResponseEnvelopeSuccess = true
+	MagicCfInterconnectReplaceParamsHealthCheckRateLow  MagicCfInterconnectReplaceParamsHealthCheckRate = "low"
+	MagicCfInterconnectReplaceParamsHealthCheckRateMid  MagicCfInterconnectReplaceParamsHealthCheckRate = "mid"
+	MagicCfInterconnectReplaceParamsHealthCheckRateHigh MagicCfInterconnectReplaceParamsHealthCheckRate = "high"
 )
 
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
+// The type of healthcheck to run, reply or request. The default value is `reply`.
+type MagicCfInterconnectReplaceParamsHealthCheckType string
 
-func (r MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
+const (
+	MagicCfInterconnectReplaceParamsHealthCheckTypeReply   MagicCfInterconnectReplaceParamsHealthCheckType = "reply"
+	MagicCfInterconnectReplaceParamsHealthCheckTypeRequest MagicCfInterconnectReplaceParamsHealthCheckType = "request"
+)
 
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelope struct {
-	Errors   []MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponse                   `json:"result,required"`
+type MagicCfInterconnectReplaceResponseEnvelope struct {
+	Errors   []MagicCfInterconnectReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicCfInterconnectReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicCfInterconnectReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeJSON    `json:"-"`
+	Success MagicCfInterconnectReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicCfInterconnectReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelope]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeJSON struct {
+// magicCfInterconnectReplaceResponseEnvelopeJSON contains the JSON metadata for
+// the struct [MagicCfInterconnectReplaceResponseEnvelope]
+type magicCfInterconnectReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -697,53 +462,51 @@ type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnv
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrors struct {
-	Code    int64                                                                                      `json:"code,required"`
-	Message string                                                                                     `json:"message,required"`
-	JSON    magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrorsJSON `json:"-"`
+type MagicCfInterconnectReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    magicCfInterconnectReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrors]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrorsJSON struct {
+// magicCfInterconnectReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [MagicCfInterconnectReplaceResponseEnvelopeErrors]
+type magicCfInterconnectReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessages struct {
-	Code    int64                                                                                        `json:"code,required"`
-	Message string                                                                                       `json:"message,required"`
-	JSON    magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessagesJSON `json:"-"`
+type MagicCfInterconnectReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    magicCfInterconnectReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessages]
-type magicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessagesJSON struct {
+// magicCfInterconnectReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [MagicCfInterconnectReplaceResponseEnvelopeMessages]
+type magicCfInterconnectReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeSuccess bool
+type MagicCfInterconnectReplaceResponseEnvelopeSuccess bool
 
 const (
-	MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeSuccessTrue MagicCfInterconnectMagicInterconnectsUpdateMultipleInterconnectsResponseEnvelopeSuccess = true
+	MagicCfInterconnectReplaceResponseEnvelopeSuccessTrue MagicCfInterconnectReplaceResponseEnvelopeSuccess = true
 )

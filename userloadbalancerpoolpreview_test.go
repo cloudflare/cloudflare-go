@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolWithOptionalParams(t *testing.T) {
+func TestUserLoadBalancerPoolPreviewNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestUserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolWithOptionalPara
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.LoadBalancers.Pools.Previews.LoadBalancerPoolsPreviewPool(
+	_, err := client.Users.LoadBalancers.Pools.Previews.New(
 		context.TODO(),
 		"17b5962d775c646f3f9725cbc7a53df4",
-		cloudflare.UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParams{
+		cloudflare.UserLoadBalancerPoolPreviewNewParams{
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -55,7 +55,7 @@ func TestUserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolWithOptionalPara
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeHTTPS),
+			Type:      cloudflare.F(cloudflare.UserLoadBalancerPoolPreviewNewParamsTypeHTTPS),
 		},
 	)
 	if err != nil {

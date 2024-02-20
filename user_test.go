@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserUserEditUserWithOptionalParams(t *testing.T) {
+func TestUserUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestUserUserEditUserWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.UserEditUser(context.TODO(), cloudflare.UserUserEditUserParams{
+	_, err := client.Users.Update(context.TODO(), cloudflare.UserUpdateParams{
 		Country:   cloudflare.F("US"),
 		FirstName: cloudflare.F("John"),
 		LastName:  cloudflare.F("Appleseed"),
@@ -45,7 +45,7 @@ func TestUserUserEditUserWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestUserUserUserDetails(t *testing.T) {
+func TestUserList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,7 +61,7 @@ func TestUserUserUserDetails(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.UserUserDetails(context.TODO())
+	_, err := client.Users.List(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

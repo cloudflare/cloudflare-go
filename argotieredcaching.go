@@ -34,23 +34,10 @@ func NewArgoTieredCachingService(opts ...option.RequestOption) (r *ArgoTieredCac
 	return
 }
 
-// Get Tiered Caching setting
-func (r *ArgoTieredCachingService) TieredCachingGetTieredCachingSetting(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ArgoTieredCachingTieredCachingGetTieredCachingSettingResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelope
-	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Updates enablement of Tiered Caching
-func (r *ArgoTieredCachingService) TieredCachingPatchTieredCachingSetting(ctx context.Context, zoneID string, body ArgoTieredCachingTieredCachingPatchTieredCachingSettingParams, opts ...option.RequestOption) (res *ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse, err error) {
+func (r *ArgoTieredCachingService) Update(ctx context.Context, zoneID string, body ArgoTieredCachingUpdateParams, opts ...option.RequestOption) (res *ArgoTieredCachingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelope
+	var env ArgoTieredCachingUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -60,16 +47,28 @@ func (r *ArgoTieredCachingService) TieredCachingPatchTieredCachingSetting(ctx co
 	return
 }
 
-// Union satisfied by
-// [ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseUnknown] or
+// Get Tiered Caching setting
+func (r *ArgoTieredCachingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ArgoTieredCachingGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ArgoTieredCachingGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Union satisfied by [ArgoTieredCachingUpdateResponseUnknown] or
 // [shared.UnionString].
-type ArgoTieredCachingTieredCachingGetTieredCachingSettingResponse interface {
-	ImplementsArgoTieredCachingTieredCachingGetTieredCachingSettingResponse()
+type ArgoTieredCachingUpdateResponse interface {
+	ImplementsArgoTieredCachingUpdateResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ArgoTieredCachingTieredCachingGetTieredCachingSettingResponse)(nil)).Elem(),
+		reflect.TypeOf((*ArgoTieredCachingUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -78,16 +77,15 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseUnknown] or
+// Union satisfied by [ArgoTieredCachingGetResponseUnknown] or
 // [shared.UnionString].
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse interface {
-	ImplementsArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse()
+type ArgoTieredCachingGetResponse interface {
+	ImplementsArgoTieredCachingGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse)(nil)).Elem(),
+		reflect.TypeOf((*ArgoTieredCachingGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -96,108 +94,35 @@ func init() {
 	)
 }
 
-type ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelope struct {
-	Errors   []ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessages `json:"messages,required"`
-	Result   ArgoTieredCachingTieredCachingGetTieredCachingSettingResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeSuccess `json:"success,required"`
-	JSON    argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeJSON    `json:"-"`
-}
-
-// argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelope]
-type argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrors struct {
-	Code    int64                                                                           `json:"code,required"`
-	Message string                                                                          `json:"message,required"`
-	JSON    argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrors]
-type argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessages struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessages]
-type argoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeSuccess bool
-
-const (
-	ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeSuccessTrue ArgoTieredCachingTieredCachingGetTieredCachingSettingResponseEnvelopeSuccess = true
-)
-
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingParams struct {
+type ArgoTieredCachingUpdateParams struct {
 	// Enables Tiered Caching.
-	Value param.Field[ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValue] `json:"value,required"`
+	Value param.Field[ArgoTieredCachingUpdateParamsValue] `json:"value,required"`
 }
 
-func (r ArgoTieredCachingTieredCachingPatchTieredCachingSettingParams) MarshalJSON() (data []byte, err error) {
+func (r ArgoTieredCachingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Enables Tiered Caching.
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValue string
+type ArgoTieredCachingUpdateParamsValue string
 
 const (
-	ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValueOn  ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValue = "on"
-	ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValueOff ArgoTieredCachingTieredCachingPatchTieredCachingSettingParamsValue = "off"
+	ArgoTieredCachingUpdateParamsValueOn  ArgoTieredCachingUpdateParamsValue = "on"
+	ArgoTieredCachingUpdateParamsValueOff ArgoTieredCachingUpdateParamsValue = "off"
 )
 
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelope struct {
-	Errors   []ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessages `json:"messages,required"`
-	Result   ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponse                   `json:"result,required"`
+type ArgoTieredCachingUpdateResponseEnvelope struct {
+	Errors   []ArgoTieredCachingUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ArgoTieredCachingUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   ArgoTieredCachingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeSuccess `json:"success,required"`
-	JSON    argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeJSON    `json:"-"`
+	Success ArgoTieredCachingUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    argoTieredCachingUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelope]
-type argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeJSON struct {
+// argoTieredCachingUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ArgoTieredCachingUpdateResponseEnvelope]
+type argoTieredCachingUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -206,53 +131,120 @@ type argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ArgoTieredCachingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrorsJSON `json:"-"`
+type ArgoTieredCachingUpdateResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    argoTieredCachingUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrors]
-type argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrorsJSON struct {
+// argoTieredCachingUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ArgoTieredCachingUpdateResponseEnvelopeErrors]
+type argoTieredCachingUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ArgoTieredCachingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessagesJSON `json:"-"`
+type ArgoTieredCachingUpdateResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    argoTieredCachingUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessages]
-type argoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessagesJSON struct {
+// argoTieredCachingUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ArgoTieredCachingUpdateResponseEnvelopeMessages]
+type argoTieredCachingUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ArgoTieredCachingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeSuccess bool
+type ArgoTieredCachingUpdateResponseEnvelopeSuccess bool
 
 const (
-	ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeSuccessTrue ArgoTieredCachingTieredCachingPatchTieredCachingSettingResponseEnvelopeSuccess = true
+	ArgoTieredCachingUpdateResponseEnvelopeSuccessTrue ArgoTieredCachingUpdateResponseEnvelopeSuccess = true
+)
+
+type ArgoTieredCachingGetResponseEnvelope struct {
+	Errors   []ArgoTieredCachingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ArgoTieredCachingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ArgoTieredCachingGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success ArgoTieredCachingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    argoTieredCachingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// argoTieredCachingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ArgoTieredCachingGetResponseEnvelope]
+type argoTieredCachingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ArgoTieredCachingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ArgoTieredCachingGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    argoTieredCachingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// argoTieredCachingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ArgoTieredCachingGetResponseEnvelopeErrors]
+type argoTieredCachingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ArgoTieredCachingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ArgoTieredCachingGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    argoTieredCachingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// argoTieredCachingGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ArgoTieredCachingGetResponseEnvelopeMessages]
+type argoTieredCachingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ArgoTieredCachingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ArgoTieredCachingGetResponseEnvelopeSuccess bool
+
+const (
+	ArgoTieredCachingGetResponseEnvelopeSuccessTrue ArgoTieredCachingGetResponseEnvelopeSuccess = true
 )

@@ -36,6 +36,36 @@ func NewRuleListItemService(opts ...option.RequestOption) (r *RuleListItemServic
 	return
 }
 
+// Appends new items to the list.
+//
+// This operation is asynchronous. To get current the operation status, invoke the
+// [Get bulk operation status](/operations/lists-get-bulk-operation-status)
+// endpoint with the returned `operation_id`.
+func (r *RuleListItemService) New(ctx context.Context, accountID string, listID string, body RuleListItemNewParams, opts ...option.RequestOption) (res *RuleListItemNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RuleListItemNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches all the items in the list.
+func (r *RuleListItemService) List(ctx context.Context, accountID string, listID string, query RuleListItemListParams, opts ...option.RequestOption) (res *[]RuleListItemListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RuleListItemListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Removes one or more items from a list.
 //
 // This operation is asynchronous. To get current the operation status, invoke the
@@ -66,45 +96,15 @@ func (r *RuleListItemService) Get(ctx context.Context, accountIdentifier string,
 	return
 }
 
-// Appends new items to the list.
-//
-// This operation is asynchronous. To get current the operation status, invoke the
-// [Get bulk operation status](/operations/lists-get-bulk-operation-status)
-// endpoint with the returned `operation_id`.
-func (r *RuleListItemService) ListsNewListItems(ctx context.Context, accountID string, listID string, body RuleListItemListsNewListItemsParams, opts ...option.RequestOption) (res *RuleListItemListsNewListItemsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RuleListItemListsNewListItemsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches all the items in the list.
-func (r *RuleListItemService) ListsGetListItems(ctx context.Context, accountID string, listID string, query RuleListItemListsGetListItemsParams, opts ...option.RequestOption) (res *[]RuleListItemListsGetListItemsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RuleListItemListsGetListItemsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Removes all existing items from the list and adds the provided items to the
 // list.
 //
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *RuleListItemService) ListsUpdateAllListItems(ctx context.Context, accountID string, listID string, body RuleListItemListsUpdateAllListItemsParams, opts ...option.RequestOption) (res *RuleListItemListsUpdateAllListItemsResponse, err error) {
+func (r *RuleListItemService) Replace(ctx context.Context, accountID string, listID string, body RuleListItemReplaceParams, opts ...option.RequestOption) (res *RuleListItemReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RuleListItemListsUpdateAllListItemsResponseEnvelope
+	var env RuleListItemReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -113,6 +113,26 @@ func (r *RuleListItemService) ListsUpdateAllListItems(ctx context.Context, accou
 	res = &env.Result
 	return
 }
+
+type RuleListItemNewResponse struct {
+	// The unique operation ID of the asynchronous action.
+	OperationID string                      `json:"operation_id"`
+	JSON        ruleListItemNewResponseJSON `json:"-"`
+}
+
+// ruleListItemNewResponseJSON contains the JSON metadata for the struct
+// [RuleListItemNewResponse]
+type ruleListItemNewResponseJSON struct {
+	OperationID apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemListResponse = interface{}
 
 type RuleListItemDeleteResponse struct {
 	// The unique operation ID of the asynchronous action.
@@ -219,41 +239,281 @@ func (r *RuleListItemGetResponseListsItemHostname) UnmarshalJSON(data []byte) (e
 
 func (r RuleListItemGetResponseListsItemHostname) ImplementsRuleListItemGetResponse() {}
 
-type RuleListItemListsNewListItemsResponse struct {
+type RuleListItemReplaceResponse struct {
 	// The unique operation ID of the asynchronous action.
-	OperationID string                                    `json:"operation_id"`
-	JSON        ruleListItemListsNewListItemsResponseJSON `json:"-"`
+	OperationID string                          `json:"operation_id"`
+	JSON        ruleListItemReplaceResponseJSON `json:"-"`
 }
 
-// ruleListItemListsNewListItemsResponseJSON contains the JSON metadata for the
-// struct [RuleListItemListsNewListItemsResponse]
-type ruleListItemListsNewListItemsResponseJSON struct {
+// ruleListItemReplaceResponseJSON contains the JSON metadata for the struct
+// [RuleListItemReplaceResponse]
+type ruleListItemReplaceResponseJSON struct {
 	OperationID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListItemListsNewListItemsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListItemReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListItemListsGetListItemsResponse = interface{}
-
-type RuleListItemListsUpdateAllListItemsResponse struct {
-	// The unique operation ID of the asynchronous action.
-	OperationID string                                          `json:"operation_id"`
-	JSON        ruleListItemListsUpdateAllListItemsResponseJSON `json:"-"`
+type RuleListItemNewParams struct {
+	Body param.Field[[]RuleListItemNewParamsBody] `json:"body,required"`
 }
 
-// ruleListItemListsUpdateAllListItemsResponseJSON contains the JSON metadata for
-// the struct [RuleListItemListsUpdateAllListItemsResponse]
-type ruleListItemListsUpdateAllListItemsResponseJSON struct {
-	OperationID apijson.Field
+func (r RuleListItemNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RuleListItemNewParamsBody struct {
+	// A non-negative 32 bit integer
+	Asn param.Field[int64] `json:"asn"`
+	// An informative summary of the list item.
+	Comment param.Field[string] `json:"comment"`
+	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+	// 0 to 9, wildcards (\*), and the hyphen (-).
+	Hostname param.Field[RuleListItemNewParamsBodyHostname] `json:"hostname"`
+	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
+	// maximum of /64.
+	IP param.Field[string] `json:"ip"`
+	// The definition of the redirect.
+	Redirect param.Field[RuleListItemNewParamsBodyRedirect] `json:"redirect"`
+}
+
+func (r RuleListItemNewParamsBody) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
+// 0 to 9, wildcards (\*), and the hyphen (-).
+type RuleListItemNewParamsBodyHostname struct {
+	URLHostname param.Field[string] `json:"url_hostname,required"`
+}
+
+func (r RuleListItemNewParamsBodyHostname) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The definition of the redirect.
+type RuleListItemNewParamsBodyRedirect struct {
+	SourceURL           param.Field[string]                                      `json:"source_url,required"`
+	TargetURL           param.Field[string]                                      `json:"target_url,required"`
+	IncludeSubdomains   param.Field[bool]                                        `json:"include_subdomains"`
+	PreservePathSuffix  param.Field[bool]                                        `json:"preserve_path_suffix"`
+	PreserveQueryString param.Field[bool]                                        `json:"preserve_query_string"`
+	StatusCode          param.Field[RuleListItemNewParamsBodyRedirectStatusCode] `json:"status_code"`
+	SubpathMatching     param.Field[bool]                                        `json:"subpath_matching"`
+}
+
+func (r RuleListItemNewParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RuleListItemNewParamsBodyRedirectStatusCode int64
+
+const (
+	RuleListItemNewParamsBodyRedirectStatusCode301 RuleListItemNewParamsBodyRedirectStatusCode = 301
+	RuleListItemNewParamsBodyRedirectStatusCode302 RuleListItemNewParamsBodyRedirectStatusCode = 302
+	RuleListItemNewParamsBodyRedirectStatusCode307 RuleListItemNewParamsBodyRedirectStatusCode = 307
+	RuleListItemNewParamsBodyRedirectStatusCode308 RuleListItemNewParamsBodyRedirectStatusCode = 308
+)
+
+type RuleListItemNewResponseEnvelope struct {
+	Errors   []RuleListItemNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListItemNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RuleListItemNewResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success RuleListItemNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ruleListItemNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// ruleListItemNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleListItemNewResponseEnvelope]
+type ruleListItemNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListItemListsUpdateAllListItemsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListItemNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    ruleListItemNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// ruleListItemNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleListItemNewResponseEnvelopeErrors]
+type ruleListItemNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    ruleListItemNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// ruleListItemNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleListItemNewResponseEnvelopeMessages]
+type ruleListItemNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RuleListItemNewResponseEnvelopeSuccess bool
+
+const (
+	RuleListItemNewResponseEnvelopeSuccessTrue RuleListItemNewResponseEnvelopeSuccess = true
+)
+
+type RuleListItemListParams struct {
+	// The pagination cursor. An opaque string token indicating the position from which
+	// to continue when requesting the next/previous set of records. Cursor values are
+	// provided under `result_info.cursors` in the response. You should make no
+	// assumptions about a cursor's content or length.
+	Cursor param.Field[string] `query:"cursor"`
+	// Amount of results to include in each paginated response. A non-negative 32 bit
+	// integer.
+	PerPage param.Field[int64] `query:"per_page"`
+	// A search query to filter returned items. Its meaning depends on the list type:
+	// IP addresses must start with the provided string, hostnames and bulk redirects
+	// must contain the string, and ASNs must match the string exactly.
+	Search param.Field[string] `query:"search"`
+}
+
+// URLQuery serializes [RuleListItemListParams]'s query parameters as `url.Values`.
+func (r RuleListItemListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type RuleListItemListResponseEnvelope struct {
+	Errors   []RuleListItemListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListItemListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []RuleListItemListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    RuleListItemListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo RuleListItemListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       ruleListItemListResponseEnvelopeJSON       `json:"-"`
+}
+
+// ruleListItemListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleListItemListResponseEnvelope]
+type ruleListItemListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemListResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    ruleListItemListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// ruleListItemListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleListItemListResponseEnvelopeErrors]
+type ruleListItemListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemListResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    ruleListItemListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// ruleListItemListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleListItemListResponseEnvelopeMessages]
+type ruleListItemListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RuleListItemListResponseEnvelopeSuccess bool
+
+const (
+	RuleListItemListResponseEnvelopeSuccessTrue RuleListItemListResponseEnvelopeSuccess = true
+)
+
+type RuleListItemListResponseEnvelopeResultInfo struct {
+	Cursors RuleListItemListResponseEnvelopeResultInfoCursors `json:"cursors"`
+	JSON    ruleListItemListResponseEnvelopeResultInfoJSON    `json:"-"`
+}
+
+// ruleListItemListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [RuleListItemListResponseEnvelopeResultInfo]
+type ruleListItemListResponseEnvelopeResultInfoJSON struct {
+	Cursors     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListItemListResponseEnvelopeResultInfoCursors struct {
+	After  string                                                `json:"after"`
+	Before string                                                `json:"before"`
+	JSON   ruleListItemListResponseEnvelopeResultInfoCursorsJSON `json:"-"`
+}
+
+// ruleListItemListResponseEnvelopeResultInfoCursorsJSON contains the JSON metadata
+// for the struct [RuleListItemListResponseEnvelopeResultInfoCursors]
+type ruleListItemListResponseEnvelopeResultInfoCursorsJSON struct {
+	After       apijson.Field
+	Before      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListItemListResponseEnvelopeResultInfoCursors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -414,79 +674,79 @@ const (
 	RuleListItemGetResponseEnvelopeSuccessTrue RuleListItemGetResponseEnvelopeSuccess = true
 )
 
-type RuleListItemListsNewListItemsParams struct {
-	Body param.Field[[]RuleListItemListsNewListItemsParamsBody] `json:"body,required"`
+type RuleListItemReplaceParams struct {
+	Body param.Field[[]RuleListItemReplaceParamsBody] `json:"body,required"`
 }
 
-func (r RuleListItemListsNewListItemsParams) MarshalJSON() (data []byte, err error) {
+func (r RuleListItemReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type RuleListItemListsNewListItemsParamsBody struct {
+type RuleListItemReplaceParamsBody struct {
 	// A non-negative 32 bit integer
 	Asn param.Field[int64] `json:"asn"`
 	// An informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[RuleListItemListsNewListItemsParamsBodyHostname] `json:"hostname"`
+	Hostname param.Field[RuleListItemReplaceParamsBodyHostname] `json:"hostname"`
 	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
 	// maximum of /64.
 	IP param.Field[string] `json:"ip"`
 	// The definition of the redirect.
-	Redirect param.Field[RuleListItemListsNewListItemsParamsBodyRedirect] `json:"redirect"`
+	Redirect param.Field[RuleListItemReplaceParamsBodyRedirect] `json:"redirect"`
 }
 
-func (r RuleListItemListsNewListItemsParamsBody) MarshalJSON() (data []byte, err error) {
+func (r RuleListItemReplaceParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
 // 0 to 9, wildcards (\*), and the hyphen (-).
-type RuleListItemListsNewListItemsParamsBodyHostname struct {
+type RuleListItemReplaceParamsBodyHostname struct {
 	URLHostname param.Field[string] `json:"url_hostname,required"`
 }
 
-func (r RuleListItemListsNewListItemsParamsBodyHostname) MarshalJSON() (data []byte, err error) {
+func (r RuleListItemReplaceParamsBodyHostname) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The definition of the redirect.
-type RuleListItemListsNewListItemsParamsBodyRedirect struct {
-	SourceURL           param.Field[string]                                                    `json:"source_url,required"`
-	TargetURL           param.Field[string]                                                    `json:"target_url,required"`
-	IncludeSubdomains   param.Field[bool]                                                      `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]                                                      `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]                                                      `json:"preserve_query_string"`
-	StatusCode          param.Field[RuleListItemListsNewListItemsParamsBodyRedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]                                                      `json:"subpath_matching"`
+type RuleListItemReplaceParamsBodyRedirect struct {
+	SourceURL           param.Field[string]                                          `json:"source_url,required"`
+	TargetURL           param.Field[string]                                          `json:"target_url,required"`
+	IncludeSubdomains   param.Field[bool]                                            `json:"include_subdomains"`
+	PreservePathSuffix  param.Field[bool]                                            `json:"preserve_path_suffix"`
+	PreserveQueryString param.Field[bool]                                            `json:"preserve_query_string"`
+	StatusCode          param.Field[RuleListItemReplaceParamsBodyRedirectStatusCode] `json:"status_code"`
+	SubpathMatching     param.Field[bool]                                            `json:"subpath_matching"`
 }
 
-func (r RuleListItemListsNewListItemsParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
+func (r RuleListItemReplaceParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RuleListItemListsNewListItemsParamsBodyRedirectStatusCode int64
+type RuleListItemReplaceParamsBodyRedirectStatusCode int64
 
 const (
-	RuleListItemListsNewListItemsParamsBodyRedirectStatusCode301 RuleListItemListsNewListItemsParamsBodyRedirectStatusCode = 301
-	RuleListItemListsNewListItemsParamsBodyRedirectStatusCode302 RuleListItemListsNewListItemsParamsBodyRedirectStatusCode = 302
-	RuleListItemListsNewListItemsParamsBodyRedirectStatusCode307 RuleListItemListsNewListItemsParamsBodyRedirectStatusCode = 307
-	RuleListItemListsNewListItemsParamsBodyRedirectStatusCode308 RuleListItemListsNewListItemsParamsBodyRedirectStatusCode = 308
+	RuleListItemReplaceParamsBodyRedirectStatusCode301 RuleListItemReplaceParamsBodyRedirectStatusCode = 301
+	RuleListItemReplaceParamsBodyRedirectStatusCode302 RuleListItemReplaceParamsBodyRedirectStatusCode = 302
+	RuleListItemReplaceParamsBodyRedirectStatusCode307 RuleListItemReplaceParamsBodyRedirectStatusCode = 307
+	RuleListItemReplaceParamsBodyRedirectStatusCode308 RuleListItemReplaceParamsBodyRedirectStatusCode = 308
 )
 
-type RuleListItemListsNewListItemsResponseEnvelope struct {
-	Errors   []RuleListItemListsNewListItemsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListItemListsNewListItemsResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleListItemListsNewListItemsResponse                   `json:"result,required,nullable"`
+type RuleListItemReplaceResponseEnvelope struct {
+	Errors   []RuleListItemReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListItemReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   RuleListItemReplaceResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success RuleListItemListsNewListItemsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleListItemListsNewListItemsResponseEnvelopeJSON    `json:"-"`
+	Success RuleListItemReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ruleListItemReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// ruleListItemListsNewListItemsResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RuleListItemListsNewListItemsResponseEnvelope]
-type ruleListItemListsNewListItemsResponseEnvelopeJSON struct {
+// ruleListItemReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RuleListItemReplaceResponseEnvelope]
+type ruleListItemReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -495,316 +755,51 @@ type ruleListItemListsNewListItemsResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListItemListsNewListItemsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListItemReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListItemListsNewListItemsResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    ruleListItemListsNewListItemsResponseEnvelopeErrorsJSON `json:"-"`
+type RuleListItemReplaceResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    ruleListItemReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// ruleListItemListsNewListItemsResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [RuleListItemListsNewListItemsResponseEnvelopeErrors]
-type ruleListItemListsNewListItemsResponseEnvelopeErrorsJSON struct {
+// ruleListItemReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleListItemReplaceResponseEnvelopeErrors]
+type ruleListItemReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListItemListsNewListItemsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListItemReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListItemListsNewListItemsResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    ruleListItemListsNewListItemsResponseEnvelopeMessagesJSON `json:"-"`
+type RuleListItemReplaceResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    ruleListItemReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// ruleListItemListsNewListItemsResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [RuleListItemListsNewListItemsResponseEnvelopeMessages]
-type ruleListItemListsNewListItemsResponseEnvelopeMessagesJSON struct {
+// ruleListItemReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RuleListItemReplaceResponseEnvelopeMessages]
+type ruleListItemReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListItemListsNewListItemsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListItemReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RuleListItemListsNewListItemsResponseEnvelopeSuccess bool
+type RuleListItemReplaceResponseEnvelopeSuccess bool
 
 const (
-	RuleListItemListsNewListItemsResponseEnvelopeSuccessTrue RuleListItemListsNewListItemsResponseEnvelopeSuccess = true
-)
-
-type RuleListItemListsGetListItemsParams struct {
-	// The pagination cursor. An opaque string token indicating the position from which
-	// to continue when requesting the next/previous set of records. Cursor values are
-	// provided under `result_info.cursors` in the response. You should make no
-	// assumptions about a cursor's content or length.
-	Cursor param.Field[string] `query:"cursor"`
-	// Amount of results to include in each paginated response. A non-negative 32 bit
-	// integer.
-	PerPage param.Field[int64] `query:"per_page"`
-	// A search query to filter returned items. Its meaning depends on the list type:
-	// IP addresses must start with the provided string, hostnames and bulk redirects
-	// must contain the string, and ASNs must match the string exactly.
-	Search param.Field[string] `query:"search"`
-}
-
-// URLQuery serializes [RuleListItemListsGetListItemsParams]'s query parameters as
-// `url.Values`.
-func (r RuleListItemListsGetListItemsParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type RuleListItemListsGetListItemsResponseEnvelope struct {
-	Errors   []RuleListItemListsGetListItemsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListItemListsGetListItemsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleListItemListsGetListItemsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    RuleListItemListsGetListItemsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo RuleListItemListsGetListItemsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       ruleListItemListsGetListItemsResponseEnvelopeJSON       `json:"-"`
-}
-
-// ruleListItemListsGetListItemsResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RuleListItemListsGetListItemsResponseEnvelope]
-type ruleListItemListsGetListItemsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsGetListItemsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsGetListItemsResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    ruleListItemListsGetListItemsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleListItemListsGetListItemsResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [RuleListItemListsGetListItemsResponseEnvelopeErrors]
-type ruleListItemListsGetListItemsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsGetListItemsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsGetListItemsResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    ruleListItemListsGetListItemsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleListItemListsGetListItemsResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [RuleListItemListsGetListItemsResponseEnvelopeMessages]
-type ruleListItemListsGetListItemsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsGetListItemsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RuleListItemListsGetListItemsResponseEnvelopeSuccess bool
-
-const (
-	RuleListItemListsGetListItemsResponseEnvelopeSuccessTrue RuleListItemListsGetListItemsResponseEnvelopeSuccess = true
-)
-
-type RuleListItemListsGetListItemsResponseEnvelopeResultInfo struct {
-	Cursors RuleListItemListsGetListItemsResponseEnvelopeResultInfoCursors `json:"cursors"`
-	JSON    ruleListItemListsGetListItemsResponseEnvelopeResultInfoJSON    `json:"-"`
-}
-
-// ruleListItemListsGetListItemsResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct
-// [RuleListItemListsGetListItemsResponseEnvelopeResultInfo]
-type ruleListItemListsGetListItemsResponseEnvelopeResultInfoJSON struct {
-	Cursors     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsGetListItemsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsGetListItemsResponseEnvelopeResultInfoCursors struct {
-	After  string                                                             `json:"after"`
-	Before string                                                             `json:"before"`
-	JSON   ruleListItemListsGetListItemsResponseEnvelopeResultInfoCursorsJSON `json:"-"`
-}
-
-// ruleListItemListsGetListItemsResponseEnvelopeResultInfoCursorsJSON contains the
-// JSON metadata for the struct
-// [RuleListItemListsGetListItemsResponseEnvelopeResultInfoCursors]
-type ruleListItemListsGetListItemsResponseEnvelopeResultInfoCursorsJSON struct {
-	After       apijson.Field
-	Before      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsGetListItemsResponseEnvelopeResultInfoCursors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsUpdateAllListItemsParams struct {
-	Body param.Field[[]RuleListItemListsUpdateAllListItemsParamsBody] `json:"body,required"`
-}
-
-func (r RuleListItemListsUpdateAllListItemsParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type RuleListItemListsUpdateAllListItemsParamsBody struct {
-	// A non-negative 32 bit integer
-	Asn param.Field[int64] `json:"asn"`
-	// An informative summary of the list item.
-	Comment param.Field[string] `json:"comment"`
-	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-	// 0 to 9, wildcards (\*), and the hyphen (-).
-	Hostname param.Field[RuleListItemListsUpdateAllListItemsParamsBodyHostname] `json:"hostname"`
-	// An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
-	// maximum of /64.
-	IP param.Field[string] `json:"ip"`
-	// The definition of the redirect.
-	Redirect param.Field[RuleListItemListsUpdateAllListItemsParamsBodyRedirect] `json:"redirect"`
-}
-
-func (r RuleListItemListsUpdateAllListItemsParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
-// 0 to 9, wildcards (\*), and the hyphen (-).
-type RuleListItemListsUpdateAllListItemsParamsBodyHostname struct {
-	URLHostname param.Field[string] `json:"url_hostname,required"`
-}
-
-func (r RuleListItemListsUpdateAllListItemsParamsBodyHostname) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The definition of the redirect.
-type RuleListItemListsUpdateAllListItemsParamsBodyRedirect struct {
-	SourceURL           param.Field[string]                                                          `json:"source_url,required"`
-	TargetURL           param.Field[string]                                                          `json:"target_url,required"`
-	IncludeSubdomains   param.Field[bool]                                                            `json:"include_subdomains"`
-	PreservePathSuffix  param.Field[bool]                                                            `json:"preserve_path_suffix"`
-	PreserveQueryString param.Field[bool]                                                            `json:"preserve_query_string"`
-	StatusCode          param.Field[RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode] `json:"status_code"`
-	SubpathMatching     param.Field[bool]                                                            `json:"subpath_matching"`
-}
-
-func (r RuleListItemListsUpdateAllListItemsParamsBodyRedirect) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode int64
-
-const (
-	RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode301 RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode = 301
-	RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode302 RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode = 302
-	RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode307 RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode = 307
-	RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode308 RuleListItemListsUpdateAllListItemsParamsBodyRedirectStatusCode = 308
-)
-
-type RuleListItemListsUpdateAllListItemsResponseEnvelope struct {
-	Errors   []RuleListItemListsUpdateAllListItemsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListItemListsUpdateAllListItemsResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleListItemListsUpdateAllListItemsResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success RuleListItemListsUpdateAllListItemsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleListItemListsUpdateAllListItemsResponseEnvelopeJSON    `json:"-"`
-}
-
-// ruleListItemListsUpdateAllListItemsResponseEnvelopeJSON contains the JSON
-// metadata for the struct [RuleListItemListsUpdateAllListItemsResponseEnvelope]
-type ruleListItemListsUpdateAllListItemsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsUpdateAllListItemsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsUpdateAllListItemsResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    ruleListItemListsUpdateAllListItemsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleListItemListsUpdateAllListItemsResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [RuleListItemListsUpdateAllListItemsResponseEnvelopeErrors]
-type ruleListItemListsUpdateAllListItemsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsUpdateAllListItemsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListItemListsUpdateAllListItemsResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    ruleListItemListsUpdateAllListItemsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleListItemListsUpdateAllListItemsResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [RuleListItemListsUpdateAllListItemsResponseEnvelopeMessages]
-type ruleListItemListsUpdateAllListItemsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListItemListsUpdateAllListItemsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RuleListItemListsUpdateAllListItemsResponseEnvelopeSuccess bool
-
-const (
-	RuleListItemListsUpdateAllListItemsResponseEnvelopeSuccessTrue RuleListItemListsUpdateAllListItemsResponseEnvelopeSuccess = true
+	RuleListItemReplaceResponseEnvelopeSuccessTrue RuleListItemReplaceResponseEnvelopeSuccess = true
 )

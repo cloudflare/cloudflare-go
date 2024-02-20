@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(t *testing.T) {
+func TestGatewayLoggingGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Gateways.Loggings.ZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.Loggings.Get(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestGatewayLoggingZeroTrustAccountsGetLoggingSettingsForTheZeroTrustAccount
 	}
 }
 
-func TestGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountWithOptionalParams(t *testing.T) {
+func TestGatewayLoggingReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,12 +55,12 @@ func TestGatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAcco
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Gateways.Loggings.ZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccount(
+	_, err := client.Gateways.Loggings.Replace(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.GatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParams{
+		cloudflare.GatewayLoggingReplaceParams{
 			RedactPii: cloudflare.F(true),
-			SettingsByRuleType: cloudflare.F(cloudflare.GatewayLoggingZeroTrustAccountsUpdateLoggingSettingsForTheZeroTrustAccountParamsSettingsByRuleType{
+			SettingsByRuleType: cloudflare.F(cloudflare.GatewayLoggingReplaceParamsSettingsByRuleType{
 				DNS:  cloudflare.F[any](map[string]interface{}{}),
 				HTTP: cloudflare.F[any](map[string]interface{}{}),
 				L4:   cloudflare.F[any](map[string]interface{}{}),

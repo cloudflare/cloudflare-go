@@ -32,9 +32,9 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 }
 
 // Describes the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) ZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse, err error) {
+func (r *DeviceSettingService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *DeviceSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelope
+	var env DeviceSettingListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,9 +45,9 @@ func (r *DeviceSettingService) ZeroTrustAccountsGetDeviceSettingsForZeroTrustAcc
 }
 
 // Updates the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccount(ctx context.Context, identifier interface{}, body DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams, opts ...option.RequestOption) (res *DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse, err error) {
+func (r *DeviceSettingService) Replace(ctx context.Context, identifier interface{}, body DeviceSettingReplaceParams, opts ...option.RequestOption) (res *DeviceSettingReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelope
+	var env DeviceSettingReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/settings", identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -57,7 +57,7 @@ func (r *DeviceSettingService) ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTr
 	return
 }
 
-type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse struct {
+type DeviceSettingListResponse struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -65,14 +65,13 @@ type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse 
 	// Enable installation of cloudflare managed root certificate.
 	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
 	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP bool                                                                           `json:"use_zt_virtual_ip"`
-	JSON           deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON `json:"-"`
+	UseZtVirtualIP bool                          `json:"use_zt_virtual_ip"`
+	JSON           deviceSettingListResponseJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse]
-type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJSON struct {
+// deviceSettingListResponseJSON contains the JSON metadata for the struct
+// [DeviceSettingListResponse]
+type deviceSettingListResponseJSON struct {
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -81,11 +80,11 @@ type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseJ
 	ExtraFields                        map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse struct {
+type DeviceSettingReplaceResponse struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -93,14 +92,13 @@ type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountRes
 	// Enable installation of cloudflare managed root certificate.
 	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
 	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP bool                                                                                 `json:"use_zt_virtual_ip"`
-	JSON           deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON `json:"-"`
+	UseZtVirtualIP bool                             `json:"use_zt_virtual_ip"`
+	JSON           deviceSettingReplaceResponseJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse]
-type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseJSON struct {
+// deviceSettingReplaceResponseJSON contains the JSON metadata for the struct
+// [DeviceSettingReplaceResponse]
+type deviceSettingReplaceResponseJSON struct {
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -109,23 +107,22 @@ type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountRes
 	ExtraFields                        map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelope struct {
-	Errors   []DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponse                   `json:"result,required,nullable"`
+type DeviceSettingListResponseEnvelope struct {
+	Errors   []DeviceSettingListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingListResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettingListResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeJSON    `json:"-"`
+	Success DeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingListResponseEnvelopeJSON    `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelope]
-type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeJSON struct {
+// deviceSettingListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceSettingListResponseEnvelope]
+type deviceSettingListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -134,58 +131,56 @@ type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrors struct {
-	Code    int64                                                                                        `json:"code,required"`
-	Message string                                                                                       `json:"message,required"`
-	JSON    deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrorsJSON `json:"-"`
+type DeviceSettingListResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    deviceSettingListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrors]
-type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrorsJSON struct {
+// deviceSettingListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceSettingListResponseEnvelopeErrors]
+type deviceSettingListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessages struct {
-	Code    int64                                                                                          `json:"code,required"`
-	Message string                                                                                         `json:"message,required"`
-	JSON    deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessagesJSON `json:"-"`
+type DeviceSettingListResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceSettingListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessages]
-type deviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessagesJSON struct {
+// deviceSettingListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceSettingListResponseEnvelopeMessages]
+type deviceSettingListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeSuccess bool
+type DeviceSettingListResponseEnvelopeSuccess bool
 
 const (
-	DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeSuccessTrue DeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccountResponseEnvelopeSuccess = true
+	DeviceSettingListResponseEnvelopeSuccessTrue DeviceSettingListResponseEnvelopeSuccess = true
 )
 
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams struct {
+type DeviceSettingReplaceParams struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -196,23 +191,22 @@ type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountPar
 	UseZtVirtualIP param.Field[bool] `json:"use_zt_virtual_ip"`
 }
 
-func (r DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams) MarshalJSON() (data []byte, err error) {
+func (r DeviceSettingReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelope struct {
-	Errors   []DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponse                   `json:"result,required,nullable"`
+type DeviceSettingReplaceResponseEnvelope struct {
+	Errors   []DeviceSettingReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceSettingReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceSettingReplaceResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeJSON    `json:"-"`
+	Success DeviceSettingReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceSettingReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelope]
-type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeJSON struct {
+// deviceSettingReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceSettingReplaceResponseEnvelope]
+type deviceSettingReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -221,53 +215,51 @@ type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountRes
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrors struct {
-	Code    int64                                                                                              `json:"code,required"`
-	Message string                                                                                             `json:"message,required"`
-	JSON    deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrorsJSON `json:"-"`
+type DeviceSettingReplaceResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    deviceSettingReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrors]
-type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrorsJSON struct {
+// deviceSettingReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DeviceSettingReplaceResponseEnvelopeErrors]
+type deviceSettingReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessages struct {
-	Code    int64                                                                                                `json:"code,required"`
-	Message string                                                                                               `json:"message,required"`
-	JSON    deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessagesJSON `json:"-"`
+type DeviceSettingReplaceResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    deviceSettingReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessages]
-type deviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessagesJSON struct {
+// deviceSettingReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceSettingReplaceResponseEnvelopeMessages]
+type deviceSettingReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceSettingReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeSuccess bool
+type DeviceSettingReplaceResponseEnvelopeSuccess bool
 
 const (
-	DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeSuccessTrue DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountResponseEnvelopeSuccess = true
+	DeviceSettingReplaceResponseEnvelopeSuccessTrue DeviceSettingReplaceResponseEnvelopeSuccess = true
 )

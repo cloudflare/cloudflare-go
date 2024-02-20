@@ -36,9 +36,9 @@ func NewMagicIpsecTunnelPskGenerateService(opts ...option.RequestOption) (r *Mag
 // without persisting changes. After a PSK is generated, the PSK is immediately
 // persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
 // safe place.
-func (r *MagicIpsecTunnelPskGenerateService) MagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnels(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponse, err error) {
+func (r *MagicIpsecTunnelPskGenerateService) New(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicIpsecTunnelPskGenerateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelope
+	var env MagicIpsecTunnelPskGenerateNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
@@ -48,20 +48,19 @@ func (r *MagicIpsecTunnelPskGenerateService) MagicIPsecTunnelsGeneratePreSharedK
 	return
 }
 
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponse struct {
+type MagicIpsecTunnelPskGenerateNewResponse struct {
 	// Identifier
 	IpsecTunnelID string `json:"ipsec_tunnel_id"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	Psk string `json:"psk"`
 	// The PSK metadata that includes when the PSK was generated.
-	PskMetadata MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadata `json:"psk_metadata"`
-	JSON        magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseJSON        `json:"-"`
+	PskMetadata MagicIpsecTunnelPskGenerateNewResponsePskMetadata `json:"psk_metadata"`
+	JSON        magicIpsecTunnelPskGenerateNewResponseJSON        `json:"-"`
 }
 
-// magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseJSON
-// contains the JSON metadata for the struct
-// [MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponse]
-type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseJSON struct {
+// magicIpsecTunnelPskGenerateNewResponseJSON contains the JSON metadata for the
+// struct [MagicIpsecTunnelPskGenerateNewResponse]
+type magicIpsecTunnelPskGenerateNewResponseJSON struct {
 	IpsecTunnelID apijson.Field
 	Psk           apijson.Field
 	PskMetadata   apijson.Field
@@ -69,43 +68,41 @@ type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsec
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicIpsecTunnelPskGenerateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The PSK metadata that includes when the PSK was generated.
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadata struct {
+type MagicIpsecTunnelPskGenerateNewResponsePskMetadata struct {
 	// The date and time the tunnel was last modified.
-	LastGeneratedOn time.Time                                                                                                 `json:"last_generated_on" format:"date-time"`
-	JSON            magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadataJSON `json:"-"`
+	LastGeneratedOn time.Time                                             `json:"last_generated_on" format:"date-time"`
+	JSON            magicIpsecTunnelPskGenerateNewResponsePskMetadataJSON `json:"-"`
 }
 
-// magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadataJSON
-// contains the JSON metadata for the struct
-// [MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadata]
-type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadataJSON struct {
+// magicIpsecTunnelPskGenerateNewResponsePskMetadataJSON contains the JSON metadata
+// for the struct [MagicIpsecTunnelPskGenerateNewResponsePskMetadata]
+type magicIpsecTunnelPskGenerateNewResponsePskMetadataJSON struct {
 	LastGeneratedOn apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponsePskMetadata) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicIpsecTunnelPskGenerateNewResponsePskMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelope struct {
-	Errors   []MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponse                   `json:"result,required"`
+type MagicIpsecTunnelPskGenerateNewResponseEnvelope struct {
+	Errors   []MagicIpsecTunnelPskGenerateNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicIpsecTunnelPskGenerateNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicIpsecTunnelPskGenerateNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeJSON    `json:"-"`
+	Success MagicIpsecTunnelPskGenerateNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicIpsecTunnelPskGenerateNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelope]
-type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeJSON struct {
+// magicIpsecTunnelPskGenerateNewResponseEnvelopeJSON contains the JSON metadata
+// for the struct [MagicIpsecTunnelPskGenerateNewResponseEnvelope]
+type magicIpsecTunnelPskGenerateNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -114,53 +111,51 @@ type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsec
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicIpsecTunnelPskGenerateNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                        `json:"code,required"`
-	Message string                                                                                                       `json:"message,required"`
-	JSON    magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrorsJSON `json:"-"`
+type MagicIpsecTunnelPskGenerateNewResponseEnvelopeErrors struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    magicIpsecTunnelPskGenerateNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrors]
-type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrorsJSON struct {
+// magicIpsecTunnelPskGenerateNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [MagicIpsecTunnelPskGenerateNewResponseEnvelopeErrors]
+type magicIpsecTunnelPskGenerateNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicIpsecTunnelPskGenerateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                          `json:"code,required"`
-	Message string                                                                                                         `json:"message,required"`
-	JSON    magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessagesJSON `json:"-"`
+type MagicIpsecTunnelPskGenerateNewResponseEnvelopeMessages struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    magicIpsecTunnelPskGenerateNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessages]
-type magicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessagesJSON struct {
+// magicIpsecTunnelPskGenerateNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [MagicIpsecTunnelPskGenerateNewResponseEnvelopeMessages]
+type magicIpsecTunnelPskGenerateNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicIpsecTunnelPskGenerateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeSuccess bool
+type MagicIpsecTunnelPskGenerateNewResponseEnvelopeSuccess bool
 
 const (
-	MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeSuccessTrue MagicIpsecTunnelPskGenerateMagicIPsecTunnelsGeneratePreSharedKeyPskForIPsecTunnelsResponseEnvelopeSuccess = true
+	MagicIpsecTunnelPskGenerateNewResponseEnvelopeSuccessTrue MagicIpsecTunnelPskGenerateNewResponseEnvelopeSuccess = true
 )

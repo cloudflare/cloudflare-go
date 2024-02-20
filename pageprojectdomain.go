@@ -34,12 +34,38 @@ func NewPageProjectDomainService(opts ...option.RequestOption) (r *PageProjectDo
 	return
 }
 
+// Add a new domain for the Pages project.
+func (r *PageProjectDomainService) New(ctx context.Context, accountID string, projectName string, body PageProjectDomainNewParams, opts ...option.RequestOption) (res *PageProjectDomainNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageProjectDomainNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Retry the validation status of a single domain.
 func (r *PageProjectDomainService) Update(ctx context.Context, accountID string, projectName string, domainName string, opts ...option.RequestOption) (res *PageProjectDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", accountID, projectName, domainName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetch a list of all domains associated with a Pages project.
+func (r *PageProjectDomainService) List(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *[]PageProjectDomainListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageProjectDomainListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -68,31 +94,26 @@ func (r *PageProjectDomainService) Get(ctx context.Context, accountID string, pr
 	return
 }
 
-// Add a new domain for the Pages project.
-func (r *PageProjectDomainService) PagesDomainsAddDomain(ctx context.Context, accountID string, projectName string, body PageProjectDomainPagesDomainsAddDomainParams, opts ...option.RequestOption) (res *PageProjectDomainPagesDomainsAddDomainResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageProjectDomainPagesDomainsAddDomainResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [PageProjectDomainNewResponseUnknown],
+// [PageProjectDomainNewResponseArray] or [shared.UnionString].
+type PageProjectDomainNewResponse interface {
+	ImplementsPageProjectDomainNewResponse()
 }
 
-// Fetch a list of all domains associated with a Pages project.
-func (r *PageProjectDomainService) PagesDomainsGetDomains(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *[]PageProjectDomainPagesDomainsGetDomainsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env PageProjectDomainPagesDomainsGetDomainsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PageProjectDomainNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
+
+type PageProjectDomainNewResponseArray []interface{}
+
+func (r PageProjectDomainNewResponseArray) ImplementsPageProjectDomainNewResponse() {}
 
 // Union satisfied by [PageProjectDomainUpdateResponseUnknown],
 // [PageProjectDomainUpdateResponseArray] or [shared.UnionString].
@@ -114,6 +135,8 @@ func init() {
 type PageProjectDomainUpdateResponseArray []interface{}
 
 func (r PageProjectDomainUpdateResponseArray) ImplementsPageProjectDomainUpdateResponse() {}
+
+type PageProjectDomainListResponse = interface{}
 
 type PageProjectDomainDeleteResponse = interface{}
 
@@ -138,29 +161,82 @@ type PageProjectDomainGetResponseArray []interface{}
 
 func (r PageProjectDomainGetResponseArray) ImplementsPageProjectDomainGetResponse() {}
 
-// Union satisfied by [PageProjectDomainPagesDomainsAddDomainResponseUnknown],
-// [PageProjectDomainPagesDomainsAddDomainResponseArray] or [shared.UnionString].
-type PageProjectDomainPagesDomainsAddDomainResponse interface {
-	ImplementsPageProjectDomainPagesDomainsAddDomainResponse()
+type PageProjectDomainNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*PageProjectDomainPagesDomainsAddDomainResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+func (r PageProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
-type PageProjectDomainPagesDomainsAddDomainResponseArray []interface{}
-
-func (r PageProjectDomainPagesDomainsAddDomainResponseArray) ImplementsPageProjectDomainPagesDomainsAddDomainResponse() {
+type PageProjectDomainNewResponseEnvelope struct {
+	Errors   []PageProjectDomainNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectDomainNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageProjectDomainNewResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success PageProjectDomainNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageProjectDomainNewResponseEnvelopeJSON    `json:"-"`
 }
 
-type PageProjectDomainPagesDomainsGetDomainsResponse = interface{}
+// pageProjectDomainNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PageProjectDomainNewResponseEnvelope]
+type pageProjectDomainNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDomainNewResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    pageProjectDomainNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageProjectDomainNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PageProjectDomainNewResponseEnvelopeErrors]
+type pageProjectDomainNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDomainNewResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    pageProjectDomainNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageProjectDomainNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PageProjectDomainNewResponseEnvelopeMessages]
+type pageProjectDomainNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageProjectDomainNewResponseEnvelopeSuccess bool
+
+const (
+	PageProjectDomainNewResponseEnvelopeSuccessTrue PageProjectDomainNewResponseEnvelopeSuccess = true
+)
 
 type PageProjectDomainUpdateResponseEnvelope struct {
 	Errors   []PageProjectDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -231,6 +307,100 @@ const (
 	PageProjectDomainUpdateResponseEnvelopeSuccessTrue PageProjectDomainUpdateResponseEnvelopeSuccess = true
 )
 
+type PageProjectDomainListResponseEnvelope struct {
+	Errors   []PageProjectDomainListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectDomainListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []PageProjectDomainListResponse                 `json:"result,required"`
+	// Whether the API call was successful
+	Success    PageProjectDomainListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PageProjectDomainListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       pageProjectDomainListResponseEnvelopeJSON       `json:"-"`
+}
+
+// pageProjectDomainListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PageProjectDomainListResponseEnvelope]
+type pageProjectDomainListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDomainListResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    pageProjectDomainListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageProjectDomainListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [PageProjectDomainListResponseEnvelopeErrors]
+type pageProjectDomainListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDomainListResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    pageProjectDomainListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageProjectDomainListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PageProjectDomainListResponseEnvelopeMessages]
+type pageProjectDomainListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageProjectDomainListResponseEnvelopeSuccess bool
+
+const (
+	PageProjectDomainListResponseEnvelopeSuccessTrue PageProjectDomainListResponseEnvelopeSuccess = true
+)
+
+type PageProjectDomainListResponseEnvelopeResultInfo struct {
+	Count      interface{}                                         `json:"count"`
+	Page       interface{}                                         `json:"page"`
+	PerPage    interface{}                                         `json:"per_page"`
+	TotalCount interface{}                                         `json:"total_count"`
+	JSON       pageProjectDomainListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// pageProjectDomainListResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [PageProjectDomainListResponseEnvelopeResultInfo]
+type pageProjectDomainListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type PageProjectDomainGetResponseEnvelope struct {
 	Errors   []PageProjectDomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectDomainGetResponseEnvelopeMessages `json:"messages,required"`
@@ -299,180 +469,3 @@ type PageProjectDomainGetResponseEnvelopeSuccess bool
 const (
 	PageProjectDomainGetResponseEnvelopeSuccessTrue PageProjectDomainGetResponseEnvelopeSuccess = true
 )
-
-type PageProjectDomainPagesDomainsAddDomainParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r PageProjectDomainPagesDomainsAddDomainParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type PageProjectDomainPagesDomainsAddDomainResponseEnvelope struct {
-	Errors   []PageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageProjectDomainPagesDomainsAddDomainResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success PageProjectDomainPagesDomainsAddDomainResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageProjectDomainPagesDomainsAddDomainResponseEnvelopeJSON    `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsAddDomainResponseEnvelopeJSON contains the JSON
-// metadata for the struct [PageProjectDomainPagesDomainsAddDomainResponseEnvelope]
-type pageProjectDomainPagesDomainsAddDomainResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsAddDomainResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrors struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    pageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [PageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrors]
-type pageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsAddDomainResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessages struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    pageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [PageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessages]
-type pageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsAddDomainResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type PageProjectDomainPagesDomainsAddDomainResponseEnvelopeSuccess bool
-
-const (
-	PageProjectDomainPagesDomainsAddDomainResponseEnvelopeSuccessTrue PageProjectDomainPagesDomainsAddDomainResponseEnvelopeSuccess = true
-)
-
-type PageProjectDomainPagesDomainsGetDomainsResponseEnvelope struct {
-	Errors   []PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageProjectDomainPagesDomainsGetDomainsResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success    PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeJSON       `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [PageProjectDomainPagesDomainsGetDomainsResponseEnvelope]
-type pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsGetDomainsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrors struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrors]
-type pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessages struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessages]
-type pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeSuccess bool
-
-const (
-	PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeSuccessTrue PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeSuccess = true
-)
-
-type PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfo struct {
-	Count      interface{}                                                           `json:"count"`
-	Page       interface{}                                                           `json:"page"`
-	PerPage    interface{}                                                           `json:"per_page"`
-	TotalCount interface{}                                                           `json:"total_count"`
-	JSON       pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfo]
-type pageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageProjectDomainPagesDomainsGetDomainsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

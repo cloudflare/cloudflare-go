@@ -29,7 +29,7 @@ func TestIntelAsnSubnetList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Intels.Asn.Subnets.List(
+	_, err := client.Intel.Asn.Subnets.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(0),

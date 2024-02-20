@@ -32,9 +32,9 @@ func NewBrandProtectionSubmitService(opts ...option.RequestOption) (r *BrandProt
 }
 
 // Submit suspicious URL for scanning
-func (r *BrandProtectionSubmitService) PhishingURLScannerSubmitSuspiciousURLForScanning(ctx context.Context, accountID string, body BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningParams, opts ...option.RequestOption) (res *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponse, err error) {
+func (r *BrandProtectionSubmitService) New(ctx context.Context, accountID string, body BrandProtectionSubmitNewParams, opts ...option.RequestOption) (res *BrandProtectionSubmitNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelope
+	var env BrandProtectionSubmitNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/brand-protection/submit", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -44,21 +44,20 @@ func (r *BrandProtectionSubmitService) PhishingURLScannerSubmitSuspiciousURLForS
 	return
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponse struct {
+type BrandProtectionSubmitNewResponse struct {
 	// URLs that were excluded from scanning because their domain is in our no-scan
 	// list.
-	ExcludedURLs []BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURL `json:"excluded_urls"`
+	ExcludedURLs []BrandProtectionSubmitNewResponseExcludedURL `json:"excluded_urls"`
 	// URLs that were skipped because the same URL is currently being scanned
-	SkippedURLs []BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURL `json:"skipped_urls"`
+	SkippedURLs []BrandProtectionSubmitNewResponseSkippedURL `json:"skipped_urls"`
 	// URLs that were successfully submitted for scanning.
-	SubmittedURLs []BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURL `json:"submitted_urls"`
-	JSON          brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseJSON           `json:"-"`
+	SubmittedURLs []BrandProtectionSubmitNewResponseSubmittedURL `json:"submitted_urls"`
+	JSON          brandProtectionSubmitNewResponseJSON           `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponse]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseJSON struct {
+// brandProtectionSubmitNewResponseJSON contains the JSON metadata for the struct
+// [BrandProtectionSubmitNewResponse]
+type brandProtectionSubmitNewResponseJSON struct {
 	ExcludedURLs  apijson.Field
 	SkippedURLs   apijson.Field
 	SubmittedURLs apijson.Field
@@ -66,95 +65,91 @@ type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningRespon
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURL struct {
+type BrandProtectionSubmitNewResponseExcludedURL struct {
 	// URL that was excluded.
-	URL  string                                                                                       `json:"url"`
-	JSON brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURLJSON `json:"-"`
+	URL  string                                          `json:"url"`
+	JSON brandProtectionSubmitNewResponseExcludedURLJSON `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURLJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURL]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURLJSON struct {
+// brandProtectionSubmitNewResponseExcludedURLJSON contains the JSON metadata for
+// the struct [BrandProtectionSubmitNewResponseExcludedURL]
+type brandProtectionSubmitNewResponseExcludedURLJSON struct {
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseExcludedURL) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseExcludedURL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURL struct {
+type BrandProtectionSubmitNewResponseSkippedURL struct {
 	// URL that was skipped.
 	URL string `json:"url"`
 	// ID of the submission of that URL that is currently scanning.
-	URLID int64                                                                                       `json:"url_id"`
-	JSON  brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURLJSON `json:"-"`
+	URLID int64                                          `json:"url_id"`
+	JSON  brandProtectionSubmitNewResponseSkippedURLJSON `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURLJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURL]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURLJSON struct {
+// brandProtectionSubmitNewResponseSkippedURLJSON contains the JSON metadata for
+// the struct [BrandProtectionSubmitNewResponseSkippedURL]
+type brandProtectionSubmitNewResponseSkippedURLJSON struct {
 	URL         apijson.Field
 	URLID       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSkippedURL) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseSkippedURL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURL struct {
+type BrandProtectionSubmitNewResponseSubmittedURL struct {
 	// URL that was submitted.
 	URL string `json:"url"`
 	// ID assigned to this URL submission. Used to retrieve scanning results.
-	URLID int64                                                                                         `json:"url_id"`
-	JSON  brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURLJSON `json:"-"`
+	URLID int64                                            `json:"url_id"`
+	JSON  brandProtectionSubmitNewResponseSubmittedURLJSON `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURLJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURL]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURLJSON struct {
+// brandProtectionSubmitNewResponseSubmittedURLJSON contains the JSON metadata for
+// the struct [BrandProtectionSubmitNewResponseSubmittedURL]
+type brandProtectionSubmitNewResponseSubmittedURLJSON struct {
 	URL         apijson.Field
 	URLID       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseSubmittedURL) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseSubmittedURL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningParams struct {
+type BrandProtectionSubmitNewParams struct {
 	// URL(s) to filter submissions results by
 	URL param.Field[string] `json:"url" format:"uri"`
 }
 
-func (r BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningParams) MarshalJSON() (data []byte, err error) {
+func (r BrandProtectionSubmitNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelope struct {
-	Errors   []BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessages `json:"messages,required"`
-	Result   BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponse                   `json:"result,required"`
+type BrandProtectionSubmitNewResponseEnvelope struct {
+	Errors   []BrandProtectionSubmitNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []BrandProtectionSubmitNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   BrandProtectionSubmitNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeSuccess `json:"success,required"`
-	JSON    brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeJSON    `json:"-"`
+	Success BrandProtectionSubmitNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    brandProtectionSubmitNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelope]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeJSON struct {
+// brandProtectionSubmitNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [BrandProtectionSubmitNewResponseEnvelope]
+type brandProtectionSubmitNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -163,53 +158,51 @@ type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningRespon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrors struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrorsJSON `json:"-"`
+type BrandProtectionSubmitNewResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    brandProtectionSubmitNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrors]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrorsJSON struct {
+// brandProtectionSubmitNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [BrandProtectionSubmitNewResponseEnvelopeErrors]
+type brandProtectionSubmitNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessages struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessagesJSON `json:"-"`
+type BrandProtectionSubmitNewResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    brandProtectionSubmitNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessages]
-type brandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessagesJSON struct {
+// brandProtectionSubmitNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [BrandProtectionSubmitNewResponseEnvelopeMessages]
+type brandProtectionSubmitNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *BrandProtectionSubmitNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeSuccess bool
+type BrandProtectionSubmitNewResponseEnvelopeSuccess bool
 
 const (
-	BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeSuccessTrue BrandProtectionSubmitPhishingURLScannerSubmitSuspiciousURLForScanningResponseEnvelopeSuccess = true
+	BrandProtectionSubmitNewResponseEnvelopeSuccessTrue BrandProtectionSubmitNewResponseEnvelopeSuccess = true
 )

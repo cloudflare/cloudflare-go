@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,19 +35,29 @@ func NewUserBillingHistoryService(opts ...option.RequestOption) (r *UserBillingH
 }
 
 // Accesses your billing history object.
-func (r *UserBillingHistoryService) UserBillingHistoryBillingHistoryDetails(ctx context.Context, query UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams, opts ...option.RequestOption) (res *[]UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelope
+func (r *UserBillingHistoryService) List(ctx context.Context, query UserBillingHistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[UserBillingHistoryListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := "user/billing/history"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse struct {
+// Accesses your billing history object.
+func (r *UserBillingHistoryService) ListAutoPaging(ctx context.Context, query UserBillingHistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[UserBillingHistoryListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
+}
+
+type UserBillingHistoryListResponse struct {
 	// Billing item identifier tag.
 	ID string `json:"id,required"`
 	// The billing item action.
@@ -60,15 +71,14 @@ type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse struct {
 	// When the billing item was created.
 	OccurredAt time.Time `json:"occurred_at,required" format:"date-time"`
 	// The billing item type.
-	Type string                                                                `json:"type,required"`
-	Zone UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone `json:"zone,required"`
-	JSON userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON `json:"-"`
+	Type string                             `json:"type,required"`
+	Zone UserBillingHistoryListResponseZone `json:"zone,required"`
+	JSON userBillingHistoryListResponseJSON `json:"-"`
 }
 
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON contains
-// the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON struct {
+// userBillingHistoryListResponseJSON contains the JSON metadata for the struct
+// [UserBillingHistoryListResponse]
+type userBillingHistoryListResponseJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Amount      apijson.Field
@@ -81,41 +91,39 @@ type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingHistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone struct {
-	Name interface{}                                                               `json:"name"`
-	JSON userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON `json:"-"`
+type UserBillingHistoryListResponseZone struct {
+	Name interface{}                            `json:"name"`
+	JSON userBillingHistoryListResponseZoneJSON `json:"-"`
 }
 
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON
-// contains the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZoneJSON struct {
+// userBillingHistoryListResponseZoneJSON contains the JSON metadata for the struct
+// [UserBillingHistoryListResponseZone]
+type userBillingHistoryListResponseZoneJSON struct {
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseZone) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingHistoryListResponseZone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams struct {
+type UserBillingHistoryListParams struct {
 	// Field to order billing history by.
-	Order param.Field[UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrder] `query:"order"`
+	Order param.Field[UserBillingHistoryListParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page.
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
-// URLQuery serializes
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams]'s query
-// parameters as `url.Values`.
-func (r UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [UserBillingHistoryListParams]'s query parameters as
+// `url.Values`.
+func (r UserBillingHistoryListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -123,112 +131,10 @@ func (r UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParams) URLQuer
 }
 
 // Field to order billing history by.
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrder string
+type UserBillingHistoryListParamsOrder string
 
 const (
-	UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrderType      UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrder = "type"
-	UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrderOccuredAt UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrder = "occured_at"
-	UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrderAction    UserBillingHistoryUserBillingHistoryBillingHistoryDetailsParamsOrder = "action"
+	UserBillingHistoryListParamsOrderType      UserBillingHistoryListParamsOrder = "type"
+	UserBillingHistoryListParamsOrderOccuredAt UserBillingHistoryListParamsOrder = "occured_at"
+	UserBillingHistoryListParamsOrderAction    UserBillingHistoryListParamsOrder = "action"
 )
-
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelope struct {
-	Errors   []UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeJSON       `json:"-"`
-}
-
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelope]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrors struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrors]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessages struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessages]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeSuccess bool
-
-const (
-	UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeSuccessTrue UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeSuccess = true
-)
-
-type UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                 `json:"total_count"`
-	JSON       userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfo]
-type userBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserBillingHistoryUserBillingHistoryBillingHistoryDetailsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

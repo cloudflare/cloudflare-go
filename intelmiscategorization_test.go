@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestIntelMiscategorizationMiscategorizationNewMiscategorizationWithOptionalParams(t *testing.T) {
+func TestIntelMiscategorizationNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,17 +29,17 @@ func TestIntelMiscategorizationMiscategorizationNewMiscategorizationWithOptional
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Intels.Miscategorizations.MiscategorizationNewMiscategorization(
+	_, err := client.Intel.Miscategorizations.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.IntelMiscategorizationMiscategorizationNewMiscategorizationParams{
+		cloudflare.IntelMiscategorizationNewParams{
 			ContentAdds: cloudflare.F[any](map[string]interface{}{
 				"0": int64(82),
 			}),
 			ContentRemoves: cloudflare.F[any](map[string]interface{}{
 				"0": int64(155),
 			}),
-			IndicatorType: cloudflare.F(cloudflare.IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorTypeDomain),
+			IndicatorType: cloudflare.F(cloudflare.IntelMiscategorizationNewParamsIndicatorTypeDomain),
 			IP:            cloudflare.F[any](map[string]interface{}{}),
 			SecurityAdds: cloudflare.F[any](map[string]interface{}{
 				"0": int64(117),

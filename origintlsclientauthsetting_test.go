@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestOriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsGetEnablementSettingForZone(t *testing.T) {
+func TestOriginTLSClientAuthSettingGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestOriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsGetEnablemen
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.OriginTLSClientAuth.Settings.ZoneLevelAuthenticatedOriginPullsGetEnablementSettingForZone(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.OriginTLSClientAuth.Settings.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestOriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsGetEnablemen
 	}
 }
 
-func TestOriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsSetEnablementForZone(t *testing.T) {
+func TestOriginTLSClientAuthSettingReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,10 +55,10 @@ func TestOriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsSetEnablemen
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.OriginTLSClientAuth.Settings.ZoneLevelAuthenticatedOriginPullsSetEnablementForZone(
+	_, err := client.OriginTLSClientAuth.Settings.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.OriginTLSClientAuthSettingZoneLevelAuthenticatedOriginPullsSetEnablementForZoneParams{
+		cloudflare.OriginTLSClientAuthSettingReplaceParams{
 			Enabled: cloudflare.F(true),
 		},
 	)

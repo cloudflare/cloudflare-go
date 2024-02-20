@@ -35,25 +35,25 @@ func NewRulesetVersionService(opts ...option.RequestOption) (r *RulesetVersionSe
 	return
 }
 
-// Deletes an existing version of an account or zone ruleset.
-func (r *RulesetVersionService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, rulesetVersion string, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
-	return
-}
-
 // Fetches the versions of an account or zone ruleset.
-func (r *RulesetVersionService) AccountRulesetsListAnAccountRulesetSVersions(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, opts ...option.RequestOption) (res *[]RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse, err error) {
+func (r *RulesetVersionService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, opts ...option.RequestOption) (res *[]RulesetVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelope
+	var env RulesetVersionListResponseEnvelope
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
+	return
+}
+
+// Deletes an existing version of an account or zone ruleset.
+func (r *RulesetVersionService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, rulesetVersion string, opts ...option.RequestOption) (err error) {
+	opts = append(r.Options[:], opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -71,13 +71,13 @@ func (r *RulesetVersionService) Get(ctx context.Context, accountOrZone string, a
 }
 
 // A ruleset object.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse struct {
+type RulesetVersionListResponse struct {
 	// The kind of the ruleset.
-	Kind RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind `json:"kind,required"`
+	Kind RulesetVersionListResponseKind `json:"kind,required"`
 	// The human-readable name of the ruleset.
 	Name string `json:"name,required"`
 	// The phase of the ruleset.
-	Phase RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase `json:"phase,required"`
+	Phase RulesetVersionListResponsePhase `json:"phase,required"`
 	// The unique ID of the ruleset.
 	ID string `json:"id"`
 	// An informative description of the ruleset.
@@ -85,14 +85,13 @@ type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse struct {
 	// The timestamp of when the ruleset was last modified.
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the ruleset.
-	Version string                                                                 `json:"version"`
-	JSON    rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseJSON `json:"-"`
+	Version string                         `json:"version"`
+	JSON    rulesetVersionListResponseJSON `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseJSON contains
-// the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseJSON struct {
+// rulesetVersionListResponseJSON contains the JSON metadata for the struct
+// [RulesetVersionListResponse]
+type rulesetVersionListResponseJSON struct {
 	Kind        apijson.Field
 	Name        apijson.Field
 	Phase       apijson.Field
@@ -104,47 +103,47 @@ type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseJSON stru
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The kind of the ruleset.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind string
+type RulesetVersionListResponseKind string
 
 const (
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKindManaged RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind = "managed"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKindCustom  RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind = "custom"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKindRoot    RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind = "root"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKindZone    RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseKind = "zone"
+	RulesetVersionListResponseKindManaged RulesetVersionListResponseKind = "managed"
+	RulesetVersionListResponseKindCustom  RulesetVersionListResponseKind = "custom"
+	RulesetVersionListResponseKindRoot    RulesetVersionListResponseKind = "root"
+	RulesetVersionListResponseKindZone    RulesetVersionListResponseKind = "zone"
 )
 
 // The phase of the ruleset.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase string
+type RulesetVersionListResponsePhase string
 
 const (
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseDDOSL4                         RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "ddos_l4"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseDDOSL7                         RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "ddos_l7"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPConfigSettings             RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_config_settings"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPCustomErrors               RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_custom_errors"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPLogCustomFields            RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_log_custom_fields"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRatelimit                  RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_ratelimit"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestCacheSettings       RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_cache_settings"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestDynamicRedirect     RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_dynamic_redirect"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestFirewallCustom      RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_firewall_custom"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestFirewallManaged     RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_firewall_managed"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestLateTransform       RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_late_transform"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestOrigin              RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_origin"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestRedirect            RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_redirect"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestSanitize            RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_sanitize"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestSbfm                RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_sbfm"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestSelectConfiguration RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_select_configuration"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPRequestTransform           RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_request_transform"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPResponseCompression        RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_response_compression"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPResponseFirewallManaged    RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_response_firewall_managed"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseHTTPResponseHeadersTransform   RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "http_response_headers_transform"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseMagicTransit                   RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "magic_transit"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseMagicTransitIDsManaged         RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "magic_transit_ids_managed"
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhaseMagicTransitManaged            RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponsePhase = "magic_transit_managed"
+	RulesetVersionListResponsePhaseDDOSL4                         RulesetVersionListResponsePhase = "ddos_l4"
+	RulesetVersionListResponsePhaseDDOSL7                         RulesetVersionListResponsePhase = "ddos_l7"
+	RulesetVersionListResponsePhaseHTTPConfigSettings             RulesetVersionListResponsePhase = "http_config_settings"
+	RulesetVersionListResponsePhaseHTTPCustomErrors               RulesetVersionListResponsePhase = "http_custom_errors"
+	RulesetVersionListResponsePhaseHTTPLogCustomFields            RulesetVersionListResponsePhase = "http_log_custom_fields"
+	RulesetVersionListResponsePhaseHTTPRatelimit                  RulesetVersionListResponsePhase = "http_ratelimit"
+	RulesetVersionListResponsePhaseHTTPRequestCacheSettings       RulesetVersionListResponsePhase = "http_request_cache_settings"
+	RulesetVersionListResponsePhaseHTTPRequestDynamicRedirect     RulesetVersionListResponsePhase = "http_request_dynamic_redirect"
+	RulesetVersionListResponsePhaseHTTPRequestFirewallCustom      RulesetVersionListResponsePhase = "http_request_firewall_custom"
+	RulesetVersionListResponsePhaseHTTPRequestFirewallManaged     RulesetVersionListResponsePhase = "http_request_firewall_managed"
+	RulesetVersionListResponsePhaseHTTPRequestLateTransform       RulesetVersionListResponsePhase = "http_request_late_transform"
+	RulesetVersionListResponsePhaseHTTPRequestOrigin              RulesetVersionListResponsePhase = "http_request_origin"
+	RulesetVersionListResponsePhaseHTTPRequestRedirect            RulesetVersionListResponsePhase = "http_request_redirect"
+	RulesetVersionListResponsePhaseHTTPRequestSanitize            RulesetVersionListResponsePhase = "http_request_sanitize"
+	RulesetVersionListResponsePhaseHTTPRequestSbfm                RulesetVersionListResponsePhase = "http_request_sbfm"
+	RulesetVersionListResponsePhaseHTTPRequestSelectConfiguration RulesetVersionListResponsePhase = "http_request_select_configuration"
+	RulesetVersionListResponsePhaseHTTPRequestTransform           RulesetVersionListResponsePhase = "http_request_transform"
+	RulesetVersionListResponsePhaseHTTPResponseCompression        RulesetVersionListResponsePhase = "http_response_compression"
+	RulesetVersionListResponsePhaseHTTPResponseFirewallManaged    RulesetVersionListResponsePhase = "http_response_firewall_managed"
+	RulesetVersionListResponsePhaseHTTPResponseHeadersTransform   RulesetVersionListResponsePhase = "http_response_headers_transform"
+	RulesetVersionListResponsePhaseMagicTransit                   RulesetVersionListResponsePhase = "magic_transit"
+	RulesetVersionListResponsePhaseMagicTransitIDsManaged         RulesetVersionListResponsePhase = "magic_transit_ids_managed"
+	RulesetVersionListResponsePhaseMagicTransitManaged            RulesetVersionListResponsePhase = "magic_transit_managed"
 )
 
 // A result.
@@ -874,22 +873,21 @@ func (r *RulesetVersionGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(da
 }
 
 // A response object.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelope struct {
+type RulesetVersionListResponseEnvelope struct {
 	// A list of error messages.
-	Errors []RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrors `json:"errors,required"`
+	Errors []RulesetVersionListResponseEnvelopeErrors `json:"errors,required"`
 	// A list of warning messages.
-	Messages []RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessages `json:"messages,required"`
+	Messages []RulesetVersionListResponseEnvelopeMessages `json:"messages,required"`
 	// A result.
-	Result []RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponse `json:"result,required"`
+	Result []RulesetVersionListResponse `json:"result,required"`
 	// Whether the API call was successful.
-	Success RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeJSON    `json:"-"`
+	Success RulesetVersionListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    rulesetVersionListResponseEnvelopeJSON    `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelope]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeJSON struct {
+// rulesetVersionListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RulesetVersionListResponseEnvelope]
+type rulesetVersionListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -898,25 +896,24 @@ type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeJ
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A message.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrors struct {
+type RulesetVersionListResponseEnvelopeErrors struct {
 	// A text description of this message.
 	Message string `json:"message,required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
-	Source RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSource `json:"source"`
-	JSON   rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsJSON   `json:"-"`
+	Source RulesetVersionListResponseEnvelopeErrorsSource `json:"source"`
+	JSON   rulesetVersionListResponseEnvelopeErrorsJSON   `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrors]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsJSON struct {
+// rulesetVersionListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RulesetVersionListResponseEnvelopeErrors]
+type rulesetVersionListResponseEnvelopeErrorsJSON struct {
 	Message     apijson.Field
 	Code        apijson.Field
 	Source      apijson.Field
@@ -924,45 +921,43 @@ type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The source of this message.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSource struct {
+type RulesetVersionListResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                                                     `json:"pointer,required"`
-	JSON    rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSourceJSON `json:"-"`
+	Pointer string                                             `json:"pointer,required"`
+	JSON    rulesetVersionListResponseEnvelopeErrorsSourceJSON `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSourceJSON
-// contains the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSource]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSourceJSON struct {
+// rulesetVersionListResponseEnvelopeErrorsSourceJSON contains the JSON metadata
+// for the struct [RulesetVersionListResponseEnvelopeErrorsSource]
+type rulesetVersionListResponseEnvelopeErrorsSourceJSON struct {
 	Pointer     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A message.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessages struct {
+type RulesetVersionListResponseEnvelopeMessages struct {
 	// A text description of this message.
 	Message string `json:"message,required"`
 	// A unique code for this message.
 	Code int64 `json:"code"`
 	// The source of this message.
-	Source RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSource `json:"source"`
-	JSON   rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesJSON   `json:"-"`
+	Source RulesetVersionListResponseEnvelopeMessagesSource `json:"source"`
+	JSON   rulesetVersionListResponseEnvelopeMessagesJSON   `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessages]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesJSON struct {
+// rulesetVersionListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [RulesetVersionListResponseEnvelopeMessages]
+type rulesetVersionListResponseEnvelopeMessagesJSON struct {
 	Message     apijson.Field
 	Code        apijson.Field
 	Source      apijson.Field
@@ -970,35 +965,34 @@ type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeM
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The source of this message.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSource struct {
+type RulesetVersionListResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                                                       `json:"pointer,required"`
-	JSON    rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSourceJSON `json:"-"`
+	Pointer string                                               `json:"pointer,required"`
+	JSON    rulesetVersionListResponseEnvelopeMessagesSourceJSON `json:"-"`
 }
 
-// rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSourceJSON
-// contains the JSON metadata for the struct
-// [RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSource]
-type rulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSourceJSON struct {
+// rulesetVersionListResponseEnvelopeMessagesSourceJSON contains the JSON metadata
+// for the struct [RulesetVersionListResponseEnvelopeMessagesSource]
+type rulesetVersionListResponseEnvelopeMessagesSourceJSON struct {
 	Pointer     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetVersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeSuccess bool
+type RulesetVersionListResponseEnvelopeSuccess bool
 
 const (
-	RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeSuccessTrue RulesetVersionAccountRulesetsListAnAccountRulesetSVersionsResponseEnvelopeSuccess = true
+	RulesetVersionListResponseEnvelopeSuccessTrue RulesetVersionListResponseEnvelopeSuccess = true
 )
 
 // A response object.

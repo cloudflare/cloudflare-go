@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2WithOptionalParams(t *testing.T) {
+func TestImageV2DirectUploadNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2Wit
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Images.V2s.DirectUploads.CloudflareImagesNewAuthenticatedDirectUploadURLV2(
+	_, err := client.Images.V2s.DirectUploads.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ImageV2DirectUploadCloudflareImagesNewAuthenticatedDirectUploadURLV2Params{
+		cloudflare.ImageV2DirectUploadNewParams{
 			Expiry:            cloudflare.F(time.Now()),
 			Metadata:          cloudflare.F[any](map[string]interface{}{}),
 			RequireSignedURLs: cloudflare.F(true),

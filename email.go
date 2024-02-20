@@ -11,8 +11,8 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewEmailService] method instead.
 type EmailService struct {
-	Options  []option.RequestOption
-	Routings *EmailRoutingService
+	Options []option.RequestOption
+	Routing *EmailRoutingService
 }
 
 // NewEmailService generates a new service that applies the given options to each
@@ -21,6 +21,6 @@ type EmailService struct {
 func NewEmailService(opts ...option.RequestOption) (r *EmailService) {
 	r = &EmailService{}
 	r.Options = opts
-	r.Routings = NewEmailRoutingService(opts...)
+	r.Routing = NewEmailRoutingService(opts...)
 	return
 }

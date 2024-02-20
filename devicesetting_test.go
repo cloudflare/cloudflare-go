@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(t *testing.T) {
+func TestDeviceSettingList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(t *t
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Devices.Settings.ZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Devices.Settings.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestDeviceSettingZeroTrustAccountsGetDeviceSettingsForZeroTrustAccount(t *t
 	}
 }
 
-func TestDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountWithOptionalParams(t *testing.T) {
+func TestDeviceSettingReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,10 +55,10 @@ func TestDeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccoun
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Devices.Settings.ZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccount(
+	_, err := client.Devices.Settings.Replace(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.DeviceSettingZeroTrustAccountsUpdateDeviceSettingsForTheZeroTrustAccountParams{
+		cloudflare.DeviceSettingReplaceParams{
 			GatewayProxyEnabled:                cloudflare.F(true),
 			GatewayUdpProxyEnabled:             cloudflare.F(true),
 			RootCertificateInstallationEnabled: cloudflare.F(true),

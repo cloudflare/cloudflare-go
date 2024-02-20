@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfr(t *testing.T) {
+func TestSecondaryDNSForceAxfrNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestSecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfr(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.SecondaryDNS.ForceAxfrs.SecondaryDNSSecondaryZoneForceAxfr(context.TODO(), "269d8f4853475ca241c4e730be286b20")
+	_, err := client.SecondaryDNS.ForceAxfrs.New(context.TODO(), "269d8f4853475ca241c4e730be286b20")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

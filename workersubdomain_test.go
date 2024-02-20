@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerSubdomainWorkerSubdomainNewSubdomain(t *testing.T) {
+func TestWorkerSubdomainGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,7 @@ func TestWorkerSubdomainWorkerSubdomainNewSubdomain(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Subdomains.WorkerSubdomainNewSubdomain(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.WorkerSubdomainWorkerSubdomainNewSubdomainParams{
-			Body: cloudflare.F[any]("{'subdomain': 'example-subdomain'}"),
-		},
-	)
+	_, err := client.Workers.Subdomains.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -45,7 +39,7 @@ func TestWorkerSubdomainWorkerSubdomainNewSubdomain(t *testing.T) {
 	}
 }
 
-func TestWorkerSubdomainWorkerSubdomainGetSubdomain(t *testing.T) {
+func TestWorkerSubdomainReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,7 +55,13 @@ func TestWorkerSubdomainWorkerSubdomainGetSubdomain(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Subdomains.WorkerSubdomainGetSubdomain(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Workers.Subdomains.Replace(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.WorkerSubdomainReplaceParams{
+			Body: cloudflare.F[any]("{'subdomain': 'example-subdomain'}"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

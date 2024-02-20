@@ -33,9 +33,9 @@ func NewGatewayAppTypeService(opts ...option.RequestOption) (r *GatewayAppTypeSe
 }
 
 // Fetches all application and application type mappings.
-func (r *GatewayAppTypeService) ZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappings(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse, err error) {
+func (r *GatewayAppTypeService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]GatewayAppTypeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelope
+	var env GatewayAppTypeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/app_types", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,19 +45,17 @@ func (r *GatewayAppTypeService) ZeroTrustGatewayApplicationAndApplicationTypeMap
 	return
 }
 
-// Union satisfied by
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplication]
-// or
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationType].
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse interface {
-	implementsGatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse()
+// Union satisfied by [GatewayAppTypeListResponseZeroTrustGatewayApplication] or
+// [GatewayAppTypeListResponseZeroTrustGatewayApplicationType].
+type GatewayAppTypeListResponse interface {
+	implementsGatewayAppTypeListResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*GatewayAppTypeListResponse)(nil)).Elem(), "")
 }
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplication struct {
+type GatewayAppTypeListResponseZeroTrustGatewayApplication struct {
 	// The identifier for this application. There is only one application per ID.
 	ID int64 `json:"id"`
 	// The identifier for the type of this application. There can be many applications
@@ -65,14 +63,13 @@ type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	ApplicationTypeID int64     `json:"application_type_id"`
 	CreatedAt         time.Time `json:"created_at" format:"date-time"`
 	// The name of the application or application type.
-	Name string                                                                                                                                              `json:"name"`
-	JSON gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationJSON `json:"-"`
+	Name string                                                    `json:"name"`
+	JSON gatewayAppTypeListResponseZeroTrustGatewayApplicationJSON `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplication]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationJSON struct {
+// gatewayAppTypeListResponseZeroTrustGatewayApplicationJSON contains the JSON
+// metadata for the struct [GatewayAppTypeListResponseZeroTrustGatewayApplication]
+type gatewayAppTypeListResponseZeroTrustGatewayApplicationJSON struct {
 	ID                apijson.Field
 	ApplicationTypeID apijson.Field
 	CreatedAt         apijson.Field
@@ -81,14 +78,14 @@ type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseZeroTrustGatewayApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplication) implementsGatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse() {
+func (r GatewayAppTypeListResponseZeroTrustGatewayApplication) implementsGatewayAppTypeListResponse() {
 }
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationType struct {
+type GatewayAppTypeListResponseZeroTrustGatewayApplicationType struct {
 	// The identifier for the type of this application. There can be many applications
 	// with the same type. This refers to the `id` of a returned application type.
 	ID        int64     `json:"id"`
@@ -96,14 +93,14 @@ type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	// A short summary of applications with this type.
 	Description string `json:"description"`
 	// The name of the application or application type.
-	Name string                                                                                                                                                  `json:"name"`
-	JSON gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationTypeJSON `json:"-"`
+	Name string                                                        `json:"name"`
+	JSON gatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationTypeJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationType]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationTypeJSON struct {
+// gatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON contains the JSON
+// metadata for the struct
+// [GatewayAppTypeListResponseZeroTrustGatewayApplicationType]
+type gatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -112,27 +109,26 @@ type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationType) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseZeroTrustGatewayApplicationType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseZeroTrustGatewayApplicationType) implementsGatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse() {
+func (r GatewayAppTypeListResponseZeroTrustGatewayApplicationType) implementsGatewayAppTypeListResponse() {
 }
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelope struct {
-	Errors   []GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponse                 `json:"result,required,nullable"`
+type GatewayAppTypeListResponseEnvelope struct {
+	Errors   []GatewayAppTypeListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayAppTypeListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []GatewayAppTypeListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeJSON       `json:"-"`
+	Success    GatewayAppTypeListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo GatewayAppTypeListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       gatewayAppTypeListResponseEnvelopeJSON       `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelope]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeJSON struct {
+// gatewayAppTypeListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayAppTypeListResponseEnvelope]
+type gatewayAppTypeListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -142,58 +138,56 @@ type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                                                  `json:"code,required"`
-	Message string                                                                                                                                 `json:"message,required"`
-	JSON    gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayAppTypeListResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    gatewayAppTypeListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrors]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrorsJSON struct {
+// gatewayAppTypeListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayAppTypeListResponseEnvelopeErrors]
+type gatewayAppTypeListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                                                    `json:"code,required"`
-	Message string                                                                                                                                   `json:"message,required"`
-	JSON    gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayAppTypeListResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    gatewayAppTypeListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessages]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessagesJSON struct {
+// gatewayAppTypeListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayAppTypeListResponseEnvelopeMessages]
+type gatewayAppTypeListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeSuccess bool
+type GatewayAppTypeListResponseEnvelopeSuccess bool
 
 const (
-	GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeSuccessTrue GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeSuccess = true
+	GatewayAppTypeListResponseEnvelopeSuccessTrue GatewayAppTypeListResponseEnvelopeSuccess = true
 )
 
-type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfo struct {
+type GatewayAppTypeListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -201,14 +195,13 @@ type GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                                                                    `json:"total_count"`
-	JSON       gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                          `json:"total_count"`
+	JSON       gatewayAppTypeListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfo]
-type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfoJSON struct {
+// gatewayAppTypeListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [GatewayAppTypeListResponseEnvelopeResultInfo]
+type gatewayAppTypeListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -217,6 +210,6 @@ type gatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListAppl
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayAppTypeZeroTrustGatewayApplicationAndApplicationTypeMappingsListApplicationAndApplicationTypeMappingsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayAppTypeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

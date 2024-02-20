@@ -32,23 +32,10 @@ func NewAddressPrefixBGPStatusService(opts ...option.RequestOption) (r *AddressP
 	return
 }
 
-// List the current advertisement state for a prefix.
-func (r *AddressPrefixBGPStatusService) IPAddressManagementDynamicAdvertisementGetAdvertisementStatus(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Advertise or withdraw BGP route for a prefix.
-func (r *AddressPrefixBGPStatusService) IPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatus(ctx context.Context, accountID string, prefixID string, body AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponse, err error) {
+func (r *AddressPrefixBGPStatusService) Update(ctx context.Context, accountID string, prefixID string, body AddressPrefixBGPStatusUpdateParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelope
+	var env AddressPrefixBGPStatusUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -58,146 +45,84 @@ func (r *AddressPrefixBGPStatusService) IPAddressManagementDynamicAdvertisementU
 	return
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponse struct {
+// List the current advertisement state for a prefix.
+func (r *AddressPrefixBGPStatusService) Get(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *AddressPrefixBGPStatusGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AddressPrefixBGPStatusGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AddressPrefixBGPStatusUpdateResponse struct {
 	// Enablement of prefix advertisement to the Internet.
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time                                                                                       `json:"advertised_modified_at,nullable" format:"date-time"`
-	JSON                 addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseJSON `json:"-"`
+	AdvertisedModifiedAt time.Time                                `json:"advertised_modified_at,nullable" format:"date-time"`
+	JSON                 addressPrefixBGPStatusUpdateResponseJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponse]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseJSON struct {
+// addressPrefixBGPStatusUpdateResponseJSON contains the JSON metadata for the
+// struct [AddressPrefixBGPStatusUpdateResponse]
+type addressPrefixBGPStatusUpdateResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponse struct {
+type AddressPrefixBGPStatusGetResponse struct {
 	// Enablement of prefix advertisement to the Internet.
 	Advertised bool `json:"advertised"`
 	// Last time the advertisement status was changed. This field is only not 'null' if
 	// on demand is enabled.
-	AdvertisedModifiedAt time.Time                                                                                                       `json:"advertised_modified_at,nullable" format:"date-time"`
-	JSON                 addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseJSON `json:"-"`
+	AdvertisedModifiedAt time.Time                             `json:"advertised_modified_at,nullable" format:"date-time"`
+	JSON                 addressPrefixBGPStatusGetResponseJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponse]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseJSON struct {
+// addressPrefixBGPStatusGetResponseJSON contains the JSON metadata for the struct
+// [AddressPrefixBGPStatusGetResponse]
+type addressPrefixBGPStatusGetResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelope struct {
-	Errors   []AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeJSON    `json:"-"`
-}
-
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelope]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrors struct {
-	Code    int64                                                                                                         `json:"code,required"`
-	Message string                                                                                                        `json:"message,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrors]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessages struct {
-	Code    int64                                                                                                           `json:"code,required"`
-	Message string                                                                                                          `json:"message,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessages]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeSuccess bool
-
-const (
-	AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeSuccessTrue AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatusResponseEnvelopeSuccess = true
-)
-
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusParams struct {
+type AddressPrefixBGPStatusUpdateParams struct {
 	// Enablement of prefix advertisement to the Internet.
 	Advertised param.Field[bool] `json:"advertised,required"`
 }
 
-func (r AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusParams) MarshalJSON() (data []byte, err error) {
+func (r AddressPrefixBGPStatusUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelope struct {
-	Errors   []AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponse                   `json:"result,required"`
+type AddressPrefixBGPStatusUpdateResponseEnvelope struct {
+	Errors   []AddressPrefixBGPStatusUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressPrefixBGPStatusUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressPrefixBGPStatusUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeJSON    `json:"-"`
+	Success AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelope]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeJSON struct {
+// addressPrefixBGPStatusUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AddressPrefixBGPStatusUpdateResponseEnvelope]
+type addressPrefixBGPStatusUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -206,53 +131,120 @@ type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDy
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrors struct {
-	Code    int64                                                                                                                         `json:"code,required"`
-	Message string                                                                                                                        `json:"message,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrorsJSON `json:"-"`
+type AddressPrefixBGPStatusUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrors]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrorsJSON struct {
+// addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AddressPrefixBGPStatusUpdateResponseEnvelopeErrors]
+type addressPrefixBGPStatusUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessages struct {
-	Code    int64                                                                                                                           `json:"code,required"`
-	Message string                                                                                                                          `json:"message,required"`
-	JSON    addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessagesJSON `json:"-"`
+type AddressPrefixBGPStatusUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessages]
-type addressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessagesJSON struct {
+// addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AddressPrefixBGPStatusUpdateResponseEnvelopeMessages]
+type addressPrefixBGPStatusUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressPrefixBGPStatusUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeSuccess bool
+type AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess bool
 
 const (
-	AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeSuccessTrue AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusResponseEnvelopeSuccess = true
+	AddressPrefixBGPStatusUpdateResponseEnvelopeSuccessTrue AddressPrefixBGPStatusUpdateResponseEnvelopeSuccess = true
+)
+
+type AddressPrefixBGPStatusGetResponseEnvelope struct {
+	Errors   []AddressPrefixBGPStatusGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressPrefixBGPStatusGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressPrefixBGPStatusGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AddressPrefixBGPStatusGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressPrefixBGPStatusGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// addressPrefixBGPStatusGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AddressPrefixBGPStatusGetResponseEnvelope]
+type addressPrefixBGPStatusGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixBGPStatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixBGPStatusGetResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    addressPrefixBGPStatusGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// addressPrefixBGPStatusGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AddressPrefixBGPStatusGetResponseEnvelopeErrors]
+type addressPrefixBGPStatusGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixBGPStatusGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixBGPStatusGetResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    addressPrefixBGPStatusGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// addressPrefixBGPStatusGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [AddressPrefixBGPStatusGetResponseEnvelopeMessages]
+type addressPrefixBGPStatusGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AddressPrefixBGPStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AddressPrefixBGPStatusGetResponseEnvelopeSuccess bool
+
+const (
+	AddressPrefixBGPStatusGetResponseEnvelopeSuccessTrue AddressPrefixBGPStatusGetResponseEnvelopeSuccess = true
 )

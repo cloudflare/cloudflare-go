@@ -20,10 +20,8 @@ import (
 // this service directly, and instead use the [NewPageProjectDeploymentService]
 // method instead.
 type PageProjectDeploymentService struct {
-	Options   []option.RequestOption
-	Histories *PageProjectDeploymentHistoryService
-	Retries   *PageProjectDeploymentRetryService
-	Rollbacks *PageProjectDeploymentRollbackService
+	Options []option.RequestOption
+	History *PageProjectDeploymentHistoryService
 }
 
 // NewPageProjectDeploymentService generates a new service that applies the given
@@ -32,9 +30,7 @@ type PageProjectDeploymentService struct {
 func NewPageProjectDeploymentService(opts ...option.RequestOption) (r *PageProjectDeploymentService) {
 	r = &PageProjectDeploymentService{}
 	r.Options = opts
-	r.Histories = NewPageProjectDeploymentHistoryService(opts...)
-	r.Retries = NewPageProjectDeploymentRetryService(opts...)
-	r.Rollbacks = NewPageProjectDeploymentRollbackService(opts...)
+	r.History = NewPageProjectDeploymentHistoryService(opts...)
 	return
 }
 
@@ -79,6 +75,33 @@ func (r *PageProjectDeploymentService) Get(ctx context.Context, accountID string
 	var env PageProjectDeploymentGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", accountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Retry a previous deployment.
+func (r *PageProjectDeploymentService) Retry(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentRetryResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageProjectDeploymentRetryResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", accountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Rollback the production deployment to a previous deployment. You can only
+// rollback to succesful builds on production.
+func (r *PageProjectDeploymentService) Rollback(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentRollbackResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageProjectDeploymentRollbackResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", accountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -496,6 +519,278 @@ func (r *PageProjectDeploymentGetResponseStage) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type PageProjectDeploymentRetryResponse struct {
+	// Id of the deployment.
+	ID string `json:"id"`
+	// A list of alias URLs pointing to this deployment.
+	Aliases     []interface{} `json:"aliases,nullable"`
+	BuildConfig interface{}   `json:"build_config"`
+	// When the deployment was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Info about what caused the deployment.
+	DeploymentTrigger PageProjectDeploymentRetryResponseDeploymentTrigger `json:"deployment_trigger"`
+	// A dict of env variables to build this deploy.
+	EnvVars interface{} `json:"env_vars"`
+	// Type of deploy.
+	Environment string `json:"environment"`
+	// If the deployment has been skipped.
+	IsSkipped   bool        `json:"is_skipped"`
+	LatestStage interface{} `json:"latest_stage"`
+	// When the deployment was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Id of the project.
+	ProjectID string `json:"project_id"`
+	// Name of the project.
+	ProjectName string `json:"project_name"`
+	// Short Id (8 character) of the deployment.
+	ShortID string      `json:"short_id"`
+	Source  interface{} `json:"source"`
+	// List of past stages.
+	Stages []PageProjectDeploymentRetryResponseStage `json:"stages"`
+	// The live URL to view this deployment.
+	URL  string                                 `json:"url"`
+	JSON pageProjectDeploymentRetryResponseJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseJSON contains the JSON metadata for the struct
+// [PageProjectDeploymentRetryResponse]
+type pageProjectDeploymentRetryResponseJSON struct {
+	ID                apijson.Field
+	Aliases           apijson.Field
+	BuildConfig       apijson.Field
+	CreatedOn         apijson.Field
+	DeploymentTrigger apijson.Field
+	EnvVars           apijson.Field
+	Environment       apijson.Field
+	IsSkipped         apijson.Field
+	LatestStage       apijson.Field
+	ModifiedOn        apijson.Field
+	ProjectID         apijson.Field
+	ProjectName       apijson.Field
+	ShortID           apijson.Field
+	Source            apijson.Field
+	Stages            apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Info about what caused the deployment.
+type PageProjectDeploymentRetryResponseDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata PageProjectDeploymentRetryResponseDeploymentTriggerMetadata `json:"metadata"`
+	// What caused the deployment.
+	Type string                                                  `json:"type"`
+	JSON pageProjectDeploymentRetryResponseDeploymentTriggerJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseDeploymentTriggerJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentRetryResponseDeploymentTrigger]
+type pageProjectDeploymentRetryResponseDeploymentTriggerJSON struct {
+	Metadata    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional info about the trigger.
+type PageProjectDeploymentRetryResponseDeploymentTriggerMetadata struct {
+	// Where the trigger happened.
+	Branch string `json:"branch"`
+	// Hash of the deployment trigger commit.
+	CommitHash string `json:"commit_hash"`
+	// Message of the deployment trigger commit.
+	CommitMessage string                                                          `json:"commit_message"`
+	JSON          pageProjectDeploymentRetryResponseDeploymentTriggerMetadataJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseDeploymentTriggerMetadataJSON contains the
+// JSON metadata for the struct
+// [PageProjectDeploymentRetryResponseDeploymentTriggerMetadata]
+type pageProjectDeploymentRetryResponseDeploymentTriggerMetadataJSON struct {
+	Branch        apijson.Field
+	CommitHash    apijson.Field
+	CommitMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the deployment.
+type PageProjectDeploymentRetryResponseStage struct {
+	// When the stage ended.
+	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
+	// The current build stage.
+	Name string `json:"name"`
+	// When the stage started.
+	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
+	// State of the current stage.
+	Status string                                      `json:"status"`
+	JSON   pageProjectDeploymentRetryResponseStageJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseStageJSON contains the JSON metadata for the
+// struct [PageProjectDeploymentRetryResponseStage]
+type pageProjectDeploymentRetryResponseStageJSON struct {
+	EndedOn     apijson.Field
+	Name        apijson.Field
+	StartedOn   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseStage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDeploymentRollbackResponse struct {
+	// Id of the deployment.
+	ID string `json:"id"`
+	// A list of alias URLs pointing to this deployment.
+	Aliases     []interface{} `json:"aliases,nullable"`
+	BuildConfig interface{}   `json:"build_config"`
+	// When the deployment was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Info about what caused the deployment.
+	DeploymentTrigger PageProjectDeploymentRollbackResponseDeploymentTrigger `json:"deployment_trigger"`
+	// A dict of env variables to build this deploy.
+	EnvVars interface{} `json:"env_vars"`
+	// Type of deploy.
+	Environment string `json:"environment"`
+	// If the deployment has been skipped.
+	IsSkipped   bool        `json:"is_skipped"`
+	LatestStage interface{} `json:"latest_stage"`
+	// When the deployment was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Id of the project.
+	ProjectID string `json:"project_id"`
+	// Name of the project.
+	ProjectName string `json:"project_name"`
+	// Short Id (8 character) of the deployment.
+	ShortID string      `json:"short_id"`
+	Source  interface{} `json:"source"`
+	// List of past stages.
+	Stages []PageProjectDeploymentRollbackResponseStage `json:"stages"`
+	// The live URL to view this deployment.
+	URL  string                                    `json:"url"`
+	JSON pageProjectDeploymentRollbackResponseJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseJSON contains the JSON metadata for the
+// struct [PageProjectDeploymentRollbackResponse]
+type pageProjectDeploymentRollbackResponseJSON struct {
+	ID                apijson.Field
+	Aliases           apijson.Field
+	BuildConfig       apijson.Field
+	CreatedOn         apijson.Field
+	DeploymentTrigger apijson.Field
+	EnvVars           apijson.Field
+	Environment       apijson.Field
+	IsSkipped         apijson.Field
+	LatestStage       apijson.Field
+	ModifiedOn        apijson.Field
+	ProjectID         apijson.Field
+	ProjectName       apijson.Field
+	ShortID           apijson.Field
+	Source            apijson.Field
+	Stages            apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Info about what caused the deployment.
+type PageProjectDeploymentRollbackResponseDeploymentTrigger struct {
+	// Additional info about the trigger.
+	Metadata PageProjectDeploymentRollbackResponseDeploymentTriggerMetadata `json:"metadata"`
+	// What caused the deployment.
+	Type string                                                     `json:"type"`
+	JSON pageProjectDeploymentRollbackResponseDeploymentTriggerJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseDeploymentTriggerJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentRollbackResponseDeploymentTrigger]
+type pageProjectDeploymentRollbackResponseDeploymentTriggerJSON struct {
+	Metadata    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Additional info about the trigger.
+type PageProjectDeploymentRollbackResponseDeploymentTriggerMetadata struct {
+	// Where the trigger happened.
+	Branch string `json:"branch"`
+	// Hash of the deployment trigger commit.
+	CommitHash string `json:"commit_hash"`
+	// Message of the deployment trigger commit.
+	CommitMessage string                                                             `json:"commit_message"`
+	JSON          pageProjectDeploymentRollbackResponseDeploymentTriggerMetadataJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseDeploymentTriggerMetadataJSON contains the
+// JSON metadata for the struct
+// [PageProjectDeploymentRollbackResponseDeploymentTriggerMetadata]
+type pageProjectDeploymentRollbackResponseDeploymentTriggerMetadataJSON struct {
+	Branch        apijson.Field
+	CommitHash    apijson.Field
+	CommitMessage apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the deployment.
+type PageProjectDeploymentRollbackResponseStage struct {
+	// When the stage ended.
+	EndedOn time.Time `json:"ended_on,nullable" format:"date-time"`
+	// The current build stage.
+	Name string `json:"name"`
+	// When the stage started.
+	StartedOn time.Time `json:"started_on,nullable" format:"date-time"`
+	// State of the current stage.
+	Status string                                         `json:"status"`
+	JSON   pageProjectDeploymentRollbackResponseStageJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseStageJSON contains the JSON metadata for
+// the struct [PageProjectDeploymentRollbackResponseStage]
+type pageProjectDeploymentRollbackResponseStageJSON struct {
+	EndedOn     apijson.Field
+	Name        apijson.Field
+	StartedOn   apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseStage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type PageProjectDeploymentNewParams struct {
 	// The branch to build the new deployment from. The `HEAD` of the branch will be
 	// used. If omitted, the production branch will be used by default.
@@ -736,4 +1031,142 @@ type PageProjectDeploymentGetResponseEnvelopeSuccess bool
 
 const (
 	PageProjectDeploymentGetResponseEnvelopeSuccessTrue PageProjectDeploymentGetResponseEnvelopeSuccess = true
+)
+
+type PageProjectDeploymentRetryResponseEnvelope struct {
+	Errors   []PageProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectDeploymentRetryResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageProjectDeploymentRetryResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success PageProjectDeploymentRetryResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageProjectDeploymentRetryResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseEnvelopeJSON contains the JSON metadata for
+// the struct [PageProjectDeploymentRetryResponseEnvelope]
+type pageProjectDeploymentRetryResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDeploymentRetryResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    pageProjectDeploymentRetryResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [PageProjectDeploymentRetryResponseEnvelopeErrors]
+type pageProjectDeploymentRetryResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDeploymentRetryResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    pageProjectDeploymentRetryResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageProjectDeploymentRetryResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentRetryResponseEnvelopeMessages]
+type pageProjectDeploymentRetryResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRetryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageProjectDeploymentRetryResponseEnvelopeSuccess bool
+
+const (
+	PageProjectDeploymentRetryResponseEnvelopeSuccessTrue PageProjectDeploymentRetryResponseEnvelopeSuccess = true
+)
+
+type PageProjectDeploymentRollbackResponseEnvelope struct {
+	Errors   []PageProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectDeploymentRollbackResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageProjectDeploymentRollbackResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success PageProjectDeploymentRollbackResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageProjectDeploymentRollbackResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseEnvelopeJSON contains the JSON metadata for
+// the struct [PageProjectDeploymentRollbackResponseEnvelope]
+type pageProjectDeploymentRollbackResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDeploymentRollbackResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    pageProjectDeploymentRollbackResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentRollbackResponseEnvelopeErrors]
+type pageProjectDeploymentRollbackResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageProjectDeploymentRollbackResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    pageProjectDeploymentRollbackResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageProjectDeploymentRollbackResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentRollbackResponseEnvelopeMessages]
+type pageProjectDeploymentRollbackResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageProjectDeploymentRollbackResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageProjectDeploymentRollbackResponseEnvelopeSuccess bool
+
+const (
+	PageProjectDeploymentRollbackResponseEnvelopeSuccessTrue PageProjectDeploymentRollbackResponseEnvelopeSuccess = true
 )

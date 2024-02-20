@@ -34,9 +34,9 @@ func NewAddressLoaDocumentService(opts ...option.RequestOption) (r *AddressLoaDo
 }
 
 // Submit LOA document (pdf format) under the account.
-func (r *AddressLoaDocumentService) IPAddressManagementPrefixesUploadLoaDocument(ctx context.Context, accountID string, body AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentParams, opts ...option.RequestOption) (res *AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponse, err error) {
+func (r *AddressLoaDocumentService) New(ctx context.Context, accountID string, body AddressLoaDocumentNewParams, opts ...option.RequestOption) (res *AddressLoaDocumentNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelope
+	var env AddressLoaDocumentNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -46,47 +46,45 @@ func (r *AddressLoaDocumentService) IPAddressManagementPrefixesUploadLoaDocument
 	return
 }
 
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponse struct {
+type AddressLoaDocumentNewResponse struct {
 	// Name of LOA document.
-	Filename string                                                                     `json:"filename"`
-	JSON     addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseJSON `json:"-"`
+	Filename string                            `json:"filename"`
+	JSON     addressLoaDocumentNewResponseJSON `json:"-"`
 }
 
-// addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseJSON
-// contains the JSON metadata for the struct
-// [AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponse]
-type addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseJSON struct {
+// addressLoaDocumentNewResponseJSON contains the JSON metadata for the struct
+// [AddressLoaDocumentNewResponse]
+type addressLoaDocumentNewResponseJSON struct {
 	Filename    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLoaDocumentNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentParams struct {
+type AddressLoaDocumentNewParams struct {
 	// LOA document to upload.
 	LoaDocument param.Field[string] `json:"loa_document,required"`
 }
 
-func (r AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentParams) MarshalJSON() (data []byte, err error) {
+func (r AddressLoaDocumentNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelope struct {
-	Errors   []AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponse                   `json:"result,required"`
+type AddressLoaDocumentNewResponseEnvelope struct {
+	Errors   []AddressLoaDocumentNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressLoaDocumentNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressLoaDocumentNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeJSON    `json:"-"`
+	Success AddressLoaDocumentNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressLoaDocumentNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelope]
-type addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeJSON struct {
+// addressLoaDocumentNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AddressLoaDocumentNewResponseEnvelope]
+type addressLoaDocumentNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -95,53 +93,51 @@ type addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvel
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLoaDocumentNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrors struct {
-	Code    int64                                                                                    `json:"code,required"`
-	Message string                                                                                   `json:"message,required"`
-	JSON    addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrorsJSON `json:"-"`
+type AddressLoaDocumentNewResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    addressLoaDocumentNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrors]
-type addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrorsJSON struct {
+// addressLoaDocumentNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AddressLoaDocumentNewResponseEnvelopeErrors]
+type addressLoaDocumentNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLoaDocumentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessages struct {
-	Code    int64                                                                                      `json:"code,required"`
-	Message string                                                                                     `json:"message,required"`
-	JSON    addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessagesJSON `json:"-"`
+type AddressLoaDocumentNewResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    addressLoaDocumentNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessages]
-type addressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessagesJSON struct {
+// addressLoaDocumentNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AddressLoaDocumentNewResponseEnvelopeMessages]
+type addressLoaDocumentNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLoaDocumentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeSuccess bool
+type AddressLoaDocumentNewResponseEnvelopeSuccess bool
 
 const (
-	AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeSuccessTrue AddressLoaDocumentIPAddressManagementPrefixesUploadLoaDocumentResponseEnvelopeSuccess = true
+	AddressLoaDocumentNewResponseEnvelopeSuccessTrue AddressLoaDocumentNewResponseEnvelopeSuccess = true
 )

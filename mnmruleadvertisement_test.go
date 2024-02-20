@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRule(t *testing.T) {
+func TestMnmRuleAdvertisementUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestMnmRuleAdvertisementMagicNetworkMonitoringRulesUpdateAdvertisementForRu
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Mnms.Rules.Advertisements.MagicNetworkMonitoringRulesUpdateAdvertisementForRule(
+	_, err := client.Mnms.Rules.Advertisements.Update(
 		context.TODO(),
 		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",

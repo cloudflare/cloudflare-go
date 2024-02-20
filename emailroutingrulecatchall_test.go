@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestEmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRule(t *testing.T) {
+func TestEmailRoutingRuleCatchAllGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestEmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRule(t *test
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Emails.Routings.Rules.CatchAlls.EmailRoutingRoutingRulesGetCatchAllRule(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Emails.Routing.Rules.CatchAlls.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestEmailRoutingRuleCatchAllEmailRoutingRoutingRulesGetCatchAllRule(t *test
 	}
 }
 
-func TestEmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleWithOptionalParams(t *testing.T) {
+func TestEmailRoutingRuleCatchAllReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,28 +55,28 @@ func TestEmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleWithO
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Emails.Routings.Rules.CatchAlls.EmailRoutingRoutingRulesUpdateCatchAllRule(
+	_, err := client.Emails.Routing.Rules.CatchAlls.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParams{
-			Actions: cloudflare.F([]cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsAction{{
-				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsActionsTypeForward),
+		cloudflare.EmailRoutingRuleCatchAllReplaceParams{
+			Actions: cloudflare.F([]cloudflare.EmailRoutingRuleCatchAllReplaceParamsAction{{
+				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsActionsTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsActionsTypeForward),
+				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsActionsTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}, {
-				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsActionsTypeForward),
+				Type:  cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsActionsTypeForward),
 				Value: cloudflare.F([]string{"destinationaddress@example.net", "destinationaddress@example.net", "destinationaddress@example.net"}),
 			}}),
-			Matchers: cloudflare.F([]cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsMatcher{{
-				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsMatchersTypeAll),
+			Matchers: cloudflare.F([]cloudflare.EmailRoutingRuleCatchAllReplaceParamsMatcher{{
+				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsMatchersTypeAll),
 			}, {
-				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsMatchersTypeAll),
+				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsMatchersTypeAll),
 			}, {
-				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsMatchersTypeAll),
+				Type: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsMatchersTypeAll),
 			}}),
-			Enabled: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllEmailRoutingRoutingRulesUpdateCatchAllRuleParamsEnabledTrue),
+			Enabled: cloudflare.F(cloudflare.EmailRoutingRuleCatchAllReplaceParamsEnabledTrue),
 			Name:    cloudflare.F("Send to user@example.net rule."),
 		},
 	)

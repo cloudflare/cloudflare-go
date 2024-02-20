@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserSubscriptionUpdateWithOptionalParams(t *testing.T) {
+func TestUserSubscriptionList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,42 +29,7 @@ func TestUserSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.Subscriptions.Update(
-		context.TODO(),
-		"506e3185e9c882d175a2d0cb0093d9f2",
-		cloudflare.UserSubscriptionUpdateParams{
-			App: cloudflare.F(cloudflare.UserSubscriptionUpdateParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]cloudflare.UserSubscriptionUpdateParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(cloudflare.UserSubscriptionUpdateParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(cloudflare.UserSubscriptionUpdateParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F[any]("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(cloudflare.UserSubscriptionUpdateParamsZone{}),
-		},
-	)
+	_, err := client.Users.Subscriptions.List(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -100,7 +65,7 @@ func TestUserSubscriptionDelete(t *testing.T) {
 	}
 }
 
-func TestUserSubscriptionUserSubscriptionGetUserSubscriptions(t *testing.T) {
+func TestUserSubscriptionReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -116,7 +81,42 @@ func TestUserSubscriptionUserSubscriptionGetUserSubscriptions(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Users.Subscriptions.UserSubscriptionGetUserSubscriptions(context.TODO())
+	_, err := client.Users.Subscriptions.Replace(
+		context.TODO(),
+		"506e3185e9c882d175a2d0cb0093d9f2",
+		cloudflare.UserSubscriptionReplaceParams{
+			App: cloudflare.F(cloudflare.UserSubscriptionReplaceParamsApp{
+				InstallID: cloudflare.F("string"),
+			}),
+			ComponentValues: cloudflare.F([]cloudflare.UserSubscriptionReplaceParamsComponentValue{{
+				Default: cloudflare.F(5.000000),
+				Name:    cloudflare.F("page_rules"),
+				Price:   cloudflare.F(5.000000),
+				Value:   cloudflare.F(20.000000),
+			}, {
+				Default: cloudflare.F(5.000000),
+				Name:    cloudflare.F("page_rules"),
+				Price:   cloudflare.F(5.000000),
+				Value:   cloudflare.F(20.000000),
+			}, {
+				Default: cloudflare.F(5.000000),
+				Name:    cloudflare.F("page_rules"),
+				Price:   cloudflare.F(5.000000),
+				Value:   cloudflare.F(20.000000),
+			}}),
+			Frequency: cloudflare.F(cloudflare.UserSubscriptionReplaceParamsFrequencyMonthly),
+			RatePlan: cloudflare.F(cloudflare.UserSubscriptionReplaceParamsRatePlan{
+				Currency:          cloudflare.F("USD"),
+				ExternallyManaged: cloudflare.F(false),
+				ID:                cloudflare.F[any]("free"),
+				IsContract:        cloudflare.F(false),
+				PublicName:        cloudflare.F("Business Plan"),
+				Scope:             cloudflare.F("zone"),
+				Sets:              cloudflare.F([]string{"string", "string", "string"}),
+			}),
+			Zone: cloudflare.F(cloudflare.UserSubscriptionReplaceParamsZone{}),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -32,9 +32,9 @@ func NewWorkerScriptScheduleService(opts ...option.RequestOption) (r *WorkerScri
 }
 
 // Fetches Cron Triggers for a Worker.
-func (r *WorkerScriptScheduleService) WorkerCronTriggerGetCronTriggers(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponse, err error) {
+func (r *WorkerScriptScheduleService) List(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptScheduleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelope
+	var env WorkerScriptScheduleListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", accountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,9 +45,9 @@ func (r *WorkerScriptScheduleService) WorkerCronTriggerGetCronTriggers(ctx conte
 }
 
 // Updates Cron Triggers for a Worker.
-func (r *WorkerScriptScheduleService) WorkerCronTriggerUpdateCronTriggers(ctx context.Context, accountID string, scriptName string, body WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersParams, opts ...option.RequestOption) (res *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponse, err error) {
+func (r *WorkerScriptScheduleService) Replace(ctx context.Context, accountID string, scriptName string, body WorkerScriptScheduleReplaceParams, opts ...option.RequestOption) (res *WorkerScriptScheduleReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelope
+	var env WorkerScriptScheduleReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", accountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -57,35 +57,33 @@ func (r *WorkerScriptScheduleService) WorkerCronTriggerUpdateCronTriggers(ctx co
 	return
 }
 
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponse struct {
-	Schedules []WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseSchedule `json:"schedules"`
-	JSON      workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseJSON       `json:"-"`
+type WorkerScriptScheduleListResponse struct {
+	Schedules []WorkerScriptScheduleListResponseSchedule `json:"schedules"`
+	JSON      workerScriptScheduleListResponseJSON       `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseJSON contains the
-// JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponse]
-type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseJSON struct {
+// workerScriptScheduleListResponseJSON contains the JSON metadata for the struct
+// [WorkerScriptScheduleListResponse]
+type workerScriptScheduleListResponseJSON struct {
 	Schedules   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseSchedule struct {
-	CreatedOn  interface{}                                                              `json:"created_on"`
-	Cron       interface{}                                                              `json:"cron"`
-	ModifiedOn interface{}                                                              `json:"modified_on"`
-	JSON       workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseScheduleJSON `json:"-"`
+type WorkerScriptScheduleListResponseSchedule struct {
+	CreatedOn  interface{}                                  `json:"created_on"`
+	Cron       interface{}                                  `json:"cron"`
+	ModifiedOn interface{}                                  `json:"modified_on"`
+	JSON       workerScriptScheduleListResponseScheduleJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseScheduleJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseSchedule]
-type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseScheduleJSON struct {
+// workerScriptScheduleListResponseScheduleJSON contains the JSON metadata for the
+// struct [WorkerScriptScheduleListResponseSchedule]
+type workerScriptScheduleListResponseScheduleJSON struct {
 	CreatedOn   apijson.Field
 	Cron        apijson.Field
 	ModifiedOn  apijson.Field
@@ -93,39 +91,37 @@ type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseScheduleJSON st
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleListResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponse struct {
-	Schedules []WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseSchedule `json:"schedules"`
-	JSON      workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseJSON       `json:"-"`
+type WorkerScriptScheduleReplaceResponse struct {
+	Schedules []WorkerScriptScheduleReplaceResponseSchedule `json:"schedules"`
+	JSON      workerScriptScheduleReplaceResponseJSON       `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseJSON contains the
-// JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponse]
-type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseJSON struct {
+// workerScriptScheduleReplaceResponseJSON contains the JSON metadata for the
+// struct [WorkerScriptScheduleReplaceResponse]
+type workerScriptScheduleReplaceResponseJSON struct {
 	Schedules   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseSchedule struct {
-	CreatedOn  interface{}                                                                 `json:"created_on"`
-	Cron       interface{}                                                                 `json:"cron"`
-	ModifiedOn interface{}                                                                 `json:"modified_on"`
-	JSON       workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseScheduleJSON `json:"-"`
+type WorkerScriptScheduleReplaceResponseSchedule struct {
+	CreatedOn  interface{}                                     `json:"created_on"`
+	Cron       interface{}                                     `json:"cron"`
+	ModifiedOn interface{}                                     `json:"modified_on"`
+	JSON       workerScriptScheduleReplaceResponseScheduleJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseScheduleJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseSchedule]
-type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseScheduleJSON struct {
+// workerScriptScheduleReplaceResponseScheduleJSON contains the JSON metadata for
+// the struct [WorkerScriptScheduleReplaceResponseSchedule]
+type workerScriptScheduleReplaceResponseScheduleJSON struct {
 	CreatedOn   apijson.Field
 	Cron        apijson.Field
 	ModifiedOn  apijson.Field
@@ -133,23 +129,22 @@ type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseScheduleJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleReplaceResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelope struct {
-	Errors   []WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponse                   `json:"result,required"`
+type WorkerScriptScheduleListResponseEnvelope struct {
+	Errors   []WorkerScriptScheduleListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptScheduleListResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptScheduleListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeJSON    `json:"-"`
+	Success WorkerScriptScheduleListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptScheduleListResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelope]
-type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeJSON struct {
+// workerScriptScheduleListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerScriptScheduleListResponseEnvelope]
+type workerScriptScheduleListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -158,78 +153,75 @@ type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeJSON st
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrors struct {
-	Code    int64                                                                          `json:"code,required"`
-	Message string                                                                         `json:"message,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerScriptScheduleListResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    workerScriptScheduleListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrors]
-type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrorsJSON struct {
+// workerScriptScheduleListResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [WorkerScriptScheduleListResponseEnvelopeErrors]
+type workerScriptScheduleListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessages struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerScriptScheduleListResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    workerScriptScheduleListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessages]
-type workerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessagesJSON struct {
+// workerScriptScheduleListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [WorkerScriptScheduleListResponseEnvelopeMessages]
+type workerScriptScheduleListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeSuccess bool
+type WorkerScriptScheduleListResponseEnvelopeSuccess bool
 
 const (
-	WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeSuccessTrue WorkerScriptScheduleWorkerCronTriggerGetCronTriggersResponseEnvelopeSuccess = true
+	WorkerScriptScheduleListResponseEnvelopeSuccessTrue WorkerScriptScheduleListResponseEnvelopeSuccess = true
 )
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersParams struct {
+type WorkerScriptScheduleReplaceParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerScriptScheduleReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelope struct {
-	Errors   []WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponse                   `json:"result,required"`
+type WorkerScriptScheduleReplaceResponseEnvelope struct {
+	Errors   []WorkerScriptScheduleReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptScheduleReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptScheduleReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeJSON    `json:"-"`
+	Success WorkerScriptScheduleReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptScheduleReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelope]
-type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeJSON struct {
+// workerScriptScheduleReplaceResponseEnvelopeJSON contains the JSON metadata for
+// the struct [WorkerScriptScheduleReplaceResponseEnvelope]
+type workerScriptScheduleReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -238,53 +230,51 @@ type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerScriptScheduleReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    workerScriptScheduleReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrors]
-type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrorsJSON struct {
+// workerScriptScheduleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [WorkerScriptScheduleReplaceResponseEnvelopeErrors]
+type workerScriptScheduleReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerScriptScheduleReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    workerScriptScheduleReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessages]
-type workerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessagesJSON struct {
+// workerScriptScheduleReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [WorkerScriptScheduleReplaceResponseEnvelopeMessages]
+type workerScriptScheduleReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeSuccess bool
+type WorkerScriptScheduleReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeSuccessTrue WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersResponseEnvelopeSuccess = true
+	WorkerScriptScheduleReplaceResponseEnvelopeSuccessTrue WorkerScriptScheduleReplaceResponseEnvelopeSuccess = true
 )

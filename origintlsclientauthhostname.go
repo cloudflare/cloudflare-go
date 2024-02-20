@@ -34,23 +34,6 @@ func NewOriginTLSClientAuthHostnameService(opts ...option.RequestOption) (r *Ori
 	return
 }
 
-// Associate a hostname to a certificate and enable, disable or invalidate the
-// association. If disabled, client certificate will not be sent to the hostname
-// even if activated at the zone level. 100 maximum associations on a single
-// certificate are allowed. Note: Use a null value for parameter _enabled_ to
-// invalidate the association.
-func (r *OriginTLSClientAuthHostnameService) Update(ctx context.Context, zoneID string, body OriginTLSClientAuthHostnameUpdateParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env OriginTLSClientAuthHostnameUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Get the Hostname Status for Client Authentication
 func (r *OriginTLSClientAuthHostnameService) Get(ctx context.Context, zoneID string, hostname string, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -64,39 +47,21 @@ func (r *OriginTLSClientAuthHostnameService) Get(ctx context.Context, zoneID str
 	return
 }
 
-type OriginTLSClientAuthHostnameUpdateResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	CertID string `json:"cert_id"`
-	// The hostname certificate.
-	Certificate string `json:"certificate"`
-	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
-	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
-	// The hostname on the origin for which the client certificate uploaded will be
-	// used.
-	Hostname string `json:"hostname"`
-	// The hostname certificate's private key.
-	PrivateKey string                                        `json:"private_key"`
-	JSON       originTLSClientAuthHostnameUpdateResponseJSON `json:"-"`
-}
-
-// originTLSClientAuthHostnameUpdateResponseJSON contains the JSON metadata for the
-// struct [OriginTLSClientAuthHostnameUpdateResponse]
-type originTLSClientAuthHostnameUpdateResponseJSON struct {
-	ID          apijson.Field
-	CertID      apijson.Field
-	Certificate apijson.Field
-	Enabled     apijson.Field
-	Hostname    apijson.Field
-	PrivateKey  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthHostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Associate a hostname to a certificate and enable, disable or invalidate the
+// association. If disabled, client certificate will not be sent to the hostname
+// even if activated at the zone level. 100 maximum associations on a single
+// certificate are allowed. Note: Use a null value for parameter _enabled_ to
+// invalidate the association.
+func (r *OriginTLSClientAuthHostnameService) Replace(ctx context.Context, zoneID string, body OriginTLSClientAuthHostnameReplaceParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env OriginTLSClientAuthHostnameReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type OriginTLSClientAuthHostnameGetResponse struct {
@@ -184,127 +149,38 @@ const (
 	OriginTLSClientAuthHostnameGetResponseStatusDeletionTimedOut   OriginTLSClientAuthHostnameGetResponseStatus = "deletion_timed_out"
 )
 
-type OriginTLSClientAuthHostnameUpdateParams struct {
-	Config param.Field[[]OriginTLSClientAuthHostnameUpdateParamsConfig] `json:"config,required"`
-}
-
-func (r OriginTLSClientAuthHostnameUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OriginTLSClientAuthHostnameUpdateParamsConfig struct {
-	// Certificate identifier tag.
-	CertID param.Field[string] `json:"cert_id"`
+type OriginTLSClientAuthHostnameReplaceResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	CertID string `json:"cert_id"`
+	// The hostname certificate.
+	Certificate string `json:"certificate"`
 	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
 	// value voids the association.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled bool `json:"enabled,nullable"`
 	// The hostname on the origin for which the client certificate uploaded will be
 	// used.
-	Hostname param.Field[string] `json:"hostname"`
+	Hostname string `json:"hostname"`
+	// The hostname certificate's private key.
+	PrivateKey string                                         `json:"private_key"`
+	JSON       originTLSClientAuthHostnameReplaceResponseJSON `json:"-"`
 }
 
-func (r OriginTLSClientAuthHostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type OriginTLSClientAuthHostnameUpdateResponseEnvelope struct {
-	Errors   []OriginTLSClientAuthHostnameUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginTLSClientAuthHostnameUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []OriginTLSClientAuthHostnameUpdateResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    OriginTLSClientAuthHostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo OriginTLSClientAuthHostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       originTLSClientAuthHostnameUpdateResponseEnvelopeJSON       `json:"-"`
-}
-
-// originTLSClientAuthHostnameUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [OriginTLSClientAuthHostnameUpdateResponseEnvelope]
-type originTLSClientAuthHostnameUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
+// originTLSClientAuthHostnameReplaceResponseJSON contains the JSON metadata for
+// the struct [OriginTLSClientAuthHostnameReplaceResponse]
+type originTLSClientAuthHostnameReplaceResponseJSON struct {
+	ID          apijson.Field
+	CertID      apijson.Field
+	Certificate apijson.Field
+	Enabled     apijson.Field
+	Hostname    apijson.Field
+	PrivateKey  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *OriginTLSClientAuthHostnameUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginTLSClientAuthHostnameUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    originTLSClientAuthHostnameUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originTLSClientAuthHostnameUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [OriginTLSClientAuthHostnameUpdateResponseEnvelopeErrors]
-type originTLSClientAuthHostnameUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthHostnameUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginTLSClientAuthHostnameUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    originTLSClientAuthHostnameUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originTLSClientAuthHostnameUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [OriginTLSClientAuthHostnameUpdateResponseEnvelopeMessages]
-type originTLSClientAuthHostnameUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthHostnameUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type OriginTLSClientAuthHostnameUpdateResponseEnvelopeSuccess bool
-
-const (
-	OriginTLSClientAuthHostnameUpdateResponseEnvelopeSuccessTrue OriginTLSClientAuthHostnameUpdateResponseEnvelopeSuccess = true
-)
-
-type OriginTLSClientAuthHostnameUpdateResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                         `json:"total_count"`
-	JSON       originTLSClientAuthHostnameUpdateResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// originTLSClientAuthHostnameUpdateResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [OriginTLSClientAuthHostnameUpdateResponseEnvelopeResultInfo]
-type originTLSClientAuthHostnameUpdateResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginTLSClientAuthHostnameUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *OriginTLSClientAuthHostnameReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -376,3 +252,127 @@ type OriginTLSClientAuthHostnameGetResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthHostnameGetResponseEnvelopeSuccessTrue OriginTLSClientAuthHostnameGetResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthHostnameReplaceParams struct {
+	Config param.Field[[]OriginTLSClientAuthHostnameReplaceParamsConfig] `json:"config,required"`
+}
+
+func (r OriginTLSClientAuthHostnameReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type OriginTLSClientAuthHostnameReplaceParamsConfig struct {
+	// Certificate identifier tag.
+	CertID param.Field[string] `json:"cert_id"`
+	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
+	// value voids the association.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The hostname on the origin for which the client certificate uploaded will be
+	// used.
+	Hostname param.Field[string] `json:"hostname"`
+}
+
+func (r OriginTLSClientAuthHostnameReplaceParamsConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type OriginTLSClientAuthHostnameReplaceResponseEnvelope struct {
+	Errors   []OriginTLSClientAuthHostnameReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OriginTLSClientAuthHostnameReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   []OriginTLSClientAuthHostnameReplaceResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    OriginTLSClientAuthHostnameReplaceResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo OriginTLSClientAuthHostnameReplaceResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       originTLSClientAuthHostnameReplaceResponseEnvelopeJSON       `json:"-"`
+}
+
+// originTLSClientAuthHostnameReplaceResponseEnvelopeJSON contains the JSON
+// metadata for the struct [OriginTLSClientAuthHostnameReplaceResponseEnvelope]
+type originTLSClientAuthHostnameReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthHostnameReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginTLSClientAuthHostnameReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    originTLSClientAuthHostnameReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// originTLSClientAuthHostnameReplaceResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [OriginTLSClientAuthHostnameReplaceResponseEnvelopeErrors]
+type originTLSClientAuthHostnameReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthHostnameReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginTLSClientAuthHostnameReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    originTLSClientAuthHostnameReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// originTLSClientAuthHostnameReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [OriginTLSClientAuthHostnameReplaceResponseEnvelopeMessages]
+type originTLSClientAuthHostnameReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthHostnameReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type OriginTLSClientAuthHostnameReplaceResponseEnvelopeSuccess bool
+
+const (
+	OriginTLSClientAuthHostnameReplaceResponseEnvelopeSuccessTrue OriginTLSClientAuthHostnameReplaceResponseEnvelopeSuccess = true
+)
+
+type OriginTLSClientAuthHostnameReplaceResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                          `json:"total_count"`
+	JSON       originTLSClientAuthHostnameReplaceResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// originTLSClientAuthHostnameReplaceResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [OriginTLSClientAuthHostnameReplaceResponseEnvelopeResultInfo]
+type originTLSClientAuthHostnameReplaceResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginTLSClientAuthHostnameReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

@@ -35,6 +35,33 @@ func NewStreamWatermarkService(opts ...option.RequestOption) (r *StreamWatermark
 	return
 }
 
+// Creates watermark profiles using a single `HTTP POST multipart/form-data`
+// request.
+func (r *StreamWatermarkService) New(ctx context.Context, accountID string, body StreamWatermarkNewParams, opts ...option.RequestOption) (res *StreamWatermarkNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamWatermarkNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists all watermark profiles for an account.
+func (r *StreamWatermarkService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]StreamWatermarkListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamWatermarkListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Deletes a watermark profile.
 func (r *StreamWatermarkService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamWatermarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -61,31 +88,78 @@ func (r *StreamWatermarkService) Get(ctx context.Context, accountID string, iden
 	return
 }
 
-// Creates watermark profiles using a single `HTTP POST multipart/form-data`
-// request.
-func (r *StreamWatermarkService) StreamWatermarkProfileNewWatermarkProfilesViaBasicUpload(ctx context.Context, accountID string, body StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadParams, opts ...option.RequestOption) (res *StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [StreamWatermarkNewResponseUnknown] or [shared.UnionString].
+type StreamWatermarkNewResponse interface {
+	ImplementsStreamWatermarkNewResponse()
 }
 
-// Lists all watermark profiles for an account.
-func (r *StreamWatermarkService) StreamWatermarkProfileListWatermarkProfiles(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamWatermarkNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type StreamWatermarkListResponse struct {
+	// The date and a time a watermark profile was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The source URL for a downloaded image. If the watermark profile was created via
+	// direct upload, this field is null.
+	DownloadedFrom string `json:"downloadedFrom"`
+	// The height of the image in pixels.
+	Height int64 `json:"height"`
+	// A short description of the watermark profile.
+	Name string `json:"name"`
+	// The translucency of the image. A value of `0.0` makes the image completely
+	// transparent, and `1.0` makes the image completely opaque. Note that if the image
+	// is already semi-transparent, setting this to `1.0` will not make the image
+	// completely opaque.
+	Opacity float64 `json:"opacity"`
+	// The whitespace between the adjacent edges (determined by position) of the video
+	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
+	// video width or length, as determined by the algorithm.
+	Padding float64 `json:"padding"`
+	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
+	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
+	// `padding` parameter.
+	Position string `json:"position"`
+	// The size of the image relative to the overall size of the video. This parameter
+	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
+	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
+	Scale float64 `json:"scale"`
+	// The size of the image in bytes.
+	Size float64 `json:"size"`
+	// The unique identifier for a watermark profile.
+	Uid string `json:"uid"`
+	// The width of the image in pixels.
+	Width int64                           `json:"width"`
+	JSON  streamWatermarkListResponseJSON `json:"-"`
+}
+
+// streamWatermarkListResponseJSON contains the JSON metadata for the struct
+// [StreamWatermarkListResponse]
+type streamWatermarkListResponseJSON struct {
+	Created        apijson.Field
+	DownloadedFrom apijson.Field
+	Height         apijson.Field
+	Name           apijson.Field
+	Opacity        apijson.Field
+	Padding        apijson.Field
+	Position       apijson.Field
+	Scale          apijson.Field
+	Size           apijson.Field
+	Uid            apijson.Field
+	Width          apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *StreamWatermarkListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Union satisfied by [StreamWatermarkDeleteResponseUnknown] or
@@ -121,82 +195,171 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseUnknown]
-// or [shared.UnionString].
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponse interface {
-	ImplementsStreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponse struct {
-	// The date and a time a watermark profile was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The source URL for a downloaded image. If the watermark profile was created via
-	// direct upload, this field is null.
-	DownloadedFrom string `json:"downloadedFrom"`
-	// The height of the image in pixels.
-	Height int64 `json:"height"`
+type StreamWatermarkNewParams struct {
+	// The image file to upload.
+	File param.Field[string] `json:"file,required"`
 	// A short description of the watermark profile.
-	Name string `json:"name"`
+	Name param.Field[string] `json:"name"`
 	// The translucency of the image. A value of `0.0` makes the image completely
 	// transparent, and `1.0` makes the image completely opaque. Note that if the image
 	// is already semi-transparent, setting this to `1.0` will not make the image
 	// completely opaque.
-	Opacity float64 `json:"opacity"`
+	Opacity param.Field[float64] `json:"opacity"`
 	// The whitespace between the adjacent edges (determined by position) of the video
 	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
 	// video width or length, as determined by the algorithm.
-	Padding float64 `json:"padding"`
+	Padding param.Field[float64] `json:"padding"`
 	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
 	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
 	// `padding` parameter.
-	Position string `json:"position"`
+	Position param.Field[string] `json:"position"`
 	// The size of the image relative to the overall size of the video. This parameter
 	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
 	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
-	Scale float64 `json:"scale"`
-	// The size of the image in bytes.
-	Size float64 `json:"size"`
-	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
-	// The width of the image in pixels.
-	Width int64                                                                  `json:"width"`
-	JSON  streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseJSON `json:"-"`
+	Scale param.Field[float64] `json:"scale"`
 }
 
-// streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseJSON contains
-// the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponse]
-type streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseJSON struct {
-	Created        apijson.Field
-	DownloadedFrom apijson.Field
-	Height         apijson.Field
-	Name           apijson.Field
-	Opacity        apijson.Field
-	Padding        apijson.Field
-	Position       apijson.Field
-	Scale          apijson.Field
-	Size           apijson.Field
-	Uid            apijson.Field
-	Width          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+func (r StreamWatermarkNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponse) UnmarshalJSON(data []byte) (err error) {
+type StreamWatermarkNewResponseEnvelope struct {
+	Errors   []StreamWatermarkNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamWatermarkNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamWatermarkNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamWatermarkNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamWatermarkNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamWatermarkNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamWatermarkNewResponseEnvelope]
+type streamWatermarkNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type StreamWatermarkNewResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    streamWatermarkNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamWatermarkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamWatermarkNewResponseEnvelopeErrors]
+type streamWatermarkNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamWatermarkNewResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    streamWatermarkNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamWatermarkNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StreamWatermarkNewResponseEnvelopeMessages]
+type streamWatermarkNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamWatermarkNewResponseEnvelopeSuccess bool
+
+const (
+	StreamWatermarkNewResponseEnvelopeSuccessTrue StreamWatermarkNewResponseEnvelopeSuccess = true
+)
+
+type StreamWatermarkListResponseEnvelope struct {
+	Errors   []StreamWatermarkListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamWatermarkListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []StreamWatermarkListResponse                 `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamWatermarkListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamWatermarkListResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamWatermarkListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StreamWatermarkListResponseEnvelope]
+type streamWatermarkListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamWatermarkListResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    streamWatermarkListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamWatermarkListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamWatermarkListResponseEnvelopeErrors]
+type streamWatermarkListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamWatermarkListResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    streamWatermarkListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamWatermarkListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StreamWatermarkListResponseEnvelopeMessages]
+type streamWatermarkListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWatermarkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamWatermarkListResponseEnvelopeSuccess bool
+
+const (
+	StreamWatermarkListResponseEnvelopeSuccessTrue StreamWatermarkListResponseEnvelopeSuccess = true
+)
 
 type StreamWatermarkDeleteResponseEnvelope struct {
 	Errors   []StreamWatermarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -334,176 +497,4 @@ type StreamWatermarkGetResponseEnvelopeSuccess bool
 
 const (
 	StreamWatermarkGetResponseEnvelopeSuccessTrue StreamWatermarkGetResponseEnvelopeSuccess = true
-)
-
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadParams struct {
-	// The image file to upload.
-	File param.Field[string] `json:"file,required"`
-	// A short description of the watermark profile.
-	Name param.Field[string] `json:"name"`
-	// The translucency of the image. A value of `0.0` makes the image completely
-	// transparent, and `1.0` makes the image completely opaque. Note that if the image
-	// is already semi-transparent, setting this to `1.0` will not make the image
-	// completely opaque.
-	Opacity param.Field[float64] `json:"opacity"`
-	// The whitespace between the adjacent edges (determined by position) of the video
-	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
-	// video width or length, as determined by the algorithm.
-	Padding param.Field[float64] `json:"padding"`
-	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
-	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
-	// `padding` parameter.
-	Position param.Field[string] `json:"position"`
-	// The size of the image relative to the overall size of the video. This parameter
-	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
-	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
-	Scale param.Field[float64] `json:"scale"`
-}
-
-func (r StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelope struct {
-	Errors   []StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelope]
-type streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrors struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrors]
-type streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessages struct {
-	Code    int64                                                                                               `json:"code,required"`
-	Message string                                                                                              `json:"message,required"`
-	JSON    streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessages]
-type streamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeSuccess bool
-
-const (
-	StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeSuccessTrue StreamWatermarkStreamWatermarkProfileNewWatermarkProfilesViaBasicUploadResponseEnvelopeSuccess = true
-)
-
-type StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelope struct {
-	Errors   []StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelope]
-type streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrors struct {
-	Code    int64                                                                                `json:"code,required"`
-	Message string                                                                               `json:"message,required"`
-	JSON    streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrors]
-type streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessages struct {
-	Code    int64                                                                                  `json:"code,required"`
-	Message string                                                                                 `json:"message,required"`
-	JSON    streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessages]
-type streamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeSuccess bool
-
-const (
-	StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeSuccessTrue StreamWatermarkStreamWatermarkProfileListWatermarkProfilesResponseEnvelopeSuccess = true
 )

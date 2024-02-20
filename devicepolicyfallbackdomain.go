@@ -31,42 +31,14 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 	return
 }
 
-// Fetches a list of domains to bypass Gateway DNS resolution. These domains will
-// use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) DevicesGetLocalDomainFallbackList(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
-func (r *DevicePolicyFallbackDomainService) DevicesGetLocalDomainFallbackListForADeviceSettingsPolicy(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponse, err error) {
+func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope
+	var env DevicePolicyFallbackDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Sets the list of domains to bypass Gateway DNS resolution. These domains will
-// use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) DevicesSetLocalDomainFallbackList(ctx context.Context, identifier interface{}, body DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,9 +49,9 @@ func (r *DevicePolicyFallbackDomainService) DevicesSetLocalDomainFallbackList(ct
 // Sets the list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
-func (r *DevicePolicyFallbackDomainService) DevicesSetLocalDomainFallbackListForADeviceSettingsPolicy(ctx context.Context, identifier interface{}, uuid string, body DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponse, err error) {
+func (r *DevicePolicyFallbackDomainService) Replace(ctx context.Context, identifier interface{}, uuid string, body DevicePolicyFallbackDomainReplaceParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope
+	var env DevicePolicyFallbackDomainReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", identifier, uuid)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -89,20 +61,19 @@ func (r *DevicePolicyFallbackDomainService) DevicesSetLocalDomainFallbackListFor
 	return
 }
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponse struct {
+type DevicePolicyFallbackDomainListResponse struct {
 	// The domain suffix to match when resolving locally.
 	Suffix string `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                                           `json:"dns_server"`
-	JSON      devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseJSON `json:"-"`
+	DNSServer []interface{}                              `json:"dns_server"`
+	JSON      devicePolicyFallbackDomainListResponseJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponse]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseJSON struct {
+// devicePolicyFallbackDomainListResponseJSON contains the JSON metadata for the
+// struct [DevicePolicyFallbackDomainListResponse]
+type devicePolicyFallbackDomainListResponseJSON struct {
 	Suffix      apijson.Field
 	Description apijson.Field
 	DNSServer   apijson.Field
@@ -110,24 +81,23 @@ type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponse struct {
+type DevicePolicyFallbackDomainReplaceResponse struct {
 	// The domain suffix to match when resolving locally.
 	Suffix string `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                                                                   `json:"dns_server"`
-	JSON      devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON `json:"-"`
+	DNSServer []interface{}                                 `json:"dns_server"`
+	JSON      devicePolicyFallbackDomainReplaceResponseJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponse]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON struct {
+// devicePolicyFallbackDomainReplaceResponseJSON contains the JSON metadata for the
+// struct [DevicePolicyFallbackDomainReplaceResponse]
+type devicePolicyFallbackDomainReplaceResponseJSON struct {
 	Suffix      apijson.Field
 	Description apijson.Field
 	DNSServer   apijson.Field
@@ -135,74 +105,23 @@ type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettin
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponse struct {
-	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description string `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                                           `json:"dns_server"`
-	JSON      devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseJSON contains
-// the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponse]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseJSON struct {
-	Suffix      apijson.Field
-	Description apijson.Field
-	DNSServer   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponse struct {
-	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description string `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                                                                   `json:"dns_server"`
-	JSON      devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponse]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseJSON struct {
-	Suffix      apijson.Field
-	Description apijson.Field
-	DNSServer   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponse                 `json:"result,required,nullable"`
+type DevicePolicyFallbackDomainListResponseEnvelope struct {
+	Errors   []DevicePolicyFallbackDomainListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyFallbackDomainListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyFallbackDomainListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeJSON       `json:"-"`
+	Success    DevicePolicyFallbackDomainListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyFallbackDomainListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyFallbackDomainListResponseEnvelopeJSON       `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeJSON struct {
+// devicePolicyFallbackDomainListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [DevicePolicyFallbackDomainListResponseEnvelope]
+type devicePolicyFallbackDomainListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -212,58 +131,56 @@ type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrors struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrorsJSON `json:"-"`
+type DevicePolicyFallbackDomainListResponseEnvelopeErrors struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    devicePolicyFallbackDomainListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrors]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrorsJSON struct {
+// devicePolicyFallbackDomainListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DevicePolicyFallbackDomainListResponseEnvelopeErrors]
+type devicePolicyFallbackDomainListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessages struct {
-	Code    int64                                                                                   `json:"code,required"`
-	Message string                                                                                  `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessagesJSON `json:"-"`
+type DevicePolicyFallbackDomainListResponseEnvelopeMessages struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    devicePolicyFallbackDomainListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessages]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessagesJSON struct {
+// devicePolicyFallbackDomainListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DevicePolicyFallbackDomainListResponseEnvelopeMessages]
+type devicePolicyFallbackDomainListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeSuccess bool
+type DevicePolicyFallbackDomainListResponseEnvelopeSuccess bool
 
 const (
-	DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeSuccess = true
+	DevicePolicyFallbackDomainListResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainListResponseEnvelopeSuccess = true
 )
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfo struct {
+type DevicePolicyFallbackDomainListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -271,14 +188,14 @@ type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                   `json:"total_count"`
-	JSON       devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                      `json:"total_count"`
+	JSON       devicePolicyFallbackDomainListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfo]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfoJSON struct {
+// devicePolicyFallbackDomainListResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct
+// [DevicePolicyFallbackDomainListResponseEnvelopeResultInfo]
+type devicePolicyFallbackDomainListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -287,121 +204,19 @@ type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelope
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON       `json:"-"`
+type DevicePolicyFallbackDomainReplaceParams struct {
+	Body param.Field[[]DevicePolicyFallbackDomainReplaceParamsBody] `json:"body,required"`
 }
 
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors struct {
-	Code    int64                                                                                                         `json:"code,required"`
-	Message string                                                                                                        `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages struct {
-	Code    int64                                                                                                           `json:"code,required"`
-	Message string                                                                                                          `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                                           `json:"total_count"`
-	JSON       devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo]
-type devicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesGetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParams struct {
-	Body param.Field[[]DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParamsBody] `json:"body,required"`
-}
-
-func (r DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParams) MarshalJSON() (data []byte, err error) {
+func (r DevicePolicyFallbackDomainReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParamsBody struct {
+type DevicePolicyFallbackDomainReplaceParamsBody struct {
 	// The domain suffix to match when resolving locally.
 	Suffix param.Field[string] `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
@@ -410,24 +225,23 @@ type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParamsBody struc
 	DNSServer param.Field[[]interface{}] `json:"dns_server"`
 }
 
-func (r DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListParamsBody) MarshalJSON() (data []byte, err error) {
+func (r DevicePolicyFallbackDomainReplaceParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponse                 `json:"result,required,nullable"`
+type DevicePolicyFallbackDomainReplaceResponseEnvelope struct {
+	Errors   []DevicePolicyFallbackDomainReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyFallbackDomainReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyFallbackDomainReplaceResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeJSON       `json:"-"`
+	Success    DevicePolicyFallbackDomainReplaceResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyFallbackDomainReplaceResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyFallbackDomainReplaceResponseEnvelopeJSON       `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeJSON struct {
+// devicePolicyFallbackDomainReplaceResponseEnvelopeJSON contains the JSON metadata
+// for the struct [DevicePolicyFallbackDomainReplaceResponseEnvelope]
+type devicePolicyFallbackDomainReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -437,58 +251,58 @@ type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrors struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrorsJSON `json:"-"`
+type DevicePolicyFallbackDomainReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    devicePolicyFallbackDomainReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrors]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrorsJSON struct {
+// devicePolicyFallbackDomainReplaceResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [DevicePolicyFallbackDomainReplaceResponseEnvelopeErrors]
+type devicePolicyFallbackDomainReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessages struct {
-	Code    int64                                                                                   `json:"code,required"`
-	Message string                                                                                  `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessagesJSON `json:"-"`
+type DevicePolicyFallbackDomainReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    devicePolicyFallbackDomainReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessages]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessagesJSON struct {
+// devicePolicyFallbackDomainReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [DevicePolicyFallbackDomainReplaceResponseEnvelopeMessages]
+type devicePolicyFallbackDomainReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeSuccess bool
+type DevicePolicyFallbackDomainReplaceResponseEnvelopeSuccess bool
 
 const (
-	DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeSuccess = true
+	DevicePolicyFallbackDomainReplaceResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainReplaceResponseEnvelopeSuccess = true
 )
 
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfo struct {
+type DevicePolicyFallbackDomainReplaceResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -496,14 +310,14 @@ type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                   `json:"total_count"`
-	JSON       devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                         `json:"total_count"`
+	JSON       devicePolicyFallbackDomainReplaceResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfo]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfoJSON struct {
+// devicePolicyFallbackDomainReplaceResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [DevicePolicyFallbackDomainReplaceResponseEnvelopeResultInfo]
+type devicePolicyFallbackDomainReplaceResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -512,129 +326,6 @@ type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelope
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParams struct {
-	Body param.Field[[]DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParamsBody] `json:"body,required"`
-}
-
-func (r DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParamsBody struct {
-	// The domain suffix to match when resolving locally.
-	Suffix param.Field[string] `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description param.Field[string] `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer param.Field[[]interface{}] `json:"dns_server"`
-}
-
-func (r DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyParamsBody) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope struct {
-	Errors   []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors struct {
-	Code    int64                                                                                                         `json:"code,required"`
-	Message string                                                                                                        `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages struct {
-	Code    int64                                                                                                           `json:"code,required"`
-	Message string                                                                                                          `json:"message,required"`
-	JSON    devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess bool
-
-const (
-	DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccessTrue DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeSuccess = true
-)
-
-type DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                                           `json:"total_count"`
-	JSON       devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo]
-type devicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyFallbackDomainDevicesSetLocalDomainFallbackListForADeviceSettingsPolicyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePolicyFallbackDomainReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

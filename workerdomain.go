@@ -33,6 +33,19 @@ func NewWorkerDomainService(opts ...option.RequestOption) (r *WorkerDomainServic
 	return
 }
 
+// Lists all Worker Domains for an account.
+func (r *WorkerDomainService) List(ctx context.Context, accountID interface{}, query WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkerDomainListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerDomainListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Detaches a Worker from a zone and hostname.
 func (r *WorkerDomainService) Delete(ctx context.Context, accountID interface{}, domainID interface{}, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
@@ -56,9 +69,9 @@ func (r *WorkerDomainService) Get(ctx context.Context, accountID interface{}, do
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *WorkerDomainService) WorkerDomainAttachToDomain(ctx context.Context, accountID interface{}, body WorkerDomainWorkerDomainAttachToDomainParams, opts ...option.RequestOption) (res *WorkerDomainWorkerDomainAttachToDomainResponse, err error) {
+func (r *WorkerDomainService) Replace(ctx context.Context, accountID interface{}, body WorkerDomainReplaceParams, opts ...option.RequestOption) (res *WorkerDomainReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerDomainWorkerDomainAttachToDomainResponseEnvelope
+	var env WorkerDomainReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -68,17 +81,37 @@ func (r *WorkerDomainService) WorkerDomainAttachToDomain(ctx context.Context, ac
 	return
 }
 
-// Lists all Worker Domains for an account.
-func (r *WorkerDomainService) WorkerDomainListDomains(ctx context.Context, accountID interface{}, query WorkerDomainWorkerDomainListDomainsParams, opts ...option.RequestOption) (res *[]WorkerDomainWorkerDomainListDomainsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerDomainWorkerDomainListDomainsResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type WorkerDomainListResponse struct {
+	// Identifer of the Worker Domain.
+	ID interface{} `json:"id"`
+	// Worker environment associated with the zone and hostname.
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID interface{} `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string                       `json:"zone_name"`
+	JSON     workerDomainListResponseJSON `json:"-"`
+}
+
+// workerDomainListResponseJSON contains the JSON metadata for the struct
+// [WorkerDomainListResponse]
+type workerDomainListResponseJSON struct {
+	ID          apijson.Field
+	Environment apijson.Field
+	Hostname    apijson.Field
+	Service     apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDomainListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerDomainGetResponse struct {
@@ -114,7 +147,7 @@ func (r *WorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDomainWorkerDomainAttachToDomainResponse struct {
+type WorkerDomainReplaceResponse struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -126,13 +159,13 @@ type WorkerDomainWorkerDomainAttachToDomainResponse struct {
 	// Identifier of the zone.
 	ZoneID interface{} `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string                                             `json:"zone_name"`
-	JSON     workerDomainWorkerDomainAttachToDomainResponseJSON `json:"-"`
+	ZoneName string                          `json:"zone_name"`
+	JSON     workerDomainReplaceResponseJSON `json:"-"`
 }
 
-// workerDomainWorkerDomainAttachToDomainResponseJSON contains the JSON metadata
-// for the struct [WorkerDomainWorkerDomainAttachToDomainResponse]
-type workerDomainWorkerDomainAttachToDomainResponseJSON struct {
+// workerDomainReplaceResponseJSON contains the JSON metadata for the struct
+// [WorkerDomainReplaceResponse]
+type workerDomainReplaceResponseJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -143,42 +176,99 @@ type workerDomainWorkerDomainAttachToDomainResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDomainWorkerDomainAttachToDomainResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDomainWorkerDomainListDomainsResponse struct {
-	// Identifer of the Worker Domain.
-	ID interface{} `json:"id"`
+type WorkerDomainListParams struct {
 	// Worker environment associated with the zone and hostname.
-	Environment string `json:"environment"`
+	Environment param.Field[string] `query:"environment"`
 	// Hostname of the Worker Domain.
-	Hostname string `json:"hostname"`
+	Hostname param.Field[string] `query:"hostname"`
 	// Worker service associated with the zone and hostname.
-	Service string `json:"service"`
+	Service param.Field[string] `query:"service"`
 	// Identifier of the zone.
-	ZoneID interface{} `json:"zone_id"`
+	ZoneID param.Field[interface{}] `query:"zone_id"`
 	// Name of the zone.
-	ZoneName string                                          `json:"zone_name"`
-	JSON     workerDomainWorkerDomainListDomainsResponseJSON `json:"-"`
+	ZoneName param.Field[string] `query:"zone_name"`
 }
 
-// workerDomainWorkerDomainListDomainsResponseJSON contains the JSON metadata for
-// the struct [WorkerDomainWorkerDomainListDomainsResponse]
-type workerDomainWorkerDomainListDomainsResponseJSON struct {
-	ID          apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
+// URLQuery serializes [WorkerDomainListParams]'s query parameters as `url.Values`.
+func (r WorkerDomainListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type WorkerDomainListResponseEnvelope struct {
+	Errors   []WorkerDomainListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerDomainListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []WorkerDomainListResponse                 `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerDomainListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerDomainListResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerDomainListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerDomainListResponseEnvelope]
+type workerDomainListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDomainWorkerDomainListDomainsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type WorkerDomainListResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    workerDomainListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerDomainListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerDomainListResponseEnvelopeErrors]
+type workerDomainListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDomainListResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    workerDomainListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerDomainListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkerDomainListResponseEnvelopeMessages]
+type workerDomainListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerDomainListResponseEnvelopeSuccess bool
+
+const (
+	WorkerDomainListResponseEnvelopeSuccessTrue WorkerDomainListResponseEnvelopeSuccess = true
+)
 
 type WorkerDomainGetResponseEnvelope struct {
 	Errors   []WorkerDomainGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -249,7 +339,7 @@ const (
 	WorkerDomainGetResponseEnvelopeSuccessTrue WorkerDomainGetResponseEnvelopeSuccess = true
 )
 
-type WorkerDomainWorkerDomainAttachToDomainParams struct {
+type WorkerDomainReplaceParams struct {
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `json:"environment,required"`
 	// Hostname of the Worker Domain.
@@ -260,22 +350,22 @@ type WorkerDomainWorkerDomainAttachToDomainParams struct {
 	ZoneID param.Field[interface{}] `json:"zone_id,required"`
 }
 
-func (r WorkerDomainWorkerDomainAttachToDomainParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerDomainReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerDomainWorkerDomainAttachToDomainResponseEnvelope struct {
-	Errors   []WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerDomainWorkerDomainAttachToDomainResponse                   `json:"result,required"`
+type WorkerDomainReplaceResponseEnvelope struct {
+	Errors   []WorkerDomainReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerDomainReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerDomainReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerDomainWorkerDomainAttachToDomainResponseEnvelopeJSON    `json:"-"`
+	Success WorkerDomainReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerDomainReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerDomainWorkerDomainAttachToDomainResponseEnvelopeJSON contains the JSON
-// metadata for the struct [WorkerDomainWorkerDomainAttachToDomainResponseEnvelope]
-type workerDomainWorkerDomainAttachToDomainResponseEnvelopeJSON struct {
+// workerDomainReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerDomainReplaceResponseEnvelope]
+type workerDomainReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -284,146 +374,51 @@ type workerDomainWorkerDomainAttachToDomainResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDomainWorkerDomainAttachToDomainResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeErrors struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    workerDomainWorkerDomainAttachToDomainResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerDomainReplaceResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    workerDomainReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerDomainWorkerDomainAttachToDomainResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeErrors]
-type workerDomainWorkerDomainAttachToDomainResponseEnvelopeErrorsJSON struct {
+// workerDomainReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerDomainReplaceResponseEnvelopeErrors]
+type workerDomainReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeMessages struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    workerDomainWorkerDomainAttachToDomainResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerDomainReplaceResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    workerDomainReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerDomainWorkerDomainAttachToDomainResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeMessages]
-type workerDomainWorkerDomainAttachToDomainResponseEnvelopeMessagesJSON struct {
+// workerDomainReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerDomainReplaceResponseEnvelopeMessages]
+type workerDomainReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeSuccess bool
+type WorkerDomainReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeSuccessTrue WorkerDomainWorkerDomainAttachToDomainResponseEnvelopeSuccess = true
-)
-
-type WorkerDomainWorkerDomainListDomainsParams struct {
-	// Worker environment associated with the zone and hostname.
-	Environment param.Field[string] `query:"environment"`
-	// Hostname of the Worker Domain.
-	Hostname param.Field[string] `query:"hostname"`
-	// Worker service associated with the zone and hostname.
-	Service param.Field[string] `query:"service"`
-	// Identifier of the zone.
-	ZoneID param.Field[interface{}] `query:"zone_id"`
-	// Name of the zone.
-	ZoneName param.Field[string] `query:"zone_name"`
-}
-
-// URLQuery serializes [WorkerDomainWorkerDomainListDomainsParams]'s query
-// parameters as `url.Values`.
-func (r WorkerDomainWorkerDomainListDomainsParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type WorkerDomainWorkerDomainListDomainsResponseEnvelope struct {
-	Errors   []WorkerDomainWorkerDomainListDomainsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerDomainWorkerDomainListDomainsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkerDomainWorkerDomainListDomainsResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerDomainWorkerDomainListDomainsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerDomainWorkerDomainListDomainsResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerDomainWorkerDomainListDomainsResponseEnvelopeJSON contains the JSON
-// metadata for the struct [WorkerDomainWorkerDomainListDomainsResponseEnvelope]
-type workerDomainWorkerDomainListDomainsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerDomainWorkerDomainListDomainsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerDomainWorkerDomainListDomainsResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    workerDomainWorkerDomainListDomainsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerDomainWorkerDomainListDomainsResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [WorkerDomainWorkerDomainListDomainsResponseEnvelopeErrors]
-type workerDomainWorkerDomainListDomainsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerDomainWorkerDomainListDomainsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerDomainWorkerDomainListDomainsResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    workerDomainWorkerDomainListDomainsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerDomainWorkerDomainListDomainsResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [WorkerDomainWorkerDomainListDomainsResponseEnvelopeMessages]
-type workerDomainWorkerDomainListDomainsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerDomainWorkerDomainListDomainsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerDomainWorkerDomainListDomainsResponseEnvelopeSuccess bool
-
-const (
-	WorkerDomainWorkerDomainListDomainsResponseEnvelopeSuccessTrue WorkerDomainWorkerDomainListDomainsResponseEnvelopeSuccess = true
+	WorkerDomainReplaceResponseEnvelopeSuccessTrue WorkerDomainReplaceResponseEnvelopeSuccess = true
 )

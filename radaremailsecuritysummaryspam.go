@@ -34,9 +34,9 @@ func NewRadarEmailSecuritySummarySpamService(opts ...option.RequestOption) (r *R
 }
 
 // Proportion of emails categorized as either spam or legitimate (non-spam).
-func (r *RadarEmailSecuritySummarySpamService) Get(ctx context.Context, query RadarEmailSecuritySummarySpamGetParams, opts ...option.RequestOption) (res *RadarEmailSecuritySummarySpamGetResponse, err error) {
+func (r *RadarEmailSecuritySummarySpamService) List(ctx context.Context, query RadarEmailSecuritySummarySpamListParams, opts ...option.RequestOption) (res *RadarEmailSecuritySummarySpamListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEmailSecuritySummarySpamGetResponseEnvelope
+	var env RadarEmailSecuritySummarySpamListResponseEnvelope
 	path := "radar/email/security/summary/spam"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,36 +46,36 @@ func (r *RadarEmailSecuritySummarySpamService) Get(ctx context.Context, query Ra
 	return
 }
 
-type RadarEmailSecuritySummarySpamGetResponse struct {
-	Meta     RadarEmailSecuritySummarySpamGetResponseMeta     `json:"meta,required"`
-	Summary0 RadarEmailSecuritySummarySpamGetResponseSummary0 `json:"summary_0,required"`
-	JSON     radarEmailSecuritySummarySpamGetResponseJSON     `json:"-"`
+type RadarEmailSecuritySummarySpamListResponse struct {
+	Meta     RadarEmailSecuritySummarySpamListResponseMeta     `json:"meta,required"`
+	Summary0 RadarEmailSecuritySummarySpamListResponseSummary0 `json:"summary_0,required"`
+	JSON     radarEmailSecuritySummarySpamListResponseJSON     `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseJSON contains the JSON metadata for the
-// struct [RadarEmailSecuritySummarySpamGetResponse]
-type radarEmailSecuritySummarySpamGetResponseJSON struct {
+// radarEmailSecuritySummarySpamListResponseJSON contains the JSON metadata for the
+// struct [RadarEmailSecuritySummarySpamListResponse]
+type radarEmailSecuritySummarySpamListResponseJSON struct {
 	Meta        apijson.Field
 	Summary0    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetResponseMeta struct {
-	DateRange      []RadarEmailSecuritySummarySpamGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                                     `json:"lastUpdated,required"`
-	Normalization  string                                                     `json:"normalization,required"`
-	ConfidenceInfo RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarEmailSecuritySummarySpamGetResponseMetaJSON           `json:"-"`
+type RadarEmailSecuritySummarySpamListResponseMeta struct {
+	DateRange      []RadarEmailSecuritySummarySpamListResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                      `json:"lastUpdated,required"`
+	Normalization  string                                                      `json:"normalization,required"`
+	ConfidenceInfo RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarEmailSecuritySummarySpamListResponseMetaJSON           `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseMetaJSON contains the JSON metadata for
-// the struct [RadarEmailSecuritySummarySpamGetResponseMeta]
-type radarEmailSecuritySummarySpamGetResponseMetaJSON struct {
+// radarEmailSecuritySummarySpamListResponseMetaJSON contains the JSON metadata for
+// the struct [RadarEmailSecuritySummarySpamListResponseMeta]
+type radarEmailSecuritySummarySpamListResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
@@ -84,66 +84,66 @@ type radarEmailSecuritySummarySpamGetResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetResponseMetaDateRange struct {
+type RadarEmailSecuritySummarySpamListResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                 `json:"startTime,required" format:"date-time"`
-	JSON      radarEmailSecuritySummarySpamGetResponseMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                                  `json:"startTime,required" format:"date-time"`
+	JSON      radarEmailSecuritySummarySpamListResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [RadarEmailSecuritySummarySpamGetResponseMetaDateRange]
-type radarEmailSecuritySummarySpamGetResponseMetaDateRangeJSON struct {
+// radarEmailSecuritySummarySpamListResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarEmailSecuritySummarySpamListResponseMetaDateRange]
+type radarEmailSecuritySummarySpamListResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfo struct {
-	Annotations []RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                  `json:"level"`
-	JSON        radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoJSON         `json:"-"`
+type RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfo struct {
+	Annotations []RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                   `json:"level"`
+	JSON        radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfo]
-type radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoJSON struct {
+// radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfo]
+type radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                   `json:"dataSource,required"`
-	Description     string                                                                   `json:"description,required"`
-	EventType       string                                                                   `json:"eventType,required"`
-	IsInstantaneous interface{}                                                              `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                                `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                   `json:"linkedUrl"`
-	StartTime       time.Time                                                                `json:"startTime" format:"date-time"`
-	JSON            radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                    `json:"dataSource,required"`
+	Description     string                                                                    `json:"description,required"`
+	EventType       string                                                                    `json:"eventType,required"`
+	IsInstantaneous interface{}                                                               `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                 `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                    `json:"linkedUrl"`
+	StartTime       time.Time                                                                 `json:"startTime" format:"date-time"`
+	JSON            radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotationJSON
+// radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotationJSON
 // contains the JSON metadata for the struct
-// [RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotation]
-type radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotation]
+type radarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -155,32 +155,32 @@ type radarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotationJSON st
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetResponseSummary0 struct {
-	NotSpam string                                               `json:"NOT_SPAM,required"`
-	Spam    string                                               `json:"SPAM,required"`
-	JSON    radarEmailSecuritySummarySpamGetResponseSummary0JSON `json:"-"`
+type RadarEmailSecuritySummarySpamListResponseSummary0 struct {
+	NotSpam string                                                `json:"NOT_SPAM,required"`
+	Spam    string                                                `json:"SPAM,required"`
+	JSON    radarEmailSecuritySummarySpamListResponseSummary0JSON `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseSummary0JSON contains the JSON metadata
-// for the struct [RadarEmailSecuritySummarySpamGetResponseSummary0]
-type radarEmailSecuritySummarySpamGetResponseSummary0JSON struct {
+// radarEmailSecuritySummarySpamListResponseSummary0JSON contains the JSON metadata
+// for the struct [RadarEmailSecuritySummarySpamListResponseSummary0]
+type radarEmailSecuritySummarySpamListResponseSummary0JSON struct {
 	NotSpam     apijson.Field
 	Spam        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecuritySummarySpamGetParams struct {
+type RadarEmailSecuritySummarySpamListParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecuritySummarySpamGetParamsArc] `query:"arc"`
+	Arc param.Field[[]RadarEmailSecuritySummarySpamListParamsArc] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -190,15 +190,15 @@ type RadarEmailSecuritySummarySpamGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarEmailSecuritySummarySpamGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarEmailSecuritySummarySpamListParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	DKIM param.Field[[]RadarEmailSecuritySummarySpamGetParamsDKIM] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecuritySummarySpamListParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecuritySummarySpamGetParamsDmarc] `query:"dmarc"`
+	Dmarc param.Field[[]RadarEmailSecuritySummarySpamListParamsDmarc] `query:"dmarc"`
 	// Format results are returned in.
-	Format param.Field[RadarEmailSecuritySummarySpamGetParamsFormat] `query:"format"`
+	Format param.Field[RadarEmailSecuritySummarySpamListParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -206,93 +206,93 @@ type RadarEmailSecuritySummarySpamGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	SPF param.Field[[]RadarEmailSecuritySummarySpamGetParamsSPF] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecuritySummarySpamListParamsSPF] `query:"spf"`
 }
 
-// URLQuery serializes [RadarEmailSecuritySummarySpamGetParams]'s query parameters
+// URLQuery serializes [RadarEmailSecuritySummarySpamListParams]'s query parameters
 // as `url.Values`.
-func (r RadarEmailSecuritySummarySpamGetParams) URLQuery() (v url.Values) {
+func (r RadarEmailSecuritySummarySpamListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type RadarEmailSecuritySummarySpamGetParamsArc string
+type RadarEmailSecuritySummarySpamListParamsArc string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsArcPass RadarEmailSecuritySummarySpamGetParamsArc = "PASS"
-	RadarEmailSecuritySummarySpamGetParamsArcNone RadarEmailSecuritySummarySpamGetParamsArc = "NONE"
-	RadarEmailSecuritySummarySpamGetParamsArcFail RadarEmailSecuritySummarySpamGetParamsArc = "FAIL"
+	RadarEmailSecuritySummarySpamListParamsArcPass RadarEmailSecuritySummarySpamListParamsArc = "PASS"
+	RadarEmailSecuritySummarySpamListParamsArcNone RadarEmailSecuritySummarySpamListParamsArc = "NONE"
+	RadarEmailSecuritySummarySpamListParamsArcFail RadarEmailSecuritySummarySpamListParamsArc = "FAIL"
 )
 
-type RadarEmailSecuritySummarySpamGetParamsDateRange string
+type RadarEmailSecuritySummarySpamListParamsDateRange string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsDateRange1d         RadarEmailSecuritySummarySpamGetParamsDateRange = "1d"
-	RadarEmailSecuritySummarySpamGetParamsDateRange2d         RadarEmailSecuritySummarySpamGetParamsDateRange = "2d"
-	RadarEmailSecuritySummarySpamGetParamsDateRange7d         RadarEmailSecuritySummarySpamGetParamsDateRange = "7d"
-	RadarEmailSecuritySummarySpamGetParamsDateRange14d        RadarEmailSecuritySummarySpamGetParamsDateRange = "14d"
-	RadarEmailSecuritySummarySpamGetParamsDateRange28d        RadarEmailSecuritySummarySpamGetParamsDateRange = "28d"
-	RadarEmailSecuritySummarySpamGetParamsDateRange12w        RadarEmailSecuritySummarySpamGetParamsDateRange = "12w"
-	RadarEmailSecuritySummarySpamGetParamsDateRange24w        RadarEmailSecuritySummarySpamGetParamsDateRange = "24w"
-	RadarEmailSecuritySummarySpamGetParamsDateRange52w        RadarEmailSecuritySummarySpamGetParamsDateRange = "52w"
-	RadarEmailSecuritySummarySpamGetParamsDateRange1dControl  RadarEmailSecuritySummarySpamGetParamsDateRange = "1dControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange2dControl  RadarEmailSecuritySummarySpamGetParamsDateRange = "2dControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange7dControl  RadarEmailSecuritySummarySpamGetParamsDateRange = "7dControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange14dControl RadarEmailSecuritySummarySpamGetParamsDateRange = "14dControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange28dControl RadarEmailSecuritySummarySpamGetParamsDateRange = "28dControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange12wControl RadarEmailSecuritySummarySpamGetParamsDateRange = "12wControl"
-	RadarEmailSecuritySummarySpamGetParamsDateRange24wControl RadarEmailSecuritySummarySpamGetParamsDateRange = "24wControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange1d         RadarEmailSecuritySummarySpamListParamsDateRange = "1d"
+	RadarEmailSecuritySummarySpamListParamsDateRange2d         RadarEmailSecuritySummarySpamListParamsDateRange = "2d"
+	RadarEmailSecuritySummarySpamListParamsDateRange7d         RadarEmailSecuritySummarySpamListParamsDateRange = "7d"
+	RadarEmailSecuritySummarySpamListParamsDateRange14d        RadarEmailSecuritySummarySpamListParamsDateRange = "14d"
+	RadarEmailSecuritySummarySpamListParamsDateRange28d        RadarEmailSecuritySummarySpamListParamsDateRange = "28d"
+	RadarEmailSecuritySummarySpamListParamsDateRange12w        RadarEmailSecuritySummarySpamListParamsDateRange = "12w"
+	RadarEmailSecuritySummarySpamListParamsDateRange24w        RadarEmailSecuritySummarySpamListParamsDateRange = "24w"
+	RadarEmailSecuritySummarySpamListParamsDateRange52w        RadarEmailSecuritySummarySpamListParamsDateRange = "52w"
+	RadarEmailSecuritySummarySpamListParamsDateRange1dControl  RadarEmailSecuritySummarySpamListParamsDateRange = "1dControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange2dControl  RadarEmailSecuritySummarySpamListParamsDateRange = "2dControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange7dControl  RadarEmailSecuritySummarySpamListParamsDateRange = "7dControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange14dControl RadarEmailSecuritySummarySpamListParamsDateRange = "14dControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange28dControl RadarEmailSecuritySummarySpamListParamsDateRange = "28dControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange12wControl RadarEmailSecuritySummarySpamListParamsDateRange = "12wControl"
+	RadarEmailSecuritySummarySpamListParamsDateRange24wControl RadarEmailSecuritySummarySpamListParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecuritySummarySpamGetParamsDKIM string
+type RadarEmailSecuritySummarySpamListParamsDKIM string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsDKIMPass RadarEmailSecuritySummarySpamGetParamsDKIM = "PASS"
-	RadarEmailSecuritySummarySpamGetParamsDKIMNone RadarEmailSecuritySummarySpamGetParamsDKIM = "NONE"
-	RadarEmailSecuritySummarySpamGetParamsDKIMFail RadarEmailSecuritySummarySpamGetParamsDKIM = "FAIL"
+	RadarEmailSecuritySummarySpamListParamsDKIMPass RadarEmailSecuritySummarySpamListParamsDKIM = "PASS"
+	RadarEmailSecuritySummarySpamListParamsDKIMNone RadarEmailSecuritySummarySpamListParamsDKIM = "NONE"
+	RadarEmailSecuritySummarySpamListParamsDKIMFail RadarEmailSecuritySummarySpamListParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecuritySummarySpamGetParamsDmarc string
+type RadarEmailSecuritySummarySpamListParamsDmarc string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsDmarcPass RadarEmailSecuritySummarySpamGetParamsDmarc = "PASS"
-	RadarEmailSecuritySummarySpamGetParamsDmarcNone RadarEmailSecuritySummarySpamGetParamsDmarc = "NONE"
-	RadarEmailSecuritySummarySpamGetParamsDmarcFail RadarEmailSecuritySummarySpamGetParamsDmarc = "FAIL"
+	RadarEmailSecuritySummarySpamListParamsDmarcPass RadarEmailSecuritySummarySpamListParamsDmarc = "PASS"
+	RadarEmailSecuritySummarySpamListParamsDmarcNone RadarEmailSecuritySummarySpamListParamsDmarc = "NONE"
+	RadarEmailSecuritySummarySpamListParamsDmarcFail RadarEmailSecuritySummarySpamListParamsDmarc = "FAIL"
 )
 
 // Format results are returned in.
-type RadarEmailSecuritySummarySpamGetParamsFormat string
+type RadarEmailSecuritySummarySpamListParamsFormat string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsFormatJson RadarEmailSecuritySummarySpamGetParamsFormat = "JSON"
-	RadarEmailSecuritySummarySpamGetParamsFormatCsv  RadarEmailSecuritySummarySpamGetParamsFormat = "CSV"
+	RadarEmailSecuritySummarySpamListParamsFormatJson RadarEmailSecuritySummarySpamListParamsFormat = "JSON"
+	RadarEmailSecuritySummarySpamListParamsFormatCsv  RadarEmailSecuritySummarySpamListParamsFormat = "CSV"
 )
 
-type RadarEmailSecuritySummarySpamGetParamsSPF string
+type RadarEmailSecuritySummarySpamListParamsSPF string
 
 const (
-	RadarEmailSecuritySummarySpamGetParamsSPFPass RadarEmailSecuritySummarySpamGetParamsSPF = "PASS"
-	RadarEmailSecuritySummarySpamGetParamsSPFNone RadarEmailSecuritySummarySpamGetParamsSPF = "NONE"
-	RadarEmailSecuritySummarySpamGetParamsSPFFail RadarEmailSecuritySummarySpamGetParamsSPF = "FAIL"
+	RadarEmailSecuritySummarySpamListParamsSPFPass RadarEmailSecuritySummarySpamListParamsSPF = "PASS"
+	RadarEmailSecuritySummarySpamListParamsSPFNone RadarEmailSecuritySummarySpamListParamsSPF = "NONE"
+	RadarEmailSecuritySummarySpamListParamsSPFFail RadarEmailSecuritySummarySpamListParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummarySpamGetResponseEnvelope struct {
-	Result  RadarEmailSecuritySummarySpamGetResponse             `json:"result,required"`
-	Success bool                                                 `json:"success,required"`
-	JSON    radarEmailSecuritySummarySpamGetResponseEnvelopeJSON `json:"-"`
+type RadarEmailSecuritySummarySpamListResponseEnvelope struct {
+	Result  RadarEmailSecuritySummarySpamListResponse             `json:"result,required"`
+	Success bool                                                  `json:"success,required"`
+	JSON    radarEmailSecuritySummarySpamListResponseEnvelopeJSON `json:"-"`
 }
 
-// radarEmailSecuritySummarySpamGetResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarEmailSecuritySummarySpamGetResponseEnvelope]
-type radarEmailSecuritySummarySpamGetResponseEnvelopeJSON struct {
+// radarEmailSecuritySummarySpamListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarEmailSecuritySummarySpamListResponseEnvelope]
+type radarEmailSecuritySummarySpamListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecuritySummarySpamGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecuritySummarySpamListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

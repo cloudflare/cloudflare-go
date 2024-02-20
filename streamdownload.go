@@ -33,6 +33,32 @@ func NewStreamDownloadService(opts ...option.RequestOption) (r *StreamDownloadSe
 	return
 }
 
+// Creates a download for a video when a video is ready to view.
+func (r *StreamDownloadService) New(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamDownloadNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists the downloads created for a video.
+func (r *StreamDownloadService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env StreamDownloadListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Delete the downloads for a video.
 func (r *StreamDownloadService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -46,30 +72,36 @@ func (r *StreamDownloadService) Delete(ctx context.Context, accountID string, id
 	return
 }
 
-// Creates a download for a video when a video is ready to view.
-func (r *StreamDownloadService) StreamMP4DownloadsNewDownloads(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadStreamMP4DownloadsNewDownloadsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [StreamDownloadNewResponseUnknown] or [shared.UnionString].
+type StreamDownloadNewResponse interface {
+	ImplementsStreamDownloadNewResponse()
 }
 
-// Lists the downloads created for a video.
-func (r *StreamDownloadService) StreamMP4DownloadsListDownloads(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadStreamMP4DownloadsListDownloadsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamDownloadNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+// Union satisfied by [StreamDownloadListResponseUnknown] or [shared.UnionString].
+type StreamDownloadListResponse interface {
+	ImplementsStreamDownloadListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*StreamDownloadListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [StreamDownloadDeleteResponseUnknown] or
@@ -89,40 +121,143 @@ func init() {
 	)
 }
 
-// Union satisfied by [StreamDownloadStreamMP4DownloadsNewDownloadsResponseUnknown]
-// or [shared.UnionString].
-type StreamDownloadStreamMP4DownloadsNewDownloadsResponse interface {
-	ImplementsStreamDownloadStreamMP4DownloadsNewDownloadsResponse()
+type StreamDownloadNewResponseEnvelope struct {
+	Errors   []StreamDownloadNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamDownloadNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamDownloadNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamDownloadNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamDownloadNewResponseEnvelopeJSON    `json:"-"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamDownloadStreamMP4DownloadsNewDownloadsResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// streamDownloadNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamDownloadNewResponseEnvelope]
+type streamDownloadNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-// Union satisfied by
-// [StreamDownloadStreamMP4DownloadsListDownloadsResponseUnknown] or
-// [shared.UnionString].
-type StreamDownloadStreamMP4DownloadsListDownloadsResponse interface {
-	ImplementsStreamDownloadStreamMP4DownloadsListDownloadsResponse()
+func (r *StreamDownloadNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamDownloadStreamMP4DownloadsListDownloadsResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+type StreamDownloadNewResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    streamDownloadNewResponseEnvelopeErrorsJSON `json:"-"`
 }
+
+// streamDownloadNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamDownloadNewResponseEnvelopeErrors]
+type streamDownloadNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDownloadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamDownloadNewResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    streamDownloadNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamDownloadNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StreamDownloadNewResponseEnvelopeMessages]
+type streamDownloadNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDownloadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamDownloadNewResponseEnvelopeSuccess bool
+
+const (
+	StreamDownloadNewResponseEnvelopeSuccessTrue StreamDownloadNewResponseEnvelopeSuccess = true
+)
+
+type StreamDownloadListResponseEnvelope struct {
+	Errors   []StreamDownloadListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamDownloadListResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamDownloadListResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamDownloadListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamDownloadListResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamDownloadListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamDownloadListResponseEnvelope]
+type streamDownloadListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDownloadListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamDownloadListResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    streamDownloadListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamDownloadListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamDownloadListResponseEnvelopeErrors]
+type streamDownloadListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDownloadListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamDownloadListResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    streamDownloadListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamDownloadListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StreamDownloadListResponseEnvelopeMessages]
+type streamDownloadListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamDownloadListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamDownloadListResponseEnvelopeSuccess bool
+
+const (
+	StreamDownloadListResponseEnvelopeSuccessTrue StreamDownloadListResponseEnvelopeSuccess = true
+)
 
 type StreamDownloadDeleteResponseEnvelope struct {
 	Errors   []StreamDownloadDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -191,148 +326,4 @@ type StreamDownloadDeleteResponseEnvelopeSuccess bool
 
 const (
 	StreamDownloadDeleteResponseEnvelopeSuccessTrue StreamDownloadDeleteResponseEnvelopeSuccess = true
-)
-
-type StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelope struct {
-	Errors   []StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamDownloadStreamMP4DownloadsNewDownloadsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelope]
-type streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrors]
-type streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessages]
-type streamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeSuccess bool
-
-const (
-	StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeSuccessTrue StreamDownloadStreamMP4DownloadsNewDownloadsResponseEnvelopeSuccess = true
-)
-
-type StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelope struct {
-	Errors   []StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamDownloadStreamMP4DownloadsListDownloadsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelope]
-type streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrors struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrors]
-type streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessages struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessages]
-type streamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeSuccess bool
-
-const (
-	StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeSuccessTrue StreamDownloadStreamMP4DownloadsListDownloadsResponseEnvelopeSuccess = true
 )

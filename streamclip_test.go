@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeWithOptionalParams(t *testing.T) {
+func TestStreamClipNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeWithOptiona
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Clips.StreamVideoClippingClipVideosGivenAStartAndEndTime(
+	_, err := client.Stream.Clips.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParams{
+		cloudflare.StreamClipNewParams{
 			ClippedFromVideoUid:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			EndTimeSeconds:        cloudflare.F(int64(0)),
 			StartTimeSeconds:      cloudflare.F(int64(0)),
@@ -41,7 +41,7 @@ func TestStreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeWithOptiona
 			MaxDurationSeconds:    cloudflare.F(int64(1)),
 			RequireSignedURLs:     cloudflare.F(true),
 			ThumbnailTimestampPct: cloudflare.F(0.529241),
-			Watermark: cloudflare.F(cloudflare.StreamClipStreamVideoClippingClipVideosGivenAStartAndEndTimeParamsWatermark{
+			Watermark: cloudflare.F(cloudflare.StreamClipNewParamsWatermark{
 				Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 			}),
 		},

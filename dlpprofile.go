@@ -36,9 +36,9 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) DLPProfilesListAllProfiles(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]DLPProfileDLPProfilesListAllProfilesResponse, err error) {
+func (r *DLPProfileService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]DLPProfileListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DLPProfileDLPProfilesListAllProfilesResponseEnvelope
+	var env DLPProfileListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -61,36 +61,34 @@ func (r *DLPProfileService) Get(ctx context.Context, accountID string, profileID
 	return
 }
 
-// Union satisfied by
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfile],
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile] or
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfile].
-type DLPProfileDLPProfilesListAllProfilesResponse interface {
-	implementsDLPProfileDLPProfilesListAllProfilesResponse()
+// Union satisfied by [DLPProfileListResponseDLPPredefinedProfile],
+// [DLPProfileListResponseDLPCustomProfile] or
+// [DLPProfileListResponseDLPIntegrationProfile].
+type DLPProfileListResponse interface {
+	implementsDLPProfileListResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DLPProfileDLPProfilesListAllProfilesResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*DLPProfileListResponse)(nil)).Elem(), "")
 }
 
-type DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfile struct {
+type DLPProfileListResponseDLPPredefinedProfile struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// The entries for this profile.
-	Entries []DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntry `json:"entries"`
+	Entries []DLPProfileListResponseDLPPredefinedProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileType `json:"type"`
-	JSON dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileJSON `json:"-"`
+	Type DLPProfileListResponseDLPPredefinedProfileType `json:"type"`
+	JSON dlpProfileListResponseDLPPredefinedProfileJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileJSON contains
-// the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfile]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileJSON struct {
+// dlpProfileListResponseDLPPredefinedProfileJSON contains the JSON metadata for
+// the struct [DLPProfileListResponseDLPPredefinedProfile]
+type dlpProfileListResponseDLPPredefinedProfileJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	Entries           apijson.Field
@@ -100,15 +98,14 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileJSON struct
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPPredefinedProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfile) implementsDLPProfileDLPProfilesListAllProfilesResponse() {
-}
+func (r DLPProfileListResponseDLPPredefinedProfile) implementsDLPProfileListResponse() {}
 
 // A predefined entry that matches a profile
-type DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntry struct {
+type DLPProfileListResponseDLPPredefinedProfileEntry struct {
 	// The ID for this entry
 	ID string `json:"id"`
 	// Whether the entry is enabled or not.
@@ -116,14 +113,13 @@ type DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntry struc
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                                                               `json:"profile_id"`
-	JSON      dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntryJSON `json:"-"`
+	ProfileID interface{}                                         `json:"profile_id"`
+	JSON      dlpProfileListResponseDLPPredefinedProfileEntryJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntryJSON
-// contains the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntry]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntryJSON struct {
+// dlpProfileListResponseDLPPredefinedProfileEntryJSON contains the JSON metadata
+// for the struct [DLPProfileListResponseDLPPredefinedProfileEntry]
+type dlpProfileListResponseDLPPredefinedProfileEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -132,18 +128,18 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntryJSON s
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPPredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of the profile.
-type DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileType string
+type DLPProfileListResponseDLPPredefinedProfileType string
 
 const (
-	DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileTypePredefined DLPProfileDLPProfilesListAllProfilesResponseDLPPredefinedProfileType = "predefined"
+	DLPProfileListResponseDLPPredefinedProfileTypePredefined DLPProfileListResponseDLPPredefinedProfileType = "predefined"
 )
 
-type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile struct {
+type DLPProfileListResponseDLPCustomProfile struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
@@ -152,19 +148,18 @@ type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile struct {
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntry `json:"entries"`
+	Entries []DLPProfileListResponseDLPCustomProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileType `json:"type"`
-	UpdatedAt time.Time                                                        `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileJSON `json:"-"`
+	Type      DLPProfileListResponseDLPCustomProfileType `json:"type"`
+	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileListResponseDLPCustomProfileJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileJSON contains the
-// JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileJSON struct {
+// dlpProfileListResponseDLPCustomProfileJSON contains the JSON metadata for the
+// struct [DLPProfileListResponseDLPCustomProfile]
+type dlpProfileListResponseDLPCustomProfileJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	CreatedAt         apijson.Field
@@ -177,15 +172,14 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPCustomProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfile) implementsDLPProfileDLPProfilesListAllProfilesResponse() {
-}
+func (r DLPProfileListResponseDLPCustomProfile) implementsDLPProfileListResponse() {}
 
 // A custom entry that matches a profile
-type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntry struct {
+type DLPProfileListResponseDLPCustomProfileEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -194,17 +188,16 @@ type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// A pattern that matches an entry
-	Pattern DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPattern `json:"pattern"`
+	Pattern DLPProfileListResponseDLPCustomProfileEntriesPattern `json:"pattern"`
 	// ID of the parent profile
-	ProfileID interface{}                                                           `json:"profile_id"`
-	UpdatedAt time.Time                                                             `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntryJSON `json:"-"`
+	ProfileID interface{}                                     `json:"profile_id"`
+	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileListResponseDLPCustomProfileEntryJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntryJSON contains
-// the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntry]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntryJSON struct {
+// dlpProfileListResponseDLPCustomProfileEntryJSON contains the JSON metadata for
+// the struct [DLPProfileListResponseDLPCustomProfileEntry]
+type dlpProfileListResponseDLPCustomProfileEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -216,69 +209,67 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntryJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A pattern that matches an entry
-type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPattern struct {
+type DLPProfileListResponseDLPCustomProfileEntriesPattern struct {
 	// The regex pattern.
 	Regex string `json:"regex,required"`
 	// Validation algorithm for the pattern. This algorithm will get run on potential
 	// matches, and if it returns false, the entry will not be matched.
-	Validation DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternValidation `json:"validation"`
-	JSON       dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternJSON       `json:"-"`
+	Validation DLPProfileListResponseDLPCustomProfileEntriesPatternValidation `json:"validation"`
+	JSON       dlpProfileListResponseDLPCustomProfileEntriesPatternJSON       `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternJSON
-// contains the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPattern]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternJSON struct {
+// dlpProfileListResponseDLPCustomProfileEntriesPatternJSON contains the JSON
+// metadata for the struct [DLPProfileListResponseDLPCustomProfileEntriesPattern]
+type dlpProfileListResponseDLPCustomProfileEntriesPatternJSON struct {
 	Regex       apijson.Field
 	Validation  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPCustomProfileEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
 // matches, and if it returns false, the entry will not be matched.
-type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternValidation string
+type DLPProfileListResponseDLPCustomProfileEntriesPatternValidation string
 
 const (
-	DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternValidationLuhn DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileEntriesPatternValidation = "luhn"
+	DLPProfileListResponseDLPCustomProfileEntriesPatternValidationLuhn DLPProfileListResponseDLPCustomProfileEntriesPatternValidation = "luhn"
 )
 
 // The type of the profile.
-type DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileType string
+type DLPProfileListResponseDLPCustomProfileType string
 
 const (
-	DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileTypeCustom DLPProfileDLPProfilesListAllProfilesResponseDLPCustomProfileType = "custom"
+	DLPProfileListResponseDLPCustomProfileTypeCustom DLPProfileListResponseDLPCustomProfileType = "custom"
 )
 
-type DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfile struct {
+type DLPProfileListResponseDLPIntegrationProfile struct {
 	// The ID for this profile
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntry `json:"entries"`
+	Entries []DLPProfileListResponseDLPIntegrationProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileType `json:"type"`
-	UpdatedAt time.Time                                                             `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileJSON `json:"-"`
+	Type      DLPProfileListResponseDLPIntegrationProfileType `json:"type"`
+	UpdatedAt time.Time                                       `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileListResponseDLPIntegrationProfileJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileJSON contains
-// the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfile]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileJSON struct {
+// dlpProfileListResponseDLPIntegrationProfileJSON contains the JSON metadata for
+// the struct [DLPProfileListResponseDLPIntegrationProfile]
+type dlpProfileListResponseDLPIntegrationProfileJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -290,15 +281,14 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileJSON struc
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPIntegrationProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfile) implementsDLPProfileDLPProfilesListAllProfilesResponse() {
-}
+func (r DLPProfileListResponseDLPIntegrationProfile) implementsDLPProfileListResponse() {}
 
 // An entry derived from an integration
-type DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntry struct {
+type DLPProfileListResponseDLPIntegrationProfileEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -307,15 +297,14 @@ type DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntry stru
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                                                                `json:"profile_id"`
-	UpdatedAt time.Time                                                                  `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntryJSON `json:"-"`
+	ProfileID interface{}                                          `json:"profile_id"`
+	UpdatedAt time.Time                                            `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileListResponseDLPIntegrationProfileEntryJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntryJSON
-// contains the JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntry]
-type dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntryJSON struct {
+// dlpProfileListResponseDLPIntegrationProfileEntryJSON contains the JSON metadata
+// for the struct [DLPProfileListResponseDLPIntegrationProfileEntry]
+type dlpProfileListResponseDLPIntegrationProfileEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -326,15 +315,15 @@ type dlpProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntryJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseDLPIntegrationProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of the profile.
-type DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileType string
+type DLPProfileListResponseDLPIntegrationProfileType string
 
 const (
-	DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileTypeIntegration DLPProfileDLPProfilesListAllProfilesResponseDLPIntegrationProfileType = "integration"
+	DLPProfileListResponseDLPIntegrationProfileTypeIntegration DLPProfileListResponseDLPIntegrationProfileType = "integration"
 )
 
 // Union satisfied by [DLPProfileGetResponseDLPPredefinedProfile],
@@ -602,19 +591,19 @@ const (
 	DLPProfileGetResponseDLPIntegrationProfileTypeIntegration DLPProfileGetResponseDLPIntegrationProfileType = "integration"
 )
 
-type DLPProfileDLPProfilesListAllProfilesResponseEnvelope struct {
-	Errors   []DLPProfileDLPProfilesListAllProfilesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileDLPProfilesListAllProfilesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DLPProfileDLPProfilesListAllProfilesResponse                 `json:"result,required,nullable"`
+type DLPProfileListResponseEnvelope struct {
+	Errors   []DLPProfileListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfileListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DLPProfileListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    DLPProfileDLPProfilesListAllProfilesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DLPProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpProfileDLPProfilesListAllProfilesResponseEnvelopeJSON       `json:"-"`
+	Success    DLPProfileListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DLPProfileListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpProfileListResponseEnvelopeJSON       `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseEnvelopeJSON contains the JSON
-// metadata for the struct [DLPProfileDLPProfilesListAllProfilesResponseEnvelope]
-type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeJSON struct {
+// dlpProfileListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DLPProfileListResponseEnvelope]
+type dlpProfileListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -624,58 +613,56 @@ type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DLPProfileDLPProfilesListAllProfilesResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    dlpProfileDLPProfilesListAllProfilesResponseEnvelopeErrorsJSON `json:"-"`
+type DLPProfileListResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dlpProfileListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseEnvelopeErrors]
-type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeErrorsJSON struct {
+// dlpProfileListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPProfileListResponseEnvelopeErrors]
+type dlpProfileListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DLPProfileDLPProfilesListAllProfilesResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    dlpProfileDLPProfilesListAllProfilesResponseEnvelopeMessagesJSON `json:"-"`
+type DLPProfileListResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    dlpProfileListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseEnvelopeMessages]
-type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeMessagesJSON struct {
+// dlpProfileListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DLPProfileListResponseEnvelopeMessages]
+type dlpProfileListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DLPProfileDLPProfilesListAllProfilesResponseEnvelopeSuccess bool
+type DLPProfileListResponseEnvelopeSuccess bool
 
 const (
-	DLPProfileDLPProfilesListAllProfilesResponseEnvelopeSuccessTrue DLPProfileDLPProfilesListAllProfilesResponseEnvelopeSuccess = true
+	DLPProfileListResponseEnvelopeSuccessTrue DLPProfileListResponseEnvelopeSuccess = true
 )
 
-type DLPProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfo struct {
+type DLPProfileListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -683,14 +670,13 @@ type DLPProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                            `json:"total_count"`
-	JSON       dlpProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                      `json:"total_count"`
+	JSON       dlpProfileListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// dlpProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [DLPProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfo]
-type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfoJSON struct {
+// dlpProfileListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [DLPProfileListResponseEnvelopeResultInfo]
+type dlpProfileListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -699,7 +685,7 @@ type dlpProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileDLPProfilesListAllProfilesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

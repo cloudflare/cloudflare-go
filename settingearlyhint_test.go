@@ -29,7 +29,7 @@ func TestSettingEarlyHintUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.EarlyHint.Update(
+	_, err := client.Settings.EarlyHints.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.SettingEarlyHintUpdateParams{
@@ -61,7 +61,7 @@ func TestSettingEarlyHintGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Settings.EarlyHint.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Settings.EarlyHints.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

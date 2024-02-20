@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarEmailSecuritySummarySpamGetWithOptionalParams(t *testing.T) {
+func TestRadarEmailSecuritySummarySpamListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,18 +30,18 @@ func TestRadarEmailSecuritySummarySpamGetWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.Email.Security.Summaries.Spams.Get(context.TODO(), cloudflare.RadarEmailSecuritySummarySpamGetParams{
-		Arc:       cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamGetParamsArc{cloudflare.RadarEmailSecuritySummarySpamGetParamsArcPass, cloudflare.RadarEmailSecuritySummarySpamGetParamsArcNone, cloudflare.RadarEmailSecuritySummarySpamGetParamsArcFail}),
+	_, err := client.Radar.Email.Security.Summaries.Spams.List(context.TODO(), cloudflare.RadarEmailSecuritySummarySpamListParams{
+		Arc:       cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamListParamsArc{cloudflare.RadarEmailSecuritySummarySpamListParamsArcPass, cloudflare.RadarEmailSecuritySummarySpamListParamsArcNone, cloudflare.RadarEmailSecuritySummarySpamListParamsArcFail}),
 		Asn:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamGetParamsDateRange{cloudflare.RadarEmailSecuritySummarySpamGetParamsDateRange1d, cloudflare.RadarEmailSecuritySummarySpamGetParamsDateRange2d, cloudflare.RadarEmailSecuritySummarySpamGetParamsDateRange7d}),
+		DateRange: cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamListParamsDateRange{cloudflare.RadarEmailSecuritySummarySpamListParamsDateRange1d, cloudflare.RadarEmailSecuritySummarySpamListParamsDateRange2d, cloudflare.RadarEmailSecuritySummarySpamListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DKIM:      cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamGetParamsDKIM{cloudflare.RadarEmailSecuritySummarySpamGetParamsDKIMPass, cloudflare.RadarEmailSecuritySummarySpamGetParamsDKIMNone, cloudflare.RadarEmailSecuritySummarySpamGetParamsDKIMFail}),
-		Dmarc:     cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamGetParamsDmarc{cloudflare.RadarEmailSecuritySummarySpamGetParamsDmarcPass, cloudflare.RadarEmailSecuritySummarySpamGetParamsDmarcNone, cloudflare.RadarEmailSecuritySummarySpamGetParamsDmarcFail}),
-		Format:    cloudflare.F(cloudflare.RadarEmailSecuritySummarySpamGetParamsFormatJson),
+		DKIM:      cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamListParamsDKIM{cloudflare.RadarEmailSecuritySummarySpamListParamsDKIMPass, cloudflare.RadarEmailSecuritySummarySpamListParamsDKIMNone, cloudflare.RadarEmailSecuritySummarySpamListParamsDKIMFail}),
+		Dmarc:     cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamListParamsDmarc{cloudflare.RadarEmailSecuritySummarySpamListParamsDmarcPass, cloudflare.RadarEmailSecuritySummarySpamListParamsDmarcNone, cloudflare.RadarEmailSecuritySummarySpamListParamsDmarcFail}),
+		Format:    cloudflare.F(cloudflare.RadarEmailSecuritySummarySpamListParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		SPF:       cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamGetParamsSPF{cloudflare.RadarEmailSecuritySummarySpamGetParamsSPFPass, cloudflare.RadarEmailSecuritySummarySpamGetParamsSPFNone, cloudflare.RadarEmailSecuritySummarySpamGetParamsSPFFail}),
+		SPF:       cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamListParamsSPF{cloudflare.RadarEmailSecuritySummarySpamListParamsSPFPass, cloudflare.RadarEmailSecuritySummarySpamListParamsSPFNone, cloudflare.RadarEmailSecuritySummarySpamListParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

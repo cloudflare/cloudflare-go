@@ -33,9 +33,9 @@ func NewStreamTokenService(opts ...option.RequestOption) (r *StreamTokenService)
 
 // Creates a signed URL token for a video. If a body is not provided in the
 // request, a token is created with default values.
-func (r *StreamTokenService) StreamVideosNewSignedURLTokensForVideos(ctx context.Context, accountID string, identifier string, body StreamTokenStreamVideosNewSignedURLTokensForVideosParams, opts ...option.RequestOption) (res *StreamTokenStreamVideosNewSignedURLTokensForVideosResponse, err error) {
+func (r *StreamTokenService) New(ctx context.Context, accountID string, identifier string, body StreamTokenNewParams, opts ...option.RequestOption) (res *StreamTokenNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelope
+	var env StreamTokenNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/token", accountID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -45,26 +45,25 @@ func (r *StreamTokenService) StreamVideosNewSignedURLTokensForVideos(ctx context
 	return
 }
 
-type StreamTokenStreamVideosNewSignedURLTokensForVideosResponse struct {
+type StreamTokenNewResponse struct {
 	// The signed token used with the signed URLs feature.
-	Token string                                                         `json:"token"`
-	JSON  streamTokenStreamVideosNewSignedURLTokensForVideosResponseJSON `json:"-"`
+	Token string                     `json:"token"`
+	JSON  streamTokenNewResponseJSON `json:"-"`
 }
 
-// streamTokenStreamVideosNewSignedURLTokensForVideosResponseJSON contains the JSON
-// metadata for the struct
-// [StreamTokenStreamVideosNewSignedURLTokensForVideosResponse]
-type streamTokenStreamVideosNewSignedURLTokensForVideosResponseJSON struct {
+// streamTokenNewResponseJSON contains the JSON metadata for the struct
+// [StreamTokenNewResponse]
+type streamTokenNewResponseJSON struct {
 	Token       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamTokenStreamVideosNewSignedURLTokensForVideosResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamTokenStreamVideosNewSignedURLTokensForVideosParams struct {
+type StreamTokenNewParams struct {
 	// The optional ID of a Stream signing key. If present, the `pem` field is also
 	// required.
 	ID param.Field[string] `json:"id"`
@@ -72,7 +71,7 @@ type StreamTokenStreamVideosNewSignedURLTokensForVideosParams struct {
 	// or allowed based on an IP, IP range, or by country. Access rules are evaluated
 	// from first to last. If a rule matches, the associated action is applied and no
 	// further rules are evaluated.
-	AccessRules param.Field[[]StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRule] `json:"accessRules"`
+	AccessRules param.Field[[]StreamTokenNewParamsAccessRule] `json:"accessRules"`
 	// The optional boolean value that enables using signed tokens to access MP4
 	// download links for a video.
 	Downloadable param.Field[bool] `json:"downloadable"`
@@ -88,7 +87,7 @@ type StreamTokenStreamVideosNewSignedURLTokensForVideosParams struct {
 	Pem param.Field[string] `json:"pem"`
 }
 
-func (r StreamTokenStreamVideosNewSignedURLTokensForVideosParams) MarshalJSON() (data []byte, err error) {
+func (r StreamTokenNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -96,10 +95,10 @@ func (r StreamTokenStreamVideosNewSignedURLTokensForVideosParams) MarshalJSON() 
 // alone. Access rules primarily make tokens conditionally valid based on user
 // information. Access Rules are specified on token payloads as the `accessRules`
 // property containing an array of Rule objects.
-type StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRule struct {
+type StreamTokenNewParamsAccessRule struct {
 	// The action to take when a request matches a rule. If the action is `block`, the
 	// signed token blocks views for viewers matching the rule.
-	Action param.Field[StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesAction] `json:"action"`
+	Action param.Field[StreamTokenNewParamsAccessRulesAction] `json:"action"`
 	// An array of 2-letter country codes in ISO 3166-1 Alpha-2 format used to match
 	// requests.
 	Country param.Field[[]string] `json:"country"`
@@ -108,46 +107,45 @@ type StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRule struct {
 	// Lists available rule types to match for requests. An `any` type matches all
 	// requests and can be used as a wildcard to apply default actions after other
 	// rules.
-	Type param.Field[StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesType] `json:"type"`
+	Type param.Field[StreamTokenNewParamsAccessRulesType] `json:"type"`
 }
 
-func (r StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRule) MarshalJSON() (data []byte, err error) {
+func (r StreamTokenNewParamsAccessRule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to take when a request matches a rule. If the action is `block`, the
 // signed token blocks views for viewers matching the rule.
-type StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesAction string
+type StreamTokenNewParamsAccessRulesAction string
 
 const (
-	StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesActionAllow StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesAction = "allow"
-	StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesActionBlock StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesAction = "block"
+	StreamTokenNewParamsAccessRulesActionAllow StreamTokenNewParamsAccessRulesAction = "allow"
+	StreamTokenNewParamsAccessRulesActionBlock StreamTokenNewParamsAccessRulesAction = "block"
 )
 
 // Lists available rule types to match for requests. An `any` type matches all
 // requests and can be used as a wildcard to apply default actions after other
 // rules.
-type StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesType string
+type StreamTokenNewParamsAccessRulesType string
 
 const (
-	StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeAny            StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesType = "any"
-	StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeIPSrc          StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesType = "ip.src"
-	StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeIPGeoipCountry StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesType = "ip.geoip.country"
+	StreamTokenNewParamsAccessRulesTypeAny            StreamTokenNewParamsAccessRulesType = "any"
+	StreamTokenNewParamsAccessRulesTypeIPSrc          StreamTokenNewParamsAccessRulesType = "ip.src"
+	StreamTokenNewParamsAccessRulesTypeIPGeoipCountry StreamTokenNewParamsAccessRulesType = "ip.geoip.country"
 )
 
-type StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelope struct {
-	Errors   []StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamTokenStreamVideosNewSignedURLTokensForVideosResponse                   `json:"result,required"`
+type StreamTokenNewResponseEnvelope struct {
+	Errors   []StreamTokenNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamTokenNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamTokenNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeJSON    `json:"-"`
+	Success StreamTokenNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamTokenNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelope]
-type streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeJSON struct {
+// streamTokenNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamTokenNewResponseEnvelope]
+type streamTokenNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -156,53 +154,51 @@ type streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeJSON stru
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamTokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrors struct {
-	Code    int64                                                                        `json:"code,required"`
-	Message string                                                                       `json:"message,required"`
-	JSON    streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrorsJSON `json:"-"`
+type StreamTokenNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    streamTokenNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrors]
-type streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrorsJSON struct {
+// streamTokenNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamTokenNewResponseEnvelopeErrors]
+type streamTokenNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamTokenNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessages struct {
-	Code    int64                                                                          `json:"code,required"`
-	Message string                                                                         `json:"message,required"`
-	JSON    streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessagesJSON `json:"-"`
+type StreamTokenNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    streamTokenNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessages]
-type streamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessagesJSON struct {
+// streamTokenNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StreamTokenNewResponseEnvelopeMessages]
+type streamTokenNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamTokenNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeSuccess bool
+type StreamTokenNewResponseEnvelopeSuccess bool
 
 const (
-	StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeSuccessTrue StreamTokenStreamVideosNewSignedURLTokensForVideosResponseEnvelopeSuccess = true
+	StreamTokenNewResponseEnvelopeSuccessTrue StreamTokenNewResponseEnvelopeSuccess = true
 )

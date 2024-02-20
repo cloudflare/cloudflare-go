@@ -31,12 +31,25 @@ func NewSecondaryDNSACLService(opts ...option.RequestOption) (r *SecondaryDNSACL
 	return
 }
 
-// Modify ACL.
-func (r *SecondaryDNSACLService) Update(ctx context.Context, accountID interface{}, aclID interface{}, body SecondaryDNSACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDnsaclUpdateResponse, err error) {
+// Create ACL.
+func (r *SecondaryDNSACLService) New(ctx context.Context, accountID interface{}, body SecondaryDNSACLNewParams, opts ...option.RequestOption) (res *SecondaryDnsaclNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SecondaryDnsaclUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", accountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env SecondaryDnsaclNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// List ACLs.
+func (r *SecondaryDNSACLService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]SecondaryDnsaclListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env SecondaryDnsaclListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -70,12 +83,12 @@ func (r *SecondaryDNSACLService) Get(ctx context.Context, accountID interface{},
 	return
 }
 
-// Create ACL.
-func (r *SecondaryDNSACLService) SecondaryDNSACLNewACL(ctx context.Context, accountID interface{}, body SecondaryDNSACLSecondaryDNSACLNewACLParams, opts ...option.RequestOption) (res *SecondaryDnsaclSecondaryDnsaclNewACLResponse, err error) {
+// Modify ACL.
+func (r *SecondaryDNSACLService) Replace(ctx context.Context, accountID interface{}, aclID interface{}, body SecondaryDNSACLReplaceParams, opts ...option.RequestOption) (res *SecondaryDnsaclReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env SecondaryDnsaclReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", accountID, aclID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -83,20 +96,7 @@ func (r *SecondaryDNSACLService) SecondaryDNSACLNewACL(ctx context.Context, acco
 	return
 }
 
-// List ACLs.
-func (r *SecondaryDNSACLService) SecondaryDNSACLListACLs(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]SecondaryDnsaclSecondaryDnsaclListACLsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type SecondaryDnsaclUpdateResponse struct {
+type SecondaryDnsaclNewResponse struct {
 	ID interface{} `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -105,13 +105,13 @@ type SecondaryDnsaclUpdateResponse struct {
 	// IPv6 respectively.
 	IPRange string `json:"ip_range,required"`
 	// The name of the acl.
-	Name string                            `json:"name,required"`
-	JSON secondaryDnsaclUpdateResponseJSON `json:"-"`
+	Name string                         `json:"name,required"`
+	JSON secondaryDnsaclNewResponseJSON `json:"-"`
 }
 
-// secondaryDnsaclUpdateResponseJSON contains the JSON metadata for the struct
-// [SecondaryDnsaclUpdateResponse]
-type secondaryDnsaclUpdateResponseJSON struct {
+// secondaryDnsaclNewResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnsaclNewResponse]
+type secondaryDnsaclNewResponseJSON struct {
 	ID          apijson.Field
 	IPRange     apijson.Field
 	Name        apijson.Field
@@ -119,7 +119,34 @@ type secondaryDnsaclUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDnsaclListResponse struct {
+	ID interface{} `json:"id,required"`
+	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
+	// be applied for the entire account. The IP range is used to allow additional
+	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
+	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
+	// IPv6 respectively.
+	IPRange string `json:"ip_range,required"`
+	// The name of the acl.
+	Name string                          `json:"name,required"`
+	JSON secondaryDnsaclListResponseJSON `json:"-"`
+}
+
+// secondaryDnsaclListResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnsaclListResponse]
+type secondaryDnsaclListResponseJSON struct {
+	ID          apijson.Field
+	IPRange     apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnsaclListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -167,7 +194,7 @@ func (r *SecondaryDnsaclGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclSecondaryDnsaclNewACLResponse struct {
+type SecondaryDnsaclReplaceResponse struct {
 	ID interface{} `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
@@ -176,13 +203,13 @@ type SecondaryDnsaclSecondaryDnsaclNewACLResponse struct {
 	// IPv6 respectively.
 	IPRange string `json:"ip_range,required"`
 	// The name of the acl.
-	Name string                                           `json:"name,required"`
-	JSON secondaryDnsaclSecondaryDnsaclNewACLResponseJSON `json:"-"`
+	Name string                             `json:"name,required"`
+	JSON secondaryDnsaclReplaceResponseJSON `json:"-"`
 }
 
-// secondaryDnsaclSecondaryDnsaclNewACLResponseJSON contains the JSON metadata for
-// the struct [SecondaryDnsaclSecondaryDnsaclNewACLResponse]
-type secondaryDnsaclSecondaryDnsaclNewACLResponseJSON struct {
+// secondaryDnsaclReplaceResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnsaclReplaceResponse]
+type secondaryDnsaclReplaceResponseJSON struct {
 	ID          apijson.Field
 	IPRange     apijson.Field
 	Name        apijson.Field
@@ -190,64 +217,30 @@ type secondaryDnsaclSecondaryDnsaclNewACLResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclSecondaryDnsaclNewACLResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclSecondaryDnsaclListACLsResponse struct {
-	ID interface{} `json:"id,required"`
-	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
-	// be applied for the entire account. The IP range is used to allow additional
-	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
-	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
-	// IPv6 respectively.
-	IPRange string `json:"ip_range,required"`
-	// The name of the acl.
-	Name string                                             `json:"name,required"`
-	JSON secondaryDnsaclSecondaryDnsaclListACLsResponseJSON `json:"-"`
+type SecondaryDNSACLNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
 }
 
-// secondaryDnsaclSecondaryDnsaclListACLsResponseJSON contains the JSON metadata
-// for the struct [SecondaryDnsaclSecondaryDnsaclListACLsResponse]
-type secondaryDnsaclSecondaryDnsaclListACLsResponseJSON struct {
-	ID          apijson.Field
-	IPRange     apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r SecondaryDNSACLNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
-func (r *SecondaryDnsaclSecondaryDnsaclListACLsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDNSACLUpdateParams struct {
-	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
-	// be applied for the entire account. The IP range is used to allow additional
-	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
-	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
-	// IPv6 respectively.
-	IPRange param.Field[string] `json:"ip_range,required"`
-	// The name of the acl.
-	Name param.Field[string] `json:"name,required"`
-}
-
-func (r SecondaryDNSACLUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type SecondaryDnsaclUpdateResponseEnvelope struct {
-	Errors   []SecondaryDnsaclUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecondaryDnsaclUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDnsaclUpdateResponse                   `json:"result,required"`
+type SecondaryDnsaclNewResponseEnvelope struct {
+	Errors   []SecondaryDnsaclNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDnsaclNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   SecondaryDnsaclNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SecondaryDnsaclUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    secondaryDnsaclUpdateResponseEnvelopeJSON    `json:"-"`
+	Success SecondaryDnsaclNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    secondaryDnsaclNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// secondaryDnsaclUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SecondaryDnsaclUpdateResponseEnvelope]
-type secondaryDnsaclUpdateResponseEnvelopeJSON struct {
+// secondaryDnsaclNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SecondaryDnsaclNewResponseEnvelope]
+type secondaryDnsaclNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -256,54 +249,152 @@ type secondaryDnsaclUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    secondaryDnsaclUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type SecondaryDnsaclNewResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    secondaryDnsaclNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// secondaryDnsaclUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SecondaryDnsaclUpdateResponseEnvelopeErrors]
-type secondaryDnsaclUpdateResponseEnvelopeErrorsJSON struct {
+// secondaryDnsaclNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SecondaryDnsaclNewResponseEnvelopeErrors]
+type secondaryDnsaclNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    secondaryDnsaclUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type SecondaryDnsaclNewResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    secondaryDnsaclNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// secondaryDnsaclUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SecondaryDnsaclUpdateResponseEnvelopeMessages]
-type secondaryDnsaclUpdateResponseEnvelopeMessagesJSON struct {
+// secondaryDnsaclNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SecondaryDnsaclNewResponseEnvelopeMessages]
+type secondaryDnsaclNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SecondaryDnsaclUpdateResponseEnvelopeSuccess bool
+type SecondaryDnsaclNewResponseEnvelopeSuccess bool
 
 const (
-	SecondaryDnsaclUpdateResponseEnvelopeSuccessTrue SecondaryDnsaclUpdateResponseEnvelopeSuccess = true
+	SecondaryDnsaclNewResponseEnvelopeSuccessTrue SecondaryDnsaclNewResponseEnvelopeSuccess = true
 )
+
+type SecondaryDnsaclListResponseEnvelope struct {
+	Errors   []SecondaryDnsaclListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDnsaclListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []SecondaryDnsaclListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    SecondaryDnsaclListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo SecondaryDnsaclListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       secondaryDnsaclListResponseEnvelopeJSON       `json:"-"`
+}
+
+// secondaryDnsaclListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SecondaryDnsaclListResponseEnvelope]
+type secondaryDnsaclListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnsaclListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDnsaclListResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    secondaryDnsaclListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// secondaryDnsaclListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SecondaryDnsaclListResponseEnvelopeErrors]
+type secondaryDnsaclListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnsaclListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDnsaclListResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    secondaryDnsaclListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// secondaryDnsaclListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SecondaryDnsaclListResponseEnvelopeMessages]
+type secondaryDnsaclListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnsaclListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type SecondaryDnsaclListResponseEnvelopeSuccess bool
+
+const (
+	SecondaryDnsaclListResponseEnvelopeSuccessTrue SecondaryDnsaclListResponseEnvelopeSuccess = true
+)
+
+type SecondaryDnsaclListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                           `json:"total_count"`
+	JSON       secondaryDnsaclListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// secondaryDnsaclListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [SecondaryDnsaclListResponseEnvelopeResultInfo]
+type secondaryDnsaclListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnsaclListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type SecondaryDnsaclDeleteResponseEnvelope struct {
 	Errors   []SecondaryDnsaclDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -443,26 +534,33 @@ const (
 	SecondaryDnsaclGetResponseEnvelopeSuccessTrue SecondaryDnsaclGetResponseEnvelopeSuccess = true
 )
 
-type SecondaryDNSACLSecondaryDNSACLNewACLParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+type SecondaryDNSACLReplaceParams struct {
+	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
+	// be applied for the entire account. The IP range is used to allow additional
+	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
+	// for primary zones. CIDRs are limited to a maximum of /24 for IPv4 and /64 for
+	// IPv6 respectively.
+	IPRange param.Field[string] `json:"ip_range,required"`
+	// The name of the acl.
+	Name param.Field[string] `json:"name,required"`
 }
 
-func (r SecondaryDNSACLSecondaryDNSACLNewACLParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+func (r SecondaryDNSACLReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-type SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelope struct {
-	Errors   []SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDnsaclSecondaryDnsaclNewACLResponse                   `json:"result,required"`
+type SecondaryDnsaclReplaceResponseEnvelope struct {
+	Errors   []SecondaryDnsaclReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDnsaclReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   SecondaryDnsaclReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeSuccess `json:"success,required"`
-	JSON    secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeJSON    `json:"-"`
+	Success SecondaryDnsaclReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    secondaryDnsaclReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeJSON contains the JSON
-// metadata for the struct [SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelope]
-type secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeJSON struct {
+// secondaryDnsaclReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SecondaryDnsaclReplaceResponseEnvelope]
+type secondaryDnsaclReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -471,154 +569,51 @@ type secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrorsJSON `json:"-"`
+type SecondaryDnsaclReplaceResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    secondaryDnsaclReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrors]
-type secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrorsJSON struct {
+// secondaryDnsaclReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SecondaryDnsaclReplaceResponseEnvelopeErrors]
+type secondaryDnsaclReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessagesJSON `json:"-"`
+type SecondaryDnsaclReplaceResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    secondaryDnsaclReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessages]
-type secondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessagesJSON struct {
+// secondaryDnsaclReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SecondaryDnsaclReplaceResponseEnvelopeMessages]
+type secondaryDnsaclReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnsaclReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeSuccess bool
+type SecondaryDnsaclReplaceResponseEnvelopeSuccess bool
 
 const (
-	SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeSuccessTrue SecondaryDnsaclSecondaryDnsaclNewACLResponseEnvelopeSuccess = true
+	SecondaryDnsaclReplaceResponseEnvelopeSuccessTrue SecondaryDnsaclReplaceResponseEnvelopeSuccess = true
 )
-
-type SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelope struct {
-	Errors   []SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SecondaryDnsaclSecondaryDnsaclListACLsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeJSON       `json:"-"`
-}
-
-// secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeJSON contains the JSON
-// metadata for the struct [SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelope]
-type secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrors struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrors]
-type secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessages struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessages]
-type secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeSuccess bool
-
-const (
-	SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeSuccessTrue SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeSuccess = true
-)
-
-type SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                              `json:"total_count"`
-	JSON       secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfo]
-type secondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *SecondaryDnsaclSecondaryDnsaclListACLsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

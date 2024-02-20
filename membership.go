@@ -36,19 +36,6 @@ func NewMembershipService(opts ...option.RequestOption) (r *MembershipService) {
 	return
 }
 
-// Accept or reject this account invitation.
-func (r *MembershipService) Update(ctx context.Context, membershipID string, body MembershipUpdateParams, opts ...option.RequestOption) (res *MembershipUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MembershipUpdateResponseEnvelope
-	path := fmt.Sprintf("memberships/%s", membershipID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List memberships of accounts the user can access.
 func (r *MembershipService) List(ctx context.Context, query MembershipListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[MembershipListResponse], err error) {
 	var raw *http.Response
@@ -98,20 +85,17 @@ func (r *MembershipService) Get(ctx context.Context, membershipID string, opts .
 	return
 }
 
-// Union satisfied by [MembershipUpdateResponseUnknown] or [shared.UnionString].
-type MembershipUpdateResponse interface {
-	ImplementsMembershipUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*MembershipUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// Accept or reject this account invitation.
+func (r *MembershipService) Replace(ctx context.Context, membershipID string, body MembershipReplaceParams, opts ...option.RequestOption) (res *MembershipReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MembershipReplaceResponseEnvelope
+	path := fmt.Sprintf("memberships/%s", membershipID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type MembershipListResponse struct {
@@ -544,91 +528,21 @@ func init() {
 	)
 }
 
-type MembershipUpdateParams struct {
-	// Whether to accept or reject this account invitation.
-	Status param.Field[MembershipUpdateParamsStatus] `json:"status,required"`
+// Union satisfied by [MembershipReplaceResponseUnknown] or [shared.UnionString].
+type MembershipReplaceResponse interface {
+	ImplementsMembershipReplaceResponse()
 }
 
-func (r MembershipUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*MembershipReplaceResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
-
-// Whether to accept or reject this account invitation.
-type MembershipUpdateParamsStatus string
-
-const (
-	MembershipUpdateParamsStatusAccepted MembershipUpdateParamsStatus = "accepted"
-	MembershipUpdateParamsStatusRejected MembershipUpdateParamsStatus = "rejected"
-)
-
-type MembershipUpdateResponseEnvelope struct {
-	Errors   []MembershipUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MembershipUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   MembershipUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MembershipUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    membershipUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// membershipUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MembershipUpdateResponseEnvelope]
-type membershipUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MembershipUpdateResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    membershipUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// membershipUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MembershipUpdateResponseEnvelopeErrors]
-type membershipUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MembershipUpdateResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    membershipUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// membershipUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MembershipUpdateResponseEnvelopeMessages]
-type membershipUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MembershipUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MembershipUpdateResponseEnvelopeSuccess bool
-
-const (
-	MembershipUpdateResponseEnvelopeSuccessTrue MembershipUpdateResponseEnvelopeSuccess = true
-)
 
 type MembershipListParams struct {
 	Account param.Field[MembershipListParamsAccount] `query:"account"`
@@ -830,4 +744,90 @@ type MembershipGetResponseEnvelopeSuccess bool
 
 const (
 	MembershipGetResponseEnvelopeSuccessTrue MembershipGetResponseEnvelopeSuccess = true
+)
+
+type MembershipReplaceParams struct {
+	// Whether to accept or reject this account invitation.
+	Status param.Field[MembershipReplaceParamsStatus] `json:"status,required"`
+}
+
+func (r MembershipReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Whether to accept or reject this account invitation.
+type MembershipReplaceParamsStatus string
+
+const (
+	MembershipReplaceParamsStatusAccepted MembershipReplaceParamsStatus = "accepted"
+	MembershipReplaceParamsStatusRejected MembershipReplaceParamsStatus = "rejected"
+)
+
+type MembershipReplaceResponseEnvelope struct {
+	Errors   []MembershipReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MembershipReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   MembershipReplaceResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MembershipReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    membershipReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// membershipReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MembershipReplaceResponseEnvelope]
+type membershipReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipReplaceResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    membershipReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// membershipReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MembershipReplaceResponseEnvelopeErrors]
+type membershipReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MembershipReplaceResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    membershipReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// membershipReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MembershipReplaceResponseEnvelopeMessages]
+type membershipReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MembershipReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MembershipReplaceResponseEnvelopeSuccess bool
+
+const (
+	MembershipReplaceResponseEnvelopeSuccessTrue MembershipReplaceResponseEnvelopeSuccess = true
 )

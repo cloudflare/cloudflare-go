@@ -19,6 +19,7 @@ import (
 // service directly, and instead use the [NewPageShieldService] method instead.
 type PageShieldService struct {
 	Options     []option.RequestOption
+	Policies    *PageShieldPolicyService
 	Connections *PageShieldConnectionService
 	Scripts     *PageShieldScriptService
 }
@@ -29,6 +30,7 @@ type PageShieldService struct {
 func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 	r = &PageShieldService{}
 	r.Options = opts
+	r.Policies = NewPageShieldPolicyService(opts...)
 	r.Connections = NewPageShieldConnectionService(opts...)
 	r.Scripts = NewPageShieldScriptService(opts...)
 	return
@@ -48,9 +50,9 @@ func (r *PageShieldService) List(ctx context.Context, zoneID string, opts ...opt
 }
 
 // Updates Page Shield settings.
-func (r *PageShieldService) PageShieldUpdatePageShieldSettings(ctx context.Context, zoneID string, body PageShieldPageShieldUpdatePageShieldSettingsParams, opts ...option.RequestOption) (res *PageShieldPageShieldUpdatePageShieldSettingsResponse, err error) {
+func (r *PageShieldService) Replace(ctx context.Context, zoneID string, body PageShieldReplaceParams, opts ...option.RequestOption) (res *PageShieldReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelope
+	var env PageShieldReplaceResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -88,7 +90,7 @@ func (r *PageShieldListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldPageShieldUpdatePageShieldSettingsResponse struct {
+type PageShieldReplaceResponse struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled bool `json:"enabled"`
 	// The timestamp of when Page Shield was last updated.
@@ -97,13 +99,13 @@ type PageShieldPageShieldUpdatePageShieldSettingsResponse struct {
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
 	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                                                     `json:"use_connection_url_path"`
-	JSON                 pageShieldPageShieldUpdatePageShieldSettingsResponseJSON `json:"-"`
+	UseConnectionURLPath bool                          `json:"use_connection_url_path"`
+	JSON                 pageShieldReplaceResponseJSON `json:"-"`
 }
 
-// pageShieldPageShieldUpdatePageShieldSettingsResponseJSON contains the JSON
-// metadata for the struct [PageShieldPageShieldUpdatePageShieldSettingsResponse]
-type pageShieldPageShieldUpdatePageShieldSettingsResponseJSON struct {
+// pageShieldReplaceResponseJSON contains the JSON metadata for the struct
+// [PageShieldReplaceResponse]
+type pageShieldReplaceResponseJSON struct {
 	Enabled                        apijson.Field
 	UpdatedAt                      apijson.Field
 	UseCloudflareReportingEndpoint apijson.Field
@@ -112,7 +114,7 @@ type pageShieldPageShieldUpdatePageShieldSettingsResponseJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *PageShieldPageShieldUpdatePageShieldSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -185,7 +187,7 @@ const (
 	PageShieldListResponseEnvelopeSuccessTrue PageShieldListResponseEnvelopeSuccess = true
 )
 
-type PageShieldPageShieldUpdatePageShieldSettingsParams struct {
+type PageShieldReplaceParams struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 	// When true, CSP reports will be sent to
@@ -195,23 +197,22 @@ type PageShieldPageShieldUpdatePageShieldSettingsParams struct {
 	UseConnectionURLPath param.Field[bool] `json:"use_connection_url_path"`
 }
 
-func (r PageShieldPageShieldUpdatePageShieldSettingsParams) MarshalJSON() (data []byte, err error) {
+func (r PageShieldReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelope struct {
-	Errors   []PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageShieldPageShieldUpdatePageShieldSettingsResponse                   `json:"result,required"`
+type PageShieldReplaceResponseEnvelope struct {
+	Errors   []PageShieldReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageShieldReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageShieldReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeJSON    `json:"-"`
+	Success PageShieldReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageShieldReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelope]
-type pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeJSON struct {
+// pageShieldReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageShieldReplaceResponseEnvelope]
+type pageShieldReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -220,53 +221,51 @@ type pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrorsJSON `json:"-"`
+type PageShieldReplaceResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    pageShieldReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrors]
-type pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrorsJSON struct {
+// pageShieldReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageShieldReplaceResponseEnvelopeErrors]
+type pageShieldReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessagesJSON `json:"-"`
+type PageShieldReplaceResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    pageShieldReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessages]
-type pageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessagesJSON struct {
+// pageShieldReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageShieldReplaceResponseEnvelopeMessages]
+type pageShieldReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeSuccess bool
+type PageShieldReplaceResponseEnvelopeSuccess bool
 
 const (
-	PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeSuccessTrue PageShieldPageShieldUpdatePageShieldSettingsResponseEnvelopeSuccess = true
+	PageShieldReplaceResponseEnvelopeSuccessTrue PageShieldReplaceResponseEnvelopeSuccess = true
 )

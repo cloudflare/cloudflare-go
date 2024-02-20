@@ -31,9 +31,9 @@ func NewAccessUserLastSeenIdentityService(opts ...option.RequestOption) (r *Acce
 }
 
 // Get last seen identity for a single user.
-func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *AccessUserLastSeenIdentityGetResponse, err error) {
+func (r *AccessUserLastSeenIdentityService) List(ctx context.Context, identifier string, id string, opts ...option.RequestOption) (res *AccessUserLastSeenIdentityListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessUserLastSeenIdentityGetResponseEnvelope
+	var env AccessUserLastSeenIdentityListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users/%s/last_seen_identity", identifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -43,31 +43,31 @@ func (r *AccessUserLastSeenIdentityService) Get(ctx context.Context, identifier 
 	return
 }
 
-type AccessUserLastSeenIdentityGetResponse struct {
-	AccountID          string                                                        `json:"account_id"`
-	AuthStatus         string                                                        `json:"auth_status"`
-	CommonName         string                                                        `json:"common_name"`
-	DeviceID           string                                                        `json:"device_id"`
-	DeviceSessions     map[string]AccessUserLastSeenIdentityGetResponseDeviceSession `json:"device_sessions"`
-	DevicePosture      map[string]AccessUserLastSeenIdentityGetResponseDevicePosture `json:"devicePosture"`
-	Email              string                                                        `json:"email"`
-	Geo                AccessUserLastSeenIdentityGetResponseGeo                      `json:"geo"`
-	Iat                float64                                                       `json:"iat"`
-	Idp                AccessUserLastSeenIdentityGetResponseIdp                      `json:"idp"`
-	IP                 string                                                        `json:"ip"`
-	IsGateway          bool                                                          `json:"is_gateway"`
-	IsWarp             bool                                                          `json:"is_warp"`
-	MtlsAuth           AccessUserLastSeenIdentityGetResponseMtlsAuth                 `json:"mtls_auth"`
-	ServiceTokenID     string                                                        `json:"service_token_id"`
-	ServiceTokenStatus bool                                                          `json:"service_token_status"`
-	UserUuid           string                                                        `json:"user_uuid"`
-	Version            float64                                                       `json:"version"`
-	JSON               accessUserLastSeenIdentityGetResponseJSON                     `json:"-"`
+type AccessUserLastSeenIdentityListResponse struct {
+	AccountID          string                                                         `json:"account_id"`
+	AuthStatus         string                                                         `json:"auth_status"`
+	CommonName         string                                                         `json:"common_name"`
+	DeviceID           string                                                         `json:"device_id"`
+	DeviceSessions     map[string]AccessUserLastSeenIdentityListResponseDeviceSession `json:"device_sessions"`
+	DevicePosture      map[string]AccessUserLastSeenIdentityListResponseDevicePosture `json:"devicePosture"`
+	Email              string                                                         `json:"email"`
+	Geo                AccessUserLastSeenIdentityListResponseGeo                      `json:"geo"`
+	Iat                float64                                                        `json:"iat"`
+	Idp                AccessUserLastSeenIdentityListResponseIdp                      `json:"idp"`
+	IP                 string                                                         `json:"ip"`
+	IsGateway          bool                                                           `json:"is_gateway"`
+	IsWarp             bool                                                           `json:"is_warp"`
+	MtlsAuth           AccessUserLastSeenIdentityListResponseMtlsAuth                 `json:"mtls_auth"`
+	ServiceTokenID     string                                                         `json:"service_token_id"`
+	ServiceTokenStatus bool                                                           `json:"service_token_status"`
+	UserUuid           string                                                         `json:"user_uuid"`
+	Version            float64                                                        `json:"version"`
+	JSON               accessUserLastSeenIdentityListResponseJSON                     `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseJSON contains the JSON metadata for the
-// struct [AccessUserLastSeenIdentityGetResponse]
-type accessUserLastSeenIdentityGetResponseJSON struct {
+// accessUserLastSeenIdentityListResponseJSON contains the JSON metadata for the
+// struct [AccessUserLastSeenIdentityListResponse]
+type accessUserLastSeenIdentityListResponseJSON struct {
 	AccountID          apijson.Field
 	AuthStatus         apijson.Field
 	CommonName         apijson.Field
@@ -90,43 +90,43 @@ type accessUserLastSeenIdentityGetResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseDeviceSession struct {
-	LastAuthenticated float64                                                `json:"last_authenticated"`
-	JSON              accessUserLastSeenIdentityGetResponseDeviceSessionJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseDeviceSession struct {
+	LastAuthenticated float64                                                 `json:"last_authenticated"`
+	JSON              accessUserLastSeenIdentityListResponseDeviceSessionJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseDeviceSessionJSON contains the JSON
-// metadata for the struct [AccessUserLastSeenIdentityGetResponseDeviceSession]
-type accessUserLastSeenIdentityGetResponseDeviceSessionJSON struct {
+// accessUserLastSeenIdentityListResponseDeviceSessionJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityListResponseDeviceSession]
+type accessUserLastSeenIdentityListResponseDeviceSessionJSON struct {
 	LastAuthenticated apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseDeviceSession) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseDeviceSession) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseDevicePosture struct {
-	ID          string                                                  `json:"id"`
-	Check       AccessUserLastSeenIdentityGetResponseDevicePostureCheck `json:"check"`
-	Data        interface{}                                             `json:"data"`
-	Description string                                                  `json:"description"`
-	Error       string                                                  `json:"error"`
-	RuleName    string                                                  `json:"rule_name"`
-	Success     bool                                                    `json:"success"`
-	Timestamp   string                                                  `json:"timestamp"`
-	Type        string                                                  `json:"type"`
-	JSON        accessUserLastSeenIdentityGetResponseDevicePostureJSON  `json:"-"`
+type AccessUserLastSeenIdentityListResponseDevicePosture struct {
+	ID          string                                                   `json:"id"`
+	Check       AccessUserLastSeenIdentityListResponseDevicePostureCheck `json:"check"`
+	Data        interface{}                                              `json:"data"`
+	Description string                                                   `json:"description"`
+	Error       string                                                   `json:"error"`
+	RuleName    string                                                   `json:"rule_name"`
+	Success     bool                                                     `json:"success"`
+	Timestamp   string                                                   `json:"timestamp"`
+	Type        string                                                   `json:"type"`
+	JSON        accessUserLastSeenIdentityListResponseDevicePostureJSON  `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseDevicePostureJSON contains the JSON
-// metadata for the struct [AccessUserLastSeenIdentityGetResponseDevicePosture]
-type accessUserLastSeenIdentityGetResponseDevicePostureJSON struct {
+// accessUserLastSeenIdentityListResponseDevicePostureJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityListResponseDevicePosture]
+type accessUserLastSeenIdentityListResponseDevicePostureJSON struct {
 	ID          apijson.Field
 	Check       apijson.Field
 	Data        apijson.Field
@@ -140,78 +140,78 @@ type accessUserLastSeenIdentityGetResponseDevicePostureJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseDevicePosture) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseDevicePostureCheck struct {
-	Exists bool                                                        `json:"exists"`
-	Path   string                                                      `json:"path"`
-	JSON   accessUserLastSeenIdentityGetResponseDevicePostureCheckJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseDevicePostureCheck struct {
+	Exists bool                                                         `json:"exists"`
+	Path   string                                                       `json:"path"`
+	JSON   accessUserLastSeenIdentityListResponseDevicePostureCheckJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseDevicePostureCheckJSON contains the JSON
+// accessUserLastSeenIdentityListResponseDevicePostureCheckJSON contains the JSON
 // metadata for the struct
-// [AccessUserLastSeenIdentityGetResponseDevicePostureCheck]
-type accessUserLastSeenIdentityGetResponseDevicePostureCheckJSON struct {
+// [AccessUserLastSeenIdentityListResponseDevicePostureCheck]
+type accessUserLastSeenIdentityListResponseDevicePostureCheckJSON struct {
 	Exists      apijson.Field
 	Path        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseDevicePostureCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseDevicePostureCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseGeo struct {
-	Country string                                       `json:"country"`
-	JSON    accessUserLastSeenIdentityGetResponseGeoJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseGeo struct {
+	Country string                                        `json:"country"`
+	JSON    accessUserLastSeenIdentityListResponseGeoJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseGeoJSON contains the JSON metadata for the
-// struct [AccessUserLastSeenIdentityGetResponseGeo]
-type accessUserLastSeenIdentityGetResponseGeoJSON struct {
+// accessUserLastSeenIdentityListResponseGeoJSON contains the JSON metadata for the
+// struct [AccessUserLastSeenIdentityListResponseGeo]
+type accessUserLastSeenIdentityListResponseGeoJSON struct {
 	Country     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseGeo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseIdp struct {
-	ID   string                                       `json:"id"`
-	Type string                                       `json:"type"`
-	JSON accessUserLastSeenIdentityGetResponseIdpJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseIdp struct {
+	ID   string                                        `json:"id"`
+	Type string                                        `json:"type"`
+	JSON accessUserLastSeenIdentityListResponseIdpJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseIdpJSON contains the JSON metadata for the
-// struct [AccessUserLastSeenIdentityGetResponseIdp]
-type accessUserLastSeenIdentityGetResponseIdpJSON struct {
+// accessUserLastSeenIdentityListResponseIdpJSON contains the JSON metadata for the
+// struct [AccessUserLastSeenIdentityListResponseIdp]
+type accessUserLastSeenIdentityListResponseIdpJSON struct {
 	ID          apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseIdp) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseIdp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseMtlsAuth struct {
-	AuthStatus    string                                            `json:"auth_status"`
-	CertIssuerDn  string                                            `json:"cert_issuer_dn"`
-	CertIssuerSki string                                            `json:"cert_issuer_ski"`
-	CertPresented bool                                              `json:"cert_presented"`
-	CertSerial    string                                            `json:"cert_serial"`
-	JSON          accessUserLastSeenIdentityGetResponseMtlsAuthJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseMtlsAuth struct {
+	AuthStatus    string                                             `json:"auth_status"`
+	CertIssuerDn  string                                             `json:"cert_issuer_dn"`
+	CertIssuerSki string                                             `json:"cert_issuer_ski"`
+	CertPresented bool                                               `json:"cert_presented"`
+	CertSerial    string                                             `json:"cert_serial"`
+	JSON          accessUserLastSeenIdentityListResponseMtlsAuthJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseMtlsAuthJSON contains the JSON metadata for
-// the struct [AccessUserLastSeenIdentityGetResponseMtlsAuth]
-type accessUserLastSeenIdentityGetResponseMtlsAuthJSON struct {
+// accessUserLastSeenIdentityListResponseMtlsAuthJSON contains the JSON metadata
+// for the struct [AccessUserLastSeenIdentityListResponseMtlsAuth]
+type accessUserLastSeenIdentityListResponseMtlsAuthJSON struct {
 	AuthStatus    apijson.Field
 	CertIssuerDn  apijson.Field
 	CertIssuerSki apijson.Field
@@ -221,22 +221,22 @@ type accessUserLastSeenIdentityGetResponseMtlsAuthJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseMtlsAuth) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseMtlsAuth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseEnvelope struct {
-	Errors   []AccessUserLastSeenIdentityGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessUserLastSeenIdentityGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessUserLastSeenIdentityGetResponse                   `json:"result,required"`
+type AccessUserLastSeenIdentityListResponseEnvelope struct {
+	Errors   []AccessUserLastSeenIdentityListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessUserLastSeenIdentityListResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessUserLastSeenIdentityListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AccessUserLastSeenIdentityGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    accessUserLastSeenIdentityGetResponseEnvelopeJSON    `json:"-"`
+	Success AccessUserLastSeenIdentityListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessUserLastSeenIdentityListResponseEnvelopeJSON    `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessUserLastSeenIdentityGetResponseEnvelope]
-type accessUserLastSeenIdentityGetResponseEnvelopeJSON struct {
+// accessUserLastSeenIdentityListResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AccessUserLastSeenIdentityListResponseEnvelope]
+type accessUserLastSeenIdentityListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -245,51 +245,51 @@ type accessUserLastSeenIdentityGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseEnvelopeErrors struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseEnvelopeErrors struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    accessUserLastSeenIdentityListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessUserLastSeenIdentityGetResponseEnvelopeErrors]
-type accessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON struct {
+// accessUserLastSeenIdentityListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityListResponseEnvelopeErrors]
+type accessUserLastSeenIdentityListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityGetResponseEnvelopeMessages struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON `json:"-"`
+type AccessUserLastSeenIdentityListResponseEnvelopeMessages struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    accessUserLastSeenIdentityListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessUserLastSeenIdentityGetResponseEnvelopeMessages]
-type accessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON struct {
+// accessUserLastSeenIdentityListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessUserLastSeenIdentityListResponseEnvelopeMessages]
+type accessUserLastSeenIdentityListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AccessUserLastSeenIdentityGetResponseEnvelopeSuccess bool
+type AccessUserLastSeenIdentityListResponseEnvelopeSuccess bool
 
 const (
-	AccessUserLastSeenIdentityGetResponseEnvelopeSuccessTrue AccessUserLastSeenIdentityGetResponseEnvelopeSuccess = true
+	AccessUserLastSeenIdentityListResponseEnvelopeSuccessTrue AccessUserLastSeenIdentityListResponseEnvelopeSuccess = true
 )

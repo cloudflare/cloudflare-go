@@ -19,7 +19,6 @@ import (
 // [NewWorkerDeploymentByScriptService] method instead.
 type WorkerDeploymentByScriptService struct {
 	Options []option.RequestOption
-	Details *WorkerDeploymentByScriptDetailService
 }
 
 // NewWorkerDeploymentByScriptService generates a new service that applies the
@@ -28,14 +27,13 @@ type WorkerDeploymentByScriptService struct {
 func NewWorkerDeploymentByScriptService(opts ...option.RequestOption) (r *WorkerDeploymentByScriptService) {
 	r = &WorkerDeploymentByScriptService{}
 	r.Options = opts
-	r.Details = NewWorkerDeploymentByScriptDetailService(opts...)
 	return
 }
 
 // List Deployments
-func (r *WorkerDeploymentByScriptService) WorkerDeploymentsListDeployments(ctx context.Context, accountID string, scriptID string, opts ...option.RequestOption) (res *WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse, err error) {
+func (r *WorkerDeploymentByScriptService) List(ctx context.Context, accountID string, scriptID string, opts ...option.RequestOption) (res *WorkerDeploymentByScriptListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelope
+	var env WorkerDeploymentByScriptListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s", accountID, scriptID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,39 +43,73 @@ func (r *WorkerDeploymentByScriptService) WorkerDeploymentsListDeployments(ctx c
 	return
 }
 
-type WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse struct {
-	Items  []interface{}                                                        `json:"items"`
-	Latest interface{}                                                          `json:"latest"`
-	JSON   workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON `json:"-"`
+// Get Deployment Detail
+func (r *WorkerDeploymentByScriptService) Get(ctx context.Context, accountID string, scriptID string, deploymentID string, opts ...option.RequestOption) (res *WorkerDeploymentByScriptGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerDeploymentByScriptGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s/detail/%s", accountID, scriptID, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
-// workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON contains
-// the JSON metadata for the struct
-// [WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse]
-type workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseJSON struct {
+type WorkerDeploymentByScriptListResponse struct {
+	Items  []interface{}                            `json:"items"`
+	Latest interface{}                              `json:"latest"`
+	JSON   workerDeploymentByScriptListResponseJSON `json:"-"`
+}
+
+// workerDeploymentByScriptListResponseJSON contains the JSON metadata for the
+// struct [WorkerDeploymentByScriptListResponse]
+type workerDeploymentByScriptListResponseJSON struct {
 	Items       apijson.Field
 	Latest      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDeploymentByScriptListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelope struct {
-	Errors   []WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeJSON    `json:"-"`
+type WorkerDeploymentByScriptGetResponse struct {
+	ID        string                                  `json:"id"`
+	Metadata  interface{}                             `json:"metadata"`
+	Number    float64                                 `json:"number"`
+	Resources interface{}                             `json:"resources"`
+	JSON      workerDeploymentByScriptGetResponseJSON `json:"-"`
 }
 
-// workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelope]
-type workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeJSON struct {
+// workerDeploymentByScriptGetResponseJSON contains the JSON metadata for the
+// struct [WorkerDeploymentByScriptGetResponse]
+type workerDeploymentByScriptGetResponseJSON struct {
+	ID          apijson.Field
+	Metadata    apijson.Field
+	Number      apijson.Field
+	Resources   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDeploymentByScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDeploymentByScriptListResponseEnvelope struct {
+	Errors   []WorkerDeploymentByScriptListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerDeploymentByScriptListResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerDeploymentByScriptListResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerDeploymentByScriptListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerDeploymentByScriptListResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerDeploymentByScriptListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [WorkerDeploymentByScriptListResponseEnvelope]
+type workerDeploymentByScriptListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -86,53 +118,120 @@ type workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeJSO
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDeploymentByScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrors struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerDeploymentByScriptListResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    workerDeploymentByScriptListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrors]
-type workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrorsJSON struct {
+// workerDeploymentByScriptListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [WorkerDeploymentByScriptListResponseEnvelopeErrors]
+type workerDeploymentByScriptListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDeploymentByScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessages struct {
-	Code    int64                                                                                `json:"code,required"`
-	Message string                                                                               `json:"message,required"`
-	JSON    workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerDeploymentByScriptListResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    workerDeploymentByScriptListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessages]
-type workerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessagesJSON struct {
+// workerDeploymentByScriptListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [WorkerDeploymentByScriptListResponseEnvelopeMessages]
+type workerDeploymentByScriptListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDeploymentByScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeSuccess bool
+type WorkerDeploymentByScriptListResponseEnvelopeSuccess bool
 
 const (
-	WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeSuccessTrue WorkerDeploymentByScriptWorkerDeploymentsListDeploymentsResponseEnvelopeSuccess = true
+	WorkerDeploymentByScriptListResponseEnvelopeSuccessTrue WorkerDeploymentByScriptListResponseEnvelopeSuccess = true
+)
+
+type WorkerDeploymentByScriptGetResponseEnvelope struct {
+	Errors   []WorkerDeploymentByScriptGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerDeploymentByScriptGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerDeploymentByScriptGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerDeploymentByScriptGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerDeploymentByScriptGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerDeploymentByScriptGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [WorkerDeploymentByScriptGetResponseEnvelope]
+type workerDeploymentByScriptGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDeploymentByScriptGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDeploymentByScriptGetResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    workerDeploymentByScriptGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerDeploymentByScriptGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [WorkerDeploymentByScriptGetResponseEnvelopeErrors]
+type workerDeploymentByScriptGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDeploymentByScriptGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDeploymentByScriptGetResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    workerDeploymentByScriptGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerDeploymentByScriptGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [WorkerDeploymentByScriptGetResponseEnvelopeMessages]
+type workerDeploymentByScriptGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDeploymentByScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerDeploymentByScriptGetResponseEnvelopeSuccess bool
+
+const (
+	WorkerDeploymentByScriptGetResponseEnvelopeSuccessTrue WorkerDeploymentByScriptGetResponseEnvelopeSuccess = true
 )

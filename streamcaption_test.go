@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamCaptionUpdate(t *testing.T) {
+func TestStreamCaptionList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,14 +29,10 @@ func TestStreamCaptionUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Captions.Update(
+	_, err := client.Stream.Captions.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
-		"tr",
-		cloudflare.StreamCaptionUpdateParams{
-			File: cloudflare.F("@/Users/kyle/Desktop/tr.vtt"),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -78,7 +74,7 @@ func TestStreamCaptionDelete(t *testing.T) {
 	}
 }
 
-func TestStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitles(t *testing.T) {
+func TestStreamCaptionReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -94,10 +90,14 @@ func TestStreamCaptionStreamSubtitlesCaptionsListCaptionsOrSubtitles(t *testing.
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Captions.StreamSubtitlesCaptionsListCaptionsOrSubtitles(
+	_, err := client.Stream.Captions.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		"tr",
+		cloudflare.StreamCaptionReplaceParams{
+			File: cloudflare.F("@/Users/kyle/Desktop/tr.vtt"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsWithOptionalParams(t *testing.T) {
+func TestSpectrumAnalyticsAggregateCurrentGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestSpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAg
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Analytics.Aggregates.Currents.SpectrumAggregateAnalyticsGetCurrentAggregatedAnalytics(
+	_, err := client.Spectrum.Analytics.Aggregates.Currents.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SpectrumAnalyticsAggregateCurrentSpectrumAggregateAnalyticsGetCurrentAggregatedAnalyticsParams{
+		cloudflare.SpectrumAnalyticsAggregateCurrentGetParams{
 			AppIDParam: cloudflare.F("ea95132c15732412d22c1476fa83f27a,d122c5f4bb71e25cc9e86ab43b142e2f"),
 			AppID:      cloudflare.F("ea95132c15732412d22c1476fa83f27a,d122c5f4bb71e25cc9e86ab43b142e2f"),
 			ColoName:   cloudflare.F("PDX"),

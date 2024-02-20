@@ -38,9 +38,9 @@ func NewSpectrumAnalyticsEventBytimeService(opts ...option.RequestOption) (r *Sp
 }
 
 // Retrieves a list of aggregate metrics grouped by time interval.
-func (r *SpectrumAnalyticsEventBytimeService) SpectrumAnalyticsByTimeGetAnalyticsByTime(ctx context.Context, zone string, query SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams, opts ...option.RequestOption) (res *SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse, err error) {
+func (r *SpectrumAnalyticsEventBytimeService) Get(ctx context.Context, zone string, query SpectrumAnalyticsEventBytimeGetParams, opts ...option.RequestOption) (res *SpectrumAnalyticsEventBytimeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelope
+	var env SpectrumAnalyticsEventBytimeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/bytime", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,16 +50,15 @@ func (r *SpectrumAnalyticsEventBytimeService) SpectrumAnalyticsByTimeGetAnalytic
 	return
 }
 
-// Union satisfied by
-// [SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseUnknown]
-// or [shared.UnionString].
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse interface {
-	ImplementsSpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse()
+// Union satisfied by [SpectrumAnalyticsEventBytimeGetResponseUnknown] or
+// [shared.UnionString].
+type SpectrumAnalyticsEventBytimeGetResponse interface {
+	ImplementsSpectrumAnalyticsEventBytimeGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse)(nil)).Elem(),
+		reflect.TypeOf((*SpectrumAnalyticsEventBytimeGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -68,7 +67,7 @@ func init() {
 	)
 }
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams struct {
+type SpectrumAnalyticsEventBytimeGetParams struct {
 	// Can be used to break down the data by given attributes. Options are:
 	//
 	// | Dimension | Name                          | Example                                                    |
@@ -77,7 +76,7 @@ type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams
 	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
 	// | coloName  | Colo Name                     | SFO                                                        |
 	// | ipVersion | IP version used by the client | 4, 6.                                                      |
-	Dimensions param.Field[[]SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension] `query:"dimensions"`
+	Dimensions param.Field[[]SpectrumAnalyticsEventBytimeGetParamsDimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -105,7 +104,7 @@ type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams
 	// | durationMedian | Median connection duration          | 1.0     | Time in milliseconds  |
 	// | duration90th   | 90th percentile connection duration | 1.0     | Time in milliseconds  |
 	// | duration99th   | 99th percentile connection duration | 1.0     | Time in milliseconds. |
-	Metrics param.Field[[]SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric] `query:"metrics"`
+	Metrics param.Field[[]SpectrumAnalyticsEventBytimeGetParamsMetric] `query:"metrics"`
 	// Start of time interval to query, defaults to `until` - 6 hours. Timestamp must
 	// be in RFC3339 format and uses UTC unless otherwise specified.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
@@ -113,70 +112,68 @@ type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams
 	// `dimensions`.
 	Sort param.Field[[]interface{}] `query:"sort"`
 	// Used to select time series resolution.
-	TimeDelta param.Field[SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta] `query:"time_delta"`
+	TimeDelta param.Field[SpectrumAnalyticsEventBytimeGetParamsTimeDelta] `query:"time_delta"`
 	// End of time interval to query, defaults to current time. Timestamp must be in
 	// RFC3339 format and uses UTC unless otherwise specified.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes
-// [SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams]'s
-// query parameters as `url.Values`.
-func (r SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParams) URLQuery() (v url.Values) {
+// URLQuery serializes [SpectrumAnalyticsEventBytimeGetParams]'s query parameters
+// as `url.Values`.
+func (r SpectrumAnalyticsEventBytimeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension string
+type SpectrumAnalyticsEventBytimeGetParamsDimension string
 
 const (
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimensionEvent     SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension = "event"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimensionAppID     SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension = "appID"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimensionColoName  SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension = "coloName"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimensionIPVersion SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsDimension = "ipVersion"
+	SpectrumAnalyticsEventBytimeGetParamsDimensionEvent     SpectrumAnalyticsEventBytimeGetParamsDimension = "event"
+	SpectrumAnalyticsEventBytimeGetParamsDimensionAppID     SpectrumAnalyticsEventBytimeGetParamsDimension = "appID"
+	SpectrumAnalyticsEventBytimeGetParamsDimensionColoName  SpectrumAnalyticsEventBytimeGetParamsDimension = "coloName"
+	SpectrumAnalyticsEventBytimeGetParamsDimensionIPVersion SpectrumAnalyticsEventBytimeGetParamsDimension = "ipVersion"
 )
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric string
+type SpectrumAnalyticsEventBytimeGetParamsMetric string
 
 const (
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricCount          SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "count"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricBytesIngress   SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "bytesIngress"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricBytesEgress    SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "bytesEgress"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricDurationAvg    SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "durationAvg"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricDurationMedian SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "durationMedian"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricDuration90th   SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "duration90th"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetricDuration99th   SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsMetric = "duration99th"
+	SpectrumAnalyticsEventBytimeGetParamsMetricCount          SpectrumAnalyticsEventBytimeGetParamsMetric = "count"
+	SpectrumAnalyticsEventBytimeGetParamsMetricBytesIngress   SpectrumAnalyticsEventBytimeGetParamsMetric = "bytesIngress"
+	SpectrumAnalyticsEventBytimeGetParamsMetricBytesEgress    SpectrumAnalyticsEventBytimeGetParamsMetric = "bytesEgress"
+	SpectrumAnalyticsEventBytimeGetParamsMetricDurationAvg    SpectrumAnalyticsEventBytimeGetParamsMetric = "durationAvg"
+	SpectrumAnalyticsEventBytimeGetParamsMetricDurationMedian SpectrumAnalyticsEventBytimeGetParamsMetric = "durationMedian"
+	SpectrumAnalyticsEventBytimeGetParamsMetricDuration90th   SpectrumAnalyticsEventBytimeGetParamsMetric = "duration90th"
+	SpectrumAnalyticsEventBytimeGetParamsMetricDuration99th   SpectrumAnalyticsEventBytimeGetParamsMetric = "duration99th"
 )
 
 // Used to select time series resolution.
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta string
+type SpectrumAnalyticsEventBytimeGetParamsTimeDelta string
 
 const (
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaYear       SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "year"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaQuarter    SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "quarter"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaMonth      SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "month"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaWeek       SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "week"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaDay        SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "day"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaHour       SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "hour"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaDekaminute SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "dekaminute"
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDeltaMinute     SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeParamsTimeDelta = "minute"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaYear       SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "year"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaQuarter    SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "quarter"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaMonth      SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "month"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaWeek       SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "week"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaDay        SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "day"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaHour       SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "hour"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaDekaminute SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "dekaminute"
+	SpectrumAnalyticsEventBytimeGetParamsTimeDeltaMinute     SpectrumAnalyticsEventBytimeGetParamsTimeDelta = "minute"
 )
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelope struct {
-	Errors   []SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessages `json:"messages,required"`
-	Result   SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponse                   `json:"result,required,nullable"`
+type SpectrumAnalyticsEventBytimeGetResponseEnvelope struct {
+	Errors   []SpectrumAnalyticsEventBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SpectrumAnalyticsEventBytimeGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SpectrumAnalyticsEventBytimeGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeSuccess `json:"success,required"`
-	JSON    spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeJSON    `json:"-"`
+	Success SpectrumAnalyticsEventBytimeGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    spectrumAnalyticsEventBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelope]
-type spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeJSON struct {
+// spectrumAnalyticsEventBytimeGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [SpectrumAnalyticsEventBytimeGetResponseEnvelope]
+type spectrumAnalyticsEventBytimeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -185,53 +182,52 @@ type spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeRespon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventBytimeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrors struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrorsJSON `json:"-"`
+type SpectrumAnalyticsEventBytimeGetResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    spectrumAnalyticsEventBytimeGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrors]
-type spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrorsJSON struct {
+// spectrumAnalyticsEventBytimeGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SpectrumAnalyticsEventBytimeGetResponseEnvelopeErrors]
+type spectrumAnalyticsEventBytimeGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessages struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessagesJSON `json:"-"`
+type SpectrumAnalyticsEventBytimeGetResponseEnvelopeMessages struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    spectrumAnalyticsEventBytimeGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessages]
-type spectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessagesJSON struct {
+// spectrumAnalyticsEventBytimeGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [SpectrumAnalyticsEventBytimeGetResponseEnvelopeMessages]
+type spectrumAnalyticsEventBytimeGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeSuccess bool
+type SpectrumAnalyticsEventBytimeGetResponseEnvelopeSuccess bool
 
 const (
-	SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeSuccessTrue SpectrumAnalyticsEventBytimeSpectrumAnalyticsByTimeGetAnalyticsByTimeResponseEnvelopeSuccess = true
+	SpectrumAnalyticsEventBytimeGetResponseEnvelopeSuccessTrue SpectrumAnalyticsEventBytimeGetResponseEnvelopeSuccess = true
 )

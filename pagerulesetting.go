@@ -32,9 +32,9 @@ func NewPageruleSettingService(opts ...option.RequestOption) (r *PageruleSetting
 
 // Returns a list of settings (and their details) that Page Rules can apply to
 // matching requests.
-func (r *PageruleSettingService) AvailablePageRulesSettingsListAvailablePageRulesSettings(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse, err error) {
+func (r *PageruleSettingService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]PageruleSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelope
+	var env PageruleSettingListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules/settings", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -44,22 +44,21 @@ func (r *PageruleSettingService) AvailablePageRulesSettingsListAvailablePageRule
 	return
 }
 
-type PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse = interface{}
+type PageruleSettingListResponse = interface{}
 
-type PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelope struct {
-	Errors   []PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessages `json:"messages,required"`
+type PageruleSettingListResponseEnvelope struct {
+	Errors   []PageruleSettingListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageruleSettingListResponseEnvelopeMessages `json:"messages,required"`
 	// Settings available for the zone.
-	Result []PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponse `json:"result,required"`
+	Result []PageruleSettingListResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeJSON    `json:"-"`
+	Success PageruleSettingListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageruleSettingListResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelope]
-type pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeJSON struct {
+// pageruleSettingListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [PageruleSettingListResponseEnvelope]
+type pageruleSettingListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -68,53 +67,51 @@ type pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResp
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageruleSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrors struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrorsJSON `json:"-"`
+type PageruleSettingListResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    pageruleSettingListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrors]
-type pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrorsJSON struct {
+// pageruleSettingListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [PageruleSettingListResponseEnvelopeErrors]
+type pageruleSettingListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PageruleSettingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessages struct {
-	Code    int64                                                                                               `json:"code,required"`
-	Message string                                                                                              `json:"message,required"`
-	JSON    pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessagesJSON `json:"-"`
+type PageruleSettingListResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    pageruleSettingListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessages]
-type pageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessagesJSON struct {
+// pageruleSettingListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [PageruleSettingListResponseEnvelopeMessages]
+type pageruleSettingListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PageruleSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeSuccess bool
+type PageruleSettingListResponseEnvelopeSuccess bool
 
 const (
-	PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeSuccessTrue PageruleSettingAvailablePageRulesSettingsListAvailablePageRulesSettingsResponseEnvelopeSuccess = true
+	PageruleSettingListResponseEnvelopeSuccessTrue PageruleSettingListResponseEnvelopeSuccess = true
 )

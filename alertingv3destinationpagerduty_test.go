@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAlertingV3DestinationPagerdutyNotificationDestinationsWithPagerDutyListPagerDutyServices(t *testing.T) {
+func TestAlertingV3DestinationPagerdutyNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,89 @@ func TestAlertingV3DestinationPagerdutyNotificationDestinationsWithPagerDutyList
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Alerting.V3s.Destinations.Pagerduties.NotificationDestinationsWithPagerDutyListPagerDutyServices(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Alerting.V3.Destinations.Pagerduty.New(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAlertingV3DestinationPagerdutyDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Alerting.V3.Destinations.Pagerduty.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAlertingV3DestinationPagerdutyGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Alerting.V3.Destinations.Pagerduty.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAlertingV3DestinationPagerdutyLink(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Alerting.V3.Destinations.Pagerduty.Link(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"8c71e667571b4f61b94d9e4b12158038",
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

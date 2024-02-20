@@ -32,9 +32,9 @@ func NewActivationCheckService(opts ...option.RequestOption) (r *ActivationCheck
 
 // Triggeres a new activation check for a PENDING Zone. This can be triggered every
 // 5 min for paygo/ent customers, every hour for FREE Zones.
-func (r *ActivationCheckService) PutZonesZoneIDActivationCheck(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ActivationCheckPutZonesZoneIDActivationCheckResponse, err error) {
+func (r *ActivationCheckService) Replace(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ActivationCheckReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelope
+	var env ActivationCheckReplaceResponseEnvelope
 	path := fmt.Sprintf("zones/%s/activation_check", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
@@ -44,37 +44,36 @@ func (r *ActivationCheckService) PutZonesZoneIDActivationCheck(ctx context.Conte
 	return
 }
 
-type ActivationCheckPutZonesZoneIDActivationCheckResponse struct {
+type ActivationCheckReplaceResponse struct {
 	// Identifier
-	ID   string                                                   `json:"id"`
-	JSON activationCheckPutZonesZoneIDActivationCheckResponseJSON `json:"-"`
+	ID   string                             `json:"id"`
+	JSON activationCheckReplaceResponseJSON `json:"-"`
 }
 
-// activationCheckPutZonesZoneIDActivationCheckResponseJSON contains the JSON
-// metadata for the struct [ActivationCheckPutZonesZoneIDActivationCheckResponse]
-type activationCheckPutZonesZoneIDActivationCheckResponseJSON struct {
+// activationCheckReplaceResponseJSON contains the JSON metadata for the struct
+// [ActivationCheckReplaceResponse]
+type activationCheckReplaceResponseJSON struct {
 	ID          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ActivationCheckPutZonesZoneIDActivationCheckResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ActivationCheckReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelope struct {
-	Errors   []ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessages `json:"messages,required"`
-	Result   ActivationCheckPutZonesZoneIDActivationCheckResponse                   `json:"result,required"`
+type ActivationCheckReplaceResponseEnvelope struct {
+	Errors   []ActivationCheckReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ActivationCheckReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   ActivationCheckReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeSuccess `json:"success,required"`
-	JSON    activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeJSON    `json:"-"`
+	Success ActivationCheckReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    activationCheckReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelope]
-type activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeJSON struct {
+// activationCheckReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ActivationCheckReplaceResponseEnvelope]
+type activationCheckReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -83,53 +82,51 @@ type activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ActivationCheckReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrorsJSON `json:"-"`
+type ActivationCheckReplaceResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    activationCheckReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrors]
-type activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrorsJSON struct {
+// activationCheckReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [ActivationCheckReplaceResponseEnvelopeErrors]
+type activationCheckReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ActivationCheckReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessagesJSON `json:"-"`
+type ActivationCheckReplaceResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    activationCheckReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessages]
-type activationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessagesJSON struct {
+// activationCheckReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [ActivationCheckReplaceResponseEnvelopeMessages]
+type activationCheckReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ActivationCheckReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeSuccess bool
+type ActivationCheckReplaceResponseEnvelopeSuccess bool
 
 const (
-	ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeSuccessTrue ActivationCheckPutZonesZoneIDActivationCheckResponseEnvelopeSuccess = true
+	ActivationCheckReplaceResponseEnvelopeSuccessTrue ActivationCheckReplaceResponseEnvelopeSuccess = true
 )

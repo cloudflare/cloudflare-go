@@ -35,12 +35,25 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 	return
 }
 
-// Updates a configured Zero Trust Gateway rule.
-func (r *GatewayRuleService) Update(ctx context.Context, accountID interface{}, ruleID string, body GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRuleUpdateResponse, err error) {
+// Creates a new Zero Trust Gateway rule.
+func (r *GatewayRuleService) New(ctx context.Context, accountID interface{}, body GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env GatewayRuleNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches the Zero Trust Gateway rules for an account.
+func (r *GatewayRuleService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayRuleListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GatewayRuleListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,12 +87,12 @@ func (r *GatewayRuleService) Get(ctx context.Context, accountID interface{}, rul
 	return
 }
 
-// Creates a new Zero Trust Gateway rule.
-func (r *GatewayRuleService) ZeroTrustGatewayRulesNewZeroTrustGatewayRule(ctx context.Context, accountID interface{}, body GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams, opts ...option.RequestOption) (res *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse, err error) {
+// Updates a configured Zero Trust Gateway rule.
+func (r *GatewayRuleService) Replace(ctx context.Context, accountID interface{}, ruleID string, body GatewayRuleReplaceParams, opts ...option.RequestOption) (res *GatewayRuleReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env GatewayRuleReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", accountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,26 +100,13 @@ func (r *GatewayRuleService) ZeroTrustGatewayRulesNewZeroTrustGatewayRule(ctx co
 	return
 }
 
-// Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) ZeroTrustGatewayRulesListZeroTrustGatewayRules(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type GatewayRuleUpdateResponse struct {
+type GatewayRuleNewResponse struct {
 	// The API resource UUID.
 	ID string `json:"id"`
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action    GatewayRuleUpdateResponseAction `json:"action"`
-	CreatedAt time.Time                       `json:"created_at" format:"date-time"`
+	Action    GatewayRuleNewResponseAction `json:"action"`
+	CreatedAt time.Time                    `json:"created_at" format:"date-time"`
 	// Date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
 	// The description of the rule.
@@ -117,7 +117,7 @@ type GatewayRuleUpdateResponse struct {
 	Enabled bool `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters []GatewayRuleUpdateResponseFilter `json:"filters"`
+	Filters []GatewayRuleNewResponseFilter `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity string `json:"identity"`
 	// The name of the rule.
@@ -127,19 +127,19 @@ type GatewayRuleUpdateResponse struct {
 	// ascending order of this value.
 	Precedence int64 `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings GatewayRuleUpdateResponseRuleSettings `json:"rule_settings"`
+	RuleSettings GatewayRuleNewResponseRuleSettings `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule GatewayRuleUpdateResponseSchedule `json:"schedule"`
+	Schedule GatewayRuleNewResponseSchedule `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
-	Traffic   string                        `json:"traffic"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      gatewayRuleUpdateResponseJSON `json:"-"`
+	Traffic   string                     `json:"traffic"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      gatewayRuleNewResponseJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseJSON contains the JSON metadata for the struct
-// [GatewayRuleUpdateResponse]
-type gatewayRuleUpdateResponseJSON struct {
+// gatewayRuleNewResponseJSON contains the JSON metadata for the struct
+// [GatewayRuleNewResponse]
+type gatewayRuleNewResponseJSON struct {
 	ID            apijson.Field
 	Action        apijson.Field
 	CreatedAt     apijson.Field
@@ -159,52 +159,52 @@ type gatewayRuleUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
-type GatewayRuleUpdateResponseAction string
+type GatewayRuleNewResponseAction string
 
 const (
-	GatewayRuleUpdateResponseActionOn           GatewayRuleUpdateResponseAction = "on"
-	GatewayRuleUpdateResponseActionOff          GatewayRuleUpdateResponseAction = "off"
-	GatewayRuleUpdateResponseActionAllow        GatewayRuleUpdateResponseAction = "allow"
-	GatewayRuleUpdateResponseActionBlock        GatewayRuleUpdateResponseAction = "block"
-	GatewayRuleUpdateResponseActionScan         GatewayRuleUpdateResponseAction = "scan"
-	GatewayRuleUpdateResponseActionNoscan       GatewayRuleUpdateResponseAction = "noscan"
-	GatewayRuleUpdateResponseActionSafesearch   GatewayRuleUpdateResponseAction = "safesearch"
-	GatewayRuleUpdateResponseActionYtrestricted GatewayRuleUpdateResponseAction = "ytrestricted"
-	GatewayRuleUpdateResponseActionIsolate      GatewayRuleUpdateResponseAction = "isolate"
-	GatewayRuleUpdateResponseActionNoisolate    GatewayRuleUpdateResponseAction = "noisolate"
-	GatewayRuleUpdateResponseActionOverride     GatewayRuleUpdateResponseAction = "override"
-	GatewayRuleUpdateResponseActionL4Override   GatewayRuleUpdateResponseAction = "l4_override"
-	GatewayRuleUpdateResponseActionEgress       GatewayRuleUpdateResponseAction = "egress"
-	GatewayRuleUpdateResponseActionAuditSSH     GatewayRuleUpdateResponseAction = "audit_ssh"
+	GatewayRuleNewResponseActionOn           GatewayRuleNewResponseAction = "on"
+	GatewayRuleNewResponseActionOff          GatewayRuleNewResponseAction = "off"
+	GatewayRuleNewResponseActionAllow        GatewayRuleNewResponseAction = "allow"
+	GatewayRuleNewResponseActionBlock        GatewayRuleNewResponseAction = "block"
+	GatewayRuleNewResponseActionScan         GatewayRuleNewResponseAction = "scan"
+	GatewayRuleNewResponseActionNoscan       GatewayRuleNewResponseAction = "noscan"
+	GatewayRuleNewResponseActionSafesearch   GatewayRuleNewResponseAction = "safesearch"
+	GatewayRuleNewResponseActionYtrestricted GatewayRuleNewResponseAction = "ytrestricted"
+	GatewayRuleNewResponseActionIsolate      GatewayRuleNewResponseAction = "isolate"
+	GatewayRuleNewResponseActionNoisolate    GatewayRuleNewResponseAction = "noisolate"
+	GatewayRuleNewResponseActionOverride     GatewayRuleNewResponseAction = "override"
+	GatewayRuleNewResponseActionL4Override   GatewayRuleNewResponseAction = "l4_override"
+	GatewayRuleNewResponseActionEgress       GatewayRuleNewResponseAction = "egress"
+	GatewayRuleNewResponseActionAuditSSH     GatewayRuleNewResponseAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
-type GatewayRuleUpdateResponseFilter string
+type GatewayRuleNewResponseFilter string
 
 const (
-	GatewayRuleUpdateResponseFilterHTTP   GatewayRuleUpdateResponseFilter = "http"
-	GatewayRuleUpdateResponseFilterDNS    GatewayRuleUpdateResponseFilter = "dns"
-	GatewayRuleUpdateResponseFilterL4     GatewayRuleUpdateResponseFilter = "l4"
-	GatewayRuleUpdateResponseFilterEgress GatewayRuleUpdateResponseFilter = "egress"
+	GatewayRuleNewResponseFilterHTTP   GatewayRuleNewResponseFilter = "http"
+	GatewayRuleNewResponseFilterDNS    GatewayRuleNewResponseFilter = "dns"
+	GatewayRuleNewResponseFilterL4     GatewayRuleNewResponseFilter = "l4"
+	GatewayRuleNewResponseFilterEgress GatewayRuleNewResponseFilter = "egress"
 )
 
 // Additional settings that modify the rule's action.
-type GatewayRuleUpdateResponseRuleSettings struct {
+type GatewayRuleNewResponseRuleSettings struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders interface{} `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH GatewayRuleUpdateResponseRuleSettingsAuditSSH `json:"audit_ssh"`
+	AuditSSH GatewayRuleNewResponseRuleSettingsAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls GatewayRuleUpdateResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
+	BisoAdminControls GatewayRuleNewResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -213,15 +213,15 @@ type GatewayRuleUpdateResponseRuleSettings struct {
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule bool `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession GatewayRuleUpdateResponseRuleSettingsCheckSession `json:"check_session"`
+	CheckSession GatewayRuleNewResponseRuleSettingsCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin.
-	DNSResolvers GatewayRuleUpdateResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
+	DNSResolvers GatewayRuleNewResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress GatewayRuleUpdateResponseRuleSettingsEgress `json:"egress"`
+	Egress GatewayRuleNewResponseRuleSettingsEgress `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -231,27 +231,27 @@ type GatewayRuleUpdateResponseRuleSettings struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override GatewayRuleUpdateResponseRuleSettingsL4override `json:"l4override"`
+	L4override GatewayRuleNewResponseRuleSettingsL4override `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings GatewayRuleUpdateResponseRuleSettingsNotificationSettings `json:"notification_settings"`
+	NotificationSettings GatewayRuleNewResponseRuleSettingsNotificationSettings `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost string `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs []string `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog GatewayRuleUpdateResponseRuleSettingsPayloadLog `json:"payload_log"`
+	PayloadLog GatewayRuleNewResponseRuleSettingsPayloadLog `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert GatewayRuleUpdateResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
-	JSON          gatewayRuleUpdateResponseRuleSettingsJSON          `json:"-"`
+	UntrustedCert GatewayRuleNewResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
+	JSON          gatewayRuleNewResponseRuleSettingsJSON          `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsJSON contains the JSON metadata for the
-// struct [GatewayRuleUpdateResponseRuleSettings]
-type gatewayRuleUpdateResponseRuleSettingsJSON struct {
+// gatewayRuleNewResponseRuleSettingsJSON contains the JSON metadata for the struct
+// [GatewayRuleNewResponseRuleSettings]
+type gatewayRuleNewResponseRuleSettingsJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
@@ -276,31 +276,31 @@ type gatewayRuleUpdateResponseRuleSettingsJSON struct {
 	ExtraFields                     map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Settings for the Audit SSH action.
-type GatewayRuleUpdateResponseRuleSettingsAuditSSH struct {
+type GatewayRuleNewResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
-	CommandLogging bool                                              `json:"command_logging"`
-	JSON           gatewayRuleUpdateResponseRuleSettingsAuditSSHJSON `json:"-"`
+	CommandLogging bool                                           `json:"command_logging"`
+	JSON           gatewayRuleNewResponseRuleSettingsAuditSSHJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsAuditSSHJSON contains the JSON metadata for
-// the struct [GatewayRuleUpdateResponseRuleSettingsAuditSSH]
-type gatewayRuleUpdateResponseRuleSettingsAuditSSHJSON struct {
+// gatewayRuleNewResponseRuleSettingsAuditSSHJSON contains the JSON metadata for
+// the struct [GatewayRuleNewResponseRuleSettingsAuditSSH]
+type gatewayRuleNewResponseRuleSettingsAuditSSHJSON struct {
 	CommandLogging apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how browser isolation behaves.
-type GatewayRuleUpdateResponseRuleSettingsBisoAdminControls struct {
+type GatewayRuleNewResponseRuleSettingsBisoAdminControls struct {
 	// Set to true to enable copy-pasting.
 	Dcp bool `json:"dcp"`
 	// Set to true to enable downloading.
@@ -310,13 +310,13 @@ type GatewayRuleUpdateResponseRuleSettingsBisoAdminControls struct {
 	// Set to true to enable printing.
 	Dp bool `json:"dp"`
 	// Set to true to enable uploading.
-	Du   bool                                                       `json:"du"`
-	JSON gatewayRuleUpdateResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
+	Du   bool                                                    `json:"du"`
+	JSON gatewayRuleNewResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsBisoAdminControlsJSON contains the JSON
-// metadata for the struct [GatewayRuleUpdateResponseRuleSettingsBisoAdminControls]
-type gatewayRuleUpdateResponseRuleSettingsBisoAdminControlsJSON struct {
+// gatewayRuleNewResponseRuleSettingsBisoAdminControlsJSON contains the JSON
+// metadata for the struct [GatewayRuleNewResponseRuleSettingsBisoAdminControls]
+type gatewayRuleNewResponseRuleSettingsBisoAdminControlsJSON struct {
 	Dcp         apijson.Field
 	Dd          apijson.Field
 	Dk          apijson.Field
@@ -326,55 +326,55 @@ type gatewayRuleUpdateResponseRuleSettingsBisoAdminControlsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how session check behaves.
-type GatewayRuleUpdateResponseRuleSettingsCheckSession struct {
+type GatewayRuleNewResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration string `json:"duration"`
 	// Set to true to enable session enforcement.
-	Enforce bool                                                  `json:"enforce"`
-	JSON    gatewayRuleUpdateResponseRuleSettingsCheckSessionJSON `json:"-"`
+	Enforce bool                                               `json:"enforce"`
+	JSON    gatewayRuleNewResponseRuleSettingsCheckSessionJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsCheckSessionJSON contains the JSON metadata
-// for the struct [GatewayRuleUpdateResponseRuleSettingsCheckSession]
-type gatewayRuleUpdateResponseRuleSettingsCheckSessionJSON struct {
+// gatewayRuleNewResponseRuleSettingsCheckSessionJSON contains the JSON metadata
+// for the struct [GatewayRuleNewResponseRuleSettingsCheckSession]
+type gatewayRuleNewResponseRuleSettingsCheckSessionJSON struct {
 	Duration    apijson.Field
 	Enforce     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
-type GatewayRuleUpdateResponseRuleSettingsDNSResolvers struct {
-	IPV4 []GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
-	IPV6 []GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
-	JSON gatewayRuleUpdateResponseRuleSettingsDNSResolversJSON   `json:"-"`
+type GatewayRuleNewResponseRuleSettingsDNSResolvers struct {
+	IPV4 []GatewayRuleNewResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
+	IPV6 []GatewayRuleNewResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
+	JSON gatewayRuleNewResponseRuleSettingsDNSResolversJSON   `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsDNSResolversJSON contains the JSON metadata
-// for the struct [GatewayRuleUpdateResponseRuleSettingsDNSResolvers]
-type gatewayRuleUpdateResponseRuleSettingsDNSResolversJSON struct {
+// gatewayRuleNewResponseRuleSettingsDNSResolversJSON contains the JSON metadata
+// for the struct [GatewayRuleNewResponseRuleSettingsDNSResolvers]
+type gatewayRuleNewResponseRuleSettingsDNSResolversJSON struct {
 	IPV4        apijson.Field
 	IPV6        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4 struct {
+type GatewayRuleNewResponseRuleSettingsDNSResolversIPV4 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -384,13 +384,13 @@ type GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4 struct {
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
 	// Optionally specify a virtual network for this resolver. Uses default virtual
 	// network id if omitted.
-	VnetID string                                                    `json:"vnet_id"`
-	JSON   gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
+	VnetID string                                                 `json:"vnet_id"`
+	JSON   gatewayRuleNewResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4JSON contains the JSON
-// metadata for the struct [GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4]
-type gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4JSON struct {
+// gatewayRuleNewResponseRuleSettingsDNSResolversIPV4JSON contains the JSON
+// metadata for the struct [GatewayRuleNewResponseRuleSettingsDNSResolversIPV4]
+type gatewayRuleNewResponseRuleSettingsDNSResolversIPV4JSON struct {
 	IP                         apijson.Field
 	Port                       apijson.Field
 	RouteThroughPrivateNetwork apijson.Field
@@ -399,11 +399,11 @@ type gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4JSON struct {
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6 struct {
+type GatewayRuleNewResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -413,13 +413,13 @@ type GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6 struct {
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
 	// Optionally specify a virtual network for this resolver. Uses default virtual
 	// network id if omitted.
-	VnetID string                                                    `json:"vnet_id"`
-	JSON   gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
+	VnetID string                                                 `json:"vnet_id"`
+	JSON   gatewayRuleNewResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON contains the JSON
-// metadata for the struct [GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6]
-type gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON struct {
+// gatewayRuleNewResponseRuleSettingsDNSResolversIPV6JSON contains the JSON
+// metadata for the struct [GatewayRuleNewResponseRuleSettingsDNSResolversIPV6]
+type gatewayRuleNewResponseRuleSettingsDNSResolversIPV6JSON struct {
 	IP                         apijson.Field
 	Port                       apijson.Field
 	RouteThroughPrivateNetwork apijson.Field
@@ -428,14 +428,14 @@ type gatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON struct {
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type GatewayRuleUpdateResponseRuleSettingsEgress struct {
+type GatewayRuleNewResponseRuleSettingsEgress struct {
 	// The IPv4 address to be used for egress.
 	IPV4 string `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -443,13 +443,13 @@ type GatewayRuleUpdateResponseRuleSettingsEgress struct {
 	// WARP IPs.
 	IPV4Fallback string `json:"ipv4_fallback"`
 	// The IPv6 range to be used for egress.
-	IPV6 string                                          `json:"ipv6"`
-	JSON gatewayRuleUpdateResponseRuleSettingsEgressJSON `json:"-"`
+	IPV6 string                                       `json:"ipv6"`
+	JSON gatewayRuleNewResponseRuleSettingsEgressJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsEgressJSON contains the JSON metadata for
-// the struct [GatewayRuleUpdateResponseRuleSettingsEgress]
-type gatewayRuleUpdateResponseRuleSettingsEgressJSON struct {
+// gatewayRuleNewResponseRuleSettingsEgressJSON contains the JSON metadata for the
+// struct [GatewayRuleNewResponseRuleSettingsEgress]
+type gatewayRuleNewResponseRuleSettingsEgressJSON struct {
 	IPV4         apijson.Field
 	IPV4Fallback apijson.Field
 	IPV6         apijson.Field
@@ -457,49 +457,48 @@ type gatewayRuleUpdateResponseRuleSettingsEgressJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type GatewayRuleUpdateResponseRuleSettingsL4override struct {
+type GatewayRuleNewResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
-	Port int64                                               `json:"port"`
-	JSON gatewayRuleUpdateResponseRuleSettingsL4overrideJSON `json:"-"`
+	Port int64                                            `json:"port"`
+	JSON gatewayRuleNewResponseRuleSettingsL4overrideJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsL4overrideJSON contains the JSON metadata
-// for the struct [GatewayRuleUpdateResponseRuleSettingsL4override]
-type gatewayRuleUpdateResponseRuleSettingsL4overrideJSON struct {
+// gatewayRuleNewResponseRuleSettingsL4overrideJSON contains the JSON metadata for
+// the struct [GatewayRuleNewResponseRuleSettingsL4override]
+type gatewayRuleNewResponseRuleSettingsL4overrideJSON struct {
 	IP          apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type GatewayRuleUpdateResponseRuleSettingsNotificationSettings struct {
+type GatewayRuleNewResponseRuleSettingsNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                                                        `json:"support_url"`
-	JSON       gatewayRuleUpdateResponseRuleSettingsNotificationSettingsJSON `json:"-"`
+	SupportURL string                                                     `json:"support_url"`
+	JSON       gatewayRuleNewResponseRuleSettingsNotificationSettingsJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsNotificationSettingsJSON contains the JSON
-// metadata for the struct
-// [GatewayRuleUpdateResponseRuleSettingsNotificationSettings]
-type gatewayRuleUpdateResponseRuleSettingsNotificationSettingsJSON struct {
+// gatewayRuleNewResponseRuleSettingsNotificationSettingsJSON contains the JSON
+// metadata for the struct [GatewayRuleNewResponseRuleSettingsNotificationSettings]
+type gatewayRuleNewResponseRuleSettingsNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -507,62 +506,62 @@ type gatewayRuleUpdateResponseRuleSettingsNotificationSettingsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure DLP payload logging.
-type GatewayRuleUpdateResponseRuleSettingsPayloadLog struct {
+type GatewayRuleNewResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
-	Enabled bool                                                `json:"enabled"`
-	JSON    gatewayRuleUpdateResponseRuleSettingsPayloadLogJSON `json:"-"`
+	Enabled bool                                             `json:"enabled"`
+	JSON    gatewayRuleNewResponseRuleSettingsPayloadLogJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsPayloadLogJSON contains the JSON metadata
-// for the struct [GatewayRuleUpdateResponseRuleSettingsPayloadLog]
-type gatewayRuleUpdateResponseRuleSettingsPayloadLogJSON struct {
+// gatewayRuleNewResponseRuleSettingsPayloadLogJSON contains the JSON metadata for
+// the struct [GatewayRuleNewResponseRuleSettingsPayloadLog]
+type gatewayRuleNewResponseRuleSettingsPayloadLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleUpdateResponseRuleSettingsUntrustedCert struct {
+type GatewayRuleNewResponseRuleSettingsUntrustedCert struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action GatewayRuleUpdateResponseRuleSettingsUntrustedCertAction `json:"action"`
-	JSON   gatewayRuleUpdateResponseRuleSettingsUntrustedCertJSON   `json:"-"`
+	Action GatewayRuleNewResponseRuleSettingsUntrustedCertAction `json:"action"`
+	JSON   gatewayRuleNewResponseRuleSettingsUntrustedCertJSON   `json:"-"`
 }
 
-// gatewayRuleUpdateResponseRuleSettingsUntrustedCertJSON contains the JSON
-// metadata for the struct [GatewayRuleUpdateResponseRuleSettingsUntrustedCert]
-type gatewayRuleUpdateResponseRuleSettingsUntrustedCertJSON struct {
+// gatewayRuleNewResponseRuleSettingsUntrustedCertJSON contains the JSON metadata
+// for the struct [GatewayRuleNewResponseRuleSettingsUntrustedCert]
+type gatewayRuleNewResponseRuleSettingsUntrustedCertJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleUpdateResponseRuleSettingsUntrustedCertAction string
+type GatewayRuleNewResponseRuleSettingsUntrustedCertAction string
 
 const (
-	GatewayRuleUpdateResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleUpdateResponseRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleUpdateResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleUpdateResponseRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleUpdateResponseRuleSettingsUntrustedCertActionError       GatewayRuleUpdateResponseRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleNewResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleNewResponseRuleSettingsUntrustedCertAction = "pass_through"
+	GatewayRuleNewResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleNewResponseRuleSettingsUntrustedCertAction = "block"
+	GatewayRuleNewResponseRuleSettingsUntrustedCertActionError       GatewayRuleNewResponseRuleSettingsUntrustedCertAction = "error"
 )
 
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
-type GatewayRuleUpdateResponseSchedule struct {
+type GatewayRuleNewResponseSchedule struct {
 	// The time intervals when the rule will be active on Fridays, in increasing order
 	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
 	// Fridays.
@@ -598,13 +597,13 @@ type GatewayRuleUpdateResponseSchedule struct {
 	// The time intervals when the rule will be active on Wednesdays, in increasing
 	// order from 00:00-24:00. If this parameter is omitted, the rule will be
 	// deactivated on Wednesdays.
-	Wed  string                                `json:"wed"`
-	JSON gatewayRuleUpdateResponseScheduleJSON `json:"-"`
+	Wed  string                             `json:"wed"`
+	JSON gatewayRuleNewResponseScheduleJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseScheduleJSON contains the JSON metadata for the struct
-// [GatewayRuleUpdateResponseSchedule]
-type gatewayRuleUpdateResponseScheduleJSON struct {
+// gatewayRuleNewResponseScheduleJSON contains the JSON metadata for the struct
+// [GatewayRuleNewResponseSchedule]
+type gatewayRuleNewResponseScheduleJSON struct {
 	Fri         apijson.Field
 	Mon         apijson.Field
 	Sat         apijson.Field
@@ -617,7 +616,528 @@ type gatewayRuleUpdateResponseScheduleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayRuleListResponse struct {
+	// The API resource UUID.
+	ID string `json:"id"`
+	// The action to preform when the associated traffic, identity, and device posture
+	// expressions are either absent or evaluate to `true`.
+	Action    GatewayRuleListResponseAction `json:"action"`
+	CreatedAt time.Time                     `json:"created_at" format:"date-time"`
+	// Date of deletion, if any.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The description of the rule.
+	Description string `json:"description"`
+	// The wirefilter expression used for device posture check matching.
+	DevicePosture string `json:"device_posture"`
+	// True if the rule is enabled.
+	Enabled bool `json:"enabled"`
+	// The protocol or layer to evaluate the traffic, identity, and device posture
+	// expressions.
+	Filters []GatewayRuleListResponseFilter `json:"filters"`
+	// The wirefilter expression used for identity matching.
+	Identity string `json:"identity"`
+	// The name of the rule.
+	Name string `json:"name"`
+	// Precedence sets the order of your rules. Lower values indicate higher
+	// precedence. At each processing phase, applicable rules are evaluated in
+	// ascending order of this value.
+	Precedence int64 `json:"precedence"`
+	// Additional settings that modify the rule's action.
+	RuleSettings GatewayRuleListResponseRuleSettings `json:"rule_settings"`
+	// The schedule for activating DNS policies. This does not apply to HTTP or network
+	// policies.
+	Schedule GatewayRuleListResponseSchedule `json:"schedule"`
+	// The wirefilter expression used for traffic matching.
+	Traffic   string                      `json:"traffic"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      gatewayRuleListResponseJSON `json:"-"`
+}
+
+// gatewayRuleListResponseJSON contains the JSON metadata for the struct
+// [GatewayRuleListResponse]
+type gatewayRuleListResponseJSON struct {
+	ID            apijson.Field
+	Action        apijson.Field
+	CreatedAt     apijson.Field
+	DeletedAt     apijson.Field
+	Description   apijson.Field
+	DevicePosture apijson.Field
+	Enabled       apijson.Field
+	Filters       apijson.Field
+	Identity      apijson.Field
+	Name          apijson.Field
+	Precedence    apijson.Field
+	RuleSettings  apijson.Field
+	Schedule      apijson.Field
+	Traffic       apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to preform when the associated traffic, identity, and device posture
+// expressions are either absent or evaluate to `true`.
+type GatewayRuleListResponseAction string
+
+const (
+	GatewayRuleListResponseActionOn           GatewayRuleListResponseAction = "on"
+	GatewayRuleListResponseActionOff          GatewayRuleListResponseAction = "off"
+	GatewayRuleListResponseActionAllow        GatewayRuleListResponseAction = "allow"
+	GatewayRuleListResponseActionBlock        GatewayRuleListResponseAction = "block"
+	GatewayRuleListResponseActionScan         GatewayRuleListResponseAction = "scan"
+	GatewayRuleListResponseActionNoscan       GatewayRuleListResponseAction = "noscan"
+	GatewayRuleListResponseActionSafesearch   GatewayRuleListResponseAction = "safesearch"
+	GatewayRuleListResponseActionYtrestricted GatewayRuleListResponseAction = "ytrestricted"
+	GatewayRuleListResponseActionIsolate      GatewayRuleListResponseAction = "isolate"
+	GatewayRuleListResponseActionNoisolate    GatewayRuleListResponseAction = "noisolate"
+	GatewayRuleListResponseActionOverride     GatewayRuleListResponseAction = "override"
+	GatewayRuleListResponseActionL4Override   GatewayRuleListResponseAction = "l4_override"
+	GatewayRuleListResponseActionEgress       GatewayRuleListResponseAction = "egress"
+	GatewayRuleListResponseActionAuditSSH     GatewayRuleListResponseAction = "audit_ssh"
+)
+
+// The protocol or layer to use.
+type GatewayRuleListResponseFilter string
+
+const (
+	GatewayRuleListResponseFilterHTTP   GatewayRuleListResponseFilter = "http"
+	GatewayRuleListResponseFilterDNS    GatewayRuleListResponseFilter = "dns"
+	GatewayRuleListResponseFilterL4     GatewayRuleListResponseFilter = "l4"
+	GatewayRuleListResponseFilterEgress GatewayRuleListResponseFilter = "egress"
+)
+
+// Additional settings that modify the rule's action.
+type GatewayRuleListResponseRuleSettings struct {
+	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
+	// header names, pointing to an array with its header value(s).
+	AddHeaders interface{} `json:"add_headers"`
+	// Set by parent MSP accounts to enable their children to bypass this rule.
+	AllowChildBypass bool `json:"allow_child_bypass"`
+	// Settings for the Audit SSH action.
+	AuditSSH GatewayRuleListResponseRuleSettingsAuditSSH `json:"audit_ssh"`
+	// Configure how browser isolation behaves.
+	BisoAdminControls GatewayRuleListResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
+	// Enable the custom block page.
+	BlockPageEnabled bool `json:"block_page_enabled"`
+	// The text describing why this block occurred, displayed on the custom block page
+	// (if enabled).
+	BlockReason string `json:"block_reason"`
+	// Set by children MSP accounts to bypass their parent's rules.
+	BypassParentRule bool `json:"bypass_parent_rule"`
+	// Configure how session check behaves.
+	CheckSession GatewayRuleListResponseRuleSettingsCheckSession `json:"check_session"`
+	// Add your own custom resolvers to route queries that match the resolver policy.
+	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
+	// route to the address closest to their origin.
+	DNSResolvers GatewayRuleListResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
+	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
+	// rules with Egress actions and filters, or omit it to indicate local egress via
+	// WARP IPs.
+	Egress GatewayRuleListResponseRuleSettingsEgress `json:"egress"`
+	// INSECURE - disable DNSSEC validation (for Allow actions).
+	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
+	// Set to true to enable IPs in DNS resolver category blocks. By default categories
+	// only block based on domain names.
+	IPCategories bool `json:"ip_categories"`
+	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
+	// indicator feeds only block based on domain names.
+	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
+	// Send matching traffic to the supplied destination IP address and port.
+	L4override GatewayRuleListResponseRuleSettingsL4override `json:"l4override"`
+	// Configure a notification to display on the user's device when this rule is
+	// matched.
+	NotificationSettings GatewayRuleListResponseRuleSettingsNotificationSettings `json:"notification_settings"`
+	// Override matching DNS queries with a hostname.
+	OverrideHost string `json:"override_host"`
+	// Override matching DNS queries with an IP or set of IPs.
+	OverrideIPs []string `json:"override_ips"`
+	// Configure DLP payload logging.
+	PayloadLog GatewayRuleListResponseRuleSettingsPayloadLog `json:"payload_log"`
+	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
+	// resolver. Cannot be set when dns_resolvers are specified.
+	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
+	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+	UntrustedCert GatewayRuleListResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
+	JSON          gatewayRuleListResponseRuleSettingsJSON          `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsJSON contains the JSON metadata for the
+// struct [GatewayRuleListResponseRuleSettings]
+type gatewayRuleListResponseRuleSettingsJSON struct {
+	AddHeaders                      apijson.Field
+	AllowChildBypass                apijson.Field
+	AuditSSH                        apijson.Field
+	BisoAdminControls               apijson.Field
+	BlockPageEnabled                apijson.Field
+	BlockReason                     apijson.Field
+	BypassParentRule                apijson.Field
+	CheckSession                    apijson.Field
+	DNSResolvers                    apijson.Field
+	Egress                          apijson.Field
+	InsecureDisableDNSSECValidation apijson.Field
+	IPCategories                    apijson.Field
+	IPIndicatorFeeds                apijson.Field
+	L4override                      apijson.Field
+	NotificationSettings            apijson.Field
+	OverrideHost                    apijson.Field
+	OverrideIPs                     apijson.Field
+	PayloadLog                      apijson.Field
+	ResolveDNSThroughCloudflare     apijson.Field
+	UntrustedCert                   apijson.Field
+	raw                             string
+	ExtraFields                     map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Settings for the Audit SSH action.
+type GatewayRuleListResponseRuleSettingsAuditSSH struct {
+	// Enable to turn on SSH command logging.
+	CommandLogging bool                                            `json:"command_logging"`
+	JSON           gatewayRuleListResponseRuleSettingsAuditSSHJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsAuditSSHJSON contains the JSON metadata for
+// the struct [GatewayRuleListResponseRuleSettingsAuditSSH]
+type gatewayRuleListResponseRuleSettingsAuditSSHJSON struct {
+	CommandLogging apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure how browser isolation behaves.
+type GatewayRuleListResponseRuleSettingsBisoAdminControls struct {
+	// Set to true to enable copy-pasting.
+	Dcp bool `json:"dcp"`
+	// Set to true to enable downloading.
+	Dd bool `json:"dd"`
+	// Set to true to enable keyboard usage.
+	Dk bool `json:"dk"`
+	// Set to true to enable printing.
+	Dp bool `json:"dp"`
+	// Set to true to enable uploading.
+	Du   bool                                                     `json:"du"`
+	JSON gatewayRuleListResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsBisoAdminControlsJSON contains the JSON
+// metadata for the struct [GatewayRuleListResponseRuleSettingsBisoAdminControls]
+type gatewayRuleListResponseRuleSettingsBisoAdminControlsJSON struct {
+	Dcp         apijson.Field
+	Dd          apijson.Field
+	Dk          apijson.Field
+	Dp          apijson.Field
+	Du          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure how session check behaves.
+type GatewayRuleListResponseRuleSettingsCheckSession struct {
+	// Configure how fresh the session needs to be to be considered valid.
+	Duration string `json:"duration"`
+	// Set to true to enable session enforcement.
+	Enforce bool                                                `json:"enforce"`
+	JSON    gatewayRuleListResponseRuleSettingsCheckSessionJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsCheckSessionJSON contains the JSON metadata
+// for the struct [GatewayRuleListResponseRuleSettingsCheckSession]
+type gatewayRuleListResponseRuleSettingsCheckSessionJSON struct {
+	Duration    apijson.Field
+	Enforce     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Add your own custom resolvers to route queries that match the resolver policy.
+// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
+// route to the address closest to their origin.
+type GatewayRuleListResponseRuleSettingsDNSResolvers struct {
+	IPV4 []GatewayRuleListResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
+	IPV6 []GatewayRuleListResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
+	JSON gatewayRuleListResponseRuleSettingsDNSResolversJSON   `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsDNSResolversJSON contains the JSON metadata
+// for the struct [GatewayRuleListResponseRuleSettingsDNSResolvers]
+type gatewayRuleListResponseRuleSettingsDNSResolversJSON struct {
+	IPV4        apijson.Field
+	IPV6        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayRuleListResponseRuleSettingsDNSResolversIPV4 struct {
+	// IP address of upstream resolver.
+	IP string `json:"ip,required"`
+	// A port number to use for upstream resolver.
+	Port int64 `json:"port"`
+	// Whether to connect to this resolver over a private network. Must be set when
+	// vnet_id is set.
+	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
+	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// network id if omitted.
+	VnetID string                                                  `json:"vnet_id"`
+	JSON   gatewayRuleListResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsDNSResolversIPV4JSON contains the JSON
+// metadata for the struct [GatewayRuleListResponseRuleSettingsDNSResolversIPV4]
+type gatewayRuleListResponseRuleSettingsDNSResolversIPV4JSON struct {
+	IP                         apijson.Field
+	Port                       apijson.Field
+	RouteThroughPrivateNetwork apijson.Field
+	VnetID                     apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayRuleListResponseRuleSettingsDNSResolversIPV6 struct {
+	// IP address of upstream resolver.
+	IP string `json:"ip,required"`
+	// A port number to use for upstream resolver.
+	Port int64 `json:"port"`
+	// Whether to connect to this resolver over a private network. Must be set when
+	// vnet_id is set.
+	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
+	// Optionally specify a virtual network for this resolver. Uses default virtual
+	// network id if omitted.
+	VnetID string                                                  `json:"vnet_id"`
+	JSON   gatewayRuleListResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsDNSResolversIPV6JSON contains the JSON
+// metadata for the struct [GatewayRuleListResponseRuleSettingsDNSResolversIPV6]
+type gatewayRuleListResponseRuleSettingsDNSResolversIPV6JSON struct {
+	IP                         apijson.Field
+	Port                       apijson.Field
+	RouteThroughPrivateNetwork apijson.Field
+	VnetID                     apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure how Gateway Proxy traffic egresses. You can enable this setting for
+// rules with Egress actions and filters, or omit it to indicate local egress via
+// WARP IPs.
+type GatewayRuleListResponseRuleSettingsEgress struct {
+	// The IPv4 address to be used for egress.
+	IPV4 string `json:"ipv4"`
+	// The fallback IPv4 address to be used for egress in the event of an error
+	// egressing with the primary IPv4. Can be '0.0.0.0' to indicate local egress via
+	// WARP IPs.
+	IPV4Fallback string `json:"ipv4_fallback"`
+	// The IPv6 range to be used for egress.
+	IPV6 string                                        `json:"ipv6"`
+	JSON gatewayRuleListResponseRuleSettingsEgressJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsEgressJSON contains the JSON metadata for the
+// struct [GatewayRuleListResponseRuleSettingsEgress]
+type gatewayRuleListResponseRuleSettingsEgressJSON struct {
+	IPV4         apijson.Field
+	IPV4Fallback apijson.Field
+	IPV6         apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Send matching traffic to the supplied destination IP address and port.
+type GatewayRuleListResponseRuleSettingsL4override struct {
+	// IPv4 or IPv6 address.
+	IP string `json:"ip"`
+	// A port number to use for TCP/UDP overrides.
+	Port int64                                             `json:"port"`
+	JSON gatewayRuleListResponseRuleSettingsL4overrideJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsL4overrideJSON contains the JSON metadata for
+// the struct [GatewayRuleListResponseRuleSettingsL4override]
+type gatewayRuleListResponseRuleSettingsL4overrideJSON struct {
+	IP          apijson.Field
+	Port        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure a notification to display on the user's device when this rule is
+// matched.
+type GatewayRuleListResponseRuleSettingsNotificationSettings struct {
+	// Set notification on
+	Enabled bool `json:"enabled"`
+	// Customize the message shown in the notification.
+	Msg string `json:"msg"`
+	// Optional URL to direct users to additional information. If not set, the
+	// notification will open a block page.
+	SupportURL string                                                      `json:"support_url"`
+	JSON       gatewayRuleListResponseRuleSettingsNotificationSettingsJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsNotificationSettingsJSON contains the JSON
+// metadata for the struct
+// [GatewayRuleListResponseRuleSettingsNotificationSettings]
+type gatewayRuleListResponseRuleSettingsNotificationSettingsJSON struct {
+	Enabled     apijson.Field
+	Msg         apijson.Field
+	SupportURL  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure DLP payload logging.
+type GatewayRuleListResponseRuleSettingsPayloadLog struct {
+	// Set to true to enable DLP payload logging for this rule.
+	Enabled bool                                              `json:"enabled"`
+	JSON    gatewayRuleListResponseRuleSettingsPayloadLogJSON `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsPayloadLogJSON contains the JSON metadata for
+// the struct [GatewayRuleListResponseRuleSettingsPayloadLog]
+type gatewayRuleListResponseRuleSettingsPayloadLogJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configure behavior when an upstream cert is invalid or an SSL error occurs.
+type GatewayRuleListResponseRuleSettingsUntrustedCert struct {
+	// The action performed when an untrusted certificate is seen. The default action
+	// is an error with HTTP code 526.
+	Action GatewayRuleListResponseRuleSettingsUntrustedCertAction `json:"action"`
+	JSON   gatewayRuleListResponseRuleSettingsUntrustedCertJSON   `json:"-"`
+}
+
+// gatewayRuleListResponseRuleSettingsUntrustedCertJSON contains the JSON metadata
+// for the struct [GatewayRuleListResponseRuleSettingsUntrustedCert]
+type gatewayRuleListResponseRuleSettingsUntrustedCertJSON struct {
+	Action      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action performed when an untrusted certificate is seen. The default action
+// is an error with HTTP code 526.
+type GatewayRuleListResponseRuleSettingsUntrustedCertAction string
+
+const (
+	GatewayRuleListResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleListResponseRuleSettingsUntrustedCertAction = "pass_through"
+	GatewayRuleListResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleListResponseRuleSettingsUntrustedCertAction = "block"
+	GatewayRuleListResponseRuleSettingsUntrustedCertActionError       GatewayRuleListResponseRuleSettingsUntrustedCertAction = "error"
+)
+
+// The schedule for activating DNS policies. This does not apply to HTTP or network
+// policies.
+type GatewayRuleListResponseSchedule struct {
+	// The time intervals when the rule will be active on Fridays, in increasing order
+	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
+	// Fridays.
+	Fri string `json:"fri"`
+	// The time intervals when the rule will be active on Mondays, in increasing order
+	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
+	// Mondays.
+	Mon string `json:"mon"`
+	// The time intervals when the rule will be active on Saturdays, in increasing
+	// order from 00:00-24:00. If this parameter is omitted, the rule will be
+	// deactivated on Saturdays.
+	Sat string `json:"sat"`
+	// The time intervals when the rule will be active on Sundays, in increasing order
+	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
+	// Sundays.
+	Sun string `json:"sun"`
+	// The time intervals when the rule will be active on Thursdays, in increasing
+	// order from 00:00-24:00. If this parameter is omitted, the rule will be
+	// deactivated on Thursdays.
+	Thu string `json:"thu"`
+	// The time zone the rule will be evaluated against. If a
+	// [valid time zone city name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
+	// is provided, Gateway will always use the current time at that time zone. If this
+	// parameter is omitted, then Gateway will use the time zone inferred from the
+	// user's source IP to evaluate the rule. If Gateway cannot determine the time zone
+	// from the IP, we will fall back to the time zone of the user's connected data
+	// center.
+	TimeZone string `json:"time_zone"`
+	// The time intervals when the rule will be active on Tuesdays, in increasing order
+	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
+	// Tuesdays.
+	Tue string `json:"tue"`
+	// The time intervals when the rule will be active on Wednesdays, in increasing
+	// order from 00:00-24:00. If this parameter is omitted, the rule will be
+	// deactivated on Wednesdays.
+	Wed  string                              `json:"wed"`
+	JSON gatewayRuleListResponseScheduleJSON `json:"-"`
+}
+
+// gatewayRuleListResponseScheduleJSON contains the JSON metadata for the struct
+// [GatewayRuleListResponseSchedule]
+type gatewayRuleListResponseScheduleJSON struct {
+	Fri         apijson.Field
+	Mon         apijson.Field
+	Sat         apijson.Field
+	Sun         apijson.Field
+	Thu         apijson.Field
+	TimeZone    apijson.Field
+	Tue         apijson.Field
+	Wed         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1157,13 +1677,13 @@ func (r *GatewayRuleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse struct {
+type GatewayRuleReplaceResponse struct {
 	// The API resource UUID.
 	ID string `json:"id"`
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action    GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction `json:"action"`
-	CreatedAt time.Time                                                             `json:"created_at" format:"date-time"`
+	Action    GatewayRuleReplaceResponseAction `json:"action"`
+	CreatedAt time.Time                        `json:"created_at" format:"date-time"`
 	// Date of deletion, if any.
 	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
 	// The description of the rule.
@@ -1174,7 +1694,7 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse struct {
 	Enabled bool `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters []GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter `json:"filters"`
+	Filters []GatewayRuleReplaceResponseFilter `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity string `json:"identity"`
 	// The name of the rule.
@@ -1184,20 +1704,19 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse struct {
 	// ascending order of this value.
 	Precedence int64 `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings `json:"rule_settings"`
+	RuleSettings GatewayRuleReplaceResponseRuleSettings `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseSchedule `json:"schedule"`
+	Schedule GatewayRuleReplaceResponseSchedule `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
-	Traffic   string                                                              `json:"traffic"`
-	UpdatedAt time.Time                                                           `json:"updated_at" format:"date-time"`
-	JSON      gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseJSON `json:"-"`
+	Traffic   string                         `json:"traffic"`
+	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
+	JSON      gatewayRuleReplaceResponseJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseJSON contains the
-// JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseJSON struct {
+// gatewayRuleReplaceResponseJSON contains the JSON metadata for the struct
+// [GatewayRuleReplaceResponse]
+type gatewayRuleReplaceResponseJSON struct {
 	ID            apijson.Field
 	Action        apijson.Field
 	CreatedAt     apijson.Field
@@ -1217,52 +1736,52 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseJSON struct 
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction string
+type GatewayRuleReplaceResponseAction string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionOn           GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "on"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionOff          GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "off"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionAllow        GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "allow"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionBlock        GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "block"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionScan         GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "scan"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionNoscan       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "noscan"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionSafesearch   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "safesearch"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionYtrestricted GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "ytrestricted"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionIsolate      GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "isolate"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionNoisolate    GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "noisolate"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionOverride     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "override"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionL4Override   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "l4_override"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionEgress       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "egress"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseActionAuditSSH     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseAction = "audit_ssh"
+	GatewayRuleReplaceResponseActionOn           GatewayRuleReplaceResponseAction = "on"
+	GatewayRuleReplaceResponseActionOff          GatewayRuleReplaceResponseAction = "off"
+	GatewayRuleReplaceResponseActionAllow        GatewayRuleReplaceResponseAction = "allow"
+	GatewayRuleReplaceResponseActionBlock        GatewayRuleReplaceResponseAction = "block"
+	GatewayRuleReplaceResponseActionScan         GatewayRuleReplaceResponseAction = "scan"
+	GatewayRuleReplaceResponseActionNoscan       GatewayRuleReplaceResponseAction = "noscan"
+	GatewayRuleReplaceResponseActionSafesearch   GatewayRuleReplaceResponseAction = "safesearch"
+	GatewayRuleReplaceResponseActionYtrestricted GatewayRuleReplaceResponseAction = "ytrestricted"
+	GatewayRuleReplaceResponseActionIsolate      GatewayRuleReplaceResponseAction = "isolate"
+	GatewayRuleReplaceResponseActionNoisolate    GatewayRuleReplaceResponseAction = "noisolate"
+	GatewayRuleReplaceResponseActionOverride     GatewayRuleReplaceResponseAction = "override"
+	GatewayRuleReplaceResponseActionL4Override   GatewayRuleReplaceResponseAction = "l4_override"
+	GatewayRuleReplaceResponseActionEgress       GatewayRuleReplaceResponseAction = "egress"
+	GatewayRuleReplaceResponseActionAuditSSH     GatewayRuleReplaceResponseAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter string
+type GatewayRuleReplaceResponseFilter string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilterHTTP   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter = "http"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilterDNS    GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter = "dns"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilterL4     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter = "l4"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilterEgress GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseFilter = "egress"
+	GatewayRuleReplaceResponseFilterHTTP   GatewayRuleReplaceResponseFilter = "http"
+	GatewayRuleReplaceResponseFilterDNS    GatewayRuleReplaceResponseFilter = "dns"
+	GatewayRuleReplaceResponseFilterL4     GatewayRuleReplaceResponseFilter = "l4"
+	GatewayRuleReplaceResponseFilterEgress GatewayRuleReplaceResponseFilter = "egress"
 )
 
 // Additional settings that modify the rule's action.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings struct {
+type GatewayRuleReplaceResponseRuleSettings struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders interface{} `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass bool `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSH `json:"audit_ssh"`
+	AuditSSH GatewayRuleReplaceResponseRuleSettingsAuditSSH `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
+	BisoAdminControls GatewayRuleReplaceResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled bool `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -1271,15 +1790,15 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule bool `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSession `json:"check_session"`
+	CheckSession GatewayRuleReplaceResponseRuleSettingsCheckSession `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin.
-	DNSResolvers GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
+	DNSResolvers GatewayRuleReplaceResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgress `json:"egress"`
+	Egress GatewayRuleReplaceResponseRuleSettingsEgress `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -1289,28 +1808,27 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4override `json:"l4override"`
+	L4override GatewayRuleReplaceResponseRuleSettingsL4override `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettings `json:"notification_settings"`
+	NotificationSettings GatewayRuleReplaceResponseRuleSettingsNotificationSettings `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost string `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs []string `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLog `json:"payload_log"`
+	PayloadLog GatewayRuleReplaceResponseRuleSettingsPayloadLog `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
-	JSON          gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsJSON          `json:"-"`
+	UntrustedCert GatewayRuleReplaceResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
+	JSON          gatewayRuleReplaceResponseRuleSettingsJSON          `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsJSON contains the JSON metadata for the
+// struct [GatewayRuleReplaceResponseRuleSettings]
+type gatewayRuleReplaceResponseRuleSettingsJSON struct {
 	AddHeaders                      apijson.Field
 	AllowChildBypass                apijson.Field
 	AuditSSH                        apijson.Field
@@ -1335,32 +1853,31 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields                     map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Settings for the Audit SSH action.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSH struct {
+type GatewayRuleReplaceResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
-	CommandLogging bool                                                                                    `json:"command_logging"`
-	JSON           gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSHJSON `json:"-"`
+	CommandLogging bool                                               `json:"command_logging"`
+	JSON           gatewayRuleReplaceResponseRuleSettingsAuditSSHJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSHJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSH]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSHJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsAuditSSHJSON contains the JSON metadata
+// for the struct [GatewayRuleReplaceResponseRuleSettingsAuditSSH]
+type gatewayRuleReplaceResponseRuleSettingsAuditSSHJSON struct {
 	CommandLogging apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how browser isolation behaves.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControls struct {
+type GatewayRuleReplaceResponseRuleSettingsBisoAdminControls struct {
 	// Set to true to enable copy-pasting.
 	Dcp bool `json:"dcp"`
 	// Set to true to enable downloading.
@@ -1370,14 +1887,14 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	// Set to true to enable printing.
 	Dp bool `json:"dp"`
 	// Set to true to enable uploading.
-	Du   bool                                                                                             `json:"du"`
-	JSON gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
+	Du   bool                                                        `json:"du"`
+	JSON gatewayRuleReplaceResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControlsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControls]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControlsJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsBisoAdminControlsJSON contains the JSON
+// metadata for the struct
+// [GatewayRuleReplaceResponseRuleSettingsBisoAdminControls]
+type gatewayRuleReplaceResponseRuleSettingsBisoAdminControlsJSON struct {
 	Dcp         apijson.Field
 	Dd          apijson.Field
 	Dk          apijson.Field
@@ -1387,57 +1904,55 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how session check behaves.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSession struct {
+type GatewayRuleReplaceResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration string `json:"duration"`
 	// Set to true to enable session enforcement.
-	Enforce bool                                                                                        `json:"enforce"`
-	JSON    gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSessionJSON `json:"-"`
+	Enforce bool                                                   `json:"enforce"`
+	JSON    gatewayRuleReplaceResponseRuleSettingsCheckSessionJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSessionJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSession]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSessionJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsCheckSessionJSON contains the JSON
+// metadata for the struct [GatewayRuleReplaceResponseRuleSettingsCheckSession]
+type gatewayRuleReplaceResponseRuleSettingsCheckSessionJSON struct {
 	Duration    apijson.Field
 	Enforce     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolvers struct {
-	IPV4 []GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
-	IPV6 []GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
-	JSON gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversJSON   `json:"-"`
+type GatewayRuleReplaceResponseRuleSettingsDNSResolvers struct {
+	IPV4 []GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
+	IPV6 []GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
+	JSON gatewayRuleReplaceResponseRuleSettingsDNSResolversJSON   `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolvers]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsDNSResolversJSON contains the JSON
+// metadata for the struct [GatewayRuleReplaceResponseRuleSettingsDNSResolvers]
+type gatewayRuleReplaceResponseRuleSettingsDNSResolversJSON struct {
 	IPV4        apijson.Field
 	IPV6        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4 struct {
+type GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -1447,14 +1962,13 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
 	// Optionally specify a virtual network for this resolver. Uses default virtual
 	// network id if omitted.
-	VnetID string                                                                                          `json:"vnet_id"`
-	JSON   gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
+	VnetID string                                                     `json:"vnet_id"`
+	JSON   gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4JSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4JSON struct {
+// gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4JSON contains the JSON
+// metadata for the struct [GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4]
+type gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4JSON struct {
 	IP                         apijson.Field
 	Port                       apijson.Field
 	RouteThroughPrivateNetwork apijson.Field
@@ -1463,11 +1977,11 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6 struct {
+type GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -1477,14 +1991,13 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
 	// Optionally specify a virtual network for this resolver. Uses default virtual
 	// network id if omitted.
-	VnetID string                                                                                          `json:"vnet_id"`
-	JSON   gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
+	VnetID string                                                     `json:"vnet_id"`
+	JSON   gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6JSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6JSON struct {
+// gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6JSON contains the JSON
+// metadata for the struct [GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6]
+type gatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6JSON struct {
 	IP                         apijson.Field
 	Port                       apijson.Field
 	RouteThroughPrivateNetwork apijson.Field
@@ -1493,14 +2006,14 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgress struct {
+type GatewayRuleReplaceResponseRuleSettingsEgress struct {
 	// The IPv4 address to be used for egress.
 	IPV4 string `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -1508,14 +2021,13 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	// WARP IPs.
 	IPV4Fallback string `json:"ipv4_fallback"`
 	// The IPv6 range to be used for egress.
-	IPV6 string                                                                                `json:"ipv6"`
-	JSON gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgressJSON `json:"-"`
+	IPV6 string                                           `json:"ipv6"`
+	JSON gatewayRuleReplaceResponseRuleSettingsEgressJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgressJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgress]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgressJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsEgressJSON contains the JSON metadata for
+// the struct [GatewayRuleReplaceResponseRuleSettingsEgress]
+type gatewayRuleReplaceResponseRuleSettingsEgressJSON struct {
 	IPV4         apijson.Field
 	IPV4Fallback apijson.Field
 	IPV6         apijson.Field
@@ -1523,50 +2035,49 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4override struct {
+type GatewayRuleReplaceResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
-	Port int64                                                                                     `json:"port"`
-	JSON gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4overrideJSON `json:"-"`
+	Port int64                                                `json:"port"`
+	JSON gatewayRuleReplaceResponseRuleSettingsL4overrideJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4overrideJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4override]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4overrideJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsL4overrideJSON contains the JSON metadata
+// for the struct [GatewayRuleReplaceResponseRuleSettingsL4override]
+type gatewayRuleReplaceResponseRuleSettingsL4overrideJSON struct {
 	IP          apijson.Field
 	Port        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettings struct {
+type GatewayRuleReplaceResponseRuleSettingsNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                                                                                              `json:"support_url"`
-	JSON       gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettingsJSON `json:"-"`
+	SupportURL string                                                         `json:"support_url"`
+	JSON       gatewayRuleReplaceResponseRuleSettingsNotificationSettingsJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettings]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettingsJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsNotificationSettingsJSON contains the JSON
+// metadata for the struct
+// [GatewayRuleReplaceResponseRuleSettingsNotificationSettings]
+type gatewayRuleReplaceResponseRuleSettingsNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -1574,64 +2085,62 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettings
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure DLP payload logging.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLog struct {
+type GatewayRuleReplaceResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
-	Enabled bool                                                                                      `json:"enabled"`
-	JSON    gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLogJSON `json:"-"`
+	Enabled bool                                                 `json:"enabled"`
+	JSON    gatewayRuleReplaceResponseRuleSettingsPayloadLogJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLogJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLog]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLogJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsPayloadLogJSON contains the JSON metadata
+// for the struct [GatewayRuleReplaceResponseRuleSettingsPayloadLog]
+type gatewayRuleReplaceResponseRuleSettingsPayloadLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCert struct {
+type GatewayRuleReplaceResponseRuleSettingsUntrustedCert struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertAction `json:"action"`
-	JSON   gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertJSON   `json:"-"`
+	Action GatewayRuleReplaceResponseRuleSettingsUntrustedCertAction `json:"action"`
+	JSON   gatewayRuleReplaceResponseRuleSettingsUntrustedCertJSON   `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCert]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertJSON struct {
+// gatewayRuleReplaceResponseRuleSettingsUntrustedCertJSON contains the JSON
+// metadata for the struct [GatewayRuleReplaceResponseRuleSettingsUntrustedCert]
+type gatewayRuleReplaceResponseRuleSettingsUntrustedCertJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertAction string
+type GatewayRuleReplaceResponseRuleSettingsUntrustedCertAction string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertActionError       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleReplaceResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleReplaceResponseRuleSettingsUntrustedCertAction = "pass_through"
+	GatewayRuleReplaceResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleReplaceResponseRuleSettingsUntrustedCertAction = "block"
+	GatewayRuleReplaceResponseRuleSettingsUntrustedCertActionError       GatewayRuleReplaceResponseRuleSettingsUntrustedCertAction = "error"
 )
 
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseSchedule struct {
+type GatewayRuleReplaceResponseSchedule struct {
 	// The time intervals when the rule will be active on Fridays, in increasing order
 	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
 	// Fridays.
@@ -1667,14 +2176,13 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseSchedule str
 	// The time intervals when the rule will be active on Wednesdays, in increasing
 	// order from 00:00-24:00. If this parameter is omitted, the rule will be
 	// deactivated on Wednesdays.
-	Wed  string                                                                      `json:"wed"`
-	JSON gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseScheduleJSON `json:"-"`
+	Wed  string                                 `json:"wed"`
+	JSON gatewayRuleReplaceResponseScheduleJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseScheduleJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseSchedule]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseScheduleJSON struct {
+// gatewayRuleReplaceResponseScheduleJSON contains the JSON metadata for the struct
+// [GatewayRuleReplaceResponseSchedule]
+type gatewayRuleReplaceResponseScheduleJSON struct {
 	Fri         apijson.Field
 	Mon         apijson.Field
 	Sat         apijson.Field
@@ -1687,548 +2195,14 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseScheduleJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponse struct {
-	// The API resource UUID.
-	ID string `json:"id"`
+type GatewayRuleNewParams struct {
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action    GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction `json:"action"`
-	CreatedAt time.Time                                                               `json:"created_at" format:"date-time"`
-	// Date of deletion, if any.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// The wirefilter expression used for device posture check matching.
-	DevicePosture string `json:"device_posture"`
-	// True if the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// The protocol or layer to evaluate the traffic, identity, and device posture
-	// expressions.
-	Filters []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter `json:"filters"`
-	// The wirefilter expression used for identity matching.
-	Identity string `json:"identity"`
-	// The name of the rule.
-	Name string `json:"name"`
-	// Precedence sets the order of your rules. Lower values indicate higher
-	// precedence. At each processing phase, applicable rules are evaluated in
-	// ascending order of this value.
-	Precedence int64 `json:"precedence"`
-	// Additional settings that modify the rule's action.
-	RuleSettings GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettings `json:"rule_settings"`
-	// The schedule for activating DNS policies. This does not apply to HTTP or network
-	// policies.
-	Schedule GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseSchedule `json:"schedule"`
-	// The wirefilter expression used for traffic matching.
-	Traffic   string                                                                `json:"traffic"`
-	UpdatedAt time.Time                                                             `json:"updated_at" format:"date-time"`
-	JSON      gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseJSON contains
-// the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponse]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseJSON struct {
-	ID            apijson.Field
-	Action        apijson.Field
-	CreatedAt     apijson.Field
-	DeletedAt     apijson.Field
-	Description   apijson.Field
-	DevicePosture apijson.Field
-	Enabled       apijson.Field
-	Filters       apijson.Field
-	Identity      apijson.Field
-	Name          apijson.Field
-	Precedence    apijson.Field
-	RuleSettings  apijson.Field
-	Schedule      apijson.Field
-	Traffic       apijson.Field
-	UpdatedAt     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to preform when the associated traffic, identity, and device posture
-// expressions are either absent or evaluate to `true`.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction string
-
-const (
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionOn           GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "on"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionOff          GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "off"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionAllow        GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "allow"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionBlock        GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "block"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionScan         GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "scan"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionNoscan       GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "noscan"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionSafesearch   GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "safesearch"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionYtrestricted GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "ytrestricted"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionIsolate      GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "isolate"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionNoisolate    GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "noisolate"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionOverride     GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "override"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionL4Override   GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "l4_override"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionEgress       GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "egress"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseActionAuditSSH     GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseAction = "audit_ssh"
-)
-
-// The protocol or layer to use.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter string
-
-const (
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilterHTTP   GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter = "http"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilterDNS    GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter = "dns"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilterL4     GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter = "l4"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilterEgress GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseFilter = "egress"
-)
-
-// Additional settings that modify the rule's action.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettings struct {
-	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
-	// header names, pointing to an array with its header value(s).
-	AddHeaders interface{} `json:"add_headers"`
-	// Set by parent MSP accounts to enable their children to bypass this rule.
-	AllowChildBypass bool `json:"allow_child_bypass"`
-	// Settings for the Audit SSH action.
-	AuditSSH GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSH `json:"audit_ssh"`
-	// Configure how browser isolation behaves.
-	BisoAdminControls GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControls `json:"biso_admin_controls"`
-	// Enable the custom block page.
-	BlockPageEnabled bool `json:"block_page_enabled"`
-	// The text describing why this block occurred, displayed on the custom block page
-	// (if enabled).
-	BlockReason string `json:"block_reason"`
-	// Set by children MSP accounts to bypass their parent's rules.
-	BypassParentRule bool `json:"bypass_parent_rule"`
-	// Configure how session check behaves.
-	CheckSession GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSession `json:"check_session"`
-	// Add your own custom resolvers to route queries that match the resolver policy.
-	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-	// route to the address closest to their origin.
-	DNSResolvers GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolvers `json:"dns_resolvers"`
-	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
-	// rules with Egress actions and filters, or omit it to indicate local egress via
-	// WARP IPs.
-	Egress GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgress `json:"egress"`
-	// INSECURE - disable DNSSEC validation (for Allow actions).
-	InsecureDisableDNSSECValidation bool `json:"insecure_disable_dnssec_validation"`
-	// Set to true to enable IPs in DNS resolver category blocks. By default categories
-	// only block based on domain names.
-	IPCategories bool `json:"ip_categories"`
-	// Set to true to include IPs in DNS resolver indicator feed blocks. By default
-	// indicator feeds only block based on domain names.
-	IPIndicatorFeeds bool `json:"ip_indicator_feeds"`
-	// Send matching traffic to the supplied destination IP address and port.
-	L4override GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4override `json:"l4override"`
-	// Configure a notification to display on the user's device when this rule is
-	// matched.
-	NotificationSettings GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettings `json:"notification_settings"`
-	// Override matching DNS queries with a hostname.
-	OverrideHost string `json:"override_host"`
-	// Override matching DNS queries with an IP or set of IPs.
-	OverrideIPs []string `json:"override_ips"`
-	// Configure DLP payload logging.
-	PayloadLog GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLog `json:"payload_log"`
-	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
-	// resolver. Cannot be set when dns_resolvers are specified.
-	ResolveDNSThroughCloudflare bool `json:"resolve_dns_through_cloudflare"`
-	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCert `json:"untrusted_cert"`
-	JSON          gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsJSON          `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettings]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsJSON struct {
-	AddHeaders                      apijson.Field
-	AllowChildBypass                apijson.Field
-	AuditSSH                        apijson.Field
-	BisoAdminControls               apijson.Field
-	BlockPageEnabled                apijson.Field
-	BlockReason                     apijson.Field
-	BypassParentRule                apijson.Field
-	CheckSession                    apijson.Field
-	DNSResolvers                    apijson.Field
-	Egress                          apijson.Field
-	InsecureDisableDNSSECValidation apijson.Field
-	IPCategories                    apijson.Field
-	IPIndicatorFeeds                apijson.Field
-	L4override                      apijson.Field
-	NotificationSettings            apijson.Field
-	OverrideHost                    apijson.Field
-	OverrideIPs                     apijson.Field
-	PayloadLog                      apijson.Field
-	ResolveDNSThroughCloudflare     apijson.Field
-	UntrustedCert                   apijson.Field
-	raw                             string
-	ExtraFields                     map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Settings for the Audit SSH action.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSH struct {
-	// Enable to turn on SSH command logging.
-	CommandLogging bool                                                                                      `json:"command_logging"`
-	JSON           gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSHJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSHJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSH]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSHJSON struct {
-	CommandLogging apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure how browser isolation behaves.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControls struct {
-	// Set to true to enable copy-pasting.
-	Dcp bool `json:"dcp"`
-	// Set to true to enable downloading.
-	Dd bool `json:"dd"`
-	// Set to true to enable keyboard usage.
-	Dk bool `json:"dk"`
-	// Set to true to enable printing.
-	Dp bool `json:"dp"`
-	// Set to true to enable uploading.
-	Du   bool                                                                                               `json:"du"`
-	JSON gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControlsJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControlsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControls]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControlsJSON struct {
-	Dcp         apijson.Field
-	Dd          apijson.Field
-	Dk          apijson.Field
-	Dp          apijson.Field
-	Du          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsBisoAdminControls) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure how session check behaves.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSession struct {
-	// Configure how fresh the session needs to be to be considered valid.
-	Duration string `json:"duration"`
-	// Set to true to enable session enforcement.
-	Enforce bool                                                                                          `json:"enforce"`
-	JSON    gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSessionJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSessionJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSession]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSessionJSON struct {
-	Duration    apijson.Field
-	Enforce     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsCheckSession) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Add your own custom resolvers to route queries that match the resolver policy.
-// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
-// route to the address closest to their origin.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolvers struct {
-	IPV4 []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4 `json:"ipv4"`
-	IPV6 []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6 `json:"ipv6"`
-	JSON gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversJSON   `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolvers]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversJSON struct {
-	IPV4        apijson.Field
-	IPV6        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4 struct {
-	// IP address of upstream resolver.
-	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver.
-	Port int64 `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
-	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
-	// network id if omitted.
-	VnetID string                                                                                            `json:"vnet_id"`
-	JSON   gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4JSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4JSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4JSON struct {
-	IP                         apijson.Field
-	Port                       apijson.Field
-	RouteThroughPrivateNetwork apijson.Field
-	VnetID                     apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV4) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6 struct {
-	// IP address of upstream resolver.
-	IP string `json:"ip,required"`
-	// A port number to use for upstream resolver.
-	Port int64 `json:"port"`
-	// Whether to connect to this resolver over a private network. Must be set when
-	// vnet_id is set.
-	RouteThroughPrivateNetwork bool `json:"route_through_private_network"`
-	// Optionally specify a virtual network for this resolver. Uses default virtual
-	// network id if omitted.
-	VnetID string                                                                                            `json:"vnet_id"`
-	JSON   gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6JSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6JSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6JSON struct {
-	IP                         apijson.Field
-	Port                       apijson.Field
-	RouteThroughPrivateNetwork apijson.Field
-	VnetID                     apijson.Field
-	raw                        string
-	ExtraFields                map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure how Gateway Proxy traffic egresses. You can enable this setting for
-// rules with Egress actions and filters, or omit it to indicate local egress via
-// WARP IPs.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgress struct {
-	// The IPv4 address to be used for egress.
-	IPV4 string `json:"ipv4"`
-	// The fallback IPv4 address to be used for egress in the event of an error
-	// egressing with the primary IPv4. Can be '0.0.0.0' to indicate local egress via
-	// WARP IPs.
-	IPV4Fallback string `json:"ipv4_fallback"`
-	// The IPv6 range to be used for egress.
-	IPV6 string                                                                                  `json:"ipv6"`
-	JSON gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgressJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgressJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgress]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgressJSON struct {
-	IPV4         apijson.Field
-	IPV4Fallback apijson.Field
-	IPV6         apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsEgress) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Send matching traffic to the supplied destination IP address and port.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4override struct {
-	// IPv4 or IPv6 address.
-	IP string `json:"ip"`
-	// A port number to use for TCP/UDP overrides.
-	Port int64                                                                                       `json:"port"`
-	JSON gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4overrideJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4overrideJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4override]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4overrideJSON struct {
-	IP          apijson.Field
-	Port        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure a notification to display on the user's device when this rule is
-// matched.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettings struct {
-	// Set notification on
-	Enabled bool `json:"enabled"`
-	// Customize the message shown in the notification.
-	Msg string `json:"msg"`
-	// Optional URL to direct users to additional information. If not set, the
-	// notification will open a block page.
-	SupportURL string                                                                                                `json:"support_url"`
-	JSON       gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettingsJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettings]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettingsJSON struct {
-	Enabled     apijson.Field
-	Msg         apijson.Field
-	SupportURL  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsNotificationSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure DLP payload logging.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLog struct {
-	// Set to true to enable DLP payload logging for this rule.
-	Enabled bool                                                                                        `json:"enabled"`
-	JSON    gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLogJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLogJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLog]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLogJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCert struct {
-	// The action performed when an untrusted certificate is seen. The default action
-	// is an error with HTTP code 526.
-	Action GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertAction `json:"action"`
-	JSON   gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertJSON   `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCert]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertJSON struct {
-	Action      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action performed when an untrusted certificate is seen. The default action
-// is an error with HTTP code 526.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertAction string
-
-const (
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertActionPassThrough GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertActionBlock       GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertActionError       GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseRuleSettingsUntrustedCertAction = "error"
-)
-
-// The schedule for activating DNS policies. This does not apply to HTTP or network
-// policies.
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseSchedule struct {
-	// The time intervals when the rule will be active on Fridays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Fridays.
-	Fri string `json:"fri"`
-	// The time intervals when the rule will be active on Mondays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Mondays.
-	Mon string `json:"mon"`
-	// The time intervals when the rule will be active on Saturdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Saturdays.
-	Sat string `json:"sat"`
-	// The time intervals when the rule will be active on Sundays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Sundays.
-	Sun string `json:"sun"`
-	// The time intervals when the rule will be active on Thursdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Thursdays.
-	Thu string `json:"thu"`
-	// The time zone the rule will be evaluated against. If a
-	// [valid time zone city name](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
-	// is provided, Gateway will always use the current time at that time zone. If this
-	// parameter is omitted, then Gateway will use the time zone inferred from the
-	// user's source IP to evaluate the rule. If Gateway cannot determine the time zone
-	// from the IP, we will fall back to the time zone of the user's connected data
-	// center.
-	TimeZone string `json:"time_zone"`
-	// The time intervals when the rule will be active on Tuesdays, in increasing order
-	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
-	// Tuesdays.
-	Tue string `json:"tue"`
-	// The time intervals when the rule will be active on Wednesdays, in increasing
-	// order from 00:00-24:00. If this parameter is omitted, the rule will be
-	// deactivated on Wednesdays.
-	Wed  string                                                                        `json:"wed"`
-	JSON gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseScheduleJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseScheduleJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseSchedule]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseScheduleJSON struct {
-	Fri         apijson.Field
-	Mon         apijson.Field
-	Sat         apijson.Field
-	Sun         apijson.Field
-	Thu         apijson.Field
-	TimeZone    apijson.Field
-	Tue         apijson.Field
-	Wed         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseSchedule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayRuleUpdateParams struct {
-	// The action to preform when the associated traffic, identity, and device posture
-	// expressions are either absent or evaluate to `true`.
-	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action,required"`
+	Action param.Field[GatewayRuleNewParamsAction] `json:"action,required"`
 	// The name of the rule.
 	Name param.Field[string] `json:"name,required"`
 	// The description of the rule.
@@ -2239,7 +2213,7 @@ type GatewayRuleUpdateParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]GatewayRuleUpdateParamsFilter] `json:"filters"`
+	Filters param.Field[[]GatewayRuleNewParamsFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
@@ -2247,60 +2221,60 @@ type GatewayRuleUpdateParams struct {
 	// ascending order of this value.
 	Precedence param.Field[int64] `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[GatewayRuleUpdateParamsRuleSettings] `json:"rule_settings"`
+	RuleSettings param.Field[GatewayRuleNewParamsRuleSettings] `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule param.Field[GatewayRuleUpdateParamsSchedule] `json:"schedule"`
+	Schedule param.Field[GatewayRuleNewParamsSchedule] `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
-func (r GatewayRuleUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
-type GatewayRuleUpdateParamsAction string
+type GatewayRuleNewParamsAction string
 
 const (
-	GatewayRuleUpdateParamsActionOn           GatewayRuleUpdateParamsAction = "on"
-	GatewayRuleUpdateParamsActionOff          GatewayRuleUpdateParamsAction = "off"
-	GatewayRuleUpdateParamsActionAllow        GatewayRuleUpdateParamsAction = "allow"
-	GatewayRuleUpdateParamsActionBlock        GatewayRuleUpdateParamsAction = "block"
-	GatewayRuleUpdateParamsActionScan         GatewayRuleUpdateParamsAction = "scan"
-	GatewayRuleUpdateParamsActionNoscan       GatewayRuleUpdateParamsAction = "noscan"
-	GatewayRuleUpdateParamsActionSafesearch   GatewayRuleUpdateParamsAction = "safesearch"
-	GatewayRuleUpdateParamsActionYtrestricted GatewayRuleUpdateParamsAction = "ytrestricted"
-	GatewayRuleUpdateParamsActionIsolate      GatewayRuleUpdateParamsAction = "isolate"
-	GatewayRuleUpdateParamsActionNoisolate    GatewayRuleUpdateParamsAction = "noisolate"
-	GatewayRuleUpdateParamsActionOverride     GatewayRuleUpdateParamsAction = "override"
-	GatewayRuleUpdateParamsActionL4Override   GatewayRuleUpdateParamsAction = "l4_override"
-	GatewayRuleUpdateParamsActionEgress       GatewayRuleUpdateParamsAction = "egress"
-	GatewayRuleUpdateParamsActionAuditSSH     GatewayRuleUpdateParamsAction = "audit_ssh"
+	GatewayRuleNewParamsActionOn           GatewayRuleNewParamsAction = "on"
+	GatewayRuleNewParamsActionOff          GatewayRuleNewParamsAction = "off"
+	GatewayRuleNewParamsActionAllow        GatewayRuleNewParamsAction = "allow"
+	GatewayRuleNewParamsActionBlock        GatewayRuleNewParamsAction = "block"
+	GatewayRuleNewParamsActionScan         GatewayRuleNewParamsAction = "scan"
+	GatewayRuleNewParamsActionNoscan       GatewayRuleNewParamsAction = "noscan"
+	GatewayRuleNewParamsActionSafesearch   GatewayRuleNewParamsAction = "safesearch"
+	GatewayRuleNewParamsActionYtrestricted GatewayRuleNewParamsAction = "ytrestricted"
+	GatewayRuleNewParamsActionIsolate      GatewayRuleNewParamsAction = "isolate"
+	GatewayRuleNewParamsActionNoisolate    GatewayRuleNewParamsAction = "noisolate"
+	GatewayRuleNewParamsActionOverride     GatewayRuleNewParamsAction = "override"
+	GatewayRuleNewParamsActionL4Override   GatewayRuleNewParamsAction = "l4_override"
+	GatewayRuleNewParamsActionEgress       GatewayRuleNewParamsAction = "egress"
+	GatewayRuleNewParamsActionAuditSSH     GatewayRuleNewParamsAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
-type GatewayRuleUpdateParamsFilter string
+type GatewayRuleNewParamsFilter string
 
 const (
-	GatewayRuleUpdateParamsFilterHTTP   GatewayRuleUpdateParamsFilter = "http"
-	GatewayRuleUpdateParamsFilterDNS    GatewayRuleUpdateParamsFilter = "dns"
-	GatewayRuleUpdateParamsFilterL4     GatewayRuleUpdateParamsFilter = "l4"
-	GatewayRuleUpdateParamsFilterEgress GatewayRuleUpdateParamsFilter = "egress"
+	GatewayRuleNewParamsFilterHTTP   GatewayRuleNewParamsFilter = "http"
+	GatewayRuleNewParamsFilterDNS    GatewayRuleNewParamsFilter = "dns"
+	GatewayRuleNewParamsFilterL4     GatewayRuleNewParamsFilter = "l4"
+	GatewayRuleNewParamsFilterEgress GatewayRuleNewParamsFilter = "egress"
 )
 
 // Additional settings that modify the rule's action.
-type GatewayRuleUpdateParamsRuleSettings struct {
+type GatewayRuleNewParamsRuleSettings struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders param.Field[interface{}] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH param.Field[GatewayRuleUpdateParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
+	AuditSSH param.Field[GatewayRuleNewParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls param.Field[GatewayRuleUpdateParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
+	BisoAdminControls param.Field[GatewayRuleNewParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -2309,15 +2283,15 @@ type GatewayRuleUpdateParamsRuleSettings struct {
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule param.Field[bool] `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession param.Field[GatewayRuleUpdateParamsRuleSettingsCheckSession] `json:"check_session"`
+	CheckSession param.Field[GatewayRuleNewParamsRuleSettingsCheckSession] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin.
-	DNSResolvers param.Field[GatewayRuleUpdateParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
+	DNSResolvers param.Field[GatewayRuleNewParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress param.Field[GatewayRuleUpdateParamsRuleSettingsEgress] `json:"egress"`
+	Egress param.Field[GatewayRuleNewParamsRuleSettingsEgress] `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation param.Field[bool] `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -2327,39 +2301,39 @@ type GatewayRuleUpdateParamsRuleSettings struct {
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds param.Field[bool] `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override param.Field[GatewayRuleUpdateParamsRuleSettingsL4override] `json:"l4override"`
+	L4override param.Field[GatewayRuleNewParamsRuleSettingsL4override] `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings param.Field[GatewayRuleUpdateParamsRuleSettingsNotificationSettings] `json:"notification_settings"`
+	NotificationSettings param.Field[GatewayRuleNewParamsRuleSettingsNotificationSettings] `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost param.Field[string] `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog param.Field[GatewayRuleUpdateParamsRuleSettingsPayloadLog] `json:"payload_log"`
+	PayloadLog param.Field[GatewayRuleNewParamsRuleSettingsPayloadLog] `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
+	UntrustedCert param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Settings for the Audit SSH action.
-type GatewayRuleUpdateParamsRuleSettingsAuditSSH struct {
+type GatewayRuleNewParamsRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how browser isolation behaves.
-type GatewayRuleUpdateParamsRuleSettingsBisoAdminControls struct {
+type GatewayRuleNewParamsRuleSettingsBisoAdminControls struct {
 	// Set to true to enable copy-pasting.
 	Dcp param.Field[bool] `json:"dcp"`
 	// Set to true to enable downloading.
@@ -2372,35 +2346,35 @@ type GatewayRuleUpdateParamsRuleSettingsBisoAdminControls struct {
 	Du param.Field[bool] `json:"du"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsBisoAdminControls) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsBisoAdminControls) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how session check behaves.
-type GatewayRuleUpdateParamsRuleSettingsCheckSession struct {
+type GatewayRuleNewParamsRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration param.Field[string] `json:"duration"`
 	// Set to true to enable session enforcement.
 	Enforce param.Field[bool] `json:"enforce"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsCheckSession) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsCheckSession) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
-type GatewayRuleUpdateParamsRuleSettingsDNSResolvers struct {
-	IPV4 param.Field[[]GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
-	IPV6 param.Field[[]GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
+type GatewayRuleNewParamsRuleSettingsDNSResolvers struct {
+	IPV4 param.Field[[]GatewayRuleNewParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
+	IPV6 param.Field[[]GatewayRuleNewParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsDNSResolvers) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsDNSResolvers) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4 struct {
+type GatewayRuleNewParamsRuleSettingsDNSResolversIPV4 struct {
 	// IP address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -2413,11 +2387,11 @@ type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4 struct {
 	VnetID param.Field[string] `json:"vnet_id"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6 struct {
+type GatewayRuleNewParamsRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -2430,14 +2404,14 @@ type GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6 struct {
 	VnetID param.Field[string] `json:"vnet_id"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsDNSResolversIPV6) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsDNSResolversIPV6) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type GatewayRuleUpdateParamsRuleSettingsEgress struct {
+type GatewayRuleNewParamsRuleSettingsEgress struct {
 	// The IPv4 address to be used for egress.
 	IPV4 param.Field[string] `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -2448,25 +2422,25 @@ type GatewayRuleUpdateParamsRuleSettingsEgress struct {
 	IPV6 param.Field[string] `json:"ipv6"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsEgress) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsEgress) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type GatewayRuleUpdateParamsRuleSettingsL4override struct {
+type GatewayRuleNewParamsRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
 	IP param.Field[string] `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsL4override) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsL4override) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type GatewayRuleUpdateParamsRuleSettingsNotificationSettings struct {
+type GatewayRuleNewParamsRuleSettingsNotificationSettings struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
 	// Customize the message shown in the notification.
@@ -2476,44 +2450,44 @@ type GatewayRuleUpdateParamsRuleSettingsNotificationSettings struct {
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsNotificationSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsNotificationSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure DLP payload logging.
-type GatewayRuleUpdateParamsRuleSettingsPayloadLog struct {
+type GatewayRuleNewParamsRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsPayloadLog) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsPayloadLog) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleUpdateParamsRuleSettingsUntrustedCert struct {
+type GatewayRuleNewParamsRuleSettingsUntrustedCert struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action param.Field[GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction] `json:"action"`
+	Action param.Field[GatewayRuleNewParamsRuleSettingsUntrustedCertAction] `json:"action"`
 }
 
-func (r GatewayRuleUpdateParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction string
+type GatewayRuleNewParamsRuleSettingsUntrustedCertAction string
 
 const (
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleUpdateParamsRuleSettingsUntrustedCertActionError       GatewayRuleUpdateParamsRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleNewParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "pass_through"
+	GatewayRuleNewParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "block"
+	GatewayRuleNewParamsRuleSettingsUntrustedCertActionError       GatewayRuleNewParamsRuleSettingsUntrustedCertAction = "error"
 )
 
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
-type GatewayRuleUpdateParamsSchedule struct {
+type GatewayRuleNewParamsSchedule struct {
 	// The time intervals when the rule will be active on Fridays, in increasing order
 	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
 	// Fridays.
@@ -2552,22 +2526,22 @@ type GatewayRuleUpdateParamsSchedule struct {
 	Wed param.Field[string] `json:"wed"`
 }
 
-func (r GatewayRuleUpdateParamsSchedule) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleNewParamsSchedule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleUpdateResponseEnvelope struct {
-	Errors   []GatewayRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayRuleUpdateResponse                   `json:"result,required"`
+type GatewayRuleNewResponseEnvelope struct {
+	Errors   []GatewayRuleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayRuleNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayRuleUpdateResponseEnvelopeJSON    `json:"-"`
+	Success GatewayRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayRuleNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [GatewayRuleUpdateResponseEnvelope]
-type gatewayRuleUpdateResponseEnvelopeJSON struct {
+// gatewayRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayRuleNewResponseEnvelope]
+type gatewayRuleNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -2576,54 +2550,152 @@ type gatewayRuleUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayRuleUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayRuleNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    gatewayRuleNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayRuleUpdateResponseEnvelopeErrors]
-type gatewayRuleUpdateResponseEnvelopeErrorsJSON struct {
+// gatewayRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayRuleNewResponseEnvelopeErrors]
+type gatewayRuleNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayRuleUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayRuleNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    gatewayRuleNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayRuleUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayRuleUpdateResponseEnvelopeMessages]
-type gatewayRuleUpdateResponseEnvelopeMessagesJSON struct {
+// gatewayRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [GatewayRuleNewResponseEnvelopeMessages]
+type gatewayRuleNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayRuleUpdateResponseEnvelopeSuccess bool
+type GatewayRuleNewResponseEnvelopeSuccess bool
 
 const (
-	GatewayRuleUpdateResponseEnvelopeSuccessTrue GatewayRuleUpdateResponseEnvelopeSuccess = true
+	GatewayRuleNewResponseEnvelopeSuccessTrue GatewayRuleNewResponseEnvelopeSuccess = true
 )
+
+type GatewayRuleListResponseEnvelope struct {
+	Errors   []GatewayRuleListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayRuleListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []GatewayRuleListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    GatewayRuleListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo GatewayRuleListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       gatewayRuleListResponseEnvelopeJSON       `json:"-"`
+}
+
+// gatewayRuleListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayRuleListResponseEnvelope]
+type gatewayRuleListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayRuleListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    gatewayRuleListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayRuleListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayRuleListResponseEnvelopeErrors]
+type gatewayRuleListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayRuleListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    gatewayRuleListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayRuleListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [GatewayRuleListResponseEnvelopeMessages]
+type gatewayRuleListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type GatewayRuleListResponseEnvelopeSuccess bool
+
+const (
+	GatewayRuleListResponseEnvelopeSuccessTrue GatewayRuleListResponseEnvelopeSuccess = true
+)
+
+type GatewayRuleListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       gatewayRuleListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// gatewayRuleListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [GatewayRuleListResponseEnvelopeResultInfo]
+type gatewayRuleListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type GatewayRuleDeleteResponseEnvelope struct {
 	Errors   []GatewayRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -2763,10 +2835,10 @@ const (
 	GatewayRuleGetResponseEnvelopeSuccessTrue GatewayRuleGetResponseEnvelopeSuccess = true
 )
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams struct {
+type GatewayRuleReplaceParams struct {
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
-	Action param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction] `json:"action,required"`
+	Action param.Field[GatewayRuleReplaceParamsAction] `json:"action,required"`
 	// The name of the rule.
 	Name param.Field[string] `json:"name,required"`
 	// The description of the rule.
@@ -2777,7 +2849,7 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams struct {
 	Enabled param.Field[bool] `json:"enabled"`
 	// The protocol or layer to evaluate the traffic, identity, and device posture
 	// expressions.
-	Filters param.Field[[]GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter] `json:"filters"`
+	Filters param.Field[[]GatewayRuleReplaceParamsFilter] `json:"filters"`
 	// The wirefilter expression used for identity matching.
 	Identity param.Field[string] `json:"identity"`
 	// Precedence sets the order of your rules. Lower values indicate higher
@@ -2785,60 +2857,60 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams struct {
 	// ascending order of this value.
 	Precedence param.Field[int64] `json:"precedence"`
 	// Additional settings that modify the rule's action.
-	RuleSettings param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettings] `json:"rule_settings"`
+	RuleSettings param.Field[GatewayRuleReplaceParamsRuleSettings] `json:"rule_settings"`
 	// The schedule for activating DNS policies. This does not apply to HTTP or network
 	// policies.
-	Schedule param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsSchedule] `json:"schedule"`
+	Schedule param.Field[GatewayRuleReplaceParamsSchedule] `json:"schedule"`
 	// The wirefilter expression used for traffic matching.
 	Traffic param.Field[string] `json:"traffic"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction string
+type GatewayRuleReplaceParamsAction string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionOn           GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "on"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionOff          GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "off"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionAllow        GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "allow"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionBlock        GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "block"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionScan         GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "scan"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionNoscan       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "noscan"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionSafesearch   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "safesearch"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionYtrestricted GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "ytrestricted"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionIsolate      GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "isolate"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionNoisolate    GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "noisolate"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionOverride     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "override"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionL4Override   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "l4_override"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionEgress       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "egress"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsActionAuditSSH     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsAction = "audit_ssh"
+	GatewayRuleReplaceParamsActionOn           GatewayRuleReplaceParamsAction = "on"
+	GatewayRuleReplaceParamsActionOff          GatewayRuleReplaceParamsAction = "off"
+	GatewayRuleReplaceParamsActionAllow        GatewayRuleReplaceParamsAction = "allow"
+	GatewayRuleReplaceParamsActionBlock        GatewayRuleReplaceParamsAction = "block"
+	GatewayRuleReplaceParamsActionScan         GatewayRuleReplaceParamsAction = "scan"
+	GatewayRuleReplaceParamsActionNoscan       GatewayRuleReplaceParamsAction = "noscan"
+	GatewayRuleReplaceParamsActionSafesearch   GatewayRuleReplaceParamsAction = "safesearch"
+	GatewayRuleReplaceParamsActionYtrestricted GatewayRuleReplaceParamsAction = "ytrestricted"
+	GatewayRuleReplaceParamsActionIsolate      GatewayRuleReplaceParamsAction = "isolate"
+	GatewayRuleReplaceParamsActionNoisolate    GatewayRuleReplaceParamsAction = "noisolate"
+	GatewayRuleReplaceParamsActionOverride     GatewayRuleReplaceParamsAction = "override"
+	GatewayRuleReplaceParamsActionL4Override   GatewayRuleReplaceParamsAction = "l4_override"
+	GatewayRuleReplaceParamsActionEgress       GatewayRuleReplaceParamsAction = "egress"
+	GatewayRuleReplaceParamsActionAuditSSH     GatewayRuleReplaceParamsAction = "audit_ssh"
 )
 
 // The protocol or layer to use.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter string
+type GatewayRuleReplaceParamsFilter string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilterHTTP   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter = "http"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilterDNS    GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter = "dns"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilterL4     GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter = "l4"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilterEgress GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsFilter = "egress"
+	GatewayRuleReplaceParamsFilterHTTP   GatewayRuleReplaceParamsFilter = "http"
+	GatewayRuleReplaceParamsFilterDNS    GatewayRuleReplaceParamsFilter = "dns"
+	GatewayRuleReplaceParamsFilterL4     GatewayRuleReplaceParamsFilter = "l4"
+	GatewayRuleReplaceParamsFilterEgress GatewayRuleReplaceParamsFilter = "egress"
 )
 
 // Additional settings that modify the rule's action.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettings struct {
+type GatewayRuleReplaceParamsRuleSettings struct {
 	// Add custom headers to allowed requests, in the form of key-value pairs. Keys are
 	// header names, pointing to an array with its header value(s).
 	AddHeaders param.Field[interface{}] `json:"add_headers"`
 	// Set by parent MSP accounts to enable their children to bypass this rule.
 	AllowChildBypass param.Field[bool] `json:"allow_child_bypass"`
 	// Settings for the Audit SSH action.
-	AuditSSH param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
+	AuditSSH param.Field[GatewayRuleReplaceParamsRuleSettingsAuditSSH] `json:"audit_ssh"`
 	// Configure how browser isolation behaves.
-	BisoAdminControls param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
+	BisoAdminControls param.Field[GatewayRuleReplaceParamsRuleSettingsBisoAdminControls] `json:"biso_admin_controls"`
 	// Enable the custom block page.
 	BlockPageEnabled param.Field[bool] `json:"block_page_enabled"`
 	// The text describing why this block occurred, displayed on the custom block page
@@ -2847,15 +2919,15 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettings s
 	// Set by children MSP accounts to bypass their parent's rules.
 	BypassParentRule param.Field[bool] `json:"bypass_parent_rule"`
 	// Configure how session check behaves.
-	CheckSession param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsCheckSession] `json:"check_session"`
+	CheckSession param.Field[GatewayRuleReplaceParamsRuleSettingsCheckSession] `json:"check_session"`
 	// Add your own custom resolvers to route queries that match the resolver policy.
 	// Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 	// route to the address closest to their origin.
-	DNSResolvers param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
+	DNSResolvers param.Field[GatewayRuleReplaceParamsRuleSettingsDNSResolvers] `json:"dns_resolvers"`
 	// Configure how Gateway Proxy traffic egresses. You can enable this setting for
 	// rules with Egress actions and filters, or omit it to indicate local egress via
 	// WARP IPs.
-	Egress param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsEgress] `json:"egress"`
+	Egress param.Field[GatewayRuleReplaceParamsRuleSettingsEgress] `json:"egress"`
 	// INSECURE - disable DNSSEC validation (for Allow actions).
 	InsecureDisableDNSSECValidation param.Field[bool] `json:"insecure_disable_dnssec_validation"`
 	// Set to true to enable IPs in DNS resolver category blocks. By default categories
@@ -2865,39 +2937,39 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettings s
 	// indicator feeds only block based on domain names.
 	IPIndicatorFeeds param.Field[bool] `json:"ip_indicator_feeds"`
 	// Send matching traffic to the supplied destination IP address and port.
-	L4override param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsL4override] `json:"l4override"`
+	L4override param.Field[GatewayRuleReplaceParamsRuleSettingsL4override] `json:"l4override"`
 	// Configure a notification to display on the user's device when this rule is
 	// matched.
-	NotificationSettings param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsNotificationSettings] `json:"notification_settings"`
+	NotificationSettings param.Field[GatewayRuleReplaceParamsRuleSettingsNotificationSettings] `json:"notification_settings"`
 	// Override matching DNS queries with a hostname.
 	OverrideHost param.Field[string] `json:"override_host"`
 	// Override matching DNS queries with an IP or set of IPs.
 	OverrideIPs param.Field[[]string] `json:"override_ips"`
 	// Configure DLP payload logging.
-	PayloadLog param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsPayloadLog] `json:"payload_log"`
+	PayloadLog param.Field[GatewayRuleReplaceParamsRuleSettingsPayloadLog] `json:"payload_log"`
 	// Enable to send queries that match the policy to Cloudflare's default 1.1.1.1 DNS
 	// resolver. Cannot be set when dns_resolvers are specified.
 	ResolveDNSThroughCloudflare param.Field[bool] `json:"resolve_dns_through_cloudflare"`
 	// Configure behavior when an upstream cert is invalid or an SSL error occurs.
-	UntrustedCert param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
+	UntrustedCert param.Field[GatewayRuleReplaceParamsRuleSettingsUntrustedCert] `json:"untrusted_cert"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Settings for the Audit SSH action.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH struct {
+type GatewayRuleReplaceParamsRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
 	CommandLogging param.Field[bool] `json:"command_logging"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsAuditSSH) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how browser isolation behaves.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBisoAdminControls struct {
+type GatewayRuleReplaceParamsRuleSettingsBisoAdminControls struct {
 	// Set to true to enable copy-pasting.
 	Dcp param.Field[bool] `json:"dcp"`
 	// Set to true to enable downloading.
@@ -2910,35 +2982,35 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBi
 	Du param.Field[bool] `json:"du"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsBisoAdminControls) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsBisoAdminControls) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how session check behaves.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsCheckSession struct {
+type GatewayRuleReplaceParamsRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
 	Duration param.Field[string] `json:"duration"`
 	// Set to true to enable session enforcement.
 	Enforce param.Field[bool] `json:"enforce"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsCheckSession) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsCheckSession) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolvers struct {
-	IPV4 param.Field[[]GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
-	IPV6 param.Field[[]GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
+type GatewayRuleReplaceParamsRuleSettingsDNSResolvers struct {
+	IPV4 param.Field[[]GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV4] `json:"ipv4"`
+	IPV6 param.Field[[]GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV6] `json:"ipv6"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolvers) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsDNSResolvers) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV4 struct {
+type GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV4 struct {
 	// IP address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -2951,11 +3023,11 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDN
 	VnetID param.Field[string] `json:"vnet_id"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV4) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV6 struct {
+type GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP param.Field[string] `json:"ip,required"`
 	// A port number to use for upstream resolver.
@@ -2968,14 +3040,14 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDN
 	VnetID param.Field[string] `json:"vnet_id"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsDNSResolversIPV6) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsDNSResolversIPV6) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
 // rules with Egress actions and filters, or omit it to indicate local egress via
 // WARP IPs.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsEgress struct {
+type GatewayRuleReplaceParamsRuleSettingsEgress struct {
 	// The IPv4 address to be used for egress.
 	IPV4 param.Field[string] `json:"ipv4"`
 	// The fallback IPv4 address to be used for egress in the event of an error
@@ -2986,25 +3058,25 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsEg
 	IPV6 param.Field[string] `json:"ipv6"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsEgress) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsEgress) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Send matching traffic to the supplied destination IP address and port.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsL4override struct {
+type GatewayRuleReplaceParamsRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
 	IP param.Field[string] `json:"ip"`
 	// A port number to use for TCP/UDP overrides.
 	Port param.Field[int64] `json:"port"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsL4override) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsL4override) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure a notification to display on the user's device when this rule is
 // matched.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsNotificationSettings struct {
+type GatewayRuleReplaceParamsRuleSettingsNotificationSettings struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
 	// Customize the message shown in the notification.
@@ -3014,44 +3086,44 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsNo
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsNotificationSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsNotificationSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure DLP payload logging.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsPayloadLog struct {
+type GatewayRuleReplaceParamsRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsPayloadLog) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsPayloadLog) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCert struct {
+type GatewayRuleReplaceParamsRuleSettingsUntrustedCert struct {
 	// The action performed when an untrusted certificate is seen. The default action
 	// is an error with HTTP code 526.
-	Action param.Field[GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertAction] `json:"action"`
+	Action param.Field[GatewayRuleReplaceParamsRuleSettingsUntrustedCertAction] `json:"action"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsRuleSettingsUntrustedCert) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The action performed when an untrusted certificate is seen. The default action
 // is an error with HTTP code 526.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertAction string
+type GatewayRuleReplaceParamsRuleSettingsUntrustedCertAction string
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertAction = "pass_through"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertAction = "block"
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertActionError       GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsRuleSettingsUntrustedCertAction = "error"
+	GatewayRuleReplaceParamsRuleSettingsUntrustedCertActionPassThrough GatewayRuleReplaceParamsRuleSettingsUntrustedCertAction = "pass_through"
+	GatewayRuleReplaceParamsRuleSettingsUntrustedCertActionBlock       GatewayRuleReplaceParamsRuleSettingsUntrustedCertAction = "block"
+	GatewayRuleReplaceParamsRuleSettingsUntrustedCertActionError       GatewayRuleReplaceParamsRuleSettingsUntrustedCertAction = "error"
 )
 
 // The schedule for activating DNS policies. This does not apply to HTTP or network
 // policies.
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsSchedule struct {
+type GatewayRuleReplaceParamsSchedule struct {
 	// The time intervals when the rule will be active on Fridays, in increasing order
 	// from 00:00-24:00. If this parameter is omitted, the rule will be deactivated on
 	// Fridays.
@@ -3090,23 +3162,22 @@ type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsSchedule struc
 	Wed param.Field[string] `json:"wed"`
 }
 
-func (r GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleParamsSchedule) MarshalJSON() (data []byte, err error) {
+func (r GatewayRuleReplaceParamsSchedule) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelope struct {
-	Errors   []GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponse                   `json:"result,required"`
+type GatewayRuleReplaceResponseEnvelope struct {
+	Errors   []GatewayRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayRuleReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeJSON    `json:"-"`
+	Success GatewayRuleReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayRuleReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelope]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeJSON struct {
+// gatewayRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayRuleReplaceResponseEnvelope]
+type gatewayRuleReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -3115,155 +3186,51 @@ type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayRuleReplaceResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    gatewayRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrors]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrorsJSON struct {
+// gatewayRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayRuleReplaceResponseEnvelopeErrors]
+type gatewayRuleReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayRuleReplaceResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    gatewayRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessages]
-type gatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessagesJSON struct {
+// gatewayRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayRuleReplaceResponseEnvelopeMessages]
+type gatewayRuleReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeSuccess bool
+type GatewayRuleReplaceResponseEnvelopeSuccess bool
 
 const (
-	GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeSuccessTrue GatewayRuleZeroTrustGatewayRulesNewZeroTrustGatewayRuleResponseEnvelopeSuccess = true
+	GatewayRuleReplaceResponseEnvelopeSuccessTrue GatewayRuleReplaceResponseEnvelopeSuccess = true
 )
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelope struct {
-	Errors   []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelope]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrors]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessages]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeSuccess bool
-
-const (
-	GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeSuccessTrue GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeSuccess = true
-)
-
-type GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                 `json:"total_count"`
-	JSON       gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfo]
-type gatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayRuleZeroTrustGatewayRulesListZeroTrustGatewayRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

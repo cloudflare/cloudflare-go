@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDiagnosticTracerouteDiagnosticsTracerouteWithOptionalParams(t *testing.T) {
+func TestDiagnosticTracerouteNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,15 +29,15 @@ func TestDiagnosticTracerouteDiagnosticsTracerouteWithOptionalParams(t *testing.
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Diagnostics.Traceroutes.DiagnosticsTraceroute(
+	_, err := client.Diagnostics.Traceroutes.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DiagnosticTracerouteDiagnosticsTracerouteParams{
+		cloudflare.DiagnosticTracerouteNewParams{
 			Targets: cloudflare.F([]string{"203.0.113.1", "cloudflare.com"}),
 			Colos:   cloudflare.F([]string{"den", "sin"}),
-			Options: cloudflare.F(cloudflare.DiagnosticTracerouteDiagnosticsTracerouteParamsOptions{
+			Options: cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptions{
 				MaxTTL:        cloudflare.F(int64(15)),
-				PacketType:    cloudflare.F(cloudflare.DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeIcmp),
+				PacketType:    cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptionsPacketTypeIcmp),
 				PacketsPerTTL: cloudflare.F(int64(0)),
 				Port:          cloudflare.F(int64(0)),
 				WaitTime:      cloudflare.F(int64(1)),

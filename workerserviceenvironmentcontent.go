@@ -36,19 +36,6 @@ func NewWorkerServiceEnvironmentContentService(opts ...option.RequestOption) (r 
 	return
 }
 
-// Put script content from a worker with an environment
-func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, accountID string, serviceName string, environmentName string, params WorkerServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentContentUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerServiceEnvironmentContentUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", accountID, serviceName, environmentName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Get script content from a worker with an environment
 func (r *WorkerServiceEnvironmentContentService) Get(ctx context.Context, accountID string, serviceName string, environmentName string, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
@@ -58,7 +45,20 @@ func (r *WorkerServiceEnvironmentContentService) Get(ctx context.Context, accoun
 	return
 }
 
-type WorkerServiceEnvironmentContentUpdateResponse struct {
+// Put script content from a worker with an environment
+func (r *WorkerServiceEnvironmentContentService) Replace(ctx context.Context, accountID string, serviceName string, environmentName string, params WorkerServiceEnvironmentContentReplaceParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentContentReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerServiceEnvironmentContentReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", accountID, serviceName, environmentName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type WorkerServiceEnvironmentContentReplaceResponse struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -74,15 +74,15 @@ type WorkerServiceEnvironmentContentUpdateResponse struct {
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerServiceEnvironmentContentUpdateResponseTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkerServiceEnvironmentContentReplaceResponseTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                            `json:"usage_model"`
-	JSON       workerServiceEnvironmentContentUpdateResponseJSON `json:"-"`
+	UsageModel string                                             `json:"usage_model"`
+	JSON       workerServiceEnvironmentContentReplaceResponseJSON `json:"-"`
 }
 
-// workerServiceEnvironmentContentUpdateResponseJSON contains the JSON metadata for
-// the struct [WorkerServiceEnvironmentContentUpdateResponse]
-type workerServiceEnvironmentContentUpdateResponseJSON struct {
+// workerServiceEnvironmentContentReplaceResponseJSON contains the JSON metadata
+// for the struct [WorkerServiceEnvironmentContentReplaceResponse]
+type workerServiceEnvironmentContentReplaceResponseJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
@@ -96,25 +96,25 @@ type workerServiceEnvironmentContentUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentContentReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkerServiceEnvironmentContentUpdateResponseTailConsumer struct {
+type WorkerServiceEnvironmentContentReplaceResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                        `json:"namespace"`
-	JSON      workerServiceEnvironmentContentUpdateResponseTailConsumerJSON `json:"-"`
+	Namespace string                                                         `json:"namespace"`
+	JSON      workerServiceEnvironmentContentReplaceResponseTailConsumerJSON `json:"-"`
 }
 
-// workerServiceEnvironmentContentUpdateResponseTailConsumerJSON contains the JSON
+// workerServiceEnvironmentContentReplaceResponseTailConsumerJSON contains the JSON
 // metadata for the struct
-// [WorkerServiceEnvironmentContentUpdateResponseTailConsumer]
-type workerServiceEnvironmentContentUpdateResponseTailConsumerJSON struct {
+// [WorkerServiceEnvironmentContentReplaceResponseTailConsumer]
+type workerServiceEnvironmentContentReplaceResponseTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -122,11 +122,11 @@ type workerServiceEnvironmentContentUpdateResponseTailConsumerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentContentReplaceResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentContentUpdateParams struct {
+type WorkerServiceEnvironmentContentReplaceParams struct {
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
@@ -134,12 +134,12 @@ type WorkerServiceEnvironmentContentUpdateParams struct {
 	// (esm) /`CF-WORKER-BODY-PART` (service worker) by part name.
 	AnyPartName param.Field[[]io.Reader] `json:"<any part name>" format:"binary"`
 	// JSON encoded metadata about the uploaded parts and Worker configuration.
-	Metadata               param.Field[WorkerServiceEnvironmentContentUpdateParamsMetadata] `json:"metadata"`
-	CfWorkerBodyPart       param.Field[string]                                              `header:"CF-WORKER-BODY-PART"`
-	CfWorkerMainModulePart param.Field[string]                                              `header:"CF-WORKER-MAIN-MODULE-PART"`
+	Metadata               param.Field[WorkerServiceEnvironmentContentReplaceParamsMetadata] `json:"metadata"`
+	CfWorkerBodyPart       param.Field[string]                                               `header:"CF-WORKER-BODY-PART"`
+	CfWorkerMainModulePart param.Field[string]                                               `header:"CF-WORKER-MAIN-MODULE-PART"`
 }
 
-func (r WorkerServiceEnvironmentContentUpdateParams) MarshalMultipart() (data []byte, contentType string, err error) {
+func (r WorkerServiceEnvironmentContentReplaceParams) MarshalMultipart() (data []byte, contentType string, err error) {
 	buf := bytes.NewBuffer(nil)
 	writer := multipart.NewWriter(buf)
 	err = apiform.MarshalRoot(r, writer)
@@ -155,7 +155,7 @@ func (r WorkerServiceEnvironmentContentUpdateParams) MarshalMultipart() (data []
 }
 
 // JSON encoded metadata about the uploaded parts and Worker configuration.
-type WorkerServiceEnvironmentContentUpdateParamsMetadata struct {
+type WorkerServiceEnvironmentContentReplaceParamsMetadata struct {
 	// Name of the part in the multipart request that contains the script (e.g. the
 	// file adding a listener to the `fetch` event). Indicates a
 	// `service worker syntax` Worker.
@@ -165,22 +165,22 @@ type WorkerServiceEnvironmentContentUpdateParamsMetadata struct {
 	MainModule param.Field[string] `json:"main_module"`
 }
 
-func (r WorkerServiceEnvironmentContentUpdateParamsMetadata) MarshalJSON() (data []byte, err error) {
+func (r WorkerServiceEnvironmentContentReplaceParamsMetadata) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerServiceEnvironmentContentUpdateResponseEnvelope struct {
-	Errors   []WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerServiceEnvironmentContentUpdateResponse                   `json:"result,required"`
+type WorkerServiceEnvironmentContentReplaceResponseEnvelope struct {
+	Errors   []WorkerServiceEnvironmentContentReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerServiceEnvironmentContentReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerServiceEnvironmentContentReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerServiceEnvironmentContentUpdateResponseEnvelopeJSON    `json:"-"`
+	Success WorkerServiceEnvironmentContentReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerServiceEnvironmentContentReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerServiceEnvironmentContentUpdateResponseEnvelopeJSON contains the JSON
-// metadata for the struct [WorkerServiceEnvironmentContentUpdateResponseEnvelope]
-type workerServiceEnvironmentContentUpdateResponseEnvelopeJSON struct {
+// workerServiceEnvironmentContentReplaceResponseEnvelopeJSON contains the JSON
+// metadata for the struct [WorkerServiceEnvironmentContentReplaceResponseEnvelope]
+type workerServiceEnvironmentContentReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -189,53 +189,53 @@ type workerServiceEnvironmentContentUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentContentReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    workerServiceEnvironmentContentUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerServiceEnvironmentContentReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                            `json:"code,required"`
+	Message string                                                           `json:"message,required"`
+	JSON    workerServiceEnvironmentContentReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerServiceEnvironmentContentUpdateResponseEnvelopeErrorsJSON contains the
+// workerServiceEnvironmentContentReplaceResponseEnvelopeErrorsJSON contains the
 // JSON metadata for the struct
-// [WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors]
-type workerServiceEnvironmentContentUpdateResponseEnvelopeErrorsJSON struct {
+// [WorkerServiceEnvironmentContentReplaceResponseEnvelopeErrors]
+type workerServiceEnvironmentContentReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentContentReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    workerServiceEnvironmentContentUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerServiceEnvironmentContentReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                              `json:"code,required"`
+	Message string                                                             `json:"message,required"`
+	JSON    workerServiceEnvironmentContentReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerServiceEnvironmentContentUpdateResponseEnvelopeMessagesJSON contains the
+// workerServiceEnvironmentContentReplaceResponseEnvelopeMessagesJSON contains the
 // JSON metadata for the struct
-// [WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages]
-type workerServiceEnvironmentContentUpdateResponseEnvelopeMessagesJSON struct {
+// [WorkerServiceEnvironmentContentReplaceResponseEnvelopeMessages]
+type workerServiceEnvironmentContentReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerServiceEnvironmentContentReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess bool
+type WorkerServiceEnvironmentContentReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess = true
+	WorkerServiceEnvironmentContentReplaceResponseEnvelopeSuccessTrue WorkerServiceEnvironmentContentReplaceResponseEnvelopeSuccess = true
 )

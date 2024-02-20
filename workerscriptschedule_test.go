@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerScriptScheduleWorkerCronTriggerGetCronTriggers(t *testing.T) {
+func TestWorkerScriptScheduleList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestWorkerScriptScheduleWorkerCronTriggerGetCronTriggers(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Scripts.Schedules.WorkerCronTriggerGetCronTriggers(
+	_, err := client.Workers.Scripts.Schedules.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
@@ -43,7 +43,7 @@ func TestWorkerScriptScheduleWorkerCronTriggerGetCronTriggers(t *testing.T) {
 	}
 }
 
-func TestWorkerScriptScheduleWorkerCronTriggerUpdateCronTriggers(t *testing.T) {
+func TestWorkerScriptScheduleReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,11 +59,11 @@ func TestWorkerScriptScheduleWorkerCronTriggerUpdateCronTriggers(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Scripts.Schedules.WorkerCronTriggerUpdateCronTriggers(
+	_, err := client.Workers.Scripts.Schedules.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
-		cloudflare.WorkerScriptScheduleWorkerCronTriggerUpdateCronTriggersParams{
+		cloudflare.WorkerScriptScheduleReplaceParams{
 			Body: cloudflare.F[any]("[{'cron': '*/30 * * * *'}]"),
 		},
 	)

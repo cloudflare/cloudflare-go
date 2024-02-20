@@ -34,12 +34,25 @@ func NewWorkerRouteService(opts ...option.RequestOption) (r *WorkerRouteService)
 	return
 }
 
-// Updates the URL pattern or Worker associated with a route.
-func (r *WorkerRouteService) Update(ctx context.Context, zoneID string, routeID string, body WorkerRouteUpdateParams, opts ...option.RequestOption) (res *WorkerRouteUpdateResponse, err error) {
+// Creates a route that maps a URL pattern to a Worker.
+func (r *WorkerRouteService) New(ctx context.Context, zoneID string, body WorkerRouteNewParams, opts ...option.RequestOption) (res *WorkerRouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerRouteUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes/%s", zoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env WorkerRouteNewResponseEnvelope
+	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Returns routes for a zone.
+func (r *WorkerRouteService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerRouteListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerRouteListResponseEnvelope
+	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,12 +86,12 @@ func (r *WorkerRouteService) Get(ctx context.Context, zoneID string, routeID str
 	return
 }
 
-// Creates a route that maps a URL pattern to a Worker.
-func (r *WorkerRouteService) WorkerRoutesNewRoute(ctx context.Context, zoneID string, body WorkerRouteWorkerRoutesNewRouteParams, opts ...option.RequestOption) (res *WorkerRouteWorkerRoutesNewRouteResponse, err error) {
+// Updates the URL pattern or Worker associated with a route.
+func (r *WorkerRouteService) Replace(ctx context.Context, zoneID string, routeID string, body WorkerRouteReplaceParams, opts ...option.RequestOption) (res *WorkerRouteReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerRouteWorkerRoutesNewRouteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env WorkerRouteReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/workers/routes/%s", zoneID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,31 +99,34 @@ func (r *WorkerRouteService) WorkerRoutesNewRoute(ctx context.Context, zoneID st
 	return
 }
 
-// Returns routes for a zone.
-func (r *WorkerRouteService) WorkerRoutesListRoutes(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerRouteWorkerRoutesListRoutesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerRouteWorkerRoutesListRoutesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [WorkerRouteNewResponseUnknown] or [shared.UnionString].
+type WorkerRouteNewResponse interface {
+	ImplementsWorkerRouteNewResponse()
 }
 
-type WorkerRouteUpdateResponse struct {
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkerRouteNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type WorkerRouteListResponse struct {
 	// Identifier
 	ID      string `json:"id,required"`
 	Pattern string `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
-	Script string                        `json:"script,required"`
-	JSON   workerRouteUpdateResponseJSON `json:"-"`
+	Script string                      `json:"script,required"`
+	JSON   workerRouteListResponseJSON `json:"-"`
 }
 
-// workerRouteUpdateResponseJSON contains the JSON metadata for the struct
-// [WorkerRouteUpdateResponse]
-type workerRouteUpdateResponseJSON struct {
+// workerRouteListResponseJSON contains the JSON metadata for the struct
+// [WorkerRouteListResponse]
+type workerRouteListResponseJSON struct {
 	ID          apijson.Field
 	Pattern     apijson.Field
 	Script      apijson.Field
@@ -118,7 +134,7 @@ type workerRouteUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -161,35 +177,18 @@ func (r *WorkerRouteGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [WorkerRouteWorkerRoutesNewRouteResponseUnknown] or
-// [shared.UnionString].
-type WorkerRouteWorkerRoutesNewRouteResponse interface {
-	ImplementsWorkerRouteWorkerRoutesNewRouteResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WorkerRouteWorkerRoutesNewRouteResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type WorkerRouteWorkerRoutesListRoutesResponse struct {
+type WorkerRouteReplaceResponse struct {
 	// Identifier
 	ID      string `json:"id,required"`
 	Pattern string `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
-	Script string                                        `json:"script,required"`
-	JSON   workerRouteWorkerRoutesListRoutesResponseJSON `json:"-"`
+	Script string                         `json:"script,required"`
+	JSON   workerRouteReplaceResponseJSON `json:"-"`
 }
 
-// workerRouteWorkerRoutesListRoutesResponseJSON contains the JSON metadata for the
-// struct [WorkerRouteWorkerRoutesListRoutesResponse]
-type workerRouteWorkerRoutesListRoutesResponseJSON struct {
+// workerRouteReplaceResponseJSON contains the JSON metadata for the struct
+// [WorkerRouteReplaceResponse]
+type workerRouteReplaceResponseJSON struct {
 	ID          apijson.Field
 	Pattern     apijson.Field
 	Script      apijson.Field
@@ -197,32 +196,32 @@ type workerRouteWorkerRoutesListRoutesResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteWorkerRoutesListRoutesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerRouteUpdateParams struct {
+type WorkerRouteNewParams struct {
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
 	Script param.Field[string] `json:"script"`
 }
 
-func (r WorkerRouteUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerRouteNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerRouteUpdateResponseEnvelope struct {
-	Errors   []WorkerRouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerRouteUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerRouteUpdateResponse                   `json:"result,required"`
+type WorkerRouteNewResponseEnvelope struct {
+	Errors   []WorkerRouteNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerRouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerRouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerRouteUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerRouteUpdateResponseEnvelopeJSON    `json:"-"`
+	Success WorkerRouteNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerRouteNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerRouteUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WorkerRouteUpdateResponseEnvelope]
-type workerRouteUpdateResponseEnvelopeJSON struct {
+// workerRouteNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerRouteNewResponseEnvelope]
+type workerRouteNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -231,53 +230,122 @@ type workerRouteUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerRouteUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    workerRouteUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerRouteNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    workerRouteNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerRouteUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WorkerRouteUpdateResponseEnvelopeErrors]
-type workerRouteUpdateResponseEnvelopeErrorsJSON struct {
+// workerRouteNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerRouteNewResponseEnvelopeErrors]
+type workerRouteNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerRouteUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    workerRouteUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerRouteNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    workerRouteNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerRouteUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WorkerRouteUpdateResponseEnvelopeMessages]
-type workerRouteUpdateResponseEnvelopeMessagesJSON struct {
+// workerRouteNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkerRouteNewResponseEnvelopeMessages]
+type workerRouteNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerRouteUpdateResponseEnvelopeSuccess bool
+type WorkerRouteNewResponseEnvelopeSuccess bool
 
 const (
-	WorkerRouteUpdateResponseEnvelopeSuccessTrue WorkerRouteUpdateResponseEnvelopeSuccess = true
+	WorkerRouteNewResponseEnvelopeSuccessTrue WorkerRouteNewResponseEnvelopeSuccess = true
+)
+
+type WorkerRouteListResponseEnvelope struct {
+	Errors   []WorkerRouteListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerRouteListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []WorkerRouteListResponse                 `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerRouteListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerRouteListResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerRouteListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerRouteListResponseEnvelope]
+type workerRouteListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerRouteListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerRouteListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    workerRouteListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerRouteListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerRouteListResponseEnvelopeErrors]
+type workerRouteListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerRouteListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerRouteListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    workerRouteListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerRouteListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkerRouteListResponseEnvelopeMessages]
+type workerRouteListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerRouteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerRouteListResponseEnvelopeSuccess bool
+
+const (
+	WorkerRouteListResponseEnvelopeSuccessTrue WorkerRouteListResponseEnvelopeSuccess = true
 )
 
 type WorkerRouteDeleteResponseEnvelope struct {
@@ -418,28 +486,28 @@ const (
 	WorkerRouteGetResponseEnvelopeSuccessTrue WorkerRouteGetResponseEnvelopeSuccess = true
 )
 
-type WorkerRouteWorkerRoutesNewRouteParams struct {
+type WorkerRouteReplaceParams struct {
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
 	Script param.Field[string] `json:"script"`
 }
 
-func (r WorkerRouteWorkerRoutesNewRouteParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerRouteReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type WorkerRouteWorkerRoutesNewRouteResponseEnvelope struct {
-	Errors   []WorkerRouteWorkerRoutesNewRouteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerRouteWorkerRoutesNewRouteResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerRouteWorkerRoutesNewRouteResponse                   `json:"result,required"`
+type WorkerRouteReplaceResponseEnvelope struct {
+	Errors   []WorkerRouteReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerRouteReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerRouteReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerRouteWorkerRoutesNewRouteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerRouteWorkerRoutesNewRouteResponseEnvelopeJSON    `json:"-"`
+	Success WorkerRouteReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerRouteReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerRouteWorkerRoutesNewRouteResponseEnvelopeJSON contains the JSON metadata
-// for the struct [WorkerRouteWorkerRoutesNewRouteResponseEnvelope]
-type workerRouteWorkerRoutesNewRouteResponseEnvelopeJSON struct {
+// workerRouteReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerRouteReplaceResponseEnvelope]
+type workerRouteReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -448,123 +516,51 @@ type workerRouteWorkerRoutesNewRouteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteWorkerRoutesNewRouteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerRouteWorkerRoutesNewRouteResponseEnvelopeErrors struct {
-	Code    int64                                                     `json:"code,required"`
-	Message string                                                    `json:"message,required"`
-	JSON    workerRouteWorkerRoutesNewRouteResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerRouteReplaceResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    workerRouteReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerRouteWorkerRoutesNewRouteResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [WorkerRouteWorkerRoutesNewRouteResponseEnvelopeErrors]
-type workerRouteWorkerRoutesNewRouteResponseEnvelopeErrorsJSON struct {
+// workerRouteReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerRouteReplaceResponseEnvelopeErrors]
+type workerRouteReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteWorkerRoutesNewRouteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerRouteWorkerRoutesNewRouteResponseEnvelopeMessages struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    workerRouteWorkerRoutesNewRouteResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerRouteReplaceResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    workerRouteReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerRouteWorkerRoutesNewRouteResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [WorkerRouteWorkerRoutesNewRouteResponseEnvelopeMessages]
-type workerRouteWorkerRoutesNewRouteResponseEnvelopeMessagesJSON struct {
+// workerRouteReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerRouteReplaceResponseEnvelopeMessages]
+type workerRouteReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerRouteWorkerRoutesNewRouteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerRouteReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerRouteWorkerRoutesNewRouteResponseEnvelopeSuccess bool
+type WorkerRouteReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerRouteWorkerRoutesNewRouteResponseEnvelopeSuccessTrue WorkerRouteWorkerRoutesNewRouteResponseEnvelopeSuccess = true
-)
-
-type WorkerRouteWorkerRoutesListRoutesResponseEnvelope struct {
-	Errors   []WorkerRouteWorkerRoutesListRoutesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerRouteWorkerRoutesListRoutesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkerRouteWorkerRoutesListRoutesResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerRouteWorkerRoutesListRoutesResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerRouteWorkerRoutesListRoutesResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerRouteWorkerRoutesListRoutesResponseEnvelopeJSON contains the JSON metadata
-// for the struct [WorkerRouteWorkerRoutesListRoutesResponseEnvelope]
-type workerRouteWorkerRoutesListRoutesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteWorkerRoutesListRoutesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerRouteWorkerRoutesListRoutesResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    workerRouteWorkerRoutesListRoutesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerRouteWorkerRoutesListRoutesResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [WorkerRouteWorkerRoutesListRoutesResponseEnvelopeErrors]
-type workerRouteWorkerRoutesListRoutesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteWorkerRoutesListRoutesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerRouteWorkerRoutesListRoutesResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    workerRouteWorkerRoutesListRoutesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerRouteWorkerRoutesListRoutesResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [WorkerRouteWorkerRoutesListRoutesResponseEnvelopeMessages]
-type workerRouteWorkerRoutesListRoutesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteWorkerRoutesListRoutesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerRouteWorkerRoutesListRoutesResponseEnvelopeSuccess bool
-
-const (
-	WorkerRouteWorkerRoutesListRoutesResponseEnvelopeSuccessTrue WorkerRouteWorkerRoutesListRoutesResponseEnvelopeSuccess = true
+	WorkerRouteReplaceResponseEnvelopeSuccessTrue WorkerRouteReplaceResponseEnvelopeSuccess = true
 )

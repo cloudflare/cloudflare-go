@@ -31,6 +31,45 @@ func NewMnmConfigService(opts ...option.RequestOption) (r *MnmConfigService) {
 	return
 }
 
+// Create a new network monitoring configuration.
+func (r *MnmConfigService) New(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MnmConfigNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Update fields in an existing network monitoring configuration.
+func (r *MnmConfigService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MnmConfigUpdateResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists default sampling and router IPs for account.
+func (r *MnmConfigService) List(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MnmConfigListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Delete an existing network monitoring configuration.
 func (r *MnmConfigService) Delete(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -44,50 +83,11 @@ func (r *MnmConfigService) Delete(ctx context.Context, accountIdentifier interfa
 	return
 }
 
-// Create a new network monitoring configuration.
-func (r *MnmConfigService) MagicNetworkMonitoringConfigurationNewAccountConfiguration(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Lists default sampling and router IPs for account.
-func (r *MnmConfigService) MagicNetworkMonitoringConfigurationListAccountConfiguration(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Update fields in an existing network monitoring configuration.
-func (r *MnmConfigService) MagicNetworkMonitoringConfigurationUpdateAccountConfigurationFields(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
-func (r *MnmConfigService) MagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfiguration(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponse, err error) {
+func (r *MnmConfigService) Replace(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MnmConfigReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelope
+	var env MnmConfigReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
@@ -95,6 +95,78 @@ func (r *MnmConfigService) MagicNetworkMonitoringConfigurationUpdateAnEntireAcco
 	}
 	res = &env.Result
 	return
+}
+
+type MnmConfigNewResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                   `json:"name,required"`
+	RouterIPs []string                 `json:"router_ips,required"`
+	JSON      mnmConfigNewResponseJSON `json:"-"`
+}
+
+// mnmConfigNewResponseJSON contains the JSON metadata for the struct
+// [MnmConfigNewResponse]
+type mnmConfigNewResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MnmConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigUpdateResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                      `json:"name,required"`
+	RouterIPs []string                    `json:"router_ips,required"`
+	JSON      mnmConfigUpdateResponseJSON `json:"-"`
+}
+
+// mnmConfigUpdateResponseJSON contains the JSON metadata for the struct
+// [MnmConfigUpdateResponse]
+type mnmConfigUpdateResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MnmConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigListResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                    `json:"name,required"`
+	RouterIPs []string                  `json:"router_ips,required"`
+	JSON      mnmConfigListResponseJSON `json:"-"`
+}
+
+// mnmConfigListResponseJSON contains the JSON metadata for the struct
+// [MnmConfigListResponse]
+type mnmConfigListResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MnmConfigListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type MnmConfigDeleteResponse struct {
@@ -121,20 +193,19 @@ func (r *MnmConfigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse struct {
+type MnmConfigReplaceResponse struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name      string                                                                          `json:"name,required"`
-	RouterIPs []string                                                                        `json:"router_ips,required"`
-	JSON      mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseJSON `json:"-"`
+	Name      string                       `json:"name,required"`
+	RouterIPs []string                     `json:"router_ips,required"`
+	JSON      mnmConfigReplaceResponseJSON `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse]
-type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseJSON struct {
+// mnmConfigReplaceResponseJSON contains the JSON metadata for the struct
+// [MnmConfigReplaceResponse]
+type mnmConfigReplaceResponseJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
@@ -142,84 +213,216 @@ type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name      string                                                                           `json:"name,required"`
-	RouterIPs []string                                                                         `json:"router_ips,required"`
-	JSON      mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseJSON `json:"-"`
+type MnmConfigNewResponseEnvelope struct {
+	Errors   []MnmConfigNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmConfigNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmConfigNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MnmConfigNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmConfigNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponse]
-type mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+// mnmConfigNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmConfigNewResponseEnvelope]
+type mnmConfigNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name      string                                                                                   `json:"name,required"`
-	RouterIPs []string                                                                                 `json:"router_ips,required"`
-	JSON      mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseJSON `json:"-"`
+type MnmConfigNewResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    mnmConfigNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponse]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+// mnmConfigNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [MnmConfigNewResponseEnvelopeErrors]
+type mnmConfigNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name      string                                                                                     `json:"name,required"`
-	RouterIPs []string                                                                                   `json:"router_ips,required"`
-	JSON      mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseJSON `json:"-"`
+type MnmConfigNewResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    mnmConfigNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponse]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+// mnmConfigNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmConfigNewResponseEnvelopeMessages]
+type mnmConfigNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Whether the API call was successful
+type MnmConfigNewResponseEnvelopeSuccess bool
+
+const (
+	MnmConfigNewResponseEnvelopeSuccessTrue MnmConfigNewResponseEnvelopeSuccess = true
+)
+
+type MnmConfigUpdateResponseEnvelope struct {
+	Errors   []MnmConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmConfigUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MnmConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmConfigUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// mnmConfigUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmConfigUpdateResponseEnvelope]
+type mnmConfigUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigUpdateResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    mnmConfigUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// mnmConfigUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MnmConfigUpdateResponseEnvelopeErrors]
+type mnmConfigUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigUpdateResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    mnmConfigUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// mnmConfigUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmConfigUpdateResponseEnvelopeMessages]
+type mnmConfigUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MnmConfigUpdateResponseEnvelopeSuccess bool
+
+const (
+	MnmConfigUpdateResponseEnvelopeSuccessTrue MnmConfigUpdateResponseEnvelopeSuccess = true
+)
+
+type MnmConfigListResponseEnvelope struct {
+	Errors   []MnmConfigListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmConfigListResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmConfigListResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MnmConfigListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmConfigListResponseEnvelopeJSON    `json:"-"`
+}
+
+// mnmConfigListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmConfigListResponseEnvelope]
+type mnmConfigListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigListResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    mnmConfigListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// mnmConfigListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MnmConfigListResponseEnvelopeErrors]
+type mnmConfigListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MnmConfigListResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    mnmConfigListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// mnmConfigListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmConfigListResponseEnvelopeMessages]
+type mnmConfigListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MnmConfigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MnmConfigListResponseEnvelopeSuccess bool
+
+const (
+	MnmConfigListResponseEnvelopeSuccessTrue MnmConfigListResponseEnvelopeSuccess = true
+)
 
 type MnmConfigDeleteResponseEnvelope struct {
 	Errors   []MnmConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -290,19 +493,18 @@ const (
 	MnmConfigDeleteResponseEnvelopeSuccessTrue MnmConfigDeleteResponseEnvelopeSuccess = true
 )
 
-type MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelope struct {
-	Errors   []MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse                   `json:"result,required"`
+type MnmConfigReplaceResponseEnvelope struct {
+	Errors   []MnmConfigReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MnmConfigReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   MnmConfigReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeJSON    `json:"-"`
+	Success MnmConfigReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    mnmConfigReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelope]
-type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeJSON struct {
+// mnmConfigReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MnmConfigReplaceResponseEnvelope]
+type mnmConfigReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -311,269 +513,51 @@ type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponse
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                         `json:"code,required"`
-	Message string                                                                                        `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
+type MnmConfigReplaceResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    mnmConfigReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrors]
-type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrorsJSON struct {
+// mnmConfigReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MnmConfigReplaceResponseEnvelopeErrors]
+type mnmConfigReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
+type MnmConfigReplaceResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    mnmConfigReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessages]
-type mnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessagesJSON struct {
+// mnmConfigReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MnmConfigReplaceResponseEnvelopeMessages]
+type mnmConfigReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MnmConfigReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeSuccess bool
+type MnmConfigReplaceResponseEnvelopeSuccess bool
 
 const (
-	MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeSuccessTrue MnmConfigMagicNetworkMonitoringConfigurationNewAccountConfigurationResponseEnvelopeSuccess = true
-)
-
-type MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelope struct {
-	Errors   []MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeJSON    `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelope]
-type mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                          `json:"code,required"`
-	Message string                                                                                         `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrors]
-type mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                            `json:"code,required"`
-	Message string                                                                                           `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessages]
-type mnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeSuccess bool
-
-const (
-	MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeSuccessTrue MnmConfigMagicNetworkMonitoringConfigurationListAccountConfigurationResponseEnvelopeSuccess = true
-)
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelope struct {
-	Errors   []MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeJSON    `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelope]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                  `json:"code,required"`
-	Message string                                                                                                 `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrors]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                    `json:"code,required"`
-	Message string                                                                                                   `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessages]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeSuccess bool
-
-const (
-	MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeSuccessTrue MnmConfigMagicNetworkMonitoringConfigurationUpdateAccountConfigurationFieldsResponseEnvelopeSuccess = true
-)
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelope struct {
-	Errors   []MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeJSON    `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelope]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                                    `json:"code,required"`
-	Message string                                                                                                   `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrors]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                                      `json:"code,required"`
-	Message string                                                                                                     `json:"message,required"`
-	JSON    mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessages]
-type mnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeSuccess bool
-
-const (
-	MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeSuccessTrue MnmConfigMagicNetworkMonitoringConfigurationUpdateAnEntireAccountConfigurationResponseEnvelopeSuccess = true
+	MnmConfigReplaceResponseEnvelopeSuccessTrue MnmConfigReplaceResponseEnvelopeSuccess = true
 )

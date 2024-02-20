@@ -36,9 +36,9 @@ func NewIntelIPService(opts ...option.RequestOption) (r *IntelIPService) {
 }
 
 // Get IP Overview
-func (r *IntelIPService) IPIntelligenceGetIPOverview(ctx context.Context, accountID string, query IntelIPIPIntelligenceGetIPOverviewParams, opts ...option.RequestOption) (res *[]IntelIpipIntelligenceGetIPOverviewResponse, err error) {
+func (r *IntelIPService) Get(ctx context.Context, accountID string, query IntelIPGetParams, opts ...option.RequestOption) (res *[]IntelIPGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelIpipIntelligenceGetIPOverviewResponseEnvelope
+	var env IntelIPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/ip", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,18 +48,18 @@ func (r *IntelIPService) IPIntelligenceGetIPOverview(ctx context.Context, accoun
 	return
 }
 
-type IntelIpipIntelligenceGetIPOverviewResponse struct {
+type IntelIPGetResponse struct {
 	// Specifies a reference to the autonomous systems (AS) that the IP address belongs
 	// to.
-	BelongsToRef IntelIpipIntelligenceGetIPOverviewResponseBelongsToRef `json:"belongs_to_ref"`
-	IP           IntelIpipIntelligenceGetIPOverviewResponseIP           `json:"ip" format:"ipv4"`
-	RiskTypes    interface{}                                            `json:"risk_types"`
-	JSON         intelIpipIntelligenceGetIPOverviewResponseJSON         `json:"-"`
+	BelongsToRef IntelIPGetResponseBelongsToRef `json:"belongs_to_ref"`
+	IP           IntelIPGetResponseIP           `json:"ip" format:"ipv4"`
+	RiskTypes    interface{}                    `json:"risk_types"`
+	JSON         intelIPGetResponseJSON         `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseJSON contains the JSON metadata for
-// the struct [IntelIpipIntelligenceGetIPOverviewResponse]
-type intelIpipIntelligenceGetIPOverviewResponseJSON struct {
+// intelIPGetResponseJSON contains the JSON metadata for the struct
+// [IntelIPGetResponse]
+type intelIPGetResponseJSON struct {
 	BelongsToRef apijson.Field
 	IP           apijson.Field
 	RiskTypes    apijson.Field
@@ -67,25 +67,25 @@ type intelIpipIntelligenceGetIPOverviewResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies a reference to the autonomous systems (AS) that the IP address belongs
 // to.
-type IntelIpipIntelligenceGetIPOverviewResponseBelongsToRef struct {
+type IntelIPGetResponseBelongsToRef struct {
 	ID          interface{} `json:"id"`
 	Country     string      `json:"country"`
 	Description string      `json:"description"`
 	// Infrastructure type of this ASN.
-	Type  IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefType `json:"type"`
-	Value string                                                     `json:"value"`
-	JSON  intelIpipIntelligenceGetIPOverviewResponseBelongsToRefJSON `json:"-"`
+	Type  IntelIPGetResponseBelongsToRefType `json:"type"`
+	Value string                             `json:"value"`
+	JSON  intelIPGetResponseBelongsToRefJSON `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseBelongsToRefJSON contains the JSON
-// metadata for the struct [IntelIpipIntelligenceGetIPOverviewResponseBelongsToRef]
-type intelIpipIntelligenceGetIPOverviewResponseBelongsToRefJSON struct {
+// intelIPGetResponseBelongsToRefJSON contains the JSON metadata for the struct
+// [IntelIPGetResponseBelongsToRef]
+type intelIPGetResponseBelongsToRefJSON struct {
 	ID          apijson.Field
 	Country     apijson.Field
 	Description apijson.Field
@@ -95,27 +95,27 @@ type intelIpipIntelligenceGetIPOverviewResponseBelongsToRefJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponseBelongsToRef) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponseBelongsToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Infrastructure type of this ASN.
-type IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefType string
+type IntelIPGetResponseBelongsToRefType string
 
 const (
-	IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefTypeHostingProvider IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefType = "hosting_provider"
-	IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefTypeIsp             IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefType = "isp"
-	IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefTypeOrganization    IntelIpipIntelligenceGetIPOverviewResponseBelongsToRefType = "organization"
+	IntelIPGetResponseBelongsToRefTypeHostingProvider IntelIPGetResponseBelongsToRefType = "hosting_provider"
+	IntelIPGetResponseBelongsToRefTypeIsp             IntelIPGetResponseBelongsToRefType = "isp"
+	IntelIPGetResponseBelongsToRefTypeOrganization    IntelIPGetResponseBelongsToRefType = "organization"
 )
 
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type IntelIpipIntelligenceGetIPOverviewResponseIP interface {
-	ImplementsIntelIpipIntelligenceGetIPOverviewResponseIP()
+type IntelIPGetResponseIP interface {
+	ImplementsIntelIPGetResponseIP()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IntelIpipIntelligenceGetIPOverviewResponseIP)(nil)).Elem(),
+		reflect.TypeOf((*IntelIPGetResponseIP)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -128,33 +128,32 @@ func init() {
 	)
 }
 
-type IntelIPIPIntelligenceGetIPOverviewParams struct {
+type IntelIPGetParams struct {
 	IPV4 param.Field[string] `query:"ipv4"`
 	IPV6 param.Field[string] `query:"ipv6"`
 }
 
-// URLQuery serializes [IntelIPIPIntelligenceGetIPOverviewParams]'s query
-// parameters as `url.Values`.
-func (r IntelIPIPIntelligenceGetIPOverviewParams) URLQuery() (v url.Values) {
+// URLQuery serializes [IntelIPGetParams]'s query parameters as `url.Values`.
+func (r IntelIPGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IntelIpipIntelligenceGetIPOverviewResponseEnvelope struct {
-	Errors   []IntelIpipIntelligenceGetIPOverviewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelIpipIntelligenceGetIPOverviewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelIpipIntelligenceGetIPOverviewResponse                 `json:"result,required,nullable"`
+type IntelIPGetResponseEnvelope struct {
+	Errors   []IntelIPGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelIPGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelIPGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    IntelIpipIntelligenceGetIPOverviewResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo IntelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       intelIpipIntelligenceGetIPOverviewResponseEnvelopeJSON       `json:"-"`
+	Success    IntelIPGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo IntelIPGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       intelIPGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseEnvelopeJSON contains the JSON
-// metadata for the struct [IntelIpipIntelligenceGetIPOverviewResponseEnvelope]
-type intelIpipIntelligenceGetIPOverviewResponseEnvelopeJSON struct {
+// intelIPGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IntelIPGetResponseEnvelope]
+type intelIPGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -164,58 +163,56 @@ type intelIpipIntelligenceGetIPOverviewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelIpipIntelligenceGetIPOverviewResponseEnvelopeErrors struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    intelIpipIntelligenceGetIPOverviewResponseEnvelopeErrorsJSON `json:"-"`
+type IntelIPGetResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    intelIPGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [IntelIpipIntelligenceGetIPOverviewResponseEnvelopeErrors]
-type intelIpipIntelligenceGetIPOverviewResponseEnvelopeErrorsJSON struct {
+// intelIPGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [IntelIPGetResponseEnvelopeErrors]
+type intelIPGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelIpipIntelligenceGetIPOverviewResponseEnvelopeMessages struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    intelIpipIntelligenceGetIPOverviewResponseEnvelopeMessagesJSON `json:"-"`
+type IntelIPGetResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    intelIPGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [IntelIpipIntelligenceGetIPOverviewResponseEnvelopeMessages]
-type intelIpipIntelligenceGetIPOverviewResponseEnvelopeMessagesJSON struct {
+// intelIPGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [IntelIPGetResponseEnvelopeMessages]
+type intelIPGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelIpipIntelligenceGetIPOverviewResponseEnvelopeSuccess bool
+type IntelIPGetResponseEnvelopeSuccess bool
 
 const (
-	IntelIpipIntelligenceGetIPOverviewResponseEnvelopeSuccessTrue IntelIpipIntelligenceGetIPOverviewResponseEnvelopeSuccess = true
+	IntelIPGetResponseEnvelopeSuccessTrue IntelIPGetResponseEnvelopeSuccess = true
 )
 
-type IntelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfo struct {
+type IntelIPGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -223,14 +220,13 @@ type IntelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                          `json:"total_count"`
-	JSON       intelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                  `json:"total_count"`
+	JSON       intelIPGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// intelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [IntelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfo]
-type intelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfoJSON struct {
+// intelIPGetResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [IntelIPGetResponseEnvelopeResultInfo]
+type intelIPGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -239,6 +235,6 @@ type intelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIpipIntelligenceGetIPOverviewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

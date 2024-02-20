@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestBillingProfileAccountBillingProfileBillingProfileDetails(t *testing.T) {
+func TestBillingProfileGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestBillingProfileAccountBillingProfileBillingProfileDetails(t *testing.T) 
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Billings.Profiles.AccountBillingProfileBillingProfileDetails(context.TODO(), map[string]interface{}{})
+	_, err := client.Billings.Profiles.Get(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

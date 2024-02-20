@@ -36,6 +36,29 @@ func NewUserOrganizationService(opts ...option.RequestOption) (r *UserOrganizati
 	return
 }
 
+// Lists organizations the user is associated with.
+func (r *UserOrganizationService) List(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[UserOrganizationListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := "user/organizations"
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists organizations the user is associated with.
+func (r *UserOrganizationService) ListAutoPaging(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[UserOrganizationListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
+}
+
 // Removes association to an organization.
 func (r *UserOrganizationService) Delete(ctx context.Context, organizationID string, opts ...option.RequestOption) (res *UserOrganizationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -57,18 +80,43 @@ func (r *UserOrganizationService) Get(ctx context.Context, organizationID string
 	return
 }
 
-// Lists organizations the user is associated with.
-func (r *UserOrganizationService) UserSOrganizationsListOrganizations(ctx context.Context, query UserOrganizationUserSOrganizationsListOrganizationsParams, opts ...option.RequestOption) (res *[]UserOrganizationUserSOrganizationsListOrganizationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelope
-	path := "user/organizations"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type UserOrganizationListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Organization name.
+	Name string `json:"name"`
+	// Access permissions for this User.
+	Permissions []string `json:"permissions"`
+	// List of roles that a user has within an organization.
+	Roles []string `json:"roles"`
+	// Whether the user is a member of the organization or has an inivitation pending.
+	Status UserOrganizationListResponseStatus `json:"status"`
+	JSON   userOrganizationListResponseJSON   `json:"-"`
 }
+
+// userOrganizationListResponseJSON contains the JSON metadata for the struct
+// [UserOrganizationListResponse]
+type userOrganizationListResponseJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	Roles       apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserOrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the user is a member of the organization or has an inivitation pending.
+type UserOrganizationListResponseStatus string
+
+const (
+	UserOrganizationListResponseStatusMember  UserOrganizationListResponseStatus = "member"
+	UserOrganizationListResponseStatusInvited UserOrganizationListResponseStatus = "invited"
+)
 
 type UserOrganizationDeleteResponse struct {
 	// Identifier
@@ -104,43 +152,63 @@ func init() {
 	)
 }
 
-type UserOrganizationUserSOrganizationsListOrganizationsResponse struct {
-	// Identifier
-	ID string `json:"id"`
+type UserOrganizationListParams struct {
+	// Direction to order organizations.
+	Direction param.Field[UserOrganizationListParamsDirection] `query:"direction"`
+	// Whether to match all search requirements or at least one (any).
+	Match param.Field[UserOrganizationListParamsMatch] `query:"match"`
 	// Organization name.
-	Name string `json:"name"`
-	// Access permissions for this User.
-	Permissions []string `json:"permissions"`
-	// List of roles that a user has within an organization.
-	Roles []string `json:"roles"`
+	Name param.Field[string] `query:"name"`
+	// Field to order organizations by.
+	Order param.Field[UserOrganizationListParamsOrder] `query:"order"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// Number of organizations per page.
+	PerPage param.Field[float64] `query:"per_page"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status UserOrganizationUserSOrganizationsListOrganizationsResponseStatus `json:"status"`
-	JSON   userOrganizationUserSOrganizationsListOrganizationsResponseJSON   `json:"-"`
+	Status param.Field[UserOrganizationListParamsStatus] `query:"status"`
 }
 
-// userOrganizationUserSOrganizationsListOrganizationsResponseJSON contains the
-// JSON metadata for the struct
-// [UserOrganizationUserSOrganizationsListOrganizationsResponse]
-type userOrganizationUserSOrganizationsListOrganizationsResponseJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Roles       apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// URLQuery serializes [UserOrganizationListParams]'s query parameters as
+// `url.Values`.
+func (r UserOrganizationListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
-func (r *UserOrganizationUserSOrganizationsListOrganizationsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the user is a member of the organization or has an inivitation pending.
-type UserOrganizationUserSOrganizationsListOrganizationsResponseStatus string
+// Direction to order organizations.
+type UserOrganizationListParamsDirection string
 
 const (
-	UserOrganizationUserSOrganizationsListOrganizationsResponseStatusMember  UserOrganizationUserSOrganizationsListOrganizationsResponseStatus = "member"
-	UserOrganizationUserSOrganizationsListOrganizationsResponseStatusInvited UserOrganizationUserSOrganizationsListOrganizationsResponseStatus = "invited"
+	UserOrganizationListParamsDirectionAsc  UserOrganizationListParamsDirection = "asc"
+	UserOrganizationListParamsDirectionDesc UserOrganizationListParamsDirection = "desc"
+)
+
+// Whether to match all search requirements or at least one (any).
+type UserOrganizationListParamsMatch string
+
+const (
+	UserOrganizationListParamsMatchAny UserOrganizationListParamsMatch = "any"
+	UserOrganizationListParamsMatchAll UserOrganizationListParamsMatch = "all"
+)
+
+// Field to order organizations by.
+type UserOrganizationListParamsOrder string
+
+const (
+	UserOrganizationListParamsOrderID     UserOrganizationListParamsOrder = "id"
+	UserOrganizationListParamsOrderName   UserOrganizationListParamsOrder = "name"
+	UserOrganizationListParamsOrderStatus UserOrganizationListParamsOrder = "status"
+)
+
+// Whether the user is a member of the organization or has an inivitation pending.
+type UserOrganizationListParamsStatus string
+
+const (
+	UserOrganizationListParamsStatusMember  UserOrganizationListParamsStatus = "member"
+	UserOrganizationListParamsStatusInvited UserOrganizationListParamsStatus = "invited"
 )
 
 type UserOrganizationGetResponseEnvelope struct {
@@ -211,165 +279,3 @@ type UserOrganizationGetResponseEnvelopeSuccess bool
 const (
 	UserOrganizationGetResponseEnvelopeSuccessTrue UserOrganizationGetResponseEnvelopeSuccess = true
 )
-
-type UserOrganizationUserSOrganizationsListOrganizationsParams struct {
-	// Direction to order organizations.
-	Direction param.Field[UserOrganizationUserSOrganizationsListOrganizationsParamsDirection] `query:"direction"`
-	// Whether to match all search requirements or at least one (any).
-	Match param.Field[UserOrganizationUserSOrganizationsListOrganizationsParamsMatch] `query:"match"`
-	// Organization name.
-	Name param.Field[string] `query:"name"`
-	// Field to order organizations by.
-	Order param.Field[UserOrganizationUserSOrganizationsListOrganizationsParamsOrder] `query:"order"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Number of organizations per page.
-	PerPage param.Field[float64] `query:"per_page"`
-	// Whether the user is a member of the organization or has an inivitation pending.
-	Status param.Field[UserOrganizationUserSOrganizationsListOrganizationsParamsStatus] `query:"status"`
-}
-
-// URLQuery serializes
-// [UserOrganizationUserSOrganizationsListOrganizationsParams]'s query parameters
-// as `url.Values`.
-func (r UserOrganizationUserSOrganizationsListOrganizationsParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// Direction to order organizations.
-type UserOrganizationUserSOrganizationsListOrganizationsParamsDirection string
-
-const (
-	UserOrganizationUserSOrganizationsListOrganizationsParamsDirectionAsc  UserOrganizationUserSOrganizationsListOrganizationsParamsDirection = "asc"
-	UserOrganizationUserSOrganizationsListOrganizationsParamsDirectionDesc UserOrganizationUserSOrganizationsListOrganizationsParamsDirection = "desc"
-)
-
-// Whether to match all search requirements or at least one (any).
-type UserOrganizationUserSOrganizationsListOrganizationsParamsMatch string
-
-const (
-	UserOrganizationUserSOrganizationsListOrganizationsParamsMatchAny UserOrganizationUserSOrganizationsListOrganizationsParamsMatch = "any"
-	UserOrganizationUserSOrganizationsListOrganizationsParamsMatchAll UserOrganizationUserSOrganizationsListOrganizationsParamsMatch = "all"
-)
-
-// Field to order organizations by.
-type UserOrganizationUserSOrganizationsListOrganizationsParamsOrder string
-
-const (
-	UserOrganizationUserSOrganizationsListOrganizationsParamsOrderID     UserOrganizationUserSOrganizationsListOrganizationsParamsOrder = "id"
-	UserOrganizationUserSOrganizationsListOrganizationsParamsOrderName   UserOrganizationUserSOrganizationsListOrganizationsParamsOrder = "name"
-	UserOrganizationUserSOrganizationsListOrganizationsParamsOrderStatus UserOrganizationUserSOrganizationsListOrganizationsParamsOrder = "status"
-)
-
-// Whether the user is a member of the organization or has an inivitation pending.
-type UserOrganizationUserSOrganizationsListOrganizationsParamsStatus string
-
-const (
-	UserOrganizationUserSOrganizationsListOrganizationsParamsStatusMember  UserOrganizationUserSOrganizationsListOrganizationsParamsStatus = "member"
-	UserOrganizationUserSOrganizationsListOrganizationsParamsStatusInvited UserOrganizationUserSOrganizationsListOrganizationsParamsStatus = "invited"
-)
-
-type UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelope struct {
-	Errors   []UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []UserOrganizationUserSOrganizationsListOrganizationsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeJSON       `json:"-"`
-}
-
-// userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelope]
-type userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrors struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrors]
-type userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessages struct {
-	Code    int64                                                                           `json:"code,required"`
-	Message string                                                                          `json:"message,required"`
-	JSON    userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessages]
-type userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeSuccess bool
-
-const (
-	UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeSuccessTrue UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeSuccess = true
-)
-
-type UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                           `json:"total_count"`
-	JSON       userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfo]
-type userOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserOrganizationUserSOrganizationsListOrganizationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

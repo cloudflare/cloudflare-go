@@ -35,9 +35,9 @@ func NewIntelMiscategorizationService(opts ...option.RequestOption) (r *IntelMis
 }
 
 // Create Miscategorization
-func (r *IntelMiscategorizationService) MiscategorizationNewMiscategorization(ctx context.Context, accountID string, body IntelMiscategorizationMiscategorizationNewMiscategorizationParams, opts ...option.RequestOption) (res *IntelMiscategorizationMiscategorizationNewMiscategorizationResponse, err error) {
+func (r *IntelMiscategorizationService) New(ctx context.Context, accountID string, body IntelMiscategorizationNewParams, opts ...option.RequestOption) (res *IntelMiscategorizationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelope
+	var env IntelMiscategorizationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/miscategorization", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -47,16 +47,15 @@ func (r *IntelMiscategorizationService) MiscategorizationNewMiscategorization(ct
 	return
 }
 
-// Union satisfied by
-// [IntelMiscategorizationMiscategorizationNewMiscategorizationResponseUnknown] or
+// Union satisfied by [IntelMiscategorizationNewResponseUnknown] or
 // [shared.UnionString].
-type IntelMiscategorizationMiscategorizationNewMiscategorizationResponse interface {
-	ImplementsIntelMiscategorizationMiscategorizationNewMiscategorizationResponse()
+type IntelMiscategorizationNewResponse interface {
+	ImplementsIntelMiscategorizationNewResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IntelMiscategorizationMiscategorizationNewMiscategorizationResponse)(nil)).Elem(),
+		reflect.TypeOf((*IntelMiscategorizationNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -65,12 +64,12 @@ func init() {
 	)
 }
 
-type IntelMiscategorizationMiscategorizationNewMiscategorizationParams struct {
+type IntelMiscategorizationNewParams struct {
 	// Content category IDs to add.
 	ContentAdds param.Field[interface{}] `json:"content_adds"`
 	// Content category IDs to remove.
-	ContentRemoves param.Field[interface{}]                                                                    `json:"content_removes"`
-	IndicatorType  param.Field[IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType] `json:"indicator_type"`
+	ContentRemoves param.Field[interface{}]                                  `json:"content_removes"`
+	IndicatorType  param.Field[IntelMiscategorizationNewParamsIndicatorType] `json:"indicator_type"`
 	// Provide only if indicator_type is `ipv4` or `ipv6`.
 	IP param.Field[interface{}] `json:"ip"`
 	// Security category IDs to add.
@@ -83,32 +82,31 @@ type IntelMiscategorizationMiscategorizationNewMiscategorizationParams struct {
 	URL param.Field[string] `json:"url"`
 }
 
-func (r IntelMiscategorizationMiscategorizationNewMiscategorizationParams) MarshalJSON() (data []byte, err error) {
+func (r IntelMiscategorizationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType string
+type IntelMiscategorizationNewParamsIndicatorType string
 
 const (
-	IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorTypeDomain IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType = "domain"
-	IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorTypeIPV4   IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType = "ipv4"
-	IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorTypeIPV6   IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType = "ipv6"
-	IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorTypeURL    IntelMiscategorizationMiscategorizationNewMiscategorizationParamsIndicatorType = "url"
+	IntelMiscategorizationNewParamsIndicatorTypeDomain IntelMiscategorizationNewParamsIndicatorType = "domain"
+	IntelMiscategorizationNewParamsIndicatorTypeIPV4   IntelMiscategorizationNewParamsIndicatorType = "ipv4"
+	IntelMiscategorizationNewParamsIndicatorTypeIPV6   IntelMiscategorizationNewParamsIndicatorType = "ipv6"
+	IntelMiscategorizationNewParamsIndicatorTypeURL    IntelMiscategorizationNewParamsIndicatorType = "url"
 )
 
-type IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelope struct {
-	Errors   []IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelMiscategorizationMiscategorizationNewMiscategorizationResponse                   `json:"result,required"`
+type IntelMiscategorizationNewResponseEnvelope struct {
+	Errors   []IntelMiscategorizationNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelMiscategorizationNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelMiscategorizationNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeJSON    `json:"-"`
+	Success IntelMiscategorizationNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    intelMiscategorizationNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelope]
-type intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeJSON struct {
+// intelMiscategorizationNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [IntelMiscategorizationNewResponseEnvelope]
+type intelMiscategorizationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -117,53 +115,51 @@ type intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelope
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelMiscategorizationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrors struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrorsJSON `json:"-"`
+type IntelMiscategorizationNewResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    intelMiscategorizationNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrors]
-type intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrorsJSON struct {
+// intelMiscategorizationNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [IntelMiscategorizationNewResponseEnvelopeErrors]
+type intelMiscategorizationNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelMiscategorizationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessages struct {
-	Code    int64                                                                                   `json:"code,required"`
-	Message string                                                                                  `json:"message,required"`
-	JSON    intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessagesJSON `json:"-"`
+type IntelMiscategorizationNewResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    intelMiscategorizationNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessages]
-type intelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessagesJSON struct {
+// intelMiscategorizationNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [IntelMiscategorizationNewResponseEnvelopeMessages]
+type intelMiscategorizationNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelMiscategorizationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeSuccess bool
+type IntelMiscategorizationNewResponseEnvelopeSuccess bool
 
 const (
-	IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeSuccessTrue IntelMiscategorizationMiscategorizationNewMiscategorizationResponseEnvelopeSuccess = true
+	IntelMiscategorizationNewResponseEnvelopeSuccessTrue IntelMiscategorizationNewResponseEnvelopeSuccess = true
 )

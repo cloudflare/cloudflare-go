@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryWithOptionalParams(t *testing.T) {
+func TestSpectrumAnalyticsEventSummaryGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,13 +30,13 @@ func TestSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummar
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Analytics.Events.Summaries.SpectrumAnalyticsSummaryGetAnalyticsSummary(
+	_, err := client.Spectrum.Analytics.Events.Summaries.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams{
-			Dimensions: cloudflare.F([]cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension{cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionEvent, cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionAppID}),
+		cloudflare.SpectrumAnalyticsEventSummaryGetParams{
+			Dimensions: cloudflare.F([]cloudflare.SpectrumAnalyticsEventSummaryGetParamsDimension{cloudflare.SpectrumAnalyticsEventSummaryGetParamsDimensionEvent, cloudflare.SpectrumAnalyticsEventSummaryGetParamsDimensionAppID}),
 			Filters:    cloudflare.F("event==disconnect%20AND%20coloName!=SFO"),
-			Metrics:    cloudflare.F([]cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric{cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricCount, cloudflare.SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricBytesIngress}),
+			Metrics:    cloudflare.F([]cloudflare.SpectrumAnalyticsEventSummaryGetParamsMetric{cloudflare.SpectrumAnalyticsEventSummaryGetParamsMetricCount, cloudflare.SpectrumAnalyticsEventSummaryGetParamsMetricBytesIngress}),
 			Since:      cloudflare.F(time.Now()),
 			Sort:       cloudflare.F([]interface{}{"+count", "-bytesIngress"}),
 			Until:      cloudflare.F(time.Now()),

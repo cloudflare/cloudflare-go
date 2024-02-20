@@ -36,9 +36,9 @@ func NewRadarConnectionTamperingService(opts ...option.RequestOption) (r *RadarC
 }
 
 // Distribution of connection tampering types over a given time period.
-func (r *RadarConnectionTamperingService) Summary(ctx context.Context, query RadarConnectionTamperingSummaryParams, opts ...option.RequestOption) (res *RadarConnectionTamperingSummaryResponse, err error) {
+func (r *RadarConnectionTamperingService) List(ctx context.Context, query RadarConnectionTamperingListParams, opts ...option.RequestOption) (res *RadarConnectionTamperingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarConnectionTamperingSummaryResponseEnvelope
+	var env RadarConnectionTamperingListResponseEnvelope
 	path := "radar/connection_tampering/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,100 +48,99 @@ func (r *RadarConnectionTamperingService) Summary(ctx context.Context, query Rad
 	return
 }
 
-type RadarConnectionTamperingSummaryResponse struct {
-	Meta     RadarConnectionTamperingSummaryResponseMeta     `json:"meta,required"`
-	Summary0 RadarConnectionTamperingSummaryResponseSummary0 `json:"summary_0,required"`
-	JSON     radarConnectionTamperingSummaryResponseJSON     `json:"-"`
+type RadarConnectionTamperingListResponse struct {
+	Meta     RadarConnectionTamperingListResponseMeta     `json:"meta,required"`
+	Summary0 RadarConnectionTamperingListResponseSummary0 `json:"summary_0,required"`
+	JSON     radarConnectionTamperingListResponseJSON     `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseJSON contains the JSON metadata for the
-// struct [RadarConnectionTamperingSummaryResponse]
-type radarConnectionTamperingSummaryResponseJSON struct {
+// radarConnectionTamperingListResponseJSON contains the JSON metadata for the
+// struct [RadarConnectionTamperingListResponse]
+type radarConnectionTamperingListResponseJSON struct {
 	Meta        apijson.Field
 	Summary0    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryResponseMeta struct {
-	DateRange      []RadarConnectionTamperingSummaryResponseMetaDateRange    `json:"dateRange,required"`
-	ConfidenceInfo RadarConnectionTamperingSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarConnectionTamperingSummaryResponseMetaJSON           `json:"-"`
+type RadarConnectionTamperingListResponseMeta struct {
+	DateRange      []RadarConnectionTamperingListResponseMetaDateRange    `json:"dateRange,required"`
+	ConfidenceInfo RadarConnectionTamperingListResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarConnectionTamperingListResponseMetaJSON           `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseMetaJSON contains the JSON metadata for
-// the struct [RadarConnectionTamperingSummaryResponseMeta]
-type radarConnectionTamperingSummaryResponseMetaJSON struct {
+// radarConnectionTamperingListResponseMetaJSON contains the JSON metadata for the
+// struct [RadarConnectionTamperingListResponseMeta]
+type radarConnectionTamperingListResponseMetaJSON struct {
 	DateRange      apijson.Field
 	ConfidenceInfo apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryResponseMetaDateRange struct {
+type RadarConnectionTamperingListResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                                `json:"startTime,required" format:"date-time"`
-	JSON      radarConnectionTamperingSummaryResponseMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                             `json:"startTime,required" format:"date-time"`
+	JSON      radarConnectionTamperingListResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseMetaDateRangeJSON contains the JSON
-// metadata for the struct [RadarConnectionTamperingSummaryResponseMetaDateRange]
-type radarConnectionTamperingSummaryResponseMetaDateRangeJSON struct {
+// radarConnectionTamperingListResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [RadarConnectionTamperingListResponseMetaDateRange]
+type radarConnectionTamperingListResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryResponseMetaConfidenceInfo struct {
-	Annotations []RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                                 `json:"level"`
-	JSON        radarConnectionTamperingSummaryResponseMetaConfidenceInfoJSON         `json:"-"`
+type RadarConnectionTamperingListResponseMetaConfidenceInfo struct {
+	Annotations []RadarConnectionTamperingListResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                              `json:"level"`
+	JSON        radarConnectionTamperingListResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseMetaConfidenceInfoJSON contains the JSON
-// metadata for the struct
-// [RadarConnectionTamperingSummaryResponseMetaConfidenceInfo]
-type radarConnectionTamperingSummaryResponseMetaConfidenceInfoJSON struct {
+// radarConnectionTamperingListResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RadarConnectionTamperingListResponseMetaConfidenceInfo]
+type radarConnectionTamperingListResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                                  `json:"dataSource,required"`
-	Description     string                                                                  `json:"description,required"`
-	EventType       string                                                                  `json:"eventType,required"`
-	IsInstantaneous interface{}                                                             `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                               `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                                  `json:"linkedUrl"`
-	StartTime       time.Time                                                               `json:"startTime" format:"date-time"`
-	JSON            radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarConnectionTamperingListResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                               `json:"dataSource,required"`
+	Description     string                                                               `json:"description,required"`
+	EventType       string                                                               `json:"eventType,required"`
+	IsInstantaneous interface{}                                                          `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                            `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                               `json:"linkedUrl"`
+	StartTime       time.Time                                                            `json:"startTime" format:"date-time"`
+	JSON            radarConnectionTamperingListResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON contains
+// radarConnectionTamperingListResponseMetaConfidenceInfoAnnotationJSON contains
 // the JSON metadata for the struct
-// [RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation]
-type radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarConnectionTamperingListResponseMetaConfidenceInfoAnnotation]
+type radarConnectionTamperingListResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -153,11 +152,11 @@ type radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryResponseSummary0 struct {
+type RadarConnectionTamperingListResponseSummary0 struct {
 	// Connections matching signatures for tampering later in the connection, after the
 	// transfer of multiple data packets.
 	LaterInFlow string `json:"later_in_flow,required"`
@@ -172,13 +171,13 @@ type RadarConnectionTamperingSummaryResponseSummary0 struct {
 	PostPsh string `json:"post_psh,required"`
 	// Connections matching signatures for tampering after the receipt of only a single
 	// SYN packet, and before the handshake completes.
-	PostSyn string                                              `json:"post_syn,required"`
-	JSON    radarConnectionTamperingSummaryResponseSummary0JSON `json:"-"`
+	PostSyn string                                           `json:"post_syn,required"`
+	JSON    radarConnectionTamperingListResponseSummary0JSON `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseSummary0JSON contains the JSON metadata
-// for the struct [RadarConnectionTamperingSummaryResponseSummary0]
-type radarConnectionTamperingSummaryResponseSummary0JSON struct {
+// radarConnectionTamperingListResponseSummary0JSON contains the JSON metadata for
+// the struct [RadarConnectionTamperingListResponseSummary0]
+type radarConnectionTamperingListResponseSummary0JSON struct {
 	LaterInFlow apijson.Field
 	NoMatch     apijson.Field
 	PostAck     apijson.Field
@@ -188,11 +187,11 @@ type radarConnectionTamperingSummaryResponseSummary0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarConnectionTamperingSummaryParams struct {
+type RadarConnectionTamperingListParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -202,11 +201,11 @@ type RadarConnectionTamperingSummaryParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarConnectionTamperingSummaryParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarConnectionTamperingListParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarConnectionTamperingSummaryParamsFormat] `query:"format"`
+	Format param.Field[RadarConnectionTamperingListParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -215,58 +214,58 @@ type RadarConnectionTamperingSummaryParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarConnectionTamperingSummaryParams]'s query parameters
-// as `url.Values`.
-func (r RadarConnectionTamperingSummaryParams) URLQuery() (v url.Values) {
+// URLQuery serializes [RadarConnectionTamperingListParams]'s query parameters as
+// `url.Values`.
+func (r RadarConnectionTamperingListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type RadarConnectionTamperingSummaryParamsDateRange string
+type RadarConnectionTamperingListParamsDateRange string
 
 const (
-	RadarConnectionTamperingSummaryParamsDateRange1d         RadarConnectionTamperingSummaryParamsDateRange = "1d"
-	RadarConnectionTamperingSummaryParamsDateRange2d         RadarConnectionTamperingSummaryParamsDateRange = "2d"
-	RadarConnectionTamperingSummaryParamsDateRange7d         RadarConnectionTamperingSummaryParamsDateRange = "7d"
-	RadarConnectionTamperingSummaryParamsDateRange14d        RadarConnectionTamperingSummaryParamsDateRange = "14d"
-	RadarConnectionTamperingSummaryParamsDateRange28d        RadarConnectionTamperingSummaryParamsDateRange = "28d"
-	RadarConnectionTamperingSummaryParamsDateRange12w        RadarConnectionTamperingSummaryParamsDateRange = "12w"
-	RadarConnectionTamperingSummaryParamsDateRange24w        RadarConnectionTamperingSummaryParamsDateRange = "24w"
-	RadarConnectionTamperingSummaryParamsDateRange52w        RadarConnectionTamperingSummaryParamsDateRange = "52w"
-	RadarConnectionTamperingSummaryParamsDateRange1dControl  RadarConnectionTamperingSummaryParamsDateRange = "1dControl"
-	RadarConnectionTamperingSummaryParamsDateRange2dControl  RadarConnectionTamperingSummaryParamsDateRange = "2dControl"
-	RadarConnectionTamperingSummaryParamsDateRange7dControl  RadarConnectionTamperingSummaryParamsDateRange = "7dControl"
-	RadarConnectionTamperingSummaryParamsDateRange14dControl RadarConnectionTamperingSummaryParamsDateRange = "14dControl"
-	RadarConnectionTamperingSummaryParamsDateRange28dControl RadarConnectionTamperingSummaryParamsDateRange = "28dControl"
-	RadarConnectionTamperingSummaryParamsDateRange12wControl RadarConnectionTamperingSummaryParamsDateRange = "12wControl"
-	RadarConnectionTamperingSummaryParamsDateRange24wControl RadarConnectionTamperingSummaryParamsDateRange = "24wControl"
+	RadarConnectionTamperingListParamsDateRange1d         RadarConnectionTamperingListParamsDateRange = "1d"
+	RadarConnectionTamperingListParamsDateRange2d         RadarConnectionTamperingListParamsDateRange = "2d"
+	RadarConnectionTamperingListParamsDateRange7d         RadarConnectionTamperingListParamsDateRange = "7d"
+	RadarConnectionTamperingListParamsDateRange14d        RadarConnectionTamperingListParamsDateRange = "14d"
+	RadarConnectionTamperingListParamsDateRange28d        RadarConnectionTamperingListParamsDateRange = "28d"
+	RadarConnectionTamperingListParamsDateRange12w        RadarConnectionTamperingListParamsDateRange = "12w"
+	RadarConnectionTamperingListParamsDateRange24w        RadarConnectionTamperingListParamsDateRange = "24w"
+	RadarConnectionTamperingListParamsDateRange52w        RadarConnectionTamperingListParamsDateRange = "52w"
+	RadarConnectionTamperingListParamsDateRange1dControl  RadarConnectionTamperingListParamsDateRange = "1dControl"
+	RadarConnectionTamperingListParamsDateRange2dControl  RadarConnectionTamperingListParamsDateRange = "2dControl"
+	RadarConnectionTamperingListParamsDateRange7dControl  RadarConnectionTamperingListParamsDateRange = "7dControl"
+	RadarConnectionTamperingListParamsDateRange14dControl RadarConnectionTamperingListParamsDateRange = "14dControl"
+	RadarConnectionTamperingListParamsDateRange28dControl RadarConnectionTamperingListParamsDateRange = "28dControl"
+	RadarConnectionTamperingListParamsDateRange12wControl RadarConnectionTamperingListParamsDateRange = "12wControl"
+	RadarConnectionTamperingListParamsDateRange24wControl RadarConnectionTamperingListParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarConnectionTamperingSummaryParamsFormat string
+type RadarConnectionTamperingListParamsFormat string
 
 const (
-	RadarConnectionTamperingSummaryParamsFormatJson RadarConnectionTamperingSummaryParamsFormat = "JSON"
-	RadarConnectionTamperingSummaryParamsFormatCsv  RadarConnectionTamperingSummaryParamsFormat = "CSV"
+	RadarConnectionTamperingListParamsFormatJson RadarConnectionTamperingListParamsFormat = "JSON"
+	RadarConnectionTamperingListParamsFormatCsv  RadarConnectionTamperingListParamsFormat = "CSV"
 )
 
-type RadarConnectionTamperingSummaryResponseEnvelope struct {
-	Result  RadarConnectionTamperingSummaryResponse             `json:"result,required"`
-	Success bool                                                `json:"success,required"`
-	JSON    radarConnectionTamperingSummaryResponseEnvelopeJSON `json:"-"`
+type RadarConnectionTamperingListResponseEnvelope struct {
+	Result  RadarConnectionTamperingListResponse             `json:"result,required"`
+	Success bool                                             `json:"success,required"`
+	JSON    radarConnectionTamperingListResponseEnvelopeJSON `json:"-"`
 }
 
-// radarConnectionTamperingSummaryResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarConnectionTamperingSummaryResponseEnvelope]
-type radarConnectionTamperingSummaryResponseEnvelopeJSON struct {
+// radarConnectionTamperingListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [RadarConnectionTamperingListResponseEnvelope]
+type radarConnectionTamperingListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarConnectionTamperingSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarConnectionTamperingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

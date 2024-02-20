@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -34,36 +35,10 @@ func NewFirewallRuleService(opts ...option.RequestOption) (r *FirewallRuleServic
 	return
 }
 
-// Updates an existing firewall rule.
-func (r *FirewallRuleService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallRuleUpdateParams, opts ...option.RequestOption) (res *FirewallRuleUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Deletes an existing firewall rule.
-func (r *FirewallRuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body FirewallRuleDeleteParams, opts ...option.RequestOption) (res *FirewallRuleDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Create one or more firewall rules.
-func (r *FirewallRuleService) FirewallRulesNewFirewallRules(ctx context.Context, zoneIdentifier string, body FirewallRuleFirewallRulesNewFirewallRulesParams, opts ...option.RequestOption) (res *[]FirewallRuleFirewallRulesNewFirewallRulesResponse, err error) {
+func (r *FirewallRuleService) New(ctx context.Context, zoneIdentifier string, body FirewallRuleNewParams, opts ...option.RequestOption) (res *[]FirewallRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelope
+	var env FirewallRuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -73,39 +48,50 @@ func (r *FirewallRuleService) FirewallRulesNewFirewallRules(ctx context.Context,
 	return
 }
 
-// Fetches firewall rules in a zone. You can filter the results using several
-// optional parameters.
-func (r *FirewallRuleService) FirewallRulesListFirewallRules(ctx context.Context, zoneIdentifier string, query FirewallRuleFirewallRulesListFirewallRulesParams, opts ...option.RequestOption) (res *[]FirewallRuleFirewallRulesListFirewallRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallRuleFirewallRulesListFirewallRulesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Updates one or more existing firewall rules.
-func (r *FirewallRuleService) FirewallRulesUpdateFirewallRules(ctx context.Context, zoneIdentifier string, body FirewallRuleFirewallRulesUpdateFirewallRulesParams, opts ...option.RequestOption) (res *[]FirewallRuleFirewallRulesUpdateFirewallRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Updates the priority of existing firewall rules.
-func (r *FirewallRuleService) FirewallRulesUpdatePriorityOfFirewallRules(ctx context.Context, zoneIdentifier string, body FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesParams, opts ...option.RequestOption) (res *[]FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponse, err error) {
+func (r *FirewallRuleService) Update(ctx context.Context, zoneIdentifier string, body FirewallRuleUpdateParams, opts ...option.RequestOption) (res *[]FirewallRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelope
+	var env FirewallRuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches firewall rules in a zone. You can filter the results using several
+// optional parameters.
+func (r *FirewallRuleService) List(ctx context.Context, zoneIdentifier string, query FirewallRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallRuleListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches firewall rules in a zone. You can filter the results using several
+// optional parameters.
+func (r *FirewallRuleService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FirewallRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallRuleListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+}
+
+// Deletes an existing firewall rule.
+func (r *FirewallRuleService) Delete(ctx context.Context, zoneIdentifier string, id string, body FirewallRuleDeleteParams, opts ...option.RequestOption) (res *FirewallRuleDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FirewallRuleDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -125,6 +111,153 @@ func (r *FirewallRuleService) Get(ctx context.Context, zoneIdentifier string, id
 	res = &env.Result
 	return
 }
+
+// Updates an existing firewall rule.
+func (r *FirewallRuleService) Replace(ctx context.Context, zoneIdentifier string, id string, body FirewallRuleReplaceParams, opts ...option.RequestOption) (res *FirewallRuleReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FirewallRuleReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type FirewallRuleNewResponse struct {
+	// The unique identifier of the firewall rule.
+	ID string `json:"id,required"`
+	// The action to apply to a matched request. The `log` action is only available on
+	// an Enterprise plan.
+	Action FirewallRuleNewResponseAction `json:"action,required"`
+	Filter FirewallRuleNewResponseFilter `json:"filter,required"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the firewall rule.
+	Description string `json:"description"`
+	// The priority of the rule. Optional value used to define the processing order. A
+	// lower number indicates a higher priority. If not provided, rules with a defined
+	// priority will be processed before rules without a priority.
+	Priority float64                          `json:"priority"`
+	Products []FirewallRuleNewResponseProduct `json:"products"`
+	// A short reference tag. Allows you to select related firewall rules.
+	Ref  string                      `json:"ref"`
+	JSON firewallRuleNewResponseJSON `json:"-"`
+}
+
+// firewallRuleNewResponseJSON contains the JSON metadata for the struct
+// [FirewallRuleNewResponse]
+type firewallRuleNewResponseJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Filter      apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Priority    apijson.Field
+	Products    apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to apply to a matched request. The `log` action is only available on
+// an Enterprise plan.
+type FirewallRuleNewResponseAction string
+
+const (
+	FirewallRuleNewResponseActionBlock            FirewallRuleNewResponseAction = "block"
+	FirewallRuleNewResponseActionChallenge        FirewallRuleNewResponseAction = "challenge"
+	FirewallRuleNewResponseActionJsChallenge      FirewallRuleNewResponseAction = "js_challenge"
+	FirewallRuleNewResponseActionManagedChallenge FirewallRuleNewResponseAction = "managed_challenge"
+	FirewallRuleNewResponseActionAllow            FirewallRuleNewResponseAction = "allow"
+	FirewallRuleNewResponseActionLog              FirewallRuleNewResponseAction = "log"
+	FirewallRuleNewResponseActionBypass           FirewallRuleNewResponseAction = "bypass"
+)
+
+// Union satisfied by [FirewallRuleNewResponseFilterLegacyJhsFilter] or
+// [FirewallRuleNewResponseFilterLegacyJhsDeletedFilter].
+type FirewallRuleNewResponseFilter interface {
+	implementsFirewallRuleNewResponseFilter()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleNewResponseFilter)(nil)).Elem(), "")
+}
+
+type FirewallRuleNewResponseFilterLegacyJhsFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                                           `json:"ref"`
+	JSON firewallRuleNewResponseFilterLegacyJhsFilterJSON `json:"-"`
+}
+
+// firewallRuleNewResponseFilterLegacyJhsFilterJSON contains the JSON metadata for
+// the struct [FirewallRuleNewResponseFilterLegacyJhsFilter]
+type firewallRuleNewResponseFilterLegacyJhsFilterJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleNewResponseFilterLegacyJhsFilter) implementsFirewallRuleNewResponseFilter() {}
+
+type FirewallRuleNewResponseFilterLegacyJhsDeletedFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                                                    `json:"deleted,required"`
+	JSON    firewallRuleNewResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
+}
+
+// firewallRuleNewResponseFilterLegacyJhsDeletedFilterJSON contains the JSON
+// metadata for the struct [FirewallRuleNewResponseFilterLegacyJhsDeletedFilter]
+type firewallRuleNewResponseFilterLegacyJhsDeletedFilterJSON struct {
+	ID          apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleNewResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleNewResponseFilter() {
+}
+
+// A list of products to bypass for a request when using the `bypass` action.
+type FirewallRuleNewResponseProduct string
+
+const (
+	FirewallRuleNewResponseProductZoneLockdown  FirewallRuleNewResponseProduct = "zoneLockdown"
+	FirewallRuleNewResponseProductUaBlock       FirewallRuleNewResponseProduct = "uaBlock"
+	FirewallRuleNewResponseProductBic           FirewallRuleNewResponseProduct = "bic"
+	FirewallRuleNewResponseProductHot           FirewallRuleNewResponseProduct = "hot"
+	FirewallRuleNewResponseProductSecurityLevel FirewallRuleNewResponseProduct = "securityLevel"
+	FirewallRuleNewResponseProductRateLimit     FirewallRuleNewResponseProduct = "rateLimit"
+	FirewallRuleNewResponseProductWAF           FirewallRuleNewResponseProduct = "waf"
+)
 
 type FirewallRuleUpdateResponse struct {
 	// The unique identifier of the firewall rule.
@@ -259,6 +392,140 @@ const (
 	FirewallRuleUpdateResponseProductSecurityLevel FirewallRuleUpdateResponseProduct = "securityLevel"
 	FirewallRuleUpdateResponseProductRateLimit     FirewallRuleUpdateResponseProduct = "rateLimit"
 	FirewallRuleUpdateResponseProductWAF           FirewallRuleUpdateResponseProduct = "waf"
+)
+
+type FirewallRuleListResponse struct {
+	// The unique identifier of the firewall rule.
+	ID string `json:"id,required"`
+	// The action to apply to a matched request. The `log` action is only available on
+	// an Enterprise plan.
+	Action FirewallRuleListResponseAction `json:"action,required"`
+	Filter FirewallRuleListResponseFilter `json:"filter,required"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the firewall rule.
+	Description string `json:"description"`
+	// The priority of the rule. Optional value used to define the processing order. A
+	// lower number indicates a higher priority. If not provided, rules with a defined
+	// priority will be processed before rules without a priority.
+	Priority float64                           `json:"priority"`
+	Products []FirewallRuleListResponseProduct `json:"products"`
+	// A short reference tag. Allows you to select related firewall rules.
+	Ref  string                       `json:"ref"`
+	JSON firewallRuleListResponseJSON `json:"-"`
+}
+
+// firewallRuleListResponseJSON contains the JSON metadata for the struct
+// [FirewallRuleListResponse]
+type firewallRuleListResponseJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Filter      apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Priority    apijson.Field
+	Products    apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to apply to a matched request. The `log` action is only available on
+// an Enterprise plan.
+type FirewallRuleListResponseAction string
+
+const (
+	FirewallRuleListResponseActionBlock            FirewallRuleListResponseAction = "block"
+	FirewallRuleListResponseActionChallenge        FirewallRuleListResponseAction = "challenge"
+	FirewallRuleListResponseActionJsChallenge      FirewallRuleListResponseAction = "js_challenge"
+	FirewallRuleListResponseActionManagedChallenge FirewallRuleListResponseAction = "managed_challenge"
+	FirewallRuleListResponseActionAllow            FirewallRuleListResponseAction = "allow"
+	FirewallRuleListResponseActionLog              FirewallRuleListResponseAction = "log"
+	FirewallRuleListResponseActionBypass           FirewallRuleListResponseAction = "bypass"
+)
+
+// Union satisfied by [FirewallRuleListResponseFilterLegacyJhsFilter] or
+// [FirewallRuleListResponseFilterLegacyJhsDeletedFilter].
+type FirewallRuleListResponseFilter interface {
+	implementsFirewallRuleListResponseFilter()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleListResponseFilter)(nil)).Elem(), "")
+}
+
+type FirewallRuleListResponseFilterLegacyJhsFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                                            `json:"ref"`
+	JSON firewallRuleListResponseFilterLegacyJhsFilterJSON `json:"-"`
+}
+
+// firewallRuleListResponseFilterLegacyJhsFilterJSON contains the JSON metadata for
+// the struct [FirewallRuleListResponseFilterLegacyJhsFilter]
+type firewallRuleListResponseFilterLegacyJhsFilterJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleListResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleListResponseFilterLegacyJhsFilter) implementsFirewallRuleListResponseFilter() {}
+
+type FirewallRuleListResponseFilterLegacyJhsDeletedFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                                                     `json:"deleted,required"`
+	JSON    firewallRuleListResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
+}
+
+// firewallRuleListResponseFilterLegacyJhsDeletedFilterJSON contains the JSON
+// metadata for the struct [FirewallRuleListResponseFilterLegacyJhsDeletedFilter]
+type firewallRuleListResponseFilterLegacyJhsDeletedFilterJSON struct {
+	ID          apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleListResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleListResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleListResponseFilter() {
+}
+
+// A list of products to bypass for a request when using the `bypass` action.
+type FirewallRuleListResponseProduct string
+
+const (
+	FirewallRuleListResponseProductZoneLockdown  FirewallRuleListResponseProduct = "zoneLockdown"
+	FirewallRuleListResponseProductUaBlock       FirewallRuleListResponseProduct = "uaBlock"
+	FirewallRuleListResponseProductBic           FirewallRuleListResponseProduct = "bic"
+	FirewallRuleListResponseProductHot           FirewallRuleListResponseProduct = "hot"
+	FirewallRuleListResponseProductSecurityLevel FirewallRuleListResponseProduct = "securityLevel"
+	FirewallRuleListResponseProductRateLimit     FirewallRuleListResponseProduct = "rateLimit"
+	FirewallRuleListResponseProductWAF           FirewallRuleListResponseProduct = "waf"
 )
 
 type FirewallRuleDeleteResponse struct {
@@ -396,560 +663,6 @@ const (
 	FirewallRuleDeleteResponseProductWAF           FirewallRuleDeleteResponseProduct = "waf"
 )
 
-type FirewallRuleFirewallRulesNewFirewallRulesResponse struct {
-	// The unique identifier of the firewall rule.
-	ID string `json:"id,required"`
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action FirewallRuleFirewallRulesNewFirewallRulesResponseAction `json:"action,required"`
-	Filter FirewallRuleFirewallRulesNewFirewallRulesResponseFilter `json:"filter,required"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the firewall rule.
-	Description string `json:"description"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority float64                                                    `json:"priority"`
-	Products []FirewallRuleFirewallRulesNewFirewallRulesResponseProduct `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string                                                `json:"ref"`
-	JSON firewallRuleFirewallRulesNewFirewallRulesResponseJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseJSON contains the JSON metadata
-// for the struct [FirewallRuleFirewallRulesNewFirewallRulesResponse]
-type firewallRuleFirewallRulesNewFirewallRulesResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Filter      apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Priority    apijson.Field
-	Products    apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to apply to a matched request. The `log` action is only available on
-// an Enterprise plan.
-type FirewallRuleFirewallRulesNewFirewallRulesResponseAction string
-
-const (
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionBlock            FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "block"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionChallenge        FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "challenge"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionJsChallenge      FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "js_challenge"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionManagedChallenge FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "managed_challenge"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionAllow            FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "allow"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionLog              FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "log"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseActionBypass           FirewallRuleFirewallRulesNewFirewallRulesResponseAction = "bypass"
-)
-
-// Union satisfied by
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilter] or
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilter].
-type FirewallRuleFirewallRulesNewFirewallRulesResponseFilter interface {
-	implementsFirewallRuleFirewallRulesNewFirewallRulesResponseFilter()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleFirewallRulesNewFirewallRulesResponseFilter)(nil)).Elem(), "")
-}
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                                                                     `json:"ref"`
-	JSON firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilter]
-type firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilterJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsFilter) implementsFirewallRuleFirewallRulesNewFirewallRulesResponseFilter() {
-}
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool                                                                              `json:"deleted,required"`
-	JSON    firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilter]
-type firewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON struct {
-	ID          apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesNewFirewallRulesResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleFirewallRulesNewFirewallRulesResponseFilter() {
-}
-
-// A list of products to bypass for a request when using the `bypass` action.
-type FirewallRuleFirewallRulesNewFirewallRulesResponseProduct string
-
-const (
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductZoneLockdown  FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "zoneLockdown"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductUaBlock       FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "uaBlock"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductBic           FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "bic"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductHot           FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "hot"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductSecurityLevel FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "securityLevel"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductRateLimit     FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "rateLimit"
-	FirewallRuleFirewallRulesNewFirewallRulesResponseProductWAF           FirewallRuleFirewallRulesNewFirewallRulesResponseProduct = "waf"
-)
-
-type FirewallRuleFirewallRulesListFirewallRulesResponse struct {
-	// The unique identifier of the firewall rule.
-	ID string `json:"id,required"`
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action FirewallRuleFirewallRulesListFirewallRulesResponseAction `json:"action,required"`
-	Filter FirewallRuleFirewallRulesListFirewallRulesResponseFilter `json:"filter,required"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the firewall rule.
-	Description string `json:"description"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority float64                                                     `json:"priority"`
-	Products []FirewallRuleFirewallRulesListFirewallRulesResponseProduct `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string                                                 `json:"ref"`
-	JSON firewallRuleFirewallRulesListFirewallRulesResponseJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseJSON contains the JSON
-// metadata for the struct [FirewallRuleFirewallRulesListFirewallRulesResponse]
-type firewallRuleFirewallRulesListFirewallRulesResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Filter      apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Priority    apijson.Field
-	Products    apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to apply to a matched request. The `log` action is only available on
-// an Enterprise plan.
-type FirewallRuleFirewallRulesListFirewallRulesResponseAction string
-
-const (
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionBlock            FirewallRuleFirewallRulesListFirewallRulesResponseAction = "block"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionChallenge        FirewallRuleFirewallRulesListFirewallRulesResponseAction = "challenge"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionJsChallenge      FirewallRuleFirewallRulesListFirewallRulesResponseAction = "js_challenge"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionManagedChallenge FirewallRuleFirewallRulesListFirewallRulesResponseAction = "managed_challenge"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionAllow            FirewallRuleFirewallRulesListFirewallRulesResponseAction = "allow"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionLog              FirewallRuleFirewallRulesListFirewallRulesResponseAction = "log"
-	FirewallRuleFirewallRulesListFirewallRulesResponseActionBypass           FirewallRuleFirewallRulesListFirewallRulesResponseAction = "bypass"
-)
-
-// Union satisfied by
-// [FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilter] or
-// [FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilter].
-type FirewallRuleFirewallRulesListFirewallRulesResponseFilter interface {
-	implementsFirewallRuleFirewallRulesListFirewallRulesResponseFilter()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleFirewallRulesListFirewallRulesResponseFilter)(nil)).Elem(), "")
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                                                                      `json:"ref"`
-	JSON firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilter]
-type firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilterJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsFilter) implementsFirewallRuleFirewallRulesListFirewallRulesResponseFilter() {
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool                                                                               `json:"deleted,required"`
-	JSON    firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilter]
-type firewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON struct {
-	ID          apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesListFirewallRulesResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleFirewallRulesListFirewallRulesResponseFilter() {
-}
-
-// A list of products to bypass for a request when using the `bypass` action.
-type FirewallRuleFirewallRulesListFirewallRulesResponseProduct string
-
-const (
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductZoneLockdown  FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "zoneLockdown"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductUaBlock       FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "uaBlock"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductBic           FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "bic"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductHot           FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "hot"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductSecurityLevel FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "securityLevel"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductRateLimit     FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "rateLimit"
-	FirewallRuleFirewallRulesListFirewallRulesResponseProductWAF           FirewallRuleFirewallRulesListFirewallRulesResponseProduct = "waf"
-)
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponse struct {
-	// The unique identifier of the firewall rule.
-	ID string `json:"id,required"`
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction `json:"action,required"`
-	Filter FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter `json:"filter,required"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the firewall rule.
-	Description string `json:"description"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority float64                                                       `json:"priority"`
-	Products []FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string                                                   `json:"ref"`
-	JSON firewallRuleFirewallRulesUpdateFirewallRulesResponseJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseJSON contains the JSON
-// metadata for the struct [FirewallRuleFirewallRulesUpdateFirewallRulesResponse]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Filter      apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Priority    apijson.Field
-	Products    apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to apply to a matched request. The `log` action is only available on
-// an Enterprise plan.
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction string
-
-const (
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionBlock            FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "block"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionChallenge        FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "challenge"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionJsChallenge      FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "js_challenge"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionManagedChallenge FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "managed_challenge"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionAllow            FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "allow"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionLog              FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "log"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseActionBypass           FirewallRuleFirewallRulesUpdateFirewallRulesResponseAction = "bypass"
-)
-
-// Union satisfied by
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilter] or
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilter].
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter interface {
-	implementsFirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter)(nil)).Elem(), "")
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                                                                        `json:"ref"`
-	JSON firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilter]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilterJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsFilter) implementsFirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter() {
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool                                                                                 `json:"deleted,required"`
-	JSON    firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilter]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON struct {
-	ID          apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesUpdateFirewallRulesResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleFirewallRulesUpdateFirewallRulesResponseFilter() {
-}
-
-// A list of products to bypass for a request when using the `bypass` action.
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct string
-
-const (
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductZoneLockdown  FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "zoneLockdown"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductUaBlock       FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "uaBlock"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductBic           FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "bic"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductHot           FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "hot"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductSecurityLevel FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "securityLevel"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductRateLimit     FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "rateLimit"
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseProductWAF           FirewallRuleFirewallRulesUpdateFirewallRulesResponseProduct = "waf"
-)
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponse struct {
-	// The unique identifier of the firewall rule.
-	ID string `json:"id,required"`
-	// The action to apply to a matched request. The `log` action is only available on
-	// an Enterprise plan.
-	Action FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction `json:"action,required"`
-	Filter FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter `json:"filter,required"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the firewall rule.
-	Description string `json:"description"`
-	// The priority of the rule. Optional value used to define the processing order. A
-	// lower number indicates a higher priority. If not provided, rules with a defined
-	// priority will be processed before rules without a priority.
-	Priority float64                                                                 `json:"priority"`
-	Products []FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct `json:"products"`
-	// A short reference tag. Allows you to select related firewall rules.
-	Ref  string                                                             `json:"ref"`
-	JSON firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseJSON contains the
-// JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponse]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Filter      apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Priority    apijson.Field
-	Products    apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The action to apply to a matched request. The `log` action is only available on
-// an Enterprise plan.
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction string
-
-const (
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionBlock            FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "block"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionChallenge        FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "challenge"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionJsChallenge      FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "js_challenge"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionManagedChallenge FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "managed_challenge"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionAllow            FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "allow"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionLog              FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "log"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseActionBypass           FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseAction = "bypass"
-)
-
-// Union satisfied by
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilter]
-// or
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilter].
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter interface {
-	implementsFirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter)(nil)).Elem(), "")
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                                                                                  `json:"ref"`
-	JSON firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilter]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilterJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsFilter) implementsFirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter() {
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilter struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// When true, indicates that the firewall rule was deleted.
-	Deleted bool                                                                                           `json:"deleted,required"`
-	JSON    firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilter]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilterJSON struct {
-	ID          apijson.Field
-	Deleted     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseFilter() {
-}
-
-// A list of products to bypass for a request when using the `bypass` action.
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct string
-
-const (
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductZoneLockdown  FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "zoneLockdown"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductUaBlock       FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "uaBlock"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductBic           FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "bic"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductHot           FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "hot"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductSecurityLevel FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "securityLevel"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductRateLimit     FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "rateLimit"
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProductWAF           FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseProduct = "waf"
-)
-
 type FirewallRuleGetResponse struct {
 	// The unique identifier of the firewall rule.
 	ID string `json:"id,required"`
@@ -1084,6 +797,248 @@ const (
 	FirewallRuleGetResponseProductWAF           FirewallRuleGetResponseProduct = "waf"
 )
 
+type FirewallRuleReplaceResponse struct {
+	// The unique identifier of the firewall rule.
+	ID string `json:"id,required"`
+	// The action to apply to a matched request. The `log` action is only available on
+	// an Enterprise plan.
+	Action FirewallRuleReplaceResponseAction `json:"action,required"`
+	Filter FirewallRuleReplaceResponseFilter `json:"filter,required"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the firewall rule.
+	Description string `json:"description"`
+	// The priority of the rule. Optional value used to define the processing order. A
+	// lower number indicates a higher priority. If not provided, rules with a defined
+	// priority will be processed before rules without a priority.
+	Priority float64                              `json:"priority"`
+	Products []FirewallRuleReplaceResponseProduct `json:"products"`
+	// A short reference tag. Allows you to select related firewall rules.
+	Ref  string                          `json:"ref"`
+	JSON firewallRuleReplaceResponseJSON `json:"-"`
+}
+
+// firewallRuleReplaceResponseJSON contains the JSON metadata for the struct
+// [FirewallRuleReplaceResponse]
+type firewallRuleReplaceResponseJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Filter      apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Priority    apijson.Field
+	Products    apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The action to apply to a matched request. The `log` action is only available on
+// an Enterprise plan.
+type FirewallRuleReplaceResponseAction string
+
+const (
+	FirewallRuleReplaceResponseActionBlock            FirewallRuleReplaceResponseAction = "block"
+	FirewallRuleReplaceResponseActionChallenge        FirewallRuleReplaceResponseAction = "challenge"
+	FirewallRuleReplaceResponseActionJsChallenge      FirewallRuleReplaceResponseAction = "js_challenge"
+	FirewallRuleReplaceResponseActionManagedChallenge FirewallRuleReplaceResponseAction = "managed_challenge"
+	FirewallRuleReplaceResponseActionAllow            FirewallRuleReplaceResponseAction = "allow"
+	FirewallRuleReplaceResponseActionLog              FirewallRuleReplaceResponseAction = "log"
+	FirewallRuleReplaceResponseActionBypass           FirewallRuleReplaceResponseAction = "bypass"
+)
+
+// Union satisfied by [FirewallRuleReplaceResponseFilterLegacyJhsFilter] or
+// [FirewallRuleReplaceResponseFilterLegacyJhsDeletedFilter].
+type FirewallRuleReplaceResponseFilter interface {
+	implementsFirewallRuleReplaceResponseFilter()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleReplaceResponseFilter)(nil)).Elem(), "")
+}
+
+type FirewallRuleReplaceResponseFilterLegacyJhsFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                                               `json:"ref"`
+	JSON firewallRuleReplaceResponseFilterLegacyJhsFilterJSON `json:"-"`
+}
+
+// firewallRuleReplaceResponseFilterLegacyJhsFilterJSON contains the JSON metadata
+// for the struct [FirewallRuleReplaceResponseFilterLegacyJhsFilter]
+type firewallRuleReplaceResponseFilterLegacyJhsFilterJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleReplaceResponseFilterLegacyJhsFilter) implementsFirewallRuleReplaceResponseFilter() {
+}
+
+type FirewallRuleReplaceResponseFilterLegacyJhsDeletedFilter struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// When true, indicates that the firewall rule was deleted.
+	Deleted bool                                                        `json:"deleted,required"`
+	JSON    firewallRuleReplaceResponseFilterLegacyJhsDeletedFilterJSON `json:"-"`
+}
+
+// firewallRuleReplaceResponseFilterLegacyJhsDeletedFilterJSON contains the JSON
+// metadata for the struct
+// [FirewallRuleReplaceResponseFilterLegacyJhsDeletedFilter]
+type firewallRuleReplaceResponseFilterLegacyJhsDeletedFilterJSON struct {
+	ID          apijson.Field
+	Deleted     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r FirewallRuleReplaceResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleReplaceResponseFilter() {
+}
+
+// A list of products to bypass for a request when using the `bypass` action.
+type FirewallRuleReplaceResponseProduct string
+
+const (
+	FirewallRuleReplaceResponseProductZoneLockdown  FirewallRuleReplaceResponseProduct = "zoneLockdown"
+	FirewallRuleReplaceResponseProductUaBlock       FirewallRuleReplaceResponseProduct = "uaBlock"
+	FirewallRuleReplaceResponseProductBic           FirewallRuleReplaceResponseProduct = "bic"
+	FirewallRuleReplaceResponseProductHot           FirewallRuleReplaceResponseProduct = "hot"
+	FirewallRuleReplaceResponseProductSecurityLevel FirewallRuleReplaceResponseProduct = "securityLevel"
+	FirewallRuleReplaceResponseProductRateLimit     FirewallRuleReplaceResponseProduct = "rateLimit"
+	FirewallRuleReplaceResponseProductWAF           FirewallRuleReplaceResponseProduct = "waf"
+)
+
+type FirewallRuleNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FirewallRuleNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FirewallRuleNewResponseEnvelope struct {
+	Errors   []FirewallRuleNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []FirewallRuleNewResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    FirewallRuleNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FirewallRuleNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       firewallRuleNewResponseEnvelopeJSON       `json:"-"`
+}
+
+// firewallRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FirewallRuleNewResponseEnvelope]
+type firewallRuleNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallRuleNewResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    firewallRuleNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// firewallRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [FirewallRuleNewResponseEnvelopeErrors]
+type firewallRuleNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallRuleNewResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    firewallRuleNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// firewallRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [FirewallRuleNewResponseEnvelopeMessages]
+type firewallRuleNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FirewallRuleNewResponseEnvelopeSuccess bool
+
+const (
+	FirewallRuleNewResponseEnvelopeSuccessTrue FirewallRuleNewResponseEnvelopeSuccess = true
+)
+
+type FirewallRuleNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       firewallRuleNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// firewallRuleNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [FirewallRuleNewResponseEnvelopeResultInfo]
+type firewallRuleNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type FirewallRuleUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -1095,10 +1050,11 @@ func (r FirewallRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 type FirewallRuleUpdateResponseEnvelope struct {
 	Errors   []FirewallRuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallRuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallRuleUpdateResponse                   `json:"result,required,nullable"`
+	Result   []FirewallRuleUpdateResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success FirewallRuleUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    firewallRuleUpdateResponseEnvelopeJSON    `json:"-"`
+	Success    FirewallRuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FirewallRuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       firewallRuleUpdateResponseEnvelopeJSON       `json:"-"`
 }
 
 // firewallRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
@@ -1108,6 +1064,7 @@ type firewallRuleUpdateResponseEnvelopeJSON struct {
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1160,6 +1117,54 @@ type FirewallRuleUpdateResponseEnvelopeSuccess bool
 const (
 	FirewallRuleUpdateResponseEnvelopeSuccessTrue FirewallRuleUpdateResponseEnvelopeSuccess = true
 )
+
+type FirewallRuleUpdateResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                          `json:"total_count"`
+	JSON       firewallRuleUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// firewallRuleUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [FirewallRuleUpdateResponseEnvelopeResultInfo]
+type firewallRuleUpdateResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallRuleListParams struct {
+	// The action to search for. Must be an exact match.
+	Action param.Field[string] `query:"action"`
+	// A case-insensitive string to find in the description.
+	Description param.Field[string] `query:"description"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// When true, indicates that the firewall rule is currently paused.
+	Paused param.Field[bool] `query:"paused"`
+	// Number of firewall rules per page.
+	PerPage param.Field[float64] `query:"per_page"`
+}
+
+// URLQuery serializes [FirewallRuleListParams]'s query parameters as `url.Values`.
+func (r FirewallRuleListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
 
 type FirewallRuleDeleteParams struct {
 	// When true, indicates that Cloudflare should also delete the associated filter if
@@ -1240,460 +1245,6 @@ const (
 	FirewallRuleDeleteResponseEnvelopeSuccessTrue FirewallRuleDeleteResponseEnvelopeSuccess = true
 )
 
-type FirewallRuleFirewallRulesNewFirewallRulesParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FirewallRuleFirewallRulesNewFirewallRulesParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelope struct {
-	Errors   []FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallRuleFirewallRulesNewFirewallRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelope]
-type firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrors struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrors]
-type firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessages]
-type firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeSuccess bool
-
-const (
-	FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeSuccessTrue FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeSuccess = true
-)
-
-type FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                 `json:"total_count"`
-	JSON       firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfo]
-type firewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesNewFirewallRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesParams struct {
-	// The action to search for. Must be an exact match.
-	Action param.Field[string] `query:"action"`
-	// A case-insensitive string to find in the description.
-	Description param.Field[string] `query:"description"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// When true, indicates that the firewall rule is currently paused.
-	Paused param.Field[bool] `query:"paused"`
-	// Number of firewall rules per page.
-	PerPage param.Field[float64] `query:"per_page"`
-}
-
-// URLQuery serializes [FirewallRuleFirewallRulesListFirewallRulesParams]'s query
-// parameters as `url.Values`.
-func (r FirewallRuleFirewallRulesListFirewallRulesParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseEnvelope struct {
-	Errors   []FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallRuleFirewallRulesListFirewallRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseEnvelope]
-type firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                `json:"code,required"`
-	Message string                                                               `json:"message,required"`
-	JSON    firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrors]
-type firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessages]
-type firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeSuccess bool
-
-const (
-	FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeSuccessTrue FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeSuccess = true
-)
-
-type FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                  `json:"total_count"`
-	JSON       firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfo]
-type firewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesListFirewallRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FirewallRuleFirewallRulesUpdateFirewallRulesParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelope struct {
-	Errors   []FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallRuleFirewallRulesUpdateFirewallRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelope]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrors]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessages]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeSuccess bool
-
-const (
-	FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeSuccessTrue FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeSuccess = true
-)
-
-type FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                    `json:"total_count"`
-	JSON       firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfo]
-type firewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdateFirewallRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelope struct {
-	Errors   []FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelope]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrors]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessages]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeSuccess bool
-
-const (
-	FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeSuccessTrue FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeSuccess = true
-)
-
-type FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                              `json:"total_count"`
-	JSON       firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfo]
-type firewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallRuleFirewallRulesUpdatePriorityOfFirewallRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type FirewallRuleGetParams struct {
 }
 
@@ -1764,4 +1315,81 @@ type FirewallRuleGetResponseEnvelopeSuccess bool
 
 const (
 	FirewallRuleGetResponseEnvelopeSuccessTrue FirewallRuleGetResponseEnvelopeSuccess = true
+)
+
+type FirewallRuleReplaceParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FirewallRuleReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FirewallRuleReplaceResponseEnvelope struct {
+	Errors   []FirewallRuleReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FirewallRuleReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   FirewallRuleReplaceResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success FirewallRuleReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    firewallRuleReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// firewallRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [FirewallRuleReplaceResponseEnvelope]
+type firewallRuleReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallRuleReplaceResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    firewallRuleReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// firewallRuleReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [FirewallRuleReplaceResponseEnvelopeErrors]
+type firewallRuleReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FirewallRuleReplaceResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    firewallRuleReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// firewallRuleReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [FirewallRuleReplaceResponseEnvelopeMessages]
+type firewallRuleReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FirewallRuleReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FirewallRuleReplaceResponseEnvelopeSuccess bool
+
+const (
+	FirewallRuleReplaceResponseEnvelopeSuccessTrue FirewallRuleReplaceResponseEnvelopeSuccess = true
 )

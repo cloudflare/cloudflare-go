@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestTeamnetRouteTunnelRouteListTunnelRoutesWithOptionalParams(t *testing.T) {
+func TestTeamnetRouteListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestTeamnetRouteTunnelRouteListTunnelRoutesWithOptionalParams(t *testing.T)
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Teamnets.Routes.TunnelRouteListTunnelRoutes(
+	_, err := client.Teamnets.Routes.List(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TeamnetRouteTunnelRouteListTunnelRoutesParams{
+		cloudflare.TeamnetRouteListParams{
 			Comment:          cloudflare.F("Example comment for this route."),
 			ExistedAt:        cloudflare.F[any](map[string]interface{}{}),
 			IsDeleted:        cloudflare.F[any](map[string]interface{}{}),

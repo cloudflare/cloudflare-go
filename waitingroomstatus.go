@@ -48,9 +48,9 @@ func NewWaitingRoomStatusService(opts ...option.RequestOption) (r *WaitingRoomSt
 //     currently active on the origin.
 //  5. `max_estimated_time_minutes`: Integer of the maximum estimated time currently
 //     presented to the users.
-func (r *WaitingRoomStatusService) WaitingRoomGetWaitingRoomStatus(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse, err error) {
+func (r *WaitingRoomStatusService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *WaitingRoomStatusGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelope
+	var env WaitingRoomStatusGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/status", zoneIdentifier, waitingRoomID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -60,19 +60,18 @@ func (r *WaitingRoomStatusService) WaitingRoomGetWaitingRoomStatus(ctx context.C
 	return
 }
 
-type WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse struct {
-	EstimatedQueuedUsers      int64                                                          `json:"estimated_queued_users"`
-	EstimatedTotalActiveUsers int64                                                          `json:"estimated_total_active_users"`
-	EventID                   string                                                         `json:"event_id"`
-	MaxEstimatedTimeMinutes   int64                                                          `json:"max_estimated_time_minutes"`
-	Status                    WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatus `json:"status"`
-	JSON                      waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON   `json:"-"`
+type WaitingRoomStatusGetResponse struct {
+	EstimatedQueuedUsers      int64                              `json:"estimated_queued_users"`
+	EstimatedTotalActiveUsers int64                              `json:"estimated_total_active_users"`
+	EventID                   string                             `json:"event_id"`
+	MaxEstimatedTimeMinutes   int64                              `json:"max_estimated_time_minutes"`
+	Status                    WaitingRoomStatusGetResponseStatus `json:"status"`
+	JSON                      waitingRoomStatusGetResponseJSON   `json:"-"`
 }
 
-// waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON contains the JSON
-// metadata for the struct
-// [WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse]
-type waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON struct {
+// waitingRoomStatusGetResponseJSON contains the JSON metadata for the struct
+// [WaitingRoomStatusGetResponse]
+type waitingRoomStatusGetResponseJSON struct {
 	EstimatedQueuedUsers      apijson.Field
 	EstimatedTotalActiveUsers apijson.Field
 	EventID                   apijson.Field
@@ -82,32 +81,31 @@ type waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseJSON struct {
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomStatusGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatus string
+type WaitingRoomStatusGetResponseStatus string
 
 const (
-	WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatusEventPrequeueing WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatus = "event_prequeueing"
-	WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatusNotQueueing      WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatus = "not_queueing"
-	WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatusQueueing         WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseStatus = "queueing"
+	WaitingRoomStatusGetResponseStatusEventPrequeueing WaitingRoomStatusGetResponseStatus = "event_prequeueing"
+	WaitingRoomStatusGetResponseStatusNotQueueing      WaitingRoomStatusGetResponseStatus = "not_queueing"
+	WaitingRoomStatusGetResponseStatusQueueing         WaitingRoomStatusGetResponseStatus = "queueing"
 )
 
-type WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelope struct {
-	Result WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponse             `json:"result,required"`
-	JSON   waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelopeJSON `json:"-"`
+type WaitingRoomStatusGetResponseEnvelope struct {
+	Result WaitingRoomStatusGetResponse             `json:"result,required"`
+	JSON   waitingRoomStatusGetResponseEnvelopeJSON `json:"-"`
 }
 
-// waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelope]
-type waitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelopeJSON struct {
+// waitingRoomStatusGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomStatusGetResponseEnvelope]
+type waitingRoomStatusGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomStatusWaitingRoomGetWaitingRoomStatusResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomStatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

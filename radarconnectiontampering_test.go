@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarConnectionTamperingSummaryWithOptionalParams(t *testing.T) {
+func TestRadarConnectionTamperingListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,12 +30,12 @@ func TestRadarConnectionTamperingSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.ConnectionTampering.Summary(context.TODO(), cloudflare.RadarConnectionTamperingSummaryParams{
+	_, err := client.Radar.ConnectionTampering.List(context.TODO(), cloudflare.RadarConnectionTamperingListParams{
 		Asn:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarConnectionTamperingSummaryParamsDateRange{cloudflare.RadarConnectionTamperingSummaryParamsDateRange1d, cloudflare.RadarConnectionTamperingSummaryParamsDateRange2d, cloudflare.RadarConnectionTamperingSummaryParamsDateRange7d}),
+		DateRange: cloudflare.F([]cloudflare.RadarConnectionTamperingListParamsDateRange{cloudflare.RadarConnectionTamperingListParamsDateRange1d, cloudflare.RadarConnectionTamperingListParamsDateRange2d, cloudflare.RadarConnectionTamperingListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:    cloudflare.F(cloudflare.RadarConnectionTamperingSummaryParamsFormatJson),
+		Format:    cloudflare.F(cloudflare.RadarConnectionTamperingListParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})

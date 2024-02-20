@@ -12,7 +12,6 @@ import (
 // service directly, and instead use the [NewAlertingService] method instead.
 type AlertingService struct {
 	Options []option.RequestOption
-	V3s     *AlertingV3Service
 	V3      *AlertingV3Service
 }
 
@@ -22,7 +21,6 @@ type AlertingService struct {
 func NewAlertingService(opts ...option.RequestOption) (r *AlertingService) {
 	r = &AlertingService{}
 	r.Options = opts
-	r.V3s = NewAlertingV3Service(opts...)
 	r.V3 = NewAlertingV3Service(opts...)
 	return
 }

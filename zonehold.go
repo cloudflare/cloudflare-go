@@ -34,11 +34,25 @@ func NewZoneHoldService(opts ...option.RequestOption) (r *ZoneHoldService) {
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
 // with this zone's hostname.
-func (r *ZoneHoldService) Enforce(ctx context.Context, zoneID string, body ZoneHoldEnforceParams, opts ...option.RequestOption) (res *ZoneHoldEnforceResponse, err error) {
+func (r *ZoneHoldService) New(ctx context.Context, zoneID string, body ZoneHoldNewParams, opts ...option.RequestOption) (res *ZoneHoldNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZoneHoldEnforceResponseEnvelope
+	var env ZoneHoldNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Stop enforcement of a zone hold on the zone, permanently or temporarily,
+// allowing the creation and activation of zones with this zone's hostname.
+func (r *ZoneHoldService) Delete(ctx context.Context, zoneID string, body ZoneHoldDeleteParams, opts ...option.RequestOption) (res *ZoneHoldDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ZoneHoldDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/hold", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,30 +74,16 @@ func (r *ZoneHoldService) Get(ctx context.Context, zoneID string, opts ...option
 	return
 }
 
-// Stop enforcement of a zone hold on the zone, permanently or temporarily,
-// allowing the creation and activation of zones with this zone's hostname.
-func (r *ZoneHoldService) Remove(ctx context.Context, zoneID string, body ZoneHoldRemoveParams, opts ...option.RequestOption) (res *ZoneHoldRemoveResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ZoneHoldRemoveResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type ZoneHoldNewResponse struct {
+	Hold              bool                    `json:"hold"`
+	HoldAfter         string                  `json:"hold_after"`
+	IncludeSubdomains string                  `json:"include_subdomains"`
+	JSON              zoneHoldNewResponseJSON `json:"-"`
 }
 
-type ZoneHoldEnforceResponse struct {
-	Hold              bool                        `json:"hold"`
-	HoldAfter         string                      `json:"hold_after"`
-	IncludeSubdomains string                      `json:"include_subdomains"`
-	JSON              zoneHoldEnforceResponseJSON `json:"-"`
-}
-
-// zoneHoldEnforceResponseJSON contains the JSON metadata for the struct
-// [ZoneHoldEnforceResponse]
-type zoneHoldEnforceResponseJSON struct {
+// zoneHoldNewResponseJSON contains the JSON metadata for the struct
+// [ZoneHoldNewResponse]
+type zoneHoldNewResponseJSON struct {
 	Hold              apijson.Field
 	HoldAfter         apijson.Field
 	IncludeSubdomains apijson.Field
@@ -91,7 +91,28 @@ type zoneHoldEnforceResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZoneHoldEnforceResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneHoldNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneHoldDeleteResponse struct {
+	Hold              bool                       `json:"hold"`
+	HoldAfter         string                     `json:"hold_after"`
+	IncludeSubdomains string                     `json:"include_subdomains"`
+	JSON              zoneHoldDeleteResponseJSON `json:"-"`
+}
+
+// zoneHoldDeleteResponseJSON contains the JSON metadata for the struct
+// [ZoneHoldDeleteResponse]
+type zoneHoldDeleteResponseJSON struct {
+	Hold              apijson.Field
+	HoldAfter         apijson.Field
+	IncludeSubdomains apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZoneHoldDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -116,28 +137,7 @@ func (r *ZoneHoldGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneHoldRemoveResponse struct {
-	Hold              bool                       `json:"hold"`
-	HoldAfter         string                     `json:"hold_after"`
-	IncludeSubdomains string                     `json:"include_subdomains"`
-	JSON              zoneHoldRemoveResponseJSON `json:"-"`
-}
-
-// zoneHoldRemoveResponseJSON contains the JSON metadata for the struct
-// [ZoneHoldRemoveResponse]
-type zoneHoldRemoveResponseJSON struct {
-	Hold              apijson.Field
-	HoldAfter         apijson.Field
-	IncludeSubdomains apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZoneHoldRemoveResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZoneHoldEnforceParams struct {
+type ZoneHoldNewParams struct {
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
 	// the hostname 'example.com' and include_subdomains=true will block 'example.com',
@@ -145,26 +145,26 @@ type ZoneHoldEnforceParams struct {
 	IncludeSubdomains param.Field[bool] `query:"include_subdomains"`
 }
 
-// URLQuery serializes [ZoneHoldEnforceParams]'s query parameters as `url.Values`.
-func (r ZoneHoldEnforceParams) URLQuery() (v url.Values) {
+// URLQuery serializes [ZoneHoldNewParams]'s query parameters as `url.Values`.
+func (r ZoneHoldNewParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type ZoneHoldEnforceResponseEnvelope struct {
-	Errors   []ZoneHoldEnforceResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneHoldEnforceResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZoneHoldEnforceResponse                   `json:"result,required"`
+type ZoneHoldNewResponseEnvelope struct {
+	Errors   []ZoneHoldNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneHoldNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   ZoneHoldNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ZoneHoldEnforceResponseEnvelopeSuccess `json:"success,required"`
-	JSON    zoneHoldEnforceResponseEnvelopeJSON    `json:"-"`
+	Success ZoneHoldNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    zoneHoldNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// zoneHoldEnforceResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZoneHoldEnforceResponseEnvelope]
-type zoneHoldEnforceResponseEnvelopeJSON struct {
+// zoneHoldNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZoneHoldNewResponseEnvelope]
+type zoneHoldNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -173,54 +173,86 @@ type zoneHoldEnforceResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneHoldEnforceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneHoldNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneHoldEnforceResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    zoneHoldEnforceResponseEnvelopeErrorsJSON `json:"-"`
+type ZoneHoldNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    zoneHoldNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zoneHoldEnforceResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZoneHoldEnforceResponseEnvelopeErrors]
-type zoneHoldEnforceResponseEnvelopeErrorsJSON struct {
+// zoneHoldNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ZoneHoldNewResponseEnvelopeErrors]
+type zoneHoldNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneHoldEnforceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneHoldNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneHoldEnforceResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    zoneHoldEnforceResponseEnvelopeMessagesJSON `json:"-"`
+type ZoneHoldNewResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    zoneHoldNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zoneHoldEnforceResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ZoneHoldEnforceResponseEnvelopeMessages]
-type zoneHoldEnforceResponseEnvelopeMessagesJSON struct {
+// zoneHoldNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZoneHoldNewResponseEnvelopeMessages]
+type zoneHoldNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneHoldEnforceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneHoldNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZoneHoldEnforceResponseEnvelopeSuccess bool
+type ZoneHoldNewResponseEnvelopeSuccess bool
 
 const (
-	ZoneHoldEnforceResponseEnvelopeSuccessTrue ZoneHoldEnforceResponseEnvelopeSuccess = true
+	ZoneHoldNewResponseEnvelopeSuccessTrue ZoneHoldNewResponseEnvelopeSuccess = true
 )
+
+type ZoneHoldDeleteParams struct {
+	// If `hold_after` is provided, the hold will be temporarily disabled, then
+	// automatically re-enabled by the system at the time specified in this
+	// RFC3339-formatted timestamp. Otherwise, the hold will be disabled indefinitely.
+	HoldAfter param.Field[string] `query:"hold_after"`
+}
+
+// URLQuery serializes [ZoneHoldDeleteParams]'s query parameters as `url.Values`.
+func (r ZoneHoldDeleteParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type ZoneHoldDeleteResponseEnvelope struct {
+	Result ZoneHoldDeleteResponse             `json:"result"`
+	JSON   zoneHoldDeleteResponseEnvelopeJSON `json:"-"`
+}
+
+// zoneHoldDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZoneHoldDeleteResponseEnvelope]
+type zoneHoldDeleteResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneHoldDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ZoneHoldGetResponseEnvelope struct {
 	Errors   []ZoneHoldGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -290,35 +322,3 @@ type ZoneHoldGetResponseEnvelopeSuccess bool
 const (
 	ZoneHoldGetResponseEnvelopeSuccessTrue ZoneHoldGetResponseEnvelopeSuccess = true
 )
-
-type ZoneHoldRemoveParams struct {
-	// If `hold_after` is provided, the hold will be temporarily disabled, then
-	// automatically re-enabled by the system at the time specified in this
-	// RFC3339-formatted timestamp. Otherwise, the hold will be disabled indefinitely.
-	HoldAfter param.Field[string] `query:"hold_after"`
-}
-
-// URLQuery serializes [ZoneHoldRemoveParams]'s query parameters as `url.Values`.
-func (r ZoneHoldRemoveParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type ZoneHoldRemoveResponseEnvelope struct {
-	Result ZoneHoldRemoveResponse             `json:"result"`
-	JSON   zoneHoldRemoveResponseEnvelopeJSON `json:"-"`
-}
-
-// zoneHoldRemoveResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZoneHoldRemoveResponseEnvelope]
-type zoneHoldRemoveResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneHoldRemoveResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

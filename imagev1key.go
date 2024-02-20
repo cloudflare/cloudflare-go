@@ -30,9 +30,9 @@ func NewImageV1KeyService(opts ...option.RequestOption) (r *ImageV1KeyService) {
 }
 
 // Lists your signing keys. These can be found on your Cloudflare Images dashboard.
-func (r *ImageV1KeyService) CloudflareImagesKeysListSigningKeys(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1KeyCloudflareImagesKeysListSigningKeysResponse, err error) {
+func (r *ImageV1KeyService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1KeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelope
+	var env ImageV1KeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -42,58 +42,56 @@ func (r *ImageV1KeyService) CloudflareImagesKeysListSigningKeys(ctx context.Cont
 	return
 }
 
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponse struct {
-	Keys []ImageV1KeyCloudflareImagesKeysListSigningKeysResponseKey `json:"keys"`
-	JSON imageV1KeyCloudflareImagesKeysListSigningKeysResponseJSON  `json:"-"`
+type ImageV1KeyListResponse struct {
+	Keys []ImageV1KeyListResponseKey `json:"keys"`
+	JSON imageV1KeyListResponseJSON  `json:"-"`
 }
 
-// imageV1KeyCloudflareImagesKeysListSigningKeysResponseJSON contains the JSON
-// metadata for the struct [ImageV1KeyCloudflareImagesKeysListSigningKeysResponse]
-type imageV1KeyCloudflareImagesKeysListSigningKeysResponseJSON struct {
+// imageV1KeyListResponseJSON contains the JSON metadata for the struct
+// [ImageV1KeyListResponse]
+type imageV1KeyListResponseJSON struct {
 	Keys        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1KeyCloudflareImagesKeysListSigningKeysResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1KeyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponseKey struct {
+type ImageV1KeyListResponseKey struct {
 	// Key name.
 	Name string `json:"name"`
 	// Key value.
-	Value string                                                       `json:"value"`
-	JSON  imageV1KeyCloudflareImagesKeysListSigningKeysResponseKeyJSON `json:"-"`
+	Value string                        `json:"value"`
+	JSON  imageV1KeyListResponseKeyJSON `json:"-"`
 }
 
-// imageV1KeyCloudflareImagesKeysListSigningKeysResponseKeyJSON contains the JSON
-// metadata for the struct
-// [ImageV1KeyCloudflareImagesKeysListSigningKeysResponseKey]
-type imageV1KeyCloudflareImagesKeysListSigningKeysResponseKeyJSON struct {
+// imageV1KeyListResponseKeyJSON contains the JSON metadata for the struct
+// [ImageV1KeyListResponseKey]
+type imageV1KeyListResponseKeyJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1KeyCloudflareImagesKeysListSigningKeysResponseKey) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1KeyListResponseKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelope struct {
-	Errors   []ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessages `json:"messages,required"`
-	Result   ImageV1KeyCloudflareImagesKeysListSigningKeysResponse                   `json:"result,required"`
+type ImageV1KeyListResponseEnvelope struct {
+	Errors   []ImageV1KeyListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ImageV1KeyListResponseEnvelopeMessages `json:"messages,required"`
+	Result   ImageV1KeyListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeSuccess `json:"success,required"`
-	JSON    imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeJSON    `json:"-"`
+	Success ImageV1KeyListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    imageV1KeyListResponseEnvelopeJSON    `json:"-"`
 }
 
-// imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelope]
-type imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeJSON struct {
+// imageV1KeyListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ImageV1KeyListResponseEnvelope]
+type imageV1KeyListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -102,53 +100,51 @@ type imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1KeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrors struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrorsJSON `json:"-"`
+type ImageV1KeyListResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    imageV1KeyListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrors]
-type imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrorsJSON struct {
+// imageV1KeyListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ImageV1KeyListResponseEnvelopeErrors]
+type imageV1KeyListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1KeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessages struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessagesJSON `json:"-"`
+type ImageV1KeyListResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    imageV1KeyListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessages]
-type imageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessagesJSON struct {
+// imageV1KeyListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ImageV1KeyListResponseEnvelopeMessages]
+type imageV1KeyListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ImageV1KeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeSuccess bool
+type ImageV1KeyListResponseEnvelopeSuccess bool
 
 const (
-	ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeSuccessTrue ImageV1KeyCloudflareImagesKeysListSigningKeysResponseEnvelopeSuccess = true
+	ImageV1KeyListResponseEnvelopeSuccessTrue ImageV1KeyListResponseEnvelopeSuccess = true
 )

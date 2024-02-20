@@ -60,54 +60,6 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPageruleUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Pagerules.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PageruleUpdateParams{
-			Actions: cloudflare.F([]cloudflare.PageruleUpdateParamsAction{{
-				Name: cloudflare.F(cloudflare.PageruleUpdateParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}}),
-			Targets: cloudflare.F([]cloudflare.PageruleUpdateParamsTarget{{
-				Constraint: cloudflare.F(cloudflare.PageruleUpdateParamsTargetsConstraint{
-					Operator: cloudflare.F(cloudflare.PageruleUpdateParamsTargetsConstraintOperatorMatches),
-					Value:    cloudflare.F("*example.com/images/*"),
-				}),
-				Target: cloudflare.F(cloudflare.PageruleUpdateParamsTargetsTargetURL),
-			}}),
-			Priority: cloudflare.F(int64(0)),
-			Status:   cloudflare.F(cloudflare.PageruleUpdateParamsStatusActive),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestPageruleListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -193,6 +145,54 @@ func TestPageruleGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestPageruleReplaceWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Pagerules.Replace(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageruleReplaceParams{
+			Actions: cloudflare.F([]cloudflare.PageruleReplaceParamsAction{{
+				Name: cloudflare.F(cloudflare.PageruleReplaceParamsActionsNameForwardURL),
+				Value: cloudflare.F(cloudflare.PageruleReplaceParamsActionsValue{
+					Type: cloudflare.F(cloudflare.PageruleReplaceParamsActionsValueTypeTemporary),
+					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+				}),
+			}}),
+			Targets: cloudflare.F([]cloudflare.PageruleReplaceParamsTarget{{
+				Constraint: cloudflare.F(cloudflare.PageruleReplaceParamsTargetsConstraint{
+					Operator: cloudflare.F(cloudflare.PageruleReplaceParamsTargetsConstraintOperatorMatches),
+					Value:    cloudflare.F("*example.com/images/*"),
+				}),
+				Target: cloudflare.F(cloudflare.PageruleReplaceParamsTargetsTargetURL),
+			}}),
+			Priority: cloudflare.F(int64(0)),
+			Status:   cloudflare.F(cloudflare.PageruleReplaceParamsStatusActive),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

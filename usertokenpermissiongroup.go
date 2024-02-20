@@ -30,9 +30,9 @@ func NewUserTokenPermissionGroupService(opts ...option.RequestOption) (r *UserTo
 }
 
 // Find all available permission groups.
-func (r *UserTokenPermissionGroupService) PermissionGroupsListPermissionGroups(ctx context.Context, opts ...option.RequestOption) (res *[]UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse, err error) {
+func (r *UserTokenPermissionGroupService) List(ctx context.Context, opts ...option.RequestOption) (res *[]UserTokenPermissionGroupListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelope
+	var env UserTokenPermissionGroupListResponseEnvelope
 	path := "user/tokens/permission_groups"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -42,22 +42,21 @@ func (r *UserTokenPermissionGroupService) PermissionGroupsListPermissionGroups(c
 	return
 }
 
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse = interface{}
+type UserTokenPermissionGroupListResponse = interface{}
 
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelope struct {
-	Errors   []UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponse                 `json:"result,required,nullable"`
+type UserTokenPermissionGroupListResponseEnvelope struct {
+	Errors   []UserTokenPermissionGroupListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserTokenPermissionGroupListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []UserTokenPermissionGroupListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeJSON       `json:"-"`
+	Success    UserTokenPermissionGroupListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo UserTokenPermissionGroupListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       userTokenPermissionGroupListResponseEnvelopeJSON       `json:"-"`
 }
 
-// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelope]
-type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeJSON struct {
+// userTokenPermissionGroupListResponseEnvelopeJSON contains the JSON metadata for
+// the struct [UserTokenPermissionGroupListResponseEnvelope]
+type userTokenPermissionGroupListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -67,58 +66,56 @@ type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelop
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrors struct {
-	Code    int64                                                                                  `json:"code,required"`
-	Message string                                                                                 `json:"message,required"`
-	JSON    userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrorsJSON `json:"-"`
+type UserTokenPermissionGroupListResponseEnvelopeErrors struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    userTokenPermissionGroupListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrors]
-type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrorsJSON struct {
+// userTokenPermissionGroupListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [UserTokenPermissionGroupListResponseEnvelopeErrors]
+type userTokenPermissionGroupListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessages struct {
-	Code    int64                                                                                    `json:"code,required"`
-	Message string                                                                                   `json:"message,required"`
-	JSON    userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessagesJSON `json:"-"`
+type UserTokenPermissionGroupListResponseEnvelopeMessages struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    userTokenPermissionGroupListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessages]
-type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessagesJSON struct {
+// userTokenPermissionGroupListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [UserTokenPermissionGroupListResponseEnvelopeMessages]
+type userTokenPermissionGroupListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeSuccess bool
+type UserTokenPermissionGroupListResponseEnvelopeSuccess bool
 
 const (
-	UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeSuccessTrue UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeSuccess = true
+	UserTokenPermissionGroupListResponseEnvelopeSuccessTrue UserTokenPermissionGroupListResponseEnvelopeSuccess = true
 )
 
-type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfo struct {
+type UserTokenPermissionGroupListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -126,14 +123,13 @@ type UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelop
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                    `json:"total_count"`
-	JSON       userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                    `json:"total_count"`
+	JSON       userTokenPermissionGroupListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfo]
-type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfoJSON struct {
+// userTokenPermissionGroupListResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [UserTokenPermissionGroupListResponseEnvelopeResultInfo]
+type userTokenPermissionGroupListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -142,6 +138,6 @@ type userTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelop
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenPermissionGroupPermissionGroupsListPermissionGroupsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenPermissionGroupListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

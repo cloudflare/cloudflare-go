@@ -34,9 +34,9 @@ func NewPageProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r 
 }
 
 // Fetch deployment logs for a project.
-func (r *PageProjectDeploymentHistoryLogService) PagesDeploymentGetDeploymentLogs(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse, err error) {
+func (r *PageProjectDeploymentHistoryLogService) List(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentHistoryLogListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelope
+	var env PageProjectDeploymentHistoryLogListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", accountID, projectName, deploymentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -46,17 +46,15 @@ func (r *PageProjectDeploymentHistoryLogService) PagesDeploymentGetDeploymentLog
 	return
 }
 
-// Union satisfied by
-// [PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseUnknown],
-// [PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseArray]
-// or [shared.UnionString].
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse interface {
-	ImplementsPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse()
+// Union satisfied by [PageProjectDeploymentHistoryLogListResponseUnknown],
+// [PageProjectDeploymentHistoryLogListResponseArray] or [shared.UnionString].
+type PageProjectDeploymentHistoryLogListResponse interface {
+	ImplementsPageProjectDeploymentHistoryLogListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse)(nil)).Elem(),
+		reflect.TypeOf((*PageProjectDeploymentHistoryLogListResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -65,24 +63,23 @@ func init() {
 	)
 }
 
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseArray []interface{}
+type PageProjectDeploymentHistoryLogListResponseArray []interface{}
 
-func (r PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseArray) ImplementsPageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse() {
+func (r PageProjectDeploymentHistoryLogListResponseArray) ImplementsPageProjectDeploymentHistoryLogListResponse() {
 }
 
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelope struct {
-	Errors   []PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponse                   `json:"result,required"`
+type PageProjectDeploymentHistoryLogListResponseEnvelope struct {
+	Errors   []PageProjectDeploymentHistoryLogListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageProjectDeploymentHistoryLogListResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageProjectDeploymentHistoryLogListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeJSON    `json:"-"`
+	Success PageProjectDeploymentHistoryLogListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageProjectDeploymentHistoryLogListResponseEnvelopeJSON    `json:"-"`
 }
 
-// pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelope]
-type pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeJSON struct {
+// pageProjectDeploymentHistoryLogListResponseEnvelopeJSON contains the JSON
+// metadata for the struct [PageProjectDeploymentHistoryLogListResponseEnvelope]
+type pageProjectDeploymentHistoryLogListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -91,53 +88,53 @@ type pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnve
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectDeploymentHistoryLogListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrors struct {
-	Code    int64                                                                                     `json:"code,required"`
-	Message string                                                                                    `json:"message,required"`
-	JSON    pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrorsJSON `json:"-"`
+type PageProjectDeploymentHistoryLogListResponseEnvelopeErrors struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    pageProjectDeploymentHistoryLogListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrors]
-type pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrorsJSON struct {
+// pageProjectDeploymentHistoryLogListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [PageProjectDeploymentHistoryLogListResponseEnvelopeErrors]
+type pageProjectDeploymentHistoryLogListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectDeploymentHistoryLogListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessages struct {
-	Code    int64                                                                                       `json:"code,required"`
-	Message string                                                                                      `json:"message,required"`
-	JSON    pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessagesJSON `json:"-"`
+type PageProjectDeploymentHistoryLogListResponseEnvelopeMessages struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    pageProjectDeploymentHistoryLogListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessages]
-type pageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessagesJSON struct {
+// pageProjectDeploymentHistoryLogListResponseEnvelopeMessagesJSON contains the
+// JSON metadata for the struct
+// [PageProjectDeploymentHistoryLogListResponseEnvelopeMessages]
+type pageProjectDeploymentHistoryLogListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectDeploymentHistoryLogListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeSuccess bool
+type PageProjectDeploymentHistoryLogListResponseEnvelopeSuccess bool
 
 const (
-	PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeSuccessTrue PageProjectDeploymentHistoryLogPagesDeploymentGetDeploymentLogsResponseEnvelopeSuccess = true
+	PageProjectDeploymentHistoryLogListResponseEnvelopeSuccessTrue PageProjectDeploymentHistoryLogListResponseEnvelopeSuccess = true
 )

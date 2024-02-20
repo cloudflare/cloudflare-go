@@ -31,14 +31,6 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 	return
 }
 
-// Updates a DLP predefined profile. Only supports enabling/disabling entries.
-func (r *DLPProfilePredefinedService) Update(ctx context.Context, accountID string, profileID string, body DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *DLPProfilePredefinedUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
-	return
-}
-
 // Fetches a predefined DLP profile.
 func (r *DLPProfilePredefinedService) Get(ctx context.Context, accountID string, profileID string, opts ...option.RequestOption) (res *DLPProfilePredefinedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -52,70 +44,13 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, accountID string,
 	return
 }
 
-type DLPProfilePredefinedUpdateResponse struct {
-	// The ID for this profile
-	ID string `json:"id"`
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64 `json:"allowed_match_count"`
-	// The entries for this profile.
-	Entries []DLPProfilePredefinedUpdateResponseEntry `json:"entries"`
-	// The name of the profile.
-	Name string `json:"name"`
-	// The type of the profile.
-	Type DLPProfilePredefinedUpdateResponseType `json:"type"`
-	JSON dlpProfilePredefinedUpdateResponseJSON `json:"-"`
+// Updates a DLP predefined profile. Only supports enabling/disabling entries.
+func (r *DLPProfilePredefinedService) Replace(ctx context.Context, accountID string, profileID string, body DLPProfilePredefinedReplaceParams, opts ...option.RequestOption) (res *DLPProfilePredefinedReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	return
 }
-
-// dlpProfilePredefinedUpdateResponseJSON contains the JSON metadata for the struct
-// [DLPProfilePredefinedUpdateResponse]
-type dlpProfilePredefinedUpdateResponseJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A predefined entry that matches a profile
-type DLPProfilePredefinedUpdateResponseEntry struct {
-	// The ID for this entry
-	ID string `json:"id"`
-	// Whether the entry is enabled or not.
-	Enabled bool `json:"enabled"`
-	// The name of the entry.
-	Name string `json:"name"`
-	// ID of the parent profile
-	ProfileID interface{}                                 `json:"profile_id"`
-	JSON      dlpProfilePredefinedUpdateResponseEntryJSON `json:"-"`
-}
-
-// dlpProfilePredefinedUpdateResponseEntryJSON contains the JSON metadata for the
-// struct [DLPProfilePredefinedUpdateResponseEntry]
-type dlpProfilePredefinedUpdateResponseEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of the profile.
-type DLPProfilePredefinedUpdateResponseType string
-
-const (
-	DLPProfilePredefinedUpdateResponseTypePredefined DLPProfilePredefinedUpdateResponseType = "predefined"
-)
 
 type DLPProfilePredefinedGetResponse struct {
 	// The ID for this profile
@@ -182,25 +117,70 @@ const (
 	DLPProfilePredefinedGetResponseTypePredefined DLPProfilePredefinedGetResponseType = "predefined"
 )
 
-type DLPProfilePredefinedUpdateParams struct {
+type DLPProfilePredefinedReplaceResponse struct {
+	// The ID for this profile
+	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
+	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// The entries for this profile.
-	Entries param.Field[[]DLPProfilePredefinedUpdateParamsEntry] `json:"entries"`
+	Entries []DLPProfilePredefinedReplaceResponseEntry `json:"entries"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// The type of the profile.
+	Type DLPProfilePredefinedReplaceResponseType `json:"type"`
+	JSON dlpProfilePredefinedReplaceResponseJSON `json:"-"`
 }
 
-func (r DLPProfilePredefinedUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// dlpProfilePredefinedReplaceResponseJSON contains the JSON metadata for the
+// struct [DLPProfilePredefinedReplaceResponse]
+type dlpProfilePredefinedReplaceResponseJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
-type DLPProfilePredefinedUpdateParamsEntry struct {
+func (r *DLPProfilePredefinedReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A predefined entry that matches a profile
+type DLPProfilePredefinedReplaceResponseEntry struct {
+	// The ID for this entry
+	ID string `json:"id"`
 	// Whether the entry is enabled or not.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled bool `json:"enabled"`
+	// The name of the entry.
+	Name string `json:"name"`
+	// ID of the parent profile
+	ProfileID interface{}                                  `json:"profile_id"`
+	JSON      dlpProfilePredefinedReplaceResponseEntryJSON `json:"-"`
 }
 
-func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// dlpProfilePredefinedReplaceResponseEntryJSON contains the JSON metadata for the
+// struct [DLPProfilePredefinedReplaceResponseEntry]
+type dlpProfilePredefinedReplaceResponseEntryJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	ProfileID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
+
+func (r *DLPProfilePredefinedReplaceResponseEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of the profile.
+type DLPProfilePredefinedReplaceResponseType string
+
+const (
+	DLPProfilePredefinedReplaceResponseTypePredefined DLPProfilePredefinedReplaceResponseType = "predefined"
+)
 
 type DLPProfilePredefinedGetResponseEnvelope struct {
 	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -270,3 +250,23 @@ type DLPProfilePredefinedGetResponseEnvelopeSuccess bool
 const (
 	DLPProfilePredefinedGetResponseEnvelopeSuccessTrue DLPProfilePredefinedGetResponseEnvelopeSuccess = true
 )
+
+type DLPProfilePredefinedReplaceParams struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
+	// The entries for this profile.
+	Entries param.Field[[]DLPProfilePredefinedReplaceParamsEntry] `json:"entries"`
+}
+
+func (r DLPProfilePredefinedReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedReplaceParamsEntry struct {
+	// Whether the entry is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DLPProfilePredefinedReplaceParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}

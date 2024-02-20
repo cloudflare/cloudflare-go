@@ -38,9 +38,9 @@ func NewSpectrumAnalyticsEventSummaryService(opts ...option.RequestOption) (r *S
 }
 
 // Retrieves a list of summarised aggregate metrics over a given time period.
-func (r *SpectrumAnalyticsEventSummaryService) SpectrumAnalyticsSummaryGetAnalyticsSummary(ctx context.Context, zone string, query SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams, opts ...option.RequestOption) (res *SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse, err error) {
+func (r *SpectrumAnalyticsEventSummaryService) Get(ctx context.Context, zone string, query SpectrumAnalyticsEventSummaryGetParams, opts ...option.RequestOption) (res *SpectrumAnalyticsEventSummaryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelope
+	var env SpectrumAnalyticsEventSummaryGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/spectrum/analytics/events/summary", zone)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -50,16 +50,15 @@ func (r *SpectrumAnalyticsEventSummaryService) SpectrumAnalyticsSummaryGetAnalyt
 	return
 }
 
-// Union satisfied by
-// [SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseUnknown]
-// or [shared.UnionString].
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse interface {
-	ImplementsSpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse()
+// Union satisfied by [SpectrumAnalyticsEventSummaryGetResponseUnknown] or
+// [shared.UnionString].
+type SpectrumAnalyticsEventSummaryGetResponse interface {
+	ImplementsSpectrumAnalyticsEventSummaryGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse)(nil)).Elem(),
+		reflect.TypeOf((*SpectrumAnalyticsEventSummaryGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -68,7 +67,7 @@ func init() {
 	)
 }
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams struct {
+type SpectrumAnalyticsEventSummaryGetParams struct {
 	// Can be used to break down the data by given attributes. Options are:
 	//
 	// | Dimension | Name                          | Example                                                    |
@@ -77,7 +76,7 @@ type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryPar
 	// | appID     | Application ID                | 40d67c87c6cd4b889a4fd57805225e85                           |
 	// | coloName  | Colo Name                     | SFO                                                        |
 	// | ipVersion | IP version used by the client | 4, 6.                                                      |
-	Dimensions param.Field[[]SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension] `query:"dimensions"`
+	Dimensions param.Field[[]SpectrumAnalyticsEventSummaryGetParamsDimension] `query:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
 	// and AND boolean logic. AND takes precedence over OR in all the expressions. The
 	// OR operator is defined using a comma (,) or OR keyword surrounded by whitespace.
@@ -105,7 +104,7 @@ type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryPar
 	// | durationMedian | Median connection duration          | 1.0     | Time in milliseconds  |
 	// | duration90th   | 90th percentile connection duration | 1.0     | Time in milliseconds  |
 	// | duration99th   | 99th percentile connection duration | 1.0     | Time in milliseconds. |
-	Metrics param.Field[[]SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric] `query:"metrics"`
+	Metrics param.Field[[]SpectrumAnalyticsEventSummaryGetParamsMetric] `query:"metrics"`
 	// Start of time interval to query, defaults to `until` - 6 hours. Timestamp must
 	// be in RFC3339 format and uses UTC unless otherwise specified.
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
@@ -117,50 +116,48 @@ type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryPar
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes
-// [SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams]'s
-// query parameters as `url.Values`.
-func (r SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParams) URLQuery() (v url.Values) {
+// URLQuery serializes [SpectrumAnalyticsEventSummaryGetParams]'s query parameters
+// as `url.Values`.
+func (r SpectrumAnalyticsEventSummaryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension string
+type SpectrumAnalyticsEventSummaryGetParamsDimension string
 
 const (
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionEvent     SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension = "event"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionAppID     SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension = "appID"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionColoName  SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension = "coloName"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimensionIPVersion SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsDimension = "ipVersion"
+	SpectrumAnalyticsEventSummaryGetParamsDimensionEvent     SpectrumAnalyticsEventSummaryGetParamsDimension = "event"
+	SpectrumAnalyticsEventSummaryGetParamsDimensionAppID     SpectrumAnalyticsEventSummaryGetParamsDimension = "appID"
+	SpectrumAnalyticsEventSummaryGetParamsDimensionColoName  SpectrumAnalyticsEventSummaryGetParamsDimension = "coloName"
+	SpectrumAnalyticsEventSummaryGetParamsDimensionIPVersion SpectrumAnalyticsEventSummaryGetParamsDimension = "ipVersion"
 )
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric string
+type SpectrumAnalyticsEventSummaryGetParamsMetric string
 
 const (
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricCount          SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "count"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricBytesIngress   SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "bytesIngress"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricBytesEgress    SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "bytesEgress"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricDurationAvg    SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "durationAvg"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricDurationMedian SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "durationMedian"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricDuration90th   SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "duration90th"
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetricDuration99th   SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryParamsMetric = "duration99th"
+	SpectrumAnalyticsEventSummaryGetParamsMetricCount          SpectrumAnalyticsEventSummaryGetParamsMetric = "count"
+	SpectrumAnalyticsEventSummaryGetParamsMetricBytesIngress   SpectrumAnalyticsEventSummaryGetParamsMetric = "bytesIngress"
+	SpectrumAnalyticsEventSummaryGetParamsMetricBytesEgress    SpectrumAnalyticsEventSummaryGetParamsMetric = "bytesEgress"
+	SpectrumAnalyticsEventSummaryGetParamsMetricDurationAvg    SpectrumAnalyticsEventSummaryGetParamsMetric = "durationAvg"
+	SpectrumAnalyticsEventSummaryGetParamsMetricDurationMedian SpectrumAnalyticsEventSummaryGetParamsMetric = "durationMedian"
+	SpectrumAnalyticsEventSummaryGetParamsMetricDuration90th   SpectrumAnalyticsEventSummaryGetParamsMetric = "duration90th"
+	SpectrumAnalyticsEventSummaryGetParamsMetricDuration99th   SpectrumAnalyticsEventSummaryGetParamsMetric = "duration99th"
 )
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelope struct {
-	Errors   []SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessages `json:"messages,required"`
-	Result   SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponse                   `json:"result,required,nullable"`
+type SpectrumAnalyticsEventSummaryGetResponseEnvelope struct {
+	Errors   []SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SpectrumAnalyticsEventSummaryGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeSuccess `json:"success,required"`
-	JSON    spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeJSON    `json:"-"`
+	Success SpectrumAnalyticsEventSummaryGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    spectrumAnalyticsEventSummaryGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelope]
-type spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeJSON struct {
+// spectrumAnalyticsEventSummaryGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [SpectrumAnalyticsEventSummaryGetResponseEnvelope]
+type spectrumAnalyticsEventSummaryGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -169,53 +166,52 @@ type spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryRes
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrors struct {
-	Code    int64                                                                                              `json:"code,required"`
-	Message string                                                                                             `json:"message,required"`
-	JSON    spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrorsJSON `json:"-"`
+type SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    spectrumAnalyticsEventSummaryGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrors]
-type spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrorsJSON struct {
+// spectrumAnalyticsEventSummaryGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors]
+type spectrumAnalyticsEventSummaryGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessages struct {
-	Code    int64                                                                                                `json:"code,required"`
-	Message string                                                                                               `json:"message,required"`
-	JSON    spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessagesJSON `json:"-"`
+type SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    spectrumAnalyticsEventSummaryGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessages]
-type spectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessagesJSON struct {
+// spectrumAnalyticsEventSummaryGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages]
+type spectrumAnalyticsEventSummaryGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeSuccess bool
+type SpectrumAnalyticsEventSummaryGetResponseEnvelopeSuccess bool
 
 const (
-	SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeSuccessTrue SpectrumAnalyticsEventSummarySpectrumAnalyticsSummaryGetAnalyticsSummaryResponseEnvelopeSuccess = true
+	SpectrumAnalyticsEventSummaryGetResponseEnvelopeSuccessTrue SpectrumAnalyticsEventSummaryGetResponseEnvelopeSuccess = true
 )

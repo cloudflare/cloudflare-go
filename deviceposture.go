@@ -34,12 +34,25 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 	return
 }
 
-// Updates a device posture rule.
-func (r *DevicePostureService) Update(ctx context.Context, identifier interface{}, uuid string, body DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureUpdateResponse, err error) {
+// Creates a new device posture rule.
+func (r *DevicePostureService) New(ctx context.Context, identifier interface{}, body DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DevicePostureUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env DevicePostureNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/posture", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches device posture rules for a Zero Trust account.
+func (r *DevicePostureService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePostureListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePostureListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/posture", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,32 +73,6 @@ func (r *DevicePostureService) Delete(ctx context.Context, identifier interface{
 	return
 }
 
-// Creates a new device posture rule.
-func (r *DevicePostureService) DevicePostureRulesNewDevicePostureRule(ctx context.Context, identifier interface{}, body DevicePostureDevicePostureRulesNewDevicePostureRuleParams, opts ...option.RequestOption) (res *DevicePostureDevicePostureRulesNewDevicePostureRuleResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches device posture rules for a Zero Trust account.
-func (r *DevicePostureService) DevicePostureRulesListDevicePostureRules(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DevicePostureDevicePostureRulesListDevicePostureRulesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches a single device posture rule.
 func (r *DevicePostureService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DevicePostureGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -99,7 +86,20 @@ func (r *DevicePostureService) Get(ctx context.Context, identifier interface{}, 
 	return
 }
 
-type DevicePostureUpdateResponse struct {
+// Updates a device posture rule.
+func (r *DevicePostureService) Replace(ctx context.Context, identifier interface{}, uuid string, body DevicePostureReplaceParams, opts ...option.RequestOption) (res *DevicePostureReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePostureReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/posture/%s", identifier, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type DevicePostureNewResponse struct {
 	// API UUID.
 	ID string `json:"id"`
 	// The description of the device posture rule.
@@ -108,22 +108,22 @@ type DevicePostureUpdateResponse struct {
 	// remains valid until it is overwritten by new data from the WARP client.
 	Expiration string `json:"expiration"`
 	// The value to be checked against.
-	Input DevicePostureUpdateResponseInput `json:"input"`
+	Input DevicePostureNewResponseInput `json:"input"`
 	// The conditions that the client must match to run the rule.
-	Match []DevicePostureUpdateResponseMatch `json:"match"`
+	Match []DevicePostureNewResponseMatch `json:"match"`
 	// The name of the device posture rule.
 	Name string `json:"name"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
 	// five minutes). Minimum: `1m`.
 	Schedule string `json:"schedule"`
 	// The type of device posture rule.
-	Type DevicePostureUpdateResponseType `json:"type"`
-	JSON devicePostureUpdateResponseJSON `json:"-"`
+	Type DevicePostureNewResponseType `json:"type"`
+	JSON devicePostureNewResponseJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseJSON contains the JSON metadata for the struct
-// [DevicePostureUpdateResponse]
-type devicePostureUpdateResponseJSON struct {
+// devicePostureNewResponseJSON contains the JSON metadata for the struct
+// [DevicePostureNewResponse]
+type devicePostureNewResponseJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Expiration  apijson.Field
@@ -136,40 +136,39 @@ type devicePostureUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The value to be checked against.
 //
-// Union satisfied by
-// [DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest] or
-// [DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureUpdateResponseInput interface {
-	implementsDevicePostureUpdateResponseInput()
+// Union satisfied by [DevicePostureNewResponseInputTeamsDevicesFileInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesApplicationInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesIntuneInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesKolideInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesTaniumInputRequest] or
+// [DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest].
+type DevicePostureNewResponseInput interface {
+	implementsDevicePostureNewResponseInput()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureUpdateResponseInput)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureNewResponseInput)(nil)).Elem(), "")
 }
 
-type DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// Whether or not file exists
@@ -177,14 +176,14 @@ type DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest struct {
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
-	Thumbprint string                                                           `json:"thumbprint"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
+	Thumbprint string                                                        `json:"thumbprint"`
+	JSON       devicePostureNewResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesFileInputRequestJSON contains the
-// JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesFileInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesFileInputRequestJSON contains the JSON
+// metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesFileInputRequest]
+type devicePostureNewResponseInputTeamsDevicesFileInputRequestJSON struct {
 	OperatingSystem apijson.Field
 	Path            apijson.Field
 	Exists          apijson.Field
@@ -194,93 +193,93 @@ type devicePostureUpdateResponseInputTeamsDevicesFileInputRequestJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating system
-type DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureUpdateResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+	DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureNewResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
 	ID string `json:"id,required"`
 	// Operating System
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest]
+type devicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
 	ID              apijson.Field
 	OperatingSystem apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating System
-type DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
-	DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
-	DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
+	DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
+	DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
+	DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
 	// Domain
-	Domain string                                                                   `json:"domain"`
-	JSON   devicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
+	Domain string                                                                `json:"domain"`
+	JSON   devicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest]
+type devicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
 	OperatingSystem apijson.Field
 	Domain          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating System
-type DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// Operator
-	Operator DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	Operator DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
@@ -289,14 +288,14 @@ type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest struct {
 	OsDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                                `json:"os_version_extra"`
-	JSON           devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+	OsVersionExtra string                                                             `json:"os_version_extra"`
+	JSON           devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON contains
-// the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest]
+type devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
 	OperatingSystem  apijson.Field
 	Operator         apijson.Field
 	Version          apijson.Field
@@ -307,80 +306,80 @@ type devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON struc
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating System
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown5 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown6 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown7 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown8 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown9 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown5 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown6 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown7 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown8 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown9 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
 	Enabled bool `json:"enabled,required"`
 	// Operating System
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureNewResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestJSON contains
-// the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesFirewallInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest]
+type devicePostureNewResponseInputTeamsDevicesFirewallInputRequestJSON struct {
 	Enabled         apijson.Field
 	OperatingSystem apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating System
-type DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
+	DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureNewResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
-	Thumbprint string                                                                  `json:"thumbprint"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
+	Thumbprint string                                                               `json:"thumbprint"`
+	JSON       devicePostureNewResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestJSON contains
+// devicePostureNewResponseInputTeamsDevicesSentineloneInputRequestJSON contains
 // the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest]
+type devicePostureNewResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
 	OperatingSystem apijson.Field
 	Path            apijson.Field
 	Sha256          apijson.Field
@@ -389,38 +388,38 @@ type devicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating system
-type DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
 	// File path.
 	Path string `json:"path,required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
-	Thumbprint string                                                                  `json:"thumbprint"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
+	Thumbprint string                                                               `json:"thumbprint"`
+	JSON       devicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestJSON contains
+// devicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestJSON contains
 // the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest]
+type devicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
 	OperatingSystem apijson.Field
 	Path            apijson.Field
 	Sha256          apijson.Field
@@ -429,63 +428,63 @@ type devicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating system
-type DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+	DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
 	CheckDisks []string `json:"checkDisks"`
 	// Whether to check all disks for encryption.
-	RequireAll bool                                                                       `json:"requireAll"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
+	RequireAll bool                                                                    `json:"requireAll"`
+	JSON       devicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest]
+type devicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
 	CheckDisks  apijson.Field
 	RequireAll  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
-type DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
 	// Path for the application.
 	Path string `json:"path,required"`
 	// SHA-256.
 	Sha256 string `json:"sha256"`
 	// Signing certificate thumbprint.
-	Thumbprint string                                                                  `json:"thumbprint"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
+	Thumbprint string                                                               `json:"thumbprint"`
+	JSON       devicePostureNewResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestJSON contains
+// devicePostureNewResponseInputTeamsDevicesApplicationInputRequestJSON contains
 // the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesApplicationInputRequest]
+type devicePostureNewResponseInputTeamsDevicesApplicationInputRequestJSON struct {
 	OperatingSystem apijson.Field
 	Path            apijson.Field
 	Sha256          apijson.Field
@@ -494,86 +493,86 @@ type devicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating system
-type DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+	DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureNewResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID string `json:"certificate_id,required"`
 	// Common Name that is protected by the certificate
-	Cn   string                                                                        `json:"cn,required"`
-	JSON devicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
+	Cn   string                                                                     `json:"cn,required"`
+	JSON devicePostureNewResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequestJSON
+// devicePostureNewResponseInputTeamsDevicesClientCertificateInputRequestJSON
 // contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest]
+type devicePostureNewResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
 	CertificateID apijson.Field
 	Cn            apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
-type DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
 	// Compliance Status
-	ComplianceStatus DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
+	ComplianceStatus DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
 	// Posture Integration ID.
-	ConnectionID string                                                                   `json:"connection_id,required"`
-	JSON         devicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
+	ConnectionID string                                                                `json:"connection_id,required"`
+	JSON         devicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest]
+type devicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
 	ComplianceStatus apijson.Field
 	ConnectionID     apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Compliance Status
-type DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
+type DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
-	DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
+	DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
+	DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
 	// Operator
-	Operator DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
+	Operator DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
 	Os string `json:"os"`
 	// overall
@@ -583,14 +582,14 @@ type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest struct 
 	// Version
 	Version string `json:"version"`
 	// Version Operator
-	VersionOperator DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
-	JSON            devicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
+	VersionOperator DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
+	JSON            devicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON contains
+// devicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJSON contains
 // the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest]
+type devicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
 	ConnectionID    apijson.Field
 	Operator        apijson.Field
 	Os              apijson.Field
@@ -602,86 +601,86 @@ type devicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON str
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operator
-type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
+type DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown15 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown16 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown17 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown18 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown19 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown15 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown16 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown17 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown18 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown19 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
 
 // Version Operator
-type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
+type DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown25 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown26 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown27 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown28 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown29 DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown25 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown26 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown27 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown28 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown29 DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesIntuneInputRequest struct {
 	// Compliance Status
-	ComplianceStatus DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
+	ComplianceStatus DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
 	// Posture Integration ID.
-	ConnectionID string                                                             `json:"connection_id,required"`
-	JSON         devicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
+	ConnectionID string                                                          `json:"connection_id,required"`
+	JSON         devicePostureNewResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestJSON contains the
+// devicePostureNewResponseInputTeamsDevicesIntuneInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesIntuneInputRequest]
+type devicePostureNewResponseInputTeamsDevicesIntuneInputRequestJSON struct {
 	ComplianceStatus apijson.Field
 	ConnectionID     apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Compliance Status
-type DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
+type DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
-	DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
+	DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureNewResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesKolideInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
 	// Count Operator
-	CountOperator DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
+	CountOperator DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
 	// The Number of Issues.
-	IssueCount string                                                             `json:"issue_count,required"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
+	IssueCount string                                                          `json:"issue_count,required"`
+	JSON       devicePostureNewResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON contains the
+// devicePostureNewResponseInputTeamsDevicesKolideInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesKolideInputRequest]
+type devicePostureNewResponseInputTeamsDevicesKolideInputRequestJSON struct {
 	ConnectionID  apijson.Field
 	CountOperator apijson.Field
 	IssueCount    apijson.Field
@@ -689,44 +688,44 @@ type devicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Count Operator
-type DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator string
+type DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown35 DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown36 DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown37 DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown38 DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown39 DevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown35 DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown36 DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown37 DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown38 DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown39 DevicePostureNewResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesTaniumInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen string `json:"eid_last_seen"`
 	// Operator to evaluate risk_level or eid_last_seen.
-	Operator DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
+	Operator DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
 	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
+	RiskLevel DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
 	// Score Operator
-	ScoreOperator DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
+	ScoreOperator DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
 	// For more details on total score, refer to the Tanium documentation.
-	TotalScore float64                                                            `json:"total_score"`
-	JSON       devicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
+	TotalScore float64                                                         `json:"total_score"`
+	JSON       devicePostureNewResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON contains the
+// devicePostureNewResponseInputTeamsDevicesTaniumInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesTaniumInputRequest]
+type devicePostureNewResponseInputTeamsDevicesTaniumInputRequestJSON struct {
 	ConnectionID  apijson.Field
 	EidLastSeen   apijson.Field
 	Operator      apijson.Field
@@ -737,46 +736,46 @@ type devicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operator to evaluate risk_level or eid_last_seen.
-type DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator string
+type DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown45 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown46 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown47 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown48 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown49 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown45 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown46 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown47 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown48 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown49 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
 
 // For more details on risk level, refer to the Tanium documentation.
-type DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
+type DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
 )
 
 // Score Operator
-type DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
+type DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown55 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown56 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown57 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown58 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown59 DevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown55 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown56 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown57 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown58 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown59 DevicePostureNewResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID string `json:"connection_id,required"`
 	// The Number of active threats.
@@ -786,16 +785,16 @@ type DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest stru
 	// Whether device is active.
 	IsActive bool `json:"is_active"`
 	// Network status of device.
-	NetworkStatus DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
+	NetworkStatus DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
 	// operator
-	Operator DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
-	JSON     devicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
+	Operator DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
+	JSON     devicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
+// devicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest]
+type devicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
 	ConnectionID  apijson.Field
 	ActiveThreats apijson.Field
 	Infected      apijson.Field
@@ -806,84 +805,870 @@ type devicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestJSON 
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Network status of device.
-type DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
+type DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
 )
 
 // operator
-type DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
+type DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown65 DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown66 DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown67 DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown68 DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown69 DevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown65 DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown66 DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown67 DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown68 DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown69 DevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
 
-type DevicePostureUpdateResponseMatch struct {
-	Platform DevicePostureUpdateResponseMatchPlatform `json:"platform"`
-	JSON     devicePostureUpdateResponseMatchJSON     `json:"-"`
+type DevicePostureNewResponseMatch struct {
+	Platform DevicePostureNewResponseMatchPlatform `json:"platform"`
+	JSON     devicePostureNewResponseMatchJSON     `json:"-"`
 }
 
-// devicePostureUpdateResponseMatchJSON contains the JSON metadata for the struct
-// [DevicePostureUpdateResponseMatch]
-type devicePostureUpdateResponseMatchJSON struct {
+// devicePostureNewResponseMatchJSON contains the JSON metadata for the struct
+// [DevicePostureNewResponseMatch]
+type devicePostureNewResponseMatchJSON struct {
 	Platform    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseMatch) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePostureUpdateResponseMatchPlatform string
+type DevicePostureNewResponseMatchPlatform string
 
 const (
-	DevicePostureUpdateResponseMatchPlatformWindows DevicePostureUpdateResponseMatchPlatform = "windows"
-	DevicePostureUpdateResponseMatchPlatformMac     DevicePostureUpdateResponseMatchPlatform = "mac"
-	DevicePostureUpdateResponseMatchPlatformLinux   DevicePostureUpdateResponseMatchPlatform = "linux"
-	DevicePostureUpdateResponseMatchPlatformAndroid DevicePostureUpdateResponseMatchPlatform = "android"
-	DevicePostureUpdateResponseMatchPlatformIos     DevicePostureUpdateResponseMatchPlatform = "ios"
+	DevicePostureNewResponseMatchPlatformWindows DevicePostureNewResponseMatchPlatform = "windows"
+	DevicePostureNewResponseMatchPlatformMac     DevicePostureNewResponseMatchPlatform = "mac"
+	DevicePostureNewResponseMatchPlatformLinux   DevicePostureNewResponseMatchPlatform = "linux"
+	DevicePostureNewResponseMatchPlatformAndroid DevicePostureNewResponseMatchPlatform = "android"
+	DevicePostureNewResponseMatchPlatformIos     DevicePostureNewResponseMatchPlatform = "ios"
 )
 
 // The type of device posture rule.
-type DevicePostureUpdateResponseType string
+type DevicePostureNewResponseType string
 
 const (
-	DevicePostureUpdateResponseTypeFile              DevicePostureUpdateResponseType = "file"
-	DevicePostureUpdateResponseTypeApplication       DevicePostureUpdateResponseType = "application"
-	DevicePostureUpdateResponseTypeTanium            DevicePostureUpdateResponseType = "tanium"
-	DevicePostureUpdateResponseTypeGateway           DevicePostureUpdateResponseType = "gateway"
-	DevicePostureUpdateResponseTypeWarp              DevicePostureUpdateResponseType = "warp"
-	DevicePostureUpdateResponseTypeDiskEncryption    DevicePostureUpdateResponseType = "disk_encryption"
-	DevicePostureUpdateResponseTypeSentinelone       DevicePostureUpdateResponseType = "sentinelone"
-	DevicePostureUpdateResponseTypeCarbonblack       DevicePostureUpdateResponseType = "carbonblack"
-	DevicePostureUpdateResponseTypeFirewall          DevicePostureUpdateResponseType = "firewall"
-	DevicePostureUpdateResponseTypeOsVersion         DevicePostureUpdateResponseType = "os_version"
-	DevicePostureUpdateResponseTypeDomainJoined      DevicePostureUpdateResponseType = "domain_joined"
-	DevicePostureUpdateResponseTypeClientCertificate DevicePostureUpdateResponseType = "client_certificate"
-	DevicePostureUpdateResponseTypeUniqueClientID    DevicePostureUpdateResponseType = "unique_client_id"
-	DevicePostureUpdateResponseTypeKolide            DevicePostureUpdateResponseType = "kolide"
-	DevicePostureUpdateResponseTypeTaniumS2s         DevicePostureUpdateResponseType = "tanium_s2s"
-	DevicePostureUpdateResponseTypeCrowdstrikeS2s    DevicePostureUpdateResponseType = "crowdstrike_s2s"
-	DevicePostureUpdateResponseTypeIntune            DevicePostureUpdateResponseType = "intune"
-	DevicePostureUpdateResponseTypeWorkspaceOne      DevicePostureUpdateResponseType = "workspace_one"
-	DevicePostureUpdateResponseTypeSentineloneS2s    DevicePostureUpdateResponseType = "sentinelone_s2s"
+	DevicePostureNewResponseTypeFile              DevicePostureNewResponseType = "file"
+	DevicePostureNewResponseTypeApplication       DevicePostureNewResponseType = "application"
+	DevicePostureNewResponseTypeTanium            DevicePostureNewResponseType = "tanium"
+	DevicePostureNewResponseTypeGateway           DevicePostureNewResponseType = "gateway"
+	DevicePostureNewResponseTypeWarp              DevicePostureNewResponseType = "warp"
+	DevicePostureNewResponseTypeDiskEncryption    DevicePostureNewResponseType = "disk_encryption"
+	DevicePostureNewResponseTypeSentinelone       DevicePostureNewResponseType = "sentinelone"
+	DevicePostureNewResponseTypeCarbonblack       DevicePostureNewResponseType = "carbonblack"
+	DevicePostureNewResponseTypeFirewall          DevicePostureNewResponseType = "firewall"
+	DevicePostureNewResponseTypeOsVersion         DevicePostureNewResponseType = "os_version"
+	DevicePostureNewResponseTypeDomainJoined      DevicePostureNewResponseType = "domain_joined"
+	DevicePostureNewResponseTypeClientCertificate DevicePostureNewResponseType = "client_certificate"
+	DevicePostureNewResponseTypeUniqueClientID    DevicePostureNewResponseType = "unique_client_id"
+	DevicePostureNewResponseTypeKolide            DevicePostureNewResponseType = "kolide"
+	DevicePostureNewResponseTypeTaniumS2s         DevicePostureNewResponseType = "tanium_s2s"
+	DevicePostureNewResponseTypeCrowdstrikeS2s    DevicePostureNewResponseType = "crowdstrike_s2s"
+	DevicePostureNewResponseTypeIntune            DevicePostureNewResponseType = "intune"
+	DevicePostureNewResponseTypeWorkspaceOne      DevicePostureNewResponseType = "workspace_one"
+	DevicePostureNewResponseTypeSentineloneS2s    DevicePostureNewResponseType = "sentinelone_s2s"
+)
+
+type DevicePostureListResponse struct {
+	// API UUID.
+	ID string `json:"id"`
+	// The description of the device posture rule.
+	Description string `json:"description"`
+	// Sets the expiration time for a posture check result. If empty, the result
+	// remains valid until it is overwritten by new data from the WARP client.
+	Expiration string `json:"expiration"`
+	// The value to be checked against.
+	Input DevicePostureListResponseInput `json:"input"`
+	// The conditions that the client must match to run the rule.
+	Match []DevicePostureListResponseMatch `json:"match"`
+	// The name of the device posture rule.
+	Name string `json:"name"`
+	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
+	// five minutes). Minimum: `1m`.
+	Schedule string `json:"schedule"`
+	// The type of device posture rule.
+	Type DevicePostureListResponseType `json:"type"`
+	JSON devicePostureListResponseJSON `json:"-"`
+}
+
+// devicePostureListResponseJSON contains the JSON metadata for the struct
+// [DevicePostureListResponse]
+type devicePostureListResponseJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expiration  apijson.Field
+	Input       apijson.Field
+	Match       apijson.Field
+	Name        apijson.Field
+	Schedule    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The value to be checked against.
+//
+// Union satisfied by [DevicePostureListResponseInputTeamsDevicesFileInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesFirewallInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesApplicationInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesIntuneInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesKolideInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesTaniumInputRequest] or
+// [DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest].
+type DevicePostureListResponseInput interface {
+	implementsDevicePostureListResponseInput()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureListResponseInput)(nil)).Elem(), "")
+}
+
+type DevicePostureListResponseInputTeamsDevicesFileInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// Whether or not file exists
+	Exists bool `json:"exists"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                         `json:"thumbprint"`
+	JSON       devicePostureListResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesFileInputRequestJSON contains the JSON
+// metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesFileInputRequest]
+type devicePostureListResponseInputTeamsDevicesFileInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Exists          apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating system
+type DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureListResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
+	// List ID.
+	ID string `json:"id,required"`
+	// Operating System
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest]
+type devicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
+	ID              apijson.Field
+	OperatingSystem apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating System
+type DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
+	DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
+	DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
+)
+
+type DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest struct {
+	// Operating System
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
+	// Domain
+	Domain string                                                                 `json:"domain"`
+	JSON   devicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest]
+type devicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Domain          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating System
+type DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
+)
+
+type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest struct {
+	// Operating System
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	// Operator
+	Operator DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	// Version of OS
+	Version string `json:"version,required"`
+	// Operating System Distribution Name (linux only)
+	OsDistroName string `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OsDistroRevision string `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OsVersionExtra string                                                              `json:"os_version_extra"`
+	JSON           devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest]
+type devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+	OperatingSystem  apijson.Field
+	Operator         apijson.Field
+	Version          apijson.Field
+	OsDistroName     apijson.Field
+	OsDistroRevision apijson.Field
+	OsVersionExtra   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating System
+type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+)
+
+// Operator
+type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown75 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown76 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown77 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown78 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown79 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+)
+
+type DevicePostureListResponseInputTeamsDevicesFirewallInputRequest struct {
+	// Enabled
+	Enabled bool `json:"enabled,required"`
+	// Operating System
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureListResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesFirewallInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesFirewallInputRequest]
+type devicePostureListResponseInputTeamsDevicesFirewallInputRequestJSON struct {
+	Enabled         apijson.Field
+	OperatingSystem apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating System
+type DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureListResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                `json:"thumbprint"`
+	JSON       devicePostureListResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesSentineloneInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest]
+type devicePostureListResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating system
+type DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureListResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                `json:"thumbprint"`
+	JSON       devicePostureListResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesCarbonblackInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest]
+type devicePostureListResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating system
+type DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
+	// List of volume names to be checked for encryption.
+	CheckDisks []string `json:"checkDisks"`
+	// Whether to check all disks for encryption.
+	RequireAll bool                                                                     `json:"requireAll"`
+	JSON       devicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest]
+type devicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
+	CheckDisks  apijson.Field
+	RequireAll  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+type DevicePostureListResponseInputTeamsDevicesApplicationInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
+	// Path for the application.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                `json:"thumbprint"`
+	JSON       devicePostureListResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesApplicationInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesApplicationInputRequest]
+type devicePostureListResponseInputTeamsDevicesApplicationInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operating system
+type DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureListResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest struct {
+	// UUID of Cloudflare managed certificate.
+	CertificateID string `json:"certificate_id,required"`
+	// Common Name that is protected by the certificate
+	Cn   string                                                                      `json:"cn,required"`
+	JSON devicePostureListResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesClientCertificateInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest]
+type devicePostureListResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
+	CertificateID apijson.Field
+	Cn            apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+type DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID string                                                                 `json:"connection_id,required"`
+	JSON         devicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest]
+type devicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Compliance Status
+type DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
+	DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
+)
+
+type DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// Operator
+	Operator DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
+	// Os Version
+	Os string `json:"os"`
+	// overall
+	Overall string `json:"overall"`
+	// SensorConfig
+	SensorConfig string `json:"sensor_config"`
+	// Version
+	Version string `json:"version"`
+	// Version Operator
+	VersionOperator DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
+	JSON            devicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest]
+type devicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
+	ConnectionID    apijson.Field
+	Operator        apijson.Field
+	Os              apijson.Field
+	Overall         apijson.Field
+	SensorConfig    apijson.Field
+	Version         apijson.Field
+	VersionOperator apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operator
+type DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown85 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown86 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown87 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown88 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown89 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+)
+
+// Version Operator
+type DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown95 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown96 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown97 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown98 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown99 DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+)
+
+type DevicePostureListResponseInputTeamsDevicesIntuneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID string                                                           `json:"connection_id,required"`
+	JSON         devicePostureListResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesIntuneInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesIntuneInputRequest]
+type devicePostureListResponseInputTeamsDevicesIntuneInputRequestJSON struct {
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Compliance Status
+type DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
+	DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureListResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
+)
+
+type DevicePostureListResponseInputTeamsDevicesKolideInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// Count Operator
+	CountOperator DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
+	// The Number of Issues.
+	IssueCount string                                                           `json:"issue_count,required"`
+	JSON       devicePostureListResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesKolideInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesKolideInputRequest]
+type devicePostureListResponseInputTeamsDevicesKolideInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	CountOperator apijson.Field
+	IssueCount    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Count Operator
+type DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown105 DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown106 DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown107 DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown108 DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown109 DevicePostureListResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
+)
+
+type DevicePostureListResponseInputTeamsDevicesTaniumInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen string `json:"eid_last_seen"`
+	// Operator to evaluate risk_level or eid_last_seen.
+	Operator DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
+	// Score Operator
+	ScoreOperator DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore float64                                                          `json:"total_score"`
+	JSON       devicePostureListResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesTaniumInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesTaniumInputRequest]
+type devicePostureListResponseInputTeamsDevicesTaniumInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	EidLastSeen   apijson.Field
+	Operator      apijson.Field
+	RiskLevel     apijson.Field
+	ScoreOperator apijson.Field
+	TotalScore    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Operator to evaluate risk_level or eid_last_seen.
+type DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown115 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown116 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown117 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown118 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown119 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
+)
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureListResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
+)
+
+// Score Operator
+type DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown125 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown126 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown127 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown128 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown129 DevicePostureListResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+)
+
+type DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// The Number of active threats.
+	ActiveThreats float64 `json:"active_threats"`
+	// Whether device is infected.
+	Infected bool `json:"infected"`
+	// Whether device is active.
+	IsActive bool `json:"is_active"`
+	// Network status of device.
+	NetworkStatus DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
+	// operator
+	Operator DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
+	JSON     devicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
+}
+
+// devicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest]
+type devicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	ActiveThreats apijson.Field
+	Infected      apijson.Field
+	IsActive      apijson.Field
+	NetworkStatus apijson.Field
+	Operator      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureListResponseInput() {
+}
+
+// Network status of device.
+type DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
+)
+
+// operator
+type DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
+
+const (
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown135 DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown136 DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown137 DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown138 DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown139 DevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+)
+
+type DevicePostureListResponseMatch struct {
+	Platform DevicePostureListResponseMatchPlatform `json:"platform"`
+	JSON     devicePostureListResponseMatchJSON     `json:"-"`
+}
+
+// devicePostureListResponseMatchJSON contains the JSON metadata for the struct
+// [DevicePostureListResponseMatch]
+type devicePostureListResponseMatchJSON struct {
+	Platform    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureListResponseMatchPlatform string
+
+const (
+	DevicePostureListResponseMatchPlatformWindows DevicePostureListResponseMatchPlatform = "windows"
+	DevicePostureListResponseMatchPlatformMac     DevicePostureListResponseMatchPlatform = "mac"
+	DevicePostureListResponseMatchPlatformLinux   DevicePostureListResponseMatchPlatform = "linux"
+	DevicePostureListResponseMatchPlatformAndroid DevicePostureListResponseMatchPlatform = "android"
+	DevicePostureListResponseMatchPlatformIos     DevicePostureListResponseMatchPlatform = "ios"
+)
+
+// The type of device posture rule.
+type DevicePostureListResponseType string
+
+const (
+	DevicePostureListResponseTypeFile              DevicePostureListResponseType = "file"
+	DevicePostureListResponseTypeApplication       DevicePostureListResponseType = "application"
+	DevicePostureListResponseTypeTanium            DevicePostureListResponseType = "tanium"
+	DevicePostureListResponseTypeGateway           DevicePostureListResponseType = "gateway"
+	DevicePostureListResponseTypeWarp              DevicePostureListResponseType = "warp"
+	DevicePostureListResponseTypeDiskEncryption    DevicePostureListResponseType = "disk_encryption"
+	DevicePostureListResponseTypeSentinelone       DevicePostureListResponseType = "sentinelone"
+	DevicePostureListResponseTypeCarbonblack       DevicePostureListResponseType = "carbonblack"
+	DevicePostureListResponseTypeFirewall          DevicePostureListResponseType = "firewall"
+	DevicePostureListResponseTypeOsVersion         DevicePostureListResponseType = "os_version"
+	DevicePostureListResponseTypeDomainJoined      DevicePostureListResponseType = "domain_joined"
+	DevicePostureListResponseTypeClientCertificate DevicePostureListResponseType = "client_certificate"
+	DevicePostureListResponseTypeUniqueClientID    DevicePostureListResponseType = "unique_client_id"
+	DevicePostureListResponseTypeKolide            DevicePostureListResponseType = "kolide"
+	DevicePostureListResponseTypeTaniumS2s         DevicePostureListResponseType = "tanium_s2s"
+	DevicePostureListResponseTypeCrowdstrikeS2s    DevicePostureListResponseType = "crowdstrike_s2s"
+	DevicePostureListResponseTypeIntune            DevicePostureListResponseType = "intune"
+	DevicePostureListResponseTypeWorkspaceOne      DevicePostureListResponseType = "workspace_one"
+	DevicePostureListResponseTypeSentineloneS2s    DevicePostureListResponseType = "sentinelone_s2s"
 )
 
 type DevicePostureDeleteResponse struct {
@@ -903,1586 +1688,6 @@ type devicePostureDeleteResponseJSON struct {
 func (r *DevicePostureDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType `json:"type"`
-	JSON devicePostureDevicePostureRulesNewDevicePostureRuleResponseJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseJSON contains the
-// JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponse]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The value to be checked against.
-//
-// Union satisfied by
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequest]
-// or
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput interface {
-	implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput)(nil)).Elem(), "")
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// Whether or not file exists
-	Exists bool `json:"exists"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                           `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Exists          apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
-	// List ID.
-	ID string `json:"id,required"`
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
-	ID              apijson.Field
-	OperatingSystem apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequest struct {
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
-	// Domain
-	Domain string                                                                                                   `json:"domain"`
-	JSON   devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Domain          apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequest struct {
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
-	// Operator
-	Operator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
-	// Version of OS
-	Version string `json:"version,required"`
-	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                                                                `json:"os_version_extra"`
-	JSON           devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
-	OperatingSystem  apijson.Field
-	Operator         apijson.Field
-	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
-)
-
-// Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown75 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown76 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown77 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown78 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown79 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequest struct {
-	// Enabled
-	Enabled bool `json:"enabled,required"`
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestJSON struct {
-	Enabled         apijson.Field
-	OperatingSystem apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                  `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                  `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
-	// List of volume names to be checked for encryption.
-	CheckDisks []string `json:"checkDisks"`
-	// Whether to check all disks for encryption.
-	RequireAll bool                                                                                                       `json:"requireAll"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
-	CheckDisks  apijson.Field
-	RequireAll  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
-	// Path for the application.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                  `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequest struct {
-	// UUID of Cloudflare managed certificate.
-	CertificateID string `json:"certificate_id,required"`
-	// Common Name that is protected by the certificate
-	Cn   string                                                                                                        `json:"cn,required"`
-	JSON devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
-	CertificateID apijson.Field
-	Cn            apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID string                                                                                                   `json:"connection_id,required"`
-	JSON         devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// Operator
-	Operator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
-	// Os Version
-	Os string `json:"os"`
-	// overall
-	Overall string `json:"overall"`
-	// SensorConfig
-	SensorConfig string `json:"sensor_config"`
-	// Version
-	Version string `json:"version"`
-	// Version Operator
-	VersionOperator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
-	JSON            devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
-	ConnectionID    apijson.Field
-	Operator        apijson.Field
-	Os              apijson.Field
-	Overall         apijson.Field
-	SensorConfig    apijson.Field
-	Version         apijson.Field
-	VersionOperator apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown85 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown86 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown87 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown88 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown89 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-// Version Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown95 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown96 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown97 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown98 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown99 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID string                                                                                             `json:"connection_id,required"`
-	JSON         devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestJSON struct {
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// Count Operator
-	CountOperator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
-	// The Number of Issues.
-	IssueCount string                                                                                             `json:"issue_count,required"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	CountOperator apijson.Field
-	IssueCount    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Count Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown105 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown106 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown107 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown108 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown109 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// For more details on eid last seen, refer to the Tanium documentation.
-	EidLastSeen string `json:"eid_last_seen"`
-	// Operator to evaluate risk_level or eid_last_seen.
-	Operator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
-	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
-	// Score Operator
-	ScoreOperator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
-	// For more details on total score, refer to the Tanium documentation.
-	TotalScore float64                                                                                            `json:"total_score"`
-	JSON       devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	EidLastSeen   apijson.Field
-	Operator      apijson.Field
-	RiskLevel     apijson.Field
-	ScoreOperator apijson.Field
-	TotalScore    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Operator to evaluate risk_level or eid_last_seen.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown115 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown116 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown117 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown118 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown119 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
-)
-
-// For more details on risk level, refer to the Tanium documentation.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
-)
-
-// Score Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown125 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown126 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown127 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown128 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown129 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// The Number of active threats.
-	ActiveThreats float64 `json:"active_threats"`
-	// Whether device is infected.
-	Infected bool `json:"infected"`
-	// Whether device is active.
-	IsActive bool `json:"is_active"`
-	// Network status of device.
-	NetworkStatus DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
-	// operator
-	Operator DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
-	JSON     devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequest]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	ActiveThreats apijson.Field
-	Infected      apijson.Field
-	IsActive      apijson.Field
-	NetworkStatus apijson.Field
-	Operator      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleResponseInput() {
-}
-
-// Network status of device.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
-)
-
-// operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown135 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown136 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown137 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown138 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown139 DevicePostureDevicePostureRulesNewDevicePostureRuleResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatch struct {
-	Platform DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform `json:"platform"`
-	JSON     devicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchJSON     `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchJSON contains
-// the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatch]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchJSON struct {
-	Platform    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatch) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatformWindows DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatformMac     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform = "mac"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatformLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatformAndroid DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform = "android"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatformIos     DevicePostureDevicePostureRulesNewDevicePostureRuleResponseMatchPlatform = "ios"
-)
-
-// The type of device posture rule.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeFile              DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "file"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeApplication       DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "application"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeTanium            DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "tanium"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeGateway           DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "gateway"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeWarp              DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "warp"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeDiskEncryption    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "disk_encryption"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeSentinelone       DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "sentinelone"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeCarbonblack       DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "carbonblack"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeFirewall          DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "firewall"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeOsVersion         DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "os_version"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeDomainJoined      DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "domain_joined"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeClientCertificate DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "client_certificate"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeUniqueClientID    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "unique_client_id"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeKolide            DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "kolide"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeTaniumS2s         DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "tanium_s2s"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeCrowdstrikeS2s    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "crowdstrike_s2s"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeIntune            DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "intune"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeWorkspaceOne      DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "workspace_one"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseTypeSentineloneS2s    DevicePostureDevicePostureRulesNewDevicePostureRuleResponseType = "sentinelone_s2s"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The description of the device posture rule.
-	Description string `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration string `json:"expiration"`
-	// The value to be checked against.
-	Input DevicePostureDevicePostureRulesListDevicePostureRulesResponseInput `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match []DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatch `json:"match"`
-	// The name of the device posture rule.
-	Name string `json:"name"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule string `json:"schedule"`
-	// The type of device posture rule.
-	Type DevicePostureDevicePostureRulesListDevicePostureRulesResponseType `json:"type"`
-	JSON devicePostureDevicePostureRulesListDevicePostureRulesResponseJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseJSON contains the
-// JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponse]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseJSON struct {
-	ID          apijson.Field
-	Description apijson.Field
-	Expiration  apijson.Field
-	Input       apijson.Field
-	Match       apijson.Field
-	Name        apijson.Field
-	Schedule    apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The value to be checked against.
-//
-// Union satisfied by
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequest],
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequest]
-// or
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInput interface {
-	implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureDevicePostureRulesListDevicePostureRulesResponseInput)(nil)).Elem(), "")
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// Whether or not file exists
-	Exists bool `json:"exists"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                             `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Exists          apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
-	// List ID.
-	ID string `json:"id,required"`
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
-	ID              apijson.Field
-	OperatingSystem apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequest struct {
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
-	// Domain
-	Domain string                                                                                                     `json:"domain"`
-	JSON   devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Domain          apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequest struct {
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
-	// Operator
-	Operator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
-	// Version of OS
-	Version string `json:"version,required"`
-	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                                                                  `json:"os_version_extra"`
-	JSON           devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
-	OperatingSystem  apijson.Field
-	Operator         apijson.Field
-	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
-)
-
-// Operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown145 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown146 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown147 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown148 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown149 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequest struct {
-	// Enabled
-	Enabled bool `json:"enabled,required"`
-	// Operating System
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
-	JSON            devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestJSON struct {
-	Enabled         apijson.Field
-	OperatingSystem apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                    `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
-	// File path.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                    `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
-	// List of volume names to be checked for encryption.
-	CheckDisks []string `json:"checkDisks"`
-	// Whether to check all disks for encryption.
-	RequireAll bool                                                                                                         `json:"requireAll"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
-	CheckDisks  apijson.Field
-	RequireAll  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequest struct {
-	// Operating system
-	OperatingSystem DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
-	// Path for the application.
-	Path string `json:"path,required"`
-	// SHA-256.
-	Sha256 string `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint string                                                                                                    `json:"thumbprint"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestJSON struct {
-	OperatingSystem apijson.Field
-	Path            apijson.Field
-	Sha256          apijson.Field
-	Thumbprint      apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequest struct {
-	// UUID of Cloudflare managed certificate.
-	CertificateID string `json:"certificate_id,required"`
-	// Common Name that is protected by the certificate
-	Cn   string                                                                                                          `json:"cn,required"`
-	JSON devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
-	CertificateID apijson.Field
-	Cn            apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID string                                                                                                     `json:"connection_id,required"`
-	JSON         devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// Operator
-	Operator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
-	// Os Version
-	Os string `json:"os"`
-	// overall
-	Overall string `json:"overall"`
-	// SensorConfig
-	SensorConfig string `json:"sensor_config"`
-	// Version
-	Version string `json:"version"`
-	// Version Operator
-	VersionOperator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
-	JSON            devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
-	ConnectionID    apijson.Field
-	Operator        apijson.Field
-	Os              apijson.Field
-	Overall         apijson.Field
-	SensorConfig    apijson.Field
-	Version         apijson.Field
-	VersionOperator apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown155 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown156 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown157 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown158 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown159 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-// Version Operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown165 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown166 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown167 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown168 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown169 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID string                                                                                               `json:"connection_id,required"`
-	JSON         devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestJSON struct {
-	ComplianceStatus apijson.Field
-	ConnectionID     apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// Count Operator
-	CountOperator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
-	// The Number of Issues.
-	IssueCount string                                                                                               `json:"issue_count,required"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	CountOperator apijson.Field
-	IssueCount    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Count Operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown175 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown176 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown177 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown178 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown179 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// For more details on eid last seen, refer to the Tanium documentation.
-	EidLastSeen string `json:"eid_last_seen"`
-	// Operator to evaluate risk_level or eid_last_seen.
-	Operator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
-	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
-	// Score Operator
-	ScoreOperator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
-	// For more details on total score, refer to the Tanium documentation.
-	TotalScore float64                                                                                              `json:"total_score"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	EidLastSeen   apijson.Field
-	Operator      apijson.Field
-	RiskLevel     apijson.Field
-	ScoreOperator apijson.Field
-	TotalScore    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Operator to evaluate risk_level or eid_last_seen.
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown185 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown186 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown187 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown188 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown189 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
-)
-
-// For more details on risk level, refer to the Tanium documentation.
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
-)
-
-// Score Operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown195 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown196 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown197 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown198 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown199 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID string `json:"connection_id,required"`
-	// The Number of active threats.
-	ActiveThreats float64 `json:"active_threats"`
-	// Whether device is infected.
-	Infected bool `json:"infected"`
-	// Whether device is active.
-	IsActive bool `json:"is_active"`
-	// Network status of device.
-	NetworkStatus DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
-	// operator
-	Operator DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
-	JSON     devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequest]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
-	ConnectionID  apijson.Field
-	ActiveThreats apijson.Field
-	Infected      apijson.Field
-	IsActive      apijson.Field
-	NetworkStatus apijson.Field
-	Operator      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureDevicePostureRulesListDevicePostureRulesResponseInput() {
-}
-
-// Network status of device.
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
-)
-
-// operator
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown205 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown206 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown207 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown208 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown209 DevicePostureDevicePostureRulesListDevicePostureRulesResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatch struct {
-	Platform DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform `json:"platform"`
-	JSON     devicePostureDevicePostureRulesListDevicePostureRulesResponseMatchJSON     `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseMatchJSON contains
-// the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatch]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseMatchJSON struct {
-	Platform    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatch) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatformWindows DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform = "windows"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatformMac     DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform = "mac"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatformLinux   DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform = "linux"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatformAndroid DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform = "android"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatformIos     DevicePostureDevicePostureRulesListDevicePostureRulesResponseMatchPlatform = "ios"
-)
-
-// The type of device posture rule.
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseType string
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeFile              DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "file"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeApplication       DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "application"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeTanium            DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "tanium"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeGateway           DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "gateway"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeWarp              DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "warp"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeDiskEncryption    DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "disk_encryption"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeSentinelone       DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "sentinelone"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeCarbonblack       DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "carbonblack"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeFirewall          DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "firewall"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeOsVersion         DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "os_version"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeDomainJoined      DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "domain_joined"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeClientCertificate DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "client_certificate"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeUniqueClientID    DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "unique_client_id"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeKolide            DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "kolide"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeTaniumS2s         DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "tanium_s2s"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeCrowdstrikeS2s    DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "crowdstrike_s2s"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeIntune            DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "intune"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeWorkspaceOne      DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "workspace_one"
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseTypeSentineloneS2s    DevicePostureDevicePostureRulesListDevicePostureRulesResponseType = "sentinelone_s2s"
-)
 
 type DevicePostureGetResponse struct {
 	// API UUID.
@@ -2709,11 +1914,11 @@ const (
 type DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown215 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown216 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown217 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown218 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown219 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown145 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown146 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown147 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown148 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown149 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
 )
 
 type DevicePostureGetResponseInputTeamsDevicesFirewallInputRequest struct {
@@ -2997,22 +2202,22 @@ func (r DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest) implem
 type DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown225 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown226 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown227 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown228 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown229 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown155 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown156 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown157 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown158 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown159 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
 
 // Version Operator
 type DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown235 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown236 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown237 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown238 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown239 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown165 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown166 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown167 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown168 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown169 DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
 
 type DevicePostureGetResponseInputTeamsDevicesIntuneInputRequest struct {
@@ -3084,11 +2289,11 @@ func (r DevicePostureGetResponseInputTeamsDevicesKolideInputRequest) implementsD
 type DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown245 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown246 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown247 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown248 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown249 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown175 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown176 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown177 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown178 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown179 DevicePostureGetResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
 
 type DevicePostureGetResponseInputTeamsDevicesTaniumInputRequest struct {
@@ -3132,11 +2337,11 @@ func (r DevicePostureGetResponseInputTeamsDevicesTaniumInputRequest) implementsD
 type DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown255 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown256 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown257 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown258 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown259 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown185 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown186 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown187 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown188 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown189 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
 
 // For more details on risk level, refer to the Tanium documentation.
@@ -3153,11 +2358,11 @@ const (
 type DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown265 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown266 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown267 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown268 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown269 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown195 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown196 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown197 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown198 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown199 DevicePostureGetResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
 
 type DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
@@ -3211,11 +2416,11 @@ const (
 type DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown275 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown276 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown277 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown278 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown279 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown205 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown206 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown207 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown208 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown209 DevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
 
 type DevicePostureGetResponseMatch struct {
@@ -3270,79 +2475,866 @@ const (
 	DevicePostureGetResponseTypeSentineloneS2s    DevicePostureGetResponseType = "sentinelone_s2s"
 )
 
-type DevicePostureUpdateParams struct {
+type DevicePostureReplaceResponse struct {
+	// API UUID.
+	ID string `json:"id"`
+	// The description of the device posture rule.
+	Description string `json:"description"`
+	// Sets the expiration time for a posture check result. If empty, the result
+	// remains valid until it is overwritten by new data from the WARP client.
+	Expiration string `json:"expiration"`
+	// The value to be checked against.
+	Input DevicePostureReplaceResponseInput `json:"input"`
+	// The conditions that the client must match to run the rule.
+	Match []DevicePostureReplaceResponseMatch `json:"match"`
+	// The name of the device posture rule.
+	Name string `json:"name"`
+	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
+	// five minutes). Minimum: `1m`.
+	Schedule string `json:"schedule"`
+	// The type of device posture rule.
+	Type DevicePostureReplaceResponseType `json:"type"`
+	JSON devicePostureReplaceResponseJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseJSON contains the JSON metadata for the struct
+// [DevicePostureReplaceResponse]
+type devicePostureReplaceResponseJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Expiration  apijson.Field
+	Input       apijson.Field
+	Match       apijson.Field
+	Name        apijson.Field
+	Schedule    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The value to be checked against.
+//
+// Union satisfied by
+// [DevicePostureReplaceResponseInputTeamsDevicesFileInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequest],
+// [DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequest] or
+// [DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequest].
+type DevicePostureReplaceResponseInput interface {
+	implementsDevicePostureReplaceResponseInput()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*DevicePostureReplaceResponseInput)(nil)).Elem(), "")
+}
+
+type DevicePostureReplaceResponseInputTeamsDevicesFileInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// Whether or not file exists
+	Exists bool `json:"exists"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                            `json:"thumbprint"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesFileInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesFileInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesFileInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesFileInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Exists          apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesFileInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesFileInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating system
+type DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureReplaceResponseInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequest struct {
+	// List ID.
+	ID string `json:"id,required"`
+	// Operating System
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestJSON            `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestJSON struct {
+	ID              apijson.Field
+	OperatingSystem apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating System
+type DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
+	DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
+	DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureReplaceResponseInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequest struct {
+	// Operating System
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem `json:"operating_system,required"`
+	// Domain
+	Domain string                                                                    `json:"domain"`
+	JSON   devicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Domain          apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating System
+type DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequest struct {
+	// Operating System
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	// Operator
+	Operator DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	// Version of OS
+	Version string `json:"version,required"`
+	// Operating System Distribution Name (linux only)
+	OsDistroName string `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OsDistroRevision string `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OsVersionExtra string                                                                 `json:"os_version_extra"`
+	JSON           devicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+	OperatingSystem  apijson.Field
+	Operator         apijson.Field
+	Version          apijson.Field
+	OsDistroName     apijson.Field
+	OsDistroRevision apijson.Field
+	OsVersionExtra   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating System
+type DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+)
+
+// Operator
+type DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown215 DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown216 DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown217 DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown218 DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown219 DevicePostureReplaceResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequest struct {
+	// Enabled
+	Enabled bool `json:"enabled,required"`
+	// Operating System
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystem `json:"operating_system,required"`
+	JSON            devicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestJSON            `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestJSON contains
+// the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestJSON struct {
+	Enabled         apijson.Field
+	OperatingSystem apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating System
+type DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureReplaceResponseInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                   `json:"thumbprint"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating system
+type DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureReplaceResponseInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem `json:"operating_system,required"`
+	// File path.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                   `json:"thumbprint"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating system
+type DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureReplaceResponseInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequest struct {
+	// List of volume names to be checked for encryption.
+	CheckDisks []string `json:"checkDisks"`
+	// Whether to check all disks for encryption.
+	RequireAll bool                                                                        `json:"requireAll"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequestJSON struct {
+	CheckDisks  apijson.Field
+	RequireAll  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+type DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequest struct {
+	// Operating system
+	OperatingSystem DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystem `json:"operating_system,required"`
+	// Path for the application.
+	Path string `json:"path,required"`
+	// SHA-256.
+	Sha256 string `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint string                                                                   `json:"thumbprint"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestJSON struct {
+	OperatingSystem apijson.Field
+	Path            apijson.Field
+	Sha256          apijson.Field
+	Thumbprint      apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operating system
+type DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureReplaceResponseInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequest struct {
+	// UUID of Cloudflare managed certificate.
+	CertificateID string `json:"certificate_id,required"`
+	// Common Name that is protected by the certificate
+	Cn   string                                                                         `json:"cn,required"`
+	JSON devicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequestJSON struct {
+	CertificateID apijson.Field
+	Cn            apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+type DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID string                                                                    `json:"connection_id,required"`
+	JSON         devicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestJSON struct {
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Compliance Status
+type DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
+	DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureReplaceResponseInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// Operator
+	Operator DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
+	// Os Version
+	Os string `json:"os"`
+	// overall
+	Overall string `json:"overall"`
+	// SensorConfig
+	SensorConfig string `json:"sensor_config"`
+	// Version
+	Version string `json:"version"`
+	// Version Operator
+	VersionOperator DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator `json:"versionOperator"`
+	JSON            devicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestJSON            `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
+	ConnectionID    apijson.Field
+	Operator        apijson.Field
+	Os              apijson.Field
+	Overall         apijson.Field
+	SensorConfig    apijson.Field
+	Version         apijson.Field
+	VersionOperator apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operator
+type DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown225 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown226 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown227 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown228 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown229 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+)
+
+// Version Operator
+type DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown235 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown236 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown237 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown238 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown239 DevicePostureReplaceResponseInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID string                                                              `json:"connection_id,required"`
+	JSON         devicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestJSON struct {
+	ComplianceStatus apijson.Field
+	ConnectionID     apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Compliance Status
+type DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
+	DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureReplaceResponseInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// Count Operator
+	CountOperator DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator `json:"countOperator,required"`
+	// The Number of Issues.
+	IssueCount string                                                              `json:"issue_count,required"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesKolideInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesKolideInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesKolideInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	CountOperator apijson.Field
+	IssueCount    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Count Operator
+type DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown245 DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown246 DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown247 DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown248 DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperatorUnknown249 DevicePostureReplaceResponseInputTeamsDevicesKolideInputRequestCountOperator = "=="
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen string `json:"eid_last_seen"`
+	// Operator to evaluate risk_level or eid_last_seen.
+	Operator DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator `json:"operator"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel `json:"risk_level"`
+	// Score Operator
+	ScoreOperator DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore float64                                                             `json:"total_score"`
+	JSON       devicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestJSON contains the
+// JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	EidLastSeen   apijson.Field
+	Operator      apijson.Field
+	RiskLevel     apijson.Field
+	ScoreOperator apijson.Field
+	TotalScore    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Operator to evaluate risk_level or eid_last_seen.
+type DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown255 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown256 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown257 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown258 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperatorUnknown259 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestOperator = "=="
+)
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
+)
+
+// Score Operator
+type DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown265 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown266 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown267 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown268 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown269 DevicePostureReplaceResponseInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+)
+
+type DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID string `json:"connection_id,required"`
+	// The Number of active threats.
+	ActiveThreats float64 `json:"active_threats"`
+	// Whether device is infected.
+	Infected bool `json:"infected"`
+	// Whether device is active.
+	IsActive bool `json:"is_active"`
+	// Network status of device.
+	NetworkStatus DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus `json:"network_status"`
+	// operator
+	Operator DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator `json:"operator"`
+	JSON     devicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestJSON     `json:"-"`
+}
+
+// devicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestJSON
+// contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequest]
+type devicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestJSON struct {
+	ConnectionID  apijson.Field
+	ActiveThreats apijson.Field
+	Infected      apijson.Field
+	IsActive      apijson.Field
+	NetworkStatus apijson.Field
+	Operator      apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequest) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureReplaceResponseInput() {
+}
+
+// Network status of device.
+type DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
+)
+
+// operator
+type DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator string
+
+const (
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown275 DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown276 DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown277 DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown278 DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown279 DevicePostureReplaceResponseInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+)
+
+type DevicePostureReplaceResponseMatch struct {
+	Platform DevicePostureReplaceResponseMatchPlatform `json:"platform"`
+	JSON     devicePostureReplaceResponseMatchJSON     `json:"-"`
+}
+
+// devicePostureReplaceResponseMatchJSON contains the JSON metadata for the struct
+// [DevicePostureReplaceResponseMatch]
+type devicePostureReplaceResponseMatchJSON struct {
+	Platform    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseMatch) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureReplaceResponseMatchPlatform string
+
+const (
+	DevicePostureReplaceResponseMatchPlatformWindows DevicePostureReplaceResponseMatchPlatform = "windows"
+	DevicePostureReplaceResponseMatchPlatformMac     DevicePostureReplaceResponseMatchPlatform = "mac"
+	DevicePostureReplaceResponseMatchPlatformLinux   DevicePostureReplaceResponseMatchPlatform = "linux"
+	DevicePostureReplaceResponseMatchPlatformAndroid DevicePostureReplaceResponseMatchPlatform = "android"
+	DevicePostureReplaceResponseMatchPlatformIos     DevicePostureReplaceResponseMatchPlatform = "ios"
+)
+
+// The type of device posture rule.
+type DevicePostureReplaceResponseType string
+
+const (
+	DevicePostureReplaceResponseTypeFile              DevicePostureReplaceResponseType = "file"
+	DevicePostureReplaceResponseTypeApplication       DevicePostureReplaceResponseType = "application"
+	DevicePostureReplaceResponseTypeTanium            DevicePostureReplaceResponseType = "tanium"
+	DevicePostureReplaceResponseTypeGateway           DevicePostureReplaceResponseType = "gateway"
+	DevicePostureReplaceResponseTypeWarp              DevicePostureReplaceResponseType = "warp"
+	DevicePostureReplaceResponseTypeDiskEncryption    DevicePostureReplaceResponseType = "disk_encryption"
+	DevicePostureReplaceResponseTypeSentinelone       DevicePostureReplaceResponseType = "sentinelone"
+	DevicePostureReplaceResponseTypeCarbonblack       DevicePostureReplaceResponseType = "carbonblack"
+	DevicePostureReplaceResponseTypeFirewall          DevicePostureReplaceResponseType = "firewall"
+	DevicePostureReplaceResponseTypeOsVersion         DevicePostureReplaceResponseType = "os_version"
+	DevicePostureReplaceResponseTypeDomainJoined      DevicePostureReplaceResponseType = "domain_joined"
+	DevicePostureReplaceResponseTypeClientCertificate DevicePostureReplaceResponseType = "client_certificate"
+	DevicePostureReplaceResponseTypeUniqueClientID    DevicePostureReplaceResponseType = "unique_client_id"
+	DevicePostureReplaceResponseTypeKolide            DevicePostureReplaceResponseType = "kolide"
+	DevicePostureReplaceResponseTypeTaniumS2s         DevicePostureReplaceResponseType = "tanium_s2s"
+	DevicePostureReplaceResponseTypeCrowdstrikeS2s    DevicePostureReplaceResponseType = "crowdstrike_s2s"
+	DevicePostureReplaceResponseTypeIntune            DevicePostureReplaceResponseType = "intune"
+	DevicePostureReplaceResponseTypeWorkspaceOne      DevicePostureReplaceResponseType = "workspace_one"
+	DevicePostureReplaceResponseTypeSentineloneS2s    DevicePostureReplaceResponseType = "sentinelone_s2s"
+)
+
+type DevicePostureNewParams struct {
 	// The name of the device posture rule.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device posture rule.
-	Type param.Field[DevicePostureUpdateParamsType] `json:"type,required"`
+	Type param.Field[DevicePostureNewParamsType] `json:"type,required"`
 	// The description of the device posture rule.
 	Description param.Field[string] `json:"description"`
 	// Sets the expiration time for a posture check result. If empty, the result
 	// remains valid until it is overwritten by new data from the WARP client.
 	Expiration param.Field[string] `json:"expiration"`
 	// The value to be checked against.
-	Input param.Field[DevicePostureUpdateParamsInput] `json:"input"`
+	Input param.Field[DevicePostureNewParamsInput] `json:"input"`
 	// The conditions that the client must match to run the rule.
-	Match param.Field[[]DevicePostureUpdateParamsMatch] `json:"match"`
+	Match param.Field[[]DevicePostureNewParamsMatch] `json:"match"`
 	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
 	// five minutes). Minimum: `1m`.
 	Schedule param.Field[string] `json:"schedule"`
 }
 
-func (r DevicePostureUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The type of device posture rule.
-type DevicePostureUpdateParamsType string
+type DevicePostureNewParamsType string
 
 const (
-	DevicePostureUpdateParamsTypeFile              DevicePostureUpdateParamsType = "file"
-	DevicePostureUpdateParamsTypeApplication       DevicePostureUpdateParamsType = "application"
-	DevicePostureUpdateParamsTypeTanium            DevicePostureUpdateParamsType = "tanium"
-	DevicePostureUpdateParamsTypeGateway           DevicePostureUpdateParamsType = "gateway"
-	DevicePostureUpdateParamsTypeWarp              DevicePostureUpdateParamsType = "warp"
-	DevicePostureUpdateParamsTypeDiskEncryption    DevicePostureUpdateParamsType = "disk_encryption"
-	DevicePostureUpdateParamsTypeSentinelone       DevicePostureUpdateParamsType = "sentinelone"
-	DevicePostureUpdateParamsTypeCarbonblack       DevicePostureUpdateParamsType = "carbonblack"
-	DevicePostureUpdateParamsTypeFirewall          DevicePostureUpdateParamsType = "firewall"
-	DevicePostureUpdateParamsTypeOsVersion         DevicePostureUpdateParamsType = "os_version"
-	DevicePostureUpdateParamsTypeDomainJoined      DevicePostureUpdateParamsType = "domain_joined"
-	DevicePostureUpdateParamsTypeClientCertificate DevicePostureUpdateParamsType = "client_certificate"
-	DevicePostureUpdateParamsTypeUniqueClientID    DevicePostureUpdateParamsType = "unique_client_id"
-	DevicePostureUpdateParamsTypeKolide            DevicePostureUpdateParamsType = "kolide"
-	DevicePostureUpdateParamsTypeTaniumS2s         DevicePostureUpdateParamsType = "tanium_s2s"
-	DevicePostureUpdateParamsTypeCrowdstrikeS2s    DevicePostureUpdateParamsType = "crowdstrike_s2s"
-	DevicePostureUpdateParamsTypeIntune            DevicePostureUpdateParamsType = "intune"
-	DevicePostureUpdateParamsTypeWorkspaceOne      DevicePostureUpdateParamsType = "workspace_one"
-	DevicePostureUpdateParamsTypeSentineloneS2s    DevicePostureUpdateParamsType = "sentinelone_s2s"
+	DevicePostureNewParamsTypeFile              DevicePostureNewParamsType = "file"
+	DevicePostureNewParamsTypeApplication       DevicePostureNewParamsType = "application"
+	DevicePostureNewParamsTypeTanium            DevicePostureNewParamsType = "tanium"
+	DevicePostureNewParamsTypeGateway           DevicePostureNewParamsType = "gateway"
+	DevicePostureNewParamsTypeWarp              DevicePostureNewParamsType = "warp"
+	DevicePostureNewParamsTypeDiskEncryption    DevicePostureNewParamsType = "disk_encryption"
+	DevicePostureNewParamsTypeSentinelone       DevicePostureNewParamsType = "sentinelone"
+	DevicePostureNewParamsTypeCarbonblack       DevicePostureNewParamsType = "carbonblack"
+	DevicePostureNewParamsTypeFirewall          DevicePostureNewParamsType = "firewall"
+	DevicePostureNewParamsTypeOsVersion         DevicePostureNewParamsType = "os_version"
+	DevicePostureNewParamsTypeDomainJoined      DevicePostureNewParamsType = "domain_joined"
+	DevicePostureNewParamsTypeClientCertificate DevicePostureNewParamsType = "client_certificate"
+	DevicePostureNewParamsTypeUniqueClientID    DevicePostureNewParamsType = "unique_client_id"
+	DevicePostureNewParamsTypeKolide            DevicePostureNewParamsType = "kolide"
+	DevicePostureNewParamsTypeTaniumS2s         DevicePostureNewParamsType = "tanium_s2s"
+	DevicePostureNewParamsTypeCrowdstrikeS2s    DevicePostureNewParamsType = "crowdstrike_s2s"
+	DevicePostureNewParamsTypeIntune            DevicePostureNewParamsType = "intune"
+	DevicePostureNewParamsTypeWorkspaceOne      DevicePostureNewParamsType = "workspace_one"
+	DevicePostureNewParamsTypeSentineloneS2s    DevicePostureNewParamsType = "sentinelone_s2s"
 )
 
 // The value to be checked against.
 //
-// Satisfied by [DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureUpdateParamsInput interface {
-	implementsDevicePostureUpdateParamsInput()
+// Satisfied by [DevicePostureNewParamsInputTeamsDevicesFileInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesKolideInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest].
+type DevicePostureNewParamsInput interface {
+	implementsDevicePostureNewParamsInput()
 }
 
-type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesFileInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// Whether or not file exists
@@ -3353,71 +3345,71 @@ type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesFileInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
 	// List ID.
 	ID param.Field[string] `json:"id,required"`
 	// Operating System
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem] `json:"operating_system,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating System
-type DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
-	DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
-	DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
+	DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
+	DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
+	DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest struct {
 	// Operating System
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Domain
 	Domain param.Field[string] `json:"domain"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating System
-type DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest struct {
 	// Operating System
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Operator
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
+	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
 	// Version of OS
 	Version param.Field[string] `json:"version,required"`
 	// Operating System Distribution Name (linux only)
@@ -3429,56 +3421,56 @@ type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest struct {
 	OsVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating System
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown285 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown286 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown287 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown288 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown289 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown285 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown286 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown287 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown288 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown289 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest struct {
 	// Enabled
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// Operating System
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem] `json:"operating_system,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating System
-type DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
+	DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -3487,25 +3479,25 @@ type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
 	// File path.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -3514,39 +3506,39 @@ type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
 	// List of volume names to be checked for encryption.
 	CheckDisks param.Field[[]string] `json:"checkDisks"`
 	// Whether to check all disks for encryption.
 	RequireAll param.Field[bool] `json:"requireAll"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
-type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest struct {
 	// Operating system
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Path for the application.
 	Path param.Field[string] `json:"path,required"`
 	// SHA-256.
@@ -3555,64 +3547,64 @@ type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest struct {
 	Thumbprint param.Field[string] `json:"thumbprint"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesApplicationInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating system
-type DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureUpdateParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureNewParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest struct {
 	// UUID of Cloudflare managed certificate.
 	CertificateID param.Field[string] `json:"certificate_id,required"`
 	// Common Name that is protected by the certificate
 	Cn param.Field[string] `json:"cn,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
-type DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
 	// Compliance Status
-	ComplianceStatus param.Field[DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus] `json:"compliance_status,required"`
+	ComplianceStatus param.Field[DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus] `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Compliance Status
-type DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
+type DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
-	DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureUpdateParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
+	DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
+	DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureNewParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// Operator
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
+	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
 	// Os Version
 	Os param.Field[string] `json:"os"`
 	// overall
@@ -3622,146 +3614,146 @@ type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Version
 	Version param.Field[string] `json:"version"`
 	// Version Operator
-	VersionOperator param.Field[DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
+	VersionOperator param.Field[DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operator
-type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
+type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown295 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown296 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown297 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown298 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown299 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown295 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown296 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown297 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown298 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown299 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
 )
 
 // Version Operator
-type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
+type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown305 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown306 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown307 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown308 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown309 DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown305 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown306 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown307 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown308 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown309 DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest struct {
 	// Compliance Status
-	ComplianceStatus param.Field[DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus] `json:"compliance_status,required"`
+	ComplianceStatus param.Field[DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus] `json:"compliance_status,required"`
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesIntuneInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Compliance Status
-type DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus string
+type DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
-	DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureUpdateParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
+	DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureNewParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesKolideInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// Count Operator
-	CountOperator param.Field[DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator] `json:"countOperator,required"`
+	CountOperator param.Field[DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator] `json:"countOperator,required"`
 	// The Number of Issues.
 	IssueCount param.Field[string] `json:"issue_count,required"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesKolideInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Count Operator
-type DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator string
+type DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown315 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown316 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown317 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown318 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown319 DevicePostureUpdateParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown315 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown316 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown317 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown318 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown319 DevicePostureNewParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// For more details on eid last seen, refer to the Tanium documentation.
 	EidLastSeen param.Field[string] `json:"eid_last_seen"`
 	// Operator to evaluate risk_level or eid_last_seen.
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator] `json:"operator"`
+	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator] `json:"operator"`
 	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel param.Field[DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel] `json:"risk_level"`
+	RiskLevel param.Field[DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel] `json:"risk_level"`
 	// Score Operator
-	ScoreOperator param.Field[DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator] `json:"scoreOperator"`
+	ScoreOperator param.Field[DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator] `json:"scoreOperator"`
 	// For more details on total score, refer to the Tanium documentation.
 	TotalScore param.Field[float64] `json:"total_score"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesTaniumInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operator to evaluate risk_level or eid_last_seen.
-type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator string
+type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown325 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown326 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown327 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown328 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown329 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown325 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown326 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown327 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown328 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown329 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
 )
 
 // For more details on risk level, refer to the Tanium documentation.
-type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
+type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
 )
 
 // Score Operator
-type DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
+type DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown335 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown336 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown337 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown338 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown339 DevicePostureUpdateParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown335 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown336 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown337 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown338 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown339 DevicePostureNewParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
 	// Posture Integration ID.
 	ConnectionID param.Field[string] `json:"connection_id,required"`
 	// The Number of active threats.
@@ -3771,69 +3763,69 @@ type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest struct
 	// Whether device is active.
 	IsActive param.Field[bool] `json:"is_active"`
 	// Network status of device.
-	NetworkStatus param.Field[DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus] `json:"network_status"`
+	NetworkStatus param.Field[DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus] `json:"network_status"`
 	// operator
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator] `json:"operator"`
+	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator] `json:"operator"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Network status of device.
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
+type DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
 )
 
 // operator
-type DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
+type DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown345 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown346 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown347 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown348 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown349 DevicePostureUpdateParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown345 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown346 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown347 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown348 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown349 DevicePostureNewParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
 )
 
-type DevicePostureUpdateParamsMatch struct {
-	Platform param.Field[DevicePostureUpdateParamsMatchPlatform] `json:"platform"`
+type DevicePostureNewParamsMatch struct {
+	Platform param.Field[DevicePostureNewParamsMatchPlatform] `json:"platform"`
 }
 
-func (r DevicePostureUpdateParamsMatch) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsMatch) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DevicePostureUpdateParamsMatchPlatform string
+type DevicePostureNewParamsMatchPlatform string
 
 const (
-	DevicePostureUpdateParamsMatchPlatformWindows DevicePostureUpdateParamsMatchPlatform = "windows"
-	DevicePostureUpdateParamsMatchPlatformMac     DevicePostureUpdateParamsMatchPlatform = "mac"
-	DevicePostureUpdateParamsMatchPlatformLinux   DevicePostureUpdateParamsMatchPlatform = "linux"
-	DevicePostureUpdateParamsMatchPlatformAndroid DevicePostureUpdateParamsMatchPlatform = "android"
-	DevicePostureUpdateParamsMatchPlatformIos     DevicePostureUpdateParamsMatchPlatform = "ios"
+	DevicePostureNewParamsMatchPlatformWindows DevicePostureNewParamsMatchPlatform = "windows"
+	DevicePostureNewParamsMatchPlatformMac     DevicePostureNewParamsMatchPlatform = "mac"
+	DevicePostureNewParamsMatchPlatformLinux   DevicePostureNewParamsMatchPlatform = "linux"
+	DevicePostureNewParamsMatchPlatformAndroid DevicePostureNewParamsMatchPlatform = "android"
+	DevicePostureNewParamsMatchPlatformIos     DevicePostureNewParamsMatchPlatform = "ios"
 )
 
-type DevicePostureUpdateResponseEnvelope struct {
-	Errors   []DevicePostureUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureUpdateResponse                   `json:"result,required,nullable"`
+type DevicePostureNewResponseEnvelope struct {
+	Errors   []DevicePostureNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success DevicePostureUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    devicePostureUpdateResponseEnvelopeJSON    `json:"-"`
+	Success DevicePostureNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePostureNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// devicePostureUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DevicePostureUpdateResponseEnvelope]
-type devicePostureUpdateResponseEnvelopeJSON struct {
+// devicePostureNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DevicePostureNewResponseEnvelope]
+type devicePostureNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -3842,54 +3834,152 @@ type devicePostureUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePostureUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    devicePostureUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type DevicePostureNewResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    devicePostureNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DevicePostureUpdateResponseEnvelopeErrors]
-type devicePostureUpdateResponseEnvelopeErrorsJSON struct {
+// devicePostureNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureNewResponseEnvelopeErrors]
+type devicePostureNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DevicePostureUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    devicePostureUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type DevicePostureNewResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    devicePostureNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DevicePostureUpdateResponseEnvelopeMessages]
-type devicePostureUpdateResponseEnvelopeMessagesJSON struct {
+// devicePostureNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePostureNewResponseEnvelopeMessages]
+type devicePostureNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DevicePostureUpdateResponseEnvelopeSuccess bool
+type DevicePostureNewResponseEnvelopeSuccess bool
 
 const (
-	DevicePostureUpdateResponseEnvelopeSuccessTrue DevicePostureUpdateResponseEnvelopeSuccess = true
+	DevicePostureNewResponseEnvelopeSuccessTrue DevicePostureNewResponseEnvelopeSuccess = true
 )
+
+type DevicePostureListResponseEnvelope struct {
+	Errors   []DevicePostureListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePostureListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePostureListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePostureListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePostureListResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePostureListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DevicePostureListResponseEnvelope]
+type devicePostureListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureListResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    devicePostureListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DevicePostureListResponseEnvelopeErrors]
+type devicePostureListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureListResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    devicePostureListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DevicePostureListResponseEnvelopeMessages]
+type devicePostureListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePostureListResponseEnvelopeSuccess bool
+
+const (
+	DevicePostureListResponseEnvelopeSuccessTrue DevicePostureListResponseEnvelopeSuccess = true
+)
+
+type DevicePostureListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                         `json:"total_count"`
+	JSON       devicePostureListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePostureListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [DevicePostureListResponseEnvelopeResultInfo]
+type devicePostureListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type DevicePostureDeleteResponseEnvelope struct {
 	Errors   []DevicePostureDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -3960,733 +4050,6 @@ const (
 	DevicePostureDeleteResponseEnvelopeSuccessTrue DevicePostureDeleteResponseEnvelopeSuccess = true
 )
 
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParams struct {
-	// The name of the device posture rule.
-	Name param.Field[string] `json:"name,required"`
-	// The type of device posture rule.
-	Type param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType] `json:"type,required"`
-	// The description of the device posture rule.
-	Description param.Field[string] `json:"description"`
-	// Sets the expiration time for a posture check result. If empty, the result
-	// remains valid until it is overwritten by new data from the WARP client.
-	Expiration param.Field[string] `json:"expiration"`
-	// The value to be checked against.
-	Input param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput] `json:"input"`
-	// The conditions that the client must match to run the rule.
-	Match param.Field[[]DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatch] `json:"match"`
-	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
-	// five minutes). Minimum: `1m`.
-	Schedule param.Field[string] `json:"schedule"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of device posture rule.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeFile              DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "file"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeApplication       DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "application"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeTanium            DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "tanium"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeGateway           DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "gateway"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeWarp              DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "warp"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeDiskEncryption    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "disk_encryption"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeSentinelone       DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "sentinelone"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeCarbonblack       DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "carbonblack"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeFirewall          DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "firewall"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeOsVersion         DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "os_version"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeDomainJoined      DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "domain_joined"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeClientCertificate DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "client_certificate"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeUniqueClientID    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "unique_client_id"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeKolide            DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "kolide"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeTaniumS2s         DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "tanium_s2s"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeCrowdstrikeS2s    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "crowdstrike_s2s"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeIntune            DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "intune"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeWorkspaceOne      DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "workspace_one"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsTypeSentineloneS2s    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsType = "sentinelone_s2s"
-)
-
-// The value to be checked against.
-//
-// Satisfied by
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDiskEncryptionInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesClientCertificateInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequest],
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequest].
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput interface {
-	implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput()
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest struct {
-	// Operating system
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
-	// File path.
-	Path param.Field[string] `json:"path,required"`
-	// Whether or not file exists
-	Exists param.Field[bool] `json:"exists"`
-	// SHA-256.
-	Sha256 param.Field[string] `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint param.Field[string] `json:"thumbprint"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
-	// List ID.
-	ID param.Field[string] `json:"id,required"`
-	// Operating System
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem] `json:"operating_system,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequest struct {
-	// Operating System
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
-	// Domain
-	Domain param.Field[string] `json:"domain"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequest struct {
-	// Operating System
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
-	// Operator
-	Operator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
-	// Version of OS
-	Version param.Field[string] `json:"version,required"`
-	// Operating System Distribution Name (linux only)
-	OsDistroName param.Field[string] `json:"os_distro_name"`
-	// Version of OS Distribution (linux only)
-	OsDistroRevision param.Field[string] `json:"os_distro_revision"`
-	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
-	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra param.Field[string] `json:"os_version_extra"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
-)
-
-// Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown355 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown356 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown357 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown358 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown359 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequest struct {
-	// Enabled
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// Operating System
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystem] `json:"operating_system,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating System
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequest struct {
-	// Operating system
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
-	// File path.
-	Path param.Field[string] `json:"path,required"`
-	// SHA-256.
-	Sha256 param.Field[string] `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint param.Field[string] `json:"thumbprint"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequest struct {
-	// Operating system
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
-	// File path.
-	Path param.Field[string] `json:"path,required"`
-	// SHA-256.
-	Sha256 param.Field[string] `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint param.Field[string] `json:"thumbprint"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
-	// List of volume names to be checked for encryption.
-	CheckDisks param.Field[[]string] `json:"checkDisks"`
-	// Whether to check all disks for encryption.
-	RequireAll param.Field[bool] `json:"requireAll"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDiskEncryptionInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequest struct {
-	// Operating system
-	OperatingSystem param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
-	// Path for the application.
-	Path param.Field[string] `json:"path,required"`
-	// SHA-256.
-	Sha256 param.Field[string] `json:"sha256"`
-	// Signing certificate thumbprint.
-	Thumbprint param.Field[string] `json:"thumbprint"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operating system
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesClientCertificateInputRequest struct {
-	// UUID of Cloudflare managed certificate.
-	CertificateID param.Field[string] `json:"certificate_id,required"`
-	// Common Name that is protected by the certificate
-	Cn param.Field[string] `json:"cn,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesClientCertificateInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus] `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// Operator
-	Operator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
-	// Os Version
-	Os param.Field[string] `json:"os"`
-	// overall
-	Overall param.Field[string] `json:"overall"`
-	// SensorConfig
-	SensorConfig param.Field[string] `json:"sensor_config"`
-	// Version
-	Version param.Field[string] `json:"version"`
-	// Version Operator
-	VersionOperator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown365 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown366 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown367 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown368 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown369 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
-)
-
-// Version Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown375 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown376 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown377 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown378 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown379 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequest struct {
-	// Compliance Status
-	ComplianceStatus param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus] `json:"compliance_status,required"`
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Compliance Status
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// Count Operator
-	CountOperator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator] `json:"countOperator,required"`
-	// The Number of Issues.
-	IssueCount param.Field[string] `json:"issue_count,required"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Count Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown385 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown386 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown387 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown388 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown389 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// For more details on eid last seen, refer to the Tanium documentation.
-	EidLastSeen param.Field[string] `json:"eid_last_seen"`
-	// Operator to evaluate risk_level or eid_last_seen.
-	Operator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator] `json:"operator"`
-	// For more details on risk level, refer to the Tanium documentation.
-	RiskLevel param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel] `json:"risk_level"`
-	// Score Operator
-	ScoreOperator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator] `json:"scoreOperator"`
-	// For more details on total score, refer to the Tanium documentation.
-	TotalScore param.Field[float64] `json:"total_score"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Operator to evaluate risk_level or eid_last_seen.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown395 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown396 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown397 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown398 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown399 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
-)
-
-// For more details on risk level, refer to the Tanium documentation.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
-)
-
-// Score Operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown405 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown406 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown407 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown408 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown409 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
-	// Posture Integration ID.
-	ConnectionID param.Field[string] `json:"connection_id,required"`
-	// The Number of active threats.
-	ActiveThreats param.Field[float64] `json:"active_threats"`
-	// Whether device is infected.
-	Infected param.Field[bool] `json:"infected"`
-	// Whether device is active.
-	IsActive param.Field[bool] `json:"is_active"`
-	// Network status of device.
-	NetworkStatus param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus] `json:"network_status"`
-	// operator
-	Operator param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator] `json:"operator"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequest) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureDevicePostureRulesNewDevicePostureRuleParamsInput() {
-}
-
-// Network status of device.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
-)
-
-// operator
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown415 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown416 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown417 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown418 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown419 DevicePostureDevicePostureRulesNewDevicePostureRuleParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatch struct {
-	Platform param.Field[DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform] `json:"platform"`
-}
-
-func (r DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatch) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform string
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformWindows DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform = "windows"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformMac     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform = "mac"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformLinux   DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform = "linux"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformAndroid DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform = "android"
-	DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatformIos     DevicePostureDevicePostureRulesNewDevicePostureRuleParamsMatchPlatform = "ios"
-)
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelope struct {
-	Errors   []DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessages `json:"messages,required"`
-	Result   DevicePostureDevicePostureRulesNewDevicePostureRuleResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeSuccess `json:"success,required"`
-	JSON    devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeJSON    `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelope]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrors struct {
-	Code    int64                                                                         `json:"code,required"`
-	Message string                                                                        `json:"message,required"`
-	JSON    devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrors]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessages struct {
-	Code    int64                                                                           `json:"code,required"`
-	Message string                                                                          `json:"message,required"`
-	JSON    devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessages]
-type devicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeSuccess bool
-
-const (
-	DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeSuccessTrue DevicePostureDevicePostureRulesNewDevicePostureRuleResponseEnvelopeSuccess = true
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelope struct {
-	Errors   []DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePostureDevicePostureRulesListDevicePostureRulesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeJSON       `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelope]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrors struct {
-	Code    int64                                                                           `json:"code,required"`
-	Message string                                                                          `json:"message,required"`
-	JSON    devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrors]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessages struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessages]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeSuccess bool
-
-const (
-	DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeSuccessTrue DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeSuccess = true
-)
-
-type DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                             `json:"total_count"`
-	JSON       devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfo]
-type devicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePostureDevicePostureRulesListDevicePostureRulesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type DevicePostureGetResponseEnvelope struct {
 	Errors   []DevicePostureGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureGetResponseEnvelopeMessages `json:"messages,required"`
@@ -4754,4 +4117,625 @@ type DevicePostureGetResponseEnvelopeSuccess bool
 
 const (
 	DevicePostureGetResponseEnvelopeSuccessTrue DevicePostureGetResponseEnvelopeSuccess = true
+)
+
+type DevicePostureReplaceParams struct {
+	// The name of the device posture rule.
+	Name param.Field[string] `json:"name,required"`
+	// The type of device posture rule.
+	Type param.Field[DevicePostureReplaceParamsType] `json:"type,required"`
+	// The description of the device posture rule.
+	Description param.Field[string] `json:"description"`
+	// Sets the expiration time for a posture check result. If empty, the result
+	// remains valid until it is overwritten by new data from the WARP client.
+	Expiration param.Field[string] `json:"expiration"`
+	// The value to be checked against.
+	Input param.Field[DevicePostureReplaceParamsInput] `json:"input"`
+	// The conditions that the client must match to run the rule.
+	Match param.Field[[]DevicePostureReplaceParamsMatch] `json:"match"`
+	// Polling frequency for the WARP client posture check. Default: `5m` (poll every
+	// five minutes). Minimum: `1m`.
+	Schedule param.Field[string] `json:"schedule"`
+}
+
+func (r DevicePostureReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of device posture rule.
+type DevicePostureReplaceParamsType string
+
+const (
+	DevicePostureReplaceParamsTypeFile              DevicePostureReplaceParamsType = "file"
+	DevicePostureReplaceParamsTypeApplication       DevicePostureReplaceParamsType = "application"
+	DevicePostureReplaceParamsTypeTanium            DevicePostureReplaceParamsType = "tanium"
+	DevicePostureReplaceParamsTypeGateway           DevicePostureReplaceParamsType = "gateway"
+	DevicePostureReplaceParamsTypeWarp              DevicePostureReplaceParamsType = "warp"
+	DevicePostureReplaceParamsTypeDiskEncryption    DevicePostureReplaceParamsType = "disk_encryption"
+	DevicePostureReplaceParamsTypeSentinelone       DevicePostureReplaceParamsType = "sentinelone"
+	DevicePostureReplaceParamsTypeCarbonblack       DevicePostureReplaceParamsType = "carbonblack"
+	DevicePostureReplaceParamsTypeFirewall          DevicePostureReplaceParamsType = "firewall"
+	DevicePostureReplaceParamsTypeOsVersion         DevicePostureReplaceParamsType = "os_version"
+	DevicePostureReplaceParamsTypeDomainJoined      DevicePostureReplaceParamsType = "domain_joined"
+	DevicePostureReplaceParamsTypeClientCertificate DevicePostureReplaceParamsType = "client_certificate"
+	DevicePostureReplaceParamsTypeUniqueClientID    DevicePostureReplaceParamsType = "unique_client_id"
+	DevicePostureReplaceParamsTypeKolide            DevicePostureReplaceParamsType = "kolide"
+	DevicePostureReplaceParamsTypeTaniumS2s         DevicePostureReplaceParamsType = "tanium_s2s"
+	DevicePostureReplaceParamsTypeCrowdstrikeS2s    DevicePostureReplaceParamsType = "crowdstrike_s2s"
+	DevicePostureReplaceParamsTypeIntune            DevicePostureReplaceParamsType = "intune"
+	DevicePostureReplaceParamsTypeWorkspaceOne      DevicePostureReplaceParamsType = "workspace_one"
+	DevicePostureReplaceParamsTypeSentineloneS2s    DevicePostureReplaceParamsType = "sentinelone_s2s"
+)
+
+// The value to be checked against.
+//
+// Satisfied by [DevicePostureReplaceParamsInputTeamsDevicesFileInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesDiskEncryptionInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesClientCertificateInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequest],
+// [DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequest].
+type DevicePostureReplaceParamsInput interface {
+	implementsDevicePostureReplaceParamsInput()
+}
+
+type DevicePostureReplaceParamsInputTeamsDevicesFileInputRequest struct {
+	// Operating system
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystem] `json:"operating_system,required"`
+	// File path.
+	Path param.Field[string] `json:"path,required"`
+	// Whether or not file exists
+	Exists param.Field[bool] `json:"exists"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesFileInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesFileInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating system
+type DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystemLinux   DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystemMac     DevicePostureReplaceParamsInputTeamsDevicesFileInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequest struct {
+	// List ID.
+	ID param.Field[string] `json:"id,required"`
+	// Operating System
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem] `json:"operating_system,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating System
+type DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemAndroid  DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "android"
+	DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemIos      DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "ios"
+	DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystemChromeos DevicePostureReplaceParamsInputTeamsDevicesUniqueClientIDInputRequestOperatingSystem = "chromeos"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequest struct {
+	// Operating System
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem] `json:"operating_system,required"`
+	// Domain
+	Domain param.Field[string] `json:"domain"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating System
+type DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequest struct {
+	// Operating System
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
+	// Operator
+	Operator param.Field[DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
+	// Version of OS
+	Version param.Field[string] `json:"version,required"`
+	// Operating System Distribution Name (linux only)
+	OsDistroName param.Field[string] `json:"os_distro_name"`
+	// Version of OS Distribution (linux only)
+	OsDistroRevision param.Field[string] `json:"os_distro_revision"`
+	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
+	// the kernel release version. (Mac, iOS, and Linux only)
+	OsVersionExtra param.Field[string] `json:"os_version_extra"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating System
+type DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+)
+
+// Operator
+type DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown355 DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown356 DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown357 DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown358 DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown359 DevicePostureReplaceParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequest struct {
+	// Enabled
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Operating System
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystem] `json:"operating_system,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating System
+type DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystemMac     DevicePostureReplaceParamsInputTeamsDevicesFirewallInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequest struct {
+	// Operating system
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem] `json:"operating_system,required"`
+	// File path.
+	Path param.Field[string] `json:"path,required"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating system
+type DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemLinux   DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystemMac     DevicePostureReplaceParamsInputTeamsDevicesSentineloneInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequest struct {
+	// Operating system
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem] `json:"operating_system,required"`
+	// File path.
+	Path param.Field[string] `json:"path,required"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating system
+type DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemLinux   DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystemMac     DevicePostureReplaceParamsInputTeamsDevicesCarbonblackInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesDiskEncryptionInputRequest struct {
+	// List of volume names to be checked for encryption.
+	CheckDisks param.Field[[]string] `json:"checkDisks"`
+	// Whether to check all disks for encryption.
+	RequireAll param.Field[bool] `json:"requireAll"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesDiskEncryptionInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesDiskEncryptionInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+type DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequest struct {
+	// Operating system
+	OperatingSystem param.Field[DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystem] `json:"operating_system,required"`
+	// Path for the application.
+	Path param.Field[string] `json:"path,required"`
+	// SHA-256.
+	Sha256 param.Field[string] `json:"sha256"`
+	// Signing certificate thumbprint.
+	Thumbprint param.Field[string] `json:"thumbprint"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operating system
+type DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystem string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystemWindows DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "windows"
+	DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystemLinux   DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "linux"
+	DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystemMac     DevicePostureReplaceParamsInputTeamsDevicesApplicationInputRequestOperatingSystem = "mac"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesClientCertificateInputRequest struct {
+	// UUID of Cloudflare managed certificate.
+	CertificateID param.Field[string] `json:"certificate_id,required"`
+	// Common Name that is protected by the certificate
+	Cn param.Field[string] `json:"cn,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesClientCertificateInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesClientCertificateInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+type DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus param.Field[DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus] `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Compliance Status
+type DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusCompliant    DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "compliant"
+	DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusNoncompliant DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatusUnknown      DevicePostureReplaceParamsInputTeamsDevicesWorkspaceOneInputRequestComplianceStatus = "unknown"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// Operator
+	Operator param.Field[DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
+	// Os Version
+	Os param.Field[string] `json:"os"`
+	// overall
+	Overall param.Field[string] `json:"overall"`
+	// SensorConfig
+	SensorConfig param.Field[string] `json:"sensor_config"`
+	// Version
+	Version param.Field[string] `json:"version"`
+	// Version Operator
+	VersionOperator param.Field[DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator] `json:"versionOperator"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operator
+type DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown365 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown366 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown367 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown368 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperatorUnknown369 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestOperator = "=="
+)
+
+// Version Operator
+type DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown375 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown376 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown377 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown378 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperatorUnknown379 DevicePostureReplaceParamsInputTeamsDevicesCrowdstrikeInputRequestVersionOperator = "=="
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequest struct {
+	// Compliance Status
+	ComplianceStatus param.Field[DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus] `json:"compliance_status,required"`
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Compliance Status
+type DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusCompliant     DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "compliant"
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNoncompliant  DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "noncompliant"
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusUnknown       DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "unknown"
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusNotapplicable DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "notapplicable"
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusIngraceperiod DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "ingraceperiod"
+	DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatusError         DevicePostureReplaceParamsInputTeamsDevicesIntuneInputRequestComplianceStatus = "error"
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// Count Operator
+	CountOperator param.Field[DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator] `json:"countOperator,required"`
+	// The Number of Issues.
+	IssueCount param.Field[string] `json:"issue_count,required"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Count Operator
+type DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown385 DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown386 DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown387 DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown388 DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperatorUnknown389 DevicePostureReplaceParamsInputTeamsDevicesKolideInputRequestCountOperator = "=="
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// For more details on eid last seen, refer to the Tanium documentation.
+	EidLastSeen param.Field[string] `json:"eid_last_seen"`
+	// Operator to evaluate risk_level or eid_last_seen.
+	Operator param.Field[DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator] `json:"operator"`
+	// For more details on risk level, refer to the Tanium documentation.
+	RiskLevel param.Field[DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel] `json:"risk_level"`
+	// Score Operator
+	ScoreOperator param.Field[DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator] `json:"scoreOperator"`
+	// For more details on total score, refer to the Tanium documentation.
+	TotalScore param.Field[float64] `json:"total_score"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Operator to evaluate risk_level or eid_last_seen.
+type DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown395 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown396 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown397 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown398 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperatorUnknown399 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestOperator = "=="
+)
+
+// For more details on risk level, refer to the Tanium documentation.
+type DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevelLow      DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "low"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevelMedium   DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "medium"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevelHigh     DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "high"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevelCritical DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestRiskLevel = "critical"
+)
+
+// Score Operator
+type DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown405 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown406 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown407 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown408 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperatorUnknown409 DevicePostureReplaceParamsInputTeamsDevicesTaniumInputRequestScoreOperator = "=="
+)
+
+type DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequest struct {
+	// Posture Integration ID.
+	ConnectionID param.Field[string] `json:"connection_id,required"`
+	// The Number of active threats.
+	ActiveThreats param.Field[float64] `json:"active_threats"`
+	// Whether device is infected.
+	Infected param.Field[bool] `json:"infected"`
+	// Whether device is active.
+	IsActive param.Field[bool] `json:"is_active"`
+	// Network status of device.
+	NetworkStatus param.Field[DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus] `json:"network_status"`
+	// operator
+	Operator param.Field[DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator] `json:"operator"`
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequest) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequest) implementsDevicePostureReplaceParamsInput() {
+}
+
+// Network status of device.
+type DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnected     DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connected"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnected  DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnected"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusDisconnecting DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "disconnecting"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatusConnecting    DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestNetworkStatus = "connecting"
+)
+
+// operator
+type DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator string
+
+const (
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown415 DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown416 DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "<="
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown417 DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">"
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown418 DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = ">="
+	DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperatorUnknown419 DevicePostureReplaceParamsInputTeamsDevicesSentineloneS2sInputRequestOperator = "=="
+)
+
+type DevicePostureReplaceParamsMatch struct {
+	Platform param.Field[DevicePostureReplaceParamsMatchPlatform] `json:"platform"`
+}
+
+func (r DevicePostureReplaceParamsMatch) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DevicePostureReplaceParamsMatchPlatform string
+
+const (
+	DevicePostureReplaceParamsMatchPlatformWindows DevicePostureReplaceParamsMatchPlatform = "windows"
+	DevicePostureReplaceParamsMatchPlatformMac     DevicePostureReplaceParamsMatchPlatform = "mac"
+	DevicePostureReplaceParamsMatchPlatformLinux   DevicePostureReplaceParamsMatchPlatform = "linux"
+	DevicePostureReplaceParamsMatchPlatformAndroid DevicePostureReplaceParamsMatchPlatform = "android"
+	DevicePostureReplaceParamsMatchPlatformIos     DevicePostureReplaceParamsMatchPlatform = "ios"
+)
+
+type DevicePostureReplaceResponseEnvelope struct {
+	Errors   []DevicePostureReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePostureReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   DevicePostureReplaceResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DevicePostureReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    devicePostureReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// devicePostureReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DevicePostureReplaceResponseEnvelope]
+type devicePostureReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureReplaceResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    devicePostureReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DevicePostureReplaceResponseEnvelopeErrors]
+type devicePostureReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePostureReplaceResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    devicePostureReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePostureReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DevicePostureReplaceResponseEnvelopeMessages]
+type devicePostureReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePostureReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePostureReplaceResponseEnvelopeSuccess bool
+
+const (
+	DevicePostureReplaceResponseEnvelopeSuccessTrue DevicePostureReplaceResponseEnvelopeSuccess = true
 )

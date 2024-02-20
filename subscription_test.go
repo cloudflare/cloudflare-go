@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
+func TestSubscriptionNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,15 +29,14 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Subscriptions.Update(
+	_, err := client.Subscriptions.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"506e3185e9c882d175a2d0cb0093d9f2",
-		cloudflare.SubscriptionUpdateParams{
-			App: cloudflare.F(cloudflare.SubscriptionUpdateParamsApp{
+		cloudflare.SubscriptionNewParams{
+			App: cloudflare.F(cloudflare.SubscriptionNewParamsApp{
 				InstallID: cloudflare.F("string"),
 			}),
-			ComponentValues: cloudflare.F([]cloudflare.SubscriptionUpdateParamsComponentValue{{
+			ComponentValues: cloudflare.F([]cloudflare.SubscriptionNewParamsComponentValue{{
 				Default: cloudflare.F(5.000000),
 				Name:    cloudflare.F("page_rules"),
 				Price:   cloudflare.F(5.000000),
@@ -53,8 +52,8 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 				Price:   cloudflare.F(5.000000),
 				Value:   cloudflare.F(20.000000),
 			}}),
-			Frequency: cloudflare.F(cloudflare.SubscriptionUpdateParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(cloudflare.SubscriptionUpdateParamsRatePlan{
+			Frequency: cloudflare.F(cloudflare.SubscriptionNewParamsFrequencyMonthly),
+			RatePlan: cloudflare.F(cloudflare.SubscriptionNewParamsRatePlan{
 				Currency:          cloudflare.F("USD"),
 				ExternallyManaged: cloudflare.F(false),
 				ID:                cloudflare.F[any]("free"),
@@ -63,9 +62,35 @@ func TestSubscriptionUpdateWithOptionalParams(t *testing.T) {
 				Scope:             cloudflare.F("zone"),
 				Sets:              cloudflare.F([]string{"string", "string", "string"}),
 			}),
-			Zone: cloudflare.F(cloudflare.SubscriptionUpdateParamsZone{}),
+			Zone: cloudflare.F(cloudflare.SubscriptionNewParamsZone{}),
 		},
 	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSubscriptionList(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Subscriptions.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -105,7 +130,7 @@ func TestSubscriptionDelete(t *testing.T) {
 	}
 }
 
-func TestSubscriptionAccountSubscriptionsNewSubscriptionWithOptionalParams(t *testing.T) {
+func TestSubscriptionGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -121,101 +146,41 @@ func TestSubscriptionAccountSubscriptionsNewSubscriptionWithOptionalParams(t *te
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Subscriptions.AccountSubscriptionsNewSubscription(
+	_, err := client.Subscriptions.Get(context.TODO(), "506e3185e9c882d175a2d0cb0093d9f2")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSubscriptionReplaceWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Subscriptions.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParams{
-			App: cloudflare.F(cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F[any]("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(cloudflare.SubscriptionAccountSubscriptionsNewSubscriptionParamsZone{}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestSubscriptionAccountSubscriptionsListSubscriptions(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Subscriptions.AccountSubscriptionsListSubscriptions(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestSubscriptionZoneSubscriptionNewZoneSubscriptionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Subscriptions.ZoneSubscriptionNewZoneSubscription(
-		context.TODO(),
 		"506e3185e9c882d175a2d0cb0093d9f2",
-		cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParams{
-			App: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParamsApp{
+		cloudflare.SubscriptionReplaceParams{
+			App: cloudflare.F(cloudflare.SubscriptionReplaceParamsApp{
 				InstallID: cloudflare.F("string"),
 			}),
-			ComponentValues: cloudflare.F([]cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParamsComponentValue{{
+			ComponentValues: cloudflare.F([]cloudflare.SubscriptionReplaceParamsComponentValue{{
 				Default: cloudflare.F(5.000000),
 				Name:    cloudflare.F("page_rules"),
 				Price:   cloudflare.F(5.000000),
@@ -231,8 +196,8 @@ func TestSubscriptionZoneSubscriptionNewZoneSubscriptionWithOptionalParams(t *te
 				Price:   cloudflare.F(5.000000),
 				Value:   cloudflare.F(20.000000),
 			}}),
-			Frequency: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParamsRatePlan{
+			Frequency: cloudflare.F(cloudflare.SubscriptionReplaceParamsFrequencyMonthly),
+			RatePlan: cloudflare.F(cloudflare.SubscriptionReplaceParamsRatePlan{
 				Currency:          cloudflare.F("USD"),
 				ExternallyManaged: cloudflare.F(false),
 				ID:                cloudflare.F[any]("free"),
@@ -241,96 +206,9 @@ func TestSubscriptionZoneSubscriptionNewZoneSubscriptionWithOptionalParams(t *te
 				Scope:             cloudflare.F("zone"),
 				Sets:              cloudflare.F([]string{"string", "string", "string"}),
 			}),
-			Zone: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionNewZoneSubscriptionParamsZone{}),
+			Zone: cloudflare.F(cloudflare.SubscriptionReplaceParamsZone{}),
 		},
 	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestSubscriptionZoneSubscriptionUpdateZoneSubscriptionWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Subscriptions.ZoneSubscriptionUpdateZoneSubscription(
-		context.TODO(),
-		"506e3185e9c882d175a2d0cb0093d9f2",
-		cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParams{
-			App: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParamsApp{
-				InstallID: cloudflare.F("string"),
-			}),
-			ComponentValues: cloudflare.F([]cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParamsComponentValue{{
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}, {
-				Default: cloudflare.F(5.000000),
-				Name:    cloudflare.F("page_rules"),
-				Price:   cloudflare.F(5.000000),
-				Value:   cloudflare.F(20.000000),
-			}}),
-			Frequency: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParamsFrequencyMonthly),
-			RatePlan: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParamsRatePlan{
-				Currency:          cloudflare.F("USD"),
-				ExternallyManaged: cloudflare.F(false),
-				ID:                cloudflare.F[any]("free"),
-				IsContract:        cloudflare.F(false),
-				PublicName:        cloudflare.F("Business Plan"),
-				Scope:             cloudflare.F("zone"),
-				Sets:              cloudflare.F([]string{"string", "string", "string"}),
-			}),
-			Zone: cloudflare.F(cloudflare.SubscriptionZoneSubscriptionUpdateZoneSubscriptionParamsZone{}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestSubscriptionZoneSubscriptionZoneSubscriptionDetails(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Subscriptions.ZoneSubscriptionZoneSubscriptionDetails(context.TODO(), "506e3185e9c882d175a2d0cb0093d9f2")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

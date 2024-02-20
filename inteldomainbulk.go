@@ -34,9 +34,9 @@ func NewIntelDomainBulkService(opts ...option.RequestOption) (r *IntelDomainBulk
 }
 
 // Get Multiple Domain Details
-func (r *IntelDomainBulkService) DomainIntelligenceGetMultipleDomainDetails(ctx context.Context, accountID string, query IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams, opts ...option.RequestOption) (res *[]IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse, err error) {
+func (r *IntelDomainBulkService) Get(ctx context.Context, accountID string, query IntelDomainBulkGetParams, opts ...option.RequestOption) (res *[]IntelDomainBulkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelope
+	var env IntelDomainBulkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,33 +46,32 @@ func (r *IntelDomainBulkService) DomainIntelligenceGetMultipleDomainDetails(ctx 
 	return
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse struct {
+type IntelDomainBulkGetResponse struct {
 	// Additional information related to the host name.
-	AdditionalInformation IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformation `json:"additional_information"`
+	AdditionalInformation IntelDomainBulkGetResponseAdditionalInformation `json:"additional_information"`
 	// Application that the hostname belongs to.
-	Application IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplication `json:"application"`
+	Application IntelDomainBulkGetResponseApplication `json:"application"`
 	// Current content categories.
-	ContentCategories          interface{}                                                                                 `json:"content_categories"`
-	Domain                     string                                                                                      `json:"domain"`
-	InheritedContentCategories []IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategory `json:"inherited_content_categories"`
+	ContentCategories          interface{}                                          `json:"content_categories"`
+	Domain                     string                                               `json:"domain"`
+	InheritedContentCategories []IntelDomainBulkGetResponseInheritedContentCategory `json:"inherited_content_categories"`
 	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
 	// inherited, if applicable.
-	InheritedFrom      string                                                                               `json:"inherited_from"`
-	InheritedRiskTypes []IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskType `json:"inherited_risk_types"`
+	InheritedFrom      string                                        `json:"inherited_from"`
+	InheritedRiskTypes []IntelDomainBulkGetResponseInheritedRiskType `json:"inherited_risk_types"`
 	// Global Cloudflare 100k ranking for the last 30 days, if available for the
 	// hostname. The top ranked domain is 1, the lowest ranked domain is 100,000.
 	PopularityRank int64 `json:"popularity_rank"`
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
-	RiskScore float64                                                               `json:"risk_score"`
-	RiskTypes interface{}                                                           `json:"risk_types"`
-	JSON      intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON `json:"-"`
+	RiskScore float64                        `json:"risk_score"`
+	RiskTypes interface{}                    `json:"risk_types"`
+	JSON      intelDomainBulkGetResponseJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON contains
-// the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON struct {
+// intelDomainBulkGetResponseJSON contains the JSON metadata for the struct
+// [IntelDomainBulkGetResponse]
+type intelDomainBulkGetResponseJSON struct {
 	AdditionalInformation      apijson.Field
 	Application                apijson.Field
 	ContentCategories          apijson.Field
@@ -87,62 +86,59 @@ type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseJSON struc
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional information related to the host name.
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformation struct {
+type IntelDomainBulkGetResponseAdditionalInformation struct {
 	// Suspected DGA malware family.
-	SuspectedMalwareFamily string                                                                                     `json:"suspected_malware_family"`
-	JSON                   intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformationJSON `json:"-"`
+	SuspectedMalwareFamily string                                              `json:"suspected_malware_family"`
+	JSON                   intelDomainBulkGetResponseAdditionalInformationJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformationJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformation]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformationJSON struct {
+// intelDomainBulkGetResponseAdditionalInformationJSON contains the JSON metadata
+// for the struct [IntelDomainBulkGetResponseAdditionalInformation]
+type intelDomainBulkGetResponseAdditionalInformationJSON struct {
 	SuspectedMalwareFamily apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Application that the hostname belongs to.
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplication struct {
-	ID   int64                                                                            `json:"id"`
-	Name string                                                                           `json:"name"`
-	JSON intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplicationJSON `json:"-"`
+type IntelDomainBulkGetResponseApplication struct {
+	ID   int64                                     `json:"id"`
+	Name string                                    `json:"name"`
+	JSON intelDomainBulkGetResponseApplicationJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplicationJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplication]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplicationJSON struct {
+// intelDomainBulkGetResponseApplicationJSON contains the JSON metadata for the
+// struct [IntelDomainBulkGetResponseApplication]
+type intelDomainBulkGetResponseApplicationJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategory struct {
-	ID              int64                                                                                         `json:"id"`
-	Name            string                                                                                        `json:"name"`
-	SuperCategoryID int64                                                                                         `json:"super_category_id"`
-	JSON            intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategoryJSON `json:"-"`
+type IntelDomainBulkGetResponseInheritedContentCategory struct {
+	ID              int64                                                  `json:"id"`
+	Name            string                                                 `json:"name"`
+	SuperCategoryID int64                                                  `json:"super_category_id"`
+	JSON            intelDomainBulkGetResponseInheritedContentCategoryJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategoryJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategory]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategoryJSON struct {
+// intelDomainBulkGetResponseInheritedContentCategoryJSON contains the JSON
+// metadata for the struct [IntelDomainBulkGetResponseInheritedContentCategory]
+type intelDomainBulkGetResponseInheritedContentCategoryJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -150,21 +146,20 @@ type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedC
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskType struct {
-	ID              int64                                                                                  `json:"id"`
-	Name            string                                                                                 `json:"name"`
-	SuperCategoryID int64                                                                                  `json:"super_category_id"`
-	JSON            intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskTypeJSON `json:"-"`
+type IntelDomainBulkGetResponseInheritedRiskType struct {
+	ID              int64                                           `json:"id"`
+	Name            string                                          `json:"name"`
+	SuperCategoryID int64                                           `json:"super_category_id"`
+	JSON            intelDomainBulkGetResponseInheritedRiskTypeJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskTypeJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskType]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskTypeJSON struct {
+// intelDomainBulkGetResponseInheritedRiskTypeJSON contains the JSON metadata for
+// the struct [IntelDomainBulkGetResponseInheritedRiskType]
+type intelDomainBulkGetResponseInheritedRiskTypeJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -172,39 +167,37 @@ type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedR
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams struct {
+type IntelDomainBulkGetParams struct {
 	// Accepts multiple values, i.e. `?domain=cloudflare.com&domain=example.com`.
 	Domain param.Field[interface{}] `query:"domain"`
 }
 
-// URLQuery serializes
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams]'s query
-// parameters as `url.Values`.
-func (r IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [IntelDomainBulkGetParams]'s query parameters as
+// `url.Values`.
+func (r IntelDomainBulkGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelope struct {
-	Errors   []IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponse                 `json:"result,required,nullable"`
+type IntelDomainBulkGetResponseEnvelope struct {
+	Errors   []IntelDomainBulkGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelDomainBulkGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelDomainBulkGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeJSON       `json:"-"`
+	Success    IntelDomainBulkGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo IntelDomainBulkGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       intelDomainBulkGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelope]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeJSON struct {
+// intelDomainBulkGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IntelDomainBulkGetResponseEnvelope]
+type intelDomainBulkGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -214,58 +207,56 @@ type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrors struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrorsJSON `json:"-"`
+type IntelDomainBulkGetResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    intelDomainBulkGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrors]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrorsJSON struct {
+// intelDomainBulkGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IntelDomainBulkGetResponseEnvelopeErrors]
+type intelDomainBulkGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessages struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessagesJSON `json:"-"`
+type IntelDomainBulkGetResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    intelDomainBulkGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessages]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessagesJSON struct {
+// intelDomainBulkGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IntelDomainBulkGetResponseEnvelopeMessages]
+type intelDomainBulkGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeSuccess bool
+type IntelDomainBulkGetResponseEnvelopeSuccess bool
 
 const (
-	IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeSuccessTrue IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeSuccess = true
+	IntelDomainBulkGetResponseEnvelopeSuccessTrue IntelDomainBulkGetResponseEnvelopeSuccess = true
 )
 
-type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfo struct {
+type IntelDomainBulkGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -273,14 +264,13 @@ type IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeRe
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                 `json:"total_count"`
-	JSON       intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                          `json:"total_count"`
+	JSON       intelDomainBulkGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfo]
-type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfoJSON struct {
+// intelDomainBulkGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [IntelDomainBulkGetResponseEnvelopeResultInfo]
+type intelDomainBulkGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -289,6 +279,6 @@ type intelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeRe
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainBulkDomainIntelligenceGetMultipleDomainDetailsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainBulkGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

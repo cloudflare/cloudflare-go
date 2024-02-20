@@ -32,27 +32,14 @@ func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayCon
 	return
 }
 
-// Fetches the current Zero Trust account configuration.
-func (r *GatewayConfigurationService) ZeroTrustAccountsGetZeroTrustAccountConfiguration(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Patches the current Zero Trust account configuration. This endpoint can update a
 // single subcollection of settings such as `antivirus`, `tls_decrypt`,
 // `activity_log`, `block_page`, `browser_isolation`, `fips`, `body_scanning`, or
 // `custom_certificate`, without updating the entire configuration object. Returns
 // an error if any collection of settings is not properly configured.
-func (r *GatewayConfigurationService) ZeroTrustAccountsPatchZeroTrustAccountConfiguration(ctx context.Context, accountID interface{}, body GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParams, opts ...option.RequestOption) (res *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponse, err error) {
+func (r *GatewayConfigurationService) Update(ctx context.Context, accountID interface{}, body GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelope
+	var env GatewayConfigurationUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -62,10 +49,23 @@ func (r *GatewayConfigurationService) ZeroTrustAccountsPatchZeroTrustAccountConf
 	return
 }
 
-// Updates the current Zero Trust account configuration.
-func (r *GatewayConfigurationService) ZeroTrustAccountsUpdateZeroTrustAccountConfiguration(ctx context.Context, accountID interface{}, body GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParams, opts ...option.RequestOption) (res *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponse, err error) {
+// Fetches the current Zero Trust account configuration.
+func (r *GatewayConfigurationService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelope
+	var env GatewayConfigurationGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates the current Zero Trust account configuration.
+func (r *GatewayConfigurationService) Replace(ctx context.Context, accountID interface{}, body GatewayConfigurationReplaceParams, opts ...option.RequestOption) (res *GatewayConfigurationReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GatewayConfigurationReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -76,18 +76,17 @@ func (r *GatewayConfigurationService) ZeroTrustAccountsUpdateZeroTrustAccountCon
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponse struct {
+type GatewayConfigurationUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettings `json:"settings"`
-	UpdatedAt time.Time                                                                             `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseJSON     `json:"-"`
+	Settings  GatewayConfigurationUpdateResponseSettings `json:"settings"`
+	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationUpdateResponseJSON     `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponse]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseJSON struct {
+// gatewayConfigurationUpdateResponseJSON contains the JSON metadata for the struct
+// [GatewayConfigurationUpdateResponse]
+type gatewayConfigurationUpdateResponseJSON struct {
 	CreatedAt   apijson.Field
 	Settings    apijson.Field
 	UpdatedAt   apijson.Field
@@ -95,39 +94,38 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettings struct {
+type GatewayConfigurationUpdateResponseSettings struct {
 	// Activity log settings.
-	ActivityLog GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLog `json:"activity_log"`
+	ActivityLog GatewayConfigurationUpdateResponseSettingsActivityLog `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirus `json:"antivirus"`
+	Antivirus GatewayConfigurationUpdateResponseSettingsAntivirus `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPage `json:"block_page"`
+	BlockPage GatewayConfigurationUpdateResponseSettingsBlockPage `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanning `json:"body_scanning"`
+	BodyScanning GatewayConfigurationUpdateResponseSettingsBodyScanning `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolation `json:"browser_isolation"`
+	BrowserIsolation GatewayConfigurationUpdateResponseSettingsBrowserIsolation `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificate `json:"custom_certificate"`
+	CustomCertificate GatewayConfigurationUpdateResponseSettingsCustomCertificate `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
+	ExtendedEmailMatching GatewayConfigurationUpdateResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFips `json:"fips"`
+	Fips GatewayConfigurationUpdateResponseSettingsFips `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection GatewayConfigurationUpdateResponseSettingsProtocolDetection `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecrypt `json:"tls_decrypt"`
-	JSON       gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsJSON       `json:"-"`
+	TLSDecrypt GatewayConfigurationUpdateResponseSettingsTLSDecrypt `json:"tls_decrypt"`
+	JSON       gatewayConfigurationUpdateResponseSettingsJSON       `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettings]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsJSON struct {
+// gatewayConfigurationUpdateResponseSettingsJSON contains the JSON metadata for
+// the struct [GatewayConfigurationUpdateResponseSettings]
+type gatewayConfigurationUpdateResponseSettingsJSON struct {
 	ActivityLog           apijson.Field
 	Antivirus             apijson.Field
 	BlockPage             apijson.Field
@@ -142,32 +140,31 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Activity log settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLog struct {
+type GatewayConfigurationUpdateResponseSettingsActivityLog struct {
 	// Enable activity logging.
-	Enabled bool                                                                                                 `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLogJSON `json:"-"`
+	Enabled bool                                                      `json:"enabled"`
+	JSON    gatewayConfigurationUpdateResponseSettingsActivityLogJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLogJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLog]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLogJSON struct {
+// gatewayConfigurationUpdateResponseSettingsActivityLogJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseSettingsActivityLog]
+type gatewayConfigurationUpdateResponseSettingsActivityLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Anti-virus settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirus struct {
+type GatewayConfigurationUpdateResponseSettingsAntivirus struct {
 	// Enable anti-virus scanning on downloads.
 	EnabledDownloadPhase bool `json:"enabled_download_phase"`
 	// Enable anti-virus scanning on uploads.
@@ -176,14 +173,13 @@ type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
-	JSON                 gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusJSON                 `json:"-"`
+	NotificationSettings GatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
+	JSON                 gatewayConfigurationUpdateResponseSettingsAntivirusJSON                 `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirus]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusJSON struct {
+// gatewayConfigurationUpdateResponseSettingsAntivirusJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseSettingsAntivirus]
+type gatewayConfigurationUpdateResponseSettingsAntivirusJSON struct {
 	EnabledDownloadPhase apijson.Field
 	EnabledUploadPhase   apijson.Field
 	FailClosed           apijson.Field
@@ -192,27 +188,27 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings struct {
+type GatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                                                                                                                 `json:"support_url"`
-	JSON       gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
+	SupportURL string                                                                      `json:"support_url"`
+	JSON       gatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON
+// gatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettingsJSON
 // contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON struct {
+// [GatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings]
+type gatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -220,12 +216,12 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Block page layout settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPage struct {
+type GatewayConfigurationUpdateResponseSettingsBlockPage struct {
 	// Block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -243,14 +239,13 @@ type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	// Block page title.
 	Name string `json:"name"`
 	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter bool                                                                                               `json:"suppress_footer"`
-	JSON           gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPageJSON `json:"-"`
+	SuppressFooter bool                                                    `json:"suppress_footer"`
+	JSON           gatewayConfigurationUpdateResponseSettingsBlockPageJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPageJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPage]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPageJSON struct {
+// gatewayConfigurationUpdateResponseSettingsBlockPageJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseSettingsBlockPage]
+type gatewayConfigurationUpdateResponseSettingsBlockPageJSON struct {
 	BackgroundColor apijson.Field
 	Enabled         apijson.Field
 	FooterText      apijson.Field
@@ -264,69 +259,68 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DLP body scanning settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanning struct {
+type GatewayConfigurationUpdateResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode string                                                                                                `json:"inspection_mode"`
-	JSON           gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON `json:"-"`
+	InspectionMode string                                                     `json:"inspection_mode"`
+	JSON           gatewayConfigurationUpdateResponseSettingsBodyScanningJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanning]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON struct {
+// gatewayConfigurationUpdateResponseSettingsBodyScanningJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseSettingsBodyScanning]
+type gatewayConfigurationUpdateResponseSettingsBodyScanningJSON struct {
 	InspectionMode apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Browser isolation settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolation struct {
+type GatewayConfigurationUpdateResponseSettingsBrowserIsolation struct {
 	// Enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled bool `json:"non_identity_enabled"`
 	// Enable Clientless Browser Isolation.
-	URLBrowserIsolationEnabled bool                                                                                                      `json:"url_browser_isolation_enabled"`
-	JSON                       gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON `json:"-"`
+	URLBrowserIsolationEnabled bool                                                           `json:"url_browser_isolation_enabled"`
+	JSON                       gatewayConfigurationUpdateResponseSettingsBrowserIsolationJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolation]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON struct {
+// gatewayConfigurationUpdateResponseSettingsBrowserIsolationJSON contains the JSON
+// metadata for the struct
+// [GatewayConfigurationUpdateResponseSettingsBrowserIsolation]
+type gatewayConfigurationUpdateResponseSettingsBrowserIsolationJSON struct {
 	NonIdentityEnabled         apijson.Field
 	URLBrowserIsolationEnabled apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Custom certificate settings for BYO-PKI.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificate struct {
+type GatewayConfigurationUpdateResponseSettingsCustomCertificate struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled bool `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
 	// Certificate status (internal).
-	BindingStatus string                                                                                                     `json:"binding_status"`
-	UpdatedAt     time.Time                                                                                                  `json:"updated_at" format:"date-time"`
-	JSON          gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON `json:"-"`
+	BindingStatus string                                                          `json:"binding_status"`
+	UpdatedAt     time.Time                                                       `json:"updated_at" format:"date-time"`
+	JSON          gatewayConfigurationUpdateResponseSettingsCustomCertificateJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificate]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON struct {
+// gatewayConfigurationUpdateResponseSettingsCustomCertificateJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationUpdateResponseSettingsCustomCertificate]
+type gatewayConfigurationUpdateResponseSettingsCustomCertificateJSON struct {
 	Enabled       apijson.Field
 	ID            apijson.Field
 	BindingStatus apijson.Field
@@ -335,104 +329,101 @@ type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationRespon
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Extended e-mail matching settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching struct {
+type GatewayConfigurationUpdateResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
-	Enabled bool                                                                                                           `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON `json:"-"`
+	Enabled bool                                                                `json:"enabled"`
+	JSON    gatewayConfigurationUpdateResponseSettingsExtendedEmailMatchingJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON struct {
+// gatewayConfigurationUpdateResponseSettingsExtendedEmailMatchingJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationUpdateResponseSettingsExtendedEmailMatching]
+type gatewayConfigurationUpdateResponseSettingsExtendedEmailMatchingJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // FIPS settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFips struct {
+type GatewayConfigurationUpdateResponseSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	TLS  bool                                                                                          `json:"tls"`
-	JSON gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFipsJSON `json:"-"`
+	TLS  bool                                               `json:"tls"`
+	JSON gatewayConfigurationUpdateResponseSettingsFipsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFipsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFips]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFipsJSON struct {
+// gatewayConfigurationUpdateResponseSettingsFipsJSON contains the JSON metadata
+// for the struct [GatewayConfigurationUpdateResponseSettingsFips]
+type gatewayConfigurationUpdateResponseSettingsFipsJSON struct {
 	TLS         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Protocol Detection settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetection struct {
+type GatewayConfigurationUpdateResponseSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled bool                                                                                                       `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON `json:"-"`
+	Enabled bool                                                            `json:"enabled"`
+	JSON    gatewayConfigurationUpdateResponseSettingsProtocolDetectionJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetection]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON struct {
+// gatewayConfigurationUpdateResponseSettingsProtocolDetectionJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationUpdateResponseSettingsProtocolDetection]
+type gatewayConfigurationUpdateResponseSettingsProtocolDetectionJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // TLS interception settings.
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecrypt struct {
+type GatewayConfigurationUpdateResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
-	Enabled bool                                                                                                `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON `json:"-"`
+	Enabled bool                                                     `json:"enabled"`
+	JSON    gatewayConfigurationUpdateResponseSettingsTLSDecryptJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecrypt]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON struct {
+// gatewayConfigurationUpdateResponseSettingsTLSDecryptJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseSettingsTLSDecrypt]
+type gatewayConfigurationUpdateResponseSettingsTLSDecryptJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponse struct {
+type GatewayConfigurationGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettings `json:"settings"`
-	UpdatedAt time.Time                                                                               `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseJSON     `json:"-"`
+	Settings  GatewayConfigurationGetResponseSettings `json:"settings"`
+	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationGetResponseJSON     `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponse]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseJSON struct {
+// gatewayConfigurationGetResponseJSON contains the JSON metadata for the struct
+// [GatewayConfigurationGetResponse]
+type gatewayConfigurationGetResponseJSON struct {
 	CreatedAt   apijson.Field
 	Settings    apijson.Field
 	UpdatedAt   apijson.Field
@@ -440,39 +431,38 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettings struct {
+type GatewayConfigurationGetResponseSettings struct {
 	// Activity log settings.
-	ActivityLog GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLog `json:"activity_log"`
+	ActivityLog GatewayConfigurationGetResponseSettingsActivityLog `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirus `json:"antivirus"`
+	Antivirus GatewayConfigurationGetResponseSettingsAntivirus `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPage `json:"block_page"`
+	BlockPage GatewayConfigurationGetResponseSettingsBlockPage `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanning `json:"body_scanning"`
+	BodyScanning GatewayConfigurationGetResponseSettingsBodyScanning `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolation `json:"browser_isolation"`
+	BrowserIsolation GatewayConfigurationGetResponseSettingsBrowserIsolation `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificate `json:"custom_certificate"`
+	CustomCertificate GatewayConfigurationGetResponseSettingsCustomCertificate `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
+	ExtendedEmailMatching GatewayConfigurationGetResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFips `json:"fips"`
+	Fips GatewayConfigurationGetResponseSettingsFips `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection GatewayConfigurationGetResponseSettingsProtocolDetection `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecrypt `json:"tls_decrypt"`
-	JSON       gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsJSON       `json:"-"`
+	TLSDecrypt GatewayConfigurationGetResponseSettingsTLSDecrypt `json:"tls_decrypt"`
+	JSON       gatewayConfigurationGetResponseSettingsJSON       `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettings]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsJSON struct {
+// gatewayConfigurationGetResponseSettingsJSON contains the JSON metadata for the
+// struct [GatewayConfigurationGetResponseSettings]
+type gatewayConfigurationGetResponseSettingsJSON struct {
 	ActivityLog           apijson.Field
 	Antivirus             apijson.Field
 	BlockPage             apijson.Field
@@ -487,32 +477,31 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Activity log settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLog struct {
+type GatewayConfigurationGetResponseSettingsActivityLog struct {
 	// Enable activity logging.
-	Enabled bool                                                                                                   `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLogJSON `json:"-"`
+	Enabled bool                                                   `json:"enabled"`
+	JSON    gatewayConfigurationGetResponseSettingsActivityLogJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLogJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLog]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLogJSON struct {
+// gatewayConfigurationGetResponseSettingsActivityLogJSON contains the JSON
+// metadata for the struct [GatewayConfigurationGetResponseSettingsActivityLog]
+type gatewayConfigurationGetResponseSettingsActivityLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Anti-virus settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirus struct {
+type GatewayConfigurationGetResponseSettingsAntivirus struct {
 	// Enable anti-virus scanning on downloads.
 	EnabledDownloadPhase bool `json:"enabled_download_phase"`
 	// Enable anti-virus scanning on uploads.
@@ -521,14 +510,13 @@ type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
-	JSON                 gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusJSON                 `json:"-"`
+	NotificationSettings GatewayConfigurationGetResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
+	JSON                 gatewayConfigurationGetResponseSettingsAntivirusJSON                 `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirus]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusJSON struct {
+// gatewayConfigurationGetResponseSettingsAntivirusJSON contains the JSON metadata
+// for the struct [GatewayConfigurationGetResponseSettingsAntivirus]
+type gatewayConfigurationGetResponseSettingsAntivirusJSON struct {
 	EnabledDownloadPhase apijson.Field
 	EnabledUploadPhase   apijson.Field
 	FailClosed           apijson.Field
@@ -537,27 +525,27 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings struct {
+type GatewayConfigurationGetResponseSettingsAntivirusNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                                                                                                                   `json:"support_url"`
-	JSON       gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
+	SupportURL string                                                                   `json:"support_url"`
+	JSON       gatewayConfigurationGetResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON
+// gatewayConfigurationGetResponseSettingsAntivirusNotificationSettingsJSON
 // contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON struct {
+// [GatewayConfigurationGetResponseSettingsAntivirusNotificationSettings]
+type gatewayConfigurationGetResponseSettingsAntivirusNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -565,12 +553,12 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Block page layout settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPage struct {
+type GatewayConfigurationGetResponseSettingsBlockPage struct {
 	// Block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -588,14 +576,13 @@ type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	// Block page title.
 	Name string `json:"name"`
 	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter bool                                                                                                 `json:"suppress_footer"`
-	JSON           gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPageJSON `json:"-"`
+	SuppressFooter bool                                                 `json:"suppress_footer"`
+	JSON           gatewayConfigurationGetResponseSettingsBlockPageJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPageJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPage]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPageJSON struct {
+// gatewayConfigurationGetResponseSettingsBlockPageJSON contains the JSON metadata
+// for the struct [GatewayConfigurationGetResponseSettingsBlockPage]
+type gatewayConfigurationGetResponseSettingsBlockPageJSON struct {
 	BackgroundColor apijson.Field
 	Enabled         apijson.Field
 	FooterText      apijson.Field
@@ -609,69 +596,68 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DLP body scanning settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanning struct {
+type GatewayConfigurationGetResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode string                                                                                                  `json:"inspection_mode"`
-	JSON           gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON `json:"-"`
+	InspectionMode string                                                  `json:"inspection_mode"`
+	JSON           gatewayConfigurationGetResponseSettingsBodyScanningJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanning]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON struct {
+// gatewayConfigurationGetResponseSettingsBodyScanningJSON contains the JSON
+// metadata for the struct [GatewayConfigurationGetResponseSettingsBodyScanning]
+type gatewayConfigurationGetResponseSettingsBodyScanningJSON struct {
 	InspectionMode apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Browser isolation settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolation struct {
+type GatewayConfigurationGetResponseSettingsBrowserIsolation struct {
 	// Enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled bool `json:"non_identity_enabled"`
 	// Enable Clientless Browser Isolation.
-	URLBrowserIsolationEnabled bool                                                                                                        `json:"url_browser_isolation_enabled"`
-	JSON                       gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON `json:"-"`
+	URLBrowserIsolationEnabled bool                                                        `json:"url_browser_isolation_enabled"`
+	JSON                       gatewayConfigurationGetResponseSettingsBrowserIsolationJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolation]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON struct {
+// gatewayConfigurationGetResponseSettingsBrowserIsolationJSON contains the JSON
+// metadata for the struct
+// [GatewayConfigurationGetResponseSettingsBrowserIsolation]
+type gatewayConfigurationGetResponseSettingsBrowserIsolationJSON struct {
 	NonIdentityEnabled         apijson.Field
 	URLBrowserIsolationEnabled apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Custom certificate settings for BYO-PKI.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificate struct {
+type GatewayConfigurationGetResponseSettingsCustomCertificate struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled bool `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
 	// Certificate status (internal).
-	BindingStatus string                                                                                                       `json:"binding_status"`
-	UpdatedAt     time.Time                                                                                                    `json:"updated_at" format:"date-time"`
-	JSON          gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON `json:"-"`
+	BindingStatus string                                                       `json:"binding_status"`
+	UpdatedAt     time.Time                                                    `json:"updated_at" format:"date-time"`
+	JSON          gatewayConfigurationGetResponseSettingsCustomCertificateJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificate]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON struct {
+// gatewayConfigurationGetResponseSettingsCustomCertificateJSON contains the JSON
+// metadata for the struct
+// [GatewayConfigurationGetResponseSettingsCustomCertificate]
+type gatewayConfigurationGetResponseSettingsCustomCertificateJSON struct {
 	Enabled       apijson.Field
 	ID            apijson.Field
 	BindingStatus apijson.Field
@@ -680,104 +666,101 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Extended e-mail matching settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching struct {
+type GatewayConfigurationGetResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
-	Enabled bool                                                                                                             `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON `json:"-"`
+	Enabled bool                                                             `json:"enabled"`
+	JSON    gatewayConfigurationGetResponseSettingsExtendedEmailMatchingJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON struct {
+// gatewayConfigurationGetResponseSettingsExtendedEmailMatchingJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationGetResponseSettingsExtendedEmailMatching]
+type gatewayConfigurationGetResponseSettingsExtendedEmailMatchingJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // FIPS settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFips struct {
+type GatewayConfigurationGetResponseSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	TLS  bool                                                                                            `json:"tls"`
-	JSON gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFipsJSON `json:"-"`
+	TLS  bool                                            `json:"tls"`
+	JSON gatewayConfigurationGetResponseSettingsFipsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFipsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFips]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFipsJSON struct {
+// gatewayConfigurationGetResponseSettingsFipsJSON contains the JSON metadata for
+// the struct [GatewayConfigurationGetResponseSettingsFips]
+type gatewayConfigurationGetResponseSettingsFipsJSON struct {
 	TLS         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Protocol Detection settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetection struct {
+type GatewayConfigurationGetResponseSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled bool                                                                                                         `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON `json:"-"`
+	Enabled bool                                                         `json:"enabled"`
+	JSON    gatewayConfigurationGetResponseSettingsProtocolDetectionJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetection]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON struct {
+// gatewayConfigurationGetResponseSettingsProtocolDetectionJSON contains the JSON
+// metadata for the struct
+// [GatewayConfigurationGetResponseSettingsProtocolDetection]
+type gatewayConfigurationGetResponseSettingsProtocolDetectionJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // TLS interception settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecrypt struct {
+type GatewayConfigurationGetResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
-	Enabled bool                                                                                                  `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON `json:"-"`
+	Enabled bool                                                  `json:"enabled"`
+	JSON    gatewayConfigurationGetResponseSettingsTLSDecryptJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecrypt]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON struct {
+// gatewayConfigurationGetResponseSettingsTLSDecryptJSON contains the JSON metadata
+// for the struct [GatewayConfigurationGetResponseSettingsTLSDecrypt]
+type gatewayConfigurationGetResponseSettingsTLSDecryptJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationGetResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponse struct {
+type GatewayConfigurationReplaceResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// account settings.
-	Settings  GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettings `json:"settings"`
-	UpdatedAt time.Time                                                                                `json:"updated_at" format:"date-time"`
-	JSON      gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseJSON     `json:"-"`
+	Settings  GatewayConfigurationReplaceResponseSettings `json:"settings"`
+	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
+	JSON      gatewayConfigurationReplaceResponseJSON     `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponse]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseJSON struct {
+// gatewayConfigurationReplaceResponseJSON contains the JSON metadata for the
+// struct [GatewayConfigurationReplaceResponse]
+type gatewayConfigurationReplaceResponseJSON struct {
 	CreatedAt   apijson.Field
 	Settings    apijson.Field
 	UpdatedAt   apijson.Field
@@ -785,39 +768,38 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettings struct {
+type GatewayConfigurationReplaceResponseSettings struct {
 	// Activity log settings.
-	ActivityLog GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLog `json:"activity_log"`
+	ActivityLog GatewayConfigurationReplaceResponseSettingsActivityLog `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirus `json:"antivirus"`
+	Antivirus GatewayConfigurationReplaceResponseSettingsAntivirus `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPage `json:"block_page"`
+	BlockPage GatewayConfigurationReplaceResponseSettingsBlockPage `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanning `json:"body_scanning"`
+	BodyScanning GatewayConfigurationReplaceResponseSettingsBodyScanning `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolation `json:"browser_isolation"`
+	BrowserIsolation GatewayConfigurationReplaceResponseSettingsBrowserIsolation `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificate `json:"custom_certificate"`
+	CustomCertificate GatewayConfigurationReplaceResponseSettingsCustomCertificate `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
+	ExtendedEmailMatching GatewayConfigurationReplaceResponseSettingsExtendedEmailMatching `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFips `json:"fips"`
+	Fips GatewayConfigurationReplaceResponseSettingsFips `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetection `json:"protocol_detection"`
+	ProtocolDetection GatewayConfigurationReplaceResponseSettingsProtocolDetection `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecrypt `json:"tls_decrypt"`
-	JSON       gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsJSON       `json:"-"`
+	TLSDecrypt GatewayConfigurationReplaceResponseSettingsTLSDecrypt `json:"tls_decrypt"`
+	JSON       gatewayConfigurationReplaceResponseSettingsJSON       `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettings]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsJSON struct {
+// gatewayConfigurationReplaceResponseSettingsJSON contains the JSON metadata for
+// the struct [GatewayConfigurationReplaceResponseSettings]
+type gatewayConfigurationReplaceResponseSettingsJSON struct {
 	ActivityLog           apijson.Field
 	Antivirus             apijson.Field
 	BlockPage             apijson.Field
@@ -832,32 +814,31 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Activity log settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLog struct {
+type GatewayConfigurationReplaceResponseSettingsActivityLog struct {
 	// Enable activity logging.
-	Enabled bool                                                                                                    `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLogJSON `json:"-"`
+	Enabled bool                                                       `json:"enabled"`
+	JSON    gatewayConfigurationReplaceResponseSettingsActivityLogJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLogJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLog]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLogJSON struct {
+// gatewayConfigurationReplaceResponseSettingsActivityLogJSON contains the JSON
+// metadata for the struct [GatewayConfigurationReplaceResponseSettingsActivityLog]
+type gatewayConfigurationReplaceResponseSettingsActivityLogJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Anti-virus settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirus struct {
+type GatewayConfigurationReplaceResponseSettingsAntivirus struct {
 	// Enable anti-virus scanning on downloads.
 	EnabledDownloadPhase bool `json:"enabled_download_phase"`
 	// Enable anti-virus scanning on uploads.
@@ -866,14 +847,13 @@ type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	FailClosed bool `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
-	JSON                 gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusJSON                 `json:"-"`
+	NotificationSettings GatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettings `json:"notification_settings"`
+	JSON                 gatewayConfigurationReplaceResponseSettingsAntivirusJSON                 `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirus]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusJSON struct {
+// gatewayConfigurationReplaceResponseSettingsAntivirusJSON contains the JSON
+// metadata for the struct [GatewayConfigurationReplaceResponseSettingsAntivirus]
+type gatewayConfigurationReplaceResponseSettingsAntivirusJSON struct {
 	EnabledDownloadPhase apijson.Field
 	EnabledUploadPhase   apijson.Field
 	FailClosed           apijson.Field
@@ -882,27 +862,27 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsAntivirus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings struct {
+type GatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettings struct {
 	// Set notification on
 	Enabled bool `json:"enabled"`
 	// Customize the message shown in the notification.
 	Msg string `json:"msg"`
 	// Optional URL to direct users to additional information. If not set, the
 	// notification will open a block page.
-	SupportURL string                                                                                                                    `json:"support_url"`
-	JSON       gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
+	SupportURL string                                                                       `json:"support_url"`
+	JSON       gatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettingsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON
+// gatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettingsJSON
 // contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettingsJSON struct {
+// [GatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettings]
+type gatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettingsJSON struct {
 	Enabled     apijson.Field
 	Msg         apijson.Field
 	SupportURL  apijson.Field
@@ -910,12 +890,12 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Block page layout settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPage struct {
+type GatewayConfigurationReplaceResponseSettingsBlockPage struct {
 	// Block page background color in #rrggbb format.
 	BackgroundColor string `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -933,14 +913,13 @@ type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	// Block page title.
 	Name string `json:"name"`
 	// Suppress detailed info at the bottom of the block page.
-	SuppressFooter bool                                                                                                  `json:"suppress_footer"`
-	JSON           gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPageJSON `json:"-"`
+	SuppressFooter bool                                                     `json:"suppress_footer"`
+	JSON           gatewayConfigurationReplaceResponseSettingsBlockPageJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPageJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPage]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPageJSON struct {
+// gatewayConfigurationReplaceResponseSettingsBlockPageJSON contains the JSON
+// metadata for the struct [GatewayConfigurationReplaceResponseSettingsBlockPage]
+type gatewayConfigurationReplaceResponseSettingsBlockPageJSON struct {
 	BackgroundColor apijson.Field
 	Enabled         apijson.Field
 	FooterText      apijson.Field
@@ -954,69 +933,69 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsBlockPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DLP body scanning settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanning struct {
+type GatewayConfigurationReplaceResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
-	InspectionMode string                                                                                                   `json:"inspection_mode"`
-	JSON           gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON `json:"-"`
+	InspectionMode string                                                      `json:"inspection_mode"`
+	JSON           gatewayConfigurationReplaceResponseSettingsBodyScanningJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanning]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanningJSON struct {
+// gatewayConfigurationReplaceResponseSettingsBodyScanningJSON contains the JSON
+// metadata for the struct
+// [GatewayConfigurationReplaceResponseSettingsBodyScanning]
+type gatewayConfigurationReplaceResponseSettingsBodyScanningJSON struct {
 	InspectionMode apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Browser isolation settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolation struct {
+type GatewayConfigurationReplaceResponseSettingsBrowserIsolation struct {
 	// Enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled bool `json:"non_identity_enabled"`
 	// Enable Clientless Browser Isolation.
-	URLBrowserIsolationEnabled bool                                                                                                         `json:"url_browser_isolation_enabled"`
-	JSON                       gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON `json:"-"`
+	URLBrowserIsolationEnabled bool                                                            `json:"url_browser_isolation_enabled"`
+	JSON                       gatewayConfigurationReplaceResponseSettingsBrowserIsolationJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolation]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolationJSON struct {
+// gatewayConfigurationReplaceResponseSettingsBrowserIsolationJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationReplaceResponseSettingsBrowserIsolation]
+type gatewayConfigurationReplaceResponseSettingsBrowserIsolationJSON struct {
 	NonIdentityEnabled         apijson.Field
 	URLBrowserIsolationEnabled apijson.Field
 	raw                        string
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Custom certificate settings for BYO-PKI.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificate struct {
+type GatewayConfigurationReplaceResponseSettingsCustomCertificate struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled bool `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID string `json:"id"`
 	// Certificate status (internal).
-	BindingStatus string                                                                                                        `json:"binding_status"`
-	UpdatedAt     time.Time                                                                                                     `json:"updated_at" format:"date-time"`
-	JSON          gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON `json:"-"`
+	BindingStatus string                                                           `json:"binding_status"`
+	UpdatedAt     time.Time                                                        `json:"updated_at" format:"date-time"`
+	JSON          gatewayConfigurationReplaceResponseSettingsCustomCertificateJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificate]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificateJSON struct {
+// gatewayConfigurationReplaceResponseSettingsCustomCertificateJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationReplaceResponseSettingsCustomCertificate]
+type gatewayConfigurationReplaceResponseSettingsCustomCertificateJSON struct {
 	Enabled       apijson.Field
 	ID            apijson.Field
 	BindingStatus apijson.Field
@@ -1025,213 +1004,138 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsCustomCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Extended e-mail matching settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching struct {
+type GatewayConfigurationReplaceResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
-	Enabled bool                                                                                                              `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON `json:"-"`
+	Enabled bool                                                                 `json:"enabled"`
+	JSON    gatewayConfigurationReplaceResponseSettingsExtendedEmailMatchingJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatchingJSON struct {
+// gatewayConfigurationReplaceResponseSettingsExtendedEmailMatchingJSON contains
+// the JSON metadata for the struct
+// [GatewayConfigurationReplaceResponseSettingsExtendedEmailMatching]
+type gatewayConfigurationReplaceResponseSettingsExtendedEmailMatchingJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // FIPS settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFips struct {
+type GatewayConfigurationReplaceResponseSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
-	TLS  bool                                                                                             `json:"tls"`
-	JSON gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFipsJSON `json:"-"`
+	TLS  bool                                                `json:"tls"`
+	JSON gatewayConfigurationReplaceResponseSettingsFipsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFipsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFips]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFipsJSON struct {
+// gatewayConfigurationReplaceResponseSettingsFipsJSON contains the JSON metadata
+// for the struct [GatewayConfigurationReplaceResponseSettingsFips]
+type gatewayConfigurationReplaceResponseSettingsFipsJSON struct {
 	TLS         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Protocol Detection settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetection struct {
+type GatewayConfigurationReplaceResponseSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
-	Enabled bool                                                                                                          `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON `json:"-"`
+	Enabled bool                                                             `json:"enabled"`
+	JSON    gatewayConfigurationReplaceResponseSettingsProtocolDetectionJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetection]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetectionJSON struct {
+// gatewayConfigurationReplaceResponseSettingsProtocolDetectionJSON contains the
+// JSON metadata for the struct
+// [GatewayConfigurationReplaceResponseSettingsProtocolDetection]
+type gatewayConfigurationReplaceResponseSettingsProtocolDetectionJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsProtocolDetection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // TLS interception settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecrypt struct {
+type GatewayConfigurationReplaceResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
-	Enabled bool                                                                                                   `json:"enabled"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON `json:"-"`
+	Enabled bool                                                      `json:"enabled"`
+	JSON    gatewayConfigurationReplaceResponseSettingsTLSDecryptJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecrypt]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecryptJSON struct {
+// gatewayConfigurationReplaceResponseSettingsTLSDecryptJSON contains the JSON
+// metadata for the struct [GatewayConfigurationReplaceResponseSettingsTLSDecrypt]
+type gatewayConfigurationReplaceResponseSettingsTLSDecryptJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelope struct {
-	Errors   []GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
+type GatewayConfigurationUpdateParams struct {
 	// account settings.
-	Result GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeJSON    `json:"-"`
+	Settings param.Field[GatewayConfigurationUpdateParamsSettings] `json:"settings"`
 }
 
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelope]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrors]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessages]
-type gatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeSuccess bool
-
-const (
-	GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeSuccessTrue GatewayConfigurationZeroTrustAccountsGetZeroTrustAccountConfigurationResponseEnvelopeSuccess = true
-)
-
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParams struct {
-	// account settings.
-	Settings param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettings] `json:"settings"`
-}
-
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettings struct {
+type GatewayConfigurationUpdateParamsSettings struct {
 	// Activity log settings.
-	ActivityLog param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsActivityLog] `json:"activity_log"`
+	ActivityLog param.Field[GatewayConfigurationUpdateParamsSettingsActivityLog] `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirus] `json:"antivirus"`
+	Antivirus param.Field[GatewayConfigurationUpdateParamsSettingsAntivirus] `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBlockPage] `json:"block_page"`
+	BlockPage param.Field[GatewayConfigurationUpdateParamsSettingsBlockPage] `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBodyScanning] `json:"body_scanning"`
+	BodyScanning param.Field[GatewayConfigurationUpdateParamsSettingsBodyScanning] `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBrowserIsolation] `json:"browser_isolation"`
+	BrowserIsolation param.Field[GatewayConfigurationUpdateParamsSettingsBrowserIsolation] `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsCustomCertificate] `json:"custom_certificate"`
+	CustomCertificate param.Field[GatewayConfigurationUpdateParamsSettingsCustomCertificate] `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching] `json:"extended_email_matching"`
+	ExtendedEmailMatching param.Field[GatewayConfigurationUpdateParamsSettingsExtendedEmailMatching] `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsFips] `json:"fips"`
+	Fips param.Field[GatewayConfigurationUpdateParamsSettingsFips] `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsProtocolDetection] `json:"protocol_detection"`
+	ProtocolDetection param.Field[GatewayConfigurationUpdateParamsSettingsProtocolDetection] `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsTLSDecrypt] `json:"tls_decrypt"`
+	TLSDecrypt param.Field[GatewayConfigurationUpdateParamsSettingsTLSDecrypt] `json:"tls_decrypt"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Activity log settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsActivityLog struct {
+type GatewayConfigurationUpdateParamsSettingsActivityLog struct {
 	// Enable activity logging.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsActivityLog) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsActivityLog) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Anti-virus settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirus struct {
+type GatewayConfigurationUpdateParamsSettingsAntivirus struct {
 	// Enable anti-virus scanning on downloads.
 	EnabledDownloadPhase param.Field[bool] `json:"enabled_download_phase"`
 	// Enable anti-virus scanning on uploads.
@@ -1240,16 +1144,16 @@ type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationPara
 	FailClosed param.Field[bool] `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings param.Field[GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings] `json:"notification_settings"`
+	NotificationSettings param.Field[GatewayConfigurationUpdateParamsSettingsAntivirusNotificationSettings] `json:"notification_settings"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirus) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsAntivirus) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings struct {
+type GatewayConfigurationUpdateParamsSettingsAntivirusNotificationSettings struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
 	// Customize the message shown in the notification.
@@ -1259,12 +1163,12 @@ type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationPara
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsAntivirusNotificationSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Block page layout settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBlockPage struct {
+type GatewayConfigurationUpdateParamsSettingsBlockPage struct {
 	// Block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -1285,99 +1189,98 @@ type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationPara
 	SuppressFooter param.Field[bool] `json:"suppress_footer"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBlockPage) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsBlockPage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // DLP body scanning settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBodyScanning struct {
+type GatewayConfigurationUpdateParamsSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
 	InspectionMode param.Field[string] `json:"inspection_mode"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBodyScanning) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsBodyScanning) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Browser isolation settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBrowserIsolation struct {
+type GatewayConfigurationUpdateParamsSettingsBrowserIsolation struct {
 	// Enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled param.Field[bool] `json:"non_identity_enabled"`
 	// Enable Clientless Browser Isolation.
 	URLBrowserIsolationEnabled param.Field[bool] `json:"url_browser_isolation_enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsBrowserIsolation) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsBrowserIsolation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Custom certificate settings for BYO-PKI.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsCustomCertificate struct {
+type GatewayConfigurationUpdateParamsSettingsCustomCertificate struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID param.Field[string] `json:"id"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsCustomCertificate) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsCustomCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Extended e-mail matching settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching struct {
+type GatewayConfigurationUpdateParamsSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsExtendedEmailMatching) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // FIPS settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsFips struct {
+type GatewayConfigurationUpdateParamsSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
 	TLS param.Field[bool] `json:"tls"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsFips) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsFips) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Protocol Detection settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsProtocolDetection struct {
+type GatewayConfigurationUpdateParamsSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsProtocolDetection) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsProtocolDetection) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // TLS interception settings.
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsTLSDecrypt struct {
+type GatewayConfigurationUpdateParamsSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationParamsSettingsTLSDecrypt) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationUpdateParamsSettingsTLSDecrypt) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelope struct {
-	Errors   []GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
+type GatewayConfigurationUpdateResponseEnvelope struct {
+	Errors   []GatewayConfigurationUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayConfigurationUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// account settings.
-	Result GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponse `json:"result,required"`
+	Result GatewayConfigurationUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeJSON    `json:"-"`
+	Success GatewayConfigurationUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayConfigurationUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelope]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeJSON struct {
+// gatewayConfigurationUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayConfigurationUpdateResponseEnvelope]
+type gatewayConfigurationUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1386,106 +1289,174 @@ type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResp
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayConfigurationUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    gatewayConfigurationUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrors]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON struct {
+// gatewayConfigurationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [GatewayConfigurationUpdateResponseEnvelopeErrors]
+type gatewayConfigurationUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                               `json:"code,required"`
-	Message string                                                                                              `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayConfigurationUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    gatewayConfigurationUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessages]
-type gatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON struct {
+// gatewayConfigurationUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [GatewayConfigurationUpdateResponseEnvelopeMessages]
+type gatewayConfigurationUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeSuccess bool
+type GatewayConfigurationUpdateResponseEnvelopeSuccess bool
 
 const (
-	GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeSuccessTrue GatewayConfigurationZeroTrustAccountsPatchZeroTrustAccountConfigurationResponseEnvelopeSuccess = true
+	GatewayConfigurationUpdateResponseEnvelopeSuccessTrue GatewayConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParams struct {
+type GatewayConfigurationGetResponseEnvelope struct {
+	Errors   []GatewayConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayConfigurationGetResponseEnvelopeMessages `json:"messages,required"`
 	// account settings.
-	Settings param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettings] `json:"settings"`
+	Result GatewayConfigurationGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success GatewayConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayConfigurationGetResponseEnvelopeJSON    `json:"-"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParams) MarshalJSON() (data []byte, err error) {
+// gatewayConfigurationGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [GatewayConfigurationGetResponseEnvelope]
+type gatewayConfigurationGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayConfigurationGetResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    gatewayConfigurationGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayConfigurationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [GatewayConfigurationGetResponseEnvelopeErrors]
+type gatewayConfigurationGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayConfigurationGetResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    gatewayConfigurationGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayConfigurationGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [GatewayConfigurationGetResponseEnvelopeMessages]
+type gatewayConfigurationGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type GatewayConfigurationGetResponseEnvelopeSuccess bool
+
+const (
+	GatewayConfigurationGetResponseEnvelopeSuccessTrue GatewayConfigurationGetResponseEnvelopeSuccess = true
+)
+
+type GatewayConfigurationReplaceParams struct {
+	// account settings.
+	Settings param.Field[GatewayConfigurationReplaceParamsSettings] `json:"settings"`
+}
+
+func (r GatewayConfigurationReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // account settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettings struct {
+type GatewayConfigurationReplaceParamsSettings struct {
 	// Activity log settings.
-	ActivityLog param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsActivityLog] `json:"activity_log"`
+	ActivityLog param.Field[GatewayConfigurationReplaceParamsSettingsActivityLog] `json:"activity_log"`
 	// Anti-virus settings.
-	Antivirus param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirus] `json:"antivirus"`
+	Antivirus param.Field[GatewayConfigurationReplaceParamsSettingsAntivirus] `json:"antivirus"`
 	// Block page layout settings.
-	BlockPage param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBlockPage] `json:"block_page"`
+	BlockPage param.Field[GatewayConfigurationReplaceParamsSettingsBlockPage] `json:"block_page"`
 	// DLP body scanning settings.
-	BodyScanning param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBodyScanning] `json:"body_scanning"`
+	BodyScanning param.Field[GatewayConfigurationReplaceParamsSettingsBodyScanning] `json:"body_scanning"`
 	// Browser isolation settings.
-	BrowserIsolation param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBrowserIsolation] `json:"browser_isolation"`
+	BrowserIsolation param.Field[GatewayConfigurationReplaceParamsSettingsBrowserIsolation] `json:"browser_isolation"`
 	// Custom certificate settings for BYO-PKI.
-	CustomCertificate param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsCustomCertificate] `json:"custom_certificate"`
+	CustomCertificate param.Field[GatewayConfigurationReplaceParamsSettingsCustomCertificate] `json:"custom_certificate"`
 	// Extended e-mail matching settings.
-	ExtendedEmailMatching param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching] `json:"extended_email_matching"`
+	ExtendedEmailMatching param.Field[GatewayConfigurationReplaceParamsSettingsExtendedEmailMatching] `json:"extended_email_matching"`
 	// FIPS settings.
-	Fips param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsFips] `json:"fips"`
+	Fips param.Field[GatewayConfigurationReplaceParamsSettingsFips] `json:"fips"`
 	// Protocol Detection settings.
-	ProtocolDetection param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsProtocolDetection] `json:"protocol_detection"`
+	ProtocolDetection param.Field[GatewayConfigurationReplaceParamsSettingsProtocolDetection] `json:"protocol_detection"`
 	// TLS interception settings.
-	TLSDecrypt param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsTLSDecrypt] `json:"tls_decrypt"`
+	TLSDecrypt param.Field[GatewayConfigurationReplaceParamsSettingsTLSDecrypt] `json:"tls_decrypt"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Activity log settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsActivityLog struct {
+type GatewayConfigurationReplaceParamsSettingsActivityLog struct {
 	// Enable activity logging.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsActivityLog) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsActivityLog) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Anti-virus settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirus struct {
+type GatewayConfigurationReplaceParamsSettingsAntivirus struct {
 	// Enable anti-virus scanning on downloads.
 	EnabledDownloadPhase param.Field[bool] `json:"enabled_download_phase"`
 	// Enable anti-virus scanning on uploads.
@@ -1494,16 +1465,16 @@ type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationPar
 	FailClosed param.Field[bool] `json:"fail_closed"`
 	// Configure a message to display on the user's device when an antivirus search is
 	// performed.
-	NotificationSettings param.Field[GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings] `json:"notification_settings"`
+	NotificationSettings param.Field[GatewayConfigurationReplaceParamsSettingsAntivirusNotificationSettings] `json:"notification_settings"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirus) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsAntivirus) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings struct {
+type GatewayConfigurationReplaceParamsSettingsAntivirusNotificationSettings struct {
 	// Set notification on
 	Enabled param.Field[bool] `json:"enabled"`
 	// Customize the message shown in the notification.
@@ -1513,12 +1484,12 @@ type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationPar
 	SupportURL param.Field[string] `json:"support_url"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsAntivirusNotificationSettings) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsAntivirusNotificationSettings) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Block page layout settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBlockPage struct {
+type GatewayConfigurationReplaceParamsSettingsBlockPage struct {
 	// Block page background color in #rrggbb format.
 	BackgroundColor param.Field[string] `json:"background_color"`
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -1539,99 +1510,98 @@ type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationPar
 	SuppressFooter param.Field[bool] `json:"suppress_footer"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBlockPage) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsBlockPage) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // DLP body scanning settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBodyScanning struct {
+type GatewayConfigurationReplaceParamsSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
 	InspectionMode param.Field[string] `json:"inspection_mode"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBodyScanning) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsBodyScanning) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Browser isolation settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBrowserIsolation struct {
+type GatewayConfigurationReplaceParamsSettingsBrowserIsolation struct {
 	// Enable non-identity onramp support for Browser Isolation.
 	NonIdentityEnabled param.Field[bool] `json:"non_identity_enabled"`
 	// Enable Clientless Browser Isolation.
 	URLBrowserIsolationEnabled param.Field[bool] `json:"url_browser_isolation_enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsBrowserIsolation) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsBrowserIsolation) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Custom certificate settings for BYO-PKI.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsCustomCertificate struct {
+type GatewayConfigurationReplaceParamsSettingsCustomCertificate struct {
 	// Enable use of custom certificate authority for signing Gateway traffic.
 	Enabled param.Field[bool] `json:"enabled,required"`
 	// UUID of certificate (ID from MTLS certificate store).
 	ID param.Field[string] `json:"id"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsCustomCertificate) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsCustomCertificate) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Extended e-mail matching settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching struct {
+type GatewayConfigurationReplaceParamsSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
 	// criteria in Firewall policies.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsExtendedEmailMatching) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsExtendedEmailMatching) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // FIPS settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsFips struct {
+type GatewayConfigurationReplaceParamsSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
 	TLS param.Field[bool] `json:"tls"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsFips) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsFips) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Protocol Detection settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsProtocolDetection struct {
+type GatewayConfigurationReplaceParamsSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsProtocolDetection) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsProtocolDetection) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // TLS interception settings.
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsTLSDecrypt struct {
+type GatewayConfigurationReplaceParamsSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationParamsSettingsTLSDecrypt) MarshalJSON() (data []byte, err error) {
+func (r GatewayConfigurationReplaceParamsSettingsTLSDecrypt) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelope struct {
-	Errors   []GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessages `json:"messages,required"`
+type GatewayConfigurationReplaceResponseEnvelope struct {
+	Errors   []GatewayConfigurationReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayConfigurationReplaceResponseEnvelopeMessages `json:"messages,required"`
 	// account settings.
-	Result GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponse `json:"result,required"`
+	Result GatewayConfigurationReplaceResponse `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeJSON    `json:"-"`
+	Success GatewayConfigurationReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayConfigurationReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelope]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeJSON struct {
+// gatewayConfigurationReplaceResponseEnvelopeJSON contains the JSON metadata for
+// the struct [GatewayConfigurationReplaceResponseEnvelope]
+type gatewayConfigurationReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -1640,53 +1610,51 @@ type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationRes
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrors struct {
-	Code    int64                                                                                              `json:"code,required"`
-	Message string                                                                                             `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayConfigurationReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    gatewayConfigurationReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrors]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrorsJSON struct {
+// gatewayConfigurationReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [GatewayConfigurationReplaceResponseEnvelopeErrors]
+type gatewayConfigurationReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessages struct {
-	Code    int64                                                                                                `json:"code,required"`
-	Message string                                                                                               `json:"message,required"`
-	JSON    gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayConfigurationReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    gatewayConfigurationReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessages]
-type gatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessagesJSON struct {
+// gatewayConfigurationReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [GatewayConfigurationReplaceResponseEnvelopeMessages]
+type gatewayConfigurationReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayConfigurationReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeSuccess bool
+type GatewayConfigurationReplaceResponseEnvelopeSuccess bool
 
 const (
-	GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeSuccessTrue GatewayConfigurationZeroTrustAccountsUpdateZeroTrustAccountConfigurationResponseEnvelopeSuccess = true
+	GatewayConfigurationReplaceResponseEnvelopeSuccessTrue GatewayConfigurationReplaceResponseEnvelopeSuccess = true
 )

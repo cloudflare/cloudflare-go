@@ -13,7 +13,7 @@ import (
 // instead.
 type LogControlCmbService struct {
 	Options []option.RequestOption
-	Configs *LogControlCmbConfigService
+	Config  *LogControlCmbConfigService
 }
 
 // NewLogControlCmbService generates a new service that applies the given options
@@ -22,6 +22,6 @@ type LogControlCmbService struct {
 func NewLogControlCmbService(opts ...option.RequestOption) (r *LogControlCmbService) {
 	r = &LogControlCmbService{}
 	r.Options = opts
-	r.Configs = NewLogControlCmbConfigService(opts...)
+	r.Config = NewLogControlCmbConfigService(opts...)
 	return
 }

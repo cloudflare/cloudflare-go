@@ -44,19 +44,6 @@ func (r *RumRuleService) New(ctx context.Context, accountID string, rulesetID st
 	return
 }
 
-// Updates a rule in a Web Analytics ruleset.
-func (r *RumRuleService) Update(ctx context.Context, accountID string, rulesetID string, ruleID string, body RumRuleUpdateParams, opts ...option.RequestOption) (res *RumRuleUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RumRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists all the rules in a Web Analytics ruleset.
 func (r *RumRuleService) List(ctx context.Context, accountID string, rulesetID string, opts ...option.RequestOption) (res *RumRuleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -76,6 +63,19 @@ func (r *RumRuleService) Delete(ctx context.Context, accountID string, rulesetID
 	var env RumRuleDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Updates a rule in a Web Analytics ruleset.
+func (r *RumRuleService) Replace(ctx context.Context, accountID string, rulesetID string, ruleID string, body RumRuleReplaceParams, opts ...option.RequestOption) (res *RumRuleReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RumRuleReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -114,40 +114,6 @@ type rumRuleNewResponseJSON struct {
 }
 
 func (r *RumRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleUpdateResponse struct {
-	// The Web Analytics rule identifier.
-	ID      string    `json:"id"`
-	Created time.Time `json:"created" format:"date-time"`
-	// The hostname the rule will be applied to.
-	Host string `json:"host"`
-	// Whether the rule includes or excludes traffic from being measured.
-	Inclusive bool `json:"inclusive"`
-	// Whether the rule is paused or not.
-	IsPaused bool `json:"is_paused"`
-	// The paths the rule will be applied to.
-	Paths    []string                  `json:"paths"`
-	Priority float64                   `json:"priority"`
-	JSON     rumRuleUpdateResponseJSON `json:"-"`
-}
-
-// rumRuleUpdateResponseJSON contains the JSON metadata for the struct
-// [RumRuleUpdateResponse]
-type rumRuleUpdateResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	Host        apijson.Field
-	Inclusive   apijson.Field
-	IsPaused    apijson.Field
-	Paths       apijson.Field
-	Priority    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -249,6 +215,40 @@ func (r *RumRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RumRuleReplaceResponse struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                   `json:"paths"`
+	Priority float64                    `json:"priority"`
+	JSON     rumRuleReplaceResponseJSON `json:"-"`
+}
+
+// rumRuleReplaceResponseJSON contains the JSON metadata for the struct
+// [RumRuleReplaceResponse]
+type rumRuleReplaceResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumRuleReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RumRuleNewParams struct {
 	Host param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
@@ -276,36 +276,6 @@ type rumRuleNewResponseEnvelopeJSON struct {
 }
 
 func (r *RumRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RumRuleUpdateParams struct {
-	Host param.Field[string] `json:"host"`
-	// Whether the rule includes or excludes traffic from being measured.
-	Inclusive param.Field[bool] `json:"inclusive"`
-	// Whether the rule is paused or not.
-	IsPaused param.Field[bool]     `json:"is_paused"`
-	Paths    param.Field[[]string] `json:"paths"`
-}
-
-func (r RumRuleUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RumRuleUpdateResponseEnvelope struct {
-	Result RumRuleUpdateResponse             `json:"result"`
-	JSON   rumRuleUpdateResponseEnvelopeJSON `json:"-"`
-}
-
-// rumRuleUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RumRuleUpdateResponseEnvelope]
-type rumRuleUpdateResponseEnvelopeJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RumRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -340,5 +310,35 @@ type rumRuleDeleteResponseEnvelopeJSON struct {
 }
 
 func (r *RumRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RumRuleReplaceParams struct {
+	Host param.Field[string] `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive param.Field[bool] `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused param.Field[bool]     `json:"is_paused"`
+	Paths    param.Field[[]string] `json:"paths"`
+}
+
+func (r RumRuleReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RumRuleReplaceResponseEnvelope struct {
+	Result RumRuleReplaceResponse             `json:"result"`
+	JSON   rumRuleReplaceResponseEnvelopeJSON `json:"-"`
+}
+
+// rumRuleReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RumRuleReplaceResponseEnvelope]
+type rumRuleReplaceResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RumRuleReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

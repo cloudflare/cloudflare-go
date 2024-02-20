@@ -20,6 +20,8 @@ type IntelService struct {
 	IPLists            *IntelIPListService
 	Miscategorizations *IntelMiscategorizationService
 	Whois              *IntelWhoisService
+	IndicatorFeeds     *IntelIndicatorFeedService
+	Sinkholes          *IntelSinkholeService
 }
 
 // NewIntelService generates a new service that applies the given options to each
@@ -36,5 +38,7 @@ func NewIntelService(opts ...option.RequestOption) (r *IntelService) {
 	r.IPLists = NewIntelIPListService(opts...)
 	r.Miscategorizations = NewIntelMiscategorizationService(opts...)
 	r.Whois = NewIntelWhoisService(opts...)
+	r.IndicatorFeeds = NewIntelIndicatorFeedService(opts...)
+	r.Sinkholes = NewIntelSinkholeService(opts...)
 	return
 }

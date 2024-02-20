@@ -32,9 +32,9 @@ func NewUserTokenValueService(opts ...option.RequestOption) (r *UserTokenValueSe
 }
 
 // Roll the token secret.
-func (r *UserTokenValueService) UserAPITokensRollToken(ctx context.Context, tokenID interface{}, body UserTokenValueUserAPITokensRollTokenParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *UserTokenValueService) Replace(ctx context.Context, tokenID interface{}, body UserTokenValueReplaceParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserTokenValueUserAPITokensRollTokenResponseEnvelope
+	var env UserTokenValueReplaceResponseEnvelope
 	path := fmt.Sprintf("user/tokens/%v/value", tokenID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -44,27 +44,27 @@ func (r *UserTokenValueService) UserAPITokensRollToken(ctx context.Context, toke
 	return
 }
 
-type UserTokenValueUserAPITokensRollTokenParams struct {
+type UserTokenValueReplaceParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r UserTokenValueUserAPITokensRollTokenParams) MarshalJSON() (data []byte, err error) {
+func (r UserTokenValueReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type UserTokenValueUserAPITokensRollTokenResponseEnvelope struct {
-	Errors   []UserTokenValueUserAPITokensRollTokenResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserTokenValueUserAPITokensRollTokenResponseEnvelopeMessages `json:"messages,required"`
+type UserTokenValueReplaceResponseEnvelope struct {
+	Errors   []UserTokenValueReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserTokenValueReplaceResponseEnvelopeMessages `json:"messages,required"`
 	// The token value.
 	Result string `json:"result,required"`
 	// Whether the API call was successful
-	Success UserTokenValueUserAPITokensRollTokenResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userTokenValueUserAPITokensRollTokenResponseEnvelopeJSON    `json:"-"`
+	Success UserTokenValueReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userTokenValueReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// userTokenValueUserAPITokensRollTokenResponseEnvelopeJSON contains the JSON
-// metadata for the struct [UserTokenValueUserAPITokensRollTokenResponseEnvelope]
-type userTokenValueUserAPITokensRollTokenResponseEnvelopeJSON struct {
+// userTokenValueReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [UserTokenValueReplaceResponseEnvelope]
+type userTokenValueReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -73,53 +73,51 @@ type userTokenValueUserAPITokensRollTokenResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueUserAPITokensRollTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenValueUserAPITokensRollTokenResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    userTokenValueUserAPITokensRollTokenResponseEnvelopeErrorsJSON `json:"-"`
+type UserTokenValueReplaceResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    userTokenValueReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userTokenValueUserAPITokensRollTokenResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [UserTokenValueUserAPITokensRollTokenResponseEnvelopeErrors]
-type userTokenValueUserAPITokensRollTokenResponseEnvelopeErrorsJSON struct {
+// userTokenValueReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [UserTokenValueReplaceResponseEnvelopeErrors]
+type userTokenValueReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueUserAPITokensRollTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserTokenValueUserAPITokensRollTokenResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    userTokenValueUserAPITokensRollTokenResponseEnvelopeMessagesJSON `json:"-"`
+type UserTokenValueReplaceResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    userTokenValueReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userTokenValueUserAPITokensRollTokenResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [UserTokenValueUserAPITokensRollTokenResponseEnvelopeMessages]
-type userTokenValueUserAPITokensRollTokenResponseEnvelopeMessagesJSON struct {
+// userTokenValueReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [UserTokenValueReplaceResponseEnvelopeMessages]
+type userTokenValueReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserTokenValueUserAPITokensRollTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserTokenValueReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserTokenValueUserAPITokensRollTokenResponseEnvelopeSuccess bool
+type UserTokenValueReplaceResponseEnvelopeSuccess bool
 
 const (
-	UserTokenValueUserAPITokensRollTokenResponseEnvelopeSuccessTrue UserTokenValueUserAPITokensRollTokenResponseEnvelopeSuccess = true
+	UserTokenValueReplaceResponseEnvelopeSuccessTrue UserTokenValueReplaceResponseEnvelopeSuccess = true
 )

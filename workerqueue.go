@@ -36,12 +36,12 @@ func NewWorkerQueueService(opts ...option.RequestOption) (r *WorkerQueueService)
 	return
 }
 
-// Updates a queue.
-func (r *WorkerQueueService) Update(ctx context.Context, accountID string, name string, body WorkerQueueUpdateParams, opts ...option.RequestOption) (res *WorkerQueueUpdateResponse, err error) {
+// Creates a new queue.
+func (r *WorkerQueueService) New(ctx context.Context, accountID string, body WorkerQueueNewParams, opts ...option.RequestOption) (res *WorkerQueueNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerQueueUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env WorkerQueueNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/queues", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,12 +88,12 @@ func (r *WorkerQueueService) Get(ctx context.Context, accountID string, name str
 	return
 }
 
-// Creates a new queue.
-func (r *WorkerQueueService) QueueNewQueue(ctx context.Context, accountID string, body WorkerQueueQueueNewQueueParams, opts ...option.RequestOption) (res *WorkerQueueQueueNewQueueResponse, err error) {
+// Updates a queue.
+func (r *WorkerQueueService) Replace(ctx context.Context, accountID string, name string, body WorkerQueueReplaceParams, opts ...option.RequestOption) (res *WorkerQueueReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerQueueQueueNewQueueResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env WorkerQueueReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s", accountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,17 +101,17 @@ func (r *WorkerQueueService) QueueNewQueue(ctx context.Context, accountID string
 	return
 }
 
-type WorkerQueueUpdateResponse struct {
-	CreatedOn  interface{}                   `json:"created_on"`
-	ModifiedOn interface{}                   `json:"modified_on"`
-	QueueID    interface{}                   `json:"queue_id"`
-	QueueName  string                        `json:"queue_name"`
-	JSON       workerQueueUpdateResponseJSON `json:"-"`
+type WorkerQueueNewResponse struct {
+	CreatedOn  interface{}                `json:"created_on"`
+	ModifiedOn interface{}                `json:"modified_on"`
+	QueueID    interface{}                `json:"queue_id"`
+	QueueName  string                     `json:"queue_name"`
+	JSON       workerQueueNewResponseJSON `json:"-"`
 }
 
-// workerQueueUpdateResponseJSON contains the JSON metadata for the struct
-// [WorkerQueueUpdateResponse]
-type workerQueueUpdateResponseJSON struct {
+// workerQueueNewResponseJSON contains the JSON metadata for the struct
+// [WorkerQueueNewResponse]
+type workerQueueNewResponseJSON struct {
 	CreatedOn   apijson.Field
 	ModifiedOn  apijson.Field
 	QueueID     apijson.Field
@@ -120,7 +120,7 @@ type workerQueueUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -207,17 +207,17 @@ func (r *WorkerQueueGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueQueueNewQueueResponse struct {
-	CreatedOn  interface{}                          `json:"created_on"`
-	ModifiedOn interface{}                          `json:"modified_on"`
-	QueueID    interface{}                          `json:"queue_id"`
-	QueueName  string                               `json:"queue_name"`
-	JSON       workerQueueQueueNewQueueResponseJSON `json:"-"`
+type WorkerQueueReplaceResponse struct {
+	CreatedOn  interface{}                    `json:"created_on"`
+	ModifiedOn interface{}                    `json:"modified_on"`
+	QueueID    interface{}                    `json:"queue_id"`
+	QueueName  string                         `json:"queue_name"`
+	JSON       workerQueueReplaceResponseJSON `json:"-"`
 }
 
-// workerQueueQueueNewQueueResponseJSON contains the JSON metadata for the struct
-// [WorkerQueueQueueNewQueueResponse]
-type workerQueueQueueNewQueueResponseJSON struct {
+// workerQueueReplaceResponseJSON contains the JSON metadata for the struct
+// [WorkerQueueReplaceResponse]
+type workerQueueReplaceResponseJSON struct {
 	CreatedOn   apijson.Field
 	ModifiedOn  apijson.Field
 	QueueID     apijson.Field
@@ -226,31 +226,31 @@ type workerQueueQueueNewQueueResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueQueueNewQueueResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueUpdateParams struct {
+type WorkerQueueNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r WorkerQueueUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerQueueNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type WorkerQueueUpdateResponseEnvelope struct {
-	Errors   []WorkerQueueUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerQueueUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerQueueUpdateResponse                   `json:"result,required,nullable"`
+type WorkerQueueNewResponseEnvelope struct {
+	Errors   []WorkerQueueNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerQueueNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerQueueNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    WorkerQueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo WorkerQueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       workerQueueUpdateResponseEnvelopeJSON       `json:"-"`
+	Success    WorkerQueueNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo WorkerQueueNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       workerQueueNewResponseEnvelopeJSON       `json:"-"`
 }
 
-// workerQueueUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [WorkerQueueUpdateResponseEnvelope]
-type workerQueueUpdateResponseEnvelopeJSON struct {
+// workerQueueNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerQueueNewResponseEnvelope]
+type workerQueueNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -260,56 +260,56 @@ type workerQueueUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    workerQueueUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerQueueNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    workerQueueNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerQueueUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [WorkerQueueUpdateResponseEnvelopeErrors]
-type workerQueueUpdateResponseEnvelopeErrorsJSON struct {
+// workerQueueNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerQueueNewResponseEnvelopeErrors]
+type workerQueueNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    workerQueueUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerQueueNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    workerQueueNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerQueueUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [WorkerQueueUpdateResponseEnvelopeMessages]
-type workerQueueUpdateResponseEnvelopeMessagesJSON struct {
+// workerQueueNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [WorkerQueueNewResponseEnvelopeMessages]
+type workerQueueNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerQueueUpdateResponseEnvelopeSuccess bool
+type WorkerQueueNewResponseEnvelopeSuccess bool
 
 const (
-	WorkerQueueUpdateResponseEnvelopeSuccessTrue WorkerQueueUpdateResponseEnvelopeSuccess = true
+	WorkerQueueNewResponseEnvelopeSuccessTrue WorkerQueueNewResponseEnvelopeSuccess = true
 )
 
-type WorkerQueueUpdateResponseEnvelopeResultInfo struct {
+type WorkerQueueNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -317,13 +317,13 @@ type WorkerQueueUpdateResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	JSON       workerQueueUpdateResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                      `json:"total_count"`
+	JSON       workerQueueNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// workerQueueUpdateResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [WorkerQueueUpdateResponseEnvelopeResultInfo]
-type workerQueueUpdateResponseEnvelopeResultInfoJSON struct {
+// workerQueueNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [WorkerQueueNewResponseEnvelopeResultInfo]
+type workerQueueNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -332,7 +332,7 @@ type workerQueueUpdateResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -594,27 +594,27 @@ func (r *WorkerQueueGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueQueueNewQueueParams struct {
+type WorkerQueueReplaceParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r WorkerQueueQueueNewQueueParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerQueueReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type WorkerQueueQueueNewQueueResponseEnvelope struct {
-	Errors   []WorkerQueueQueueNewQueueResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerQueueQueueNewQueueResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerQueueQueueNewQueueResponse                   `json:"result,required,nullable"`
+type WorkerQueueReplaceResponseEnvelope struct {
+	Errors   []WorkerQueueReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerQueueReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerQueueReplaceResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    WorkerQueueQueueNewQueueResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo WorkerQueueQueueNewQueueResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       workerQueueQueueNewQueueResponseEnvelopeJSON       `json:"-"`
+	Success    WorkerQueueReplaceResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo WorkerQueueReplaceResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       workerQueueReplaceResponseEnvelopeJSON       `json:"-"`
 }
 
-// workerQueueQueueNewQueueResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerQueueQueueNewQueueResponseEnvelope]
-type workerQueueQueueNewQueueResponseEnvelopeJSON struct {
+// workerQueueReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WorkerQueueReplaceResponseEnvelope]
+type workerQueueReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -624,56 +624,56 @@ type workerQueueQueueNewQueueResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueQueueNewQueueResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueQueueNewQueueResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    workerQueueQueueNewQueueResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerQueueReplaceResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    workerQueueReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerQueueQueueNewQueueResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [WorkerQueueQueueNewQueueResponseEnvelopeErrors]
-type workerQueueQueueNewQueueResponseEnvelopeErrorsJSON struct {
+// workerQueueReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerQueueReplaceResponseEnvelopeErrors]
+type workerQueueReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueQueueNewQueueResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerQueueQueueNewQueueResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    workerQueueQueueNewQueueResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerQueueReplaceResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    workerQueueReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerQueueQueueNewQueueResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WorkerQueueQueueNewQueueResponseEnvelopeMessages]
-type workerQueueQueueNewQueueResponseEnvelopeMessagesJSON struct {
+// workerQueueReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerQueueReplaceResponseEnvelopeMessages]
+type workerQueueReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueQueueNewQueueResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerQueueQueueNewQueueResponseEnvelopeSuccess bool
+type WorkerQueueReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerQueueQueueNewQueueResponseEnvelopeSuccessTrue WorkerQueueQueueNewQueueResponseEnvelopeSuccess = true
+	WorkerQueueReplaceResponseEnvelopeSuccessTrue WorkerQueueReplaceResponseEnvelopeSuccess = true
 )
 
-type WorkerQueueQueueNewQueueResponseEnvelopeResultInfo struct {
+type WorkerQueueReplaceResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -681,13 +681,13 @@ type WorkerQueueQueueNewQueueResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                `json:"total_count"`
-	JSON       workerQueueQueueNewQueueResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                          `json:"total_count"`
+	JSON       workerQueueReplaceResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// workerQueueQueueNewQueueResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [WorkerQueueQueueNewQueueResponseEnvelopeResultInfo]
-type workerQueueQueueNewQueueResponseEnvelopeResultInfoJSON struct {
+// workerQueueReplaceResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [WorkerQueueReplaceResponseEnvelopeResultInfo]
+type workerQueueReplaceResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -696,6 +696,6 @@ type workerQueueQueueNewQueueResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerQueueQueueNewQueueResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerQueueReplaceResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

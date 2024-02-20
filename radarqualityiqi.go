@@ -37,9 +37,9 @@ func NewRadarQualityIqiService(opts ...option.RequestOption) (r *RadarQualityIqi
 
 // Get a summary (percentiles) of bandwidth, latency or DNS response time from the
 // Radar Internet Quality Index (IQI).
-func (r *RadarQualityIqiService) Get(ctx context.Context, query RadarQualityIqiGetParams, opts ...option.RequestOption) (res *RadarQualityIqiGetResponse, err error) {
+func (r *RadarQualityIqiService) List(ctx context.Context, query RadarQualityIqiListParams, opts ...option.RequestOption) (res *RadarQualityIqiListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarQualityIqiGetResponseEnvelope
+	var env RadarQualityIqiListResponseEnvelope
 	path := "radar/quality/iqi/summary"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -49,36 +49,36 @@ func (r *RadarQualityIqiService) Get(ctx context.Context, query RadarQualityIqiG
 	return
 }
 
-type RadarQualityIqiGetResponse struct {
-	Meta     RadarQualityIqiGetResponseMeta     `json:"meta,required"`
-	Summary0 RadarQualityIqiGetResponseSummary0 `json:"summary_0,required"`
-	JSON     radarQualityIqiGetResponseJSON     `json:"-"`
+type RadarQualityIqiListResponse struct {
+	Meta     RadarQualityIqiListResponseMeta     `json:"meta,required"`
+	Summary0 RadarQualityIqiListResponseSummary0 `json:"summary_0,required"`
+	JSON     radarQualityIqiListResponseJSON     `json:"-"`
 }
 
-// radarQualityIqiGetResponseJSON contains the JSON metadata for the struct
-// [RadarQualityIqiGetResponse]
-type radarQualityIqiGetResponseJSON struct {
+// radarQualityIqiListResponseJSON contains the JSON metadata for the struct
+// [RadarQualityIqiListResponse]
+type radarQualityIqiListResponseJSON struct {
 	Meta        apijson.Field
 	Summary0    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetResponseMeta struct {
-	DateRange      []RadarQualityIqiGetResponseMetaDateRange    `json:"dateRange,required"`
-	LastUpdated    string                                       `json:"lastUpdated,required"`
-	Normalization  string                                       `json:"normalization,required"`
-	ConfidenceInfo RadarQualityIqiGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarQualityIqiGetResponseMetaJSON           `json:"-"`
+type RadarQualityIqiListResponseMeta struct {
+	DateRange      []RadarQualityIqiListResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                        `json:"lastUpdated,required"`
+	Normalization  string                                        `json:"normalization,required"`
+	ConfidenceInfo RadarQualityIqiListResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarQualityIqiListResponseMetaJSON           `json:"-"`
 }
 
-// radarQualityIqiGetResponseMetaJSON contains the JSON metadata for the struct
-// [RadarQualityIqiGetResponseMeta]
-type radarQualityIqiGetResponseMetaJSON struct {
+// radarQualityIqiListResponseMetaJSON contains the JSON metadata for the struct
+// [RadarQualityIqiListResponseMeta]
+type radarQualityIqiListResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	Normalization  apijson.Field
@@ -87,64 +87,65 @@ type radarQualityIqiGetResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetResponseMetaDateRange struct {
+type RadarQualityIqiListResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
-	StartTime time.Time                                   `json:"startTime,required" format:"date-time"`
-	JSON      radarQualityIqiGetResponseMetaDateRangeJSON `json:"-"`
+	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
+	JSON      radarQualityIqiListResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarQualityIqiGetResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [RadarQualityIqiGetResponseMetaDateRange]
-type radarQualityIqiGetResponseMetaDateRangeJSON struct {
+// radarQualityIqiListResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [RadarQualityIqiListResponseMetaDateRange]
+type radarQualityIqiListResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetResponseMetaConfidenceInfo struct {
-	Annotations []RadarQualityIqiGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
-	Level       int64                                                    `json:"level"`
-	JSON        radarQualityIqiGetResponseMetaConfidenceInfoJSON         `json:"-"`
+type RadarQualityIqiListResponseMetaConfidenceInfo struct {
+	Annotations []RadarQualityIqiListResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                     `json:"level"`
+	JSON        radarQualityIqiListResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarQualityIqiGetResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [RadarQualityIqiGetResponseMetaConfidenceInfo]
-type radarQualityIqiGetResponseMetaConfidenceInfoJSON struct {
+// radarQualityIqiListResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [RadarQualityIqiListResponseMetaConfidenceInfo]
+type radarQualityIqiListResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetResponseMetaConfidenceInfoAnnotation struct {
-	DataSource      string                                                     `json:"dataSource,required"`
-	Description     string                                                     `json:"description,required"`
-	EventType       string                                                     `json:"eventType,required"`
-	IsInstantaneous interface{}                                                `json:"isInstantaneous,required"`
-	EndTime         time.Time                                                  `json:"endTime" format:"date-time"`
-	LinkedURL       string                                                     `json:"linkedUrl"`
-	StartTime       time.Time                                                  `json:"startTime" format:"date-time"`
-	JSON            radarQualityIqiGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+type RadarQualityIqiListResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                      `json:"dataSource,required"`
+	Description     string                                                      `json:"description,required"`
+	EventType       string                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
+	JSON            radarQualityIqiListResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarQualityIqiGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [RadarQualityIqiGetResponseMetaConfidenceInfoAnnotation]
-type radarQualityIqiGetResponseMetaConfidenceInfoAnnotationJSON struct {
+// radarQualityIqiListResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [RadarQualityIqiListResponseMetaConfidenceInfoAnnotation]
+type radarQualityIqiListResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -156,20 +157,20 @@ type radarQualityIqiGetResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetResponseSummary0 struct {
-	P25  string                                 `json:"p25,required"`
-	P50  string                                 `json:"p50,required"`
-	P75  string                                 `json:"p75,required"`
-	JSON radarQualityIqiGetResponseSummary0JSON `json:"-"`
+type RadarQualityIqiListResponseSummary0 struct {
+	P25  string                                  `json:"p25,required"`
+	P50  string                                  `json:"p50,required"`
+	P75  string                                  `json:"p75,required"`
+	JSON radarQualityIqiListResponseSummary0JSON `json:"-"`
 }
 
-// radarQualityIqiGetResponseSummary0JSON contains the JSON metadata for the struct
-// [RadarQualityIqiGetResponseSummary0]
-type radarQualityIqiGetResponseSummary0JSON struct {
+// radarQualityIqiListResponseSummary0JSON contains the JSON metadata for the
+// struct [RadarQualityIqiListResponseSummary0]
+type radarQualityIqiListResponseSummary0JSON struct {
 	P25         apijson.Field
 	P50         apijson.Field
 	P75         apijson.Field
@@ -177,13 +178,13 @@ type radarQualityIqiGetResponseSummary0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarQualityIqiGetParams struct {
+type RadarQualityIqiListParams struct {
 	// Which metric to return: bandwidth, latency or DNS response time.
-	Metric param.Field[RadarQualityIqiGetParamsMetric] `query:"metric,required"`
+	Metric param.Field[RadarQualityIqiListParamsMetric] `query:"metric,required"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -197,11 +198,11 @@ type RadarQualityIqiGetParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarQualityIqiGetParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarQualityIqiListParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarQualityIqiGetParamsFormat] `query:"format"`
+	Format param.Field[RadarQualityIqiListParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -210,9 +211,9 @@ type RadarQualityIqiGetParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarQualityIqiGetParams]'s query parameters as
+// URLQuery serializes [RadarQualityIqiListParams]'s query parameters as
 // `url.Values`.
-func (r RadarQualityIqiGetParams) URLQuery() (v url.Values) {
+func (r RadarQualityIqiListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -220,57 +221,57 @@ func (r RadarQualityIqiGetParams) URLQuery() (v url.Values) {
 }
 
 // Which metric to return: bandwidth, latency or DNS response time.
-type RadarQualityIqiGetParamsMetric string
+type RadarQualityIqiListParamsMetric string
 
 const (
-	RadarQualityIqiGetParamsMetricBandwidth RadarQualityIqiGetParamsMetric = "BANDWIDTH"
-	RadarQualityIqiGetParamsMetricDNS       RadarQualityIqiGetParamsMetric = "DNS"
-	RadarQualityIqiGetParamsMetricLatency   RadarQualityIqiGetParamsMetric = "LATENCY"
+	RadarQualityIqiListParamsMetricBandwidth RadarQualityIqiListParamsMetric = "BANDWIDTH"
+	RadarQualityIqiListParamsMetricDNS       RadarQualityIqiListParamsMetric = "DNS"
+	RadarQualityIqiListParamsMetricLatency   RadarQualityIqiListParamsMetric = "LATENCY"
 )
 
-type RadarQualityIqiGetParamsDateRange string
+type RadarQualityIqiListParamsDateRange string
 
 const (
-	RadarQualityIqiGetParamsDateRange1d         RadarQualityIqiGetParamsDateRange = "1d"
-	RadarQualityIqiGetParamsDateRange2d         RadarQualityIqiGetParamsDateRange = "2d"
-	RadarQualityIqiGetParamsDateRange7d         RadarQualityIqiGetParamsDateRange = "7d"
-	RadarQualityIqiGetParamsDateRange14d        RadarQualityIqiGetParamsDateRange = "14d"
-	RadarQualityIqiGetParamsDateRange28d        RadarQualityIqiGetParamsDateRange = "28d"
-	RadarQualityIqiGetParamsDateRange12w        RadarQualityIqiGetParamsDateRange = "12w"
-	RadarQualityIqiGetParamsDateRange24w        RadarQualityIqiGetParamsDateRange = "24w"
-	RadarQualityIqiGetParamsDateRange52w        RadarQualityIqiGetParamsDateRange = "52w"
-	RadarQualityIqiGetParamsDateRange1dControl  RadarQualityIqiGetParamsDateRange = "1dControl"
-	RadarQualityIqiGetParamsDateRange2dControl  RadarQualityIqiGetParamsDateRange = "2dControl"
-	RadarQualityIqiGetParamsDateRange7dControl  RadarQualityIqiGetParamsDateRange = "7dControl"
-	RadarQualityIqiGetParamsDateRange14dControl RadarQualityIqiGetParamsDateRange = "14dControl"
-	RadarQualityIqiGetParamsDateRange28dControl RadarQualityIqiGetParamsDateRange = "28dControl"
-	RadarQualityIqiGetParamsDateRange12wControl RadarQualityIqiGetParamsDateRange = "12wControl"
-	RadarQualityIqiGetParamsDateRange24wControl RadarQualityIqiGetParamsDateRange = "24wControl"
+	RadarQualityIqiListParamsDateRange1d         RadarQualityIqiListParamsDateRange = "1d"
+	RadarQualityIqiListParamsDateRange2d         RadarQualityIqiListParamsDateRange = "2d"
+	RadarQualityIqiListParamsDateRange7d         RadarQualityIqiListParamsDateRange = "7d"
+	RadarQualityIqiListParamsDateRange14d        RadarQualityIqiListParamsDateRange = "14d"
+	RadarQualityIqiListParamsDateRange28d        RadarQualityIqiListParamsDateRange = "28d"
+	RadarQualityIqiListParamsDateRange12w        RadarQualityIqiListParamsDateRange = "12w"
+	RadarQualityIqiListParamsDateRange24w        RadarQualityIqiListParamsDateRange = "24w"
+	RadarQualityIqiListParamsDateRange52w        RadarQualityIqiListParamsDateRange = "52w"
+	RadarQualityIqiListParamsDateRange1dControl  RadarQualityIqiListParamsDateRange = "1dControl"
+	RadarQualityIqiListParamsDateRange2dControl  RadarQualityIqiListParamsDateRange = "2dControl"
+	RadarQualityIqiListParamsDateRange7dControl  RadarQualityIqiListParamsDateRange = "7dControl"
+	RadarQualityIqiListParamsDateRange14dControl RadarQualityIqiListParamsDateRange = "14dControl"
+	RadarQualityIqiListParamsDateRange28dControl RadarQualityIqiListParamsDateRange = "28dControl"
+	RadarQualityIqiListParamsDateRange12wControl RadarQualityIqiListParamsDateRange = "12wControl"
+	RadarQualityIqiListParamsDateRange24wControl RadarQualityIqiListParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarQualityIqiGetParamsFormat string
+type RadarQualityIqiListParamsFormat string
 
 const (
-	RadarQualityIqiGetParamsFormatJson RadarQualityIqiGetParamsFormat = "JSON"
-	RadarQualityIqiGetParamsFormatCsv  RadarQualityIqiGetParamsFormat = "CSV"
+	RadarQualityIqiListParamsFormatJson RadarQualityIqiListParamsFormat = "JSON"
+	RadarQualityIqiListParamsFormatCsv  RadarQualityIqiListParamsFormat = "CSV"
 )
 
-type RadarQualityIqiGetResponseEnvelope struct {
-	Result  RadarQualityIqiGetResponse             `json:"result,required"`
-	Success bool                                   `json:"success,required"`
-	JSON    radarQualityIqiGetResponseEnvelopeJSON `json:"-"`
+type RadarQualityIqiListResponseEnvelope struct {
+	Result  RadarQualityIqiListResponse             `json:"result,required"`
+	Success bool                                    `json:"success,required"`
+	JSON    radarQualityIqiListResponseEnvelopeJSON `json:"-"`
 }
 
-// radarQualityIqiGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RadarQualityIqiGetResponseEnvelope]
-type radarQualityIqiGetResponseEnvelopeJSON struct {
+// radarQualityIqiListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarQualityIqiListResponseEnvelope]
+type radarQualityIqiListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarQualityIqiGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarQualityIqiListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

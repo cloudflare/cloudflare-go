@@ -35,9 +35,9 @@ func NewCertificateAuthorityHostnameAssociationService(opts ...option.RequestOpt
 }
 
 // List Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) ClientCertificateForAZoneListHostnameAssociations(ctx context.Context, zoneID string, query CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponse, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) List(ctx context.Context, zoneID string, query CertificateAuthorityHostnameAssociationListParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelope
+	var env CertificateAuthorityHostnameAssociationListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,9 +48,9 @@ func (r *CertificateAuthorityHostnameAssociationService) ClientCertificateForAZo
 }
 
 // Replace Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) ClientCertificateForAZonePutHostnameAssociations(ctx context.Context, zoneID string, body CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponse, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) Replace(ctx context.Context, zoneID string, body CertificateAuthorityHostnameAssociationReplaceParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelope
+	var env CertificateAuthorityHostnameAssociationReplaceResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -60,82 +60,79 @@ func (r *CertificateAuthorityHostnameAssociationService) ClientCertificateForAZo
 	return
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponse struct {
+type CertificateAuthorityHostnameAssociationListResponse struct {
 	Hostnames []string `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MtlsCertificateID string                                                                                               `json:"mtls_certificate_id"`
-	JSON              certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseJSON `json:"-"`
+	MtlsCertificateID string                                                  `json:"mtls_certificate_id"`
+	JSON              certificateAuthorityHostnameAssociationListResponseJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponse]
-type certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseJSON struct {
+// certificateAuthorityHostnameAssociationListResponseJSON contains the JSON
+// metadata for the struct [CertificateAuthorityHostnameAssociationListResponse]
+type certificateAuthorityHostnameAssociationListResponseJSON struct {
 	Hostnames         apijson.Field
 	MtlsCertificateID apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponse struct {
+type CertificateAuthorityHostnameAssociationReplaceResponse struct {
 	Hostnames []string `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MtlsCertificateID string                                                                                              `json:"mtls_certificate_id"`
-	JSON              certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseJSON `json:"-"`
+	MtlsCertificateID string                                                     `json:"mtls_certificate_id"`
+	JSON              certificateAuthorityHostnameAssociationReplaceResponseJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponse]
-type certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseJSON struct {
+// certificateAuthorityHostnameAssociationReplaceResponseJSON contains the JSON
+// metadata for the struct [CertificateAuthorityHostnameAssociationReplaceResponse]
+type certificateAuthorityHostnameAssociationReplaceResponseJSON struct {
 	Hostnames         apijson.Field
 	MtlsCertificateID apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsParams struct {
+type CertificateAuthorityHostnameAssociationListParams struct {
 	// The UUID to match against for a certificate that was uploaded to the mTLS
 	// Certificate Management endpoint. If no mtls_certificate_id is given, the results
 	// will be the hostnames associated to your active Cloudflare Managed CA.
 	MtlsCertificateID param.Field[string] `query:"mtls_certificate_id"`
 }
 
-// URLQuery serializes
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsParams]'s
-// query parameters as `url.Values`.
-func (r CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [CertificateAuthorityHostnameAssociationListParams]'s query
+// parameters as `url.Values`.
+func (r CertificateAuthorityHostnameAssociationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelope struct {
-	Errors   []CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponse                   `json:"result,required"`
+type CertificateAuthorityHostnameAssociationListResponseEnvelope struct {
+	Errors   []CertificateAuthorityHostnameAssociationListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateAuthorityHostnameAssociationListResponseEnvelopeMessages `json:"messages,required"`
+	Result   CertificateAuthorityHostnameAssociationListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeJSON    `json:"-"`
+	Success CertificateAuthorityHostnameAssociationListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    certificateAuthorityHostnameAssociationListResponseEnvelopeJSON    `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelope]
-type certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeJSON struct {
+// certificateAuthorityHostnameAssociationListResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [CertificateAuthorityHostnameAssociationListResponseEnvelope]
+type certificateAuthorityHostnameAssociationListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -144,58 +141,58 @@ type certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnam
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                              `json:"code,required"`
-	Message string                                                                                                             `json:"message,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrorsJSON `json:"-"`
+type CertificateAuthorityHostnameAssociationListResponseEnvelopeErrors struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    certificateAuthorityHostnameAssociationListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrors]
-type certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrorsJSON struct {
+// certificateAuthorityHostnameAssociationListResponseEnvelopeErrorsJSON contains
+// the JSON metadata for the struct
+// [CertificateAuthorityHostnameAssociationListResponseEnvelopeErrors]
+type certificateAuthorityHostnameAssociationListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                                `json:"code,required"`
-	Message string                                                                                                               `json:"message,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessagesJSON `json:"-"`
+type CertificateAuthorityHostnameAssociationListResponseEnvelopeMessages struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    certificateAuthorityHostnameAssociationListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessages]
-type certificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessagesJSON struct {
+// certificateAuthorityHostnameAssociationListResponseEnvelopeMessagesJSON contains
+// the JSON metadata for the struct
+// [CertificateAuthorityHostnameAssociationListResponseEnvelopeMessages]
+type certificateAuthorityHostnameAssociationListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeSuccess bool
+type CertificateAuthorityHostnameAssociationListResponseEnvelopeSuccess bool
 
 const (
-	CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeSuccessTrue CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsResponseEnvelopeSuccess = true
+	CertificateAuthorityHostnameAssociationListResponseEnvelopeSuccessTrue CertificateAuthorityHostnameAssociationListResponseEnvelopeSuccess = true
 )
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsParams struct {
+type CertificateAuthorityHostnameAssociationReplaceParams struct {
 	Hostnames param.Field[[]string] `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
@@ -203,23 +200,23 @@ type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostname
 	MtlsCertificateID param.Field[string] `json:"mtls_certificate_id"`
 }
 
-func (r CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsParams) MarshalJSON() (data []byte, err error) {
+func (r CertificateAuthorityHostnameAssociationReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelope struct {
-	Errors   []CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessages `json:"messages,required"`
-	Result   CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponse                   `json:"result,required"`
+type CertificateAuthorityHostnameAssociationReplaceResponseEnvelope struct {
+	Errors   []CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   CertificateAuthorityHostnameAssociationReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeJSON    `json:"-"`
+	Success CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    certificateAuthorityHostnameAssociationReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelope]
-type certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeJSON struct {
+// certificateAuthorityHostnameAssociationReplaceResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [CertificateAuthorityHostnameAssociationReplaceResponseEnvelope]
+type certificateAuthorityHostnameAssociationReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -228,53 +225,53 @@ type certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostname
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                             `json:"code,required"`
-	Message string                                                                                                            `json:"message,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrorsJSON `json:"-"`
+type CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                                    `json:"code,required"`
+	Message string                                                                   `json:"message,required"`
+	JSON    certificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrorsJSON
+// certificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrorsJSON
 // contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrors]
-type certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrorsJSON struct {
+// [CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrors]
+type certificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                               `json:"code,required"`
-	Message string                                                                                                              `json:"message,required"`
-	JSON    certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessagesJSON `json:"-"`
+type CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                                      `json:"code,required"`
+	Message string                                                                     `json:"message,required"`
+	JSON    certificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessagesJSON
+// certificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessagesJSON
 // contains the JSON metadata for the struct
-// [CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessages]
-type certificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessagesJSON struct {
+// [CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessages]
+type certificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeSuccess bool
+type CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeSuccess bool
 
 const (
-	CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeSuccessTrue CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsResponseEnvelopeSuccess = true
+	CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeSuccessTrue CertificateAuthorityHostnameAssociationReplaceResponseEnvelopeSuccess = true
 )

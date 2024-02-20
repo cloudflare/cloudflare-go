@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarEntityIPsWithOptionalParams(t *testing.T) {
+func TestRadarEntityListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,9 +29,9 @@ func TestRadarEntityIPsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.Entities.IPs(context.TODO(), cloudflare.RadarEntityIPsParams{
+	_, err := client.Radar.Entities.List(context.TODO(), cloudflare.RadarEntityListParams{
 		IP:     cloudflare.F("8.8.8.8"),
-		Format: cloudflare.F(cloudflare.RadarEntityIPsParamsFormatJson),
+		Format: cloudflare.F(cloudflare.RadarEntityListParamsFormatJson),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

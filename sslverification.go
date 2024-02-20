@@ -50,9 +50,9 @@ func (r *SSLVerificationService) Update(ctx context.Context, zoneID string, cert
 }
 
 // Get SSL Verification Info for a Zone.
-func (r *SSLVerificationService) SSLVerificationSSLVerificationDetails(ctx context.Context, zoneID string, query SSLVerificationSSLVerificationSSLVerificationDetailsParams, opts ...option.RequestOption) (res *[]SSLVerificationSSLVerificationSSLVerificationDetailsResponse, err error) {
+func (r *SSLVerificationService) List(ctx context.Context, zoneID string, query SSLVerificationListParams, opts ...option.RequestOption) (res *[]SSLVerificationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLVerificationSSLVerificationSSLVerificationDetailsResponseEnvelope
+	var env SSLVerificationListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/verification", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -93,31 +93,30 @@ const (
 	SSLVerificationUpdateResponseValidationMethodEmail SSLVerificationUpdateResponseValidationMethod = "email"
 )
 
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponse struct {
+type SSLVerificationListResponse struct {
 	// Current status of certificate.
-	CertificateStatus SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus `json:"certificate_status,required"`
+	CertificateStatus SSLVerificationListResponseCertificateStatus `json:"certificate_status,required"`
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
 	CertPackUuid string `json:"cert_pack_uuid"`
 	// Certificate's signature algorithm.
-	Signature SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignature `json:"signature"`
+	Signature SSLVerificationListResponseSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
-	ValidationMethod SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethod `json:"validation_method"`
+	ValidationMethod SSLVerificationListResponseValidationMethod `json:"validation_method"`
 	// Certificate's required verification information.
-	VerificationInfo SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfo `json:"verification_info"`
+	VerificationInfo SSLVerificationListResponseVerificationInfo `json:"verification_info"`
 	// Status of the required verification information, omitted if verification status
 	// is unknown.
 	VerificationStatus bool `json:"verification_status"`
 	// Method of verification.
-	VerificationType SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationType `json:"verification_type"`
-	JSON             sslVerificationSSLVerificationSSLVerificationDetailsResponseJSON             `json:"-"`
+	VerificationType SSLVerificationListResponseVerificationType `json:"verification_type"`
+	JSON             sslVerificationListResponseJSON             `json:"-"`
 }
 
-// sslVerificationSSLVerificationSSLVerificationDetailsResponseJSON contains the
-// JSON metadata for the struct
-// [SSLVerificationSSLVerificationSSLVerificationDetailsResponse]
-type sslVerificationSSLVerificationSSLVerificationDetailsResponseJSON struct {
+// sslVerificationListResponseJSON contains the JSON metadata for the struct
+// [SSLVerificationListResponse]
+type sslVerificationListResponseJSON struct {
 	CertificateStatus  apijson.Field
 	BrandCheck         apijson.Field
 	CertPackUuid       apijson.Field
@@ -130,90 +129,89 @@ type sslVerificationSSLVerificationSSLVerificationDetailsResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *SSLVerificationSSLVerificationSSLVerificationDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLVerificationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Current status of certificate.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus string
+type SSLVerificationListResponseCertificateStatus string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusInitializing      SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "initializing"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusAuthorizing       SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "authorizing"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusActive            SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "active"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusExpired           SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "expired"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusIssuing           SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "issuing"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusTimingOut         SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "timing_out"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatusPendingDeployment SSLVerificationSSLVerificationSSLVerificationDetailsResponseCertificateStatus = "pending_deployment"
+	SSLVerificationListResponseCertificateStatusInitializing      SSLVerificationListResponseCertificateStatus = "initializing"
+	SSLVerificationListResponseCertificateStatusAuthorizing       SSLVerificationListResponseCertificateStatus = "authorizing"
+	SSLVerificationListResponseCertificateStatusActive            SSLVerificationListResponseCertificateStatus = "active"
+	SSLVerificationListResponseCertificateStatusExpired           SSLVerificationListResponseCertificateStatus = "expired"
+	SSLVerificationListResponseCertificateStatusIssuing           SSLVerificationListResponseCertificateStatus = "issuing"
+	SSLVerificationListResponseCertificateStatusTimingOut         SSLVerificationListResponseCertificateStatus = "timing_out"
+	SSLVerificationListResponseCertificateStatusPendingDeployment SSLVerificationListResponseCertificateStatus = "pending_deployment"
 )
 
 // Certificate's signature algorithm.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignature string
+type SSLVerificationListResponseSignature string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignatureEcdsaWithSha256 SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignature = "ECDSAWithSHA256"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignatureSha1WithRsa     SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignature = "SHA1WithRSA"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignatureSha256WithRsa   SSLVerificationSSLVerificationSSLVerificationDetailsResponseSignature = "SHA256WithRSA"
+	SSLVerificationListResponseSignatureEcdsaWithSha256 SSLVerificationListResponseSignature = "ECDSAWithSHA256"
+	SSLVerificationListResponseSignatureSha1WithRsa     SSLVerificationListResponseSignature = "SHA1WithRSA"
+	SSLVerificationListResponseSignatureSha256WithRsa   SSLVerificationListResponseSignature = "SHA256WithRSA"
 )
 
 // Validation method in use for a certificate pack order.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethod string
+type SSLVerificationListResponseValidationMethod string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethodHTTP  SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethod = "http"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethodCname SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethod = "cname"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethodTxt   SSLVerificationSSLVerificationSSLVerificationDetailsResponseValidationMethod = "txt"
+	SSLVerificationListResponseValidationMethodHTTP  SSLVerificationListResponseValidationMethod = "http"
+	SSLVerificationListResponseValidationMethodCname SSLVerificationListResponseValidationMethod = "cname"
+	SSLVerificationListResponseValidationMethodTxt   SSLVerificationListResponseValidationMethod = "txt"
 )
 
 // Certificate's required verification information.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfo struct {
+type SSLVerificationListResponseVerificationInfo struct {
 	// Name of CNAME record.
-	RecordName SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName `json:"record_name"`
+	RecordName SSLVerificationListResponseVerificationInfoRecordName `json:"record_name"`
 	// Target of CNAME record.
-	RecordTarget SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget `json:"record_target"`
-	JSON         sslVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoJSON         `json:"-"`
+	RecordTarget SSLVerificationListResponseVerificationInfoRecordTarget `json:"record_target"`
+	JSON         sslVerificationListResponseVerificationInfoJSON         `json:"-"`
 }
 
-// sslVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoJSON
-// contains the JSON metadata for the struct
-// [SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfo]
-type sslVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoJSON struct {
+// sslVerificationListResponseVerificationInfoJSON contains the JSON metadata for
+// the struct [SSLVerificationListResponseVerificationInfo]
+type sslVerificationListResponseVerificationInfoJSON struct {
 	RecordName   apijson.Field
 	RecordTarget apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLVerificationListResponseVerificationInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Name of CNAME record.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName string
+type SSLVerificationListResponseVerificationInfoRecordName string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordNameRecordName SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName = "record_name"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordNameHTTPURL    SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName = "http_url"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordNameCname      SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName = "cname"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordNameTxtName    SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordName = "txt_name"
+	SSLVerificationListResponseVerificationInfoRecordNameRecordName SSLVerificationListResponseVerificationInfoRecordName = "record_name"
+	SSLVerificationListResponseVerificationInfoRecordNameHTTPURL    SSLVerificationListResponseVerificationInfoRecordName = "http_url"
+	SSLVerificationListResponseVerificationInfoRecordNameCname      SSLVerificationListResponseVerificationInfoRecordName = "cname"
+	SSLVerificationListResponseVerificationInfoRecordNameTxtName    SSLVerificationListResponseVerificationInfoRecordName = "txt_name"
 )
 
 // Target of CNAME record.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget string
+type SSLVerificationListResponseVerificationInfoRecordTarget string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTargetRecordValue SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget = "record_value"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTargetHTTPBody    SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget = "http_body"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTargetCnameTarget SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget = "cname_target"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTargetTxtValue    SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationInfoRecordTarget = "txt_value"
+	SSLVerificationListResponseVerificationInfoRecordTargetRecordValue SSLVerificationListResponseVerificationInfoRecordTarget = "record_value"
+	SSLVerificationListResponseVerificationInfoRecordTargetHTTPBody    SSLVerificationListResponseVerificationInfoRecordTarget = "http_body"
+	SSLVerificationListResponseVerificationInfoRecordTargetCnameTarget SSLVerificationListResponseVerificationInfoRecordTarget = "cname_target"
+	SSLVerificationListResponseVerificationInfoRecordTargetTxtValue    SSLVerificationListResponseVerificationInfoRecordTarget = "txt_value"
 )
 
 // Method of verification.
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationType string
+type SSLVerificationListResponseVerificationType string
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationTypeCname   SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationType = "cname"
-	SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationTypeMetaTag SSLVerificationSSLVerificationSSLVerificationDetailsResponseVerificationType = "meta tag"
+	SSLVerificationListResponseVerificationTypeCname   SSLVerificationListResponseVerificationType = "cname"
+	SSLVerificationListResponseVerificationTypeMetaTag SSLVerificationListResponseVerificationType = "meta tag"
 )
 
 type SSLVerificationUpdateParams struct {
@@ -304,15 +302,14 @@ const (
 	SSLVerificationUpdateResponseEnvelopeSuccessTrue SSLVerificationUpdateResponseEnvelopeSuccess = true
 )
 
-type SSLVerificationSSLVerificationSSLVerificationDetailsParams struct {
+type SSLVerificationListParams struct {
 	// Immediately retry SSL Verification.
-	Retry param.Field[SSLVerificationSSLVerificationSSLVerificationDetailsParamsRetry] `query:"retry"`
+	Retry param.Field[SSLVerificationListParamsRetry] `query:"retry"`
 }
 
-// URLQuery serializes
-// [SSLVerificationSSLVerificationSSLVerificationDetailsParams]'s query parameters
-// as `url.Values`.
-func (r SSLVerificationSSLVerificationSSLVerificationDetailsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [SSLVerificationListParams]'s query parameters as
+// `url.Values`.
+func (r SSLVerificationListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -320,26 +317,25 @@ func (r SSLVerificationSSLVerificationSSLVerificationDetailsParams) URLQuery() (
 }
 
 // Immediately retry SSL Verification.
-type SSLVerificationSSLVerificationSSLVerificationDetailsParamsRetry bool
+type SSLVerificationListParamsRetry bool
 
 const (
-	SSLVerificationSSLVerificationSSLVerificationDetailsParamsRetryTrue SSLVerificationSSLVerificationSSLVerificationDetailsParamsRetry = true
+	SSLVerificationListParamsRetryTrue SSLVerificationListParamsRetry = true
 )
 
-type SSLVerificationSSLVerificationSSLVerificationDetailsResponseEnvelope struct {
-	Result []SSLVerificationSSLVerificationSSLVerificationDetailsResponse           `json:"result"`
-	JSON   sslVerificationSSLVerificationSSLVerificationDetailsResponseEnvelopeJSON `json:"-"`
+type SSLVerificationListResponseEnvelope struct {
+	Result []SSLVerificationListResponse           `json:"result"`
+	JSON   sslVerificationListResponseEnvelopeJSON `json:"-"`
 }
 
-// sslVerificationSSLVerificationSSLVerificationDetailsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SSLVerificationSSLVerificationSSLVerificationDetailsResponseEnvelope]
-type sslVerificationSSLVerificationSSLVerificationDetailsResponseEnvelopeJSON struct {
+// sslVerificationListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLVerificationListResponseEnvelope]
+type sslVerificationListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLVerificationSSLVerificationSSLVerificationDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLVerificationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

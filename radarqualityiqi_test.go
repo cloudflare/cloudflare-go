@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarQualityIqiGetWithOptionalParams(t *testing.T) {
+func TestRadarQualityIqiListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,14 +30,14 @@ func TestRadarQualityIqiGetWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.Quality.Iqi.Get(context.TODO(), cloudflare.RadarQualityIqiGetParams{
-		Metric:    cloudflare.F(cloudflare.RadarQualityIqiGetParamsMetricBandwidth),
+	_, err := client.Radar.Quality.Iqi.List(context.TODO(), cloudflare.RadarQualityIqiListParams{
+		Metric:    cloudflare.F(cloudflare.RadarQualityIqiListParamsMetricBandwidth),
 		Asn:       cloudflare.F([]string{"string", "string", "string"}),
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarQualityIqiGetParamsDateRange{cloudflare.RadarQualityIqiGetParamsDateRange1d, cloudflare.RadarQualityIqiGetParamsDateRange2d, cloudflare.RadarQualityIqiGetParamsDateRange7d}),
+		DateRange: cloudflare.F([]cloudflare.RadarQualityIqiListParamsDateRange{cloudflare.RadarQualityIqiListParamsDateRange1d, cloudflare.RadarQualityIqiListParamsDateRange2d, cloudflare.RadarQualityIqiListParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:    cloudflare.F(cloudflare.RadarQualityIqiGetParamsFormatJson),
+		Format:    cloudflare.F(cloudflare.RadarQualityIqiListParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})

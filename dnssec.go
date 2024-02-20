@@ -6,12 +6,15 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"reflect"
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // DNSSECService contains methods and other services that help with interacting
@@ -37,6 +40,19 @@ func (r *DNSSECService) Update(ctx context.Context, zoneID string, body DNSSECUp
 	var env DNSSECUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Delete DNSSEC.
+func (r *DNSSECService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DNSSECDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DNSSECDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/dnssec", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -134,6 +150,22 @@ const (
 	DNSSECUpdateResponseStatusPendingDisabled DNSSECUpdateResponseStatus = "pending-disabled"
 	DNSSECUpdateResponseStatusError           DNSSECUpdateResponseStatus = "error"
 )
+
+// Union satisfied by [DNSSECDeleteResponseUnknown] or [shared.UnionString].
+type DNSSECDeleteResponse interface {
+	ImplementsDNSSECDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSSECDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
 
 type DNSSECGetResponse struct {
 	// Algorithm key code.
@@ -314,6 +346,75 @@ type DNSSECUpdateResponseEnvelopeSuccess bool
 
 const (
 	DNSSECUpdateResponseEnvelopeSuccessTrue DNSSECUpdateResponseEnvelopeSuccess = true
+)
+
+type DNSSECDeleteResponseEnvelope struct {
+	Errors   []DNSSECDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSSECDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSSECDeleteResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success DNSSECDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dnssecDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// dnssecDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DNSSECDeleteResponseEnvelope]
+type dnssecDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSSECDeleteResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    dnssecDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// dnssecDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [DNSSECDeleteResponseEnvelopeErrors]
+type dnssecDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSSECDeleteResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    dnssecDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dnssecDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DNSSECDeleteResponseEnvelopeMessages]
+type dnssecDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSSECDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DNSSECDeleteResponseEnvelopeSuccess bool
+
+const (
+	DNSSECDeleteResponseEnvelopeSuccessTrue DNSSECDeleteResponseEnvelopeSuccess = true
 )
 
 type DNSSECGetResponseEnvelope struct {

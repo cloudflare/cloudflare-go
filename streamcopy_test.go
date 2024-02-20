@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamCopyStreamVideosUploadVideosFromAURLWithOptionalParams(t *testing.T) {
+func TestStreamCopyNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestStreamCopyStreamVideosUploadVideosFromAURLWithOptionalParams(t *testing
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Copies.StreamVideosUploadVideosFromAURL(
+	_, err := client.Stream.Copies.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamCopyStreamVideosUploadVideosFromAURLParams{
+		cloudflare.StreamCopyNewParams{
 			URL:            cloudflare.F("https://example.com/myvideo.mp4"),
 			AllowedOrigins: cloudflare.F([]string{"example.com"}),
 			Creator:        cloudflare.F("creator-id_abcde12345"),
@@ -43,7 +43,7 @@ func TestStreamCopyStreamVideosUploadVideosFromAURLWithOptionalParams(t *testing
 			RequireSignedURLs:     cloudflare.F(true),
 			ScheduledDeletion:     cloudflare.F(time.Now()),
 			ThumbnailTimestampPct: cloudflare.F(0.529241),
-			Watermark: cloudflare.F(cloudflare.StreamCopyStreamVideosUploadVideosFromAurlParamsWatermark{
+			Watermark: cloudflare.F(cloudflare.StreamCopyNewParamsWatermark{
 				Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 			}),
 			UploadCreator:  cloudflare.F("creator-id_abcde12345"),

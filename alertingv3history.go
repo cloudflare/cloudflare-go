@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -37,19 +38,31 @@ func NewAlertingV3HistoryService(opts ...option.RequestOption) (r *AlertingV3His
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *AlertingV3HistoryService) NotificationHistoryListHistory(ctx context.Context, accountID string, query AlertingV3HistoryNotificationHistoryListHistoryParams, opts ...option.RequestOption) (res *[]AlertingV3HistoryNotificationHistoryListHistoryResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelope
+func (r *AlertingV3HistoryService) List(ctx context.Context, accountID string, query AlertingV3HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AlertingV3HistoryListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/alerting/v3/history", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type AlertingV3HistoryNotificationHistoryListHistoryResponse struct {
+// Gets a list of history records for notifications sent to an account. The records
+// are displayed for last `x` number of days based on the zone plan (free = 30, pro
+// = 30, biz = 30, ent = 90).
+func (r *AlertingV3HistoryService) ListAutoPaging(ctx context.Context, accountID string, query AlertingV3HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AlertingV3HistoryListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+}
+
+type AlertingV3HistoryListResponse struct {
 	// UUID
 	ID string `json:"id"`
 	// Message body included in the notification sent.
@@ -62,20 +75,19 @@ type AlertingV3HistoryNotificationHistoryListHistoryResponse struct {
 	Mechanism string `json:"mechanism"`
 	// The type of mechanism to which the notification has been dispatched. This can be
 	// email/pagerduty/webhook based on the mechanism configured.
-	MechanismType AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismType `json:"mechanism_type"`
+	MechanismType AlertingV3HistoryListResponseMechanismType `json:"mechanism_type"`
 	// Name of the policy.
 	Name string `json:"name"`
 	// The unique identifier of a notification policy
 	PolicyID string `json:"policy_id"`
 	// Timestamp of when the notification was dispatched in ISO 8601 format.
-	Sent time.Time                                                   `json:"sent" format:"date-time"`
-	JSON alertingV3HistoryNotificationHistoryListHistoryResponseJSON `json:"-"`
+	Sent time.Time                         `json:"sent" format:"date-time"`
+	JSON alertingV3HistoryListResponseJSON `json:"-"`
 }
 
-// alertingV3HistoryNotificationHistoryListHistoryResponseJSON contains the JSON
-// metadata for the struct
-// [AlertingV3HistoryNotificationHistoryListHistoryResponse]
-type alertingV3HistoryNotificationHistoryListHistoryResponseJSON struct {
+// alertingV3HistoryListResponseJSON contains the JSON metadata for the struct
+// [AlertingV3HistoryListResponse]
+type alertingV3HistoryListResponseJSON struct {
 	ID            apijson.Field
 	AlertBody     apijson.Field
 	AlertType     apijson.Field
@@ -89,21 +101,21 @@ type alertingV3HistoryNotificationHistoryListHistoryResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AlertingV3HistoryNotificationHistoryListHistoryResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingV3HistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of mechanism to which the notification has been dispatched. This can be
 // email/pagerduty/webhook based on the mechanism configured.
-type AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismType string
+type AlertingV3HistoryListResponseMechanismType string
 
 const (
-	AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismTypeEmail     AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismType = "email"
-	AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismTypePagerduty AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismType = "pagerduty"
-	AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismTypeWebhook   AlertingV3HistoryNotificationHistoryListHistoryResponseMechanismType = "webhook"
+	AlertingV3HistoryListResponseMechanismTypeEmail     AlertingV3HistoryListResponseMechanismType = "email"
+	AlertingV3HistoryListResponseMechanismTypePagerduty AlertingV3HistoryListResponseMechanismType = "pagerduty"
+	AlertingV3HistoryListResponseMechanismTypeWebhook   AlertingV3HistoryListResponseMechanismType = "webhook"
 )
 
-type AlertingV3HistoryNotificationHistoryListHistoryParams struct {
+type AlertingV3HistoryListParams struct {
 	// Limit the returned results to history records older than the specified date.
 	// This must be a timestamp that conforms to RFC3339.
 	Before param.Field[time.Time] `query:"before" format:"date-time"`
@@ -116,113 +128,11 @@ type AlertingV3HistoryNotificationHistoryListHistoryParams struct {
 	Since param.Field[time.Time] `query:"since" format:"date-time"`
 }
 
-// URLQuery serializes [AlertingV3HistoryNotificationHistoryListHistoryParams]'s
-// query parameters as `url.Values`.
-func (r AlertingV3HistoryNotificationHistoryListHistoryParams) URLQuery() (v url.Values) {
+// URLQuery serializes [AlertingV3HistoryListParams]'s query parameters as
+// `url.Values`.
+func (r AlertingV3HistoryListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelope struct {
-	Errors   []AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AlertingV3HistoryNotificationHistoryListHistoryResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeJSON       `json:"-"`
-}
-
-// alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelope]
-type alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrors struct {
-	Code    int64                                                                     `json:"code,required"`
-	Message string                                                                    `json:"message,required"`
-	JSON    alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrors]
-type alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessages struct {
-	Code    int64                                                                       `json:"code,required"`
-	Message string                                                                      `json:"message,required"`
-	JSON    alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessages]
-type alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeSuccess bool
-
-const (
-	AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeSuccessTrue AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeSuccess = true
-)
-
-type AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                       `json:"total_count"`
-	JSON       alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfo]
-type alertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AlertingV3HistoryNotificationHistoryListHistoryResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }

@@ -36,6 +36,19 @@ func NewLoadBalancerRegionService(opts ...option.RequestOption) (r *LoadBalancer
 	return
 }
 
+// List all region mappings.
+func (r *LoadBalancerRegionService) List(ctx context.Context, accountID string, query LoadBalancerRegionListParams, opts ...option.RequestOption) (res *LoadBalancerRegionListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env LoadBalancerRegionListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/load_balancers/regions", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Get a single region mapping.
 func (r *LoadBalancerRegionService) Get(ctx context.Context, accountID string, regionID LoadBalancerRegionGetParamsRegionID, opts ...option.RequestOption) (res *LoadBalancerRegionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -49,17 +62,21 @@ func (r *LoadBalancerRegionService) Get(ctx context.Context, accountID string, r
 	return
 }
 
-// List all region mappings.
-func (r *LoadBalancerRegionService) LoadBalancerRegionsListRegions(ctx context.Context, accountID string, query LoadBalancerRegionLoadBalancerRegionsListRegionsParams, opts ...option.RequestOption) (res *LoadBalancerRegionLoadBalancerRegionsListRegionsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/regions", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// Union satisfied by [LoadBalancerRegionListResponseUnknown] or
+// [shared.UnionString].
+type LoadBalancerRegionListResponse interface {
+	ImplementsLoadBalancerRegionListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*LoadBalancerRegionListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // A list of countries and subdivisions mapped to a region.
@@ -81,23 +98,92 @@ func init() {
 	)
 }
 
-// Union satisfied by
-// [LoadBalancerRegionLoadBalancerRegionsListRegionsResponseUnknown] or
-// [shared.UnionString].
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponse interface {
-	ImplementsLoadBalancerRegionLoadBalancerRegionsListRegionsResponse()
+type LoadBalancerRegionListParams struct {
+	// Two-letter alpha-2 country code followed in ISO 3166-1.
+	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
+	// Two-letter subdivision code followed in ISO 3166-2.
+	SubdivisionCode param.Field[string] `query:"subdivision_code"`
+	// Two-letter subdivision code followed in ISO 3166-2.
+	SubdivisionCodeA2 param.Field[string] `query:"subdivision_code_a2"`
 }
 
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*LoadBalancerRegionLoadBalancerRegionsListRegionsResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// URLQuery serializes [LoadBalancerRegionListParams]'s query parameters as
+// `url.Values`.
+func (r LoadBalancerRegionListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
+
+type LoadBalancerRegionListResponseEnvelope struct {
+	Errors   []LoadBalancerRegionListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerRegionListResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerRegionListResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success LoadBalancerRegionListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancerRegionListResponseEnvelopeJSON    `json:"-"`
+}
+
+// loadBalancerRegionListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancerRegionListResponseEnvelope]
+type loadBalancerRegionListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerRegionListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerRegionListResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    loadBalancerRegionListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// loadBalancerRegionListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LoadBalancerRegionListResponseEnvelopeErrors]
+type loadBalancerRegionListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerRegionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LoadBalancerRegionListResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    loadBalancerRegionListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// loadBalancerRegionListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [LoadBalancerRegionListResponseEnvelopeMessages]
+type loadBalancerRegionListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LoadBalancerRegionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type LoadBalancerRegionListResponseEnvelopeSuccess bool
+
+const (
+	LoadBalancerRegionListResponseEnvelopeSuccessTrue LoadBalancerRegionListResponseEnvelopeSuccess = true
+)
 
 // A list of Cloudflare regions. WNAM: Western North America, ENAM: Eastern North
 // America, WEU: Western Europe, EEU: Eastern Europe, NSAM: Northern South America,
@@ -190,94 +276,4 @@ type LoadBalancerRegionGetResponseEnvelopeSuccess bool
 
 const (
 	LoadBalancerRegionGetResponseEnvelopeSuccessTrue LoadBalancerRegionGetResponseEnvelopeSuccess = true
-)
-
-type LoadBalancerRegionLoadBalancerRegionsListRegionsParams struct {
-	// Two-letter alpha-2 country code followed in ISO 3166-1.
-	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
-	// Two-letter subdivision code followed in ISO 3166-2.
-	SubdivisionCode param.Field[string] `query:"subdivision_code"`
-	// Two-letter subdivision code followed in ISO 3166-2.
-	SubdivisionCodeA2 param.Field[string] `query:"subdivision_code_a2"`
-}
-
-// URLQuery serializes [LoadBalancerRegionLoadBalancerRegionsListRegionsParams]'s
-// query parameters as `url.Values`.
-func (r LoadBalancerRegionLoadBalancerRegionsListRegionsParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelope struct {
-	Errors   []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancerRegionLoadBalancerRegionsListRegionsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeJSON    `json:"-"`
-}
-
-// loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelope]
-type loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors struct {
-	Code    int64                                                                      `json:"code,required"`
-	Message string                                                                     `json:"message,required"`
-	JSON    loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors]
-type loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages struct {
-	Code    int64                                                                        `json:"code,required"`
-	Message string                                                                       `json:"message,required"`
-	JSON    loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages]
-type loadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccess bool
-
-const (
-	LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccessTrue LoadBalancerRegionLoadBalancerRegionsListRegionsResponseEnvelopeSuccess = true
 )

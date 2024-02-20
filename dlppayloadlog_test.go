@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDLPPayloadLogDLPPayloadLogSettingsGetSettings(t *testing.T) {
+func TestDLPPayloadLogGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestDLPPayloadLogDLPPayloadLogSettingsGetSettings(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DLPs.PayloadLogs.DLPPayloadLogSettingsGetSettings(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.DLP.PayloadLogs.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestDLPPayloadLogDLPPayloadLogSettingsGetSettings(t *testing.T) {
 	}
 }
 
-func TestDLPPayloadLogDLPPayloadLogSettingsUpdateSettings(t *testing.T) {
+func TestDLPPayloadLogReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,10 +55,10 @@ func TestDLPPayloadLogDLPPayloadLogSettingsUpdateSettings(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DLPs.PayloadLogs.DLPPayloadLogSettingsUpdateSettings(
+	_, err := client.DLP.PayloadLogs.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DLPPayloadLogDLPPayloadLogSettingsUpdateSettingsParams{
+		cloudflare.DLPPayloadLogReplaceParams{
 			PublicKey: cloudflare.F("EmpOvSXw8BfbrGCi0fhGiD/3yXk2SiV1Nzg2lru3oj0="),
 		},
 	)

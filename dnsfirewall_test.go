@@ -30,7 +30,7 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DNSFirewalls.New(
+	_, err := client.DNSFirewall.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.DNSFirewallNewParams{
@@ -76,7 +76,7 @@ func TestDNSFirewallUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DNSFirewalls.Update(
+	_, err := client.DNSFirewall.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -124,7 +124,7 @@ func TestDNSFirewallListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DNSFirewalls.List(
+	_, err := client.DNSFirewall.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.DNSFirewallListParams{
@@ -157,7 +157,7 @@ func TestDNSFirewallDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DNSFirewalls.Delete(
+	_, err := client.DNSFirewall.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -187,7 +187,7 @@ func TestDNSFirewallGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DNSFirewalls.Get(
+	_, err := client.DNSFirewall.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

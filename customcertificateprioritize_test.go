@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestCustomCertificatePrioritizeCustomSSLForAZoneRePrioritizeSSLCertificates(t *testing.T) {
+func TestCustomCertificatePrioritizeReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestCustomCertificatePrioritizeCustomSSLForAZoneRePrioritizeSSLCertificates
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.CustomCertificates.Prioritizes.CustomSSLForAZoneRePrioritizeSSLCertificates(
+	_, err := client.CustomCertificates.Prioritize.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CustomCertificatePrioritizeCustomSSLForAZoneRePrioritizeSSLCertificatesParams{
-			Certificates: cloudflare.F([]cloudflare.CustomCertificatePrioritizeCustomSSLForAZoneRePrioritizeSSLCertificatesParamsCertificate{{
+		cloudflare.CustomCertificatePrioritizeReplaceParams{
+			Certificates: cloudflare.F([]cloudflare.CustomCertificatePrioritizeReplaceParamsCertificate{{
 				Priority: cloudflare.F(2.000000),
 			}, {
 				Priority: cloudflare.F(1.000000),

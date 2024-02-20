@@ -35,6 +35,20 @@ func NewRateLimitService(opts ...option.RequestOption) (r *RateLimitService) {
 	return
 }
 
+// Creates a new rate limit for a zone. Refer to the object definition for a list
+// of required attributes.
+func (r *RateLimitService) New(ctx context.Context, zoneIdentifier string, body RateLimitNewParams, opts ...option.RequestOption) (res *RateLimitNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RateLimitNewResponseEnvelope
+	path := fmt.Sprintf("zones/%s/rate_limits", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates an existing rate limit.
 func (r *RateLimitService) Update(ctx context.Context, zoneIdentifier string, id string, body RateLimitUpdateParams, opts ...option.RequestOption) (res *RateLimitUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -71,6 +85,19 @@ func (r *RateLimitService) ListAutoPaging(ctx context.Context, zoneIdentifier st
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
+// Deletes an existing rate limit.
+func (r *RateLimitService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RateLimitDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/rate_limits/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the details of a rate limit.
 func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *RateLimitGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -82,6 +109,22 @@ func (r *RateLimitService) Get(ctx context.Context, zoneIdentifier string, id st
 	}
 	res = &env.Result
 	return
+}
+
+// Union satisfied by [RateLimitNewResponseUnknown] or [shared.UnionString].
+type RateLimitNewResponse interface {
+	ImplementsRateLimitNewResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RateLimitNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [RateLimitUpdateResponseUnknown] or [shared.UnionString].
@@ -365,6 +408,24 @@ func (r *RateLimitListResponseMatchResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RateLimitDeleteResponse struct {
+	// The unique identifier of the rate limit.
+	ID   string                      `json:"id"`
+	JSON rateLimitDeleteResponseJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponse]
+type rateLimitDeleteResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Union satisfied by [RateLimitGetResponseUnknown] or [shared.UnionString].
 type RateLimitGetResponse interface {
 	ImplementsRateLimitGetResponse()
@@ -380,6 +441,83 @@ func init() {
 		},
 	)
 }
+
+type RateLimitNewParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r RateLimitNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type RateLimitNewResponseEnvelope struct {
+	Errors   []RateLimitNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimitNewResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success RateLimitNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    rateLimitNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// rateLimitNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RateLimitNewResponseEnvelope]
+type rateLimitNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RateLimitNewResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    rateLimitNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RateLimitNewResponseEnvelopeErrors]
+type rateLimitNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RateLimitNewResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    rateLimitNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitNewResponseEnvelopeMessages]
+type rateLimitNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RateLimitNewResponseEnvelopeSuccess bool
+
+const (
+	RateLimitNewResponseEnvelopeSuccessTrue RateLimitNewResponseEnvelopeSuccess = true
+)
 
 type RateLimitUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -473,6 +611,75 @@ func (r RateLimitListParams) URLQuery() (v url.Values) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+type RateLimitDeleteResponseEnvelope struct {
+	Errors   []RateLimitDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RateLimitDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   RateLimitDeleteResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success RateLimitDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    rateLimitDeleteResponseEnvelopeJSON    `json:"-"`
+}
+
+// rateLimitDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RateLimitDeleteResponseEnvelope]
+type rateLimitDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RateLimitDeleteResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    rateLimitDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseEnvelopeErrors]
+type rateLimitDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RateLimitDeleteResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    rateLimitDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// rateLimitDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RateLimitDeleteResponseEnvelopeMessages]
+type rateLimitDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RateLimitDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RateLimitDeleteResponseEnvelopeSuccess bool
+
+const (
+	RateLimitDeleteResponseEnvelopeSuccessTrue RateLimitDeleteResponseEnvelopeSuccess = true
+)
 
 type RateLimitGetResponseEnvelope struct {
 	Errors   []RateLimitGetResponseEnvelopeErrors   `json:"errors,required"`

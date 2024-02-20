@@ -35,9 +35,9 @@ func NewRadarEntityService(opts ...option.RequestOption) (r *RadarEntityService)
 }
 
 // Get IP address information.
-func (r *RadarEntityService) IPs(ctx context.Context, query RadarEntityIPsParams, opts ...option.RequestOption) (res *RadarEntityIPsResponse, err error) {
+func (r *RadarEntityService) List(ctx context.Context, query RadarEntityListParams, opts ...option.RequestOption) (res *RadarEntityListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEntityIPsResponseEnvelope
+	var env RadarEntityListResponseEnvelope
 	path := "radar/entities/ip"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -47,38 +47,38 @@ func (r *RadarEntityService) IPs(ctx context.Context, query RadarEntityIPsParams
 	return
 }
 
-type RadarEntityIPsResponse struct {
-	IP   RadarEntityIPsResponseIP   `json:"ip,required"`
-	JSON radarEntityIPsResponseJSON `json:"-"`
+type RadarEntityListResponse struct {
+	IP   RadarEntityListResponseIP   `json:"ip,required"`
+	JSON radarEntityListResponseJSON `json:"-"`
 }
 
-// radarEntityIPsResponseJSON contains the JSON metadata for the struct
-// [RadarEntityIPsResponse]
-type radarEntityIPsResponseJSON struct {
+// radarEntityListResponseJSON contains the JSON metadata for the struct
+// [RadarEntityListResponse]
+type radarEntityListResponseJSON struct {
 	IP          apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEntityIPsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEntityIPsResponseIP struct {
-	Asn          string                       `json:"asn,required"`
-	AsnLocation  string                       `json:"asnLocation,required"`
-	AsnName      string                       `json:"asnName,required"`
-	AsnOrgName   string                       `json:"asnOrgName,required"`
-	IP           string                       `json:"ip,required"`
-	IPVersion    string                       `json:"ipVersion,required"`
-	Location     string                       `json:"location,required"`
-	LocationName string                       `json:"locationName,required"`
-	JSON         radarEntityIPsResponseIPJSON `json:"-"`
+type RadarEntityListResponseIP struct {
+	Asn          string                        `json:"asn,required"`
+	AsnLocation  string                        `json:"asnLocation,required"`
+	AsnName      string                        `json:"asnName,required"`
+	AsnOrgName   string                        `json:"asnOrgName,required"`
+	IP           string                        `json:"ip,required"`
+	IPVersion    string                        `json:"ipVersion,required"`
+	Location     string                        `json:"location,required"`
+	LocationName string                        `json:"locationName,required"`
+	JSON         radarEntityListResponseIPJSON `json:"-"`
 }
 
-// radarEntityIPsResponseIPJSON contains the JSON metadata for the struct
-// [RadarEntityIPsResponseIP]
-type radarEntityIPsResponseIPJSON struct {
+// radarEntityListResponseIPJSON contains the JSON metadata for the struct
+// [RadarEntityListResponseIP]
+type radarEntityListResponseIPJSON struct {
 	Asn          apijson.Field
 	AsnLocation  apijson.Field
 	AsnName      apijson.Field
@@ -91,19 +91,19 @@ type radarEntityIPsResponseIPJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarEntityIPsResponseIP) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityListResponseIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEntityIPsParams struct {
+type RadarEntityListParams struct {
 	// IP address.
 	IP param.Field[string] `query:"ip,required"`
 	// Format results are returned in.
-	Format param.Field[RadarEntityIPsParamsFormat] `query:"format"`
+	Format param.Field[RadarEntityListParamsFormat] `query:"format"`
 }
 
-// URLQuery serializes [RadarEntityIPsParams]'s query parameters as `url.Values`.
-func (r RadarEntityIPsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [RadarEntityListParams]'s query parameters as `url.Values`.
+func (r RadarEntityListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -111,28 +111,28 @@ func (r RadarEntityIPsParams) URLQuery() (v url.Values) {
 }
 
 // Format results are returned in.
-type RadarEntityIPsParamsFormat string
+type RadarEntityListParamsFormat string
 
 const (
-	RadarEntityIPsParamsFormatJson RadarEntityIPsParamsFormat = "JSON"
-	RadarEntityIPsParamsFormatCsv  RadarEntityIPsParamsFormat = "CSV"
+	RadarEntityListParamsFormatJson RadarEntityListParamsFormat = "JSON"
+	RadarEntityListParamsFormatCsv  RadarEntityListParamsFormat = "CSV"
 )
 
-type RadarEntityIPsResponseEnvelope struct {
-	Result  RadarEntityIPsResponse             `json:"result,required"`
-	Success bool                               `json:"success,required"`
-	JSON    radarEntityIPsResponseEnvelopeJSON `json:"-"`
+type RadarEntityListResponseEnvelope struct {
+	Result  RadarEntityListResponse             `json:"result,required"`
+	Success bool                                `json:"success,required"`
+	JSON    radarEntityListResponseEnvelopeJSON `json:"-"`
 }
 
-// radarEntityIPsResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RadarEntityIPsResponseEnvelope]
-type radarEntityIPsResponseEnvelopeJSON struct {
+// radarEntityListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RadarEntityListResponseEnvelope]
+type radarEntityListResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEntityIPsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEntityListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

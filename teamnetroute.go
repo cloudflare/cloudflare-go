@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -39,19 +40,29 @@ func NewTeamnetRouteService(opts ...option.RequestOption) (r *TeamnetRouteServic
 }
 
 // Lists and filters private network routes in an account.
-func (r *TeamnetRouteService) TunnelRouteListTunnelRoutes(ctx context.Context, accountID string, query TeamnetRouteTunnelRouteListTunnelRoutesParams, opts ...option.RequestOption) (res *[]TeamnetRouteTunnelRouteListTunnelRoutesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelope
+func (r *TeamnetRouteService) List(ctx context.Context, accountID string, query TeamnetRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TeamnetRouteListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-type TeamnetRouteTunnelRouteListTunnelRoutesResponse struct {
+// Lists and filters private network routes in an account.
+func (r *TeamnetRouteService) ListAutoPaging(ctx context.Context, accountID string, query TeamnetRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TeamnetRouteListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+}
+
+type TeamnetRouteListResponse struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -64,7 +75,7 @@ type TeamnetRouteTunnelRouteListTunnelRoutesResponse struct {
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network string `json:"network"`
 	// The type of tunnel.
-	TunType TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType `json:"tun_type"`
+	TunType TeamnetRouteListResponseTunType `json:"tun_type"`
 	// UUID of the Cloudflare Tunnel serving the route.
 	TunnelID interface{} `json:"tunnel_id"`
 	// The user-friendly name of the Cloudflare Tunnel serving the route.
@@ -74,13 +85,13 @@ type TeamnetRouteTunnelRouteListTunnelRoutesResponse struct {
 	// account.
 	VirtualNetworkID interface{} `json:"virtual_network_id"`
 	// A user-friendly name for the virtual network.
-	VirtualNetworkName string                                              `json:"virtual_network_name"`
-	JSON               teamnetRouteTunnelRouteListTunnelRoutesResponseJSON `json:"-"`
+	VirtualNetworkName string                       `json:"virtual_network_name"`
+	JSON               teamnetRouteListResponseJSON `json:"-"`
 }
 
-// teamnetRouteTunnelRouteListTunnelRoutesResponseJSON contains the JSON metadata
-// for the struct [TeamnetRouteTunnelRouteListTunnelRoutesResponse]
-type teamnetRouteTunnelRouteListTunnelRoutesResponseJSON struct {
+// teamnetRouteListResponseJSON contains the JSON metadata for the struct
+// [TeamnetRouteListResponse]
+type teamnetRouteListResponseJSON struct {
 	ID                 apijson.Field
 	Comment            apijson.Field
 	CreatedAt          apijson.Field
@@ -95,22 +106,22 @@ type teamnetRouteTunnelRouteListTunnelRoutesResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TeamnetRouteTunnelRouteListTunnelRoutesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamnetRouteListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType string
+type TeamnetRouteListResponseTunType string
 
 const (
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeCfdTunnel     TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "cfd_tunnel"
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeWarpConnector TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "warp_connector"
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeIPSec         TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "ip_sec"
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeGre           TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "gre"
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseTunTypeCni           TeamnetRouteTunnelRouteListTunnelRoutesResponseTunType = "cni"
+	TeamnetRouteListResponseTunTypeCfdTunnel     TeamnetRouteListResponseTunType = "cfd_tunnel"
+	TeamnetRouteListResponseTunTypeWarpConnector TeamnetRouteListResponseTunType = "warp_connector"
+	TeamnetRouteListResponseTunTypeIPSec         TeamnetRouteListResponseTunType = "ip_sec"
+	TeamnetRouteListResponseTunTypeGre           TeamnetRouteListResponseTunType = "gre"
+	TeamnetRouteListResponseTunTypeCni           TeamnetRouteListResponseTunType = "cni"
 )
 
-type TeamnetRouteTunnelRouteListTunnelRoutesParams struct {
+type TeamnetRouteListParams struct {
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
 	// If provided, include only routes that were created (and not deleted) before this
@@ -137,113 +148,10 @@ type TeamnetRouteTunnelRouteListTunnelRoutesParams struct {
 	VirtualNetworkID param.Field[interface{}] `query:"virtual_network_id"`
 }
 
-// URLQuery serializes [TeamnetRouteTunnelRouteListTunnelRoutesParams]'s query
-// parameters as `url.Values`.
-func (r TeamnetRouteTunnelRouteListTunnelRoutesParams) URLQuery() (v url.Values) {
+// URLQuery serializes [TeamnetRouteListParams]'s query parameters as `url.Values`.
+func (r TeamnetRouteListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelope struct {
-	Errors   []TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamnetRouteTunnelRouteListTunnelRoutesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeJSON       `json:"-"`
-}
-
-// teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelope]
-type teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrors struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrors]
-type teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessages struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessages]
-type teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeSuccess bool
-
-const (
-	TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeSuccessTrue TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeSuccess = true
-)
-
-type TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                               `json:"total_count"`
-	JSON       teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfo]
-type teamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TeamnetRouteTunnelRouteListTunnelRoutesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }

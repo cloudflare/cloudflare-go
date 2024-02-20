@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerQueueUpdate(t *testing.T) {
+func TestWorkerQueueNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,12 @@ func TestWorkerQueueUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Queues.Update(
+	_, err := client.Workers.Queues.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"example-queue",
-		cloudflare.WorkerQueueUpdateParams{
+		cloudflare.WorkerQueueNewParams{
 			Body: cloudflare.F[any](map[string]interface{}{
-				"queue_name": "renamed-example-queue",
+				"queue_name": "example-queue",
 			}),
 		},
 	)
@@ -134,7 +133,7 @@ func TestWorkerQueueGet(t *testing.T) {
 	}
 }
 
-func TestWorkerQueueQueueNewQueue(t *testing.T) {
+func TestWorkerQueueReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -150,12 +149,13 @@ func TestWorkerQueueQueueNewQueue(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Queues.QueueNewQueue(
+	_, err := client.Workers.Queues.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.WorkerQueueQueueNewQueueParams{
+		"example-queue",
+		cloudflare.WorkerQueueReplaceParams{
 			Body: cloudflare.F[any](map[string]interface{}{
-				"queue_name": "example-queue",
+				"queue_name": "renamed-example-queue",
 			}),
 		},
 	)

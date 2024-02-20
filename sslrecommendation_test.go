@@ -29,7 +29,7 @@ func TestSSLRecommendationList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.SSLs.Recommendations.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.SSL.Recommendations.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

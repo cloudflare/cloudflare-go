@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsWithOptionalParams(t *testing.T) {
+func TestStreamDirectUploadNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsWithOption
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.DirectUploads.StreamVideosUploadVideosViaDirectUploadURLs(
+	_, err := client.Stream.DirectUploads.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParams{
+		cloudflare.StreamDirectUploadNewParams{
 			MaxDurationSeconds: cloudflare.F(int64(1)),
 			AllowedOrigins:     cloudflare.F([]string{"example.com"}),
 			Creator:            cloudflare.F("creator-id_abcde12345"),
@@ -44,7 +44,7 @@ func TestStreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsWithOption
 			RequireSignedURLs:     cloudflare.F(true),
 			ScheduledDeletion:     cloudflare.F(time.Now()),
 			ThumbnailTimestampPct: cloudflare.F(0.529241),
-			Watermark: cloudflare.F(cloudflare.StreamDirectUploadStreamVideosUploadVideosViaDirectUploadURLsParamsWatermark{
+			Watermark: cloudflare.F(cloudflare.StreamDirectUploadNewParamsWatermark{
 				Uid: cloudflare.F("ea95132c15732412d22c1476fa83f27a"),
 			}),
 			UploadCreator: cloudflare.F("creator-id_abcde12345"),

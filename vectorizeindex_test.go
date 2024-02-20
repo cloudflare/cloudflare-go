@@ -49,39 +49,6 @@ func TestVectorizeIndexNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestVectorizeIndexUpdate(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Vectorize.Indexes.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"example-index",
-		cloudflare.VectorizeIndexUpdateParams{
-			Description: cloudflare.F("This is my example index."),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestVectorizeIndexList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -138,39 +105,6 @@ func TestVectorizeIndexDelete(t *testing.T) {
 	}
 }
 
-func TestVectorizeIndexDeleteByIDsWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Vectorize.Indexes.DeleteByIDs(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"example-index",
-		cloudflare.VectorizeIndexDeleteByIDsParams{
-			IDs: cloudflare.F([]string{"5121db81354a40c6aedc3fe1ace51c59", "f90eb49c2107486abdfd78c67e853430"}),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
 func TestVectorizeIndexGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -191,39 +125,6 @@ func TestVectorizeIndexGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-index",
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestVectorizeIndexGetByIDsWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Vectorize.Indexes.GetByIDs(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"example-index",
-		cloudflare.VectorizeIndexGetByIDsParams{
-			IDs: cloudflare.F([]string{"5121db81354a40c6aedc3fe1ace51c59", "f90eb49c2107486abdfd78c67e853430"}),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -289,6 +190,39 @@ func TestVectorizeIndexQueryWithOptionalParams(t *testing.T) {
 			ReturnValues:   cloudflare.F(true),
 			TopK:           cloudflare.F(5.000000),
 			Vector:         cloudflare.F([]float64{0.500000, 0.500000, 0.500000}),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestVectorizeIndexReplace(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Vectorize.Indexes.Replace(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"example-index",
+		cloudflare.VectorizeIndexReplaceParams{
+			Description: cloudflare.F("This is my example index."),
 		},
 	)
 	if err != nil {

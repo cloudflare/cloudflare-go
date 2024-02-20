@@ -12,11 +12,11 @@ import (
 // directly, and instead use the [NewSSLService] method instead.
 type SSLService struct {
 	Options          []option.RequestOption
-	Analyzes         *SSLAnalyzeService
+	Analyze          *SSLAnalyzeService
 	CertificatePacks *SSLCertificatePackService
 	Recommendations  *SSLRecommendationService
-	Universals       *SSLUniversalService
-	Verifications    *SSLVerificationService
+	Universal        *SSLUniversalService
+	Verification     *SSLVerificationService
 }
 
 // NewSSLService generates a new service that applies the given options to each
@@ -25,10 +25,10 @@ type SSLService struct {
 func NewSSLService(opts ...option.RequestOption) (r *SSLService) {
 	r = &SSLService{}
 	r.Options = opts
-	r.Analyzes = NewSSLAnalyzeService(opts...)
+	r.Analyze = NewSSLAnalyzeService(opts...)
 	r.CertificatePacks = NewSSLCertificatePackService(opts...)
 	r.Recommendations = NewSSLRecommendationService(opts...)
-	r.Universals = NewSSLUniversalService(opts...)
-	r.Verifications = NewSSLVerificationService(opts...)
+	r.Universal = NewSSLUniversalService(opts...)
+	r.Verification = NewSSLVerificationService(opts...)
 	return
 }

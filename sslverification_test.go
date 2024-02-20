@@ -29,7 +29,7 @@ func TestSSLVerificationUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.SSLs.Verifications.Update(
+	_, err := client.SSL.Verification.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a77f8bd7-3b47-46b4-a6f1-75cf98109948",
@@ -46,7 +46,7 @@ func TestSSLVerificationUpdate(t *testing.T) {
 	}
 }
 
-func TestSSLVerificationSSLVerificationSSLVerificationDetailsWithOptionalParams(t *testing.T) {
+func TestSSLVerificationListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -62,11 +62,11 @@ func TestSSLVerificationSSLVerificationSSLVerificationDetailsWithOptionalParams(
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.SSLs.Verifications.SSLVerificationSSLVerificationDetails(
+	_, err := client.SSL.Verification.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SSLVerificationSSLVerificationSSLVerificationDetailsParams{
-			Retry: cloudflare.F(cloudflare.SSLVerificationSSLVerificationSSLVerificationDetailsParamsRetryTrue),
+		cloudflare.SSLVerificationListParams{
+			Retry: cloudflare.F(cloudflare.SSLVerificationListParamsRetryTrue),
 		},
 	)
 	if err != nil {

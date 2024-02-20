@@ -33,9 +33,9 @@ func NewUserBillingProfileService(opts ...option.RequestOption) (r *UserBillingP
 }
 
 // Accesses your billing profile object.
-func (r *UserBillingProfileService) UserBillingProfileBillingProfileDetails(ctx context.Context, opts ...option.RequestOption) (res *UserBillingProfileUserBillingProfileBillingProfileDetailsResponse, err error) {
+func (r *UserBillingProfileService) List(ctx context.Context, opts ...option.RequestOption) (res *UserBillingProfileListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelope
+	var env UserBillingProfileListResponseEnvelope
 	path := "user/billing/profile"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,16 +45,15 @@ func (r *UserBillingProfileService) UserBillingProfileBillingProfileDetails(ctx 
 	return
 }
 
-// Union satisfied by
-// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseUnknown] or
+// Union satisfied by [UserBillingProfileListResponseUnknown] or
 // [shared.UnionString].
-type UserBillingProfileUserBillingProfileBillingProfileDetailsResponse interface {
-	ImplementsUserBillingProfileUserBillingProfileBillingProfileDetailsResponse()
+type UserBillingProfileListResponse interface {
+	ImplementsUserBillingProfileListResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*UserBillingProfileUserBillingProfileBillingProfileDetailsResponse)(nil)).Elem(),
+		reflect.TypeOf((*UserBillingProfileListResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -63,19 +62,18 @@ func init() {
 	)
 }
 
-type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelope struct {
-	Errors   []UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserBillingProfileUserBillingProfileBillingProfileDetailsResponse                   `json:"result,required"`
+type UserBillingProfileListResponseEnvelope struct {
+	Errors   []UserBillingProfileListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserBillingProfileListResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserBillingProfileListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeJSON    `json:"-"`
+	Success UserBillingProfileListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userBillingProfileListResponseEnvelopeJSON    `json:"-"`
 }
 
-// userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelope]
-type userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeJSON struct {
+// userBillingProfileListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [UserBillingProfileListResponseEnvelope]
+type userBillingProfileListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -84,53 +82,51 @@ type userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeJS
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingProfileListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrors struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrorsJSON `json:"-"`
+type UserBillingProfileListResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    userBillingProfileListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrors]
-type userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrorsJSON struct {
+// userBillingProfileListResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [UserBillingProfileListResponseEnvelopeErrors]
+type userBillingProfileListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingProfileListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessages struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessagesJSON `json:"-"`
+type UserBillingProfileListResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    userBillingProfileListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessages]
-type userBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessagesJSON struct {
+// userBillingProfileListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [UserBillingProfileListResponseEnvelopeMessages]
+type userBillingProfileListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserBillingProfileListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeSuccess bool
+type UserBillingProfileListResponseEnvelopeSuccess bool
 
 const (
-	UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeSuccessTrue UserBillingProfileUserBillingProfileBillingProfileDetailsResponseEnvelopeSuccess = true
+	UserBillingProfileListResponseEnvelopeSuccessTrue UserBillingProfileListResponseEnvelopeSuccess = true
 )

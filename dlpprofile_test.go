@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDLPProfileDLPProfilesListAllProfiles(t *testing.T) {
+func TestDLPProfileList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestDLPProfileDLPProfilesListAllProfiles(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DLPs.Profiles.DLPProfilesListAllProfiles(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.DLP.Profiles.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -55,7 +55,7 @@ func TestDLPProfileGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.DLPs.Profiles.Get(
+	_, err := client.DLP.Profiles.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",

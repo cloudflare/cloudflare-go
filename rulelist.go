@@ -34,12 +34,25 @@ func NewRuleListService(opts ...option.RequestOption) (r *RuleListService) {
 	return
 }
 
-// Updates the description of a list.
-func (r *RuleListService) Update(ctx context.Context, accountID string, listID string, body RuleListUpdateParams, opts ...option.RequestOption) (res *[]RuleListUpdateResponse, err error) {
+// Creates a new list of the specified type.
+func (r *RuleListService) New(ctx context.Context, accountID string, body RuleListNewParams, opts ...option.RequestOption) (res *[]RuleListNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RuleListUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env RuleListNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches all lists in the account.
+func (r *RuleListService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]RuleListListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RuleListListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,12 +86,12 @@ func (r *RuleListService) Get(ctx context.Context, accountID string, listID stri
 	return
 }
 
-// Creates a new list of the specified type.
-func (r *RuleListService) ListsNewAList(ctx context.Context, accountID string, body RuleListListsNewAListParams, opts ...option.RequestOption) (res *[]RuleListListsNewAListResponse, err error) {
+// Updates the description of a list.
+func (r *RuleListService) Replace(ctx context.Context, accountID string, listID string, body RuleListReplaceParams, opts ...option.RequestOption) (res *[]RuleListReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RuleListListsNewAListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env RuleListReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,20 +99,58 @@ func (r *RuleListService) ListsNewAList(ctx context.Context, accountID string, b
 	return
 }
 
-// Fetches all lists in the account.
-func (r *RuleListService) ListsGetLists(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]RuleListListsGetListsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RuleListListsGetListsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type RuleListNewResponse = interface{}
+
+type RuleListListResponse struct {
+	// The unique ID of the list.
+	ID string `json:"id,required"`
+	// The RFC 3339 timestamp of when the list was created.
+	CreatedOn string `json:"created_on,required"`
+	// The type of the list. Each type supports specific list items (IP addresses,
+	// ASNs, hostnames or redirects).
+	Kind RuleListListResponseKind `json:"kind,required"`
+	// The RFC 3339 timestamp of when the list was last modified.
+	ModifiedOn string `json:"modified_on,required"`
+	// An informative name for the list. Use this name in filter and rule expressions.
+	Name string `json:"name,required"`
+	// The number of items in the list.
+	NumItems float64 `json:"num_items,required"`
+	// An informative summary of the list.
+	Description string `json:"description"`
+	// The number of [filters](/operations/filters-list-filters) referencing the list.
+	NumReferencingFilters float64                  `json:"num_referencing_filters"`
+	JSON                  ruleListListResponseJSON `json:"-"`
 }
 
-type RuleListUpdateResponse = interface{}
+// ruleListListResponseJSON contains the JSON metadata for the struct
+// [RuleListListResponse]
+type ruleListListResponseJSON struct {
+	ID                    apijson.Field
+	CreatedOn             apijson.Field
+	Kind                  apijson.Field
+	ModifiedOn            apijson.Field
+	Name                  apijson.Field
+	NumItems              apijson.Field
+	Description           apijson.Field
+	NumReferencingFilters apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
+}
+
+func (r *RuleListListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type RuleListListResponseKind string
+
+const (
+	RuleListListResponseKindIP       RuleListListResponseKind = "ip"
+	RuleListListResponseKindRedirect RuleListListResponseKind = "redirect"
+	RuleListListResponseKindHostname RuleListListResponseKind = "hostname"
+	RuleListListResponseKindAsn      RuleListListResponseKind = "asn"
+)
 
 type RuleListDeleteResponse struct {
 	// The unique ID of the item in the List.
@@ -121,80 +172,45 @@ func (r *RuleListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 
 type RuleListGetResponse = interface{}
 
-type RuleListListsNewAListResponse = interface{}
+type RuleListReplaceResponse = interface{}
 
-type RuleListListsGetListsResponse struct {
-	// The unique ID of the list.
-	ID string `json:"id,required"`
-	// The RFC 3339 timestamp of when the list was created.
-	CreatedOn string `json:"created_on,required"`
+type RuleListNewParams struct {
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
-	Kind RuleListListsGetListsResponseKind `json:"kind,required"`
-	// The RFC 3339 timestamp of when the list was last modified.
-	ModifiedOn string `json:"modified_on,required"`
+	Kind param.Field[RuleListNewParamsKind] `json:"kind,required"`
 	// An informative name for the list. Use this name in filter and rule expressions.
-	Name string `json:"name,required"`
-	// The number of items in the list.
-	NumItems float64 `json:"num_items,required"`
-	// An informative summary of the list.
-	Description string `json:"description"`
-	// The number of [filters](/operations/filters-list-filters) referencing the list.
-	NumReferencingFilters float64                           `json:"num_referencing_filters"`
-	JSON                  ruleListListsGetListsResponseJSON `json:"-"`
-}
-
-// ruleListListsGetListsResponseJSON contains the JSON metadata for the struct
-// [RuleListListsGetListsResponse]
-type ruleListListsGetListsResponseJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	Kind                  apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NumItems              apijson.Field
-	Description           apijson.Field
-	NumReferencingFilters apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *RuleListListsGetListsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type RuleListListsGetListsResponseKind string
-
-const (
-	RuleListListsGetListsResponseKindIP       RuleListListsGetListsResponseKind = "ip"
-	RuleListListsGetListsResponseKindRedirect RuleListListsGetListsResponseKind = "redirect"
-	RuleListListsGetListsResponseKindHostname RuleListListsGetListsResponseKind = "hostname"
-	RuleListListsGetListsResponseKindAsn      RuleListListsGetListsResponseKind = "asn"
-)
-
-type RuleListUpdateParams struct {
+	Name param.Field[string] `json:"name,required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
 }
 
-func (r RuleListUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r RuleListNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type RuleListUpdateResponseEnvelope struct {
-	Errors   []RuleListUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleListUpdateResponse                 `json:"result,required,nullable"`
+// The type of the list. Each type supports specific list items (IP addresses,
+// ASNs, hostnames or redirects).
+type RuleListNewParamsKind string
+
+const (
+	RuleListNewParamsKindIP       RuleListNewParamsKind = "ip"
+	RuleListNewParamsKindRedirect RuleListNewParamsKind = "redirect"
+	RuleListNewParamsKindHostname RuleListNewParamsKind = "hostname"
+	RuleListNewParamsKindAsn      RuleListNewParamsKind = "asn"
+)
+
+type RuleListNewResponseEnvelope struct {
+	Errors   []RuleListNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []RuleListNewResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success RuleListUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleListUpdateResponseEnvelopeJSON    `json:"-"`
+	Success RuleListNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ruleListNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// ruleListUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RuleListUpdateResponseEnvelope]
-type ruleListUpdateResponseEnvelopeJSON struct {
+// ruleListNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleListNewResponseEnvelope]
+type ruleListNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -203,53 +219,122 @@ type ruleListUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListUpdateResponseEnvelopeErrors struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    ruleListUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type RuleListNewResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    ruleListNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// ruleListUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [RuleListUpdateResponseEnvelopeErrors]
-type ruleListUpdateResponseEnvelopeErrorsJSON struct {
+// ruleListNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RuleListNewResponseEnvelopeErrors]
+type ruleListNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListUpdateResponseEnvelopeMessages struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    ruleListUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type RuleListNewResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    ruleListNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// ruleListUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [RuleListUpdateResponseEnvelopeMessages]
-type ruleListUpdateResponseEnvelopeMessagesJSON struct {
+// ruleListNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleListNewResponseEnvelopeMessages]
+type ruleListNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RuleListUpdateResponseEnvelopeSuccess bool
+type RuleListNewResponseEnvelopeSuccess bool
 
 const (
-	RuleListUpdateResponseEnvelopeSuccessTrue RuleListUpdateResponseEnvelopeSuccess = true
+	RuleListNewResponseEnvelopeSuccessTrue RuleListNewResponseEnvelopeSuccess = true
+)
+
+type RuleListListResponseEnvelope struct {
+	Errors   []RuleListListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []RuleListListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success RuleListListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ruleListListResponseEnvelopeJSON    `json:"-"`
+}
+
+// ruleListListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleListListResponseEnvelope]
+type ruleListListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListListResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    ruleListListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// ruleListListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RuleListListResponseEnvelopeErrors]
+type ruleListListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RuleListListResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    ruleListListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// ruleListListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleListListResponseEnvelopeMessages]
+type ruleListListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RuleListListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RuleListListResponseEnvelopeSuccess bool
+
+const (
+	RuleListListResponseEnvelopeSuccessTrue RuleListListResponseEnvelopeSuccess = true
 )
 
 type RuleListDeleteResponseEnvelope struct {
@@ -390,43 +475,27 @@ const (
 	RuleListGetResponseEnvelopeSuccessTrue RuleListGetResponseEnvelopeSuccess = true
 )
 
-type RuleListListsNewAListParams struct {
-	// The type of the list. Each type supports specific list items (IP addresses,
-	// ASNs, hostnames or redirects).
-	Kind param.Field[RuleListListsNewAListParamsKind] `json:"kind,required"`
-	// An informative name for the list. Use this name in filter and rule expressions.
-	Name param.Field[string] `json:"name,required"`
+type RuleListReplaceParams struct {
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
 }
 
-func (r RuleListListsNewAListParams) MarshalJSON() (data []byte, err error) {
+func (r RuleListReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of the list. Each type supports specific list items (IP addresses,
-// ASNs, hostnames or redirects).
-type RuleListListsNewAListParamsKind string
-
-const (
-	RuleListListsNewAListParamsKindIP       RuleListListsNewAListParamsKind = "ip"
-	RuleListListsNewAListParamsKindRedirect RuleListListsNewAListParamsKind = "redirect"
-	RuleListListsNewAListParamsKindHostname RuleListListsNewAListParamsKind = "hostname"
-	RuleListListsNewAListParamsKindAsn      RuleListListsNewAListParamsKind = "asn"
-)
-
-type RuleListListsNewAListResponseEnvelope struct {
-	Errors   []RuleListListsNewAListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListListsNewAListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleListListsNewAListResponse                 `json:"result,required,nullable"`
+type RuleListReplaceResponseEnvelope struct {
+	Errors   []RuleListReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RuleListReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   []RuleListReplaceResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success RuleListListsNewAListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleListListsNewAListResponseEnvelopeJSON    `json:"-"`
+	Success RuleListReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    ruleListReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// ruleListListsNewAListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RuleListListsNewAListResponseEnvelope]
-type ruleListListsNewAListResponseEnvelopeJSON struct {
+// ruleListReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RuleListReplaceResponseEnvelope]
+type ruleListReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -435,120 +504,51 @@ type ruleListListsNewAListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListListsNewAListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListListsNewAListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    ruleListListsNewAListResponseEnvelopeErrorsJSON `json:"-"`
+type RuleListReplaceResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    ruleListReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// ruleListListsNewAListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RuleListListsNewAListResponseEnvelopeErrors]
-type ruleListListsNewAListResponseEnvelopeErrorsJSON struct {
+// ruleListReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RuleListReplaceResponseEnvelopeErrors]
+type ruleListReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListListsNewAListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RuleListListsNewAListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    ruleListListsNewAListResponseEnvelopeMessagesJSON `json:"-"`
+type RuleListReplaceResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    ruleListReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// ruleListListsNewAListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RuleListListsNewAListResponseEnvelopeMessages]
-type ruleListListsNewAListResponseEnvelopeMessagesJSON struct {
+// ruleListReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RuleListReplaceResponseEnvelopeMessages]
+type ruleListReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleListListsNewAListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *RuleListReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RuleListListsNewAListResponseEnvelopeSuccess bool
+type RuleListReplaceResponseEnvelopeSuccess bool
 
 const (
-	RuleListListsNewAListResponseEnvelopeSuccessTrue RuleListListsNewAListResponseEnvelopeSuccess = true
-)
-
-type RuleListListsGetListsResponseEnvelope struct {
-	Errors   []RuleListListsGetListsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RuleListListsGetListsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleListListsGetListsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success RuleListListsGetListsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    ruleListListsGetListsResponseEnvelopeJSON    `json:"-"`
-}
-
-// ruleListListsGetListsResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RuleListListsGetListsResponseEnvelope]
-type ruleListListsGetListsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListListsGetListsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListListsGetListsResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    ruleListListsGetListsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// ruleListListsGetListsResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RuleListListsGetListsResponseEnvelopeErrors]
-type ruleListListsGetListsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListListsGetListsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RuleListListsGetListsResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    ruleListListsGetListsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// ruleListListsGetListsResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RuleListListsGetListsResponseEnvelopeMessages]
-type ruleListListsGetListsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListListsGetListsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RuleListListsGetListsResponseEnvelopeSuccess bool
-
-const (
-	RuleListListsGetListsResponseEnvelopeSuccessTrue RuleListListsGetListsResponseEnvelopeSuccess = true
+	RuleListReplaceResponseEnvelopeSuccessTrue RuleListReplaceResponseEnvelopeSuccess = true
 )

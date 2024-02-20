@@ -32,9 +32,9 @@ func NewDiagnosticTracerouteService(opts ...option.RequestOption) (r *Diagnostic
 }
 
 // Run traceroutes from Cloudflare colos.
-func (r *DiagnosticTracerouteService) DiagnosticsTraceroute(ctx context.Context, accountID string, body DiagnosticTracerouteDiagnosticsTracerouteParams, opts ...option.RequestOption) (res *[]DiagnosticTracerouteDiagnosticsTracerouteResponse, err error) {
+func (r *DiagnosticTracerouteService) New(ctx context.Context, accountID string, body DiagnosticTracerouteNewParams, opts ...option.RequestOption) (res *[]DiagnosticTracerouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelope
+	var env DiagnosticTracerouteNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/diagnostics/traceroute", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -44,41 +44,41 @@ func (r *DiagnosticTracerouteService) DiagnosticsTraceroute(ctx context.Context,
 	return
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponse struct {
-	Colos []DiagnosticTracerouteDiagnosticsTracerouteResponseColo `json:"colos"`
+type DiagnosticTracerouteNewResponse struct {
+	Colos []DiagnosticTracerouteNewResponseColo `json:"colos"`
 	// The target hostname, IPv6, or IPv6 address.
-	Target string                                                `json:"target"`
-	JSON   diagnosticTracerouteDiagnosticsTracerouteResponseJSON `json:"-"`
+	Target string                              `json:"target"`
+	JSON   diagnosticTracerouteNewResponseJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseJSON contains the JSON metadata
-// for the struct [DiagnosticTracerouteDiagnosticsTracerouteResponse]
-type diagnosticTracerouteDiagnosticsTracerouteResponseJSON struct {
+// diagnosticTracerouteNewResponseJSON contains the JSON metadata for the struct
+// [DiagnosticTracerouteNewResponse]
+type diagnosticTracerouteNewResponseJSON struct {
 	Colos       apijson.Field
 	Target      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseColo struct {
-	Colo DiagnosticTracerouteDiagnosticsTracerouteResponseColosColo `json:"colo"`
+type DiagnosticTracerouteNewResponseColo struct {
+	Colo DiagnosticTracerouteNewResponseColosColo `json:"colo"`
 	// Errors resulting from collecting traceroute from colo to target.
-	Error DiagnosticTracerouteDiagnosticsTracerouteResponseColosError `json:"error"`
-	Hops  []DiagnosticTracerouteDiagnosticsTracerouteResponseColosHop `json:"hops"`
+	Error DiagnosticTracerouteNewResponseColosError `json:"error"`
+	Hops  []DiagnosticTracerouteNewResponseColosHop `json:"hops"`
 	// Aggregated statistics from all hops about the target.
 	TargetSummary interface{} `json:"target_summary"`
 	// Total time of traceroute in ms.
-	TracerouteTimeMs int64                                                     `json:"traceroute_time_ms"`
-	JSON             diagnosticTracerouteDiagnosticsTracerouteResponseColoJSON `json:"-"`
+	TracerouteTimeMs int64                                   `json:"traceroute_time_ms"`
+	JSON             diagnosticTracerouteNewResponseColoJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseColoJSON contains the JSON
-// metadata for the struct [DiagnosticTracerouteDiagnosticsTracerouteResponseColo]
-type diagnosticTracerouteDiagnosticsTracerouteResponseColoJSON struct {
+// diagnosticTracerouteNewResponseColoJSON contains the JSON metadata for the
+// struct [DiagnosticTracerouteNewResponseColo]
+type diagnosticTracerouteNewResponseColoJSON struct {
 	Colo             apijson.Field
 	Error            apijson.Field
 	Hops             apijson.Field
@@ -88,59 +88,57 @@ type diagnosticTracerouteDiagnosticsTracerouteResponseColoJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseColosColo struct {
+type DiagnosticTracerouteNewResponseColosColo struct {
 	// Source colo city.
 	City string `json:"city"`
 	// Source colo name.
-	Name string                                                         `json:"name"`
-	JSON diagnosticTracerouteDiagnosticsTracerouteResponseColosColoJSON `json:"-"`
+	Name string                                       `json:"name"`
+	JSON diagnosticTracerouteNewResponseColosColoJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseColosColoJSON contains the JSON
-// metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseColosColo]
-type diagnosticTracerouteDiagnosticsTracerouteResponseColosColoJSON struct {
+// diagnosticTracerouteNewResponseColosColoJSON contains the JSON metadata for the
+// struct [DiagnosticTracerouteNewResponseColosColo]
+type diagnosticTracerouteNewResponseColosColoJSON struct {
 	City        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseColosColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseColosColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Errors resulting from collecting traceroute from colo to target.
-type DiagnosticTracerouteDiagnosticsTracerouteResponseColosError string
+type DiagnosticTracerouteNewResponseColosError string
 
 const (
-	DiagnosticTracerouteDiagnosticsTracerouteResponseColosErrorEmpty                             DiagnosticTracerouteDiagnosticsTracerouteResponseColosError = ""
-	DiagnosticTracerouteDiagnosticsTracerouteResponseColosErrorCouldNotGatherTracerouteDataCode1 DiagnosticTracerouteDiagnosticsTracerouteResponseColosError = "Could not gather traceroute data: Code 1"
-	DiagnosticTracerouteDiagnosticsTracerouteResponseColosErrorCouldNotGatherTracerouteDataCode2 DiagnosticTracerouteDiagnosticsTracerouteResponseColosError = "Could not gather traceroute data: Code 2"
-	DiagnosticTracerouteDiagnosticsTracerouteResponseColosErrorCouldNotGatherTracerouteDataCode3 DiagnosticTracerouteDiagnosticsTracerouteResponseColosError = "Could not gather traceroute data: Code 3"
-	DiagnosticTracerouteDiagnosticsTracerouteResponseColosErrorCouldNotGatherTracerouteDataCode4 DiagnosticTracerouteDiagnosticsTracerouteResponseColosError = "Could not gather traceroute data: Code 4"
+	DiagnosticTracerouteNewResponseColosErrorEmpty                             DiagnosticTracerouteNewResponseColosError = ""
+	DiagnosticTracerouteNewResponseColosErrorCouldNotGatherTracerouteDataCode1 DiagnosticTracerouteNewResponseColosError = "Could not gather traceroute data: Code 1"
+	DiagnosticTracerouteNewResponseColosErrorCouldNotGatherTracerouteDataCode2 DiagnosticTracerouteNewResponseColosError = "Could not gather traceroute data: Code 2"
+	DiagnosticTracerouteNewResponseColosErrorCouldNotGatherTracerouteDataCode3 DiagnosticTracerouteNewResponseColosError = "Could not gather traceroute data: Code 3"
+	DiagnosticTracerouteNewResponseColosErrorCouldNotGatherTracerouteDataCode4 DiagnosticTracerouteNewResponseColosError = "Could not gather traceroute data: Code 4"
 )
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseColosHop struct {
+type DiagnosticTracerouteNewResponseColosHop struct {
 	// An array of node objects.
-	Nodes []DiagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNode `json:"nodes"`
+	Nodes []DiagnosticTracerouteNewResponseColosHopsNode `json:"nodes"`
 	// Number of packets where no response was received.
 	PacketsLost int64 `json:"packets_lost"`
 	// Number of packets sent with specified TTL.
 	PacketsSent int64 `json:"packets_sent"`
 	// The time to live (TTL).
-	PacketsTTL int64                                                         `json:"packets_ttl"`
-	JSON       diagnosticTracerouteDiagnosticsTracerouteResponseColosHopJSON `json:"-"`
+	PacketsTTL int64                                       `json:"packets_ttl"`
+	JSON       diagnosticTracerouteNewResponseColosHopJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseColosHopJSON contains the JSON
-// metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseColosHop]
-type diagnosticTracerouteDiagnosticsTracerouteResponseColosHopJSON struct {
+// diagnosticTracerouteNewResponseColosHopJSON contains the JSON metadata for the
+// struct [DiagnosticTracerouteNewResponseColosHop]
+type diagnosticTracerouteNewResponseColosHopJSON struct {
 	Nodes       apijson.Field
 	PacketsLost apijson.Field
 	PacketsSent apijson.Field
@@ -149,11 +147,11 @@ type diagnosticTracerouteDiagnosticsTracerouteResponseColosHopJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseColosHop) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseColosHop) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNode struct {
+type DiagnosticTracerouteNewResponseColosHopsNode struct {
 	// AS number associated with the node object.
 	Asn string `json:"asn"`
 	// IP address of the node.
@@ -173,14 +171,13 @@ type DiagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNode struct {
 	// Number of packets with a response from this node.
 	PacketCount int64 `json:"packet_count"`
 	// Standard deviation of the RTTs in ms.
-	StdDevRttMs float64                                                            `json:"std_dev_rtt_ms"`
-	JSON        diagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNodeJSON `json:"-"`
+	StdDevRttMs float64                                          `json:"std_dev_rtt_ms"`
+	JSON        diagnosticTracerouteNewResponseColosHopsNodeJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNodeJSON contains the
-// JSON metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNode]
-type diagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNodeJSON struct {
+// diagnosticTracerouteNewResponseColosHopsNodeJSON contains the JSON metadata for
+// the struct [DiagnosticTracerouteNewResponseColosHopsNode]
+type diagnosticTracerouteNewResponseColosHopsNodeJSON struct {
 	Asn         apijson.Field
 	IP          apijson.Field
 	Labels      apijson.Field
@@ -194,27 +191,27 @@ type diagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNodeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseColosHopsNode) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseColosHopsNode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteParams struct {
+type DiagnosticTracerouteNewParams struct {
 	Targets param.Field[[]string] `json:"targets,required"`
 	// If no source colo names specified, all colos will be used. China colos are
 	// unavailable for traceroutes.
-	Colos   param.Field[[]string]                                               `json:"colos"`
-	Options param.Field[DiagnosticTracerouteDiagnosticsTracerouteParamsOptions] `json:"options"`
+	Colos   param.Field[[]string]                             `json:"colos"`
+	Options param.Field[DiagnosticTracerouteNewParamsOptions] `json:"options"`
 }
 
-func (r DiagnosticTracerouteDiagnosticsTracerouteParams) MarshalJSON() (data []byte, err error) {
+func (r DiagnosticTracerouteNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteParamsOptions struct {
+type DiagnosticTracerouteNewParamsOptions struct {
 	// Max TTL.
 	MaxTTL param.Field[int64] `json:"max_ttl"`
 	// Type of packet sent.
-	PacketType param.Field[DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType] `json:"packet_type"`
+	PacketType param.Field[DiagnosticTracerouteNewParamsOptionsPacketType] `json:"packet_type"`
 	// Number of packets sent at each TTL.
 	PacketsPerTTL param.Field[int64] `json:"packets_per_ttl"`
 	// For UDP and TCP, specifies the destination port. For ICMP, specifies the initial
@@ -225,35 +222,34 @@ type DiagnosticTracerouteDiagnosticsTracerouteParamsOptions struct {
 	WaitTime param.Field[int64] `json:"wait_time"`
 }
 
-func (r DiagnosticTracerouteDiagnosticsTracerouteParamsOptions) MarshalJSON() (data []byte, err error) {
+func (r DiagnosticTracerouteNewParamsOptions) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Type of packet sent.
-type DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType string
+type DiagnosticTracerouteNewParamsOptionsPacketType string
 
 const (
-	DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeIcmp    DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType = "icmp"
-	DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeTcp     DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType = "tcp"
-	DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeUdp     DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType = "udp"
-	DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeGre     DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType = "gre"
-	DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketTypeGreIcmp DiagnosticTracerouteDiagnosticsTracerouteParamsOptionsPacketType = "gre+icmp"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeIcmp    DiagnosticTracerouteNewParamsOptionsPacketType = "icmp"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeTcp     DiagnosticTracerouteNewParamsOptionsPacketType = "tcp"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeUdp     DiagnosticTracerouteNewParamsOptionsPacketType = "udp"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeGre     DiagnosticTracerouteNewParamsOptionsPacketType = "gre"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeGreIcmp DiagnosticTracerouteNewParamsOptionsPacketType = "gre+icmp"
 )
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelope struct {
-	Errors   []DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DiagnosticTracerouteDiagnosticsTracerouteResponse                 `json:"result,required,nullable"`
+type DiagnosticTracerouteNewResponseEnvelope struct {
+	Errors   []DiagnosticTracerouteNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DiagnosticTracerouteNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DiagnosticTracerouteNewResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeJSON       `json:"-"`
+	Success    DiagnosticTracerouteNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DiagnosticTracerouteNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       diagnosticTracerouteNewResponseEnvelopeJSON       `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelope]
-type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeJSON struct {
+// diagnosticTracerouteNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DiagnosticTracerouteNewResponseEnvelope]
+type diagnosticTracerouteNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -263,58 +259,56 @@ type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrors struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrorsJSON `json:"-"`
+type DiagnosticTracerouteNewResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    diagnosticTracerouteNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrors]
-type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrorsJSON struct {
+// diagnosticTracerouteNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DiagnosticTracerouteNewResponseEnvelopeErrors]
+type diagnosticTracerouteNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessages struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessagesJSON `json:"-"`
+type DiagnosticTracerouteNewResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    diagnosticTracerouteNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessages]
-type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessagesJSON struct {
+// diagnosticTracerouteNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DiagnosticTracerouteNewResponseEnvelopeMessages]
+type diagnosticTracerouteNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeSuccess bool
+type DiagnosticTracerouteNewResponseEnvelopeSuccess bool
 
 const (
-	DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeSuccessTrue DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeSuccess = true
+	DiagnosticTracerouteNewResponseEnvelopeSuccessTrue DiagnosticTracerouteNewResponseEnvelopeSuccess = true
 )
 
-type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfo struct {
+type DiagnosticTracerouteNewResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -322,14 +316,13 @@ type DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfo struct 
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                 `json:"total_count"`
-	JSON       diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                               `json:"total_count"`
+	JSON       diagnosticTracerouteNewResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfoJSON contains
-// the JSON metadata for the struct
-// [DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfo]
-type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfoJSON struct {
+// diagnosticTracerouteNewResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [DiagnosticTracerouteNewResponseEnvelopeResultInfo]
+type diagnosticTracerouteNewResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -338,6 +331,6 @@ type diagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfoJSON str
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DiagnosticTracerouteDiagnosticsTracerouteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *DiagnosticTracerouteNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

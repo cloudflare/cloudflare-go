@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStorageKvNamespaceUpdate(t *testing.T) {
+func TestStorageKvNamespaceNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,10 @@ func TestStorageKvNamespaceUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Update(
+	_, err := client.Storage.Kv.Namespaces.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"0f2ac74b498b48028cb68387c421e279",
-		cloudflare.StorageKvNamespaceUpdateParams{
+		cloudflare.StorageKvNamespaceNewParams{
 			Title: cloudflare.F("My Own Namespace"),
 		},
 	)
@@ -111,7 +110,7 @@ func TestStorageKvNamespaceDelete(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceWorkersKvNamespaceNewANamespace(t *testing.T) {
+func TestStorageKvNamespaceReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -127,10 +126,11 @@ func TestStorageKvNamespaceWorkersKvNamespaceNewANamespace(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Storage.Kv.Namespaces.WorkersKvNamespaceNewANamespace(
+	_, err := client.Storage.Kv.Namespaces.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageKvNamespaceWorkersKvNamespaceNewANamespaceParams{
+		"0f2ac74b498b48028cb68387c421e279",
+		cloudflare.StorageKvNamespaceReplaceParams{
 			Title: cloudflare.F("My Own Namespace"),
 		},
 	)

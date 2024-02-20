@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAlertingV3HistoryNotificationHistoryListHistoryWithOptionalParams(t *testing.T) {
+func TestAlertingV3HistoryListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestAlertingV3HistoryNotificationHistoryListHistoryWithOptionalParams(t *te
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Alerting.V3s.Histories.NotificationHistoryListHistory(
+	_, err := client.Alerting.V3.Histories.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AlertingV3HistoryNotificationHistoryListHistoryParams{
+		cloudflare.AlertingV3HistoryListParams{
 			Before:  cloudflare.F(time.Now()),
 			Page:    cloudflare.F(1.000000),
 			PerPage: cloudflare.F(5.000000),

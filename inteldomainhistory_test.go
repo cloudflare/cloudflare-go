@@ -29,7 +29,7 @@ func TestIntelDomainHistoryListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Intels.DomainHistories.List(
+	_, err := client.Intel.DomainHistories.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.IntelDomainHistoryListParams{

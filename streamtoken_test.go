@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStreamTokenStreamVideosNewSignedURLTokensForVideosWithOptionalParams(t *testing.T) {
+func TestStreamTokenNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,27 +29,27 @@ func TestStreamTokenStreamVideosNewSignedURLTokensForVideosWithOptionalParams(t 
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Tokens.StreamVideosNewSignedURLTokensForVideos(
+	_, err := client.Stream.Tokens.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
-		cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParams{
+		cloudflare.StreamTokenNewParams{
 			ID: cloudflare.F("ab0d4ef71g4425f8dcba9041231813000"),
-			AccessRules: cloudflare.F([]cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRule{{
-				Action:  cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesActionBlock),
+			AccessRules: cloudflare.F([]cloudflare.StreamTokenNewParamsAccessRule{{
+				Action:  cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesActionBlock),
 				Country: cloudflare.F([]string{"US", "MX"}),
 				IP:      cloudflare.F([]string{"string", "string", "string"}),
-				Type:    cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeIPGeoipCountry),
+				Type:    cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesTypeIPGeoipCountry),
 			}, {
-				Action:  cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesActionAllow),
+				Action:  cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesActionAllow),
 				Country: cloudflare.F([]string{"string", "string", "string"}),
 				IP:      cloudflare.F([]string{"93.184.216.0/24", "2400:cb00::/32"}),
-				Type:    cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeIPSrc),
+				Type:    cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesTypeIPSrc),
 			}, {
-				Action:  cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesActionBlock),
+				Action:  cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesActionBlock),
 				Country: cloudflare.F([]string{"string", "string", "string"}),
 				IP:      cloudflare.F([]string{"string", "string", "string"}),
-				Type:    cloudflare.F(cloudflare.StreamTokenStreamVideosNewSignedURLTokensForVideosParamsAccessRulesTypeAny),
+				Type:    cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesTypeAny),
 			}}),
 			Downloadable: cloudflare.F(true),
 			Exp:          cloudflare.F(int64(0)),

@@ -34,6 +34,20 @@ func NewRulesetRuleService(opts ...option.RequestOption) (r *RulesetRuleService)
 	return
 }
 
+// Adds a new rule to an account or zone ruleset. The rule will be added to the end
+// of the existing list of rules in the ruleset by default.
+func (r *RulesetRuleService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, body RulesetRuleNewParams, opts ...option.RequestOption) (res *RulesetRuleNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RulesetRuleNewResponseEnvelope
+	path := fmt.Sprintf("%s/%s/rulesets/%s/rules", accountOrZone, accountOrZoneID, rulesetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates an existing rule in an account ruleset.
 func (r *RulesetRuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RulesetRuleUpdateParams, opts ...option.RequestOption) (res *RulesetRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -60,18 +74,728 @@ func (r *RulesetRuleService) Delete(ctx context.Context, accountOrZone string, a
 	return
 }
 
-// Adds a new rule to an account or zone ruleset. The rule will be added to the end
-// of the existing list of rules in the ruleset by default.
-func (r *RulesetRuleService) AccountRulesetsNewAnAccountRulesetRule(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, body RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams, opts ...option.RequestOption) (res *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelope
-	path := fmt.Sprintf("%s/%s/rulesets/%s/rules", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+// A result.
+type RulesetRuleNewResponse struct {
+	// The unique ID of the ruleset.
+	ID string `json:"id,required"`
+	// The kind of the ruleset.
+	Kind RulesetRuleNewResponseKind `json:"kind,required"`
+	// The timestamp of when the ruleset was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The human-readable name of the ruleset.
+	Name string `json:"name,required"`
+	// The phase of the ruleset.
+	Phase RulesetRuleNewResponsePhase `json:"phase,required"`
+	// The list of rules in the ruleset.
+	Rules []RulesetRuleNewResponseRule `json:"rules,required"`
+	// The version of the ruleset.
+	Version string `json:"version,required"`
+	// An informative description of the ruleset.
+	Description string                     `json:"description"`
+	JSON        rulesetRuleNewResponseJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseJSON contains the JSON metadata for the struct
+// [RulesetRuleNewResponse]
+type rulesetRuleNewResponseJSON struct {
+	ID          apijson.Field
+	Kind        apijson.Field
+	LastUpdated apijson.Field
+	Name        apijson.Field
+	Phase       apijson.Field
+	Rules       apijson.Field
+	Version     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The kind of the ruleset.
+type RulesetRuleNewResponseKind string
+
+const (
+	RulesetRuleNewResponseKindManaged RulesetRuleNewResponseKind = "managed"
+	RulesetRuleNewResponseKindCustom  RulesetRuleNewResponseKind = "custom"
+	RulesetRuleNewResponseKindRoot    RulesetRuleNewResponseKind = "root"
+	RulesetRuleNewResponseKindZone    RulesetRuleNewResponseKind = "zone"
+)
+
+// The phase of the ruleset.
+type RulesetRuleNewResponsePhase string
+
+const (
+	RulesetRuleNewResponsePhaseDDOSL4                         RulesetRuleNewResponsePhase = "ddos_l4"
+	RulesetRuleNewResponsePhaseDDOSL7                         RulesetRuleNewResponsePhase = "ddos_l7"
+	RulesetRuleNewResponsePhaseHTTPConfigSettings             RulesetRuleNewResponsePhase = "http_config_settings"
+	RulesetRuleNewResponsePhaseHTTPCustomErrors               RulesetRuleNewResponsePhase = "http_custom_errors"
+	RulesetRuleNewResponsePhaseHTTPLogCustomFields            RulesetRuleNewResponsePhase = "http_log_custom_fields"
+	RulesetRuleNewResponsePhaseHTTPRatelimit                  RulesetRuleNewResponsePhase = "http_ratelimit"
+	RulesetRuleNewResponsePhaseHTTPRequestCacheSettings       RulesetRuleNewResponsePhase = "http_request_cache_settings"
+	RulesetRuleNewResponsePhaseHTTPRequestDynamicRedirect     RulesetRuleNewResponsePhase = "http_request_dynamic_redirect"
+	RulesetRuleNewResponsePhaseHTTPRequestFirewallCustom      RulesetRuleNewResponsePhase = "http_request_firewall_custom"
+	RulesetRuleNewResponsePhaseHTTPRequestFirewallManaged     RulesetRuleNewResponsePhase = "http_request_firewall_managed"
+	RulesetRuleNewResponsePhaseHTTPRequestLateTransform       RulesetRuleNewResponsePhase = "http_request_late_transform"
+	RulesetRuleNewResponsePhaseHTTPRequestOrigin              RulesetRuleNewResponsePhase = "http_request_origin"
+	RulesetRuleNewResponsePhaseHTTPRequestRedirect            RulesetRuleNewResponsePhase = "http_request_redirect"
+	RulesetRuleNewResponsePhaseHTTPRequestSanitize            RulesetRuleNewResponsePhase = "http_request_sanitize"
+	RulesetRuleNewResponsePhaseHTTPRequestSbfm                RulesetRuleNewResponsePhase = "http_request_sbfm"
+	RulesetRuleNewResponsePhaseHTTPRequestSelectConfiguration RulesetRuleNewResponsePhase = "http_request_select_configuration"
+	RulesetRuleNewResponsePhaseHTTPRequestTransform           RulesetRuleNewResponsePhase = "http_request_transform"
+	RulesetRuleNewResponsePhaseHTTPResponseCompression        RulesetRuleNewResponsePhase = "http_response_compression"
+	RulesetRuleNewResponsePhaseHTTPResponseFirewallManaged    RulesetRuleNewResponsePhase = "http_response_firewall_managed"
+	RulesetRuleNewResponsePhaseHTTPResponseHeadersTransform   RulesetRuleNewResponsePhase = "http_response_headers_transform"
+	RulesetRuleNewResponsePhaseMagicTransit                   RulesetRuleNewResponsePhase = "magic_transit"
+	RulesetRuleNewResponsePhaseMagicTransitIDsManaged         RulesetRuleNewResponsePhase = "magic_transit_ids_managed"
+	RulesetRuleNewResponsePhaseMagicTransitManaged            RulesetRuleNewResponsePhase = "magic_transit_managed"
+)
+
+// Union satisfied by [RulesetRuleNewResponseRulesRulesetsBlockRule],
+// [RulesetRuleNewResponseRulesRulesetsExecuteRule],
+// [RulesetRuleNewResponseRulesRulesetsLogRule] or
+// [RulesetRuleNewResponseRulesRulesetsSkipRule].
+type RulesetRuleNewResponseRule interface {
+	implementsRulesetRuleNewResponseRule()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RulesetRuleNewResponseRule)(nil)).Elem(),
+		"action",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetRuleNewResponseRulesRulesetsBlockRule{}),
+			DiscriminatorValue: "block",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetRuleNewResponseRulesRulesetsExecuteRule{}),
+			DiscriminatorValue: "execute",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetRuleNewResponseRulesRulesetsLogRule{}),
+			DiscriminatorValue: "log",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(RulesetRuleNewResponseRulesRulesetsSkipRule{}),
+			DiscriminatorValue: "skip",
+		},
+	)
+}
+
+type RulesetRuleNewResponseRulesRulesetsBlockRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetRuleNewResponseRulesRulesetsBlockRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetRuleNewResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetRuleNewResponseRulesRulesetsBlockRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                           `json:"ref"`
+	JSON rulesetRuleNewResponseRulesRulesetsBlockRuleJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsBlockRuleJSON contains the JSON metadata for
+// the struct [RulesetRuleNewResponseRulesRulesetsBlockRule]
+type rulesetRuleNewResponseRulesRulesetsBlockRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetRuleNewResponseRulesRulesetsBlockRule) implementsRulesetRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetRuleNewResponseRulesRulesetsBlockRuleAction string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsBlockRuleActionBlock RulesetRuleNewResponseRulesRulesetsBlockRuleAction = "block"
+)
+
+// The parameters configuring the rule's action.
+type RulesetRuleNewResponseRulesRulesetsBlockRuleActionParameters struct {
+	// The response to show when the block is applied.
+	Response RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
+	JSON     rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsBlockRuleActionParameters]
+type rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersJSON struct {
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The response to show when the block is applied.
+type RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse struct {
+	// The content to return.
+	Content string `json:"content,required"`
+	// The type of the content to return.
+	ContentType string `json:"content_type,required"`
+	// The status code to return.
+	StatusCode int64                                                                    `json:"status_code,required"`
+	JSON       rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON
+// contains the JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse]
+type rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
+	Content     apijson.Field
+	ContentType apijson.Field
+	StatusCode  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// An object configuring the rule's logging behavior.
+type RulesetRuleNewResponseRulesRulesetsBlockRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                    `json:"enabled,required"`
+	JSON    rulesetRuleNewResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsBlockRuleLoggingJSON contains the JSON
+// metadata for the struct [RulesetRuleNewResponseRulesRulesetsBlockRuleLogging]
+type rulesetRuleNewResponseRulesRulesetsBlockRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetRuleNewResponseRulesRulesetsExecuteRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetRuleNewResponseRulesRulesetsExecuteRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetRuleNewResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                             `json:"ref"`
+	JSON rulesetRuleNewResponseRulesRulesetsExecuteRuleJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleJSON contains the JSON metadata
+// for the struct [RulesetRuleNewResponseRulesRulesetsExecuteRule]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetRuleNewResponseRulesRulesetsExecuteRule) implementsRulesetRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleAction string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionExecute RulesetRuleNewResponseRulesRulesetsExecuteRuleAction = "execute"
+)
+
+// The parameters configuring the rule's action.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParameters struct {
+	// The ID of the ruleset to execute.
+	ID string `json:"id,required"`
+	// The configuration to use for matched data logging.
+	MatchedData RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
+	// A set of overrides to apply to the target ruleset.
+	Overrides RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
+	JSON      rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParameters]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
+	ID          apijson.Field
+	MatchedData apijson.Field
+	Overrides   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration to use for matched data logging.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
+	// The public key to encrypt matched data logs with.
+	PublicKey string                                                                        `json:"public_key,required"`
+	JSON      rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON
+// contains the JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
+	PublicKey   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A set of overrides to apply to the target ruleset.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
+	// An action to override all rules with. This option has lower precedence than rule
+	// and category overrides.
+	Action string `json:"action"`
+	// A list of category-level overrides. This option has the second-highest
+	// precedence after rule-level overrides.
+	Categories []RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
+	// Whether to enable execution of all rules. This option has lower precedence than
+	// rule and category overrides.
+	Enabled bool `json:"enabled"`
+	// A list of rule-level overrides. This option has the highest precedence.
+	Rules []RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
+	// A sensitivity level to set for all rules. This option has lower precedence than
+	// rule and category overrides and is only applicable for DDoS phases.
+	SensitivityLevel RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON
+// contains the JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
+	Action           apijson.Field
+	Categories       apijson.Field
+	Enabled          apijson.Field
+	Rules            apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A category-level override
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
+	// The name of the category to override.
+	Category string `json:"category,required"`
+	// The action to override rules in the category with.
+	Action string `json:"action"`
+	// Whether to enable execution of rules in the category.
+	Enabled bool `json:"enabled"`
+	// The sensitivity level to use for rules in the category.
+	SensitivityLevel RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
+// contains the JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
+	Category         apijson.Field
+	Action           apijson.Field
+	Enabled          apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The sensitivity level to use for rules in the category.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+)
+
+// A rule-level override
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
+	// The ID of the rule to override.
+	ID string `json:"id,required"`
+	// The action to override the rule with.
+	Action string `json:"action"`
+	// Whether to enable execution of the rule.
+	Enabled bool `json:"enabled"`
+	// The score threshold to use for the rule.
+	ScoreThreshold int64 `json:"score_threshold"`
+	// The sensitivity level to use for the rule.
+	SensitivityLevel RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
+	JSON             rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
+// contains the JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
+	ID               apijson.Field
+	Action           apijson.Field
+	Enabled          apijson.Field
+	ScoreThreshold   apijson.Field
+	SensitivityLevel apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The sensitivity level to use for the rule.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+)
+
+// A sensitivity level to set for all rules. This option has lower precedence than
+// rule and category overrides and is only applicable for DDoS phases.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetRuleNewResponseRulesRulesetsExecuteRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                      `json:"enabled,required"`
+	JSON    rulesetRuleNewResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsExecuteRuleLoggingJSON contains the JSON
+// metadata for the struct [RulesetRuleNewResponseRulesRulesetsExecuteRuleLogging]
+type rulesetRuleNewResponseRulesRulesetsExecuteRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetRuleNewResponseRulesRulesetsLogRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetRuleNewResponseRulesRulesetsLogRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters interface{} `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetRuleNewResponseRulesRulesetsLogRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                         `json:"ref"`
+	JSON rulesetRuleNewResponseRulesRulesetsLogRuleJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsLogRuleJSON contains the JSON metadata for
+// the struct [RulesetRuleNewResponseRulesRulesetsLogRule]
+type rulesetRuleNewResponseRulesRulesetsLogRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetRuleNewResponseRulesRulesetsLogRule) implementsRulesetRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetRuleNewResponseRulesRulesetsLogRuleAction string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsLogRuleActionLog RulesetRuleNewResponseRulesRulesetsLogRuleAction = "log"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetRuleNewResponseRulesRulesetsLogRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                  `json:"enabled,required"`
+	JSON    rulesetRuleNewResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsLogRuleLoggingJSON contains the JSON metadata
+// for the struct [RulesetRuleNewResponseRulesRulesetsLogRuleLogging]
+type rulesetRuleNewResponseRulesRulesetsLogRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetRuleNewResponseRulesRulesetsSkipRule struct {
+	// The timestamp of when the rule was last modified.
+	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
+	// The version of the rule.
+	Version string `json:"version,required"`
+	// The unique ID of the rule.
+	ID string `json:"id"`
+	// The action to perform when the rule matches.
+	Action RulesetRuleNewResponseRulesRulesetsSkipRuleAction `json:"action"`
+	// The parameters configuring the rule's action.
+	ActionParameters RulesetRuleNewResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
+	// The categories of the rule.
+	Categories []string `json:"categories"`
+	// An informative description of the rule.
+	Description string `json:"description"`
+	// Whether the rule should be executed.
+	Enabled bool `json:"enabled"`
+	// The expression defining which traffic will match the rule.
+	Expression string `json:"expression"`
+	// An object configuring the rule's logging behavior.
+	Logging RulesetRuleNewResponseRulesRulesetsSkipRuleLogging `json:"logging"`
+	// The reference of the rule (the rule ID by default).
+	Ref  string                                          `json:"ref"`
+	JSON rulesetRuleNewResponseRulesRulesetsSkipRuleJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsSkipRuleJSON contains the JSON metadata for
+// the struct [RulesetRuleNewResponseRulesRulesetsSkipRule]
+type rulesetRuleNewResponseRulesRulesetsSkipRuleJSON struct {
+	LastUpdated      apijson.Field
+	Version          apijson.Field
+	ID               apijson.Field
+	Action           apijson.Field
+	ActionParameters apijson.Field
+	Categories       apijson.Field
+	Description      apijson.Field
+	Enabled          apijson.Field
+	Expression       apijson.Field
+	Logging          apijson.Field
+	Ref              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r RulesetRuleNewResponseRulesRulesetsSkipRule) implementsRulesetRuleNewResponseRule() {}
+
+// The action to perform when the rule matches.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleAction string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionSkip RulesetRuleNewResponseRulesRulesetsSkipRuleAction = "skip"
+)
+
+// The parameters configuring the rule's action.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleActionParameters struct {
+	// A list of phases to skip the execution of. This option is incompatible with the
+	// ruleset and rulesets options.
+	Phases []RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
+	// A list of legacy security products to skip the execution of.
+	Products []RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
+	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
+	// execution of. This option is incompatible with the ruleset option.
+	Rules map[string][]string `json:"rules"`
+	// A ruleset to skip the execution of. This option is incompatible with the
+	// rulesets, rules and phases options.
+	Ruleset RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
+	// A list of ruleset IDs to skip the execution of. This option is incompatible with
+	// the ruleset and phases options.
+	Rulesets []string                                                        `json:"rulesets"`
+	JSON     rulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersJSON contains the
+// JSON metadata for the struct
+// [RulesetRuleNewResponseRulesRulesetsSkipRuleActionParameters]
+type rulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersJSON struct {
+	Phases      apijson.Field
+	Products    apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	Rulesets    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A phase to skip the execution of.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+)
+
+// The name of a legacy security product to skip the execution of.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductBic           RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+)
+
+// A ruleset to skip the execution of. This option is incompatible with the
+// rulesets, rules and phases options.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset string
+
+const (
+	RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
+)
+
+// An object configuring the rule's logging behavior.
+type RulesetRuleNewResponseRulesRulesetsSkipRuleLogging struct {
+	// Whether to generate a log when the rule matches.
+	Enabled bool                                                   `json:"enabled,required"`
+	JSON    rulesetRuleNewResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseRulesRulesetsSkipRuleLoggingJSON contains the JSON
+// metadata for the struct [RulesetRuleNewResponseRulesRulesetsSkipRuleLogging]
+type rulesetRuleNewResponseRulesRulesetsSkipRuleLoggingJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // A result.
@@ -1526,744 +2250,519 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A result.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponse struct {
-	// The unique ID of the ruleset.
-	ID string `json:"id,required"`
-	// The kind of the ruleset.
-	Kind RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind `json:"kind,required"`
-	// The timestamp of when the ruleset was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The human-readable name of the ruleset.
-	Name string `json:"name,required"`
-	// The phase of the ruleset.
-	Phase RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase `json:"phase,required"`
-	// The list of rules in the ruleset.
-	Rules []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule `json:"rules,required"`
-	// The version of the ruleset.
-	Version string `json:"version,required"`
-	// An informative description of the ruleset.
-	Description string                                                        `json:"description"`
-	JSON        rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseJSON `json:"-"`
+// This interface is a union satisfied by one of the following:
+// [RulesetRuleNewParamsRulesetsBlockRule],
+// [RulesetRuleNewParamsRulesetsExecuteRule],
+// [RulesetRuleNewParamsRulesetsLogRule], [RulesetRuleNewParamsRulesetsSkipRule].
+type RulesetRuleNewParams interface {
+	ImplementsRulesetRuleNewParams()
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseJSON contains the JSON
-// metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponse]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseJSON struct {
-	ID          apijson.Field
-	Kind        apijson.Field
-	LastUpdated apijson.Field
-	Name        apijson.Field
-	Phase       apijson.Field
-	Rules       apijson.Field
-	Version     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The kind of the ruleset.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKindManaged RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind = "managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKindCustom  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind = "custom"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKindRoot    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind = "root"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKindZone    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseKind = "zone"
-)
-
-// The phase of the ruleset.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseDDOSL4                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "ddos_l4"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseDDOSL7                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "ddos_l7"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPConfigSettings             RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_config_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPCustomErrors               RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_custom_errors"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPLogCustomFields            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_log_custom_fields"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRatelimit                  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_ratelimit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestCacheSettings       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_cache_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestDynamicRedirect     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_dynamic_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestFirewallCustom      RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_firewall_custom"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestFirewallManaged     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestLateTransform       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_late_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestOrigin              RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_origin"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestRedirect            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestSanitize            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_sanitize"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestSbfm                RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_sbfm"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestSelectConfiguration RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_select_configuration"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPRequestTransform           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_request_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPResponseCompression        RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_response_compression"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPResponseFirewallManaged    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_response_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseHTTPResponseHeadersTransform   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "http_response_headers_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseMagicTransit                   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "magic_transit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseMagicTransitIDsManaged         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "magic_transit_ids_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhaseMagicTransitManaged            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponsePhase = "magic_transit_managed"
-)
-
-// Union satisfied by
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule],
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule],
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule]
-// or
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule].
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule interface {
-	implementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule)(nil)).Elem(),
-		"action",
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule{}),
-			DiscriminatorValue: "block",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule{}),
-			DiscriminatorValue: "execute",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule{}),
-			DiscriminatorValue: "log",
-		},
-		apijson.UnionVariant{
-			TypeFilter:         gjson.JSON,
-			Type:               reflect.TypeOf(RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule{}),
-			DiscriminatorValue: "skip",
-		},
-	)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
+type RulesetRuleNewParamsRulesetsBlockRule struct {
 	// The unique ID of the rule.
-	ID string `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleAction `json:"action"`
+	Action param.Field[RulesetRuleNewParamsRulesetsBlockRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
+	ActionParameters param.Field[RulesetRuleNewParamsRulesetsBlockRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description string `json:"description"`
+	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
+	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLogging `json:"logging"`
+	Logging param.Field[RulesetRuleNewParamsRulesetsBlockRuleLogging] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
-	Ref  string                                                                              `json:"ref"`
-	JSON rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleJSON `json:"-"`
+	Ref param.Field[string] `json:"ref"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+func (RulesetRuleNewParamsRulesetsBlockRule) ImplementsRulesetRuleNewParams() {
 
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRule) implementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule() {
 }
 
 // The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleAction string
+type RulesetRuleNewParamsRulesetsBlockRuleAction string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionBlock RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleAction = "block"
+	RulesetRuleNewParamsRulesetsBlockRuleActionBlock RulesetRuleNewParamsRulesetsBlockRuleAction = "block"
 )
 
 // The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParameters struct {
+type RulesetRuleNewParamsRulesetsBlockRuleActionParameters struct {
 	// The response to show when the block is applied.
-	Response RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponse `json:"response"`
-	JSON     rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersJSON     `json:"-"`
+	Response param.Field[RulesetRuleNewParamsRulesetsBlockRuleActionParametersResponse] `json:"response"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParameters]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersJSON struct {
-	Response    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The response to show when the block is applied.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponse struct {
+type RulesetRuleNewParamsRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
-	Content string `json:"content,required"`
+	Content param.Field[string] `json:"content,required"`
 	// The type of the content to return.
-	ContentType string `json:"content_type,required"`
+	ContentType param.Field[string] `json:"content_type,required"`
 	// The status code to return.
-	StatusCode int64                                                                                                       `json:"status_code,required"`
-	JSON       rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponseJSON `json:"-"`
+	StatusCode param.Field[int64] `json:"status_code,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponseJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponse]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponseJSON struct {
-	Content     apijson.Field
-	ContentType apijson.Field
-	StatusCode  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleActionParametersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLogging struct {
+type RulesetRuleNewParamsRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
-	Enabled bool                                                                                       `json:"enabled,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLoggingJSON `json:"-"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLoggingJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLogging]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsBlockRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
+type RulesetRuleNewParamsRulesetsExecuteRule struct {
 	// The unique ID of the rule.
-	ID string `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleAction `json:"action"`
+	Action param.Field[RulesetRuleNewParamsRulesetsExecuteRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
+	ActionParameters param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description string `json:"description"`
+	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
+	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLogging `json:"logging"`
+	Logging param.Field[RulesetRuleNewParamsRulesetsExecuteRuleLogging] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
-	Ref  string                                                                                `json:"ref"`
-	JSON rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleJSON `json:"-"`
+	Ref param.Field[string] `json:"ref"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+func (RulesetRuleNewParamsRulesetsExecuteRule) ImplementsRulesetRuleNewParams() {
 
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRule) implementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule() {
 }
 
 // The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleAction string
+type RulesetRuleNewParamsRulesetsExecuteRuleAction string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionExecute RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleAction = "execute"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionExecute RulesetRuleNewParamsRulesetsExecuteRuleAction = "execute"
 )
 
 // The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParameters struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParameters struct {
 	// The ID of the ruleset to execute.
-	ID string `json:"id,required"`
+	ID param.Field[string] `json:"id,required"`
 	// The configuration to use for matched data logging.
-	MatchedData RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedData `json:"matched_data"`
+	MatchedData param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
 	// A set of overrides to apply to the target ruleset.
-	Overrides RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverrides `json:"overrides"`
-	JSON      rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersJSON      `json:"-"`
+	Overrides param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParameters]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersJSON struct {
-	ID          apijson.Field
-	MatchedData apijson.Field
-	Overrides   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The configuration to use for matched data logging.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
-	PublicKey string                                                                                                           `json:"public_key,required"`
-	JSON      rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON `json:"-"`
+	PublicKey param.Field[string] `json:"public_key,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedData]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON struct {
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A set of overrides to apply to the target ruleset.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverrides struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverrides struct {
 	// An action to override all rules with. This option has lower precedence than rule
 	// and category overrides.
-	Action string `json:"action"`
+	Action param.Field[string] `json:"action"`
 	// A list of category-level overrides. This option has the second-highest
 	// precedence after rule-level overrides.
-	Categories []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory `json:"categories"`
+	Categories param.Field[[]RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
 	// Whether to enable execution of all rules. This option has lower precedence than
 	// rule and category overrides.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// A list of rule-level overrides. This option has the highest precedence.
-	Rules []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRule `json:"rules"`
+	Rules param.Field[[]RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
 	// A sensitivity level to set for all rules. This option has lower precedence than
 	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON             `json:"-"`
+	SensitivityLevel param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverrides]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON struct {
-	Action           apijson.Field
-	Categories       apijson.Field
-	Enabled          apijson.Field
-	Rules            apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverrides) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A category-level override
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
-	Category string `json:"category,required"`
+	Category param.Field[string] `json:"category,required"`
 	// The action to override rules in the category with.
-	Action string `json:"action"`
+	Action param.Field[string] `json:"action"`
 	// Whether to enable execution of rules in the category.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The sensitivity level to use for rules in the category.
-	SensitivityLevel RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON               `json:"-"`
+	SensitivityLevel param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON struct {
-	Category         apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for rules in the category.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
 )
 
 // A rule-level override
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRule struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
 	// The ID of the rule to override.
-	ID string `json:"id,required"`
+	ID param.Field[string] `json:"id,required"`
 	// The action to override the rule with.
-	Action string `json:"action"`
+	Action param.Field[string] `json:"action"`
 	// Whether to enable execution of the rule.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The score threshold to use for the rule.
-	ScoreThreshold int64 `json:"score_threshold"`
+	ScoreThreshold param.Field[int64] `json:"score_threshold"`
 	// The sensitivity level to use for the rule.
-	SensitivityLevel RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel `json:"sensitivity_level"`
-	JSON             rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON              `json:"-"`
+	SensitivityLevel param.Field[RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRule]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON struct {
-	ID               apijson.Field
-	Action           apijson.Field
-	Enabled          apijson.Field
-	ScoreThreshold   apijson.Field
-	SensitivityLevel apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // The sensitivity level to use for the rule.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
 )
 
 // A sensitivity level to set for all rules. This option has lower precedence than
 // rule and category overrides and is only applicable for DDoS phases.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
+type RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
+	RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetRuleNewParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
 )
 
 // An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLogging struct {
+type RulesetRuleNewParamsRulesetsExecuteRuleLogging struct {
 	// Whether to generate a log when the rule matches.
-	Enabled bool                                                                                         `json:"enabled,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLoggingJSON `json:"-"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLoggingJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLogging]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsExecuteRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
+type RulesetRuleNewParamsRulesetsLogRule struct {
 	// The unique ID of the rule.
-	ID string `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleAction `json:"action"`
+	Action param.Field[RulesetRuleNewParamsRulesetsLogRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters interface{} `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
+	ActionParameters param.Field[interface{}] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description string `json:"description"`
+	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
+	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLogging `json:"logging"`
+	Logging param.Field[RulesetRuleNewParamsRulesetsLogRuleLogging] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
-	Ref  string                                                                            `json:"ref"`
-	JSON rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleJSON `json:"-"`
+	Ref param.Field[string] `json:"ref"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsLogRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+func (RulesetRuleNewParamsRulesetsLogRule) ImplementsRulesetRuleNewParams() {
 
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRule) implementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule() {
 }
 
 // The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleAction string
+type RulesetRuleNewParamsRulesetsLogRuleAction string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleActionLog RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleAction = "log"
+	RulesetRuleNewParamsRulesetsLogRuleActionLog RulesetRuleNewParamsRulesetsLogRuleAction = "log"
 )
 
 // An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLogging struct {
+type RulesetRuleNewParamsRulesetsLogRuleLogging struct {
 	// Whether to generate a log when the rule matches.
-	Enabled bool                                                                                     `json:"enabled,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLoggingJSON `json:"-"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLoggingJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLogging]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLoggingJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsLogRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule struct {
-	// The timestamp of when the rule was last modified.
-	LastUpdated time.Time `json:"last_updated,required" format:"date-time"`
-	// The version of the rule.
-	Version string `json:"version,required"`
+type RulesetRuleNewParamsRulesetsSkipRule struct {
 	// The unique ID of the rule.
-	ID string `json:"id"`
+	ID param.Field[string] `json:"id"`
 	// The action to perform when the rule matches.
-	Action RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleAction `json:"action"`
+	Action param.Field[RulesetRuleNewParamsRulesetsSkipRuleAction] `json:"action"`
 	// The parameters configuring the rule's action.
-	ActionParameters RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParameters `json:"action_parameters"`
-	// The categories of the rule.
-	Categories []string `json:"categories"`
+	ActionParameters param.Field[RulesetRuleNewParamsRulesetsSkipRuleActionParameters] `json:"action_parameters"`
 	// An informative description of the rule.
-	Description string `json:"description"`
+	Description param.Field[string] `json:"description"`
 	// Whether the rule should be executed.
-	Enabled bool `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled"`
 	// The expression defining which traffic will match the rule.
-	Expression string `json:"expression"`
+	Expression param.Field[string] `json:"expression"`
 	// An object configuring the rule's logging behavior.
-	Logging RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLogging `json:"logging"`
+	Logging param.Field[RulesetRuleNewParamsRulesetsSkipRuleLogging] `json:"logging"`
 	// The reference of the rule (the rule ID by default).
-	Ref  string                                                                             `json:"ref"`
-	JSON rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleJSON `json:"-"`
+	Ref param.Field[string] `json:"ref"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleJSON struct {
-	LastUpdated      apijson.Field
-	Version          apijson.Field
-	ID               apijson.Field
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Categories       apijson.Field
-	Description      apijson.Field
-	Enabled          apijson.Field
-	Expression       apijson.Field
-	Logging          apijson.Field
-	Ref              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
+func (r RulesetRuleNewParamsRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+func (RulesetRuleNewParamsRulesetsSkipRule) ImplementsRulesetRuleNewParams() {
 
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRule) implementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRule() {
 }
 
 // The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleAction string
+type RulesetRuleNewParamsRulesetsSkipRuleAction string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionSkip RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleAction = "skip"
+	RulesetRuleNewParamsRulesetsSkipRuleActionSkip RulesetRuleNewParamsRulesetsSkipRuleAction = "skip"
 )
 
 // The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParameters struct {
+type RulesetRuleNewParamsRulesetsSkipRuleActionParameters struct {
 	// A list of phases to skip the execution of. This option is incompatible with the
 	// ruleset and rulesets options.
-	Phases []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase `json:"phases"`
+	Phases param.Field[[]RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase] `json:"phases"`
 	// A list of legacy security products to skip the execution of.
-	Products []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct `json:"products"`
+	Products param.Field[[]RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct] `json:"products"`
 	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
 	// execution of. This option is incompatible with the ruleset option.
-	Rules map[string][]string `json:"rules"`
+	Rules param.Field[map[string][]string] `json:"rules"`
 	// A ruleset to skip the execution of. This option is incompatible with the
 	// rulesets, rules and phases options.
-	Ruleset RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersRuleset `json:"ruleset"`
+	Ruleset param.Field[RulesetRuleNewParamsRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
 	// A list of ruleset IDs to skip the execution of. This option is incompatible with
 	// the ruleset and phases options.
-	Rulesets []string                                                                                           `json:"rulesets"`
-	JSON     rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersJSON `json:"-"`
+	Rulesets param.Field[[]string] `json:"rulesets"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParameters]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersJSON struct {
-	Phases      apijson.Field
-	Products    apijson.Field
-	Rules       apijson.Field
-	Ruleset     apijson.Field
-	Rulesets    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+func (r RulesetRuleNewParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
 // A phase to skip the execution of.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase string
+type RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_origin"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_request_transform"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_compression"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetRuleNewParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
 )
 
 // The name of a legacy security product to skip the execution of.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct string
+type RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductBic           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "bic"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductBic           RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "bic"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductHot           RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "hot"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductRateLimit     RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "rateLimit"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductSecurityLevel RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "securityLevel"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductUaBlock       RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductWAF           RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "waf"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetRuleNewParamsRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
 
 // A ruleset to skip the execution of. This option is incompatible with the
 // rulesets, rules and phases options.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersRuleset string
+type RulesetRuleNewParamsRulesetsSkipRuleActionParametersRuleset string
 
 const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersRulesetCurrent RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleActionParametersRuleset = "current"
+	RulesetRuleNewParamsRulesetsSkipRuleActionParametersRulesetCurrent RulesetRuleNewParamsRulesetsSkipRuleActionParametersRuleset = "current"
 )
 
 // An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLogging struct {
+type RulesetRuleNewParamsRulesetsSkipRuleLogging struct {
 	// Whether to generate a log when the rule matches.
-	Enabled bool                                                                                      `json:"enabled,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLoggingJSON `json:"-"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 }
 
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLoggingJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLogging]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLoggingJSON struct {
-	Enabled     apijson.Field
+func (r RulesetRuleNewParamsRulesetsSkipRuleLogging) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A response object.
+type RulesetRuleNewResponseEnvelope struct {
+	// A list of error messages.
+	Errors []RulesetRuleNewResponseEnvelopeErrors `json:"errors,required"`
+	// A list of warning messages.
+	Messages []RulesetRuleNewResponseEnvelopeMessages `json:"messages,required"`
+	// A result.
+	Result RulesetRuleNewResponse `json:"result,required"`
+	// Whether the API call was successful.
+	Success RulesetRuleNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    rulesetRuleNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// rulesetRuleNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RulesetRuleNewResponseEnvelope]
+type rulesetRuleNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
+func (r *RulesetRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// A message.
+type RulesetRuleNewResponseEnvelopeErrors struct {
+	// A text description of this message.
+	Message string `json:"message,required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source RulesetRuleNewResponseEnvelopeErrorsSource `json:"source"`
+	JSON   rulesetRuleNewResponseEnvelopeErrorsJSON   `json:"-"`
+}
+
+// rulesetRuleNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [RulesetRuleNewResponseEnvelopeErrors]
+type rulesetRuleNewResponseEnvelopeErrorsJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The source of this message.
+type RulesetRuleNewResponseEnvelopeErrorsSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                         `json:"pointer,required"`
+	JSON    rulesetRuleNewResponseEnvelopeErrorsSourceJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseEnvelopeErrorsSourceJSON contains the JSON metadata for
+// the struct [RulesetRuleNewResponseEnvelopeErrorsSource]
+type rulesetRuleNewResponseEnvelopeErrorsSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A message.
+type RulesetRuleNewResponseEnvelopeMessages struct {
+	// A text description of this message.
+	Message string `json:"message,required"`
+	// A unique code for this message.
+	Code int64 `json:"code"`
+	// The source of this message.
+	Source RulesetRuleNewResponseEnvelopeMessagesSource `json:"source"`
+	JSON   rulesetRuleNewResponseEnvelopeMessagesJSON   `json:"-"`
+}
+
+// rulesetRuleNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [RulesetRuleNewResponseEnvelopeMessages]
+type rulesetRuleNewResponseEnvelopeMessagesJSON struct {
+	Message     apijson.Field
+	Code        apijson.Field
+	Source      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The source of this message.
+type RulesetRuleNewResponseEnvelopeMessagesSource struct {
+	// A JSON pointer to the field that is the source of the message.
+	Pointer string                                           `json:"pointer,required"`
+	JSON    rulesetRuleNewResponseEnvelopeMessagesSourceJSON `json:"-"`
+}
+
+// rulesetRuleNewResponseEnvelopeMessagesSourceJSON contains the JSON metadata for
+// the struct [RulesetRuleNewResponseEnvelopeMessagesSource]
+type rulesetRuleNewResponseEnvelopeMessagesSourceJSON struct {
+	Pointer     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RulesetRuleNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type RulesetRuleNewResponseEnvelopeSuccess bool
+
+const (
+	RulesetRuleNewResponseEnvelopeSuccessTrue RulesetRuleNewResponseEnvelopeSuccess = true
+)
 
 // This interface is a union satisfied by one of the following:
 // [RulesetRuleUpdateParamsRulesetsBlockRule],
@@ -2909,524 +3408,4 @@ type RulesetRuleDeleteResponseEnvelopeSuccess bool
 
 const (
 	RulesetRuleDeleteResponseEnvelopeSuccessTrue RulesetRuleDeleteResponseEnvelopeSuccess = true
-)
-
-// This interface is a union satisfied by one of the following:
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRule],
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRule],
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRule],
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRule].
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams interface {
-	ImplementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams()
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRule) ImplementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams() {
-
-}
-
-// The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleAction string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionBlock RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleAction = "block"
-)
-
-// The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParameters struct {
-	// The response to show when the block is applied.
-	Response param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParametersResponse] `json:"response"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The response to show when the block is applied.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParametersResponse struct {
-	// The content to return.
-	Content param.Field[string] `json:"content,required"`
-	// The type of the content to return.
-	ContentType param.Field[string] `json:"content_type,required"`
-	// The status code to return.
-	StatusCode param.Field[int64] `json:"status_code,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleActionParametersResponse) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsBlockRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRule) ImplementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams() {
-
-}
-
-// The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleAction string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionExecute RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleAction = "execute"
-)
-
-// The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParameters struct {
-	// The ID of the ruleset to execute.
-	ID param.Field[string] `json:"id,required"`
-	// The configuration to use for matched data logging.
-	MatchedData param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersMatchedData] `json:"matched_data"`
-	// A set of overrides to apply to the target ruleset.
-	Overrides param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverrides] `json:"overrides"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration to use for matched data logging.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersMatchedData struct {
-	// The public key to encrypt matched data logs with.
-	PublicKey param.Field[string] `json:"public_key,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersMatchedData) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A set of overrides to apply to the target ruleset.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverrides struct {
-	// An action to override all rules with. This option has lower precedence than rule
-	// and category overrides.
-	Action param.Field[string] `json:"action"`
-	// A list of category-level overrides. This option has the second-highest
-	// precedence after rule-level overrides.
-	Categories param.Field[[]RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategory] `json:"categories"`
-	// Whether to enable execution of all rules. This option has lower precedence than
-	// rule and category overrides.
-	Enabled param.Field[bool] `json:"enabled"`
-	// A list of rule-level overrides. This option has the highest precedence.
-	Rules param.Field[[]RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRule] `json:"rules"`
-	// A sensitivity level to set for all rules. This option has lower precedence than
-	// rule and category overrides and is only applicable for DDoS phases.
-	SensitivityLevel param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverrides) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A category-level override
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategory struct {
-	// The name of the category to override.
-	Category param.Field[string] `json:"category,required"`
-	// The action to override rules in the category with.
-	Action param.Field[string] `json:"action"`
-	// Whether to enable execution of rules in the category.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The sensitivity level to use for rules in the category.
-	SensitivityLevel param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategory) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The sensitivity level to use for rules in the category.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesCategoriesSensitivityLevel = "eoff"
-)
-
-// A rule-level override
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRule struct {
-	// The ID of the rule to override.
-	ID param.Field[string] `json:"id,required"`
-	// The action to override the rule with.
-	Action param.Field[string] `json:"action"`
-	// Whether to enable execution of the rule.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The score threshold to use for the rule.
-	ScoreThreshold param.Field[int64] `json:"score_threshold"`
-	// The sensitivity level to use for the rule.
-	SensitivityLevel param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel] `json:"sensitivity_level"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The sensitivity level to use for the rule.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel = "eoff"
-)
-
-// A sensitivity level to set for all rules. This option has lower precedence than
-// rule and category overrides and is only applicable for DDoS phases.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelDefault RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "default"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelMedium  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "medium"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelLow     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "low"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevelEoff    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleActionParametersOverridesSensitivityLevel = "eoff"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsExecuteRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[interface{}] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRule) ImplementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams() {
-
-}
-
-// The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleAction string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleActionLog RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleAction = "log"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsLogRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRule struct {
-	// The unique ID of the rule.
-	ID param.Field[string] `json:"id"`
-	// The action to perform when the rule matches.
-	Action param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleAction] `json:"action"`
-	// The parameters configuring the rule's action.
-	ActionParameters param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParameters] `json:"action_parameters"`
-	// An informative description of the rule.
-	Description param.Field[string] `json:"description"`
-	// Whether the rule should be executed.
-	Enabled param.Field[bool] `json:"enabled"`
-	// The expression defining which traffic will match the rule.
-	Expression param.Field[string] `json:"expression"`
-	// An object configuring the rule's logging behavior.
-	Logging param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleLogging] `json:"logging"`
-	// The reference of the rule (the rule ID by default).
-	Ref param.Field[string] `json:"ref"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRule) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRule) ImplementsRulesetRuleAccountRulesetsNewAnAccountRulesetRuleParams() {
-
-}
-
-// The action to perform when the rule matches.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleAction string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionSkip RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleAction = "skip"
-)
-
-// The parameters configuring the rule's action.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParameters struct {
-	// A list of phases to skip the execution of. This option is incompatible with the
-	// ruleset and rulesets options.
-	Phases param.Field[[]RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase] `json:"phases"`
-	// A list of legacy security products to skip the execution of.
-	Products param.Field[[]RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct] `json:"products"`
-	// A mapping of ruleset IDs to a list of rule IDs in that ruleset to skip the
-	// execution of. This option is incompatible with the ruleset option.
-	Rules param.Field[map[string][]string] `json:"rules"`
-	// A ruleset to skip the execution of. This option is incompatible with the
-	// rulesets, rules and phases options.
-	Ruleset param.Field[RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersRuleset] `json:"ruleset"`
-	// A list of ruleset IDs to skip the execution of. This option is incompatible with
-	// the ruleset and phases options.
-	Rulesets param.Field[[]string] `json:"rulesets"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParameters) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A phase to skip the execution of.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseDDOSL4                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "ddos_l4"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseDDOSL7                         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "ddos_l7"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPConfigSettings             RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_config_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPCustomErrors               RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_custom_errors"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPLogCustomFields            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_log_custom_fields"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRatelimit                  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_ratelimit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestCacheSettings       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_cache_settings"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestDynamicRedirect     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_dynamic_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallCustom      RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_custom"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestFirewallManaged     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestLateTransform       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_late_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestOrigin              RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_origin"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestRedirect            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_redirect"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSanitize            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_sanitize"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSbfm                RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_sbfm"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestSelectConfiguration RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_select_configuration"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPRequestTransform           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_request_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseCompression        RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_response_compression"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseFirewallManaged    RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_response_firewall_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseHTTPResponseHeadersTransform   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "http_response_headers_transform"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseMagicTransit                   RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "magic_transit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseMagicTransitIDsManaged         RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_ids_managed"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhaseMagicTransitManaged            RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersPhase = "magic_transit_managed"
-)
-
-// The name of a legacy security product to skip the execution of.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductBic           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "bic"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductHot           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "hot"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductRateLimit     RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "rateLimit"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductSecurityLevel RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductUaBlock       RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "uaBlock"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductWAF           RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "waf"
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
-)
-
-// A ruleset to skip the execution of. This option is incompatible with the
-// rulesets, rules and phases options.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersRuleset string
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersRulesetCurrent RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleActionParametersRuleset = "current"
-)
-
-// An object configuring the rule's logging behavior.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleLogging struct {
-	// Whether to generate a log when the rule matches.
-	Enabled param.Field[bool] `json:"enabled,required"`
-}
-
-func (r RulesetRuleAccountRulesetsNewAnAccountRulesetRuleParamsRulesetsSkipRuleLogging) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A response object.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelope struct {
-	// A list of error messages.
-	Errors []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrors `json:"errors,required"`
-	// A list of warning messages.
-	Messages []RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessages `json:"messages,required"`
-	// A result.
-	Result RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponse `json:"result,required"`
-	// Whether the API call was successful.
-	Success RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeSuccess `json:"success,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeJSON    `json:"-"`
-}
-
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeJSON contains
-// the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelope]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A message.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrors struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSource `json:"source"`
-	JSON   rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsJSON   `json:"-"`
-}
-
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrors]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The source of this message.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                                            `json:"pointer,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSourceJSON `json:"-"`
-}
-
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSourceJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSource]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A message.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessages struct {
-	// A text description of this message.
-	Message string `json:"message,required"`
-	// A unique code for this message.
-	Code int64 `json:"code"`
-	// The source of this message.
-	Source RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSource `json:"source"`
-	JSON   rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesJSON   `json:"-"`
-}
-
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessages]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesJSON struct {
-	Message     apijson.Field
-	Code        apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The source of this message.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSource struct {
-	// A JSON pointer to the field that is the source of the message.
-	Pointer string                                                                              `json:"pointer,required"`
-	JSON    rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSourceJSON `json:"-"`
-}
-
-// rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSourceJSON
-// contains the JSON metadata for the struct
-// [RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSource]
-type rulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSourceJSON struct {
-	Pointer     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeSuccess bool
-
-const (
-	RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeSuccessTrue RulesetRuleAccountRulesetsNewAnAccountRulesetRuleResponseEnvelopeSuccess = true
 )

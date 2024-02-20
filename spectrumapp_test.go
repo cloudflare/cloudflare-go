@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSpectrumAppUpdateWithOptionalParams(t *testing.T) {
+func TestSpectrumAppNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,31 +30,65 @@ func TestSpectrumAppUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Apps.Update(
+	_, err := client.Spectrum.Apps.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"ea95132c15732412d22c1476fa83f27a",
-		cloudflare.SpectrumAppUpdateParams{
-			DNS: cloudflare.F(cloudflare.SpectrumAppUpdateParamsDNS{
+		cloudflare.SpectrumAppNewParams{
+			DNS: cloudflare.F(cloudflare.SpectrumAppNewParamsDNS{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(cloudflare.SpectrumAppUpdateParamsDNSTypeCname),
+				Type: cloudflare.F(cloudflare.SpectrumAppNewParamsDNSTypeCname),
 			}),
-			OriginDNS: cloudflare.F(cloudflare.SpectrumAppUpdateParamsOriginDNS{
+			OriginDNS: cloudflare.F(cloudflare.SpectrumAppNewParamsOriginDNS{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
-				Type: cloudflare.F(cloudflare.SpectrumAppUpdateParamsOriginDNSTypeEmpty),
+				Type: cloudflare.F(cloudflare.SpectrumAppNewParamsOriginDNSTypeEmpty),
 			}),
-			OriginPort:       cloudflare.F[cloudflare.SpectrumAppUpdateParamsOriginPort](shared.UnionInt(int64(22))),
+			OriginPort:       cloudflare.F[cloudflare.SpectrumAppNewParamsOriginPort](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[cloudflare.SpectrumAppUpdateParamsEdgeIPs](cloudflare.SpectrumAppUpdateParamsEdgeIPsObject(cloudflare.SpectrumAppUpdateParamsEdgeIPsObject{
-				Connectivity: cloudflare.F(cloudflare.SpectrumAppUpdateParamsEdgeIPsObjectConnectivityAll),
-				Type:         cloudflare.F(cloudflare.SpectrumAppUpdateParamsEdgeIPsObjectTypeDynamic),
+			EdgeIPs: cloudflare.F[cloudflare.SpectrumAppNewParamsEdgeIPs](cloudflare.SpectrumAppNewParamsEdgeIPsObject(cloudflare.SpectrumAppNewParamsEdgeIPsObject{
+				Connectivity: cloudflare.F(cloudflare.SpectrumAppNewParamsEdgeIPsObjectConnectivityAll),
+				Type:         cloudflare.F(cloudflare.SpectrumAppNewParamsEdgeIPsObjectTypeDynamic),
 			})),
 			IPFirewall:    cloudflare.F(true),
-			ProxyProtocol: cloudflare.F(cloudflare.SpectrumAppUpdateParamsProxyProtocolOff),
-			TLS:           cloudflare.F(cloudflare.SpectrumAppUpdateParamsTLSFull),
-			TrafficType:   cloudflare.F(cloudflare.SpectrumAppUpdateParamsTrafficTypeDirect),
+			ProxyProtocol: cloudflare.F(cloudflare.SpectrumAppNewParamsProxyProtocolOff),
+			TLS:           cloudflare.F(cloudflare.SpectrumAppNewParamsTLSFull),
+			TrafficType:   cloudflare.F(cloudflare.SpectrumAppNewParamsTrafficTypeDirect),
+		},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSpectrumAppListWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("My User Service Key"),
+	)
+	_, err := client.Spectrum.Apps.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.SpectrumAppListParams{
+			Direction: cloudflare.F(cloudflare.SpectrumAppListParamsDirectionDesc),
+			Order:     cloudflare.F(cloudflare.SpectrumAppListParamsOrderProtocol),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(1.000000),
 		},
 	)
 	if err != nil {
@@ -82,7 +116,7 @@ func TestSpectrumAppDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Apps.Delete(
+	_, err := client.Spectrum.Apps.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
@@ -112,7 +146,7 @@ func TestSpectrumAppGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Apps.Get(
+	_, err := client.Spectrum.Apps.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
@@ -126,7 +160,7 @@ func TestSpectrumAppGet(t *testing.T) {
 	}
 }
 
-func TestSpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginWithOptionalParams(t *testing.T) {
+func TestSpectrumAppReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -142,65 +176,31 @@ func TestSpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOr
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Spectrums.Apps.SpectrumApplicationsNewSpectrumApplicationUsingANameForTheOrigin(
+	_, err := client.Spectrum.Apps.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParams{
-			DNS: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsDNS{
+		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.SpectrumAppReplaceParams{
+			DNS: cloudflare.F(cloudflare.SpectrumAppReplaceParamsDNS{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsDNSTypeCname),
+				Type: cloudflare.F(cloudflare.SpectrumAppReplaceParamsDNSTypeCname),
 			}),
-			OriginDNS: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginDNS{
+			OriginDNS: cloudflare.F(cloudflare.SpectrumAppReplaceParamsOriginDNS{
 				Name: cloudflare.F("origin.example.com"),
 				TTL:  cloudflare.F(int64(600)),
-				Type: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginDNSTypeEmpty),
+				Type: cloudflare.F(cloudflare.SpectrumAppReplaceParamsOriginDNSTypeEmpty),
 			}),
-			OriginPort:       cloudflare.F[cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsOriginPort](shared.UnionInt(int64(22))),
+			OriginPort:       cloudflare.F[cloudflare.SpectrumAppReplaceParamsOriginPort](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsEdgeIPs](cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsEdgeIPsObject(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsEdgeIPsObject{
-				Connectivity: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsEdgeIPsObjectConnectivityAll),
-				Type:         cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsEdgeIPsObjectTypeDynamic),
+			EdgeIPs: cloudflare.F[cloudflare.SpectrumAppReplaceParamsEdgeIPs](cloudflare.SpectrumAppReplaceParamsEdgeIPsObject(cloudflare.SpectrumAppReplaceParamsEdgeIPsObject{
+				Connectivity: cloudflare.F(cloudflare.SpectrumAppReplaceParamsEdgeIPsObjectConnectivityAll),
+				Type:         cloudflare.F(cloudflare.SpectrumAppReplaceParamsEdgeIPsObjectTypeDynamic),
 			})),
 			IPFirewall:    cloudflare.F(true),
-			ProxyProtocol: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsProxyProtocolOff),
-			TLS:           cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsTLSFull),
-			TrafficType:   cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsNewSpectrumApplicationUsingANameForTheOriginParamsTrafficTypeDirect),
-		},
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestSpectrumAppSpectrumApplicationsListSpectrumApplicationsWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
-	)
-	_, err := client.Spectrums.Apps.SpectrumApplicationsListSpectrumApplications(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SpectrumAppSpectrumApplicationsListSpectrumApplicationsParams{
-			Direction: cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsListSpectrumApplicationsParamsDirectionDesc),
-			Order:     cloudflare.F(cloudflare.SpectrumAppSpectrumApplicationsListSpectrumApplicationsParamsOrderProtocol),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(1.000000),
+			ProxyProtocol: cloudflare.F(cloudflare.SpectrumAppReplaceParamsProxyProtocolOff),
+			TLS:           cloudflare.F(cloudflare.SpectrumAppReplaceParamsTLSFull),
+			TrafficType:   cloudflare.F(cloudflare.SpectrumAppReplaceParamsTrafficTypeDirect),
 		},
 	)
 	if err != nil {

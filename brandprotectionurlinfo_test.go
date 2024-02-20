@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestBrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanWithOptionalParams(t *testing.T) {
+func TestBrandProtectionURLInfoGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestBrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanWithOp
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.BrandProtections.URLInfos.PhishingURLInformationGetResultsForAURLScan(
+	_, err := client.BrandProtection.URLInfos.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.BrandProtectionURLInfoPhishingURLInformationGetResultsForAURLScanParams{
+		cloudflare.BrandProtectionURLInfoGetParams{
 			URL: cloudflare.F("string"),
-			URLIDParam: cloudflare.F(cloudflare.BrandProtectionURLInfoPhishingURLInformationGetResultsForAurlScanParamsURLIDParam{
+			URLIDParam: cloudflare.F(cloudflare.BrandProtectionURLInfoGetParamsURLIDParam{
 				URLID: cloudflare.F(int64(0)),
 			}),
 		},

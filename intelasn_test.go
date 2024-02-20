@@ -29,7 +29,7 @@ func TestIntelAsnGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Intels.Asn.Get(
+	_, err := client.Intel.Asn.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(0),

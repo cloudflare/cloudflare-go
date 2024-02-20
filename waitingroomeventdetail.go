@@ -33,9 +33,9 @@ func NewWaitingRoomEventDetailService(opts ...option.RequestOption) (r *WaitingR
 
 // Previews an event's configuration as if it was active. Inherited fields from the
 // waiting room will be displayed with their current values.
-func (r *WaitingRoomEventDetailService) WaitingRoomPreviewActiveEventDetails(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse, err error) {
+func (r *WaitingRoomEventDetailService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingRoomEventDetailGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelope
+	var env WaitingRoomEventDetailGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v/details", zoneIdentifier, waitingRoomID, eventID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -45,7 +45,7 @@ func (r *WaitingRoomEventDetailService) WaitingRoomPreviewActiveEventDetails(ctx
 	return
 }
 
-type WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse struct {
+type WaitingRoomEventDetailGetResponse struct {
 	ID             interface{} `json:"id"`
 	CreatedOn      time.Time   `json:"created_on" format:"date-time"`
 	CustomPageHTML string      `json:"custom_page_html"`
@@ -78,15 +78,14 @@ type WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse struct {
 	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
 	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
 	// will be handled based on the waiting room configuration.
-	Suspended        bool                                                                   `json:"suspended"`
-	TotalActiveUsers int64                                                                  `json:"total_active_users"`
-	JSON             waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseJSON `json:"-"`
+	Suspended        bool                                  `json:"suspended"`
+	TotalActiveUsers int64                                 `json:"total_active_users"`
+	JSON             waitingRoomEventDetailGetResponseJSON `json:"-"`
 }
 
-// waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseJSON contains
-// the JSON metadata for the struct
-// [WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse]
-type waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseJSON struct {
+// waitingRoomEventDetailGetResponseJSON contains the JSON metadata for the struct
+// [WaitingRoomEventDetailGetResponse]
+type waitingRoomEventDetailGetResponseJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	CustomPageHTML        apijson.Field
@@ -107,24 +106,23 @@ type waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseJSON stru
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomEventDetailGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelope struct {
-	Result WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponse             `json:"result,required"`
-	JSON   waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelopeJSON `json:"-"`
+type WaitingRoomEventDetailGetResponseEnvelope struct {
+	Result WaitingRoomEventDetailGetResponse             `json:"result,required"`
+	JSON   waitingRoomEventDetailGetResponseEnvelopeJSON `json:"-"`
 }
 
-// waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelope]
-type waitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelopeJSON struct {
+// waitingRoomEventDetailGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomEventDetailGetResponseEnvelope]
+type waitingRoomEventDetailGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WaitingRoomEventDetailWaitingRoomPreviewActiveEventDetailsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomEventDetailGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

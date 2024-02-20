@@ -35,11 +35,16 @@ func NewDLPProfileCustomService(opts ...option.RequestOption) (r *DLPProfileCust
 	return
 }
 
-// Updates a DLP custom profile.
-func (r *DLPProfileCustomService) Update(ctx context.Context, accountID string, profileID string, body DLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *DLPProfileCustomUpdateResponse, err error) {
+// Creates a set of DLP custom profiles.
+func (r *DLPProfileCustomService) New(ctx context.Context, accountID string, body DLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]DLPProfileCustomNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	var env DLPProfileCustomNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
 	return
 }
 
@@ -49,19 +54,6 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, accountID string, 
 	var env DLPProfileCustomDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Creates a set of DLP custom profiles.
-func (r *DLPProfileCustomService) DLPProfilesNewCustomProfiles(ctx context.Context, accountID string, body DLPProfileCustomDLPProfilesNewCustomProfilesParams, opts ...option.RequestOption) (res *[]DLPProfileCustomDLPProfilesNewCustomProfilesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,7 +74,15 @@ func (r *DLPProfileCustomService) Get(ctx context.Context, accountID string, pro
 	return
 }
 
-type DLPProfileCustomUpdateResponse struct {
+// Updates a DLP custom profile.
+func (r *DLPProfileCustomService) Replace(ctx context.Context, accountID string, profileID string, body DLPProfileCustomReplaceParams, opts ...option.RequestOption) (res *DLPProfileCustomReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	return
+}
+
+type DLPProfileCustomNewResponse struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
@@ -91,18 +91,18 @@ type DLPProfileCustomUpdateResponse struct {
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPProfileCustomUpdateResponseEntry `json:"entries"`
+	Entries []DLPProfileCustomNewResponseEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPProfileCustomUpdateResponseType `json:"type"`
-	UpdatedAt time.Time                          `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomUpdateResponseJSON `json:"-"`
+	Type      DLPProfileCustomNewResponseType `json:"type"`
+	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileCustomNewResponseJSON `json:"-"`
 }
 
-// dlpProfileCustomUpdateResponseJSON contains the JSON metadata for the struct
-// [DLPProfileCustomUpdateResponse]
-type dlpProfileCustomUpdateResponseJSON struct {
+// dlpProfileCustomNewResponseJSON contains the JSON metadata for the struct
+// [DLPProfileCustomNewResponse]
+type dlpProfileCustomNewResponseJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	CreatedAt         apijson.Field
@@ -115,12 +115,12 @@ type dlpProfileCustomUpdateResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DLPProfileCustomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileCustomNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A custom entry that matches a profile
-type DLPProfileCustomUpdateResponseEntry struct {
+type DLPProfileCustomNewResponseEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -129,16 +129,16 @@ type DLPProfileCustomUpdateResponseEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// A pattern that matches an entry
-	Pattern DLPProfileCustomUpdateResponseEntriesPattern `json:"pattern"`
+	Pattern DLPProfileCustomNewResponseEntriesPattern `json:"pattern"`
 	// ID of the parent profile
-	ProfileID interface{}                             `json:"profile_id"`
-	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomUpdateResponseEntryJSON `json:"-"`
+	ProfileID interface{}                          `json:"profile_id"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileCustomNewResponseEntryJSON `json:"-"`
 }
 
-// dlpProfileCustomUpdateResponseEntryJSON contains the JSON metadata for the
-// struct [DLPProfileCustomUpdateResponseEntry]
-type dlpProfileCustomUpdateResponseEntryJSON struct {
+// dlpProfileCustomNewResponseEntryJSON contains the JSON metadata for the struct
+// [DLPProfileCustomNewResponseEntry]
+type dlpProfileCustomNewResponseEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -150,46 +150,46 @@ type dlpProfileCustomUpdateResponseEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileCustomUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileCustomNewResponseEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A pattern that matches an entry
-type DLPProfileCustomUpdateResponseEntriesPattern struct {
+type DLPProfileCustomNewResponseEntriesPattern struct {
 	// The regex pattern.
 	Regex string `json:"regex,required"`
 	// Validation algorithm for the pattern. This algorithm will get run on potential
 	// matches, and if it returns false, the entry will not be matched.
-	Validation DLPProfileCustomUpdateResponseEntriesPatternValidation `json:"validation"`
-	JSON       dlpProfileCustomUpdateResponseEntriesPatternJSON       `json:"-"`
+	Validation DLPProfileCustomNewResponseEntriesPatternValidation `json:"validation"`
+	JSON       dlpProfileCustomNewResponseEntriesPatternJSON       `json:"-"`
 }
 
-// dlpProfileCustomUpdateResponseEntriesPatternJSON contains the JSON metadata for
-// the struct [DLPProfileCustomUpdateResponseEntriesPattern]
-type dlpProfileCustomUpdateResponseEntriesPatternJSON struct {
+// dlpProfileCustomNewResponseEntriesPatternJSON contains the JSON metadata for the
+// struct [DLPProfileCustomNewResponseEntriesPattern]
+type dlpProfileCustomNewResponseEntriesPatternJSON struct {
 	Regex       apijson.Field
 	Validation  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfileCustomUpdateResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPProfileCustomNewResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
 // matches, and if it returns false, the entry will not be matched.
-type DLPProfileCustomUpdateResponseEntriesPatternValidation string
+type DLPProfileCustomNewResponseEntriesPatternValidation string
 
 const (
-	DLPProfileCustomUpdateResponseEntriesPatternValidationLuhn DLPProfileCustomUpdateResponseEntriesPatternValidation = "luhn"
+	DLPProfileCustomNewResponseEntriesPatternValidationLuhn DLPProfileCustomNewResponseEntriesPatternValidation = "luhn"
 )
 
 // The type of the profile.
-type DLPProfileCustomUpdateResponseType string
+type DLPProfileCustomNewResponseType string
 
 const (
-	DLPProfileCustomUpdateResponseTypeCustom DLPProfileCustomUpdateResponseType = "custom"
+	DLPProfileCustomNewResponseTypeCustom DLPProfileCustomNewResponseType = "custom"
 )
 
 // Union satisfied by [DLPProfileCustomDeleteResponseUnknown] or
@@ -208,118 +208,6 @@ func init() {
 		},
 	)
 }
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponse struct {
-	// The ID for this profile
-	ID string `json:"id"`
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64   `json:"allowed_match_count"`
-	CreatedAt         time.Time `json:"created_at" format:"date-time"`
-	// The description of the profile.
-	Description string `json:"description"`
-	// The entries for this profile.
-	Entries []DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntry `json:"entries"`
-	// The name of the profile.
-	Name string `json:"name"`
-	// The type of the profile.
-	Type      DLPProfileCustomDLPProfilesNewCustomProfilesResponseType `json:"type"`
-	UpdatedAt time.Time                                                `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomDLPProfilesNewCustomProfilesResponseJSON `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseJSON contains the JSON
-// metadata for the struct [DLPProfileCustomDLPProfilesNewCustomProfilesResponse]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	CreatedAt         apijson.Field
-	Description       apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	UpdatedAt         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A custom entry that matches a profile
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntry struct {
-	// The ID for this entry
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Whether the entry is enabled or not.
-	Enabled bool `json:"enabled"`
-	// The name of the entry.
-	Name string `json:"name"`
-	// A pattern that matches an entry
-	Pattern DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPattern `json:"pattern"`
-	// ID of the parent profile
-	ProfileID interface{}                                                   `json:"profile_id"`
-	UpdatedAt time.Time                                                     `json:"updated_at" format:"date-time"`
-	JSON      dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntryJSON `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntryJSON contains the JSON
-// metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntry]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntryJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	Pattern     apijson.Field
-	ProfileID   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A pattern that matches an entry
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPattern struct {
-	// The regex pattern.
-	Regex string `json:"regex,required"`
-	// Validation algorithm for the pattern. This algorithm will get run on potential
-	// matches, and if it returns false, the entry will not be matched.
-	Validation DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternValidation `json:"validation"`
-	JSON       dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternJSON       `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternJSON contains
-// the JSON metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPattern]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternJSON struct {
-	Regex       apijson.Field
-	Validation  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Validation algorithm for the pattern. This algorithm will get run on potential
-// matches, and if it returns false, the entry will not be matched.
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternValidation string
-
-const (
-	DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternValidationLuhn DLPProfileCustomDLPProfilesNewCustomProfilesResponseEntriesPatternValidation = "luhn"
-)
-
-// The type of the profile.
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseType string
-
-const (
-	DLPProfileCustomDLPProfilesNewCustomProfilesResponseTypeCustom DLPProfileCustomDLPProfilesNewCustomProfilesResponseType = "custom"
-)
 
 type DLPProfileCustomGetResponse struct {
 	// The ID for this profile
@@ -431,96 +319,270 @@ const (
 	DLPProfileCustomGetResponseTypeCustom DLPProfileCustomGetResponseType = "custom"
 )
 
-type DLPProfileCustomUpdateParams struct {
+type DLPProfileCustomReplaceResponse struct {
+	// The ID for this profile
+	ID string `json:"id"`
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64   `json:"allowed_match_count"`
+	CreatedAt         time.Time `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string `json:"description"`
+	// The entries for this profile.
+	Entries []DLPProfileCustomReplaceResponseEntry `json:"entries"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// The type of the profile.
+	Type      DLPProfileCustomReplaceResponseType `json:"type"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileCustomReplaceResponseJSON `json:"-"`
+}
+
+// dlpProfileCustomReplaceResponseJSON contains the JSON metadata for the struct
+// [DLPProfileCustomReplaceResponse]
+type dlpProfileCustomReplaceResponseJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A custom entry that matches a profile
+type DLPProfileCustomReplaceResponseEntry struct {
+	// The ID for this entry
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the entry is enabled or not.
+	Enabled bool `json:"enabled"`
+	// The name of the entry.
+	Name string `json:"name"`
+	// A pattern that matches an entry
+	Pattern DLPProfileCustomReplaceResponseEntriesPattern `json:"pattern"`
+	// ID of the parent profile
+	ProfileID interface{}                              `json:"profile_id"`
+	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
+	JSON      dlpProfileCustomReplaceResponseEntryJSON `json:"-"`
+}
+
+// dlpProfileCustomReplaceResponseEntryJSON contains the JSON metadata for the
+// struct [DLPProfileCustomReplaceResponseEntry]
+type dlpProfileCustomReplaceResponseEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomReplaceResponseEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A pattern that matches an entry
+type DLPProfileCustomReplaceResponseEntriesPattern struct {
+	// The regex pattern.
+	Regex string `json:"regex,required"`
+	// Validation algorithm for the pattern. This algorithm will get run on potential
+	// matches, and if it returns false, the entry will not be matched.
+	Validation DLPProfileCustomReplaceResponseEntriesPatternValidation `json:"validation"`
+	JSON       dlpProfileCustomReplaceResponseEntriesPatternJSON       `json:"-"`
+}
+
+// dlpProfileCustomReplaceResponseEntriesPatternJSON contains the JSON metadata for
+// the struct [DLPProfileCustomReplaceResponseEntriesPattern]
+type dlpProfileCustomReplaceResponseEntriesPatternJSON struct {
+	Regex       apijson.Field
+	Validation  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomReplaceResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Validation algorithm for the pattern. This algorithm will get run on potential
+// matches, and if it returns false, the entry will not be matched.
+type DLPProfileCustomReplaceResponseEntriesPatternValidation string
+
+const (
+	DLPProfileCustomReplaceResponseEntriesPatternValidationLuhn DLPProfileCustomReplaceResponseEntriesPatternValidation = "luhn"
+)
+
+// The type of the profile.
+type DLPProfileCustomReplaceResponseType string
+
+const (
+	DLPProfileCustomReplaceResponseTypeCustom DLPProfileCustomReplaceResponseType = "custom"
+)
+
+type DLPProfileCustomNewParams struct {
+	Profiles param.Field[[]DLPProfileCustomNewParamsProfile] `json:"profiles,required"`
+}
+
+func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type DLPProfileCustomNewParamsProfile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
 	// The description of the profile.
 	Description param.Field[string] `json:"description"`
-	// The custom entries for this profile. Array elements with IDs are modifying the
-	// existing entry with that ID. Elements without ID will create new entries. Any
-	// entry not in the list will be deleted.
-	Entries param.Field[[]DLPProfileCustomUpdateParamsEntry] `json:"entries"`
+	// The entries for this profile.
+	Entries param.Field[[]DLPProfileCustomNewParamsProfilesEntry] `json:"entries"`
 	// The name of the profile.
 	Name param.Field[string] `json:"name"`
-	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
-	// Microsoft Information Protection profiles).
-	SharedEntries param.Field[[]DLPProfileCustomUpdateParamsSharedEntry] `json:"shared_entries"`
 }
 
-func (r DLPProfileCustomUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r DLPProfileCustomNewParamsProfile) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// A custom entry that matches a profile
-type DLPProfileCustomUpdateParamsEntry struct {
+// A custom entry create payload
+type DLPProfileCustomNewParamsProfilesEntry struct {
 	// Whether the entry is enabled or not.
-	Enabled param.Field[bool] `json:"enabled"`
+	Enabled param.Field[bool] `json:"enabled,required"`
 	// The name of the entry.
-	Name param.Field[string] `json:"name"`
+	Name param.Field[string] `json:"name,required"`
 	// A pattern that matches an entry
-	Pattern param.Field[DLPProfileCustomUpdateParamsEntriesPattern] `json:"pattern"`
-	// ID of the parent profile
-	ProfileID param.Field[interface{}] `json:"profile_id"`
+	Pattern param.Field[DLPProfileCustomNewParamsProfilesEntriesPattern] `json:"pattern,required"`
 }
 
-func (r DLPProfileCustomUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
+func (r DLPProfileCustomNewParamsProfilesEntry) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // A pattern that matches an entry
-type DLPProfileCustomUpdateParamsEntriesPattern struct {
+type DLPProfileCustomNewParamsProfilesEntriesPattern struct {
 	// The regex pattern.
 	Regex param.Field[string] `json:"regex,required"`
 	// Validation algorithm for the pattern. This algorithm will get run on potential
 	// matches, and if it returns false, the entry will not be matched.
-	Validation param.Field[DLPProfileCustomUpdateParamsEntriesPatternValidation] `json:"validation"`
+	Validation param.Field[DLPProfileCustomNewParamsProfilesEntriesPatternValidation] `json:"validation"`
 }
 
-func (r DLPProfileCustomUpdateParamsEntriesPattern) MarshalJSON() (data []byte, err error) {
+func (r DLPProfileCustomNewParamsProfilesEntriesPattern) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
 // matches, and if it returns false, the entry will not be matched.
-type DLPProfileCustomUpdateParamsEntriesPatternValidation string
+type DLPProfileCustomNewParamsProfilesEntriesPatternValidation string
 
 const (
-	DLPProfileCustomUpdateParamsEntriesPatternValidationLuhn DLPProfileCustomUpdateParamsEntriesPatternValidation = "luhn"
+	DLPProfileCustomNewParamsProfilesEntriesPatternValidationLuhn DLPProfileCustomNewParamsProfilesEntriesPatternValidation = "luhn"
 )
 
-// Properties of a predefined entry in a custom profile
-//
-// Satisfied by
-// [DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined],
-// [DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration].
-type DLPProfileCustomUpdateParamsSharedEntry interface {
-	implementsDLPProfileCustomUpdateParamsSharedEntry()
+type DLPProfileCustomNewResponseEnvelope struct {
+	Errors   []DLPProfileCustomNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DLPProfileCustomNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DLPProfileCustomNewResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    DLPProfileCustomNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DLPProfileCustomNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       dlpProfileCustomNewResponseEnvelopeJSON       `json:"-"`
 }
 
-// Properties of a predefined entry in a custom profile
-type DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined struct {
-	// Whether the entry is enabled or not.
-	Enabled param.Field[bool] `json:"enabled"`
+// dlpProfileCustomNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DLPProfileCustomNewResponseEnvelope]
+type dlpProfileCustomNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r *DLPProfileCustomNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdatePredefined) implementsDLPProfileCustomUpdateParamsSharedEntry() {
+type DLPProfileCustomNewResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    dlpProfileCustomNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// Properties of an integration entry in a custom profile
-type DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration struct {
-	// Whether the entry is enabled or not.
-	Enabled param.Field[bool] `json:"enabled"`
+// dlpProfileCustomNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DLPProfileCustomNewResponseEnvelopeErrors]
+type dlpProfileCustomNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r *DLPProfileCustomNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration) implementsDLPProfileCustomUpdateParamsSharedEntry() {
+type DLPProfileCustomNewResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    dlpProfileCustomNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// dlpProfileCustomNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DLPProfileCustomNewResponseEnvelopeMessages]
+type dlpProfileCustomNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type DLPProfileCustomNewResponseEnvelopeSuccess bool
+
+const (
+	DLPProfileCustomNewResponseEnvelopeSuccessTrue DLPProfileCustomNewResponseEnvelopeSuccess = true
+)
+
+type DLPProfileCustomNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                           `json:"total_count"`
+	JSON       dlpProfileCustomNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// dlpProfileCustomNewResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [DLPProfileCustomNewResponseEnvelopeResultInfo]
+type dlpProfileCustomNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DLPProfileCustomDeleteResponseEnvelope struct {
@@ -592,166 +654,6 @@ const (
 	DLPProfileCustomDeleteResponseEnvelopeSuccessTrue DLPProfileCustomDeleteResponseEnvelopeSuccess = true
 )
 
-type DLPProfileCustomDLPProfilesNewCustomProfilesParams struct {
-	Profiles param.Field[[]DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfile] `json:"profiles,required"`
-}
-
-func (r DLPProfileCustomDLPProfilesNewCustomProfilesParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfile struct {
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
-	// The description of the profile.
-	Description param.Field[string] `json:"description"`
-	// The entries for this profile.
-	Entries param.Field[[]DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntry] `json:"entries"`
-	// The name of the profile.
-	Name param.Field[string] `json:"name"`
-}
-
-func (r DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfile) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A custom entry create payload
-type DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntry struct {
-	// Whether the entry is enabled or not.
-	Enabled param.Field[bool] `json:"enabled,required"`
-	// The name of the entry.
-	Name param.Field[string] `json:"name,required"`
-	// A pattern that matches an entry
-	Pattern param.Field[DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPattern] `json:"pattern,required"`
-}
-
-func (r DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntry) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// A pattern that matches an entry
-type DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPattern struct {
-	// The regex pattern.
-	Regex param.Field[string] `json:"regex,required"`
-	// Validation algorithm for the pattern. This algorithm will get run on potential
-	// matches, and if it returns false, the entry will not be matched.
-	Validation param.Field[DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPatternValidation] `json:"validation"`
-}
-
-func (r DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPattern) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Validation algorithm for the pattern. This algorithm will get run on potential
-// matches, and if it returns false, the entry will not be matched.
-type DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPatternValidation string
-
-const (
-	DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPatternValidationLuhn DLPProfileCustomDLPProfilesNewCustomProfilesParamsProfilesEntriesPatternValidation = "luhn"
-)
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelope struct {
-	Errors   []DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DLPProfileCustomDLPProfilesNewCustomProfilesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeJSON       `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelope]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrors]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessages]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeSuccess bool
-
-const (
-	DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeSuccessTrue DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeSuccess = true
-)
-
-type DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                    `json:"total_count"`
-	JSON       dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfo]
-type dlpProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfileCustomDLPProfilesNewCustomProfilesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type DLPProfileCustomGetResponseEnvelope struct {
 	Errors   []DLPProfileCustomGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DLPProfileCustomGetResponseEnvelopeMessages `json:"messages,required"`
@@ -820,3 +722,95 @@ type DLPProfileCustomGetResponseEnvelopeSuccess bool
 const (
 	DLPProfileCustomGetResponseEnvelopeSuccessTrue DLPProfileCustomGetResponseEnvelopeSuccess = true
 )
+
+type DLPProfileCustomReplaceParams struct {
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
+	// The description of the profile.
+	Description param.Field[string] `json:"description"`
+	// The custom entries for this profile. Array elements with IDs are modifying the
+	// existing entry with that ID. Elements without ID will create new entries. Any
+	// entry not in the list will be deleted.
+	Entries param.Field[[]DLPProfileCustomReplaceParamsEntry] `json:"entries"`
+	// The name of the profile.
+	Name param.Field[string] `json:"name"`
+	// Entries from other profiles (e.g. pre-defined Cloudflare profiles, or your
+	// Microsoft Information Protection profiles).
+	SharedEntries param.Field[[]DLPProfileCustomReplaceParamsSharedEntry] `json:"shared_entries"`
+}
+
+func (r DLPProfileCustomReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A custom entry that matches a profile
+type DLPProfileCustomReplaceParamsEntry struct {
+	// Whether the entry is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The name of the entry.
+	Name param.Field[string] `json:"name"`
+	// A pattern that matches an entry
+	Pattern param.Field[DLPProfileCustomReplaceParamsEntriesPattern] `json:"pattern"`
+	// ID of the parent profile
+	ProfileID param.Field[interface{}] `json:"profile_id"`
+}
+
+func (r DLPProfileCustomReplaceParamsEntry) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// A pattern that matches an entry
+type DLPProfileCustomReplaceParamsEntriesPattern struct {
+	// The regex pattern.
+	Regex param.Field[string] `json:"regex,required"`
+	// Validation algorithm for the pattern. This algorithm will get run on potential
+	// matches, and if it returns false, the entry will not be matched.
+	Validation param.Field[DLPProfileCustomReplaceParamsEntriesPatternValidation] `json:"validation"`
+}
+
+func (r DLPProfileCustomReplaceParamsEntriesPattern) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Validation algorithm for the pattern. This algorithm will get run on potential
+// matches, and if it returns false, the entry will not be matched.
+type DLPProfileCustomReplaceParamsEntriesPatternValidation string
+
+const (
+	DLPProfileCustomReplaceParamsEntriesPatternValidationLuhn DLPProfileCustomReplaceParamsEntriesPatternValidation = "luhn"
+)
+
+// Properties of a predefined entry in a custom profile
+//
+// Satisfied by
+// [DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdatePredefined],
+// [DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdateIntegration].
+type DLPProfileCustomReplaceParamsSharedEntry interface {
+	implementsDLPProfileCustomReplaceParamsSharedEntry()
+}
+
+// Properties of a predefined entry in a custom profile
+type DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdatePredefined struct {
+	// Whether the entry is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdatePredefined) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdatePredefined) implementsDLPProfileCustomReplaceParamsSharedEntry() {
+}
+
+// Properties of an integration entry in a custom profile
+type DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdateIntegration struct {
+	// Whether the entry is enabled or not.
+	Enabled param.Field[bool] `json:"enabled"`
+}
+
+func (r DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdateIntegration) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r DLPProfileCustomReplaceParamsSharedEntriesDLPSharedEntryUpdateIntegration) implementsDLPProfileCustomReplaceParamsSharedEntry() {
+}

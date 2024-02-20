@@ -34,9 +34,9 @@ func NewUserLoadBalancingAnalyticEventService(opts ...option.RequestOption) (r *
 }
 
 // List origin health changes.
-func (r *UserLoadBalancingAnalyticEventService) LoadBalancerHealthcheckEventsListHealthcheckEvents(ctx context.Context, query UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams, opts ...option.RequestOption) (res *[]UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse, err error) {
+func (r *UserLoadBalancingAnalyticEventService) List(ctx context.Context, query UserLoadBalancingAnalyticEventListParams, opts ...option.RequestOption) (res *[]UserLoadBalancingAnalyticEventListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelope
+	var env UserLoadBalancingAnalyticEventListResponseEnvelope
 	path := "user/load_balancing_analytics/events"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,18 +46,17 @@ func (r *UserLoadBalancingAnalyticEventService) LoadBalancerHealthcheckEventsLis
 	return
 }
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse struct {
-	ID        int64                                                                                        `json:"id"`
-	Origins   []interface{}                                                                                `json:"origins"`
-	Pool      interface{}                                                                                  `json:"pool"`
-	Timestamp time.Time                                                                                    `json:"timestamp" format:"date-time"`
-	JSON      userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON `json:"-"`
+type UserLoadBalancingAnalyticEventListResponse struct {
+	ID        int64                                          `json:"id"`
+	Origins   []interface{}                                  `json:"origins"`
+	Pool      interface{}                                    `json:"pool"`
+	Timestamp time.Time                                      `json:"timestamp" format:"date-time"`
+	JSON      userLoadBalancingAnalyticEventListResponseJSON `json:"-"`
 }
 
-// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse]
-type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseJSON struct {
+// userLoadBalancingAnalyticEventListResponseJSON contains the JSON metadata for
+// the struct [UserLoadBalancingAnalyticEventListResponse]
+type userLoadBalancingAnalyticEventListResponseJSON struct {
 	ID          apijson.Field
 	Origins     apijson.Field
 	Pool        apijson.Field
@@ -66,11 +65,11 @@ type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams struct {
+type UserLoadBalancingAnalyticEventListParams struct {
 	// If true, filter events where the origin status is healthy. If false, filter
 	// events where the origin status is unhealthy.
 	OriginHealthy param.Field[bool] `query:"origin_healthy"`
@@ -88,30 +87,28 @@ type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams]'s
-// query parameters as `url.Values`.
-func (r UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsParams) URLQuery() (v url.Values) {
+// URLQuery serializes [UserLoadBalancingAnalyticEventListParams]'s query
+// parameters as `url.Values`.
+func (r UserLoadBalancingAnalyticEventListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelope struct {
-	Errors   []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponse                 `json:"result,required,nullable"`
+type UserLoadBalancingAnalyticEventListResponseEnvelope struct {
+	Errors   []UserLoadBalancingAnalyticEventListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancingAnalyticEventListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []UserLoadBalancingAnalyticEventListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeJSON       `json:"-"`
+	Success    UserLoadBalancingAnalyticEventListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo UserLoadBalancingAnalyticEventListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       userLoadBalancingAnalyticEventListResponseEnvelopeJSON       `json:"-"`
 }
 
-// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelope]
-type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeJSON struct {
+// userLoadBalancingAnalyticEventListResponseEnvelopeJSON contains the JSON
+// metadata for the struct [UserLoadBalancingAnalyticEventListResponseEnvelope]
+type userLoadBalancingAnalyticEventListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -121,58 +118,58 @@ type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrors struct {
-	Code    int64                                                                                                      `json:"code,required"`
-	Message string                                                                                                     `json:"message,required"`
-	JSON    userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrorsJSON `json:"-"`
+type UserLoadBalancingAnalyticEventListResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    userLoadBalancingAnalyticEventListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrors]
-type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrorsJSON struct {
+// userLoadBalancingAnalyticEventListResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancingAnalyticEventListResponseEnvelopeErrors]
+type userLoadBalancingAnalyticEventListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessages struct {
-	Code    int64                                                                                                        `json:"code,required"`
-	Message string                                                                                                       `json:"message,required"`
-	JSON    userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessagesJSON `json:"-"`
+type UserLoadBalancingAnalyticEventListResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    userLoadBalancingAnalyticEventListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessages]
-type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessagesJSON struct {
+// userLoadBalancingAnalyticEventListResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancingAnalyticEventListResponseEnvelopeMessages]
+type userLoadBalancingAnalyticEventListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeSuccess bool
+type UserLoadBalancingAnalyticEventListResponseEnvelopeSuccess bool
 
 const (
-	UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeSuccessTrue UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeSuccess = true
+	UserLoadBalancingAnalyticEventListResponseEnvelopeSuccessTrue UserLoadBalancingAnalyticEventListResponseEnvelopeSuccess = true
 )
 
-type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfo struct {
+type UserLoadBalancingAnalyticEventListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -180,14 +177,14 @@ type UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                                        `json:"total_count"`
-	JSON       userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                          `json:"total_count"`
+	JSON       userLoadBalancingAnalyticEventListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfo]
-type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfoJSON struct {
+// userLoadBalancingAnalyticEventListResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [UserLoadBalancingAnalyticEventListResponseEnvelopeResultInfo]
+type userLoadBalancingAnalyticEventListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -196,6 +193,6 @@ type userLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckE
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancingAnalyticEventLoadBalancerHealthcheckEventsListHealthcheckEventsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancingAnalyticEventListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

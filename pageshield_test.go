@@ -29,7 +29,7 @@ func TestPageShieldList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.PageShields.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.PageShield.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestPageShieldList(t *testing.T) {
 	}
 }
 
-func TestPageShieldPageShieldUpdatePageShieldSettingsWithOptionalParams(t *testing.T) {
+func TestPageShieldReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,10 +55,10 @@ func TestPageShieldPageShieldUpdatePageShieldSettingsWithOptionalParams(t *testi
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.PageShields.PageShieldUpdatePageShieldSettings(
+	_, err := client.PageShield.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PageShieldPageShieldUpdatePageShieldSettingsParams{
+		cloudflare.PageShieldReplaceParams{
 			Enabled:                        cloudflare.F(true),
 			UseCloudflareReportingEndpoint: cloudflare.F(true),
 			UseConnectionURLPath:           cloudflare.F(true),

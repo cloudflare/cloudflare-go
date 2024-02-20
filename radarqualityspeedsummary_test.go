@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarQualitySpeedSummaryGetWithOptionalParams(t *testing.T) {
+func TestRadarQualitySpeedSummaryListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestRadarQualitySpeedSummaryGetWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.Quality.Speed.Summary.Get(context.TODO(), cloudflare.RadarQualitySpeedSummaryGetParams{
+	_, err := client.Radar.Quality.Speed.Summary.List(context.TODO(), cloudflare.RadarQualitySpeedSummaryListParams{
 		Asn:      cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:   cloudflare.F(cloudflare.RadarQualitySpeedSummaryGetParamsFormatJson),
+		Format:   cloudflare.F(cloudflare.RadarQualitySpeedSummaryListParamsFormatJson),
 		Location: cloudflare.F([]string{"string", "string", "string"}),
 		Name:     cloudflare.F([]string{"string", "string", "string"}),
 	})

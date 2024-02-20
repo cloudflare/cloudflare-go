@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerQueueConsumerUpdate(t *testing.T) {
+func TestWorkerQueueConsumerNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,18 +29,19 @@ func TestWorkerQueueConsumerUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Queues.Consumers.Update(
+	_, err := client.Workers.Queues.Consumers.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-queue",
-		"example-consumer",
-		cloudflare.WorkerQueueConsumerUpdateParams{
+		cloudflare.WorkerQueueConsumerNewParams{
 			Body: cloudflare.F[any](map[string]interface{}{
-				"dead_letter_queue": "updated-example-dlq",
+				"dead_letter_queue": "example-dlq",
 				"environment":       "production",
 				"script_name":       "example-consumer",
 				"settings": map[string]interface{}{
-					"batch_size": int64(100),
+					"batch_size":       int64(10),
+					"max_retries":      int64(3),
+					"max_wait_time_ms": int64(5000),
 				},
 			}),
 		},
@@ -115,7 +116,7 @@ func TestWorkerQueueConsumerDelete(t *testing.T) {
 	}
 }
 
-func TestWorkerQueueConsumerQueueNewQueueConsumer(t *testing.T) {
+func TestWorkerQueueConsumerReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -131,19 +132,18 @@ func TestWorkerQueueConsumerQueueNewQueueConsumer(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Queues.Consumers.QueueNewQueueConsumer(
+	_, err := client.Workers.Queues.Consumers.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-queue",
-		cloudflare.WorkerQueueConsumerQueueNewQueueConsumerParams{
+		"example-consumer",
+		cloudflare.WorkerQueueConsumerReplaceParams{
 			Body: cloudflare.F[any](map[string]interface{}{
-				"dead_letter_queue": "example-dlq",
+				"dead_letter_queue": "updated-example-dlq",
 				"environment":       "production",
 				"script_name":       "example-consumer",
 				"settings": map[string]interface{}{
-					"batch_size":       int64(10),
-					"max_retries":      int64(3),
-					"max_wait_time_ms": int64(5000),
+					"batch_size": int64(100),
 				},
 			}),
 		},

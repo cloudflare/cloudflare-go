@@ -37,12 +37,25 @@ func NewGatewayListService(opts ...option.RequestOption) (r *GatewayListService)
 	return
 }
 
-// Updates a configured Zero Trust list.
-func (r *GatewayListService) Update(ctx context.Context, accountID interface{}, listID string, body GatewayListUpdateParams, opts ...option.RequestOption) (res *GatewayListUpdateResponse, err error) {
+// Creates a new Zero Trust list.
+func (r *GatewayListService) New(ctx context.Context, accountID interface{}, body GatewayListNewParams, opts ...option.RequestOption) (res *GatewayListNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayListUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env GatewayListNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/lists", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches all Zero Trust lists for an account.
+func (r *GatewayListService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayListListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GatewayListListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/lists", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,12 +89,12 @@ func (r *GatewayListService) Get(ctx context.Context, accountID interface{}, lis
 	return
 }
 
-// Creates a new Zero Trust list.
-func (r *GatewayListService) ZeroTrustListsNewZeroTrustList(ctx context.Context, accountID interface{}, body GatewayListZeroTrustListsNewZeroTrustListParams, opts ...option.RequestOption) (res *GatewayListZeroTrustListsNewZeroTrustListResponse, err error) {
+// Updates a configured Zero Trust list.
+func (r *GatewayListService) Replace(ctx context.Context, accountID interface{}, listID string, body GatewayListReplaceParams, opts ...option.RequestOption) (res *GatewayListReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayListZeroTrustListsNewZeroTrustListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env GatewayListReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", accountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,20 +102,72 @@ func (r *GatewayListService) ZeroTrustListsNewZeroTrustList(ctx context.Context,
 	return
 }
 
-// Fetches all Zero Trust lists for an account.
-func (r *GatewayListService) ZeroTrustListsListZeroTrustLists(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayListZeroTrustListsListZeroTrustListsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayListZeroTrustListsListZeroTrustListsResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type GatewayListNewResponse struct {
+	// API Resource UUID tag.
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The description of the list.
+	Description string `json:"description"`
+	// The items in the list.
+	Items []GatewayListNewResponseItem `json:"items"`
+	// The name of the list.
+	Name string `json:"name"`
+	// The type of list.
+	Type      GatewayListNewResponseType `json:"type"`
+	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
+	JSON      gatewayListNewResponseJSON `json:"-"`
 }
 
-type GatewayListUpdateResponse struct {
+// gatewayListNewResponseJSON contains the JSON metadata for the struct
+// [GatewayListNewResponse]
+type gatewayListNewResponseJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Description apijson.Field
+	Items       apijson.Field
+	Name        apijson.Field
+	Type        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayListNewResponseItem struct {
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The value of the item in a list.
+	Value string                         `json:"value"`
+	JSON  gatewayListNewResponseItemJSON `json:"-"`
+}
+
+// gatewayListNewResponseItemJSON contains the JSON metadata for the struct
+// [GatewayListNewResponseItem]
+type gatewayListNewResponseItemJSON struct {
+	CreatedAt   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListNewResponseItem) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of list.
+type GatewayListNewResponseType string
+
+const (
+	GatewayListNewResponseTypeSerial GatewayListNewResponseType = "SERIAL"
+	GatewayListNewResponseTypeURL    GatewayListNewResponseType = "URL"
+	GatewayListNewResponseTypeDomain GatewayListNewResponseType = "DOMAIN"
+	GatewayListNewResponseTypeEmail  GatewayListNewResponseType = "EMAIL"
+	GatewayListNewResponseTypeIP     GatewayListNewResponseType = "IP"
+)
+
+type GatewayListListResponse struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
 	// The number of items in the list.
@@ -113,14 +178,14 @@ type GatewayListUpdateResponse struct {
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
-	Type      GatewayListUpdateResponseType `json:"type"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      gatewayListUpdateResponseJSON `json:"-"`
+	Type      GatewayListListResponseType `json:"type"`
+	UpdatedAt time.Time                   `json:"updated_at" format:"date-time"`
+	JSON      gatewayListListResponseJSON `json:"-"`
 }
 
-// gatewayListUpdateResponseJSON contains the JSON metadata for the struct
-// [GatewayListUpdateResponse]
-type gatewayListUpdateResponseJSON struct {
+// gatewayListListResponseJSON contains the JSON metadata for the struct
+// [GatewayListListResponse]
+type gatewayListListResponseJSON struct {
 	ID          apijson.Field
 	Count       apijson.Field
 	CreatedAt   apijson.Field
@@ -132,19 +197,19 @@ type gatewayListUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of list.
-type GatewayListUpdateResponseType string
+type GatewayListListResponseType string
 
 const (
-	GatewayListUpdateResponseTypeSerial GatewayListUpdateResponseType = "SERIAL"
-	GatewayListUpdateResponseTypeURL    GatewayListUpdateResponseType = "URL"
-	GatewayListUpdateResponseTypeDomain GatewayListUpdateResponseType = "DOMAIN"
-	GatewayListUpdateResponseTypeEmail  GatewayListUpdateResponseType = "EMAIL"
-	GatewayListUpdateResponseTypeIP     GatewayListUpdateResponseType = "IP"
+	GatewayListListResponseTypeSerial GatewayListListResponseType = "SERIAL"
+	GatewayListListResponseTypeURL    GatewayListListResponseType = "URL"
+	GatewayListListResponseTypeDomain GatewayListListResponseType = "DOMAIN"
+	GatewayListListResponseTypeEmail  GatewayListListResponseType = "EMAIL"
+	GatewayListListResponseTypeIP     GatewayListListResponseType = "IP"
 )
 
 // Union satisfied by [GatewayListDeleteResponseUnknown] or [shared.UnionString].
@@ -208,72 +273,7 @@ const (
 	GatewayListGetResponseTypeIP     GatewayListGetResponseType = "IP"
 )
 
-type GatewayListZeroTrustListsNewZeroTrustListResponse struct {
-	// API Resource UUID tag.
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The description of the list.
-	Description string `json:"description"`
-	// The items in the list.
-	Items []GatewayListZeroTrustListsNewZeroTrustListResponseItem `json:"items"`
-	// The name of the list.
-	Name string `json:"name"`
-	// The type of list.
-	Type      GatewayListZeroTrustListsNewZeroTrustListResponseType `json:"type"`
-	UpdatedAt time.Time                                             `json:"updated_at" format:"date-time"`
-	JSON      gatewayListZeroTrustListsNewZeroTrustListResponseJSON `json:"-"`
-}
-
-// gatewayListZeroTrustListsNewZeroTrustListResponseJSON contains the JSON metadata
-// for the struct [GatewayListZeroTrustListsNewZeroTrustListResponse]
-type gatewayListZeroTrustListsNewZeroTrustListResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Description apijson.Field
-	Items       apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsNewZeroTrustListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayListZeroTrustListsNewZeroTrustListResponseItem struct {
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The value of the item in a list.
-	Value string                                                    `json:"value"`
-	JSON  gatewayListZeroTrustListsNewZeroTrustListResponseItemJSON `json:"-"`
-}
-
-// gatewayListZeroTrustListsNewZeroTrustListResponseItemJSON contains the JSON
-// metadata for the struct [GatewayListZeroTrustListsNewZeroTrustListResponseItem]
-type gatewayListZeroTrustListsNewZeroTrustListResponseItemJSON struct {
-	CreatedAt   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsNewZeroTrustListResponseItem) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of list.
-type GatewayListZeroTrustListsNewZeroTrustListResponseType string
-
-const (
-	GatewayListZeroTrustListsNewZeroTrustListResponseTypeSerial GatewayListZeroTrustListsNewZeroTrustListResponseType = "SERIAL"
-	GatewayListZeroTrustListsNewZeroTrustListResponseTypeURL    GatewayListZeroTrustListsNewZeroTrustListResponseType = "URL"
-	GatewayListZeroTrustListsNewZeroTrustListResponseTypeDomain GatewayListZeroTrustListsNewZeroTrustListResponseType = "DOMAIN"
-	GatewayListZeroTrustListsNewZeroTrustListResponseTypeEmail  GatewayListZeroTrustListsNewZeroTrustListResponseType = "EMAIL"
-	GatewayListZeroTrustListsNewZeroTrustListResponseTypeIP     GatewayListZeroTrustListsNewZeroTrustListResponseType = "IP"
-)
-
-type GatewayListZeroTrustListsListZeroTrustListsResponse struct {
+type GatewayListReplaceResponse struct {
 	// API Resource UUID tag.
 	ID string `json:"id"`
 	// The number of items in the list.
@@ -284,14 +284,14 @@ type GatewayListZeroTrustListsListZeroTrustListsResponse struct {
 	// The name of the list.
 	Name string `json:"name"`
 	// The type of list.
-	Type      GatewayListZeroTrustListsListZeroTrustListsResponseType `json:"type"`
-	UpdatedAt time.Time                                               `json:"updated_at" format:"date-time"`
-	JSON      gatewayListZeroTrustListsListZeroTrustListsResponseJSON `json:"-"`
+	Type      GatewayListReplaceResponseType `json:"type"`
+	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
+	JSON      gatewayListReplaceResponseJSON `json:"-"`
 }
 
-// gatewayListZeroTrustListsListZeroTrustListsResponseJSON contains the JSON
-// metadata for the struct [GatewayListZeroTrustListsListZeroTrustListsResponse]
-type gatewayListZeroTrustListsListZeroTrustListsResponseJSON struct {
+// gatewayListReplaceResponseJSON contains the JSON metadata for the struct
+// [GatewayListReplaceResponse]
+type gatewayListReplaceResponseJSON struct {
 	ID          apijson.Field
 	Count       apijson.Field
 	CreatedAt   apijson.Field
@@ -303,44 +303,68 @@ type gatewayListZeroTrustListsListZeroTrustListsResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListZeroTrustListsListZeroTrustListsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of list.
-type GatewayListZeroTrustListsListZeroTrustListsResponseType string
+type GatewayListReplaceResponseType string
 
 const (
-	GatewayListZeroTrustListsListZeroTrustListsResponseTypeSerial GatewayListZeroTrustListsListZeroTrustListsResponseType = "SERIAL"
-	GatewayListZeroTrustListsListZeroTrustListsResponseTypeURL    GatewayListZeroTrustListsListZeroTrustListsResponseType = "URL"
-	GatewayListZeroTrustListsListZeroTrustListsResponseTypeDomain GatewayListZeroTrustListsListZeroTrustListsResponseType = "DOMAIN"
-	GatewayListZeroTrustListsListZeroTrustListsResponseTypeEmail  GatewayListZeroTrustListsListZeroTrustListsResponseType = "EMAIL"
-	GatewayListZeroTrustListsListZeroTrustListsResponseTypeIP     GatewayListZeroTrustListsListZeroTrustListsResponseType = "IP"
+	GatewayListReplaceResponseTypeSerial GatewayListReplaceResponseType = "SERIAL"
+	GatewayListReplaceResponseTypeURL    GatewayListReplaceResponseType = "URL"
+	GatewayListReplaceResponseTypeDomain GatewayListReplaceResponseType = "DOMAIN"
+	GatewayListReplaceResponseTypeEmail  GatewayListReplaceResponseType = "EMAIL"
+	GatewayListReplaceResponseTypeIP     GatewayListReplaceResponseType = "IP"
 )
 
-type GatewayListUpdateParams struct {
+type GatewayListNewParams struct {
 	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
+	// The type of list.
+	Type param.Field[GatewayListNewParamsType] `json:"type,required"`
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
+	// The items in the list.
+	Items param.Field[[]GatewayListNewParamsItem] `json:"items"`
 }
 
-func (r GatewayListUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayListNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayListUpdateResponseEnvelope struct {
-	Errors   []GatewayListUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayListUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayListUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success GatewayListUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayListUpdateResponseEnvelopeJSON    `json:"-"`
+// The type of list.
+type GatewayListNewParamsType string
+
+const (
+	GatewayListNewParamsTypeSerial GatewayListNewParamsType = "SERIAL"
+	GatewayListNewParamsTypeURL    GatewayListNewParamsType = "URL"
+	GatewayListNewParamsTypeDomain GatewayListNewParamsType = "DOMAIN"
+	GatewayListNewParamsTypeEmail  GatewayListNewParamsType = "EMAIL"
+	GatewayListNewParamsTypeIP     GatewayListNewParamsType = "IP"
+)
+
+type GatewayListNewParamsItem struct {
+	// The value of the item in a list.
+	Value param.Field[string] `json:"value"`
 }
 
-// gatewayListUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [GatewayListUpdateResponseEnvelope]
-type gatewayListUpdateResponseEnvelopeJSON struct {
+func (r GatewayListNewParamsItem) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type GatewayListNewResponseEnvelope struct {
+	Errors   []GatewayListNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayListNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayListNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success GatewayListNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayListNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// gatewayListNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayListNewResponseEnvelope]
+type gatewayListNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -349,54 +373,152 @@ type gatewayListUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayListUpdateResponseEnvelopeErrors struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    gatewayListUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayListNewResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    gatewayListNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayListUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [GatewayListUpdateResponseEnvelopeErrors]
-type gatewayListUpdateResponseEnvelopeErrorsJSON struct {
+// gatewayListNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayListNewResponseEnvelopeErrors]
+type gatewayListNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayListUpdateResponseEnvelopeMessages struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    gatewayListUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayListNewResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    gatewayListNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayListUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [GatewayListUpdateResponseEnvelopeMessages]
-type gatewayListUpdateResponseEnvelopeMessagesJSON struct {
+// gatewayListNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [GatewayListNewResponseEnvelopeMessages]
+type gatewayListNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayListUpdateResponseEnvelopeSuccess bool
+type GatewayListNewResponseEnvelopeSuccess bool
 
 const (
-	GatewayListUpdateResponseEnvelopeSuccessTrue GatewayListUpdateResponseEnvelopeSuccess = true
+	GatewayListNewResponseEnvelopeSuccessTrue GatewayListNewResponseEnvelopeSuccess = true
 )
+
+type GatewayListListResponseEnvelope struct {
+	Errors   []GatewayListListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayListListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []GatewayListListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    GatewayListListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo GatewayListListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       gatewayListListResponseEnvelopeJSON       `json:"-"`
+}
+
+// gatewayListListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayListListResponseEnvelope]
+type gatewayListListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayListListResponseEnvelopeErrors struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    gatewayListListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayListListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayListListResponseEnvelopeErrors]
+type gatewayListListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayListListResponseEnvelopeMessages struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    gatewayListListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayListListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [GatewayListListResponseEnvelopeMessages]
+type gatewayListListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type GatewayListListResponseEnvelopeSuccess bool
+
+const (
+	GatewayListListResponseEnvelopeSuccessTrue GatewayListListResponseEnvelopeSuccess = true
+)
+
+type GatewayListListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                       `json:"total_count"`
+	JSON       gatewayListListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// gatewayListListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [GatewayListListResponseEnvelopeResultInfo]
+type gatewayListListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayListListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type GatewayListDeleteResponseEnvelope struct {
 	Errors   []GatewayListDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -536,54 +658,29 @@ const (
 	GatewayListGetResponseEnvelopeSuccessTrue GatewayListGetResponseEnvelopeSuccess = true
 )
 
-type GatewayListZeroTrustListsNewZeroTrustListParams struct {
+type GatewayListReplaceParams struct {
 	// The name of the list.
 	Name param.Field[string] `json:"name,required"`
-	// The type of list.
-	Type param.Field[GatewayListZeroTrustListsNewZeroTrustListParamsType] `json:"type,required"`
 	// The description of the list.
 	Description param.Field[string] `json:"description"`
-	// The items in the list.
-	Items param.Field[[]GatewayListZeroTrustListsNewZeroTrustListParamsItem] `json:"items"`
 }
 
-func (r GatewayListZeroTrustListsNewZeroTrustListParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayListReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of list.
-type GatewayListZeroTrustListsNewZeroTrustListParamsType string
-
-const (
-	GatewayListZeroTrustListsNewZeroTrustListParamsTypeSerial GatewayListZeroTrustListsNewZeroTrustListParamsType = "SERIAL"
-	GatewayListZeroTrustListsNewZeroTrustListParamsTypeURL    GatewayListZeroTrustListsNewZeroTrustListParamsType = "URL"
-	GatewayListZeroTrustListsNewZeroTrustListParamsTypeDomain GatewayListZeroTrustListsNewZeroTrustListParamsType = "DOMAIN"
-	GatewayListZeroTrustListsNewZeroTrustListParamsTypeEmail  GatewayListZeroTrustListsNewZeroTrustListParamsType = "EMAIL"
-	GatewayListZeroTrustListsNewZeroTrustListParamsTypeIP     GatewayListZeroTrustListsNewZeroTrustListParamsType = "IP"
-)
-
-type GatewayListZeroTrustListsNewZeroTrustListParamsItem struct {
-	// The value of the item in a list.
-	Value param.Field[string] `json:"value"`
-}
-
-func (r GatewayListZeroTrustListsNewZeroTrustListParamsItem) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type GatewayListZeroTrustListsNewZeroTrustListResponseEnvelope struct {
-	Errors   []GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayListZeroTrustListsNewZeroTrustListResponse                   `json:"result,required"`
+type GatewayListReplaceResponseEnvelope struct {
+	Errors   []GatewayListReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayListReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayListReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeJSON    `json:"-"`
+	Success GatewayListReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayListReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeJSON contains the JSON
-// metadata for the struct
-// [GatewayListZeroTrustListsNewZeroTrustListResponseEnvelope]
-type gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeJSON struct {
+// gatewayListReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayListReplaceResponseEnvelope]
+type gatewayListReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -592,155 +689,51 @@ type gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListZeroTrustListsNewZeroTrustListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrors struct {
-	Code    int64                                                               `json:"code,required"`
-	Message string                                                              `json:"message,required"`
-	JSON    gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayListReplaceResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    gatewayListReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrors]
-type gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrorsJSON struct {
+// gatewayListReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayListReplaceResponseEnvelopeErrors]
+type gatewayListReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessages struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayListReplaceResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    gatewayListReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessages]
-type gatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessagesJSON struct {
+// gatewayListReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayListReplaceResponseEnvelopeMessages]
+type gatewayListReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayListReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeSuccess bool
+type GatewayListReplaceResponseEnvelopeSuccess bool
 
 const (
-	GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeSuccessTrue GatewayListZeroTrustListsNewZeroTrustListResponseEnvelopeSuccess = true
+	GatewayListReplaceResponseEnvelopeSuccessTrue GatewayListReplaceResponseEnvelopeSuccess = true
 )
-
-type GatewayListZeroTrustListsListZeroTrustListsResponseEnvelope struct {
-	Errors   []GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []GatewayListZeroTrustListsListZeroTrustListsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [GatewayListZeroTrustListsListZeroTrustListsResponseEnvelope]
-type gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsListZeroTrustListsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrors struct {
-	Code    int64                                                                 `json:"code,required"`
-	Message string                                                                `json:"message,required"`
-	JSON    gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrorsJSON contains
-// the JSON metadata for the struct
-// [GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrors]
-type gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessages struct {
-	Code    int64                                                                   `json:"code,required"`
-	Message string                                                                  `json:"message,required"`
-	JSON    gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessagesJSON contains
-// the JSON metadata for the struct
-// [GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessages]
-type gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeSuccess bool
-
-const (
-	GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeSuccessTrue GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeSuccess = true
-)
-
-type GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                   `json:"total_count"`
-	JSON       gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfo]
-type gatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayListZeroTrustListsListZeroTrustListsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}

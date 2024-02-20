@@ -47,12 +47,12 @@ func (r *StreamWebhookService) Delete(ctx context.Context, accountID string, opt
 	return
 }
 
-// Creates a webhook notification.
-func (r *StreamWebhookService) StreamWebhookNewWebhooks(ctx context.Context, accountID string, body StreamWebhookStreamWebhookNewWebhooksParams, opts ...option.RequestOption) (res *StreamWebhookStreamWebhookNewWebhooksResponse, err error) {
+// Retrieves a list of webhooks.
+func (r *StreamWebhookService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *StreamWebhookGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamWebhookStreamWebhookNewWebhooksResponseEnvelope
+	var env StreamWebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,12 +60,12 @@ func (r *StreamWebhookService) StreamWebhookNewWebhooks(ctx context.Context, acc
 	return
 }
 
-// Retrieves a list of webhooks.
-func (r *StreamWebhookService) StreamWebhookViewWebhooks(ctx context.Context, accountID string, opts ...option.RequestOption) (res *StreamWebhookStreamWebhookViewWebhooksResponse, err error) {
+// Creates a webhook notification.
+func (r *StreamWebhookService) Replace(ctx context.Context, accountID string, body StreamWebhookReplaceParams, opts ...option.RequestOption) (res *StreamWebhookReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamWebhookStreamWebhookViewWebhooksResponseEnvelope
+	var env StreamWebhookReplaceResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,15 +89,14 @@ func init() {
 	)
 }
 
-// Union satisfied by [StreamWebhookStreamWebhookNewWebhooksResponseUnknown] or
-// [shared.UnionString].
-type StreamWebhookStreamWebhookNewWebhooksResponse interface {
-	ImplementsStreamWebhookStreamWebhookNewWebhooksResponse()
+// Union satisfied by [StreamWebhookGetResponseUnknown] or [shared.UnionString].
+type StreamWebhookGetResponse interface {
+	ImplementsStreamWebhookGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamWebhookStreamWebhookNewWebhooksResponse)(nil)).Elem(),
+		reflect.TypeOf((*StreamWebhookGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -106,15 +105,15 @@ func init() {
 	)
 }
 
-// Union satisfied by [StreamWebhookStreamWebhookViewWebhooksResponseUnknown] or
+// Union satisfied by [StreamWebhookReplaceResponseUnknown] or
 // [shared.UnionString].
-type StreamWebhookStreamWebhookViewWebhooksResponse interface {
-	ImplementsStreamWebhookStreamWebhookViewWebhooksResponse()
+type StreamWebhookReplaceResponse interface {
+	ImplementsStreamWebhookReplaceResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*StreamWebhookStreamWebhookViewWebhooksResponse)(nil)).Elem(),
+		reflect.TypeOf((*StreamWebhookReplaceResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -192,27 +191,96 @@ const (
 	StreamWebhookDeleteResponseEnvelopeSuccessTrue StreamWebhookDeleteResponseEnvelopeSuccess = true
 )
 
-type StreamWebhookStreamWebhookNewWebhooksParams struct {
+type StreamWebhookGetResponseEnvelope struct {
+	Errors   []StreamWebhookGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamWebhookGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamWebhookGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamWebhookGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamWebhookGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamWebhookGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamWebhookGetResponseEnvelope]
+type streamWebhookGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWebhookGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamWebhookGetResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    streamWebhookGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamWebhookGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [StreamWebhookGetResponseEnvelopeErrors]
+type streamWebhookGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWebhookGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamWebhookGetResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    streamWebhookGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamWebhookGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StreamWebhookGetResponseEnvelopeMessages]
+type streamWebhookGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamWebhookGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamWebhookGetResponseEnvelopeSuccess bool
+
+const (
+	StreamWebhookGetResponseEnvelopeSuccessTrue StreamWebhookGetResponseEnvelopeSuccess = true
+)
+
+type StreamWebhookReplaceParams struct {
 	// The URL where webhooks will be sent.
 	NotificationURL param.Field[string] `json:"notificationUrl,required" format:"uri"`
 }
 
-func (r StreamWebhookStreamWebhookNewWebhooksParams) MarshalJSON() (data []byte, err error) {
+func (r StreamWebhookReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StreamWebhookStreamWebhookNewWebhooksResponseEnvelope struct {
-	Errors   []StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamWebhookStreamWebhookNewWebhooksResponse                   `json:"result,required"`
+type StreamWebhookReplaceResponseEnvelope struct {
+	Errors   []StreamWebhookReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamWebhookReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   StreamWebhookReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamWebhookStreamWebhookNewWebhooksResponseEnvelopeJSON    `json:"-"`
+	Success StreamWebhookReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamWebhookReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// streamWebhookStreamWebhookNewWebhooksResponseEnvelopeJSON contains the JSON
-// metadata for the struct [StreamWebhookStreamWebhookNewWebhooksResponseEnvelope]
-type streamWebhookStreamWebhookNewWebhooksResponseEnvelopeJSON struct {
+// streamWebhookReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StreamWebhookReplaceResponseEnvelope]
+type streamWebhookReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -221,124 +289,51 @@ type streamWebhookStreamWebhookNewWebhooksResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamWebhookStreamWebhookNewWebhooksResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamWebhookReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrors struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    streamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrorsJSON `json:"-"`
+type StreamWebhookReplaceResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    streamWebhookReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// streamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrors]
-type streamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrorsJSON struct {
+// streamWebhookReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [StreamWebhookReplaceResponseEnvelopeErrors]
+type streamWebhookReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamWebhookReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessages struct {
-	Code    int64                                                             `json:"code,required"`
-	Message string                                                            `json:"message,required"`
-	JSON    streamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessagesJSON `json:"-"`
+type StreamWebhookReplaceResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    streamWebhookReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// streamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessages]
-type streamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessagesJSON struct {
+// streamWebhookReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StreamWebhookReplaceResponseEnvelopeMessages]
+type streamWebhookReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamWebhookReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeSuccess bool
+type StreamWebhookReplaceResponseEnvelopeSuccess bool
 
 const (
-	StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeSuccessTrue StreamWebhookStreamWebhookNewWebhooksResponseEnvelopeSuccess = true
-)
-
-type StreamWebhookStreamWebhookViewWebhooksResponseEnvelope struct {
-	Errors   []StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamWebhookStreamWebhookViewWebhooksResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamWebhookStreamWebhookViewWebhooksResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamWebhookStreamWebhookViewWebhooksResponseEnvelopeJSON contains the JSON
-// metadata for the struct [StreamWebhookStreamWebhookViewWebhooksResponseEnvelope]
-type streamWebhookStreamWebhookViewWebhooksResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWebhookStreamWebhookViewWebhooksResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrors struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    streamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrorsJSON contains the
-// JSON metadata for the struct
-// [StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrors]
-type streamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessages struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    streamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessages]
-type streamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeSuccess bool
-
-const (
-	StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeSuccessTrue StreamWebhookStreamWebhookViewWebhooksResponseEnvelopeSuccess = true
+	StreamWebhookReplaceResponseEnvelopeSuccessTrue StreamWebhookReplaceResponseEnvelopeSuccess = true
 )

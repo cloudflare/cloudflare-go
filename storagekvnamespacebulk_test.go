@@ -29,7 +29,7 @@ func TestStorageKvNamespaceBulkDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Bulks.Delete(
+	_, err := client.Storage.Kv.Namespaces.Bulk.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
@@ -46,7 +46,7 @@ func TestStorageKvNamespaceBulkDelete(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairs(t *testing.T) {
+func TestStorageKvNamespaceBulkReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -62,12 +62,12 @@ func TestStorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairs(t *t
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Bulks.WorkersKvNamespaceWriteMultipleKeyValuePairs(
+	_, err := client.Storage.Kv.Namespaces.Bulk.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
-		cloudflare.StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParams{
-			Body: cloudflare.F([]cloudflare.StorageKvNamespaceBulkWorkersKvNamespaceWriteMultipleKeyValuePairsParamsBody{{
+		cloudflare.StorageKvNamespaceBulkReplaceParams{
+			Body: cloudflare.F([]cloudflare.StorageKvNamespaceBulkReplaceParamsBody{{
 				Base64:        cloudflare.F(true),
 				Expiration:    cloudflare.F(1578435000.000000),
 				ExpirationTTL: cloudflare.F(300.000000),

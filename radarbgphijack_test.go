@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarBGPHijackEventsWithOptionalParams(t *testing.T) {
+func TestRadarBGPHijackListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,12 +30,12 @@ func TestRadarBGPHijackEventsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Radar.BGP.Hijacks.Events(context.TODO(), cloudflare.RadarBGPHijackEventsParams{
+	_, err := client.Radar.BGP.Hijacks.List(context.TODO(), cloudflare.RadarBGPHijackListParams{
 		DateEnd:         cloudflare.F(time.Now()),
-		DateRange:       cloudflare.F(cloudflare.RadarBGPHijackEventsParamsDateRange7d),
+		DateRange:       cloudflare.F(cloudflare.RadarBGPHijackListParamsDateRange7d),
 		DateStart:       cloudflare.F(time.Now()),
 		EventID:         cloudflare.F(int64(0)),
-		Format:          cloudflare.F(cloudflare.RadarBGPHijackEventsParamsFormatJson),
+		Format:          cloudflare.F(cloudflare.RadarBGPHijackListParamsFormatJson),
 		HijackerAsn:     cloudflare.F(int64(0)),
 		InvolvedAsn:     cloudflare.F(int64(0)),
 		InvolvedCountry: cloudflare.F("string"),
@@ -44,8 +44,8 @@ func TestRadarBGPHijackEventsWithOptionalParams(t *testing.T) {
 		Page:            cloudflare.F(int64(0)),
 		PerPage:         cloudflare.F(int64(0)),
 		Prefix:          cloudflare.F("string"),
-		SortBy:          cloudflare.F(cloudflare.RadarBGPHijackEventsParamsSortByTime),
-		SortOrder:       cloudflare.F(cloudflare.RadarBGPHijackEventsParamsSortOrderDesc),
+		SortBy:          cloudflare.F(cloudflare.RadarBGPHijackListParamsSortByTime),
+		SortOrder:       cloudflare.F(cloudflare.RadarBGPHijackListParamsSortOrderDesc),
 		VictimAsn:       cloudflare.F(int64(0)),
 	})
 	if err != nil {

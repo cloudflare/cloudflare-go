@@ -33,9 +33,9 @@ func NewLoadBalancerMonitorPreviewService(opts ...option.RequestOption) (r *Load
 
 // Preview pools using the specified monitor with provided monitor details. The
 // returned preview_id can be used in the preview endpoint to retrieve the results.
-func (r *LoadBalancerMonitorPreviewService) AccountLoadBalancerMonitorsPreviewMonitor(ctx context.Context, accountID string, monitorID string, body LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams, opts ...option.RequestOption) (res *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse, err error) {
+func (r *LoadBalancerMonitorPreviewService) New(ctx context.Context, accountID string, monitorID string, body LoadBalancerMonitorPreviewNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorPreviewNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelope
+	var env LoadBalancerMonitorPreviewNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", accountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -45,28 +45,27 @@ func (r *LoadBalancerMonitorPreviewService) AccountLoadBalancerMonitorsPreviewMo
 	return
 }
 
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse struct {
+type LoadBalancerMonitorPreviewNewResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     map[string]string                                                               `json:"pools"`
-	PreviewID string                                                                          `json:"preview_id"`
-	JSON      loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON `json:"-"`
+	Pools     map[string]string                         `json:"pools"`
+	PreviewID string                                    `json:"preview_id"`
+	JSON      loadBalancerMonitorPreviewNewResponseJSON `json:"-"`
 }
 
-// loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse]
-type loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseJSON struct {
+// loadBalancerMonitorPreviewNewResponseJSON contains the JSON metadata for the
+// struct [LoadBalancerMonitorPreviewNewResponse]
+type loadBalancerMonitorPreviewNewResponseJSON struct {
 	Pools       apijson.Field
 	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorPreviewNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams struct {
+type LoadBalancerMonitorPreviewNewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -115,39 +114,38 @@ type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams s
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType] `json:"type"`
+	Type param.Field[LoadBalancerMonitorPreviewNewParamsType] `json:"type"`
 }
 
-func (r LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams) MarshalJSON() (data []byte, err error) {
+func (r LoadBalancerMonitorPreviewNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType string
+type LoadBalancerMonitorPreviewNewParamsType string
 
 const (
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeHTTP     LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "http"
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeHTTPS    LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "https"
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeTcp      LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "tcp"
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeUdpIcmp  LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "udp_icmp"
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeIcmpPing LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "icmp_ping"
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeSmtp     LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsType = "smtp"
+	LoadBalancerMonitorPreviewNewParamsTypeHTTP     LoadBalancerMonitorPreviewNewParamsType = "http"
+	LoadBalancerMonitorPreviewNewParamsTypeHTTPS    LoadBalancerMonitorPreviewNewParamsType = "https"
+	LoadBalancerMonitorPreviewNewParamsTypeTcp      LoadBalancerMonitorPreviewNewParamsType = "tcp"
+	LoadBalancerMonitorPreviewNewParamsTypeUdpIcmp  LoadBalancerMonitorPreviewNewParamsType = "udp_icmp"
+	LoadBalancerMonitorPreviewNewParamsTypeIcmpPing LoadBalancerMonitorPreviewNewParamsType = "icmp_ping"
+	LoadBalancerMonitorPreviewNewParamsTypeSmtp     LoadBalancerMonitorPreviewNewParamsType = "smtp"
 )
 
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages `json:"messages,required"`
-	Result   LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse                   `json:"result,required"`
+type LoadBalancerMonitorPreviewNewResponseEnvelope struct {
+	Errors   []LoadBalancerMonitorPreviewNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorPreviewNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   LoadBalancerMonitorPreviewNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccess `json:"success,required"`
-	JSON    loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeJSON    `json:"-"`
+	Success LoadBalancerMonitorPreviewNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    loadBalancerMonitorPreviewNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelope]
-type loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeJSON struct {
+// loadBalancerMonitorPreviewNewResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LoadBalancerMonitorPreviewNewResponseEnvelope]
+type loadBalancerMonitorPreviewNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -156,53 +154,51 @@ type loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponse
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorPreviewNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors struct {
-	Code    int64                                                                                         `json:"code,required"`
-	Message string                                                                                        `json:"message,required"`
-	JSON    loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrorsJSON `json:"-"`
+type LoadBalancerMonitorPreviewNewResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    loadBalancerMonitorPreviewNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors]
-type loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrorsJSON struct {
+// loadBalancerMonitorPreviewNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [LoadBalancerMonitorPreviewNewResponseEnvelopeErrors]
+type loadBalancerMonitorPreviewNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorPreviewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessagesJSON `json:"-"`
+type LoadBalancerMonitorPreviewNewResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    loadBalancerMonitorPreviewNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages]
-type loadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessagesJSON struct {
+// loadBalancerMonitorPreviewNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [LoadBalancerMonitorPreviewNewResponseEnvelopeMessages]
+type loadBalancerMonitorPreviewNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorPreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccess bool
+type LoadBalancerMonitorPreviewNewResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccessTrue LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorResponseEnvelopeSuccess = true
+	LoadBalancerMonitorPreviewNewResponseEnvelopeSuccessTrue LoadBalancerMonitorPreviewNewResponseEnvelopeSuccess = true
 )

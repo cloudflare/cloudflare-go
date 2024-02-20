@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAuditLogAuditLogsGetAccountAuditLogsWithOptionalParams(t *testing.T) {
+func TestAuditLogListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,26 +30,26 @@ func TestAuditLogAuditLogsGetAccountAuditLogsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.AuditLogs.AuditLogsGetAccountAuditLogs(
+	_, err := client.AuditLogs.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AuditLogAuditLogsGetAccountAuditLogsParams{
+		cloudflare.AuditLogListParams{
 			ID: cloudflare.F("f174be97-19b1-40d6-954d-70cd5fbd52db"),
-			Action: cloudflare.F(cloudflare.AuditLogAuditLogsGetAccountAuditLogsParamsAction{
+			Action: cloudflare.F(cloudflare.AuditLogListParamsAction{
 				Type: cloudflare.F("add"),
 			}),
-			Actor: cloudflare.F(cloudflare.AuditLogAuditLogsGetAccountAuditLogsParamsActor{
+			Actor: cloudflare.F(cloudflare.AuditLogListParamsActor{
 				IP:    cloudflare.F("17.168.228.63"),
 				Email: cloudflare.F("alice@example.com"),
 			}),
 			Before:       cloudflare.F(time.Now()),
-			Direction:    cloudflare.F(cloudflare.AuditLogAuditLogsGetAccountAuditLogsParamsDirectionDesc),
+			Direction:    cloudflare.F(cloudflare.AuditLogListParamsDirectionDesc),
 			Export:       cloudflare.F(true),
 			HideUserLogs: cloudflare.F(true),
 			Page:         cloudflare.F(50.000000),
 			PerPage:      cloudflare.F(25.000000),
 			Since:        cloudflare.F(time.Now()),
-			Zone: cloudflare.F(cloudflare.AuditLogAuditLogsGetAccountAuditLogsParamsZone{
+			Zone: cloudflare.F(cloudflare.AuditLogListParamsZone{
 				Name: cloudflare.F("example.com"),
 			}),
 		},

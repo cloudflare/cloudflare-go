@@ -181,20 +181,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
-	Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
-		ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-	}),
-	Name: cloudflare.F("example.com"),
-	Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
-})
+_, err := client.Zones.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 if err != nil {
 	var apierr *cloudflare.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/zones": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/zones/{zone_id}": 400 Bad Request { ... }
 }
 ```
 
@@ -212,15 +206,10 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.Zones.New(
+client.Zones.Update(
 	ctx,
-	cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
-			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}),
-		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
-	},
+	"023e105f4ecef8ad9ca31a8372d0c353",
+	cloudflare.ZoneUpdateParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -241,15 +230,9 @@ client := cloudflare.NewClient(
 )
 
 // Override per-request:
-client.Zones.New(
+client.Zones.Get(
 	context.TODO(),
-	cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
-			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		}),
-		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
-	},
+	"023e105f4ecef8ad9ca31a8372d0c353",
 	option.WithMaxRetries(5),
 )
 ```

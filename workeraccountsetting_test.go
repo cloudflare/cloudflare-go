@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettings(t *testing.T) {
+func TestWorkerAccountSettingGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,7 @@ func TestWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettings(t *te
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.AccountSettings.WorkerAccountSettingsNewWorkerAccountSettings(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams{
-			Body: cloudflare.F[any]("{'default_usage_model': 'unbound'}"),
-		},
-	)
+	_, err := client.Workers.AccountSettings.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -45,7 +39,7 @@ func TestWorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettings(t *te
 	}
 }
 
-func TestWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettings(t *testing.T) {
+func TestWorkerAccountSettingReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,7 +55,13 @@ func TestWorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettings(t *
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.AccountSettings.WorkerAccountSettingsFetchWorkerAccountSettings(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Workers.AccountSettings.Replace(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.WorkerAccountSettingReplaceParams{
+			Body: cloudflare.F[any]("{'default_usage_model': 'unbound'}"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

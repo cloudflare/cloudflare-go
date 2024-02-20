@@ -31,9 +31,9 @@ func NewSecondaryDNSForceAxfrService(opts ...option.RequestOption) (r *Secondary
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *SecondaryDNSForceAxfrService) SecondaryDNSSecondaryZoneForceAxfr(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSForceAxfrService) New(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelope
+	var env SecondaryDNSForceAxfrNewResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/force_axfr", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
@@ -43,20 +43,19 @@ func (r *SecondaryDNSForceAxfrService) SecondaryDNSSecondaryZoneForceAxfr(ctx co
 	return
 }
 
-type SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelope struct {
-	Errors   []SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessages `json:"messages,required"`
+type SecondaryDNSForceAxfrNewResponseEnvelope struct {
+	Errors   []SecondaryDNSForceAxfrNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SecondaryDNSForceAxfrNewResponseEnvelopeMessages `json:"messages,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
 	Result string `json:"result,required"`
 	// Whether the API call was successful
-	Success SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeSuccess `json:"success,required"`
-	JSON    secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeJSON    `json:"-"`
+	Success SecondaryDNSForceAxfrNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    secondaryDNSForceAxfrNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelope]
-type secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeJSON struct {
+// secondaryDNSForceAxfrNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SecondaryDNSForceAxfrNewResponseEnvelope]
+type secondaryDNSForceAxfrNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -65,53 +64,51 @@ type secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDNSForceAxfrNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrorsJSON `json:"-"`
+type SecondaryDNSForceAxfrNewResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    secondaryDNSForceAxfrNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrors]
-type secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrorsJSON struct {
+// secondaryDNSForceAxfrNewResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SecondaryDNSForceAxfrNewResponseEnvelopeErrors]
+type secondaryDNSForceAxfrNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDNSForceAxfrNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessagesJSON `json:"-"`
+type SecondaryDNSForceAxfrNewResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    secondaryDNSForceAxfrNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessages]
-type secondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessagesJSON struct {
+// secondaryDNSForceAxfrNewResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [SecondaryDNSForceAxfrNewResponseEnvelopeMessages]
+type secondaryDNSForceAxfrNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDNSForceAxfrNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeSuccess bool
+type SecondaryDNSForceAxfrNewResponseEnvelopeSuccess bool
 
 const (
-	SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeSuccessTrue SecondaryDNSForceAxfrSecondaryDNSSecondaryZoneForceAxfrResponseEnvelopeSuccess = true
+	SecondaryDNSForceAxfrNewResponseEnvelopeSuccessTrue SecondaryDNSForceAxfrNewResponseEnvelopeSuccess = true
 )

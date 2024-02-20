@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorWithOptionalParams(t *testing.T) {
+func TestLoadBalancerMonitorPreviewNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorWith
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.LoadBalancers.Monitors.Previews.AccountLoadBalancerMonitorsPreviewMonitor(
+	_, err := client.LoadBalancers.Monitors.Previews.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
-		cloudflare.LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParams{
+		cloudflare.LoadBalancerMonitorPreviewNewParams{
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -56,7 +56,7 @@ func TestLoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorWith
 			ProbeZone: cloudflare.F("example.com"),
 			Retries:   cloudflare.F(int64(0)),
 			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorPreviewAccountLoadBalancerMonitorsPreviewMonitorParamsTypeHTTPS),
+			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorPreviewNewParamsTypeHTTPS),
 		},
 	)
 	if err != nil {

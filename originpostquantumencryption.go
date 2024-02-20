@@ -40,11 +40,11 @@ func NewOriginPostQuantumEncryptionService(opts ...option.RequestOption) (r *Ori
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
-func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, zoneID string, body OriginPostQuantumEncryptionUpdateParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionUpdateResponse, err error) {
+func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env OriginPostQuantumEncryptionUpdateResponseEnvelope
+	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,33 +58,16 @@ func (r *OriginPostQuantumEncryptionService) Update(ctx context.Context, zoneID 
 // connections when the origin supports and prefers PQ), supported means that PQ
 // algorithms are advertised but only used when requested by the origin, and off
 // means that PQ algorithms are not advertised
-func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionGetResponse, err error) {
+func (r *OriginPostQuantumEncryptionService) Replace(ctx context.Context, zoneID string, body OriginPostQuantumEncryptionReplaceParams, opts ...option.RequestOption) (res *OriginPostQuantumEncryptionReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env OriginPostQuantumEncryptionGetResponseEnvelope
+	var env OriginPostQuantumEncryptionReplaceResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
-}
-
-// Union satisfied by [OriginPostQuantumEncryptionUpdateResponseUnknown] or
-// [shared.UnionString].
-type OriginPostQuantumEncryptionUpdateResponse interface {
-	ImplementsOriginPostQuantumEncryptionUpdateResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*OriginPostQuantumEncryptionUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 // Union satisfied by [OriginPostQuantumEncryptionGetResponseUnknown] or
@@ -104,94 +87,22 @@ func init() {
 	)
 }
 
-type OriginPostQuantumEncryptionUpdateParams struct {
-	// Value of the Origin Post Quantum Encryption Setting.
-	Value param.Field[OriginPostQuantumEncryptionUpdateParamsValue] `json:"value,required"`
+// Union satisfied by [OriginPostQuantumEncryptionReplaceResponseUnknown] or
+// [shared.UnionString].
+type OriginPostQuantumEncryptionReplaceResponse interface {
+	ImplementsOriginPostQuantumEncryptionReplaceResponse()
 }
 
-func (r OriginPostQuantumEncryptionUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*OriginPostQuantumEncryptionReplaceResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
-
-// Value of the Origin Post Quantum Encryption Setting.
-type OriginPostQuantumEncryptionUpdateParamsValue string
-
-const (
-	OriginPostQuantumEncryptionUpdateParamsValuePreferred OriginPostQuantumEncryptionUpdateParamsValue = "preferred"
-	OriginPostQuantumEncryptionUpdateParamsValueSupported OriginPostQuantumEncryptionUpdateParamsValue = "supported"
-	OriginPostQuantumEncryptionUpdateParamsValueOff       OriginPostQuantumEncryptionUpdateParamsValue = "off"
-)
-
-type OriginPostQuantumEncryptionUpdateResponseEnvelope struct {
-	Errors   []OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   OriginPostQuantumEncryptionUpdateResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeJSON    `json:"-"`
-}
-
-// originPostQuantumEncryptionUpdateResponseEnvelopeJSON contains the JSON metadata
-// for the struct [OriginPostQuantumEncryptionUpdateResponseEnvelope]
-type originPostQuantumEncryptionUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginPostQuantumEncryptionUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// originPostQuantumEncryptionUpdateResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors]
-type originPostQuantumEncryptionUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    originPostQuantumEncryptionUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// originPostQuantumEncryptionUpdateResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages]
-type originPostQuantumEncryptionUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess bool
-
-const (
-	OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccessTrue OriginPostQuantumEncryptionUpdateResponseEnvelopeSuccess = true
-)
 
 type OriginPostQuantumEncryptionGetResponseEnvelope struct {
 	Errors   []OriginPostQuantumEncryptionGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -260,4 +171,93 @@ type OriginPostQuantumEncryptionGetResponseEnvelopeSuccess bool
 
 const (
 	OriginPostQuantumEncryptionGetResponseEnvelopeSuccessTrue OriginPostQuantumEncryptionGetResponseEnvelopeSuccess = true
+)
+
+type OriginPostQuantumEncryptionReplaceParams struct {
+	// Value of the Origin Post Quantum Encryption Setting.
+	Value param.Field[OriginPostQuantumEncryptionReplaceParamsValue] `json:"value,required"`
+}
+
+func (r OriginPostQuantumEncryptionReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Value of the Origin Post Quantum Encryption Setting.
+type OriginPostQuantumEncryptionReplaceParamsValue string
+
+const (
+	OriginPostQuantumEncryptionReplaceParamsValuePreferred OriginPostQuantumEncryptionReplaceParamsValue = "preferred"
+	OriginPostQuantumEncryptionReplaceParamsValueSupported OriginPostQuantumEncryptionReplaceParamsValue = "supported"
+	OriginPostQuantumEncryptionReplaceParamsValueOff       OriginPostQuantumEncryptionReplaceParamsValue = "off"
+)
+
+type OriginPostQuantumEncryptionReplaceResponseEnvelope struct {
+	Errors   []OriginPostQuantumEncryptionReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []OriginPostQuantumEncryptionReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   OriginPostQuantumEncryptionReplaceResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success OriginPostQuantumEncryptionReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    originPostQuantumEncryptionReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// originPostQuantumEncryptionReplaceResponseEnvelopeJSON contains the JSON
+// metadata for the struct [OriginPostQuantumEncryptionReplaceResponseEnvelope]
+type originPostQuantumEncryptionReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginPostQuantumEncryptionReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginPostQuantumEncryptionReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    originPostQuantumEncryptionReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// originPostQuantumEncryptionReplaceResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [OriginPostQuantumEncryptionReplaceResponseEnvelopeErrors]
+type originPostQuantumEncryptionReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginPostQuantumEncryptionReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginPostQuantumEncryptionReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    originPostQuantumEncryptionReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// originPostQuantumEncryptionReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [OriginPostQuantumEncryptionReplaceResponseEnvelopeMessages]
+type originPostQuantumEncryptionReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *OriginPostQuantumEncryptionReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type OriginPostQuantumEncryptionReplaceResponseEnvelopeSuccess bool
+
+const (
+	OriginPostQuantumEncryptionReplaceResponseEnvelopeSuccessTrue OriginPostQuantumEncryptionReplaceResponseEnvelopeSuccess = true
 )

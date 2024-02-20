@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestImageV1BlobCloudflareImagesBaseImage(t *testing.T) {
+func TestImageV1BlobGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(200)
@@ -30,7 +30,7 @@ func TestImageV1BlobCloudflareImagesBaseImage(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	resp, err := client.Images.V1s.Blobs.CloudflareImagesBaseImage(
+	resp, err := client.Images.V1s.Blobs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"string",

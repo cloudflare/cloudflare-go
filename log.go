@@ -11,10 +11,10 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewLogService] method instead.
 type LogService struct {
-	Options   []option.RequestOption
-	Controls  *LogControlService
-	Rayids    *LogRayidService
-	Receiveds *LogReceivedService
+	Options  []option.RequestOption
+	Controls *LogControlService
+	Rayids   *LogRayidService
+	Received *LogReceivedService
 }
 
 // NewLogService generates a new service that applies the given options to each
@@ -25,6 +25,6 @@ func NewLogService(opts ...option.RequestOption) (r *LogService) {
 	r.Options = opts
 	r.Controls = NewLogControlService(opts...)
 	r.Rayids = NewLogRayidService(opts...)
-	r.Receiveds = NewLogReceivedService(opts...)
+	r.Received = NewLogReceivedService(opts...)
 	return
 }

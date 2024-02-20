@@ -34,9 +34,9 @@ func NewIntelWhoisService(opts ...option.RequestOption) (r *IntelWhoisService) {
 }
 
 // Get WHOIS Record
-func (r *IntelWhoisService) WhoisRecordGetWhoisRecord(ctx context.Context, accountID string, query IntelWhoisWhoisRecordGetWhoisRecordParams, opts ...option.RequestOption) (res *IntelWhoisWhoisRecordGetWhoisRecordResponse, err error) {
+func (r *IntelWhoisService) Get(ctx context.Context, accountID string, query IntelWhoisGetParams, opts ...option.RequestOption) (res *IntelWhoisGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelope
+	var env IntelWhoisGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/whois", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -46,22 +46,22 @@ func (r *IntelWhoisService) WhoisRecordGetWhoisRecord(ctx context.Context, accou
 	return
 }
 
-type IntelWhoisWhoisRecordGetWhoisRecordResponse struct {
-	CreatedDate       time.Time                                       `json:"created_date" format:"date"`
-	Domain            string                                          `json:"domain"`
-	Nameservers       []string                                        `json:"nameservers"`
-	Registrant        string                                          `json:"registrant"`
-	RegistrantCountry string                                          `json:"registrant_country"`
-	RegistrantEmail   string                                          `json:"registrant_email"`
-	RegistrantOrg     string                                          `json:"registrant_org"`
-	Registrar         string                                          `json:"registrar"`
-	UpdatedDate       time.Time                                       `json:"updated_date" format:"date"`
-	JSON              intelWhoisWhoisRecordGetWhoisRecordResponseJSON `json:"-"`
+type IntelWhoisGetResponse struct {
+	CreatedDate       time.Time                 `json:"created_date" format:"date"`
+	Domain            string                    `json:"domain"`
+	Nameservers       []string                  `json:"nameservers"`
+	Registrant        string                    `json:"registrant"`
+	RegistrantCountry string                    `json:"registrant_country"`
+	RegistrantEmail   string                    `json:"registrant_email"`
+	RegistrantOrg     string                    `json:"registrant_org"`
+	Registrar         string                    `json:"registrar"`
+	UpdatedDate       time.Time                 `json:"updated_date" format:"date"`
+	JSON              intelWhoisGetResponseJSON `json:"-"`
 }
 
-// intelWhoisWhoisRecordGetWhoisRecordResponseJSON contains the JSON metadata for
-// the struct [IntelWhoisWhoisRecordGetWhoisRecordResponse]
-type intelWhoisWhoisRecordGetWhoisRecordResponseJSON struct {
+// intelWhoisGetResponseJSON contains the JSON metadata for the struct
+// [IntelWhoisGetResponse]
+type intelWhoisGetResponseJSON struct {
 	CreatedDate       apijson.Field
 	Domain            apijson.Field
 	Nameservers       apijson.Field
@@ -75,35 +75,34 @@ type intelWhoisWhoisRecordGetWhoisRecordResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *IntelWhoisWhoisRecordGetWhoisRecordResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelWhoisGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelWhoisWhoisRecordGetWhoisRecordParams struct {
+type IntelWhoisGetParams struct {
 	Domain param.Field[string] `query:"domain"`
 }
 
-// URLQuery serializes [IntelWhoisWhoisRecordGetWhoisRecordParams]'s query
-// parameters as `url.Values`.
-func (r IntelWhoisWhoisRecordGetWhoisRecordParams) URLQuery() (v url.Values) {
+// URLQuery serializes [IntelWhoisGetParams]'s query parameters as `url.Values`.
+func (r IntelWhoisGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelope struct {
-	Errors   []IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelWhoisWhoisRecordGetWhoisRecordResponse                   `json:"result,required"`
+type IntelWhoisGetResponseEnvelope struct {
+	Errors   []IntelWhoisGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelWhoisGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   IntelWhoisGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeSuccess `json:"success,required"`
-	JSON    intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeJSON    `json:"-"`
+	Success IntelWhoisGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    intelWhoisGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeJSON contains the JSON
-// metadata for the struct [IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelope]
-type intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeJSON struct {
+// intelWhoisGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IntelWhoisGetResponseEnvelope]
+type intelWhoisGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -112,53 +111,51 @@ type intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelWhoisGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrors struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrorsJSON `json:"-"`
+type IntelWhoisGetResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    intelWhoisGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrors]
-type intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrorsJSON struct {
+// intelWhoisGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [IntelWhoisGetResponseEnvelopeErrors]
+type intelWhoisGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelWhoisGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessages struct {
-	Code    int64                                                           `json:"code,required"`
-	Message string                                                          `json:"message,required"`
-	JSON    intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessagesJSON `json:"-"`
+type IntelWhoisGetResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    intelWhoisGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessagesJSON contains the
-// JSON metadata for the struct
-// [IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessages]
-type intelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessagesJSON struct {
+// intelWhoisGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [IntelWhoisGetResponseEnvelopeMessages]
+type intelWhoisGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelWhoisGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeSuccess bool
+type IntelWhoisGetResponseEnvelopeSuccess bool
 
 const (
-	IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeSuccessTrue IntelWhoisWhoisRecordGetWhoisRecordResponseEnvelopeSuccess = true
+	IntelWhoisGetResponseEnvelopeSuccessTrue IntelWhoisGetResponseEnvelopeSuccess = true
 )

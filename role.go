@@ -33,9 +33,9 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) AccountRolesListRoles(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]RoleAccountRolesListRolesResponse, err error) {
+func (r *RoleService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]RoleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RoleAccountRolesListRolesResponseEnvelope
+	var env RoleListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -58,7 +58,7 @@ func (r *RoleService) Get(ctx context.Context, accountID interface{}, roleID int
 	return
 }
 
-type RoleAccountRolesListRolesResponse struct {
+type RoleListResponse struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
@@ -66,13 +66,13 @@ type RoleAccountRolesListRolesResponse struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []string                              `json:"permissions,required"`
-	JSON        roleAccountRolesListRolesResponseJSON `json:"-"`
+	Permissions []string             `json:"permissions,required"`
+	JSON        roleListResponseJSON `json:"-"`
 }
 
-// roleAccountRolesListRolesResponseJSON contains the JSON metadata for the struct
-// [RoleAccountRolesListRolesResponse]
-type roleAccountRolesListRolesResponseJSON struct {
+// roleListResponseJSON contains the JSON metadata for the struct
+// [RoleListResponse]
+type roleListResponseJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -81,7 +81,7 @@ type roleAccountRolesListRolesResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleAccountRolesListRolesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -101,19 +101,19 @@ func init() {
 	)
 }
 
-type RoleAccountRolesListRolesResponseEnvelope struct {
-	Errors   []RoleAccountRolesListRolesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RoleAccountRolesListRolesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RoleAccountRolesListRolesResponse                 `json:"result,required,nullable"`
+type RoleListResponseEnvelope struct {
+	Errors   []RoleListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RoleListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []RoleListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    RoleAccountRolesListRolesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo RoleAccountRolesListRolesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       roleAccountRolesListRolesResponseEnvelopeJSON       `json:"-"`
+	Success    RoleListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo RoleListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       roleListResponseEnvelopeJSON       `json:"-"`
 }
 
-// roleAccountRolesListRolesResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RoleAccountRolesListRolesResponseEnvelope]
-type roleAccountRolesListRolesResponseEnvelopeJSON struct {
+// roleListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RoleListResponseEnvelope]
+type roleListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -123,56 +123,56 @@ type roleAccountRolesListRolesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleAccountRolesListRolesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoleAccountRolesListRolesResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    roleAccountRolesListRolesResponseEnvelopeErrorsJSON `json:"-"`
+type RoleListResponseEnvelopeErrors struct {
+	Code    int64                              `json:"code,required"`
+	Message string                             `json:"message,required"`
+	JSON    roleListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// roleAccountRolesListRolesResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [RoleAccountRolesListRolesResponseEnvelopeErrors]
-type roleAccountRolesListRolesResponseEnvelopeErrorsJSON struct {
+// roleListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [RoleListResponseEnvelopeErrors]
+type roleListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleAccountRolesListRolesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RoleAccountRolesListRolesResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    roleAccountRolesListRolesResponseEnvelopeMessagesJSON `json:"-"`
+type RoleListResponseEnvelopeMessages struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    roleListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// roleAccountRolesListRolesResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [RoleAccountRolesListRolesResponseEnvelopeMessages]
-type roleAccountRolesListRolesResponseEnvelopeMessagesJSON struct {
+// roleListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [RoleListResponseEnvelopeMessages]
+type roleListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleAccountRolesListRolesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type RoleAccountRolesListRolesResponseEnvelopeSuccess bool
+type RoleListResponseEnvelopeSuccess bool
 
 const (
-	RoleAccountRolesListRolesResponseEnvelopeSuccessTrue RoleAccountRolesListRolesResponseEnvelopeSuccess = true
+	RoleListResponseEnvelopeSuccessTrue RoleListResponseEnvelopeSuccess = true
 )
 
-type RoleAccountRolesListRolesResponseEnvelopeResultInfo struct {
+type RoleListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -180,13 +180,13 @@ type RoleAccountRolesListRolesResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                 `json:"total_count"`
-	JSON       roleAccountRolesListRolesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                `json:"total_count"`
+	JSON       roleListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// roleAccountRolesListRolesResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [RoleAccountRolesListRolesResponseEnvelopeResultInfo]
-type roleAccountRolesListRolesResponseEnvelopeResultInfoJSON struct {
+// roleListResponseEnvelopeResultInfoJSON contains the JSON metadata for the struct
+// [RoleListResponseEnvelopeResultInfo]
+type roleListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -195,7 +195,7 @@ type roleAccountRolesListRolesResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleAccountRolesListRolesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RoleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

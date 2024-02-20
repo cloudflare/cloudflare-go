@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -32,36 +33,10 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 	return
 }
 
-// Updates an existing filter.
-func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FilterUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FilterUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FilterDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Creates one or more filters.
-func (r *FilterService) FiltersNewFilters(ctx context.Context, zoneIdentifier string, body FilterFiltersNewFiltersParams, opts ...option.RequestOption) (res *[]FilterFiltersNewFiltersResponse, err error) {
+func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FilterNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FilterFiltersNewFiltersResponseEnvelope
+	var env FilterNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -73,24 +48,35 @@ func (r *FilterService) FiltersNewFilters(ctx context.Context, zoneIdentifier st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) FiltersListFilters(ctx context.Context, zoneIdentifier string, query FilterFiltersListFiltersParams, opts ...option.RequestOption) (res *[]FilterFiltersListFiltersResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env FilterFiltersListFiltersResponseEnvelope
+func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FilterListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
 }
 
-// Updates one or more existing filters.
-func (r *FilterService) FiltersUpdateFilters(ctx context.Context, zoneIdentifier string, body FilterFiltersUpdateFiltersParams, opts ...option.RequestOption) (res *[]FilterFiltersUpdateFiltersResponse, err error) {
+// Fetches filters in a zone. You can filter the results using several optional
+// parameters.
+func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FilterListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
+}
+
+// Deletes an existing filter.
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env FilterFiltersUpdateFiltersResponseEnvelope
-	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env FilterDeleteResponseEnvelope
+	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -111,7 +97,20 @@ func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-type FilterUpdateResponse struct {
+// Updates an existing filter.
+func (r *FilterService) Replace(ctx context.Context, zoneIdentifier string, id string, body FilterReplaceParams, opts ...option.RequestOption) (res *FilterReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env FilterReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type FilterNewResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
 	// The filter expression. For more information, refer to
@@ -122,13 +121,13 @@ type FilterUpdateResponse struct {
 	// An informative summary of the filter.
 	Description string `json:"description"`
 	// A short reference tag. Allows you to select related filters.
-	Ref  string                   `json:"ref"`
-	JSON filterUpdateResponseJSON `json:"-"`
+	Ref  string                `json:"ref"`
+	JSON filterNewResponseJSON `json:"-"`
 }
 
-// filterUpdateResponseJSON contains the JSON metadata for the struct
-// [FilterUpdateResponse]
-type filterUpdateResponseJSON struct {
+// filterNewResponseJSON contains the JSON metadata for the struct
+// [FilterNewResponse]
+type filterNewResponseJSON struct {
 	ID          apijson.Field
 	Expression  apijson.Field
 	Paused      apijson.Field
@@ -138,7 +137,38 @@ type filterUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *FilterNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterListResponse struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression,required"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                 `json:"ref"`
+	JSON filterListResponseJSON `json:"-"`
+}
+
+// filterListResponseJSON contains the JSON metadata for the struct
+// [FilterListResponse]
+type filterListResponseJSON struct {
+	ID          apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -173,99 +203,6 @@ func (r *FilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterFiltersNewFiltersResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                              `json:"ref"`
-	JSON filterFiltersNewFiltersResponseJSON `json:"-"`
-}
-
-// filterFiltersNewFiltersResponseJSON contains the JSON metadata for the struct
-// [FilterFiltersNewFiltersResponse]
-type filterFiltersNewFiltersResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersNewFiltersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersListFiltersResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                               `json:"ref"`
-	JSON filterFiltersListFiltersResponseJSON `json:"-"`
-}
-
-// filterFiltersListFiltersResponseJSON contains the JSON metadata for the struct
-// [FilterFiltersListFiltersResponse]
-type filterFiltersListFiltersResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersListFiltersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersUpdateFiltersResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                                 `json:"ref"`
-	JSON filterFiltersUpdateFiltersResponseJSON `json:"-"`
-}
-
-// filterFiltersUpdateFiltersResponseJSON contains the JSON metadata for the struct
-// [FilterFiltersUpdateFiltersResponse]
-type filterFiltersUpdateFiltersResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersUpdateFiltersResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type FilterGetResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
@@ -297,82 +234,165 @@ func (r *FilterGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterUpdateParams struct {
+type FilterReplaceResponse struct {
+	// The unique identifier of the filter.
+	ID string `json:"id,required"`
+	// The filter expression. For more information, refer to
+	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
+	Expression string `json:"expression,required"`
+	// When true, indicates that the filter is currently paused.
+	Paused bool `json:"paused,required"`
+	// An informative summary of the filter.
+	Description string `json:"description"`
+	// A short reference tag. Allows you to select related filters.
+	Ref  string                    `json:"ref"`
+	JSON filterReplaceResponseJSON `json:"-"`
+}
+
+// filterReplaceResponseJSON contains the JSON metadata for the struct
+// [FilterReplaceResponse]
+type filterReplaceResponseJSON struct {
+	ID          apijson.Field
+	Expression  apijson.Field
+	Paused      apijson.Field
+	Description apijson.Field
+	Ref         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type FilterUpdateResponseEnvelope struct {
-	Errors   []FilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FilterUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FilterUpdateResponse                   `json:"result,required,nullable"`
+type FilterNewResponseEnvelope struct {
+	Errors   []FilterNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FilterNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   []FilterNewResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
+	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       filterNewResponseEnvelopeJSON       `json:"-"`
 }
 
-// filterUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [FilterUpdateResponseEnvelope]
-type filterUpdateResponseEnvelopeJSON struct {
+// filterNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FilterNewResponseEnvelope]
+type filterNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
 	Success     apijson.Field
+	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *FilterNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterUpdateResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    filterUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type FilterNewResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    filterNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// filterUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [FilterUpdateResponseEnvelopeErrors]
-type filterUpdateResponseEnvelopeErrorsJSON struct {
+// filterNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [FilterNewResponseEnvelopeErrors]
+type filterNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *FilterNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterUpdateResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    filterUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type FilterNewResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    filterNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// filterUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [FilterUpdateResponseEnvelopeMessages]
-type filterUpdateResponseEnvelopeMessagesJSON struct {
+// filterNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [FilterNewResponseEnvelopeMessages]
+type filterNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *FilterNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type FilterUpdateResponseEnvelopeSuccess bool
+type FilterNewResponseEnvelopeSuccess bool
 
 const (
-	FilterUpdateResponseEnvelopeSuccessTrue FilterUpdateResponseEnvelopeSuccess = true
+	FilterNewResponseEnvelopeSuccessTrue FilterNewResponseEnvelopeSuccess = true
 )
+
+type FilterNewResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                 `json:"total_count"`
+	JSON       filterNewResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// filterNewResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [FilterNewResponseEnvelopeResultInfo]
+type filterNewResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterListParams struct {
+	// A case-insensitive string to find in the description.
+	Description param.Field[string] `query:"description"`
+	// A case-insensitive string to find in the expression.
+	Expression param.Field[string] `query:"expression"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// When true, indicates that the filter is currently paused.
+	Paused param.Field[bool] `query:"paused"`
+	// Number of filters per page.
+	PerPage param.Field[float64] `query:"per_page"`
+	// The filter ref (a short reference tag) to search for. Must be an exact match.
+	Ref param.Field[string] `query:"ref"`
+}
+
+// URLQuery serializes [FilterListParams]'s query parameters as `url.Values`.
+func (r FilterListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
 
 type FilterDeleteResponseEnvelope struct {
 	Errors   []FilterDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -443,340 +463,6 @@ const (
 	FilterDeleteResponseEnvelopeSuccessTrue FilterDeleteResponseEnvelopeSuccess = true
 )
 
-type FilterFiltersNewFiltersParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FilterFiltersNewFiltersParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FilterFiltersNewFiltersResponseEnvelope struct {
-	Errors   []FilterFiltersNewFiltersResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FilterFiltersNewFiltersResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FilterFiltersNewFiltersResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterFiltersNewFiltersResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterFiltersNewFiltersResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterFiltersNewFiltersResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterFiltersNewFiltersResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FilterFiltersNewFiltersResponseEnvelope]
-type filterFiltersNewFiltersResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersNewFiltersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersNewFiltersResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    filterFiltersNewFiltersResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// filterFiltersNewFiltersResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [FilterFiltersNewFiltersResponseEnvelopeErrors]
-type filterFiltersNewFiltersResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersNewFiltersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersNewFiltersResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    filterFiltersNewFiltersResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// filterFiltersNewFiltersResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FilterFiltersNewFiltersResponseEnvelopeMessages]
-type filterFiltersNewFiltersResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersNewFiltersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FilterFiltersNewFiltersResponseEnvelopeSuccess bool
-
-const (
-	FilterFiltersNewFiltersResponseEnvelopeSuccessTrue FilterFiltersNewFiltersResponseEnvelopeSuccess = true
-)
-
-type FilterFiltersNewFiltersResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                               `json:"total_count"`
-	JSON       filterFiltersNewFiltersResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterFiltersNewFiltersResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [FilterFiltersNewFiltersResponseEnvelopeResultInfo]
-type filterFiltersNewFiltersResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersNewFiltersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersListFiltersParams struct {
-	// A case-insensitive string to find in the description.
-	Description param.Field[string] `query:"description"`
-	// A case-insensitive string to find in the expression.
-	Expression param.Field[string] `query:"expression"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// When true, indicates that the filter is currently paused.
-	Paused param.Field[bool] `query:"paused"`
-	// Number of filters per page.
-	PerPage param.Field[float64] `query:"per_page"`
-	// The filter ref (a short reference tag) to search for. Must be an exact match.
-	Ref param.Field[string] `query:"ref"`
-}
-
-// URLQuery serializes [FilterFiltersListFiltersParams]'s query parameters as
-// `url.Values`.
-func (r FilterFiltersListFiltersParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-type FilterFiltersListFiltersResponseEnvelope struct {
-	Errors   []FilterFiltersListFiltersResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FilterFiltersListFiltersResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FilterFiltersListFiltersResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterFiltersListFiltersResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterFiltersListFiltersResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterFiltersListFiltersResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterFiltersListFiltersResponseEnvelopeJSON contains the JSON metadata for the
-// struct [FilterFiltersListFiltersResponseEnvelope]
-type filterFiltersListFiltersResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersListFiltersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersListFiltersResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    filterFiltersListFiltersResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// filterFiltersListFiltersResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [FilterFiltersListFiltersResponseEnvelopeErrors]
-type filterFiltersListFiltersResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersListFiltersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersListFiltersResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    filterFiltersListFiltersResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// filterFiltersListFiltersResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [FilterFiltersListFiltersResponseEnvelopeMessages]
-type filterFiltersListFiltersResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersListFiltersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FilterFiltersListFiltersResponseEnvelopeSuccess bool
-
-const (
-	FilterFiltersListFiltersResponseEnvelopeSuccessTrue FilterFiltersListFiltersResponseEnvelopeSuccess = true
-)
-
-type FilterFiltersListFiltersResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                `json:"total_count"`
-	JSON       filterFiltersListFiltersResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterFiltersListFiltersResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [FilterFiltersListFiltersResponseEnvelopeResultInfo]
-type filterFiltersListFiltersResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersListFiltersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersUpdateFiltersParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
-}
-
-func (r FilterFiltersUpdateFiltersParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type FilterFiltersUpdateFiltersResponseEnvelope struct {
-	Errors   []FilterFiltersUpdateFiltersResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []FilterFiltersUpdateFiltersResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FilterFiltersUpdateFiltersResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    FilterFiltersUpdateFiltersResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo FilterFiltersUpdateFiltersResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       filterFiltersUpdateFiltersResponseEnvelopeJSON       `json:"-"`
-}
-
-// filterFiltersUpdateFiltersResponseEnvelopeJSON contains the JSON metadata for
-// the struct [FilterFiltersUpdateFiltersResponseEnvelope]
-type filterFiltersUpdateFiltersResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersUpdateFiltersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersUpdateFiltersResponseEnvelopeErrors struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    filterFiltersUpdateFiltersResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// filterFiltersUpdateFiltersResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [FilterFiltersUpdateFiltersResponseEnvelopeErrors]
-type filterFiltersUpdateFiltersResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersUpdateFiltersResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterFiltersUpdateFiltersResponseEnvelopeMessages struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    filterFiltersUpdateFiltersResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// filterFiltersUpdateFiltersResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [FilterFiltersUpdateFiltersResponseEnvelopeMessages]
-type filterFiltersUpdateFiltersResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersUpdateFiltersResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type FilterFiltersUpdateFiltersResponseEnvelopeSuccess bool
-
-const (
-	FilterFiltersUpdateFiltersResponseEnvelopeSuccessTrue FilterFiltersUpdateFiltersResponseEnvelopeSuccess = true
-)
-
-type FilterFiltersUpdateFiltersResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                  `json:"total_count"`
-	JSON       filterFiltersUpdateFiltersResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// filterFiltersUpdateFiltersResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [FilterFiltersUpdateFiltersResponseEnvelopeResultInfo]
-type filterFiltersUpdateFiltersResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterFiltersUpdateFiltersResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type FilterGetResponseEnvelope struct {
 	Errors   []FilterGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterGetResponseEnvelopeMessages `json:"messages,required"`
@@ -844,4 +530,81 @@ type FilterGetResponseEnvelopeSuccess bool
 
 const (
 	FilterGetResponseEnvelopeSuccessTrue FilterGetResponseEnvelopeSuccess = true
+)
+
+type FilterReplaceParams struct {
+	Body param.Field[interface{}] `json:"body,required"`
+}
+
+func (r FilterReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type FilterReplaceResponseEnvelope struct {
+	Errors   []FilterReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []FilterReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   FilterReplaceResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success FilterReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    filterReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// filterReplaceResponseEnvelopeJSON contains the JSON metadata for the struct
+// [FilterReplaceResponseEnvelope]
+type filterReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterReplaceResponseEnvelopeErrors struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    filterReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// filterReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [FilterReplaceResponseEnvelopeErrors]
+type filterReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type FilterReplaceResponseEnvelopeMessages struct {
+	Code    int64                                     `json:"code,required"`
+	Message string                                    `json:"message,required"`
+	JSON    filterReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// filterReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [FilterReplaceResponseEnvelopeMessages]
+type filterReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *FilterReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type FilterReplaceResponseEnvelopeSuccess bool
+
+const (
+	FilterReplaceResponseEnvelopeSuccessTrue FilterReplaceResponseEnvelopeSuccess = true
 )

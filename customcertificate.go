@@ -25,8 +25,8 @@ import (
 // this service directly, and instead use the [NewCustomCertificateService] method
 // instead.
 type CustomCertificateService struct {
-	Options     []option.RequestOption
-	Prioritizes *CustomCertificatePrioritizeService
+	Options    []option.RequestOption
+	Prioritize *CustomCertificatePrioritizeService
 }
 
 // NewCustomCertificateService generates a new service that applies the given
@@ -35,7 +35,7 @@ type CustomCertificateService struct {
 func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertificateService) {
 	r = &CustomCertificateService{}
 	r.Options = opts
-	r.Prioritizes = NewCustomCertificatePrioritizeService(opts...)
+	r.Prioritize = NewCustomCertificatePrioritizeService(opts...)
 	return
 }
 

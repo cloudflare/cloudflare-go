@@ -31,12 +31,25 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 	return
 }
 
-// Updates a configured device managed network.
-func (r *DeviceNetworkService) Update(ctx context.Context, identifier interface{}, uuid string, body DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetworkUpdateResponse, err error) {
+// Creates a new device managed network.
+func (r *DeviceNetworkService) New(ctx context.Context, identifier interface{}, body DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetworkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DeviceNetworkUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks/%s", identifier, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env DeviceNetworkNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/networks", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches a list of managed networks for an account.
+func (r *DeviceNetworkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DeviceNetworkListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DeviceNetworkListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/networks", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,32 +71,6 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, identifier interface{
 	return
 }
 
-// Creates a new device managed network.
-func (r *DeviceNetworkService) DeviceManagedNetworksNewDeviceManagedNetwork(ctx context.Context, identifier interface{}, body DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParams, opts ...option.RequestOption) (res *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) DeviceManagedNetworksListDeviceManagedNetworks(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks", identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches details for a single managed network.
 func (r *DeviceNetworkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *DeviceNetworkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -97,22 +84,35 @@ func (r *DeviceNetworkService) Get(ctx context.Context, identifier interface{}, 
 	return
 }
 
-type DeviceNetworkUpdateResponse struct {
+// Updates a configured device managed network.
+func (r *DeviceNetworkService) Replace(ctx context.Context, identifier interface{}, uuid string, body DeviceNetworkReplaceParams, opts ...option.RequestOption) (res *DeviceNetworkReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DeviceNetworkReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/networks/%s", identifier, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type DeviceNetworkNewResponse struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config DeviceNetworkUpdateResponseConfig `json:"config"`
+	Config DeviceNetworkNewResponseConfig `json:"config"`
 	// The name of the device managed network. This name must be unique.
 	Name string `json:"name"`
 	// API UUID.
 	NetworkID string `json:"network_id"`
 	// The type of device managed network.
-	Type DeviceNetworkUpdateResponseType `json:"type"`
-	JSON deviceNetworkUpdateResponseJSON `json:"-"`
+	Type DeviceNetworkNewResponseType `json:"type"`
+	JSON deviceNetworkNewResponseJSON `json:"-"`
 }
 
-// deviceNetworkUpdateResponseJSON contains the JSON metadata for the struct
-// [DeviceNetworkUpdateResponse]
-type deviceNetworkUpdateResponseJSON struct {
+// deviceNetworkNewResponseJSON contains the JSON metadata for the struct
+// [DeviceNetworkNewResponse]
+type deviceNetworkNewResponseJSON struct {
 	Config      apijson.Field
 	Name        apijson.Field
 	NetworkID   apijson.Field
@@ -121,41 +121,102 @@ type deviceNetworkUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceNetworkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The configuration object containing information for the WARP client to detect
 // the managed network.
-type DeviceNetworkUpdateResponseConfig struct {
+type DeviceNetworkNewResponseConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
 	TLSSockaddr string `json:"tls_sockaddr,required"`
 	// The SHA-256 hash of the TLS certificate presented by the host found at
 	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
 	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string                                `json:"sha256"`
-	JSON   deviceNetworkUpdateResponseConfigJSON `json:"-"`
+	Sha256 string                             `json:"sha256"`
+	JSON   deviceNetworkNewResponseConfigJSON `json:"-"`
 }
 
-// deviceNetworkUpdateResponseConfigJSON contains the JSON metadata for the struct
-// [DeviceNetworkUpdateResponseConfig]
-type deviceNetworkUpdateResponseConfigJSON struct {
+// deviceNetworkNewResponseConfigJSON contains the JSON metadata for the struct
+// [DeviceNetworkNewResponseConfig]
+type deviceNetworkNewResponseConfigJSON struct {
 	TLSSockaddr apijson.Field
 	Sha256      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceNetworkUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device managed network.
-type DeviceNetworkUpdateResponseType string
+type DeviceNetworkNewResponseType string
 
 const (
-	DeviceNetworkUpdateResponseTypeTLS DeviceNetworkUpdateResponseType = "tls"
+	DeviceNetworkNewResponseTypeTLS DeviceNetworkNewResponseType = "tls"
+)
+
+type DeviceNetworkListResponse struct {
+	// The configuration object containing information for the WARP client to detect
+	// the managed network.
+	Config DeviceNetworkListResponseConfig `json:"config"`
+	// The name of the device managed network. This name must be unique.
+	Name string `json:"name"`
+	// API UUID.
+	NetworkID string `json:"network_id"`
+	// The type of device managed network.
+	Type DeviceNetworkListResponseType `json:"type"`
+	JSON deviceNetworkListResponseJSON `json:"-"`
+}
+
+// deviceNetworkListResponseJSON contains the JSON metadata for the struct
+// [DeviceNetworkListResponse]
+type deviceNetworkListResponseJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	NetworkID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object containing information for the WARP client to detect
+// the managed network.
+type DeviceNetworkListResponseConfig struct {
+	// A network address of the form "host:port" that the WARP client will use to
+	// detect the presence of a TLS host.
+	TLSSockaddr string `json:"tls_sockaddr,required"`
+	// The SHA-256 hash of the TLS certificate presented by the host found at
+	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
+	// timestamp, etc) will be used to validate the certificate.
+	Sha256 string                              `json:"sha256"`
+	JSON   deviceNetworkListResponseConfigJSON `json:"-"`
+}
+
+// deviceNetworkListResponseConfigJSON contains the JSON metadata for the struct
+// [DeviceNetworkListResponseConfig]
+type deviceNetworkListResponseConfigJSON struct {
+	TLSSockaddr apijson.Field
+	Sha256      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponseConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device managed network.
+type DeviceNetworkListResponseType string
+
+const (
+	DeviceNetworkListResponseTypeTLS DeviceNetworkListResponseType = "tls"
 )
 
 type DeviceNetworkDeleteResponse struct {
@@ -219,132 +280,6 @@ const (
 	DeviceNetworkDeleteResponseTypeTLS DeviceNetworkDeleteResponseType = "tls"
 )
 
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponse struct {
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfig `json:"config"`
-	// The name of the device managed network. This name must be unique.
-	Name string `json:"name"`
-	// API UUID.
-	NetworkID string `json:"network_id"`
-	// The type of device managed network.
-	Type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseType `json:"type"`
-	JSON deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseJSON contains
-// the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponse]
-type deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	NetworkID   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing information for the WARP client to detect
-// the managed network.
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfig struct {
-	// A network address of the form "host:port" that the WARP client will use to
-	// detect the presence of a TLS host.
-	TLSSockaddr string `json:"tls_sockaddr,required"`
-	// The SHA-256 hash of the TLS certificate presented by the host found at
-	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
-	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string                                                                      `json:"sha256"`
-	JSON   deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfigJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfigJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfig]
-type deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfigJSON struct {
-	TLSSockaddr apijson.Field
-	Sha256      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device managed network.
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseType string
-
-const (
-	DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseTypeTLS DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseType = "tls"
-)
-
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponse struct {
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfig `json:"config"`
-	// The name of the device managed network. This name must be unique.
-	Name string `json:"name"`
-	// API UUID.
-	NetworkID string `json:"network_id"`
-	// The type of device managed network.
-	Type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseType `json:"type"`
-	JSON deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseJSON contains
-// the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponse]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseJSON struct {
-	Config      apijson.Field
-	Name        apijson.Field
-	NetworkID   apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing information for the WARP client to detect
-// the managed network.
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfig struct {
-	// A network address of the form "host:port" that the WARP client will use to
-	// detect the presence of a TLS host.
-	TLSSockaddr string `json:"tls_sockaddr,required"`
-	// The SHA-256 hash of the TLS certificate presented by the host found at
-	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
-	// timestamp, etc) will be used to validate the certificate.
-	Sha256 string                                                                        `json:"sha256"`
-	JSON   deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfigJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfigJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfig]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfigJSON struct {
-	TLSSockaddr apijson.Field
-	Sha256      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device managed network.
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseType string
-
-const (
-	DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseTypeTLS DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseType = "tls"
-)
-
 type DeviceNetworkGetResponse struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
@@ -406,23 +341,84 @@ const (
 	DeviceNetworkGetResponseTypeTLS DeviceNetworkGetResponseType = "tls"
 )
 
-type DeviceNetworkUpdateParams struct {
+type DeviceNetworkReplaceResponse struct {
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
-	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
+	Config DeviceNetworkReplaceResponseConfig `json:"config"`
 	// The name of the device managed network. This name must be unique.
-	Name param.Field[string] `json:"name"`
+	Name string `json:"name"`
+	// API UUID.
+	NetworkID string `json:"network_id"`
 	// The type of device managed network.
-	Type param.Field[DeviceNetworkUpdateParamsType] `json:"type"`
+	Type DeviceNetworkReplaceResponseType `json:"type"`
+	JSON deviceNetworkReplaceResponseJSON `json:"-"`
 }
 
-func (r DeviceNetworkUpdateParams) MarshalJSON() (data []byte, err error) {
+// deviceNetworkReplaceResponseJSON contains the JSON metadata for the struct
+// [DeviceNetworkReplaceResponse]
+type deviceNetworkReplaceResponseJSON struct {
+	Config      apijson.Field
+	Name        apijson.Field
+	NetworkID   apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkReplaceResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The configuration object containing information for the WARP client to detect
+// the managed network.
+type DeviceNetworkReplaceResponseConfig struct {
+	// A network address of the form "host:port" that the WARP client will use to
+	// detect the presence of a TLS host.
+	TLSSockaddr string `json:"tls_sockaddr,required"`
+	// The SHA-256 hash of the TLS certificate presented by the host found at
+	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
+	// timestamp, etc) will be used to validate the certificate.
+	Sha256 string                                 `json:"sha256"`
+	JSON   deviceNetworkReplaceResponseConfigJSON `json:"-"`
+}
+
+// deviceNetworkReplaceResponseConfigJSON contains the JSON metadata for the struct
+// [DeviceNetworkReplaceResponseConfig]
+type deviceNetworkReplaceResponseConfigJSON struct {
+	TLSSockaddr apijson.Field
+	Sha256      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkReplaceResponseConfig) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device managed network.
+type DeviceNetworkReplaceResponseType string
+
+const (
+	DeviceNetworkReplaceResponseTypeTLS DeviceNetworkReplaceResponseType = "tls"
+)
+
+type DeviceNetworkNewParams struct {
+	// The configuration object containing information for the WARP client to detect
+	// the managed network.
+	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
+	// The name of the device managed network. This name must be unique.
+	Name param.Field[string] `json:"name,required"`
+	// The type of device managed network.
+	Type param.Field[DeviceNetworkNewParamsType] `json:"type,required"`
+}
+
+func (r DeviceNetworkNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The configuration object containing information for the WARP client to detect
 // the managed network.
-type DeviceNetworkUpdateParamsConfig struct {
+type DeviceNetworkNewParamsConfig struct {
 	// A network address of the form "host:port" that the WARP client will use to
 	// detect the presence of a TLS host.
 	TLSSockaddr param.Field[string] `json:"tls_sockaddr,required"`
@@ -432,29 +428,29 @@ type DeviceNetworkUpdateParamsConfig struct {
 	Sha256 param.Field[string] `json:"sha256"`
 }
 
-func (r DeviceNetworkUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
+func (r DeviceNetworkNewParamsConfig) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The type of device managed network.
-type DeviceNetworkUpdateParamsType string
+type DeviceNetworkNewParamsType string
 
 const (
-	DeviceNetworkUpdateParamsTypeTLS DeviceNetworkUpdateParamsType = "tls"
+	DeviceNetworkNewParamsTypeTLS DeviceNetworkNewParamsType = "tls"
 )
 
-type DeviceNetworkUpdateResponseEnvelope struct {
-	Errors   []DeviceNetworkUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceNetworkUpdateResponse                   `json:"result,required,nullable"`
+type DeviceNetworkNewResponseEnvelope struct {
+	Errors   []DeviceNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceNetworkNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceNetworkNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success DeviceNetworkUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceNetworkUpdateResponseEnvelopeJSON    `json:"-"`
+	Success DeviceNetworkNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceNetworkNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// deviceNetworkUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DeviceNetworkUpdateResponseEnvelope]
-type deviceNetworkUpdateResponseEnvelopeJSON struct {
+// deviceNetworkNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceNetworkNewResponseEnvelope]
+type deviceNetworkNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -463,54 +459,152 @@ type deviceNetworkUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceNetworkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceNetworkUpdateResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    deviceNetworkUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type DeviceNetworkNewResponseEnvelopeErrors struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    deviceNetworkNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// deviceNetworkUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [DeviceNetworkUpdateResponseEnvelopeErrors]
-type deviceNetworkUpdateResponseEnvelopeErrorsJSON struct {
+// deviceNetworkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceNetworkNewResponseEnvelopeErrors]
+type deviceNetworkNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceNetworkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceNetworkUpdateResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    deviceNetworkUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type DeviceNetworkNewResponseEnvelopeMessages struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    deviceNetworkNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// deviceNetworkUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DeviceNetworkUpdateResponseEnvelopeMessages]
-type deviceNetworkUpdateResponseEnvelopeMessagesJSON struct {
+// deviceNetworkNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceNetworkNewResponseEnvelopeMessages]
+type deviceNetworkNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DeviceNetworkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DeviceNetworkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type DeviceNetworkUpdateResponseEnvelopeSuccess bool
+type DeviceNetworkNewResponseEnvelopeSuccess bool
 
 const (
-	DeviceNetworkUpdateResponseEnvelopeSuccessTrue DeviceNetworkUpdateResponseEnvelopeSuccess = true
+	DeviceNetworkNewResponseEnvelopeSuccessTrue DeviceNetworkNewResponseEnvelopeSuccess = true
 )
+
+type DeviceNetworkListResponseEnvelope struct {
+	Errors   []DeviceNetworkListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceNetworkListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DeviceNetworkListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DeviceNetworkListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DeviceNetworkListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       deviceNetworkListResponseEnvelopeJSON       `json:"-"`
+}
+
+// deviceNetworkListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [DeviceNetworkListResponseEnvelope]
+type deviceNetworkListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceNetworkListResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    deviceNetworkListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceNetworkListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [DeviceNetworkListResponseEnvelopeErrors]
+type deviceNetworkListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceNetworkListResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    deviceNetworkListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceNetworkListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [DeviceNetworkListResponseEnvelopeMessages]
+type deviceNetworkListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DeviceNetworkListResponseEnvelopeSuccess bool
+
+const (
+	DeviceNetworkListResponseEnvelopeSuccessTrue DeviceNetworkListResponseEnvelopeSuccess = true
+)
+
+type DeviceNetworkListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                         `json:"total_count"`
+	JSON       deviceNetworkListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// deviceNetworkListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [DeviceNetworkListResponseEnvelopeResultInfo]
+type deviceNetworkListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type DeviceNetworkDeleteResponseEnvelope struct {
 	Errors   []DeviceNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -610,217 +704,6 @@ func (r *DeviceNetworkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParams struct {
-	// The configuration object containing information for the WARP client to detect
-	// the managed network.
-	Config param.Field[DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsConfig] `json:"config,required"`
-	// The name of the device managed network. This name must be unique.
-	Name param.Field[string] `json:"name,required"`
-	// The type of device managed network.
-	Type param.Field[DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsType] `json:"type,required"`
-}
-
-func (r DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The configuration object containing information for the WARP client to detect
-// the managed network.
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsConfig struct {
-	// A network address of the form "host:port" that the WARP client will use to
-	// detect the presence of a TLS host.
-	TLSSockaddr param.Field[string] `json:"tls_sockaddr,required"`
-	// The SHA-256 hash of the TLS certificate presented by the host found at
-	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
-	// timestamp, etc) will be used to validate the certificate.
-	Sha256 param.Field[string] `json:"sha256"`
-}
-
-func (r DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The type of device managed network.
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsType string
-
-const (
-	DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsTypeTLS DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkParamsType = "tls"
-)
-
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelope struct {
-	Errors   []DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessages `json:"messages,required"`
-	Result   DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeSuccess `json:"success,required"`
-	JSON    deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeJSON    `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelope]
-type deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrors struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrors]
-type deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessages struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessages]
-type deviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeSuccess bool
-
-const (
-	DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeSuccessTrue DeviceNetworkDeviceManagedNetworksNewDeviceManagedNetworkResponseEnvelopeSuccess = true
-)
-
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelope struct {
-	Errors   []DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful.
-	Success    DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeJSON       `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelope]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrors struct {
-	Code    int64                                                                                 `json:"code,required"`
-	Message string                                                                                `json:"message,required"`
-	JSON    deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrors]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessages struct {
-	Code    int64                                                                                   `json:"code,required"`
-	Message string                                                                                  `json:"message,required"`
-	JSON    deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessages]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful.
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeSuccess bool
-
-const (
-	DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeSuccessTrue DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeSuccess = true
-)
-
-type DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                   `json:"total_count"`
-	JSON       deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfo]
-type deviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DeviceNetworkDeviceManagedNetworksListDeviceManagedNetworksResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type DeviceNetworkGetResponseEnvelope struct {
 	Errors   []DeviceNetworkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkGetResponseEnvelopeMessages `json:"messages,required"`
@@ -888,4 +771,110 @@ type DeviceNetworkGetResponseEnvelopeSuccess bool
 
 const (
 	DeviceNetworkGetResponseEnvelopeSuccessTrue DeviceNetworkGetResponseEnvelopeSuccess = true
+)
+
+type DeviceNetworkReplaceParams struct {
+	// The configuration object containing information for the WARP client to detect
+	// the managed network.
+	Config param.Field[DeviceNetworkReplaceParamsConfig] `json:"config"`
+	// The name of the device managed network. This name must be unique.
+	Name param.Field[string] `json:"name"`
+	// The type of device managed network.
+	Type param.Field[DeviceNetworkReplaceParamsType] `json:"type"`
+}
+
+func (r DeviceNetworkReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The configuration object containing information for the WARP client to detect
+// the managed network.
+type DeviceNetworkReplaceParamsConfig struct {
+	// A network address of the form "host:port" that the WARP client will use to
+	// detect the presence of a TLS host.
+	TLSSockaddr param.Field[string] `json:"tls_sockaddr,required"`
+	// The SHA-256 hash of the TLS certificate presented by the host found at
+	// tls_sockaddr. If absent, regular certificate verification (trusted roots, valid
+	// timestamp, etc) will be used to validate the certificate.
+	Sha256 param.Field[string] `json:"sha256"`
+}
+
+func (r DeviceNetworkReplaceParamsConfig) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of device managed network.
+type DeviceNetworkReplaceParamsType string
+
+const (
+	DeviceNetworkReplaceParamsTypeTLS DeviceNetworkReplaceParamsType = "tls"
+)
+
+type DeviceNetworkReplaceResponseEnvelope struct {
+	Errors   []DeviceNetworkReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DeviceNetworkReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   DeviceNetworkReplaceResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success DeviceNetworkReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    deviceNetworkReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// deviceNetworkReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DeviceNetworkReplaceResponseEnvelope]
+type deviceNetworkReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceNetworkReplaceResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    deviceNetworkReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// deviceNetworkReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DeviceNetworkReplaceResponseEnvelopeErrors]
+type deviceNetworkReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceNetworkReplaceResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    deviceNetworkReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// deviceNetworkReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DeviceNetworkReplaceResponseEnvelopeMessages]
+type deviceNetworkReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DeviceNetworkReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DeviceNetworkReplaceResponseEnvelopeSuccess bool
+
+const (
+	DeviceNetworkReplaceResponseEnvelopeSuccessTrue DeviceNetworkReplaceResponseEnvelopeSuccess = true
 )

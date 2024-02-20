@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdvertisementStatus(t *testing.T) {
+func TestAddressPrefixBGPStatusUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,13 @@ func TestAddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdverti
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Addresses.Prefixes.BGPs.Statuses.IPAddressManagementDynamicAdvertisementGetAdvertisementStatus(
+	_, err := client.Addresses.Prefixes.BGPs.Statuses.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressPrefixBGPStatusUpdateParams{
+			Advertised: cloudflare.F(true),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +46,7 @@ func TestAddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementGetAdverti
 	}
 }
 
-func TestAddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatus(t *testing.T) {
+func TestAddressPrefixBGPStatusGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,13 +62,10 @@ func TestAddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePref
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Addresses.Prefixes.BGPs.Statuses.IPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatus(
+	_, err := client.Addresses.Prefixes.BGPs.Statuses.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AddressPrefixBGPStatusIPAddressManagementDynamicAdvertisementUpdatePrefixDynamicAdvertisementStatusParams{
-			Advertised: cloudflare.F(true),
-		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

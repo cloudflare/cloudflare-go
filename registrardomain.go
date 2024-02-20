@@ -35,19 +35,6 @@ func NewRegistrarDomainService(opts ...option.RequestOption) (r *RegistrarDomain
 	return
 }
 
-// Update individual domain.
-func (r *RegistrarDomainService) Update(ctx context.Context, accountID string, domainName string, body RegistrarDomainUpdateParams, opts ...option.RequestOption) (res *RegistrarDomainUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env RegistrarDomainUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", accountID, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // List domains handled by Registrar.
 func (r *RegistrarDomainService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]RegistrarDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -74,26 +61,18 @@ func (r *RegistrarDomainService) Get(ctx context.Context, accountID string, doma
 	return
 }
 
-// Union satisfied by [RegistrarDomainUpdateResponseUnknown],
-// [RegistrarDomainUpdateResponseArray] or [shared.UnionString].
-type RegistrarDomainUpdateResponse interface {
-	ImplementsRegistrarDomainUpdateResponse()
+// Update individual domain.
+func (r *RegistrarDomainService) Replace(ctx context.Context, accountID string, domainName string, body RegistrarDomainReplaceParams, opts ...option.RequestOption) (res *RegistrarDomainReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RegistrarDomainReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", accountID, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*RegistrarDomainUpdateResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type RegistrarDomainUpdateResponseArray []interface{}
-
-func (r RegistrarDomainUpdateResponseArray) ImplementsRegistrarDomainUpdateResponse() {}
 
 type RegistrarDomainListResponse struct {
 	// Domain identifier.
@@ -260,88 +239,26 @@ type RegistrarDomainGetResponseArray []interface{}
 
 func (r RegistrarDomainGetResponseArray) ImplementsRegistrarDomainGetResponse() {}
 
-type RegistrarDomainUpdateParams struct {
-	// Auto-renew controls whether subscription is automatically renewed upon domain
-	// expiration.
-	AutoRenew param.Field[bool] `json:"auto_renew"`
-	// Shows whether a registrar lock is in place for a domain.
-	Locked param.Field[bool] `json:"locked"`
-	// Privacy option controls redacting WHOIS information.
-	Privacy param.Field[bool] `json:"privacy"`
+// Union satisfied by [RegistrarDomainReplaceResponseUnknown],
+// [RegistrarDomainReplaceResponseArray] or [shared.UnionString].
+type RegistrarDomainReplaceResponse interface {
+	ImplementsRegistrarDomainReplaceResponse()
 }
 
-func (r RegistrarDomainUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*RegistrarDomainReplaceResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
-type RegistrarDomainUpdateResponseEnvelope struct {
-	Errors   []RegistrarDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []RegistrarDomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   RegistrarDomainUpdateResponse                   `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success RegistrarDomainUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    registrarDomainUpdateResponseEnvelopeJSON    `json:"-"`
-}
+type RegistrarDomainReplaceResponseArray []interface{}
 
-// registrarDomainUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RegistrarDomainUpdateResponseEnvelope]
-type registrarDomainUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegistrarDomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RegistrarDomainUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    registrarDomainUpdateResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// registrarDomainUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [RegistrarDomainUpdateResponseEnvelopeErrors]
-type registrarDomainUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegistrarDomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type RegistrarDomainUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    registrarDomainUpdateResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// registrarDomainUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [RegistrarDomainUpdateResponseEnvelopeMessages]
-type registrarDomainUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RegistrarDomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type RegistrarDomainUpdateResponseEnvelopeSuccess bool
-
-const (
-	RegistrarDomainUpdateResponseEnvelopeSuccessTrue RegistrarDomainUpdateResponseEnvelopeSuccess = true
-)
+func (r RegistrarDomainReplaceResponseArray) ImplementsRegistrarDomainReplaceResponse() {}
 
 type RegistrarDomainListResponseEnvelope struct {
 	Errors   []RegistrarDomainListResponseEnvelopeErrors   `json:"errors,required"`
@@ -508,4 +425,87 @@ type RegistrarDomainGetResponseEnvelopeSuccess bool
 
 const (
 	RegistrarDomainGetResponseEnvelopeSuccessTrue RegistrarDomainGetResponseEnvelopeSuccess = true
+)
+
+type RegistrarDomainReplaceParams struct {
+	// Auto-renew controls whether subscription is automatically renewed upon domain
+	// expiration.
+	AutoRenew param.Field[bool] `json:"auto_renew"`
+	// Shows whether a registrar lock is in place for a domain.
+	Locked param.Field[bool] `json:"locked"`
+	// Privacy option controls redacting WHOIS information.
+	Privacy param.Field[bool] `json:"privacy"`
+}
+
+func (r RegistrarDomainReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type RegistrarDomainReplaceResponseEnvelope struct {
+	Errors   []RegistrarDomainReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []RegistrarDomainReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   RegistrarDomainReplaceResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success RegistrarDomainReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    registrarDomainReplaceResponseEnvelopeJSON    `json:"-"`
+}
+
+// registrarDomainReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RegistrarDomainReplaceResponseEnvelope]
+type registrarDomainReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarDomainReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RegistrarDomainReplaceResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    registrarDomainReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// registrarDomainReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [RegistrarDomainReplaceResponseEnvelopeErrors]
+type registrarDomainReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarDomainReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RegistrarDomainReplaceResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    registrarDomainReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// registrarDomainReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [RegistrarDomainReplaceResponseEnvelopeMessages]
+type registrarDomainReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RegistrarDomainReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type RegistrarDomainReplaceResponseEnvelopeSuccess bool
+
+const (
+	RegistrarDomainReplaceResponseEnvelopeSuccessTrue RegistrarDomainReplaceResponseEnvelopeSuccess = true
 )

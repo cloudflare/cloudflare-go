@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
@@ -19,7 +18,11 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewCacheService] method instead.
 type CacheService struct {
-	Options []option.RequestOption
+	Options                  []option.RequestOption
+	CacheReserves            *CacheCacheReserveService
+	TieredCacheSmartTopology *CacheTieredCacheSmartTopologyService
+	Variants                 *CacheVariantService
+	RegionalTieredCache      *CacheRegionalTieredCacheService
 }
 
 // NewCacheService generates a new service that applies the given options to each
@@ -28,17 +31,46 @@ type CacheService struct {
 func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	r = &CacheService{}
 	r.Options = opts
+	r.CacheReserves = NewCacheCacheReserveService(opts...)
+	r.TieredCacheSmartTopology = NewCacheTieredCacheSmartTopologyService(opts...)
+	r.Variants = NewCacheVariantService(opts...)
+	r.RegionalTieredCache = NewCacheRegionalTieredCacheService(opts...)
 	return
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-func (r *CacheService) RegionalTieredCaches(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheRegionalTieredCachesResponse, err error) {
+// ### Purge All Cached Content
+//
+// Removes ALL files from Cloudflare's cache. All tiers can purge everything.
+//
+// ### Purge Cached Content by URL
+//
+// Granularly removes one or more files from Cloudflare's cache by specifying URLs.
+// All tiers can purge by URL.
+//
+// To purge files with custom cache keys, include the headers used to compute the
+// cache key as in the example. If you have a device type or geo in your cache key,
+// you will need to include the CF-Device-Type or CF-IPCountry headers. If you have
+// lang in your cache key, you will need to include the Accept-Language header.
+//
+// **NB:** When including the Origin header, be sure to include the **scheme** and
+// **hostname**. The port number can be omitted if it is the default port (80 for
+// http, 443 for https), but must be included otherwise.
+//
+// ### Purge Cached Content by Tag, Host or Prefix
+//
+// Granularly removes one or more files from Cloudflare's cache either by
+// specifying the host, the associated Cache-Tag, or a Prefix. Only Enterprise
+// customers are permitted to purge by Tag, Host or Prefix.
+//
+// **NB:** Cache-Tag, host, and prefix purging each have a rate limit of 30,000
+// purge API calls in every 24 hour period. You may purge up to 30 tags, hosts, or
+// prefixes in one API call. This rate limit can be raised for customers who need
+// to purge at higher volume.
+func (r *CacheService) Purge(ctx context.Context, identifier string, body CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env CacheRegionalTieredCachesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	var env CachePurgeResponseEnvelope
+	path := fmt.Sprintf("zones/%s/purge_cache", identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,259 +78,99 @@ func (r *CacheService) RegionalTieredCaches(ctx context.Context, zoneID string, 
 	return
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-func (r *CacheService) UpdateRegionalTieredCache(ctx context.Context, zoneID string, body CacheUpdateRegionalTieredCacheParams, opts ...option.RequestOption) (res *CacheUpdateRegionalTieredCacheResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CacheUpdateRegionalTieredCacheResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
+type CachePurgeResponse struct {
+	// Identifier
+	ID   string                 `json:"id,required"`
+	JSON cachePurgeResponseJSON `json:"-"`
 }
 
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type CacheRegionalTieredCachesResponse struct {
-	// ID of the zone setting.
-	ID CacheRegionalTieredCachesResponseID `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Value CacheRegionalTieredCachesResponseValue `json:"value,required"`
-	JSON  cacheRegionalTieredCachesResponseJSON  `json:"-"`
-}
-
-// cacheRegionalTieredCachesResponseJSON contains the JSON metadata for the struct
-// [CacheRegionalTieredCachesResponse]
-type cacheRegionalTieredCachesResponseJSON struct {
+// cachePurgeResponseJSON contains the JSON metadata for the struct
+// [CachePurgeResponse]
+type cachePurgeResponseJSON struct {
 	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CacheRegionalTieredCachesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CachePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// ID of the zone setting.
-type CacheRegionalTieredCachesResponseID string
-
-const (
-	CacheRegionalTieredCachesResponseIDTcRegional CacheRegionalTieredCachesResponseID = "tc_regional"
-)
-
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type CacheRegionalTieredCachesResponseValue struct {
-	// ID of the zone setting.
-	ID CacheRegionalTieredCachesResponseValueID `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       cacheRegionalTieredCachesResponseValueJSON `json:"-"`
+// This interface is a union satisfied by one of the following:
+// [CachePurgeParamsKtBnhzJvFlex], [CachePurgeParamsKtBnhzJvEverything],
+// [CachePurgeParamsKtBnhzJvFiles].
+type CachePurgeParams interface {
+	ImplementsCachePurgeParams()
 }
 
-// cacheRegionalTieredCachesResponseValueJSON contains the JSON metadata for the
-// struct [CacheRegionalTieredCachesResponseValue]
-type cacheRegionalTieredCachesResponseValueJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+type CachePurgeParamsKtBnhzJvFlex struct {
+	Hosts    param.Field[[]string] `json:"hosts"`
+	Prefixes param.Field[[]string] `json:"prefixes"`
+	Tags     param.Field[[]string] `json:"tags"`
 }
 
-func (r *CacheRegionalTieredCachesResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type CacheRegionalTieredCachesResponseValueID string
-
-const (
-	CacheRegionalTieredCachesResponseValueIDTcRegional CacheRegionalTieredCachesResponseValueID = "tc_regional"
-)
-
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type CacheUpdateRegionalTieredCacheResponse struct {
-	// ID of the zone setting.
-	ID CacheUpdateRegionalTieredCacheResponseID `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Value CacheUpdateRegionalTieredCacheResponseValue `json:"value,required"`
-	JSON  cacheUpdateRegionalTieredCacheResponseJSON  `json:"-"`
-}
-
-// cacheUpdateRegionalTieredCacheResponseJSON contains the JSON metadata for the
-// struct [CacheUpdateRegionalTieredCacheResponse]
-type cacheUpdateRegionalTieredCacheResponseJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheUpdateRegionalTieredCacheResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type CacheUpdateRegionalTieredCacheResponseID string
-
-const (
-	CacheUpdateRegionalTieredCacheResponseIDTcRegional CacheUpdateRegionalTieredCacheResponseID = "tc_regional"
-)
-
-// Instructs Cloudflare to check a regional hub data center on the way to your
-// upper tier. This can help improve performance for smart and custom tiered cache
-// topologies.
-type CacheUpdateRegionalTieredCacheResponseValue struct {
-	// ID of the zone setting.
-	ID CacheUpdateRegionalTieredCacheResponseValueID `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,required,nullable" format:"date-time"`
-	JSON       cacheUpdateRegionalTieredCacheResponseValueJSON `json:"-"`
-}
-
-// cacheUpdateRegionalTieredCacheResponseValueJSON contains the JSON metadata for
-// the struct [CacheUpdateRegionalTieredCacheResponseValue]
-type cacheUpdateRegionalTieredCacheResponseValueJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheUpdateRegionalTieredCacheResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type CacheUpdateRegionalTieredCacheResponseValueID string
-
-const (
-	CacheUpdateRegionalTieredCacheResponseValueIDTcRegional CacheUpdateRegionalTieredCacheResponseValueID = "tc_regional"
-)
-
-type CacheRegionalTieredCachesResponseEnvelope struct {
-	Errors   []CacheRegionalTieredCachesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheRegionalTieredCachesResponseEnvelopeMessages `json:"messages,required"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Result CacheRegionalTieredCachesResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheRegionalTieredCachesResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheRegionalTieredCachesResponseEnvelopeJSON    `json:"-"`
-}
-
-// cacheRegionalTieredCachesResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CacheRegionalTieredCachesResponseEnvelope]
-type cacheRegionalTieredCachesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheRegionalTieredCachesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheRegionalTieredCachesResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    cacheRegionalTieredCachesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheRegionalTieredCachesResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [CacheRegionalTieredCachesResponseEnvelopeErrors]
-type cacheRegionalTieredCachesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheRegionalTieredCachesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheRegionalTieredCachesResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    cacheRegionalTieredCachesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheRegionalTieredCachesResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [CacheRegionalTieredCachesResponseEnvelopeMessages]
-type cacheRegionalTieredCachesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheRegionalTieredCachesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CacheRegionalTieredCachesResponseEnvelopeSuccess bool
-
-const (
-	CacheRegionalTieredCachesResponseEnvelopeSuccessTrue CacheRegionalTieredCachesResponseEnvelopeSuccess = true
-)
-
-type CacheUpdateRegionalTieredCacheParams struct {
-	// Value of the Regional Tiered Cache zone setting.
-	Value param.Field[CacheUpdateRegionalTieredCacheParamsValue] `json:"value,required"`
-}
-
-func (r CacheUpdateRegionalTieredCacheParams) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsKtBnhzJvFlex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// Value of the Regional Tiered Cache zone setting.
-type CacheUpdateRegionalTieredCacheParamsValue string
+func (CachePurgeParamsKtBnhzJvFlex) ImplementsCachePurgeParams() {
 
-const (
-	CacheUpdateRegionalTieredCacheParamsValueOn  CacheUpdateRegionalTieredCacheParamsValue = "on"
-	CacheUpdateRegionalTieredCacheParamsValueOff CacheUpdateRegionalTieredCacheParamsValue = "off"
-)
-
-type CacheUpdateRegionalTieredCacheResponseEnvelope struct {
-	Errors   []CacheUpdateRegionalTieredCacheResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheUpdateRegionalTieredCacheResponseEnvelopeMessages `json:"messages,required"`
-	// Instructs Cloudflare to check a regional hub data center on the way to your
-	// upper tier. This can help improve performance for smart and custom tiered cache
-	// topologies.
-	Result CacheUpdateRegionalTieredCacheResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheUpdateRegionalTieredCacheResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheUpdateRegionalTieredCacheResponseEnvelopeJSON    `json:"-"`
 }
 
-// cacheUpdateRegionalTieredCacheResponseEnvelopeJSON contains the JSON metadata
-// for the struct [CacheUpdateRegionalTieredCacheResponseEnvelope]
-type cacheUpdateRegionalTieredCacheResponseEnvelopeJSON struct {
+type CachePurgeParamsKtBnhzJvEverything struct {
+	PurgeEverything param.Field[bool] `json:"purge_everything"`
+}
+
+func (r CachePurgeParamsKtBnhzJvEverything) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (CachePurgeParamsKtBnhzJvEverything) ImplementsCachePurgeParams() {
+
+}
+
+type CachePurgeParamsKtBnhzJvFiles struct {
+	Files param.Field[[]CachePurgeParamsKtBnhzJvFilesFile] `json:"files"`
+}
+
+func (r CachePurgeParamsKtBnhzJvFiles) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (CachePurgeParamsKtBnhzJvFiles) ImplementsCachePurgeParams() {
+
+}
+
+// Satisfied by [shared.UnionString],
+// [CachePurgeParamsKtBnhzJvFilesFilesKtBnhzJvURLAndHeaders].
+type CachePurgeParamsKtBnhzJvFilesFile interface {
+	ImplementsCachePurgeParamsKtBnhzJvFilesFile()
+}
+
+type CachePurgeParamsKtBnhzJvFilesFilesKtBnhzJvURLAndHeaders struct {
+	Headers param.Field[interface{}] `json:"headers"`
+	URL     param.Field[string]      `json:"url"`
+}
+
+func (r CachePurgeParamsKtBnhzJvFilesFilesKtBnhzJvURLAndHeaders) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r CachePurgeParamsKtBnhzJvFilesFilesKtBnhzJvURLAndHeaders) ImplementsCachePurgeParamsKtBnhzJvFilesFile() {
+}
+
+type CachePurgeResponseEnvelope struct {
+	Errors   []CachePurgeResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CachePurgeResponseEnvelopeMessages `json:"messages,required"`
+	Result   CachePurgeResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success CachePurgeResponseEnvelopeSuccess `json:"success,required"`
+	JSON    cachePurgeResponseEnvelopeJSON    `json:"-"`
+}
+
+// cachePurgeResponseEnvelopeJSON contains the JSON metadata for the struct
+// [CachePurgeResponseEnvelope]
+type cachePurgeResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -307,51 +179,51 @@ type cacheUpdateRegionalTieredCacheResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CacheUpdateRegionalTieredCacheResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *CachePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CacheUpdateRegionalTieredCacheResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    cacheUpdateRegionalTieredCacheResponseEnvelopeErrorsJSON `json:"-"`
+type CachePurgeResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    cachePurgeResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// cacheUpdateRegionalTieredCacheResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [CacheUpdateRegionalTieredCacheResponseEnvelopeErrors]
-type cacheUpdateRegionalTieredCacheResponseEnvelopeErrorsJSON struct {
+// cachePurgeResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [CachePurgeResponseEnvelopeErrors]
+type cachePurgeResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CacheUpdateRegionalTieredCacheResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *CachePurgeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type CacheUpdateRegionalTieredCacheResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    cacheUpdateRegionalTieredCacheResponseEnvelopeMessagesJSON `json:"-"`
+type CachePurgeResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    cachePurgeResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// cacheUpdateRegionalTieredCacheResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [CacheUpdateRegionalTieredCacheResponseEnvelopeMessages]
-type cacheUpdateRegionalTieredCacheResponseEnvelopeMessagesJSON struct {
+// cachePurgeResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [CachePurgeResponseEnvelopeMessages]
+type cachePurgeResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CacheUpdateRegionalTieredCacheResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *CachePurgeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type CacheUpdateRegionalTieredCacheResponseEnvelopeSuccess bool
+type CachePurgeResponseEnvelopeSuccess bool
 
 const (
-	CacheUpdateRegionalTieredCacheResponseEnvelopeSuccessTrue CacheUpdateRegionalTieredCacheResponseEnvelopeSuccess = true
+	CachePurgeResponseEnvelopeSuccessTrue CachePurgeResponseEnvelopeSuccess = true
 )

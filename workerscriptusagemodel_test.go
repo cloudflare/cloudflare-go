@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerScriptUsageModelWorkerScriptFetchUsageModel(t *testing.T) {
+func TestWorkerScriptUsageModelGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestWorkerScriptUsageModelWorkerScriptFetchUsageModel(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Scripts.UsageModels.WorkerScriptFetchUsageModel(
+	_, err := client.Workers.Scripts.UsageModel.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
@@ -43,7 +43,7 @@ func TestWorkerScriptUsageModelWorkerScriptFetchUsageModel(t *testing.T) {
 	}
 }
 
-func TestWorkerScriptUsageModelWorkerScriptUpdateUsageModel(t *testing.T) {
+func TestWorkerScriptUsageModelReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,11 +59,11 @@ func TestWorkerScriptUsageModelWorkerScriptUpdateUsageModel(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Workers.Scripts.UsageModels.WorkerScriptUpdateUsageModel(
+	_, err := client.Workers.Scripts.UsageModel.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
-		cloudflare.WorkerScriptUsageModelWorkerScriptUpdateUsageModelParams{
+		cloudflare.WorkerScriptUsageModelReplaceParams{
 			Body: cloudflare.F[any]("{'usage_model': 'unbound'}"),
 		},
 	)

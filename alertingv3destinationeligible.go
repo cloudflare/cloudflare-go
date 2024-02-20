@@ -34,9 +34,9 @@ func NewAlertingV3DestinationEligibleService(opts ...option.RequestOption) (r *A
 }
 
 // Get a list of all delivery mechanism types for which an account is eligible.
-func (r *AlertingV3DestinationEligibleService) NotificationMechanismEligibilityGetDeliveryMechanismEligibility(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse, err error) {
+func (r *AlertingV3DestinationEligibleService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AlertingV3DestinationEligibleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelope
+	var env AlertingV3DestinationEligibleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -46,17 +46,15 @@ func (r *AlertingV3DestinationEligibleService) NotificationMechanismEligibilityG
 	return
 }
 
-// Union satisfied by
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseUnknown],
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseArray]
-// or [shared.UnionString].
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse interface {
-	ImplementsAlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse()
+// Union satisfied by [AlertingV3DestinationEligibleGetResponseUnknown],
+// [AlertingV3DestinationEligibleGetResponseArray] or [shared.UnionString].
+type AlertingV3DestinationEligibleGetResponse interface {
+	ImplementsAlertingV3DestinationEligibleGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse)(nil)).Elem(),
+		reflect.TypeOf((*AlertingV3DestinationEligibleGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -65,25 +63,24 @@ func init() {
 	)
 }
 
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseArray []interface{}
+type AlertingV3DestinationEligibleGetResponseArray []interface{}
 
-func (r AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseArray) ImplementsAlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse() {
+func (r AlertingV3DestinationEligibleGetResponseArray) ImplementsAlertingV3DestinationEligibleGetResponse() {
 }
 
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelope struct {
-	Errors   []AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessages `json:"messages,required"`
-	Result   AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponse                   `json:"result,required,nullable"`
+type AlertingV3DestinationEligibleGetResponseEnvelope struct {
+	Errors   []AlertingV3DestinationEligibleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AlertingV3DestinationEligibleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AlertingV3DestinationEligibleGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeJSON       `json:"-"`
+	Success    AlertingV3DestinationEligibleGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AlertingV3DestinationEligibleGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       alertingV3DestinationEligibleGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelope]
-type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeJSON struct {
+// alertingV3DestinationEligibleGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AlertingV3DestinationEligibleGetResponseEnvelope]
+type alertingV3DestinationEligibleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -93,58 +90,57 @@ type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMec
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingV3DestinationEligibleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrors struct {
-	Code    int64                                                                                                                  `json:"code,required"`
-	Message string                                                                                                                 `json:"message,required"`
-	JSON    alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrorsJSON `json:"-"`
+type AlertingV3DestinationEligibleGetResponseEnvelopeErrors struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    alertingV3DestinationEligibleGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrors]
-type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrorsJSON struct {
+// alertingV3DestinationEligibleGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [AlertingV3DestinationEligibleGetResponseEnvelopeErrors]
+type alertingV3DestinationEligibleGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingV3DestinationEligibleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessages struct {
-	Code    int64                                                                                                                    `json:"code,required"`
-	Message string                                                                                                                   `json:"message,required"`
-	JSON    alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessagesJSON `json:"-"`
+type AlertingV3DestinationEligibleGetResponseEnvelopeMessages struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    alertingV3DestinationEligibleGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessages]
-type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessagesJSON struct {
+// alertingV3DestinationEligibleGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [AlertingV3DestinationEligibleGetResponseEnvelopeMessages]
+type alertingV3DestinationEligibleGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingV3DestinationEligibleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeSuccess bool
+type AlertingV3DestinationEligibleGetResponseEnvelopeSuccess bool
 
 const (
-	AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeSuccessTrue AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeSuccess = true
+	AlertingV3DestinationEligibleGetResponseEnvelopeSuccessTrue AlertingV3DestinationEligibleGetResponseEnvelopeSuccess = true
 )
 
-type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfo struct {
+type AlertingV3DestinationEligibleGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -152,14 +148,14 @@ type AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMec
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                                                                                    `json:"total_count"`
-	JSON       alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                        `json:"total_count"`
+	JSON       alertingV3DestinationEligibleGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfo]
-type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfoJSON struct {
+// alertingV3DestinationEligibleGetResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct
+// [AlertingV3DestinationEligibleGetResponseEnvelopeResultInfo]
+type alertingV3DestinationEligibleGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -168,6 +164,6 @@ type alertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMec
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AlertingV3DestinationEligibleNotificationMechanismEligibilityGetDeliveryMechanismEligibilityResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AlertingV3DestinationEligibleGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

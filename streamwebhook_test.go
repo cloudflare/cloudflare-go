@@ -39,7 +39,7 @@ func TestStreamWebhookDelete(t *testing.T) {
 	}
 }
 
-func TestStreamWebhookStreamWebhookNewWebhooks(t *testing.T) {
+func TestStreamWebhookGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,13 +55,7 @@ func TestStreamWebhookStreamWebhookNewWebhooks(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Webhooks.StreamWebhookNewWebhooks(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamWebhookStreamWebhookNewWebhooksParams{
-			NotificationURL: cloudflare.F("https://example.com"),
-		},
-	)
+	_, err := client.Stream.Webhooks.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -71,7 +65,7 @@ func TestStreamWebhookStreamWebhookNewWebhooks(t *testing.T) {
 	}
 }
 
-func TestStreamWebhookStreamWebhookViewWebhooks(t *testing.T) {
+func TestStreamWebhookReplace(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -87,7 +81,13 @@ func TestStreamWebhookStreamWebhookViewWebhooks(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Stream.Webhooks.StreamWebhookViewWebhooks(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Stream.Webhooks.Replace(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.StreamWebhookReplaceParams{
+			NotificationURL: cloudflare.F("https://example.com"),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

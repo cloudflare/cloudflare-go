@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAcmTotalTLSUpdateWithOptionalParams(t *testing.T) {
+func TestAcmTotalTLSNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestAcmTotalTLSUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Acms.TotalTLS.Update(
+	_, err := client.Acm.TotalTLS.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AcmTotalTLSUpdateParams{
+		cloudflare.AcmTotalTLSNewParams{
 			Enabled:              cloudflare.F(true),
-			CertificateAuthority: cloudflare.F(cloudflare.AcmTotalTLSUpdateParamsCertificateAuthorityGoogle),
+			CertificateAuthority: cloudflare.F(cloudflare.AcmTotalTLSNewParamsCertificateAuthorityGoogle),
 		},
 	)
 	if err != nil {
@@ -62,7 +62,7 @@ func TestAcmTotalTLSGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Acms.TotalTLS.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Acm.TotalTLS.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

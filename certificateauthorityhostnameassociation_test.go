@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestCertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsWithOptionalParams(t *testing.T) {
+func TestCertificateAuthorityHostnameAssociationListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestCertificateAuthorityHostnameAssociationClientCertificateForAZoneListHos
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.CertificateAuthorities.HostnameAssociations.ClientCertificateForAZoneListHostnameAssociations(
+	_, err := client.CertificateAuthorities.HostnameAssociations.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CertificateAuthorityHostnameAssociationClientCertificateForAZoneListHostnameAssociationsParams{
+		cloudflare.CertificateAuthorityHostnameAssociationListParams{
 			MtlsCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
 		},
 	)
@@ -45,7 +45,7 @@ func TestCertificateAuthorityHostnameAssociationClientCertificateForAZoneListHos
 	}
 }
 
-func TestCertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsWithOptionalParams(t *testing.T) {
+func TestCertificateAuthorityHostnameAssociationReplaceWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,10 +61,10 @@ func TestCertificateAuthorityHostnameAssociationClientCertificateForAZonePutHost
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.CertificateAuthorities.HostnameAssociations.ClientCertificateForAZonePutHostnameAssociations(
+	_, err := client.CertificateAuthorities.HostnameAssociations.Replace(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CertificateAuthorityHostnameAssociationClientCertificateForAZonePutHostnameAssociationsParams{
+		cloudflare.CertificateAuthorityHostnameAssociationReplaceParams{
 			Hostnames:         cloudflare.F([]string{"api.example.com", "api.example.com", "api.example.com"}),
 			MtlsCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 		},

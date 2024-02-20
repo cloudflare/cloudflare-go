@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAccessSeatZeroTrustSeatsUpdateAUserSeat(t *testing.T) {
+func TestAccessSeatUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestAccessSeatZeroTrustSeatsUpdateAUserSeat(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("My User Service Key"),
 	)
-	_, err := client.Access.Seats.ZeroTrustSeatsUpdateAUserSeat(
+	_, err := client.Access.Seats.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccessSeatZeroTrustSeatsUpdateAUserSeatParams{
-			Body: cloudflare.F([]cloudflare.AccessSeatZeroTrustSeatsUpdateAUserSeatParamsBody{{
+		cloudflare.AccessSeatUpdateParams{
+			Body: cloudflare.F([]cloudflare.AccessSeatUpdateParamsBody{{
 				AccessSeat:  cloudflare.F(false),
 				GatewaySeat: cloudflare.F(false),
 			}, {

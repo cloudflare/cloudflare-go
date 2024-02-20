@@ -31,23 +31,10 @@ func NewWorkerAccountSettingService(opts ...option.RequestOption) (r *WorkerAcco
 	return
 }
 
-// Creates Worker account settings for an account.
-func (r *WorkerAccountSettingService) WorkerAccountSettingsNewWorkerAccountSettings(ctx context.Context, accountID string, body WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams, opts ...option.RequestOption) (res *WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Fetches Worker account settings for an account.
-func (r *WorkerAccountSettingService) WorkerAccountSettingsFetchWorkerAccountSettings(ctx context.Context, accountID string, opts ...option.RequestOption) (res *WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse, err error) {
+func (r *WorkerAccountSettingService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *WorkerAccountSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelope
+	var env WorkerAccountSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -57,67 +44,146 @@ func (r *WorkerAccountSettingService) WorkerAccountSettingsFetchWorkerAccountSet
 	return
 }
 
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse struct {
-	DefaultUsageModel interface{}                                                                   `json:"default_usage_model"`
-	GreenCompute      interface{}                                                                   `json:"green_compute"`
-	JSON              workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON `json:"-"`
+// Creates Worker account settings for an account.
+func (r *WorkerAccountSettingService) Replace(ctx context.Context, accountID string, body WorkerAccountSettingReplaceParams, opts ...option.RequestOption) (res *WorkerAccountSettingReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WorkerAccountSettingReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
-// workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse]
-type workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseJSON struct {
+type WorkerAccountSettingGetResponse struct {
+	DefaultUsageModel interface{}                         `json:"default_usage_model"`
+	GreenCompute      interface{}                         `json:"green_compute"`
+	JSON              workerAccountSettingGetResponseJSON `json:"-"`
+}
+
+// workerAccountSettingGetResponseJSON contains the JSON metadata for the struct
+// [WorkerAccountSettingGetResponse]
+type workerAccountSettingGetResponseJSON struct {
 	DefaultUsageModel apijson.Field
 	GreenCompute      apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerAccountSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse struct {
-	DefaultUsageModel interface{}                                                                     `json:"default_usage_model"`
-	GreenCompute      interface{}                                                                     `json:"green_compute"`
-	JSON              workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON `json:"-"`
+type WorkerAccountSettingReplaceResponse struct {
+	DefaultUsageModel interface{}                             `json:"default_usage_model"`
+	GreenCompute      interface{}                             `json:"green_compute"`
+	JSON              workerAccountSettingReplaceResponseJSON `json:"-"`
 }
 
-// workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse]
-type workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseJSON struct {
+// workerAccountSettingReplaceResponseJSON contains the JSON metadata for the
+// struct [WorkerAccountSettingReplaceResponse]
+type workerAccountSettingReplaceResponseJSON struct {
 	DefaultUsageModel apijson.Field
 	GreenCompute      apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerAccountSettingReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams struct {
+type WorkerAccountSettingGetResponseEnvelope struct {
+	Errors   []WorkerAccountSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerAccountSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerAccountSettingGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerAccountSettingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerAccountSettingGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerAccountSettingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerAccountSettingGetResponseEnvelope]
+type workerAccountSettingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerAccountSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerAccountSettingGetResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    workerAccountSettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerAccountSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [WorkerAccountSettingGetResponseEnvelopeErrors]
+type workerAccountSettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerAccountSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerAccountSettingGetResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    workerAccountSettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerAccountSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [WorkerAccountSettingGetResponseEnvelopeMessages]
+type workerAccountSettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerAccountSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerAccountSettingGetResponseEnvelopeSuccess bool
+
+const (
+	WorkerAccountSettingGetResponseEnvelopeSuccessTrue WorkerAccountSettingGetResponseEnvelopeSuccess = true
+)
+
+type WorkerAccountSettingReplaceParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsParams) MarshalJSON() (data []byte, err error) {
+func (r WorkerAccountSettingReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelope struct {
-	Errors   []WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponse                   `json:"result,required"`
+type WorkerAccountSettingReplaceResponseEnvelope struct {
+	Errors   []WorkerAccountSettingReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerAccountSettingReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerAccountSettingReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeJSON    `json:"-"`
+	Success WorkerAccountSettingReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerAccountSettingReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelope]
-type workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeJSON struct {
+// workerAccountSettingReplaceResponseEnvelopeJSON contains the JSON metadata for
+// the struct [WorkerAccountSettingReplaceResponseEnvelope]
+type workerAccountSettingReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -126,125 +192,51 @@ type workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEn
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerAccountSettingReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrors struct {
-	Code    int64                                                                                       `json:"code,required"`
-	Message string                                                                                      `json:"message,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerAccountSettingReplaceResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    workerAccountSettingReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrors]
-type workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrorsJSON struct {
+// workerAccountSettingReplaceResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [WorkerAccountSettingReplaceResponseEnvelopeErrors]
+type workerAccountSettingReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerAccountSettingReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessages struct {
-	Code    int64                                                                                         `json:"code,required"`
-	Message string                                                                                        `json:"message,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerAccountSettingReplaceResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    workerAccountSettingReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessages]
-type workerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessagesJSON struct {
+// workerAccountSettingReplaceResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [WorkerAccountSettingReplaceResponseEnvelopeMessages]
+type workerAccountSettingReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerAccountSettingReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeSuccess bool
+type WorkerAccountSettingReplaceResponseEnvelopeSuccess bool
 
 const (
-	WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeSuccessTrue WorkerAccountSettingWorkerAccountSettingsNewWorkerAccountSettingsResponseEnvelopeSuccess = true
-)
-
-type WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelope struct {
-	Errors   []WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelope]
-type workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrors struct {
-	Code    int64                                                                                         `json:"code,required"`
-	Message string                                                                                        `json:"message,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrors]
-type workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessages struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessages]
-type workerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeSuccess bool
-
-const (
-	WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeSuccessTrue WorkerAccountSettingWorkerAccountSettingsFetchWorkerAccountSettingsResponseEnvelopeSuccess = true
+	WorkerAccountSettingReplaceResponseEnvelopeSuccessTrue WorkerAccountSettingReplaceResponseEnvelopeSuccess = true
 )

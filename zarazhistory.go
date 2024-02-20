@@ -39,19 +39,6 @@ func NewZarazHistoryService(opts ...option.RequestOption) (r *ZarazHistoryServic
 	return
 }
 
-// Restores a historical published Zaraz configuration by ID for a zone.
-func (r *ZarazHistoryService) Update(ctx context.Context, zoneID string, body ZarazHistoryUpdateParams, opts ...option.RequestOption) (res *ZarazHistoryUpdateResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ZarazHistoryUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/zaraz/history", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Lists a history of published Zaraz configuration records for a zone.
 func (r *ZarazHistoryService) List(ctx context.Context, zoneID string, query ZarazHistoryListParams, opts ...option.RequestOption) (res *[]ZarazHistoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -65,1413 +52,17 @@ func (r *ZarazHistoryService) List(ctx context.Context, zoneID string, query Zar
 	return
 }
 
-// Zaraz configuration
-type ZarazHistoryUpdateResponse struct {
-	// Data layer compatibility mode enabled.
-	DataLayer bool `json:"dataLayer,required"`
-	// The key for Zaraz debug mode.
-	DebugKey string `json:"debugKey,required"`
-	// General Zaraz settings.
-	Settings ZarazHistoryUpdateResponseSettings `json:"settings,required"`
-	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
-	// and value is the tool configuration object.
-	Tools map[string]ZarazHistoryUpdateResponseTool `json:"tools,required"`
-	// Triggers set up under Zaraz configuration, where key is the trigger
-	// alpha-numeric ID and value is the trigger configuration.
-	Triggers map[string]ZarazHistoryUpdateResponseTrigger `json:"triggers,required"`
-	// Variables set up under Zaraz configuration, where key is the variable
-	// alpha-numeric ID and value is the variable configuration. Values of variables of
-	// type secret are not included.
-	Variables map[string]ZarazHistoryUpdateResponseVariable `json:"variables,required"`
-	// Zaraz internal version of the config.
-	ZarazVersion int64 `json:"zarazVersion,required"`
-	// Consent management configuration.
-	Consent ZarazHistoryUpdateResponseConsent `json:"consent"`
-	// Single Page Application support enabled.
-	HistoryChange bool                           `json:"historyChange"`
-	JSON          zarazHistoryUpdateResponseJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseJSON contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponse]
-type zarazHistoryUpdateResponseJSON struct {
-	DataLayer     apijson.Field
-	DebugKey      apijson.Field
-	Settings      apijson.Field
-	Tools         apijson.Field
-	Triggers      apijson.Field
-	Variables     apijson.Field
-	ZarazVersion  apijson.Field
-	Consent       apijson.Field
-	HistoryChange apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// General Zaraz settings.
-type ZarazHistoryUpdateResponseSettings struct {
-	// Automatic injection of Zaraz scripts enabled.
-	AutoInjectScript bool `json:"autoInjectScript,required"`
-	// Details of the worker that receives and edits Zaraz Context object.
-	ContextEnricher ZarazHistoryUpdateResponseSettingsContextEnricher `json:"contextEnricher"`
-	// The domain Zaraz will use for writing and reading its cookies.
-	CookieDomain string `json:"cookieDomain"`
-	// Ecommerce API enabled.
-	Ecommerce bool `json:"ecommerce"`
-	// Custom endpoint for server-side track events.
-	EventsAPIPath string `json:"eventsApiPath"`
-	// Hiding external referrer URL enabled.
-	HideExternalReferer bool `json:"hideExternalReferer"`
-	// Trimming IP address enabled.
-	HideIPAddress bool `json:"hideIPAddress"`
-	// Removing URL query params enabled.
-	HideQueryParams bool `json:"hideQueryParams"`
-	// Removing sensitive data from User Aagent string enabled.
-	HideUserAgent bool `json:"hideUserAgent"`
-	// Custom endpoint for Zaraz init script.
-	InitPath string `json:"initPath"`
-	// Injection of Zaraz scripts into iframes enabled.
-	InjectIframes bool `json:"injectIframes"`
-	// Custom path for Managed Components server functionalities.
-	McRootPath string `json:"mcRootPath"`
-	// Custom endpoint for Zaraz main script.
-	ScriptPath string `json:"scriptPath"`
-	// Custom endpoint for Zaraz tracking requests.
-	TrackPath string                                 `json:"trackPath"`
-	JSON      zarazHistoryUpdateResponseSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseSettingsJSON contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseSettings]
-type zarazHistoryUpdateResponseSettingsJSON struct {
-	AutoInjectScript    apijson.Field
-	ContextEnricher     apijson.Field
-	CookieDomain        apijson.Field
-	Ecommerce           apijson.Field
-	EventsAPIPath       apijson.Field
-	HideExternalReferer apijson.Field
-	HideIPAddress       apijson.Field
-	HideQueryParams     apijson.Field
-	HideUserAgent       apijson.Field
-	InitPath            apijson.Field
-	InjectIframes       apijson.Field
-	McRootPath          apijson.Field
-	ScriptPath          apijson.Field
-	TrackPath           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Details of the worker that receives and edits Zaraz Context object.
-type ZarazHistoryUpdateResponseSettingsContextEnricher struct {
-	EscapedWorkerName string                                                `json:"escapedWorkerName,required"`
-	WorkerTag         string                                                `json:"workerTag,required"`
-	JSON              zarazHistoryUpdateResponseSettingsContextEnricherJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseSettingsContextEnricherJSON contains the JSON metadata
-// for the struct [ZarazHistoryUpdateResponseSettingsContextEnricher]
-type zarazHistoryUpdateResponseSettingsContextEnricherJSON struct {
-	EscapedWorkerName apijson.Field
-	WorkerTag         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Union satisfied by [ZarazHistoryUpdateResponseToolsZarazManagedComponent] or
-// [ZarazHistoryUpdateResponseToolsZarazCustomManagedComponent].
-type ZarazHistoryUpdateResponseTool interface {
-	implementsZarazHistoryUpdateResponseTool()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryUpdateResponseTool)(nil)).Elem(), "")
-}
-
-type ZarazHistoryUpdateResponseToolsZarazManagedComponent struct {
-	// List of blocking trigger IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component string `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields map[string]ZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled bool `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name string `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions []string `json:"permissions,required"`
-	// Tool's settings
-	Settings map[string]ZarazHistoryUpdateResponseToolsZarazManagedComponentSetting `json:"settings,required"`
-	Type     ZarazHistoryUpdateResponseToolsZarazManagedComponentType               `json:"type,required"`
-	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions map[string]ZarazHistoryUpdateResponseToolsZarazManagedComponentAction `json:"actions"`
-	// Default consent purpose ID
-	DefaultPurpose string `json:"defaultPurpose"`
-	// DEPRECATED - List of actions configured on a tool. Either this or actions field
-	// is required. If both are present, actions field will take precedence.
-	NeoEvents []ZarazHistoryUpdateResponseToolsZarazManagedComponentNeoEvent `json:"neoEvents"`
-	JSON      zarazHistoryUpdateResponseToolsZarazManagedComponentJSON       `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazManagedComponentJSON contains the JSON
-// metadata for the struct [ZarazHistoryUpdateResponseToolsZarazManagedComponent]
-type zarazHistoryUpdateResponseToolsZarazManagedComponentJSON struct {
-	BlockingTriggers apijson.Field
-	Component        apijson.Field
-	DefaultFields    apijson.Field
-	Enabled          apijson.Field
-	Name             apijson.Field
-	Permissions      apijson.Field
-	Settings         apijson.Field
-	Type             apijson.Field
-	Actions          apijson.Field
-	DefaultPurpose   apijson.Field
-	NeoEvents        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazManagedComponent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseToolsZarazManagedComponent) implementsZarazHistoryUpdateResponseTool() {
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField interface {
-	ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazHistoryUpdateResponseToolsZarazManagedComponentSetting interface {
-	ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentSetting()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazHistoryUpdateResponseToolsZarazManagedComponentSetting)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazManagedComponentType string
-
-const (
-	ZarazHistoryUpdateResponseToolsZarazManagedComponentTypeComponent ZarazHistoryUpdateResponseToolsZarazManagedComponentType = "component"
-)
-
-type ZarazHistoryUpdateResponseToolsZarazManagedComponentAction struct {
-	// Tool event type
-	ActionType string `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Event payload
-	Data interface{} `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers []string                                                       `json:"firingTriggers,required"`
-	JSON           zarazHistoryUpdateResponseToolsZarazManagedComponentActionJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazManagedComponentActionJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazManagedComponentAction]
-type zarazHistoryUpdateResponseToolsZarazManagedComponentActionJSON struct {
-	ActionType       apijson.Field
-	BlockingTriggers apijson.Field
-	Data             apijson.Field
-	FiringTriggers   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazManagedComponentAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazManagedComponentNeoEvent struct {
-	// Tool event type
-	ActionType string `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Event payload
-	Data interface{} `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers []string                                                         `json:"firingTriggers,required"`
-	JSON           zarazHistoryUpdateResponseToolsZarazManagedComponentNeoEventJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazManagedComponentNeoEventJSON contains the
-// JSON metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazManagedComponentNeoEvent]
-type zarazHistoryUpdateResponseToolsZarazManagedComponentNeoEventJSON struct {
-	ActionType       apijson.Field
-	BlockingTriggers apijson.Field
-	Data             apijson.Field
-	FiringTriggers   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazManagedComponentNeoEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponent struct {
-	// List of blocking trigger IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Tool's internal name
-	Component string `json:"component,required"`
-	// Default fields for tool's actions
-	DefaultFields map[string]ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField `json:"defaultFields,required"`
-	// Whether tool is enabled
-	Enabled bool `json:"enabled,required"`
-	// Tool's name defined by the user
-	Name string `json:"name,required"`
-	// List of permissions granted to the component
-	Permissions []string `json:"permissions,required"`
-	// Tool's settings
-	Settings map[string]ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting `json:"settings,required"`
-	Type     ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentType               `json:"type,required"`
-	// Cloudflare worker that acts as a managed component
-	Worker ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorker `json:"worker,required"`
-	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions map[string]ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentAction `json:"actions"`
-	// Default consent purpose ID
-	DefaultPurpose string `json:"defaultPurpose"`
-	// DEPRECATED - List of actions configured on a tool. Either this or actions field
-	// is required. If both are present, actions field will take precedence.
-	NeoEvents []ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEvent `json:"neoEvents"`
-	JSON      zarazHistoryUpdateResponseToolsZarazCustomManagedComponentJSON       `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazCustomManagedComponentJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazCustomManagedComponent]
-type zarazHistoryUpdateResponseToolsZarazCustomManagedComponentJSON struct {
-	BlockingTriggers apijson.Field
-	Component        apijson.Field
-	DefaultFields    apijson.Field
-	Enabled          apijson.Field
-	Name             apijson.Field
-	Permissions      apijson.Field
-	Settings         apijson.Field
-	Type             apijson.Field
-	Worker           apijson.Field
-	Actions          apijson.Field
-	DefaultPurpose   apijson.Field
-	NeoEvents        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazCustomManagedComponent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseToolsZarazCustomManagedComponent) implementsZarazHistoryUpdateResponseTool() {
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField interface {
-	ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentDefaultField)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-// Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting interface {
-	ImplementsZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentSetting)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.True,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.False,
-			Type:       reflect.TypeOf(shared.UnionBool(false)),
-		},
-	)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentType string
-
-const (
-	ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentTypeCustomMc ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentType = "custom-mc"
-)
-
-// Cloudflare worker that acts as a managed component
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorker struct {
-	EscapedWorkerName string                                                               `json:"escapedWorkerName,required"`
-	WorkerTag         string                                                               `json:"workerTag,required"`
-	JSON              zarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorkerJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorkerJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorker]
-type zarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorkerJSON struct {
-	EscapedWorkerName apijson.Field
-	WorkerTag         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentWorker) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentAction struct {
-	// Tool event type
-	ActionType string `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Event payload
-	Data interface{} `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers []string                                                             `json:"firingTriggers,required"`
-	JSON           zarazHistoryUpdateResponseToolsZarazCustomManagedComponentActionJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazCustomManagedComponentActionJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentAction]
-type zarazHistoryUpdateResponseToolsZarazCustomManagedComponentActionJSON struct {
-	ActionType       apijson.Field
-	BlockingTriggers apijson.Field
-	Data             apijson.Field
-	FiringTriggers   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEvent struct {
-	// Tool event type
-	ActionType string `json:"actionType,required"`
-	// List of blocking triggers IDs
-	BlockingTriggers []string `json:"blockingTriggers,required"`
-	// Event payload
-	Data interface{} `json:"data,required"`
-	// List of firing triggers IDs
-	FiringTriggers []string                                                               `json:"firingTriggers,required"`
-	JSON           zarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEventJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEventJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEvent]
-type zarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEventJSON struct {
-	ActionType       apijson.Field
-	BlockingTriggers apijson.Field
-	Data             apijson.Field
-	FiringTriggers   apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseToolsZarazCustomManagedComponentNeoEvent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTrigger struct {
-	// Rules defining when the trigger is not fired.
-	ExcludeRules []ZarazHistoryUpdateResponseTriggersExcludeRule `json:"excludeRules,required"`
-	// Rules defining when the trigger is fired.
-	LoadRules []ZarazHistoryUpdateResponseTriggersLoadRule `json:"loadRules,required"`
-	// Trigger name.
-	Name string `json:"name,required"`
-	// Trigger description.
-	Description string                                   `json:"description"`
-	System      ZarazHistoryUpdateResponseTriggersSystem `json:"system"`
-	JSON        zarazHistoryUpdateResponseTriggerJSON    `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggerJSON contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTrigger]
-type zarazHistoryUpdateResponseTriggerJSON struct {
-	ExcludeRules apijson.Field
-	LoadRules    apijson.Field
-	Name         apijson.Field
-	Description  apijson.Field
-	System       apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTrigger) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Union satisfied by
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRule],
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRule],
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRule],
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRule],
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRule],
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRule] or
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRule].
-type ZarazHistoryUpdateResponseTriggersExcludeRule interface {
-	implementsZarazHistoryUpdateResponseTriggersExcludeRule()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryUpdateResponseTriggersExcludeRule)(nil)).Elem(), "")
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRule struct {
-	ID    string                                                          `json:"id,required"`
-	Match string                                                          `json:"match,required"`
-	Op    ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp   `json:"op,required"`
-	Value string                                                          `json:"value,required"`
-	JSON  zarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleJSON contains the
-// JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleJSON struct {
-	ID          apijson.Field
-	Match       apijson.Field
-	Op          apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpContains           ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "CONTAINS"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpEquals             ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "EQUALS"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpStartsWith         ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "STARTS_WITH"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpEndsWith           ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "ENDS_WITH"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpMatchRegex         ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "MATCH_REGEX"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpNotMatchRegex      ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "NOT_MATCH_REGEX"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpGreaterThan        ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "GREATER_THAN"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpGreaterThanOrEqual ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "GREATER_THAN_OR_EQUAL"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpLessThan           ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "LESS_THAN"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOpLessThanOrEqual    ZarazHistoryUpdateResponseTriggersExcludeRulesZarazLoadRuleOp = "LESS_THAN_OR_EQUAL"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRule struct {
-	ID       string                                                                       `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleActionClickListener ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleAction = "clickListener"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettings struct {
-	Selector    string                                                                           `json:"selector,required"`
-	Type        ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType `json:"type,required"`
-	WaitForTags int64                                                                            `json:"waitForTags,required"`
-	JSON        zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON struct {
-	Selector    apijson.Field
-	Type        apijson.Field
-	WaitForTags apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsTypeXpath ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType = "xpath"
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsTypeCss   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType = "css"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRule struct {
-	ID       string                                                               `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleJSON contains the
-// JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleActionTimer ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleAction = "timer"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettings struct {
-	Interval int64                                                                    `json:"interval,required"`
-	Limit    int64                                                                    `json:"limit,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON struct {
-	Interval    apijson.Field
-	Limit       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazTimerRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRule struct {
-	ID       string                                                                        `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleActionFormSubmission ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleAction = "formSubmission"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings struct {
-	Selector string                                                                            `json:"selector,required"`
-	Validate bool                                                                              `json:"validate,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON struct {
-	Selector    apijson.Field
-	Validate    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRule struct {
-	ID       string                                                                       `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleActionVariableMatch ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleAction = "variableMatch"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettings struct {
-	Match    string                                                                           `json:"match,required"`
-	Variable string                                                                           `json:"variable,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON struct {
-	Match       apijson.Field
-	Variable    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazVariableMatchRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRule struct {
-	ID       string                                                                     `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleActionScrollDepth ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleAction = "scrollDepth"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettings struct {
-	Positions string                                                                         `json:"positions,required"`
-	JSON      zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON struct {
-	Positions   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazScrollDepthRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRule struct {
-	ID       string                                                                           `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRule]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRule) implementsZarazHistoryUpdateResponseTriggersExcludeRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleActionElementVisibility ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleAction = "elementVisibility"
-)
-
-type ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings struct {
-	Selector string                                                                               `json:"selector,required"`
-	JSON     zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings]
-type zarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON struct {
-	Selector    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Union satisfied by [ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRule],
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRule],
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRule],
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRule],
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRule],
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRule] or
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRule].
-type ZarazHistoryUpdateResponseTriggersLoadRule interface {
-	implementsZarazHistoryUpdateResponseTriggersLoadRule()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryUpdateResponseTriggersLoadRule)(nil)).Elem(), "")
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRule struct {
-	ID    string                                                       `json:"id,required"`
-	Match string                                                       `json:"match,required"`
-	Op    ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp   `json:"op,required"`
-	Value string                                                       `json:"value,required"`
-	JSON  zarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleJSON struct {
-	ID          apijson.Field
-	Match       apijson.Field
-	Op          apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpContains           ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "CONTAINS"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpEquals             ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "EQUALS"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpStartsWith         ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "STARTS_WITH"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpEndsWith           ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "ENDS_WITH"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpMatchRegex         ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "MATCH_REGEX"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpNotMatchRegex      ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "NOT_MATCH_REGEX"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpGreaterThan        ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "GREATER_THAN"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpGreaterThanOrEqual ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "GREATER_THAN_OR_EQUAL"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpLessThan           ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "LESS_THAN"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOpLessThanOrEqual    ZarazHistoryUpdateResponseTriggersLoadRulesZarazLoadRuleOp = "LESS_THAN_OR_EQUAL"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRule struct {
-	ID       string                                                                    `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleActionClickListener ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleAction = "clickListener"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettings struct {
-	Selector    string                                                                        `json:"selector,required"`
-	Type        ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsType `json:"type,required"`
-	WaitForTags int64                                                                         `json:"waitForTags,required"`
-	JSON        zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON struct {
-	Selector    apijson.Field
-	Type        apijson.Field
-	WaitForTags apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsType string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsTypeXpath ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsType = "xpath"
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsTypeCss   ZarazHistoryUpdateResponseTriggersLoadRulesZarazClickListenerRuleSettingsType = "css"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRule struct {
-	ID       string                                                            `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleActionTimer ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleAction = "timer"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettings struct {
-	Interval int64                                                                 `json:"interval,required"`
-	Limit    int64                                                                 `json:"limit,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettingsJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettingsJSON struct {
-	Interval    apijson.Field
-	Limit       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazTimerRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRule struct {
-	ID       string                                                                     `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleActionFormSubmission ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleAction = "formSubmission"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettings struct {
-	Selector string                                                                         `json:"selector,required"`
-	Validate bool                                                                           `json:"validate,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON struct {
-	Selector    apijson.Field
-	Validate    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazFormSubmissionRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRule struct {
-	ID       string                                                                    `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleJSON contains
-// the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleActionVariableMatch ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleAction = "variableMatch"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettings struct {
-	Match    string                                                                        `json:"match,required"`
-	Variable string                                                                        `json:"variable,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON struct {
-	Match       apijson.Field
-	Variable    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazVariableMatchRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRule struct {
-	ID       string                                                                  `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleJSON contains the
-// JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleActionScrollDepth ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleAction = "scrollDepth"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettings struct {
-	Positions string                                                                      `json:"positions,required"`
-	JSON      zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON struct {
-	Positions   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazScrollDepthRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRule struct {
-	ID       string                                                                        `json:"id,required"`
-	Action   ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleAction   `json:"action,required"`
-	Settings ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleJSON     `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRule]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRule) implementsZarazHistoryUpdateResponseTriggersLoadRule() {
-}
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleAction string
-
-const (
-	ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleActionElementVisibility ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleAction = "elementVisibility"
-)
-
-type ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettings struct {
-	Selector string                                                                            `json:"selector,required"`
-	JSON     zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON
-// contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettings]
-type zarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON struct {
-	Selector    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseTriggersLoadRulesZarazElementVisibilityRuleSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseTriggersSystem string
-
-const (
-	ZarazHistoryUpdateResponseTriggersSystemPageload ZarazHistoryUpdateResponseTriggersSystem = "pageload"
-)
-
-// Union satisfied by [ZarazHistoryUpdateResponseVariablesObject] or
-// [ZarazHistoryUpdateResponseVariablesObject].
-type ZarazHistoryUpdateResponseVariable interface {
-	implementsZarazHistoryUpdateResponseVariable()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryUpdateResponseVariable)(nil)).Elem(), "")
-}
-
-type ZarazHistoryUpdateResponseVariablesObject struct {
-	Name  string                                        `json:"name,required"`
-	Type  ZarazHistoryUpdateResponseVariablesObjectType `json:"type,required"`
-	Value string                                        `json:"value,required"`
-	JSON  zarazHistoryUpdateResponseVariablesObjectJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseVariablesObjectJSON contains the JSON metadata for the
-// struct [ZarazHistoryUpdateResponseVariablesObject]
-type zarazHistoryUpdateResponseVariablesObjectJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseVariablesObject) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZarazHistoryUpdateResponseVariablesObject) implementsZarazHistoryUpdateResponseVariable() {}
-
-type ZarazHistoryUpdateResponseVariablesObjectType string
-
-const (
-	ZarazHistoryUpdateResponseVariablesObjectTypeString ZarazHistoryUpdateResponseVariablesObjectType = "string"
-	ZarazHistoryUpdateResponseVariablesObjectTypeSecret ZarazHistoryUpdateResponseVariablesObjectType = "secret"
-)
-
-// Consent management configuration.
-type ZarazHistoryUpdateResponseConsent struct {
-	Enabled                bool                                                    `json:"enabled,required"`
-	ButtonTextTranslations ZarazHistoryUpdateResponseConsentButtonTextTranslations `json:"buttonTextTranslations"`
-	CompanyEmail           string                                                  `json:"companyEmail"`
-	CompanyName            string                                                  `json:"companyName"`
-	CompanyStreetAddress   string                                                  `json:"companyStreetAddress"`
-	ConsentModalIntroHTML  string                                                  `json:"consentModalIntroHTML"`
-	// Object where keys are language codes
-	ConsentModalIntroHTMLWithTranslations map[string]string `json:"consentModalIntroHTMLWithTranslations"`
-	CookieName                            string            `json:"cookieName"`
-	CustomCss                             string            `json:"customCSS"`
-	CustomIntroDisclaimerDismissed        bool              `json:"customIntroDisclaimerDismissed"`
-	DefaultLanguage                       string            `json:"defaultLanguage"`
-	HideModal                             bool              `json:"hideModal"`
-	// Object where keys are purpose alpha-numeric IDs
-	Purposes map[string]ZarazHistoryUpdateResponseConsentPurpose `json:"purposes"`
-	// Object where keys are purpose alpha-numeric IDs
-	PurposesWithTranslations map[string]ZarazHistoryUpdateResponseConsentPurposesWithTranslation `json:"purposesWithTranslations"`
-	JSON                     zarazHistoryUpdateResponseConsentJSON                               `json:"-"`
-}
-
-// zarazHistoryUpdateResponseConsentJSON contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseConsent]
-type zarazHistoryUpdateResponseConsentJSON struct {
-	Enabled                               apijson.Field
-	ButtonTextTranslations                apijson.Field
-	CompanyEmail                          apijson.Field
-	CompanyName                           apijson.Field
-	CompanyStreetAddress                  apijson.Field
-	ConsentModalIntroHTML                 apijson.Field
-	ConsentModalIntroHTMLWithTranslations apijson.Field
-	CookieName                            apijson.Field
-	CustomCss                             apijson.Field
-	CustomIntroDisclaimerDismissed        apijson.Field
-	DefaultLanguage                       apijson.Field
-	HideModal                             apijson.Field
-	Purposes                              apijson.Field
-	PurposesWithTranslations              apijson.Field
-	raw                                   string
-	ExtraFields                           map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseConsent) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseConsentButtonTextTranslations struct {
-	// Object where keys are language codes
-	AcceptAll map[string]string `json:"accept_all,required"`
-	// Object where keys are language codes
-	ConfirmMyChoices map[string]string `json:"confirm_my_choices,required"`
-	// Object where keys are language codes
-	RejectAll map[string]string                                           `json:"reject_all,required"`
-	JSON      zarazHistoryUpdateResponseConsentButtonTextTranslationsJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseConsentButtonTextTranslationsJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseConsentButtonTextTranslations]
-type zarazHistoryUpdateResponseConsentButtonTextTranslationsJSON struct {
-	AcceptAll        apijson.Field
-	ConfirmMyChoices apijson.Field
-	RejectAll        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseConsentPurpose struct {
-	Description string                                       `json:"description,required"`
-	Name        string                                       `json:"name,required"`
-	JSON        zarazHistoryUpdateResponseConsentPurposeJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseConsentPurposeJSON contains the JSON metadata for the
-// struct [ZarazHistoryUpdateResponseConsentPurpose]
-type zarazHistoryUpdateResponseConsentPurposeJSON struct {
-	Description apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseConsentPurpose) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZarazHistoryUpdateResponseConsentPurposesWithTranslation struct {
-	// Object where keys are language codes
-	Description map[string]string `json:"description,required"`
-	// Object where keys are language codes
-	Name  map[string]string                                            `json:"name,required"`
-	Order int64                                                        `json:"order,required"`
-	JSON  zarazHistoryUpdateResponseConsentPurposesWithTranslationJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseConsentPurposesWithTranslationJSON contains the JSON
-// metadata for the struct
-// [ZarazHistoryUpdateResponseConsentPurposesWithTranslation]
-type zarazHistoryUpdateResponseConsentPurposesWithTranslationJSON struct {
-	Description apijson.Field
-	Name        apijson.Field
-	Order       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseConsentPurposesWithTranslation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
+// Restores a historical published Zaraz configuration by ID for a zone.
+func (r *ZarazHistoryService) Replace(ctx context.Context, zoneID string, body ZarazHistoryReplaceParams, opts ...option.RequestOption) (res *ZarazHistoryReplaceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ZarazHistoryReplaceResponseEnvelope
+	path := fmt.Sprintf("zones/%s/settings/zaraz/history", zoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 type ZarazHistoryListResponse struct {
@@ -1504,75 +95,1412 @@ func (r *ZarazHistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazHistoryUpdateParams struct {
-	// ID of the Zaraz configuration to restore.
-	Body param.Field[int64] `json:"body,required"`
+// Zaraz configuration
+type ZarazHistoryReplaceResponse struct {
+	// Data layer compatibility mode enabled.
+	DataLayer bool `json:"dataLayer,required"`
+	// The key for Zaraz debug mode.
+	DebugKey string `json:"debugKey,required"`
+	// General Zaraz settings.
+	Settings ZarazHistoryReplaceResponseSettings `json:"settings,required"`
+	// Tools set up under Zaraz configuration, where key is the alpha-numeric tool ID
+	// and value is the tool configuration object.
+	Tools map[string]ZarazHistoryReplaceResponseTool `json:"tools,required"`
+	// Triggers set up under Zaraz configuration, where key is the trigger
+	// alpha-numeric ID and value is the trigger configuration.
+	Triggers map[string]ZarazHistoryReplaceResponseTrigger `json:"triggers,required"`
+	// Variables set up under Zaraz configuration, where key is the variable
+	// alpha-numeric ID and value is the variable configuration. Values of variables of
+	// type secret are not included.
+	Variables map[string]ZarazHistoryReplaceResponseVariable `json:"variables,required"`
+	// Zaraz internal version of the config.
+	ZarazVersion int64 `json:"zarazVersion,required"`
+	// Consent management configuration.
+	Consent ZarazHistoryReplaceResponseConsent `json:"consent"`
+	// Single Page Application support enabled.
+	HistoryChange bool                            `json:"historyChange"`
+	JSON          zarazHistoryReplaceResponseJSON `json:"-"`
 }
 
-func (r ZarazHistoryUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
+// zarazHistoryReplaceResponseJSON contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponse]
+type zarazHistoryReplaceResponseJSON struct {
+	DataLayer     apijson.Field
+	DebugKey      apijson.Field
+	Settings      apijson.Field
+	Tools         apijson.Field
+	Triggers      apijson.Field
+	Variables     apijson.Field
+	ZarazVersion  apijson.Field
+	Consent       apijson.Field
+	HistoryChange apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
 }
 
-type ZarazHistoryUpdateResponseEnvelope struct {
-	Errors   []ZarazHistoryUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZarazHistoryUpdateResponseEnvelopeMessages `json:"messages,required"`
-	// Zaraz configuration
-	Result ZarazHistoryUpdateResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success bool                                   `json:"success,required"`
-	JSON    zarazHistoryUpdateResponseEnvelopeJSON `json:"-"`
-}
-
-// zarazHistoryUpdateResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZarazHistoryUpdateResponseEnvelope]
-type zarazHistoryUpdateResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZarazHistoryUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazHistoryReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazHistoryUpdateResponseEnvelopeErrors struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    zarazHistoryUpdateResponseEnvelopeErrorsJSON `json:"-"`
+// General Zaraz settings.
+type ZarazHistoryReplaceResponseSettings struct {
+	// Automatic injection of Zaraz scripts enabled.
+	AutoInjectScript bool `json:"autoInjectScript,required"`
+	// Details of the worker that receives and edits Zaraz Context object.
+	ContextEnricher ZarazHistoryReplaceResponseSettingsContextEnricher `json:"contextEnricher"`
+	// The domain Zaraz will use for writing and reading its cookies.
+	CookieDomain string `json:"cookieDomain"`
+	// Ecommerce API enabled.
+	Ecommerce bool `json:"ecommerce"`
+	// Custom endpoint for server-side track events.
+	EventsAPIPath string `json:"eventsApiPath"`
+	// Hiding external referrer URL enabled.
+	HideExternalReferer bool `json:"hideExternalReferer"`
+	// Trimming IP address enabled.
+	HideIPAddress bool `json:"hideIPAddress"`
+	// Removing URL query params enabled.
+	HideQueryParams bool `json:"hideQueryParams"`
+	// Removing sensitive data from User Aagent string enabled.
+	HideUserAgent bool `json:"hideUserAgent"`
+	// Custom endpoint for Zaraz init script.
+	InitPath string `json:"initPath"`
+	// Injection of Zaraz scripts into iframes enabled.
+	InjectIframes bool `json:"injectIframes"`
+	// Custom path for Managed Components server functionalities.
+	McRootPath string `json:"mcRootPath"`
+	// Custom endpoint for Zaraz main script.
+	ScriptPath string `json:"scriptPath"`
+	// Custom endpoint for Zaraz tracking requests.
+	TrackPath string                                  `json:"trackPath"`
+	JSON      zarazHistoryReplaceResponseSettingsJSON `json:"-"`
 }
 
-// zarazHistoryUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZarazHistoryUpdateResponseEnvelopeErrors]
-type zarazHistoryUpdateResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// zarazHistoryReplaceResponseSettingsJSON contains the JSON metadata for the
+// struct [ZarazHistoryReplaceResponseSettings]
+type zarazHistoryReplaceResponseSettingsJSON struct {
+	AutoInjectScript    apijson.Field
+	ContextEnricher     apijson.Field
+	CookieDomain        apijson.Field
+	Ecommerce           apijson.Field
+	EventsAPIPath       apijson.Field
+	HideExternalReferer apijson.Field
+	HideIPAddress       apijson.Field
+	HideQueryParams     apijson.Field
+	HideUserAgent       apijson.Field
+	InitPath            apijson.Field
+	InjectIframes       apijson.Field
+	McRootPath          apijson.Field
+	ScriptPath          apijson.Field
+	TrackPath           apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZarazHistoryUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazHistoryReplaceResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazHistoryUpdateResponseEnvelopeMessages struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    zarazHistoryUpdateResponseEnvelopeMessagesJSON `json:"-"`
+// Details of the worker that receives and edits Zaraz Context object.
+type ZarazHistoryReplaceResponseSettingsContextEnricher struct {
+	EscapedWorkerName string                                                 `json:"escapedWorkerName,required"`
+	WorkerTag         string                                                 `json:"workerTag,required"`
+	JSON              zarazHistoryReplaceResponseSettingsContextEnricherJSON `json:"-"`
 }
 
-// zarazHistoryUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [ZarazHistoryUpdateResponseEnvelopeMessages]
-type zarazHistoryUpdateResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+// zarazHistoryReplaceResponseSettingsContextEnricherJSON contains the JSON
+// metadata for the struct [ZarazHistoryReplaceResponseSettingsContextEnricher]
+type zarazHistoryReplaceResponseSettingsContextEnricherJSON struct {
+	EscapedWorkerName apijson.Field
+	WorkerTag         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseSettingsContextEnricher) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [ZarazHistoryReplaceResponseToolsZarazManagedComponent] or
+// [ZarazHistoryReplaceResponseToolsZarazCustomManagedComponent].
+type ZarazHistoryReplaceResponseTool interface {
+	implementsZarazHistoryReplaceResponseTool()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryReplaceResponseTool)(nil)).Elem(), "")
+}
+
+type ZarazHistoryReplaceResponseToolsZarazManagedComponent struct {
+	// List of blocking trigger IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Tool's internal name
+	Component string `json:"component,required"`
+	// Default fields for tool's actions
+	DefaultFields map[string]ZarazHistoryReplaceResponseToolsZarazManagedComponentDefaultField `json:"defaultFields,required"`
+	// Whether tool is enabled
+	Enabled bool `json:"enabled,required"`
+	// Tool's name defined by the user
+	Name string `json:"name,required"`
+	// List of permissions granted to the component
+	Permissions []string `json:"permissions,required"`
+	// Tool's settings
+	Settings map[string]ZarazHistoryReplaceResponseToolsZarazManagedComponentSetting `json:"settings,required"`
+	Type     ZarazHistoryReplaceResponseToolsZarazManagedComponentType               `json:"type,required"`
+	// Actions configured on a tool. Either this or neoEvents field is required.
+	Actions map[string]ZarazHistoryReplaceResponseToolsZarazManagedComponentAction `json:"actions"`
+	// Default consent purpose ID
+	DefaultPurpose string `json:"defaultPurpose"`
+	// DEPRECATED - List of actions configured on a tool. Either this or actions field
+	// is required. If both are present, actions field will take precedence.
+	NeoEvents []ZarazHistoryReplaceResponseToolsZarazManagedComponentNeoEvent `json:"neoEvents"`
+	JSON      zarazHistoryReplaceResponseToolsZarazManagedComponentJSON       `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazManagedComponentJSON contains the JSON
+// metadata for the struct [ZarazHistoryReplaceResponseToolsZarazManagedComponent]
+type zarazHistoryReplaceResponseToolsZarazManagedComponentJSON struct {
+	BlockingTriggers apijson.Field
+	Component        apijson.Field
+	DefaultFields    apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Permissions      apijson.Field
+	Settings         apijson.Field
+	Type             apijson.Field
+	Actions          apijson.Field
+	DefaultPurpose   apijson.Field
+	NeoEvents        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazManagedComponent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseToolsZarazManagedComponent) implementsZarazHistoryReplaceResponseTool() {
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionBool].
+type ZarazHistoryReplaceResponseToolsZarazManagedComponentDefaultField interface {
+	ImplementsZarazHistoryReplaceResponseToolsZarazManagedComponentDefaultField()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZarazHistoryReplaceResponseToolsZarazManagedComponentDefaultField)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionBool].
+type ZarazHistoryReplaceResponseToolsZarazManagedComponentSetting interface {
+	ImplementsZarazHistoryReplaceResponseToolsZarazManagedComponentSetting()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZarazHistoryReplaceResponseToolsZarazManagedComponentSetting)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazManagedComponentType string
+
+const (
+	ZarazHistoryReplaceResponseToolsZarazManagedComponentTypeComponent ZarazHistoryReplaceResponseToolsZarazManagedComponentType = "component"
+)
+
+type ZarazHistoryReplaceResponseToolsZarazManagedComponentAction struct {
+	// Tool event type
+	ActionType string `json:"actionType,required"`
+	// List of blocking triggers IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Event payload
+	Data interface{} `json:"data,required"`
+	// List of firing triggers IDs
+	FiringTriggers []string                                                        `json:"firingTriggers,required"`
+	JSON           zarazHistoryReplaceResponseToolsZarazManagedComponentActionJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazManagedComponentActionJSON contains the
+// JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazManagedComponentAction]
+type zarazHistoryReplaceResponseToolsZarazManagedComponentActionJSON struct {
+	ActionType       apijson.Field
+	BlockingTriggers apijson.Field
+	Data             apijson.Field
+	FiringTriggers   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazManagedComponentAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazManagedComponentNeoEvent struct {
+	// Tool event type
+	ActionType string `json:"actionType,required"`
+	// List of blocking triggers IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Event payload
+	Data interface{} `json:"data,required"`
+	// List of firing triggers IDs
+	FiringTriggers []string                                                          `json:"firingTriggers,required"`
+	JSON           zarazHistoryReplaceResponseToolsZarazManagedComponentNeoEventJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazManagedComponentNeoEventJSON contains the
+// JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazManagedComponentNeoEvent]
+type zarazHistoryReplaceResponseToolsZarazManagedComponentNeoEventJSON struct {
+	ActionType       apijson.Field
+	BlockingTriggers apijson.Field
+	Data             apijson.Field
+	FiringTriggers   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazManagedComponentNeoEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponent struct {
+	// List of blocking trigger IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Tool's internal name
+	Component string `json:"component,required"`
+	// Default fields for tool's actions
+	DefaultFields map[string]ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentDefaultField `json:"defaultFields,required"`
+	// Whether tool is enabled
+	Enabled bool `json:"enabled,required"`
+	// Tool's name defined by the user
+	Name string `json:"name,required"`
+	// List of permissions granted to the component
+	Permissions []string `json:"permissions,required"`
+	// Tool's settings
+	Settings map[string]ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentSetting `json:"settings,required"`
+	Type     ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentType               `json:"type,required"`
+	// Cloudflare worker that acts as a managed component
+	Worker ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorker `json:"worker,required"`
+	// Actions configured on a tool. Either this or neoEvents field is required.
+	Actions map[string]ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentAction `json:"actions"`
+	// Default consent purpose ID
+	DefaultPurpose string `json:"defaultPurpose"`
+	// DEPRECATED - List of actions configured on a tool. Either this or actions field
+	// is required. If both are present, actions field will take precedence.
+	NeoEvents []ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEvent `json:"neoEvents"`
+	JSON      zarazHistoryReplaceResponseToolsZarazCustomManagedComponentJSON       `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazCustomManagedComponentJSON contains the
+// JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazCustomManagedComponent]
+type zarazHistoryReplaceResponseToolsZarazCustomManagedComponentJSON struct {
+	BlockingTriggers apijson.Field
+	Component        apijson.Field
+	DefaultFields    apijson.Field
+	Enabled          apijson.Field
+	Name             apijson.Field
+	Permissions      apijson.Field
+	Settings         apijson.Field
+	Type             apijson.Field
+	Worker           apijson.Field
+	Actions          apijson.Field
+	DefaultPurpose   apijson.Field
+	NeoEvents        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazCustomManagedComponent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseToolsZarazCustomManagedComponent) implementsZarazHistoryReplaceResponseTool() {
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionBool].
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentDefaultField interface {
+	ImplementsZarazHistoryReplaceResponseToolsZarazCustomManagedComponentDefaultField()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentDefaultField)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+// Union satisfied by [shared.UnionString] or [shared.UnionBool].
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentSetting interface {
+	ImplementsZarazHistoryReplaceResponseToolsZarazCustomManagedComponentSetting()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentSetting)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.True,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.False,
+			Type:       reflect.TypeOf(shared.UnionBool(false)),
+		},
+	)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentType string
+
+const (
+	ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentTypeCustomMc ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentType = "custom-mc"
+)
+
+// Cloudflare worker that acts as a managed component
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorker struct {
+	EscapedWorkerName string                                                                `json:"escapedWorkerName,required"`
+	WorkerTag         string                                                                `json:"workerTag,required"`
+	JSON              zarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorkerJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorkerJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorker]
+type zarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorkerJSON struct {
+	EscapedWorkerName apijson.Field
+	WorkerTag         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentWorker) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentAction struct {
+	// Tool event type
+	ActionType string `json:"actionType,required"`
+	// List of blocking triggers IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Event payload
+	Data interface{} `json:"data,required"`
+	// List of firing triggers IDs
+	FiringTriggers []string                                                              `json:"firingTriggers,required"`
+	JSON           zarazHistoryReplaceResponseToolsZarazCustomManagedComponentActionJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazCustomManagedComponentActionJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentAction]
+type zarazHistoryReplaceResponseToolsZarazCustomManagedComponentActionJSON struct {
+	ActionType       apijson.Field
+	BlockingTriggers apijson.Field
+	Data             apijson.Field
+	FiringTriggers   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEvent struct {
+	// Tool event type
+	ActionType string `json:"actionType,required"`
+	// List of blocking triggers IDs
+	BlockingTriggers []string `json:"blockingTriggers,required"`
+	// Event payload
+	Data interface{} `json:"data,required"`
+	// List of firing triggers IDs
+	FiringTriggers []string                                                                `json:"firingTriggers,required"`
+	JSON           zarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEventJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEventJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEvent]
+type zarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEventJSON struct {
+	ActionType       apijson.Field
+	BlockingTriggers apijson.Field
+	Data             apijson.Field
+	FiringTriggers   apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseToolsZarazCustomManagedComponentNeoEvent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTrigger struct {
+	// Rules defining when the trigger is not fired.
+	ExcludeRules []ZarazHistoryReplaceResponseTriggersExcludeRule `json:"excludeRules,required"`
+	// Rules defining when the trigger is fired.
+	LoadRules []ZarazHistoryReplaceResponseTriggersLoadRule `json:"loadRules,required"`
+	// Trigger name.
+	Name string `json:"name,required"`
+	// Trigger description.
+	Description string                                    `json:"description"`
+	System      ZarazHistoryReplaceResponseTriggersSystem `json:"system"`
+	JSON        zarazHistoryReplaceResponseTriggerJSON    `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggerJSON contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTrigger]
+type zarazHistoryReplaceResponseTriggerJSON struct {
+	ExcludeRules apijson.Field
+	LoadRules    apijson.Field
+	Name         apijson.Field
+	Description  apijson.Field
+	System       apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTrigger) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRule],
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRule],
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRule],
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRule],
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRule],
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRule] or
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRule].
+type ZarazHistoryReplaceResponseTriggersExcludeRule interface {
+	implementsZarazHistoryReplaceResponseTriggersExcludeRule()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryReplaceResponseTriggersExcludeRule)(nil)).Elem(), "")
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRule struct {
+	ID    string                                                           `json:"id,required"`
+	Match string                                                           `json:"match,required"`
+	Op    ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp   `json:"op,required"`
+	Value string                                                           `json:"value,required"`
+	JSON  zarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleJSON contains the
+// JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleJSON struct {
+	ID          apijson.Field
+	Match       apijson.Field
+	Op          apijson.Field
+	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZarazHistoryUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpContains           ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "CONTAINS"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpEquals             ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "EQUALS"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpStartsWith         ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "STARTS_WITH"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpEndsWith           ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "ENDS_WITH"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpMatchRegex         ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "MATCH_REGEX"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpNotMatchRegex      ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "NOT_MATCH_REGEX"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpGreaterThan        ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "GREATER_THAN"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpGreaterThanOrEqual ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "GREATER_THAN_OR_EQUAL"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpLessThan           ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "LESS_THAN"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOpLessThanOrEqual    ZarazHistoryReplaceResponseTriggersExcludeRulesZarazLoadRuleOp = "LESS_THAN_OR_EQUAL"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRule struct {
+	ID       string                                                                        `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleActionClickListener ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleAction = "clickListener"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettings struct {
+	Selector    string                                                                            `json:"selector,required"`
+	Type        ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType `json:"type,required"`
+	WaitForTags int64                                                                             `json:"waitForTags,required"`
+	JSON        zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsJSON struct {
+	Selector    apijson.Field
+	Type        apijson.Field
+	WaitForTags apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsTypeXpath ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType = "xpath"
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsTypeCss   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazClickListenerRuleSettingsType = "css"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRule struct {
+	ID       string                                                                `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleJSON contains the
+// JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleActionTimer ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleAction = "timer"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettings struct {
+	Interval int64                                                                     `json:"interval,required"`
+	Limit    int64                                                                     `json:"limit,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettingsJSON struct {
+	Interval    apijson.Field
+	Limit       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazTimerRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRule struct {
+	ID       string                                                                         `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleActionFormSubmission ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleAction = "formSubmission"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings struct {
+	Selector string                                                                             `json:"selector,required"`
+	Validate bool                                                                               `json:"validate,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettingsJSON struct {
+	Selector    apijson.Field
+	Validate    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazFormSubmissionRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRule struct {
+	ID       string                                                                        `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleActionVariableMatch ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleAction = "variableMatch"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettings struct {
+	Match    string                                                                            `json:"match,required"`
+	Variable string                                                                            `json:"variable,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettingsJSON struct {
+	Match       apijson.Field
+	Variable    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazVariableMatchRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRule struct {
+	ID       string                                                                      `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleActionScrollDepth ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleAction = "scrollDepth"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettings struct {
+	Positions string                                                                          `json:"positions,required"`
+	JSON      zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettingsJSON struct {
+	Positions   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazScrollDepthRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRule struct {
+	ID       string                                                                            `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRule]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRule) implementsZarazHistoryReplaceResponseTriggersExcludeRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleActionElementVisibility ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleAction = "elementVisibility"
+)
+
+type ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings struct {
+	Selector string                                                                                `json:"selector,required"`
+	JSON     zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings]
+type zarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettingsJSON struct {
+	Selector    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersExcludeRulesZarazElementVisibilityRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRule],
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRule],
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRule],
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRule],
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRule],
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRule] or
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRule].
+type ZarazHistoryReplaceResponseTriggersLoadRule interface {
+	implementsZarazHistoryReplaceResponseTriggersLoadRule()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryReplaceResponseTriggersLoadRule)(nil)).Elem(), "")
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRule struct {
+	ID    string                                                        `json:"id,required"`
+	Match string                                                        `json:"match,required"`
+	Op    ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp   `json:"op,required"`
+	Value string                                                        `json:"value,required"`
+	JSON  zarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleJSON contains the JSON
+// metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleJSON struct {
+	ID          apijson.Field
+	Match       apijson.Field
+	Op          apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpContains           ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "CONTAINS"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpEquals             ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "EQUALS"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpStartsWith         ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "STARTS_WITH"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpEndsWith           ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "ENDS_WITH"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpMatchRegex         ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "MATCH_REGEX"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpNotMatchRegex      ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "NOT_MATCH_REGEX"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpGreaterThan        ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "GREATER_THAN"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpGreaterThanOrEqual ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "GREATER_THAN_OR_EQUAL"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpLessThan           ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "LESS_THAN"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOpLessThanOrEqual    ZarazHistoryReplaceResponseTriggersLoadRulesZarazLoadRuleOp = "LESS_THAN_OR_EQUAL"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRule struct {
+	ID       string                                                                     `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleActionClickListener ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleAction = "clickListener"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettings struct {
+	Selector    string                                                                         `json:"selector,required"`
+	Type        ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsType `json:"type,required"`
+	WaitForTags int64                                                                          `json:"waitForTags,required"`
+	JSON        zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsJSON struct {
+	Selector    apijson.Field
+	Type        apijson.Field
+	WaitForTags apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsType string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsTypeXpath ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsType = "xpath"
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsTypeCss   ZarazHistoryReplaceResponseTriggersLoadRulesZarazClickListenerRuleSettingsType = "css"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRule struct {
+	ID       string                                                             `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleJSON contains the JSON
+// metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleActionTimer ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleAction = "timer"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettings struct {
+	Interval int64                                                                  `json:"interval,required"`
+	Limit    int64                                                                  `json:"limit,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettingsJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettingsJSON struct {
+	Interval    apijson.Field
+	Limit       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazTimerRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRule struct {
+	ID       string                                                                      `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleActionFormSubmission ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleAction = "formSubmission"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettings struct {
+	Selector string                                                                          `json:"selector,required"`
+	Validate bool                                                                            `json:"validate,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettingsJSON struct {
+	Selector    apijson.Field
+	Validate    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazFormSubmissionRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRule struct {
+	ID       string                                                                     `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleActionVariableMatch ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleAction = "variableMatch"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettings struct {
+	Match    string                                                                         `json:"match,required"`
+	Variable string                                                                         `json:"variable,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettingsJSON struct {
+	Match       apijson.Field
+	Variable    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazVariableMatchRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRule struct {
+	ID       string                                                                   `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleJSON contains
+// the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleActionScrollDepth ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleAction = "scrollDepth"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettings struct {
+	Positions string                                                                       `json:"positions,required"`
+	JSON      zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettingsJSON struct {
+	Positions   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazScrollDepthRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRule struct {
+	ID       string                                                                         `json:"id,required"`
+	Action   ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleAction   `json:"action,required"`
+	Settings ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettings `json:"settings,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleJSON     `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRule]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleJSON struct {
+	ID          apijson.Field
+	Action      apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRule) implementsZarazHistoryReplaceResponseTriggersLoadRule() {
+}
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleAction string
+
+const (
+	ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleActionElementVisibility ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleAction = "elementVisibility"
+)
+
+type ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettings struct {
+	Selector string                                                                             `json:"selector,required"`
+	JSON     zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON
+// contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettings]
+type zarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettingsJSON struct {
+	Selector    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseTriggersLoadRulesZarazElementVisibilityRuleSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseTriggersSystem string
+
+const (
+	ZarazHistoryReplaceResponseTriggersSystemPageload ZarazHistoryReplaceResponseTriggersSystem = "pageload"
+)
+
+// Union satisfied by [ZarazHistoryReplaceResponseVariablesObject] or
+// [ZarazHistoryReplaceResponseVariablesObject].
+type ZarazHistoryReplaceResponseVariable interface {
+	implementsZarazHistoryReplaceResponseVariable()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*ZarazHistoryReplaceResponseVariable)(nil)).Elem(), "")
+}
+
+type ZarazHistoryReplaceResponseVariablesObject struct {
+	Name  string                                         `json:"name,required"`
+	Type  ZarazHistoryReplaceResponseVariablesObjectType `json:"type,required"`
+	Value string                                         `json:"value,required"`
+	JSON  zarazHistoryReplaceResponseVariablesObjectJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseVariablesObjectJSON contains the JSON metadata for
+// the struct [ZarazHistoryReplaceResponseVariablesObject]
+type zarazHistoryReplaceResponseVariablesObjectJSON struct {
+	Name        apijson.Field
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseVariablesObject) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZarazHistoryReplaceResponseVariablesObject) implementsZarazHistoryReplaceResponseVariable() {}
+
+type ZarazHistoryReplaceResponseVariablesObjectType string
+
+const (
+	ZarazHistoryReplaceResponseVariablesObjectTypeString ZarazHistoryReplaceResponseVariablesObjectType = "string"
+	ZarazHistoryReplaceResponseVariablesObjectTypeSecret ZarazHistoryReplaceResponseVariablesObjectType = "secret"
+)
+
+// Consent management configuration.
+type ZarazHistoryReplaceResponseConsent struct {
+	Enabled                bool                                                     `json:"enabled,required"`
+	ButtonTextTranslations ZarazHistoryReplaceResponseConsentButtonTextTranslations `json:"buttonTextTranslations"`
+	CompanyEmail           string                                                   `json:"companyEmail"`
+	CompanyName            string                                                   `json:"companyName"`
+	CompanyStreetAddress   string                                                   `json:"companyStreetAddress"`
+	ConsentModalIntroHTML  string                                                   `json:"consentModalIntroHTML"`
+	// Object where keys are language codes
+	ConsentModalIntroHTMLWithTranslations map[string]string `json:"consentModalIntroHTMLWithTranslations"`
+	CookieName                            string            `json:"cookieName"`
+	CustomCss                             string            `json:"customCSS"`
+	CustomIntroDisclaimerDismissed        bool              `json:"customIntroDisclaimerDismissed"`
+	DefaultLanguage                       string            `json:"defaultLanguage"`
+	HideModal                             bool              `json:"hideModal"`
+	// Object where keys are purpose alpha-numeric IDs
+	Purposes map[string]ZarazHistoryReplaceResponseConsentPurpose `json:"purposes"`
+	// Object where keys are purpose alpha-numeric IDs
+	PurposesWithTranslations map[string]ZarazHistoryReplaceResponseConsentPurposesWithTranslation `json:"purposesWithTranslations"`
+	JSON                     zarazHistoryReplaceResponseConsentJSON                               `json:"-"`
+}
+
+// zarazHistoryReplaceResponseConsentJSON contains the JSON metadata for the struct
+// [ZarazHistoryReplaceResponseConsent]
+type zarazHistoryReplaceResponseConsentJSON struct {
+	Enabled                               apijson.Field
+	ButtonTextTranslations                apijson.Field
+	CompanyEmail                          apijson.Field
+	CompanyName                           apijson.Field
+	CompanyStreetAddress                  apijson.Field
+	ConsentModalIntroHTML                 apijson.Field
+	ConsentModalIntroHTMLWithTranslations apijson.Field
+	CookieName                            apijson.Field
+	CustomCss                             apijson.Field
+	CustomIntroDisclaimerDismissed        apijson.Field
+	DefaultLanguage                       apijson.Field
+	HideModal                             apijson.Field
+	Purposes                              apijson.Field
+	PurposesWithTranslations              apijson.Field
+	raw                                   string
+	ExtraFields                           map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseConsent) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseConsentButtonTextTranslations struct {
+	// Object where keys are language codes
+	AcceptAll map[string]string `json:"accept_all,required"`
+	// Object where keys are language codes
+	ConfirmMyChoices map[string]string `json:"confirm_my_choices,required"`
+	// Object where keys are language codes
+	RejectAll map[string]string                                            `json:"reject_all,required"`
+	JSON      zarazHistoryReplaceResponseConsentButtonTextTranslationsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseConsentButtonTextTranslationsJSON contains the JSON
+// metadata for the struct
+// [ZarazHistoryReplaceResponseConsentButtonTextTranslations]
+type zarazHistoryReplaceResponseConsentButtonTextTranslationsJSON struct {
+	AcceptAll        apijson.Field
+	ConfirmMyChoices apijson.Field
+	RejectAll        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseConsentButtonTextTranslations) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseConsentPurpose struct {
+	Description string                                        `json:"description,required"`
+	Name        string                                        `json:"name,required"`
+	JSON        zarazHistoryReplaceResponseConsentPurposeJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseConsentPurposeJSON contains the JSON metadata for the
+// struct [ZarazHistoryReplaceResponseConsentPurpose]
+type zarazHistoryReplaceResponseConsentPurposeJSON struct {
+	Description apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseConsentPurpose) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseConsentPurposesWithTranslation struct {
+	// Object where keys are language codes
+	Description map[string]string `json:"description,required"`
+	// Object where keys are language codes
+	Name  map[string]string                                             `json:"name,required"`
+	Order int64                                                         `json:"order,required"`
+	JSON  zarazHistoryReplaceResponseConsentPurposesWithTranslationJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseConsentPurposesWithTranslationJSON contains the JSON
+// metadata for the struct
+// [ZarazHistoryReplaceResponseConsentPurposesWithTranslation]
+type zarazHistoryReplaceResponseConsentPurposesWithTranslationJSON struct {
+	Description apijson.Field
+	Name        apijson.Field
+	Order       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseConsentPurposesWithTranslation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1673,5 +1601,77 @@ type zarazHistoryListResponseEnvelopeMessagesJSON struct {
 }
 
 func (r *ZarazHistoryListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceParams struct {
+	// ID of the Zaraz configuration to restore.
+	Body param.Field[int64] `json:"body,required"`
+}
+
+func (r ZarazHistoryReplaceParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type ZarazHistoryReplaceResponseEnvelope struct {
+	Errors   []ZarazHistoryReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZarazHistoryReplaceResponseEnvelopeMessages `json:"messages,required"`
+	// Zaraz configuration
+	Result ZarazHistoryReplaceResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success bool                                    `json:"success,required"`
+	JSON    zarazHistoryReplaceResponseEnvelopeJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZarazHistoryReplaceResponseEnvelope]
+type zarazHistoryReplaceResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zarazHistoryReplaceResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZarazHistoryReplaceResponseEnvelopeErrors]
+type zarazHistoryReplaceResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZarazHistoryReplaceResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zarazHistoryReplaceResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// zarazHistoryReplaceResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ZarazHistoryReplaceResponseEnvelopeMessages]
+type zarazHistoryReplaceResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZarazHistoryReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -33,9 +33,9 @@ func NewUserLoadBalancerPoolPreviewService(opts ...option.RequestOption) (r *Use
 
 // Preview pool health using provided monitor details. The returned preview_id can
 // be used in the preview endpoint to retrieve the results.
-func (r *UserLoadBalancerPoolPreviewService) LoadBalancerPoolsPreviewPool(ctx context.Context, poolID string, body UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParams, opts ...option.RequestOption) (res *UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponse, err error) {
+func (r *UserLoadBalancerPoolPreviewService) New(ctx context.Context, poolID string, body UserLoadBalancerPoolPreviewNewParams, opts ...option.RequestOption) (res *UserLoadBalancerPoolPreviewNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelope
+	var env UserLoadBalancerPoolPreviewNewResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/pools/%s/preview", poolID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -45,28 +45,27 @@ func (r *UserLoadBalancerPoolPreviewService) LoadBalancerPoolsPreviewPool(ctx co
 	return
 }
 
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponse struct {
+type UserLoadBalancerPoolPreviewNewResponse struct {
 	// Monitored pool IDs mapped to their respective names.
-	Pools     map[string]string                                                   `json:"pools"`
-	PreviewID string                                                              `json:"preview_id"`
-	JSON      userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseJSON `json:"-"`
+	Pools     map[string]string                          `json:"pools"`
+	PreviewID string                                     `json:"preview_id"`
+	JSON      userLoadBalancerPoolPreviewNewResponseJSON `json:"-"`
 }
 
-// userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseJSON contains the
-// JSON metadata for the struct
-// [UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponse]
-type userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseJSON struct {
+// userLoadBalancerPoolPreviewNewResponseJSON contains the JSON metadata for the
+// struct [UserLoadBalancerPoolPreviewNewResponse]
+type userLoadBalancerPoolPreviewNewResponseJSON struct {
 	Pools       apijson.Field
 	PreviewID   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolPreviewNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParams struct {
+type UserLoadBalancerPoolPreviewNewParams struct {
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -115,39 +114,38 @@ type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParams struct {
 	Timeout param.Field[int64] `json:"timeout"`
 	// The protocol to use for the health check. Currently supported protocols are
 	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-	Type param.Field[UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType] `json:"type"`
+	Type param.Field[UserLoadBalancerPoolPreviewNewParamsType] `json:"type"`
 }
 
-func (r UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParams) MarshalJSON() (data []byte, err error) {
+func (r UserLoadBalancerPoolPreviewNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType string
+type UserLoadBalancerPoolPreviewNewParamsType string
 
 const (
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeHTTP     UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "http"
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeHTTPS    UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "https"
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeTcp      UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "tcp"
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeUdpIcmp  UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "udp_icmp"
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeIcmpPing UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "icmp_ping"
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsTypeSmtp     UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolParamsType = "smtp"
+	UserLoadBalancerPoolPreviewNewParamsTypeHTTP     UserLoadBalancerPoolPreviewNewParamsType = "http"
+	UserLoadBalancerPoolPreviewNewParamsTypeHTTPS    UserLoadBalancerPoolPreviewNewParamsType = "https"
+	UserLoadBalancerPoolPreviewNewParamsTypeTcp      UserLoadBalancerPoolPreviewNewParamsType = "tcp"
+	UserLoadBalancerPoolPreviewNewParamsTypeUdpIcmp  UserLoadBalancerPoolPreviewNewParamsType = "udp_icmp"
+	UserLoadBalancerPoolPreviewNewParamsTypeIcmpPing UserLoadBalancerPoolPreviewNewParamsType = "icmp_ping"
+	UserLoadBalancerPoolPreviewNewParamsTypeSmtp     UserLoadBalancerPoolPreviewNewParamsType = "smtp"
 )
 
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelope struct {
-	Errors   []UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponse                   `json:"result,required"`
+type UserLoadBalancerPoolPreviewNewResponseEnvelope struct {
+	Errors   []UserLoadBalancerPoolPreviewNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancerPoolPreviewNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserLoadBalancerPoolPreviewNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON    `json:"-"`
+	Success UserLoadBalancerPoolPreviewNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userLoadBalancerPoolPreviewNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelope]
-type userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON struct {
+// userLoadBalancerPoolPreviewNewResponseEnvelopeJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolPreviewNewResponseEnvelope]
+type userLoadBalancerPoolPreviewNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -156,53 +154,51 @@ type userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeJSON
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolPreviewNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors struct {
-	Code    int64                                                                             `json:"code,required"`
-	Message string                                                                            `json:"message,required"`
-	JSON    userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON `json:"-"`
+type UserLoadBalancerPoolPreviewNewResponseEnvelopeErrors struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    userLoadBalancerPoolPreviewNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors]
-type userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrorsJSON struct {
+// userLoadBalancerPoolPreviewNewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [UserLoadBalancerPoolPreviewNewResponseEnvelopeErrors]
+type userLoadBalancerPoolPreviewNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolPreviewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages struct {
-	Code    int64                                                                               `json:"code,required"`
-	Message string                                                                              `json:"message,required"`
-	JSON    userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON `json:"-"`
+type UserLoadBalancerPoolPreviewNewResponseEnvelopeMessages struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    userLoadBalancerPoolPreviewNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages]
-type userLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessagesJSON struct {
+// userLoadBalancerPoolPreviewNewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [UserLoadBalancerPoolPreviewNewResponseEnvelopeMessages]
+type userLoadBalancerPoolPreviewNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *UserLoadBalancerPoolPreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess bool
+type UserLoadBalancerPoolPreviewNewResponseEnvelopeSuccess bool
 
 const (
-	UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccessTrue UserLoadBalancerPoolPreviewLoadBalancerPoolsPreviewPoolResponseEnvelopeSuccess = true
+	UserLoadBalancerPoolPreviewNewResponseEnvelopeSuccessTrue UserLoadBalancerPoolPreviewNewResponseEnvelopeSuccess = true
 )

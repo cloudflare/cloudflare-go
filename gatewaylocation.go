@@ -35,12 +35,25 @@ func NewGatewayLocationService(opts ...option.RequestOption) (r *GatewayLocation
 	return
 }
 
-// Updates a configured Zero Trust Gateway location.
-func (r *GatewayLocationService) Update(ctx context.Context, accountID interface{}, locationID interface{}, body GatewayLocationUpdateParams, opts ...option.RequestOption) (res *GatewayLocationUpdateResponse, err error) {
+// Creates a new Zero Trust Gateway location.
+func (r *GatewayLocationService) New(ctx context.Context, accountID interface{}, body GatewayLocationNewParams, opts ...option.RequestOption) (res *GatewayLocationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayLocationUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", accountID, locationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	var env GatewayLocationNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/locations", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Fetches Zero Trust Gateway locations for an account.
+func (r *GatewayLocationService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayLocationListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env GatewayLocationListResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/locations", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,12 +87,12 @@ func (r *GatewayLocationService) Get(ctx context.Context, accountID interface{},
 	return
 }
 
-// Creates a new Zero Trust Gateway location.
-func (r *GatewayLocationService) ZeroTrustGatewayLocationsNewZeroTrustGatewayLocation(ctx context.Context, accountID interface{}, body GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParams, opts ...option.RequestOption) (res *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse, err error) {
+// Updates a configured Zero Trust Gateway location.
+func (r *GatewayLocationService) Replace(ctx context.Context, accountID interface{}, locationID interface{}, body GatewayLocationReplaceParams, opts ...option.RequestOption) (res *GatewayLocationReplaceResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	var env GatewayLocationReplaceResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", accountID, locationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,20 +100,7 @@ func (r *GatewayLocationService) ZeroTrustGatewayLocationsNewZeroTrustGatewayLoc
 	return
 }
 
-// Fetches Zero Trust Gateway locations for an account.
-func (r *GatewayLocationService) ZeroTrustGatewayLocationsListZeroTrustGatewayLocations(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/locations", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-type GatewayLocationUpdateResponse struct {
+type GatewayLocationNewResponse struct {
 	ID interface{} `json:"id"`
 	// True if the location is the default location.
 	ClientDefault bool      `json:"client_default"`
@@ -117,14 +117,14 @@ type GatewayLocationUpdateResponse struct {
 	// The name of the location.
 	Name string `json:"name"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks  []GatewayLocationUpdateResponseNetwork `json:"networks"`
-	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
-	JSON      gatewayLocationUpdateResponseJSON      `json:"-"`
+	Networks  []GatewayLocationNewResponseNetwork `json:"networks"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      gatewayLocationNewResponseJSON      `json:"-"`
 }
 
-// gatewayLocationUpdateResponseJSON contains the JSON metadata for the struct
-// [GatewayLocationUpdateResponse]
-type gatewayLocationUpdateResponseJSON struct {
+// gatewayLocationNewResponseJSON contains the JSON metadata for the struct
+// [GatewayLocationNewResponse]
+type gatewayLocationNewResponseJSON struct {
 	ID            apijson.Field
 	ClientDefault apijson.Field
 	CreatedAt     apijson.Field
@@ -138,25 +138,85 @@ type gatewayLocationUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayLocationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationUpdateResponseNetwork struct {
+type GatewayLocationNewResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
-	Network string                                   `json:"network,required"`
-	JSON    gatewayLocationUpdateResponseNetworkJSON `json:"-"`
+	Network string                                `json:"network,required"`
+	JSON    gatewayLocationNewResponseNetworkJSON `json:"-"`
 }
 
-// gatewayLocationUpdateResponseNetworkJSON contains the JSON metadata for the
-// struct [GatewayLocationUpdateResponseNetwork]
-type gatewayLocationUpdateResponseNetworkJSON struct {
+// gatewayLocationNewResponseNetworkJSON contains the JSON metadata for the struct
+// [GatewayLocationNewResponseNetwork]
+type gatewayLocationNewResponseNetworkJSON struct {
 	Network     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationUpdateResponseNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationNewResponseNetwork) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayLocationListResponse struct {
+	ID interface{} `json:"id"`
+	// True if the location is the default location.
+	ClientDefault bool      `json:"client_default"`
+	CreatedAt     time.Time `json:"created_at" format:"date-time"`
+	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
+	// by Gateway.
+	DohSubdomain string `json:"doh_subdomain"`
+	// True if the location needs to resolve EDNS queries.
+	EcsSupport bool `json:"ecs_support"`
+	// IPV6 destination ip assigned to this location. DNS requests sent to this IP will
+	// counted as the request under this location. This field is auto-generated by
+	// Gateway.
+	IP string `json:"ip"`
+	// The name of the location.
+	Name string `json:"name"`
+	// A list of network ranges that requests from this location would originate from.
+	Networks  []GatewayLocationListResponseNetwork `json:"networks"`
+	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
+	JSON      gatewayLocationListResponseJSON      `json:"-"`
+}
+
+// gatewayLocationListResponseJSON contains the JSON metadata for the struct
+// [GatewayLocationListResponse]
+type gatewayLocationListResponseJSON struct {
+	ID            apijson.Field
+	ClientDefault apijson.Field
+	CreatedAt     apijson.Field
+	DohSubdomain  apijson.Field
+	EcsSupport    apijson.Field
+	IP            apijson.Field
+	Name          apijson.Field
+	Networks      apijson.Field
+	UpdatedAt     apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayLocationListResponseNetwork struct {
+	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
+	Network string                                 `json:"network,required"`
+	JSON    gatewayLocationListResponseNetworkJSON `json:"-"`
+}
+
+// gatewayLocationListResponseNetworkJSON contains the JSON metadata for the struct
+// [GatewayLocationListResponseNetwork]
+type gatewayLocationListResponseNetworkJSON struct {
+	Network     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -237,7 +297,7 @@ func (r *GatewayLocationGetResponseNetwork) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse struct {
+type GatewayLocationReplaceResponse struct {
 	ID interface{} `json:"id"`
 	// True if the location is the default location.
 	ClientDefault bool      `json:"client_default"`
@@ -254,15 +314,14 @@ type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse
 	// The name of the location.
 	Name string `json:"name"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks  []GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetwork `json:"networks"`
-	UpdatedAt time.Time                                                                            `json:"updated_at" format:"date-time"`
-	JSON      gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseJSON      `json:"-"`
+	Networks  []GatewayLocationReplaceResponseNetwork `json:"networks"`
+	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
+	JSON      gatewayLocationReplaceResponseJSON      `json:"-"`
 }
 
-// gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse]
-type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseJSON struct {
+// gatewayLocationReplaceResponseJSON contains the JSON metadata for the struct
+// [GatewayLocationReplaceResponse]
+type gatewayLocationReplaceResponseJSON struct {
 	ID            apijson.Field
 	ClientDefault apijson.Field
 	CreatedAt     apijson.Field
@@ -276,92 +335,29 @@ type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationReplaceResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetwork struct {
+type GatewayLocationReplaceResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
-	Network string                                                                                 `json:"network,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetworkJSON `json:"-"`
+	Network string                                    `json:"network,required"`
+	JSON    gatewayLocationReplaceResponseNetworkJSON `json:"-"`
 }
 
-// gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetworkJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetwork]
-type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetworkJSON struct {
+// gatewayLocationReplaceResponseNetworkJSON contains the JSON metadata for the
+// struct [GatewayLocationReplaceResponseNetwork]
+type gatewayLocationReplaceResponseNetworkJSON struct {
 	Network     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseNetwork) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationReplaceResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponse struct {
-	ID interface{} `json:"id"`
-	// True if the location is the default location.
-	ClientDefault bool      `json:"client_default"`
-	CreatedAt     time.Time `json:"created_at" format:"date-time"`
-	// The DNS over HTTPS domain to send DNS requests to. This field is auto-generated
-	// by Gateway.
-	DohSubdomain string `json:"doh_subdomain"`
-	// True if the location needs to resolve EDNS queries.
-	EcsSupport bool `json:"ecs_support"`
-	// IPV6 destination ip assigned to this location. DNS requests sent to this IP will
-	// counted as the request under this location. This field is auto-generated by
-	// Gateway.
-	IP string `json:"ip"`
-	// The name of the location.
-	Name string `json:"name"`
-	// A list of network ranges that requests from this location would originate from.
-	Networks  []GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetwork `json:"networks"`
-	UpdatedAt time.Time                                                                              `json:"updated_at" format:"date-time"`
-	JSON      gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseJSON      `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponse]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseJSON struct {
-	ID            apijson.Field
-	ClientDefault apijson.Field
-	CreatedAt     apijson.Field
-	DohSubdomain  apijson.Field
-	EcsSupport    apijson.Field
-	IP            apijson.Field
-	Name          apijson.Field
-	Networks      apijson.Field
-	UpdatedAt     apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetwork struct {
-	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
-	Network string                                                                                   `json:"network,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetworkJSON `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetworkJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetwork]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetworkJSON struct {
-	Network     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseNetwork) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayLocationUpdateParams struct {
+type GatewayLocationNewParams struct {
 	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
 	// True if the location is the default location.
@@ -369,34 +365,34 @@ type GatewayLocationUpdateParams struct {
 	// True if the location needs to resolve EDNS queries.
 	EcsSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks param.Field[[]GatewayLocationUpdateParamsNetwork] `json:"networks"`
+	Networks param.Field[[]GatewayLocationNewParamsNetwork] `json:"networks"`
 }
 
-func (r GatewayLocationUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayLocationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayLocationUpdateParamsNetwork struct {
+type GatewayLocationNewParamsNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network param.Field[string] `json:"network,required"`
 }
 
-func (r GatewayLocationUpdateParamsNetwork) MarshalJSON() (data []byte, err error) {
+func (r GatewayLocationNewParamsNetwork) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayLocationUpdateResponseEnvelope struct {
-	Errors   []GatewayLocationUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLocationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayLocationUpdateResponse                   `json:"result,required"`
+type GatewayLocationNewResponseEnvelope struct {
+	Errors   []GatewayLocationNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayLocationNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayLocationNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayLocationUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayLocationUpdateResponseEnvelopeJSON    `json:"-"`
+	Success GatewayLocationNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayLocationNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayLocationUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [GatewayLocationUpdateResponseEnvelope]
-type gatewayLocationUpdateResponseEnvelopeJSON struct {
+// gatewayLocationNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [GatewayLocationNewResponseEnvelope]
+type gatewayLocationNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -405,54 +401,152 @@ type gatewayLocationUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationUpdateResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    gatewayLocationUpdateResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayLocationNewResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    gatewayLocationNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayLocationUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [GatewayLocationUpdateResponseEnvelopeErrors]
-type gatewayLocationUpdateResponseEnvelopeErrorsJSON struct {
+// gatewayLocationNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayLocationNewResponseEnvelopeErrors]
+type gatewayLocationNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationUpdateResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    gatewayLocationUpdateResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayLocationNewResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    gatewayLocationNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayLocationUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [GatewayLocationUpdateResponseEnvelopeMessages]
-type gatewayLocationUpdateResponseEnvelopeMessagesJSON struct {
+// gatewayLocationNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayLocationNewResponseEnvelopeMessages]
+type gatewayLocationNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayLocationUpdateResponseEnvelopeSuccess bool
+type GatewayLocationNewResponseEnvelopeSuccess bool
 
 const (
-	GatewayLocationUpdateResponseEnvelopeSuccessTrue GatewayLocationUpdateResponseEnvelopeSuccess = true
+	GatewayLocationNewResponseEnvelopeSuccessTrue GatewayLocationNewResponseEnvelopeSuccess = true
 )
+
+type GatewayLocationListResponseEnvelope struct {
+	Errors   []GatewayLocationListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayLocationListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []GatewayLocationListResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    GatewayLocationListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo GatewayLocationListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       gatewayLocationListResponseEnvelopeJSON       `json:"-"`
+}
+
+// gatewayLocationListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [GatewayLocationListResponseEnvelope]
+type gatewayLocationListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayLocationListResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    gatewayLocationListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// gatewayLocationListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [GatewayLocationListResponseEnvelopeErrors]
+type gatewayLocationListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayLocationListResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    gatewayLocationListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// gatewayLocationListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [GatewayLocationListResponseEnvelopeMessages]
+type gatewayLocationListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type GatewayLocationListResponseEnvelopeSuccess bool
+
+const (
+	GatewayLocationListResponseEnvelopeSuccessTrue GatewayLocationListResponseEnvelopeSuccess = true
+)
+
+type GatewayLocationListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                           `json:"total_count"`
+	JSON       gatewayLocationListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// gatewayLocationListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [GatewayLocationListResponseEnvelopeResultInfo]
+type gatewayLocationListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *GatewayLocationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type GatewayLocationDeleteResponseEnvelope struct {
 	Errors   []GatewayLocationDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -592,7 +686,7 @@ const (
 	GatewayLocationGetResponseEnvelopeSuccessTrue GatewayLocationGetResponseEnvelopeSuccess = true
 )
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParams struct {
+type GatewayLocationReplaceParams struct {
 	// The name of the location.
 	Name param.Field[string] `json:"name,required"`
 	// True if the location is the default location.
@@ -600,35 +694,34 @@ type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParams s
 	// True if the location needs to resolve EDNS queries.
 	EcsSupport param.Field[bool] `json:"ecs_support"`
 	// A list of network ranges that requests from this location would originate from.
-	Networks param.Field[[]GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParamsNetwork] `json:"networks"`
+	Networks param.Field[[]GatewayLocationReplaceParamsNetwork] `json:"networks"`
 }
 
-func (r GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParams) MarshalJSON() (data []byte, err error) {
+func (r GatewayLocationReplaceParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParamsNetwork struct {
+type GatewayLocationReplaceParamsNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network param.Field[string] `json:"network,required"`
 }
 
-func (r GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationParamsNetwork) MarshalJSON() (data []byte, err error) {
+func (r GatewayLocationReplaceParamsNetwork) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelope struct {
-	Errors   []GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse                   `json:"result,required"`
+type GatewayLocationReplaceResponseEnvelope struct {
+	Errors   []GatewayLocationReplaceResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []GatewayLocationReplaceResponseEnvelopeMessages `json:"messages,required"`
+	Result   GatewayLocationReplaceResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeSuccess `json:"success,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeJSON    `json:"-"`
+	Success GatewayLocationReplaceResponseEnvelopeSuccess `json:"success,required"`
+	JSON    gatewayLocationReplaceResponseEnvelopeJSON    `json:"-"`
 }
 
-// gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelope]
-type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeJSON struct {
+// gatewayLocationReplaceResponseEnvelopeJSON contains the JSON metadata for the
+// struct [GatewayLocationReplaceResponseEnvelope]
+type gatewayLocationReplaceResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -637,155 +730,51 @@ type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponse
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationReplaceResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrors struct {
-	Code    int64                                                                                         `json:"code,required"`
-	Message string                                                                                        `json:"message,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrorsJSON `json:"-"`
+type GatewayLocationReplaceResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    gatewayLocationReplaceResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrors]
-type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrorsJSON struct {
+// gatewayLocationReplaceResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [GatewayLocationReplaceResponseEnvelopeErrors]
+type gatewayLocationReplaceResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationReplaceResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessages struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessagesJSON `json:"-"`
+type GatewayLocationReplaceResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    gatewayLocationReplaceResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessages]
-type gatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessagesJSON struct {
+// gatewayLocationReplaceResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [GatewayLocationReplaceResponseEnvelopeMessages]
+type gatewayLocationReplaceResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *GatewayLocationReplaceResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeSuccess bool
+type GatewayLocationReplaceResponseEnvelopeSuccess bool
 
 const (
-	GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeSuccessTrue GatewayLocationZeroTrustGatewayLocationsNewZeroTrustGatewayLocationResponseEnvelopeSuccess = true
+	GatewayLocationReplaceResponseEnvelopeSuccessTrue GatewayLocationReplaceResponseEnvelopeSuccess = true
 )
-
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelope struct {
-	Errors   []GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessages `json:"messages,required"`
-	Result   []GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeJSON       `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelope]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrors struct {
-	Code    int64                                                                                           `json:"code,required"`
-	Message string                                                                                          `json:"message,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrors]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessages struct {
-	Code    int64                                                                                             `json:"code,required"`
-	Message string                                                                                            `json:"message,required"`
-	JSON    gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessages]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeSuccess bool
-
-const (
-	GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeSuccessTrue GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeSuccess = true
-)
-
-type GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                             `json:"total_count"`
-	JSON       gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfo]
-type gatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLocationZeroTrustGatewayLocationsListZeroTrustGatewayLocationsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
