@@ -32,12 +32,12 @@ func TestPcapNewWithOptionalParams(t *testing.T) {
 	_, err := client.Pcaps.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PcapNewParams2aE72SzcPcapsRequestSimple{
+		cloudflare.PcapNewParamsM2NEk72FPcapsRequestSimple{
 			PacketLimit: cloudflare.F(10000.000000),
-			System:      cloudflare.F(cloudflare.PcapNewParams2aE72SzcPcapsRequestSimpleSystemMagicTransit),
+			System:      cloudflare.F(cloudflare.PcapNewParamsM2NEk72FPcapsRequestSimpleSystemMagicTransit),
 			TimeLimit:   cloudflare.F(300.000000),
-			Type:        cloudflare.F(cloudflare.PcapNewParams2aE72SzcPcapsRequestSimpleTypeSimple),
-			FilterV1: cloudflare.F(cloudflare.PcapNewParams2aE72SzcPcapsRequestSimpleFilterV1{
+			Type:        cloudflare.F(cloudflare.PcapNewParamsM2NEk72FPcapsRequestSimpleTypeSimple),
+			FilterV1: cloudflare.F(cloudflare.PcapNewParamsM2NEk72FPcapsRequestSimpleFilterV1{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
