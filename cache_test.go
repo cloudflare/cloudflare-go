@@ -32,7 +32,7 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 	_, err := client.Cache.Purge(
 		context.TODO(),
 		"string",
-		cloudflare.CachePurgeParams6q4XxEwrFlex{
+		cloudflare.CachePurgeParamsDba3P8WwFlex{
 			Hosts:    cloudflare.F([]string{"www.example.com", "images.example.com"}),
 			Prefixes: cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
 			Tags:     cloudflare.F([]string{"some-tag", "another-tag"}),

@@ -97,66 +97,66 @@ func (r *CachePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 // This interface is a union satisfied by one of the following:
-// [CachePurgeParams6q4XxEwrFlex], [CachePurgeParams6q4XxEwrEverything],
-// [CachePurgeParams6q4XxEwrFiles].
+// [CachePurgeParamsDba3P8WwFlex], [CachePurgeParamsDba3P8WwEverything],
+// [CachePurgeParamsDba3P8WwFiles].
 type CachePurgeParams interface {
 	ImplementsCachePurgeParams()
 }
 
-type CachePurgeParams6q4XxEwrFlex struct {
+type CachePurgeParamsDba3P8WwFlex struct {
 	Hosts    param.Field[[]string] `json:"hosts"`
 	Prefixes param.Field[[]string] `json:"prefixes"`
 	Tags     param.Field[[]string] `json:"tags"`
 }
 
-func (r CachePurgeParams6q4XxEwrFlex) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsDba3P8WwFlex) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (CachePurgeParams6q4XxEwrFlex) ImplementsCachePurgeParams() {
+func (CachePurgeParamsDba3P8WwFlex) ImplementsCachePurgeParams() {
 
 }
 
-type CachePurgeParams6q4XxEwrEverything struct {
+type CachePurgeParamsDba3P8WwEverything struct {
 	PurgeEverything param.Field[bool] `json:"purge_everything"`
 }
 
-func (r CachePurgeParams6q4XxEwrEverything) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsDba3P8WwEverything) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (CachePurgeParams6q4XxEwrEverything) ImplementsCachePurgeParams() {
+func (CachePurgeParamsDba3P8WwEverything) ImplementsCachePurgeParams() {
 
 }
 
-type CachePurgeParams6q4XxEwrFiles struct {
-	Files param.Field[[]CachePurgeParams6q4XxEwrFilesFile] `json:"files"`
+type CachePurgeParamsDba3P8WwFiles struct {
+	Files param.Field[[]CachePurgeParamsDba3P8WwFilesFile] `json:"files"`
 }
 
-func (r CachePurgeParams6q4XxEwrFiles) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsDba3P8WwFiles) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (CachePurgeParams6q4XxEwrFiles) ImplementsCachePurgeParams() {
+func (CachePurgeParamsDba3P8WwFiles) ImplementsCachePurgeParams() {
 
 }
 
 // Satisfied by [shared.UnionString],
-// [CachePurgeParams6q4XxEwrFilesFiles6q4XxEwrURLAndHeaders].
-type CachePurgeParams6q4XxEwrFilesFile interface {
-	ImplementsCachePurgeParams6q4XxEwrFilesFile()
+// [CachePurgeParamsDba3P8WwFilesFilesDba3P8WwURLAndHeaders].
+type CachePurgeParamsDba3P8WwFilesFile interface {
+	ImplementsCachePurgeParamsDba3P8WwFilesFile()
 }
 
-type CachePurgeParams6q4XxEwrFilesFiles6q4XxEwrURLAndHeaders struct {
+type CachePurgeParamsDba3P8WwFilesFilesDba3P8WwURLAndHeaders struct {
 	Headers param.Field[interface{}] `json:"headers"`
 	URL     param.Field[string]      `json:"url"`
 }
 
-func (r CachePurgeParams6q4XxEwrFilesFiles6q4XxEwrURLAndHeaders) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsDba3P8WwFilesFilesDba3P8WwURLAndHeaders) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParams6q4XxEwrFilesFiles6q4XxEwrURLAndHeaders) ImplementsCachePurgeParams6q4XxEwrFilesFile() {
+func (r CachePurgeParamsDba3P8WwFilesFilesDba3P8WwURLAndHeaders) ImplementsCachePurgeParamsDba3P8WwFilesFile() {
 }
 
 type CachePurgeResponseEnvelope struct {
