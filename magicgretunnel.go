@@ -172,9 +172,7 @@ type MagicGreTunnelNewResponseGreTunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
+	// via the tunnel.
 	Direction MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
@@ -182,9 +180,7 @@ type MagicGreTunnelNewResponseGreTunnelsHealthCheck struct {
 	Rate MagicGreTunnelNewResponseGreTunnelsHealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
+	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
 	Type MagicGreTunnelNewResponseGreTunnelsHealthCheckType `json:"type"`
@@ -210,9 +206,7 @@ func (r *MagicGreTunnelNewResponseGreTunnelsHealthCheck) UnmarshalJSON(data []by
 // The direction of the flow of the healthcheck. Either unidirectional, where the
 // probe comes to you via the tunnel and the result comes back to Cloudflare via
 // the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
+// via the tunnel.
 type MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection string
 
 const (
@@ -328,9 +322,7 @@ type MagicGreTunnelListResponseGreTunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
+	// via the tunnel.
 	Direction MagicGreTunnelListResponseGreTunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
@@ -338,9 +330,7 @@ type MagicGreTunnelListResponseGreTunnelsHealthCheck struct {
 	Rate MagicGreTunnelListResponseGreTunnelsHealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
+	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
 	Type MagicGreTunnelListResponseGreTunnelsHealthCheckType `json:"type"`
@@ -366,9 +356,7 @@ func (r *MagicGreTunnelListResponseGreTunnelsHealthCheck) UnmarshalJSON(data []b
 // The direction of the flow of the healthcheck. Either unidirectional, where the
 // probe comes to you via the tunnel and the result comes back to Cloudflare via
 // the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
+// via the tunnel.
 type MagicGreTunnelListResponseGreTunnelsHealthCheckDirection string
 
 const (
@@ -536,9 +524,7 @@ type MagicGreTunnelUpdateParamsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
+	// via the tunnel.
 	Direction param.Field[MagicGreTunnelUpdateParamsHealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
@@ -546,9 +532,7 @@ type MagicGreTunnelUpdateParamsHealthCheck struct {
 	Rate param.Field[MagicGreTunnelUpdateParamsHealthCheckRate] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
+	// to this address. This field defaults to `customer_gre_endpoint address`.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
 	Type param.Field[MagicGreTunnelUpdateParamsHealthCheckType] `json:"type"`
@@ -561,9 +545,7 @@ func (r MagicGreTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err e
 // The direction of the flow of the healthcheck. Either unidirectional, where the
 // probe comes to you via the tunnel and the result comes back to Cloudflare via
 // the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
+// via the tunnel.
 type MagicGreTunnelUpdateParamsHealthCheckDirection string
 
 const (

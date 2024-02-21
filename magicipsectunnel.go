@@ -446,8 +446,7 @@ type MagicIpsecTunnelNewParams struct {
 	// The IP address assigned to the customer side of the IPsec tunnel.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
-	Description param.Field[string]                               `json:"description"`
-	HealthCheck param.Field[MagicIpsecTunnelNewParamsHealthCheck] `json:"health_check"`
+	Description param.Field[string] `json:"description"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	Psk param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the
@@ -458,62 +457,6 @@ type MagicIpsecTunnelNewParams struct {
 func (r MagicIpsecTunnelNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type MagicIpsecTunnelNewParamsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[MagicIpsecTunnelNewParamsHealthCheckDirection] `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[MagicIpsecTunnelNewParamsHealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[MagicIpsecTunnelNewParamsHealthCheckType] `json:"type"`
-}
-
-func (r MagicIpsecTunnelNewParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type MagicIpsecTunnelNewParamsHealthCheckDirection string
-
-const (
-	MagicIpsecTunnelNewParamsHealthCheckDirectionUnidirectional MagicIpsecTunnelNewParamsHealthCheckDirection = "unidirectional"
-	MagicIpsecTunnelNewParamsHealthCheckDirectionBidirectional  MagicIpsecTunnelNewParamsHealthCheckDirection = "bidirectional"
-)
-
-// How frequent the health check is run. The default value is `mid`.
-type MagicIpsecTunnelNewParamsHealthCheckRate string
-
-const (
-	MagicIpsecTunnelNewParamsHealthCheckRateLow  MagicIpsecTunnelNewParamsHealthCheckRate = "low"
-	MagicIpsecTunnelNewParamsHealthCheckRateMid  MagicIpsecTunnelNewParamsHealthCheckRate = "mid"
-	MagicIpsecTunnelNewParamsHealthCheckRateHigh MagicIpsecTunnelNewParamsHealthCheckRate = "high"
-)
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicIpsecTunnelNewParamsHealthCheckType string
-
-const (
-	MagicIpsecTunnelNewParamsHealthCheckTypeReply   MagicIpsecTunnelNewParamsHealthCheckType = "reply"
-	MagicIpsecTunnelNewParamsHealthCheckTypeRequest MagicIpsecTunnelNewParamsHealthCheckType = "request"
-)
 
 type MagicIpsecTunnelNewResponseEnvelope struct {
 	Errors   []MagicIpsecTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
@@ -596,8 +539,7 @@ type MagicIpsecTunnelUpdateParams struct {
 	// The IP address assigned to the customer side of the IPsec tunnel.
 	CustomerEndpoint param.Field[string] `json:"customer_endpoint"`
 	// An optional description forthe IPsec tunnel.
-	Description param.Field[string]                                  `json:"description"`
-	HealthCheck param.Field[MagicIpsecTunnelUpdateParamsHealthCheck] `json:"health_check"`
+	Description param.Field[string] `json:"description"`
 	// A randomly generated or provided string for use in the IPsec tunnel.
 	Psk param.Field[string] `json:"psk"`
 	// If `true`, then IPsec replay protection will be supported in the
@@ -608,62 +550,6 @@ type MagicIpsecTunnelUpdateParams struct {
 func (r MagicIpsecTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-type MagicIpsecTunnelUpdateParamsHealthCheck struct {
-	// The direction of the flow of the healthcheck. Either unidirectional, where the
-	// probe comes to you via the tunnel and the result comes back to Cloudflare via
-	// the open Internet, or bidirectional where both the probe and result come and go
-	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-	// in health_check is ignored as the interface_address is used to send traffic into
-	// the tunnel.
-	Direction param.Field[MagicIpsecTunnelUpdateParamsHealthCheckDirection] `json:"direction"`
-	// Determines whether to run healthchecks for a tunnel.
-	Enabled param.Field[bool] `json:"enabled"`
-	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[MagicIpsecTunnelUpdateParamsHealthCheckRate] `json:"rate"`
-	// The destination address in a request type health check. After the healthcheck is
-	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
-	// to this address. This field defaults to `customer_gre_endpoint address`. This
-	// field is ignored for bidirectional healthchecks as the interface_address (not
-	// assigned to the Cloudflare side of the tunnel) is used as the target.
-	Target param.Field[string] `json:"target"`
-	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[MagicIpsecTunnelUpdateParamsHealthCheckType] `json:"type"`
-}
-
-func (r MagicIpsecTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// The direction of the flow of the healthcheck. Either unidirectional, where the
-// probe comes to you via the tunnel and the result comes back to Cloudflare via
-// the open Internet, or bidirectional where both the probe and result come and go
-// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
-// in health_check is ignored as the interface_address is used to send traffic into
-// the tunnel.
-type MagicIpsecTunnelUpdateParamsHealthCheckDirection string
-
-const (
-	MagicIpsecTunnelUpdateParamsHealthCheckDirectionUnidirectional MagicIpsecTunnelUpdateParamsHealthCheckDirection = "unidirectional"
-	MagicIpsecTunnelUpdateParamsHealthCheckDirectionBidirectional  MagicIpsecTunnelUpdateParamsHealthCheckDirection = "bidirectional"
-)
-
-// How frequent the health check is run. The default value is `mid`.
-type MagicIpsecTunnelUpdateParamsHealthCheckRate string
-
-const (
-	MagicIpsecTunnelUpdateParamsHealthCheckRateLow  MagicIpsecTunnelUpdateParamsHealthCheckRate = "low"
-	MagicIpsecTunnelUpdateParamsHealthCheckRateMid  MagicIpsecTunnelUpdateParamsHealthCheckRate = "mid"
-	MagicIpsecTunnelUpdateParamsHealthCheckRateHigh MagicIpsecTunnelUpdateParamsHealthCheckRate = "high"
-)
-
-// The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicIpsecTunnelUpdateParamsHealthCheckType string
-
-const (
-	MagicIpsecTunnelUpdateParamsHealthCheckTypeReply   MagicIpsecTunnelUpdateParamsHealthCheckType = "reply"
-	MagicIpsecTunnelUpdateParamsHealthCheckTypeRequest MagicIpsecTunnelUpdateParamsHealthCheckType = "request"
-)
 
 type MagicIpsecTunnelUpdateResponseEnvelope struct {
 	Errors   []MagicIpsecTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
