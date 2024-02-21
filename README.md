@@ -41,9 +41,9 @@ import (
 func main() {
 	client := cloudflare.NewClient(
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),           // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
-		option.WithAPIEmail("dev@cloudflare.com"),                       // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
+		option.WithAPIEmail("user@example.com"),                         // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"), // defaults to os.LookupEnv("CLOUDFLARE_API_TOKEN")
-		option.WithUserServiceKey("My User Service Key"),                // defaults to os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY")
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"), // defaults to os.LookupEnv("CLOUDFLARE_API_USER_SERVICE_KEY")
 	)
 	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
 		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{

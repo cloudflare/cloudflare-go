@@ -37,6 +37,15 @@ func NewWorkerDomainService(opts ...option.RequestOption) (r *WorkerDomainServic
 func (r *WorkerDomainService) Update(ctx context.Context, accountID interface{}, body WorkerDomainUpdateParams, opts ...option.RequestOption) (res *WorkerDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -50,6 +59,15 @@ func (r *WorkerDomainService) Update(ctx context.Context, accountID interface{},
 func (r *WorkerDomainService) List(ctx context.Context, accountID interface{}, query WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkerDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {

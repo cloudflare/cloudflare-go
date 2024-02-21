@@ -37,7 +37,16 @@ func NewAddressAddressMapZoneService(opts ...option.RequestOption) (r *AddressAd
 func (r *AddressAddressMapZoneService) Update(ctx context.Context, accountID string, addressMapID string, zoneID string, opts ...option.RequestOption) (res *AddressAddressMapZoneUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapZoneUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountID, addressMapID, zoneID)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -50,7 +59,16 @@ func (r *AddressAddressMapZoneService) Update(ctx context.Context, accountID str
 func (r *AddressAddressMapZoneService) Delete(ctx context.Context, accountID string, addressMapID string, zoneID string, opts ...option.RequestOption) (res *AddressAddressMapZoneDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapZoneDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountID, addressMapID, zoneID)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return

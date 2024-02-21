@@ -32,11 +32,20 @@ func NewLogpushOwnershipService(opts ...option.RequestOption) (r *LogpushOwnersh
 }
 
 // Gets a new ownership challenge sent to your destination.
-func (r *LogpushOwnershipService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, body LogpushOwnershipNewParams, opts ...option.RequestOption) (res *LogpushOwnershipNewResponse, err error) {
+func (r *LogpushOwnershipService) New(ctx context.Context, params LogpushOwnershipNewParams, opts ...option.RequestOption) (res *LogpushOwnershipNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushOwnershipNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/ownership", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +54,20 @@ func (r *LogpushOwnershipService) New(ctx context.Context, accountOrZone string,
 }
 
 // Validates ownership challenge of the destination.
-func (r *LogpushOwnershipService) Validate(ctx context.Context, accountOrZone string, accountOrZoneID string, body LogpushOwnershipValidateParams, opts ...option.RequestOption) (res *LogpushOwnershipValidateResponse, err error) {
+func (r *LogpushOwnershipService) Validate(ctx context.Context, params LogpushOwnershipValidateParams, opts ...option.RequestOption) (res *LogpushOwnershipValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushOwnershipValidateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/ownership/validate", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -96,6 +114,10 @@ func (r *LogpushOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type LogpushOwnershipNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
@@ -176,6 +198,10 @@ const (
 )
 
 type LogpushOwnershipValidateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.

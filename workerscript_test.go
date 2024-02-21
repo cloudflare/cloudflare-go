@@ -29,18 +29,19 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Workers.Scripts.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
-		cloudflare.WorkerScriptUpdateParamsVariant0{
+		cloudflare.WorkerScriptUpdateParams{
 			RollbackTo:  cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
-			Metadata: cloudflare.F(cloudflare.WorkerScriptUpdateParamsVariant0Metadata{
+			Message:     cloudflare.F("string"),
+			Metadata: cloudflare.F(cloudflare.WorkerScriptUpdateParamsMetadata{
 				Bindings:           cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2023-07-25"),
@@ -48,12 +49,12 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[cloudflare.WorkerScriptUpdateParamsVariant0MetadataMigrations](cloudflare.WorkerScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations(cloudflare.WorkerScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[cloudflare.WorkerScriptUpdateParamsMetadataMigrations](cloudflare.WorkerScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations(cloudflare.WorkerScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -63,7 +64,7 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsVariant0MetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -77,11 +78,11 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(cloudflare.WorkerScriptUpdateParamsVariant0MetadataPlacement{
-					Mode: cloudflare.F(cloudflare.WorkerScriptUpdateParamsVariant0MetadataPlacementModeSmart),
+				Placement: cloudflare.F(cloudflare.WorkerScriptUpdateParamsMetadataPlacement{
+					Mode: cloudflare.F(cloudflare.WorkerScriptUpdateParamsMetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsVariant0MetadataTailConsumer{{
+				TailConsumers: cloudflare.F([]cloudflare.WorkerScriptUpdateParamsMetadataTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -94,7 +95,7 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
-				UsageModel:  cloudflare.F(cloudflare.WorkerScriptUpdateParamsVariant0MetadataUsageModelBundled),
+				UsageModel:  cloudflare.F(cloudflare.WorkerScriptUpdateParamsMetadataUsageModelBundled),
 				VersionTags: cloudflare.F[any](map[string]interface{}{}),
 			}),
 		},
@@ -120,9 +121,9 @@ func TestWorkerScriptList(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Workers.Scripts.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -146,9 +147,9 @@ func TestWorkerScriptDeleteWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	err := client.Workers.Scripts.Delete(
 		context.TODO(),
@@ -178,9 +179,9 @@ func TestWorkerScriptGet(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	resp, err := client.Workers.Scripts.Get(
 		context.TODO(),

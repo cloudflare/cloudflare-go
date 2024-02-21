@@ -14,6 +14,7 @@ import (
 type RadarAttackService struct {
 	Options []option.RequestOption
 	Layer3  *RadarAttackLayer3Service
+	Layer7  *RadarAttackLayer7Service
 }
 
 // NewRadarAttackService generates a new service that applies the given options to
@@ -23,5 +24,6 @@ func NewRadarAttackService(opts ...option.RequestOption) (r *RadarAttackService)
 	r = &RadarAttackService{}
 	r.Options = opts
 	r.Layer3 = NewRadarAttackLayer3Service(opts...)
+	r.Layer7 = NewRadarAttackLayer7Service(opts...)
 	return
 }

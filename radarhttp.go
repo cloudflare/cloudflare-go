@@ -11,8 +11,12 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewRadarHTTPService] method instead.
 type RadarHTTPService struct {
-	Options    []option.RequestOption
-	TLSVersion *RadarHTTPTLSVersionService
+	Options          []option.RequestOption
+	Top              *RadarHTTPTopService
+	Locations        *RadarHTTPLocationService
+	Ases             *RadarHTTPAseService
+	Summary          *RadarHTTPSummaryService
+	TimeseriesGroups *RadarHTTPTimeseriesGroupService
 }
 
 // NewRadarHTTPService generates a new service that applies the given options to
@@ -21,6 +25,10 @@ type RadarHTTPService struct {
 func NewRadarHTTPService(opts ...option.RequestOption) (r *RadarHTTPService) {
 	r = &RadarHTTPService{}
 	r.Options = opts
-	r.TLSVersion = NewRadarHTTPTLSVersionService(opts...)
+	r.Top = NewRadarHTTPTopService(opts...)
+	r.Locations = NewRadarHTTPLocationService(opts...)
+	r.Ases = NewRadarHTTPAseService(opts...)
+	r.Summary = NewRadarHTTPSummaryService(opts...)
+	r.TimeseriesGroups = NewRadarHTTPTimeseriesGroupService(opts...)
 	return
 }

@@ -13,7 +13,7 @@ import (
 // instead.
 type RadarVerifiedBotService struct {
 	Options []option.RequestOption
-	Tops    *RadarVerifiedBotTopService
+	Top     *RadarVerifiedBotTopService
 }
 
 // NewRadarVerifiedBotService generates a new service that applies the given
@@ -22,6 +22,6 @@ type RadarVerifiedBotService struct {
 func NewRadarVerifiedBotService(opts ...option.RequestOption) (r *RadarVerifiedBotService) {
 	r = &RadarVerifiedBotService{}
 	r.Options = opts
-	r.Tops = NewRadarVerifiedBotTopService(opts...)
+	r.Top = NewRadarVerifiedBotTopService(opts...)
 	return
 }

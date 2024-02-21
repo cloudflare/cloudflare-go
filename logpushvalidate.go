@@ -32,11 +32,20 @@ func NewLogpushValidateService(opts ...option.RequestOption) (r *LogpushValidate
 }
 
 // Checks if there is an existing job with a destination.
-func (r *LogpushValidateService) Destination(ctx context.Context, accountOrZone string, accountOrZoneID string, body LogpushValidateDestinationParams, opts ...option.RequestOption) (res *LogpushValidateDestinationResponse, err error) {
+func (r *LogpushValidateService) Destination(ctx context.Context, params LogpushValidateDestinationParams, opts ...option.RequestOption) (res *LogpushValidateDestinationResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushValidateDestinationResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/validate/destination/exists", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +54,20 @@ func (r *LogpushValidateService) Destination(ctx context.Context, accountOrZone 
 }
 
 // Validates logpull origin with logpull_options.
-func (r *LogpushValidateService) Origin(ctx context.Context, accountOrZone string, accountOrZoneID string, body LogpushValidateOriginParams, opts ...option.RequestOption) (res *LogpushValidateOriginResponse, err error) {
+func (r *LogpushValidateService) Origin(ctx context.Context, params LogpushValidateOriginParams, opts ...option.RequestOption) (res *LogpushValidateOriginResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushValidateOriginResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/validate/origin", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -94,6 +112,10 @@ func (r *LogpushValidateOriginResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type LogpushValidateDestinationParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
@@ -174,6 +196,10 @@ const (
 )
 
 type LogpushValidateOriginParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
 	// the logpull api, copy the url (full url or just the query string) of your call

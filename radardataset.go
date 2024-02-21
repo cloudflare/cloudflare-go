@@ -21,8 +21,7 @@ import (
 // this service directly, and instead use the [NewRadarDatasetService] method
 // instead.
 type RadarDatasetService struct {
-	Options   []option.RequestOption
-	Downloads *RadarDatasetDownloadService
+	Options []option.RequestOption
 }
 
 // NewRadarDatasetService generates a new service that applies the given options to
@@ -31,7 +30,6 @@ type RadarDatasetService struct {
 func NewRadarDatasetService(opts ...option.RequestOption) (r *RadarDatasetService) {
 	r = &RadarDatasetService{}
 	r.Options = opts
-	r.Downloads = NewRadarDatasetDownloadService(opts...)
 	return
 }
 
@@ -41,6 +39,19 @@ func (r *RadarDatasetService) List(ctx context.Context, query RadarDatasetListPa
 	var env RadarDatasetListResponseEnvelope
 	path := "radar/datasets"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a url to download a single dataset.
+func (r *RadarDatasetService) Download(ctx context.Context, params RadarDatasetDownloadParams, opts ...option.RequestOption) (res *RadarDatasetDownloadResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarDatasetDownloadResponseEnvelope
+	path := "radar/datasets/download"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -103,6 +114,40 @@ func (r *RadarDatasetListResponseDataset) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarDatasetDownloadResponse struct {
+	Dataset RadarDatasetDownloadResponseDataset `json:"dataset,required"`
+	JSON    radarDatasetDownloadResponseJSON    `json:"-"`
+}
+
+// radarDatasetDownloadResponseJSON contains the JSON metadata for the struct
+// [RadarDatasetDownloadResponse]
+type radarDatasetDownloadResponseJSON struct {
+	Dataset     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarDatasetDownloadResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarDatasetDownloadResponseDataset struct {
+	URL  string                                  `json:"url,required"`
+	JSON radarDatasetDownloadResponseDatasetJSON `json:"-"`
+}
+
+// radarDatasetDownloadResponseDatasetJSON contains the JSON metadata for the
+// struct [RadarDatasetDownloadResponseDataset]
+type radarDatasetDownloadResponseDatasetJSON struct {
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarDatasetDownloadResponseDataset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarDatasetListParams struct {
 	// Dataset type.
 	DatasetType param.Field[RadarDatasetListParamsDatasetType] `query:"datasetType"`
@@ -154,6 +199,52 @@ type radarDatasetListResponseEnvelopeJSON struct {
 }
 
 func (r *RadarDatasetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarDatasetDownloadParams struct {
+	DatasetID param.Field[int64] `json:"datasetId,required"`
+	// Format results are returned in.
+	Format param.Field[RadarDatasetDownloadParamsFormat] `query:"format"`
+}
+
+func (r RadarDatasetDownloadParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// URLQuery serializes [RadarDatasetDownloadParams]'s query parameters as
+// `url.Values`.
+func (r RadarDatasetDownloadParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Format results are returned in.
+type RadarDatasetDownloadParamsFormat string
+
+const (
+	RadarDatasetDownloadParamsFormatJson RadarDatasetDownloadParamsFormat = "JSON"
+	RadarDatasetDownloadParamsFormatCsv  RadarDatasetDownloadParamsFormat = "CSV"
+)
+
+type RadarDatasetDownloadResponseEnvelope struct {
+	Result  RadarDatasetDownloadResponse             `json:"result,required"`
+	Success bool                                     `json:"success,required"`
+	JSON    radarDatasetDownloadResponseEnvelopeJSON `json:"-"`
+}
+
+// radarDatasetDownloadResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarDatasetDownloadResponseEnvelope]
+type radarDatasetDownloadResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarDatasetDownloadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

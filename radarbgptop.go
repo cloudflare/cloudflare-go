@@ -12,9 +12,8 @@ import (
 // this service directly, and instead use the [NewRadarBGPTopService] method
 // instead.
 type RadarBGPTopService struct {
-	Options  []option.RequestOption
-	Ases     *RadarBGPTopAseService
-	Prefixes *RadarBGPTopPrefixService
+	Options []option.RequestOption
+	Ases    *RadarBGPTopAseService
 }
 
 // NewRadarBGPTopService generates a new service that applies the given options to
@@ -24,6 +23,5 @@ func NewRadarBGPTopService(opts ...option.RequestOption) (r *RadarBGPTopService)
 	r = &RadarBGPTopService{}
 	r.Options = opts
 	r.Ases = NewRadarBGPTopAseService(opts...)
-	r.Prefixes = NewRadarBGPTopPrefixService(opts...)
 	return
 }

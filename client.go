@@ -102,7 +102,6 @@ type Client struct {
 	URLScanner                  *URLScannerService
 	Radar                       *RadarService
 	BotManagement               *BotManagementService
-	CacheReserve                *CacheReserveService
 	OriginPostQuantumEncryption *OriginPostQuantumEncryptionService
 	Firewall                    *FirewallService
 	Zaraz                       *ZarazService
@@ -225,7 +224,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.URLScanner = NewURLScannerService(opts...)
 	r.Radar = NewRadarService(opts...)
 	r.BotManagement = NewBotManagementService(opts...)
-	r.CacheReserve = NewCacheReserveService(opts...)
 	r.OriginPostQuantumEncryption = NewOriginPostQuantumEncryptionService(opts...)
 	r.Firewall = NewFirewallService(opts...)
 	r.Zaraz = NewZarazService(opts...)

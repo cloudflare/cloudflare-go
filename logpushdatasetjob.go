@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,20 @@ func NewLogpushDatasetJobService(opts ...option.RequestOption) (r *LogpushDatase
 }
 
 // Lists Logpush jobs for an account or zone for a dataset.
-func (r *LogpushDatasetJobService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, datasetID string, opts ...option.RequestOption) (res *[]LogpushDatasetJobListResponse, err error) {
+func (r *LogpushDatasetJobService) List(ctx context.Context, datasetID string, query LogpushDatasetJobListParams, opts ...option.RequestOption) (res *[]LogpushDatasetJobListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushDatasetJobListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/jobs", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -203,6 +213,13 @@ const (
 	LogpushDatasetJobListResponseOutputOptionsTimestampFormatUnix     LogpushDatasetJobListResponseOutputOptionsTimestampFormat = "unix"
 	LogpushDatasetJobListResponseOutputOptionsTimestampFormatRfc3339  LogpushDatasetJobListResponseOutputOptionsTimestampFormat = "rfc3339"
 )
+
+type LogpushDatasetJobListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type LogpushDatasetJobListResponseEnvelope struct {
 	Errors   []LogpushDatasetJobListResponseEnvelopeErrors   `json:"errors,required"`

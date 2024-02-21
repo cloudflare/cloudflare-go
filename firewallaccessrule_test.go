@@ -25,23 +25,20 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.New(
-		context.TODO(),
-		"string",
-		map[string]interface{}{},
-		cloudflare.FirewallAccessRuleNewParams{
-			Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
-				Target: cloudflare.F(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
-				Value:  cloudflare.F("198.51.100.4"),
-			})),
-			Mode:  cloudflare.F(cloudflare.FirewallAccessRuleNewParamsModeChallenge),
-			Notes: cloudflare.F("This rule is enabled because of an event that occurred on date X."),
-		},
-	)
+	_, err := client.Firewalls.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
+			Target: cloudflare.F(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
+			Value:  cloudflare.F("198.51.100.4"),
+		})),
+		Mode:  cloudflare.F(cloudflare.FirewallAccessRuleNewParamsModeChallenge),
+		Notes: cloudflare.F("This rule is enabled because of an event that occurred on date X."),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,34 +60,31 @@ func TestFirewallAccessRuleListWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.List(
-		context.TODO(),
-		"string",
-		map[string]interface{}{},
-		cloudflare.FirewallAccessRuleListParams{
-			Direction: cloudflare.F(cloudflare.FirewallAccessRuleListParamsDirectionDesc),
-			EgsPagination: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPagination{
-				Json: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPaginationJson{
-					Page:    cloudflare.F(1.000000),
-					PerPage: cloudflare.F(1.000000),
-				}),
+	_, err := client.Firewalls.AccessRules.List(context.TODO(), cloudflare.FirewallAccessRuleListParams{
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		Direction: cloudflare.F(cloudflare.FirewallAccessRuleListParamsDirectionDesc),
+		EgsPagination: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPagination{
+			Json: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPaginationJson{
+				Page:    cloudflare.F(1.000000),
+				PerPage: cloudflare.F(1.000000),
 			}),
-			Filters: cloudflare.F(cloudflare.FirewallAccessRuleListParamsFilters{
-				ConfigurationTarget: cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersConfigurationTargetIP),
-				ConfigurationValue:  cloudflare.F("198.51.100.4"),
-				Match:               cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersMatchAny),
-				Mode:                cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersModeChallenge),
-				Notes:               cloudflare.F("my note"),
-			}),
-			Order:   cloudflare.F(cloudflare.FirewallAccessRuleListParamsOrderMode),
-			Page:    cloudflare.F(1.000000),
-			PerPage: cloudflare.F(20.000000),
-		},
-	)
+		}),
+		Filters: cloudflare.F(cloudflare.FirewallAccessRuleListParamsFilters{
+			ConfigurationTarget: cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersConfigurationTargetIP),
+			ConfigurationValue:  cloudflare.F("198.51.100.4"),
+			Match:               cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersMatchAny),
+			Mode:                cloudflare.F(cloudflare.FirewallAccessRuleListParamsFiltersModeChallenge),
+			Notes:               cloudflare.F("my note"),
+		}),
+		Order:   cloudflare.F(cloudflare.FirewallAccessRuleListParamsOrderMode),
+		Page:    cloudflare.F(1.000000),
+		PerPage: cloudflare.F(20.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -112,15 +106,17 @@ func TestFirewallAccessRuleDelete(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Firewalls.AccessRules.Delete(
 		context.TODO(),
-		"string",
 		map[string]interface{}{},
-		map[string]interface{}{},
+		cloudflare.FirewallAccessRuleDeleteParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -143,9 +139,9 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Firewalls.AccessRules.Edit(
 		context.TODO(),
@@ -181,15 +177,17 @@ func TestFirewallAccessRuleGet(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Firewalls.AccessRules.Get(
 		context.TODO(),
-		"string",
 		map[string]interface{}{},
-		map[string]interface{}{},
+		cloudflare.FirewallAccessRuleGetParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

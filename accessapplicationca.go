@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,20 @@ func NewAccessApplicationCaService(opts ...option.RequestOption) (r *AccessAppli
 }
 
 // Generates a new short-lived certificate CA and public key.
-func (r *AccessApplicationCaService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessApplicationCaNewResponse, err error) {
+func (r *AccessApplicationCaService) New(ctx context.Context, uuid string, body AccessApplicationCaNewParams, opts ...option.RequestOption) (res *AccessApplicationCaNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCaNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +57,20 @@ func (r *AccessApplicationCaService) New(ctx context.Context, accountOrZone stri
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCaService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessApplicationCaListResponse, err error) {
+func (r *AccessApplicationCaService) List(ctx context.Context, query AccessApplicationCaListParams, opts ...option.RequestOption) (res *[]AccessApplicationCaListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCaListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/ca", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +79,20 @@ func (r *AccessApplicationCaService) List(ctx context.Context, accountOrZone str
 }
 
 // Deletes a short-lived certificate CA.
-func (r *AccessApplicationCaService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessApplicationCaDeleteResponse, err error) {
+func (r *AccessApplicationCaService) Delete(ctx context.Context, uuid string, body AccessApplicationCaDeleteParams, opts ...option.RequestOption) (res *AccessApplicationCaDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCaDeleteResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,11 +101,20 @@ func (r *AccessApplicationCaService) Delete(ctx context.Context, accountOrZone s
 }
 
 // Fetches a short-lived certificate CA and its public key.
-func (r *AccessApplicationCaService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessApplicationCaGetResponse, err error) {
+func (r *AccessApplicationCaService) Get(ctx context.Context, uuid string, query AccessApplicationCaGetParams, opts ...option.RequestOption) (res *AccessApplicationCaGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCaGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/ca", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -162,6 +199,13 @@ func init() {
 	)
 }
 
+type AccessApplicationCaNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessApplicationCaNewResponseEnvelope struct {
 	Errors   []AccessApplicationCaNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationCaNewResponseEnvelopeMessages `json:"messages,required"`
@@ -230,6 +274,13 @@ type AccessApplicationCaNewResponseEnvelopeSuccess bool
 const (
 	AccessApplicationCaNewResponseEnvelopeSuccessTrue AccessApplicationCaNewResponseEnvelopeSuccess = true
 )
+
+type AccessApplicationCaListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type AccessApplicationCaListResponseEnvelope struct {
 	Errors   []AccessApplicationCaListResponseEnvelopeErrors   `json:"errors,required"`
@@ -329,6 +380,13 @@ func (r *AccessApplicationCaListResponseEnvelopeResultInfo) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccessApplicationCaDeleteParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessApplicationCaDeleteResponseEnvelope struct {
 	Errors   []AccessApplicationCaDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationCaDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -397,6 +455,13 @@ type AccessApplicationCaDeleteResponseEnvelopeSuccess bool
 const (
 	AccessApplicationCaDeleteResponseEnvelopeSuccessTrue AccessApplicationCaDeleteResponseEnvelopeSuccess = true
 )
+
+type AccessApplicationCaGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type AccessApplicationCaGetResponseEnvelope struct {
 	Errors   []AccessApplicationCaGetResponseEnvelopeErrors   `json:"errors,required"`

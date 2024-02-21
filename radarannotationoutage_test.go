@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarAnnotationOutageListWithOptionalParams(t *testing.T) {
+func TestRadarAnnotationOutageLocationsWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,19 +26,16 @@ func TestRadarAnnotationOutageListWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.Annotations.Outages.List(context.TODO(), cloudflare.RadarAnnotationOutageListParams{
-		Asn:       cloudflare.F(int64(0)),
+	_, err := client.Radar.Annotations.Outages.Locations(context.TODO(), cloudflare.RadarAnnotationOutageLocationsParams{
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(cloudflare.RadarAnnotationOutageListParamsDateRange7d),
+		DateRange: cloudflare.F(cloudflare.RadarAnnotationOutageLocationsParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),
-		Format:    cloudflare.F(cloudflare.RadarAnnotationOutageListParamsFormatJson),
+		Format:    cloudflare.F(cloudflare.RadarAnnotationOutageLocationsParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F("US"),
-		Offset:    cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

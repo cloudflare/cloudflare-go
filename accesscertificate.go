@@ -35,11 +35,20 @@ func NewAccessCertificateService(opts ...option.RequestOption) (r *AccessCertifi
 }
 
 // Adds a new mTLS root certificate to Access.
-func (r *AccessCertificateService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessCertificateNewParams, opts ...option.RequestOption) (res *AccessCertificateNewResponse, err error) {
+func (r *AccessCertificateService) New(ctx context.Context, params AccessCertificateNewParams, opts ...option.RequestOption) (res *AccessCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +57,20 @@ func (r *AccessCertificateService) New(ctx context.Context, accountOrZone string
 }
 
 // Updates a configured mTLS certificate.
-func (r *AccessCertificateService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificateUpdateResponse, err error) {
+func (r *AccessCertificateService) Update(ctx context.Context, uuid string, params AccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificateUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +79,20 @@ func (r *AccessCertificateService) Update(ctx context.Context, accountOrZone str
 }
 
 // Lists all mTLS root certificates.
-func (r *AccessCertificateService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessCertificateListResponse, err error) {
+func (r *AccessCertificateService) List(ctx context.Context, query AccessCertificateListParams, opts ...option.RequestOption) (res *[]AccessCertificateListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +101,20 @@ func (r *AccessCertificateService) List(ctx context.Context, accountOrZone strin
 }
 
 // Deletes an mTLS certificate.
-func (r *AccessCertificateService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
+func (r *AccessCertificateService) Delete(ctx context.Context, uuid string, body AccessCertificateDeleteParams, opts ...option.RequestOption) (res *AccessCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateDeleteResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +123,20 @@ func (r *AccessCertificateService) Delete(ctx context.Context, accountOrZone str
 }
 
 // Fetches a single mTLS certificate.
-func (r *AccessCertificateService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *AccessCertificateGetResponse, err error) {
+func (r *AccessCertificateService) Get(ctx context.Context, uuid string, query AccessCertificateGetParams, opts ...option.RequestOption) (res *AccessCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -250,6 +295,10 @@ func (r *AccessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AccessCertificateNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The certificate content.
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The name of the certificate.
@@ -332,6 +381,10 @@ const (
 )
 
 type AccessCertificateUpdateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames,required"`
 	// The name of the certificate.
@@ -410,6 +463,13 @@ type AccessCertificateUpdateResponseEnvelopeSuccess bool
 const (
 	AccessCertificateUpdateResponseEnvelopeSuccessTrue AccessCertificateUpdateResponseEnvelopeSuccess = true
 )
+
+type AccessCertificateListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type AccessCertificateListResponseEnvelope struct {
 	Errors   []AccessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
@@ -509,6 +569,13 @@ func (r *AccessCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccessCertificateDeleteParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessCertificateDeleteResponseEnvelope struct {
 	Errors   []AccessCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -577,6 +644,13 @@ type AccessCertificateDeleteResponseEnvelopeSuccess bool
 const (
 	AccessCertificateDeleteResponseEnvelopeSuccessTrue AccessCertificateDeleteResponseEnvelopeSuccess = true
 )
+
+type AccessCertificateGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type AccessCertificateGetResponseEnvelope struct {
 	Errors   []AccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`

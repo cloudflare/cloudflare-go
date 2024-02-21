@@ -32,11 +32,20 @@ func NewAccessCertificateSettingService(opts ...option.RequestOption) (r *Access
 }
 
 // Updates an mTLS certificate's hostname settings.
-func (r *AccessCertificateSettingService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]AccessCertificateSettingUpdateResponse, err error) {
+func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]AccessCertificateSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates/settings", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +54,20 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, accountOrZ
 }
 
 // List all mTLS hostname settings for this account or zone.
-func (r *AccessCertificateSettingService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]AccessCertificateSettingListResponse, err error) {
+func (r *AccessCertificateSettingService) List(ctx context.Context, query AccessCertificateSettingListParams, opts ...option.RequestOption) (res *[]AccessCertificateSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/certificates/settings", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -112,6 +130,10 @@ func (r *AccessCertificateSettingListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type AccessCertificateSettingUpdateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID   param.Field[string]                                        `path:"zone_id,required"`
 	Settings param.Field[[]AccessCertificateSettingUpdateParamsSetting] `json:"settings,required"`
 }
 
@@ -232,6 +254,13 @@ type accessCertificateSettingUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *AccessCertificateSettingUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessCertificateSettingListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type AccessCertificateSettingListResponseEnvelope struct {

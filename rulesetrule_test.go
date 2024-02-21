@@ -25,32 +25,19 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Rulesets.Rules.New(
 		context.TODO(),
-		"string",
-		"abf9b32d38c5f572afde3336ec0ce302",
 		"2f2feab2026849078ba485f918791bdc",
-		cloudflare.RulesetRuleNewParamsRulesetsBlockRule{
-			ID:     cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action: cloudflare.F(cloudflare.RulesetRuleNewParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(cloudflare.RulesetRuleNewParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(cloudflare.RulesetRuleNewParamsRulesetsBlockRuleActionParametersResponse{
-					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-					ContentType: cloudflare.F("application/json"),
-					StatusCode:  cloudflare.F(int64(400)),
-				}),
-			}),
-			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(cloudflare.RulesetRuleNewParamsRulesetsBlockRuleLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
+		cloudflare.RulesetRuleNewParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			Position: cloudflare.F[cloudflare.RulesetRuleNewParamsPosition](cloudflare.RulesetRuleNewParamsPositionPosition(cloudflare.RulesetRuleNewParamsPositionPosition{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
+			})),
 		},
 	)
 	if err != nil {
@@ -74,16 +61,18 @@ func TestRulesetRuleDelete(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Rulesets.Rules.Delete(
 		context.TODO(),
-		"string",
-		"abf9b32d38c5f572afde3336ec0ce302",
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
+		cloudflare.RulesetRuleDeleteParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -106,32 +95,19 @@ func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Rulesets.Rules.Edit(
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
-		cloudflare.RulesetRuleEditParamsRulesetsBlockRule{
+		cloudflare.RulesetRuleEditParams{
 			AccountID: cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
-			ID:        cloudflare.F("3a03d665bac047339bb530ecb439a90d"),
-			Action:    cloudflare.F(cloudflare.RulesetRuleEditParamsRulesetsBlockRuleActionBlock),
-			ActionParameters: cloudflare.F(cloudflare.RulesetRuleEditParamsRulesetsBlockRuleActionParameters{
-				Response: cloudflare.F(cloudflare.RulesetRuleEditParamsRulesetsBlockRuleActionParametersResponse{
-					Content:     cloudflare.F("{\n  \"success\": false,\n  \"error\": \"you have been blocked\"\n}"),
-					ContentType: cloudflare.F("application/json"),
-					StatusCode:  cloudflare.F(int64(400)),
-				}),
-			}),
-			Description: cloudflare.F("Block when the IP address is not 1.1.1.1"),
-			Enabled:     cloudflare.F(true),
-			Expression:  cloudflare.F("ip.src ne 1.1.1.1"),
-			Logging: cloudflare.F(cloudflare.RulesetRuleEditParamsRulesetsBlockRuleLogging{
-				Enabled: cloudflare.F(true),
-			}),
-			Ref: cloudflare.F("my_ref"),
+			Position: cloudflare.F[cloudflare.RulesetRuleEditParamsPosition](cloudflare.RulesetRuleEditParamsPositionPosition(cloudflare.RulesetRuleEditParamsPositionPosition{
+				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
+			})),
 		},
 	)
 	if err != nil {

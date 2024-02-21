@@ -25,17 +25,17 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Policies.New(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyNewParams{
-			Decision: cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsDecisionAllow),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyNewParamsInclude{cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -114,18 +114,18 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Policies.Update(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyUpdateParams{
-			Decision: cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsDecisionAllow),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyUpdateParamsInclude{cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -204,15 +204,17 @@ func TestAccessApplicationPolicyList(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Policies.List(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.AccessApplicationPolicyListParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -235,16 +237,18 @@ func TestAccessApplicationPolicyDelete(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Policies.Delete(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.AccessApplicationPolicyDeleteParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -267,16 +271,18 @@ func TestAccessApplicationPolicyGet(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Policies.Get(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.AccessApplicationPolicyGetParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

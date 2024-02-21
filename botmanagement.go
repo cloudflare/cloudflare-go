@@ -477,125 +477,7 @@ func (r *BotManagementGetResponseBotManagementBmSubscriptionConfig) UnmarshalJSO
 func (r BotManagementGetResponseBotManagementBmSubscriptionConfig) implementsBotManagementGetResponse() {
 }
 
-// This interface is a union satisfied by one of the following:
-// [BotManagementUpdateParamsBotManagementBotFightModeConfig],
-// [BotManagementUpdateParamsBotManagementSbfmDefinitelyConfig],
-// [BotManagementUpdateParamsBotManagementSbfmLikelyConfig],
-// [BotManagementUpdateParamsBotManagementBmSubscriptionConfig].
-type BotManagementUpdateParams interface {
-	ImplementsBotManagementUpdateParams()
-}
-
-type BotManagementUpdateParamsBotManagementBotFightModeConfig struct {
-	// Use lightweight, invisible JavaScript detections to improve Bot Management.
-	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
-	// Whether to enable Bot Fight Mode.
-	FightMode param.Field[bool] `json:"fight_mode"`
-}
-
-func (r BotManagementUpdateParamsBotManagementBotFightModeConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (BotManagementUpdateParamsBotManagementBotFightModeConfig) ImplementsBotManagementUpdateParams() {
-
-}
-
-type BotManagementUpdateParamsBotManagementSbfmDefinitelyConfig struct {
-	// Use lightweight, invisible JavaScript detections to improve Bot Management.
-	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
-	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
-	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
-	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated param.Field[BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
-	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
-	// static resources on your application need bot protection. Note: Static resource
-	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
-	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots param.Field[BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBots] `json:"sbfm_verified_bots"`
-}
-
-func (r BotManagementUpdateParamsBotManagementSbfmDefinitelyConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (BotManagementUpdateParamsBotManagementSbfmDefinitelyConfig) ImplementsBotManagementUpdateParams() {
-
-}
-
-// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated string
-
-const (
-	BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedAllow            BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated = "allow"
-	BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedBlock            BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated = "block"
-	BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmDefinitelyAutomated = "managed_challenge"
-)
-
-// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBots string
-
-const (
-	BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsAllow BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "allow"
-	BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBotsBlock BotManagementUpdateParamsBotManagementSbfmDefinitelyConfigSbfmVerifiedBots = "block"
-)
-
-type BotManagementUpdateParamsBotManagementSbfmLikelyConfig struct {
-	// Use lightweight, invisible JavaScript detections to improve Bot Management.
-	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
-	EnableJs param.Field[bool] `json:"enable_js"`
-	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
-	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
-	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-	SbfmDefinitelyAutomated param.Field[BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
-	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-	SbfmLikelyAutomated param.Field[BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomated] `json:"sbfm_likely_automated"`
-	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
-	// static resources on your application need bot protection. Note: Static resource
-	// protection can also result in legitimate traffic being blocked.
-	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
-	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-	SbfmVerifiedBots param.Field[BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBots] `json:"sbfm_verified_bots"`
-}
-
-func (r BotManagementUpdateParamsBotManagementSbfmLikelyConfig) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (BotManagementUpdateParamsBotManagementSbfmLikelyConfig) ImplementsBotManagementUpdateParams() {
-
-}
-
-// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
-type BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated string
-
-const (
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedAllow            BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated = "allow"
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedBlock            BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated = "block"
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmDefinitelyAutomated = "managed_challenge"
-)
-
-// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
-type BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomated string
-
-const (
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomatedAllow            BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomated = "allow"
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomatedBlock            BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomated = "block"
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomatedManagedChallenge BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmLikelyAutomated = "managed_challenge"
-)
-
-// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
-type BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBots string
-
-const (
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBotsAllow BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBots = "allow"
-	BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBotsBlock BotManagementUpdateParamsBotManagementSbfmLikelyConfigSbfmVerifiedBots = "block"
-)
-
-type BotManagementUpdateParamsBotManagementBmSubscriptionConfig struct {
+type BotManagementUpdateParams struct {
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -603,18 +485,54 @@ type BotManagementUpdateParamsBotManagementBmSubscriptionConfig struct {
 	// Use lightweight, invisible JavaScript detections to improve Bot Management.
 	// [Learn more about JavaScript Detections](https://developers.cloudflare.com/bots/reference/javascript-detections/).
 	EnableJs param.Field[bool] `json:"enable_js"`
+	// Whether to enable Bot Fight Mode.
+	FightMode param.Field[bool] `json:"fight_mode"`
+	// Whether to optimize Super Bot Fight Mode protections for Wordpress.
+	OptimizeWordpress param.Field[bool] `json:"optimize_wordpress"`
+	// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
+	SbfmDefinitelyAutomated param.Field[BotManagementUpdateParamsSbfmDefinitelyAutomated] `json:"sbfm_definitely_automated"`
+	// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
+	SbfmLikelyAutomated param.Field[BotManagementUpdateParamsSbfmLikelyAutomated] `json:"sbfm_likely_automated"`
+	// Super Bot Fight Mode (SBFM) to enable static resource protection. Enable if
+	// static resources on your application need bot protection. Note: Static resource
+	// protection can also result in legitimate traffic being blocked.
+	SbfmStaticResourceProtection param.Field[bool] `json:"sbfm_static_resource_protection"`
+	// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
+	SbfmVerifiedBots param.Field[BotManagementUpdateParamsSbfmVerifiedBots] `json:"sbfm_verified_bots"`
 	// Whether to disable tracking the highest bot score for a session in the Bot
 	// Management cookie.
 	SuppressSessionScore param.Field[bool] `json:"suppress_session_score"`
 }
 
-func (r BotManagementUpdateParamsBotManagementBmSubscriptionConfig) MarshalJSON() (data []byte, err error) {
+func (r BotManagementUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (BotManagementUpdateParamsBotManagementBmSubscriptionConfig) ImplementsBotManagementUpdateParams() {
+// Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
+type BotManagementUpdateParamsSbfmDefinitelyAutomated string
 
-}
+const (
+	BotManagementUpdateParamsSbfmDefinitelyAutomatedAllow            BotManagementUpdateParamsSbfmDefinitelyAutomated = "allow"
+	BotManagementUpdateParamsSbfmDefinitelyAutomatedBlock            BotManagementUpdateParamsSbfmDefinitelyAutomated = "block"
+	BotManagementUpdateParamsSbfmDefinitelyAutomatedManagedChallenge BotManagementUpdateParamsSbfmDefinitelyAutomated = "managed_challenge"
+)
+
+// Super Bot Fight Mode (SBFM) action to take on likely automated requests.
+type BotManagementUpdateParamsSbfmLikelyAutomated string
+
+const (
+	BotManagementUpdateParamsSbfmLikelyAutomatedAllow            BotManagementUpdateParamsSbfmLikelyAutomated = "allow"
+	BotManagementUpdateParamsSbfmLikelyAutomatedBlock            BotManagementUpdateParamsSbfmLikelyAutomated = "block"
+	BotManagementUpdateParamsSbfmLikelyAutomatedManagedChallenge BotManagementUpdateParamsSbfmLikelyAutomated = "managed_challenge"
+)
+
+// Super Bot Fight Mode (SBFM) action to take on verified bots requests.
+type BotManagementUpdateParamsSbfmVerifiedBots string
+
+const (
+	BotManagementUpdateParamsSbfmVerifiedBotsAllow BotManagementUpdateParamsSbfmVerifiedBots = "allow"
+	BotManagementUpdateParamsSbfmVerifiedBotsBlock BotManagementUpdateParamsSbfmVerifiedBots = "block"
+)
 
 type BotManagementUpdateResponseEnvelope struct {
 	Errors   []BotManagementUpdateResponseEnvelopeErrors   `json:"errors,required"`

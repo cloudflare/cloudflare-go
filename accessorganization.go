@@ -33,11 +33,20 @@ func NewAccessOrganizationService(opts ...option.RequestOption) (r *AccessOrgani
 }
 
 // Sets up a Zero Trust organization for your account or zone.
-func (r *AccessOrganizationService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessOrganizationNewParams, opts ...option.RequestOption) (res *AccessOrganizationNewResponse, err error) {
+func (r *AccessOrganizationService) New(ctx context.Context, params AccessOrganizationNewParams, opts ...option.RequestOption) (res *AccessOrganizationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessOrganizationNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/organizations", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +55,20 @@ func (r *AccessOrganizationService) New(ctx context.Context, accountOrZone strin
 }
 
 // Updates the configuration for your Zero Trust organization.
-func (r *AccessOrganizationService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessOrganizationUpdateParams, opts ...option.RequestOption) (res *AccessOrganizationUpdateResponse, err error) {
+func (r *AccessOrganizationService) Update(ctx context.Context, params AccessOrganizationUpdateParams, opts ...option.RequestOption) (res *AccessOrganizationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessOrganizationUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/organizations", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +77,20 @@ func (r *AccessOrganizationService) Update(ctx context.Context, accountOrZone st
 }
 
 // Returns the configuration for your Zero Trust organization.
-func (r *AccessOrganizationService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *AccessOrganizationListResponse, err error) {
+func (r *AccessOrganizationService) List(ctx context.Context, query AccessOrganizationListParams, opts ...option.RequestOption) (res *AccessOrganizationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessOrganizationListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/organizations", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +99,20 @@ func (r *AccessOrganizationService) List(ctx context.Context, accountOrZone stri
 }
 
 // Revokes a user's access across all applications.
-func (r *AccessOrganizationService) RevokeUsers(ctx context.Context, accountOrZone string, accountOrZoneID string, body AccessOrganizationRevokeUsersParams, opts ...option.RequestOption) (res *AccessOrganizationRevokeUsersResponse, err error) {
+func (r *AccessOrganizationService) RevokeUsers(ctx context.Context, params AccessOrganizationRevokeUsersParams, opts ...option.RequestOption) (res *AccessOrganizationRevokeUsersResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessOrganizationRevokeUsersResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/organizations/revoke_user", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -425,6 +461,10 @@ const (
 )
 
 type AccessOrganizationNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain param.Field[string] `json:"auth_domain,required"`
 	// The name of your Zero Trust organization.
@@ -546,6 +586,10 @@ const (
 )
 
 type AccessOrganizationUpdateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
@@ -679,6 +723,13 @@ const (
 	AccessOrganizationUpdateResponseEnvelopeSuccessTrue AccessOrganizationUpdateResponseEnvelopeSuccess = true
 )
 
+type AccessOrganizationListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessOrganizationListResponseEnvelope struct {
 	Errors   []AccessOrganizationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessOrganizationListResponseEnvelopeMessages `json:"messages,required"`
@@ -749,6 +800,10 @@ const (
 )
 
 type AccessOrganizationRevokeUsersParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The email of the user to revoke.
 	Email param.Field[string] `json:"email,required"`
 }

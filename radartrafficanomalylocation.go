@@ -36,9 +36,9 @@ func NewRadarTrafficAnomalyLocationService(opts ...option.RequestOption) (r *Rad
 // Internet traffic anomalies are signals that might point to an outage, These
 // alerts are automatically detected by Radar and then manually verified by our
 // team. This endpoint returns the sum of alerts grouped by location.
-func (r *RadarTrafficAnomalyLocationService) List(ctx context.Context, query RadarTrafficAnomalyLocationListParams, opts ...option.RequestOption) (res *RadarTrafficAnomalyLocationListResponse, err error) {
+func (r *RadarTrafficAnomalyLocationService) Get(ctx context.Context, query RadarTrafficAnomalyLocationGetParams, opts ...option.RequestOption) (res *RadarTrafficAnomalyLocationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarTrafficAnomalyLocationListResponseEnvelope
+	var env RadarTrafficAnomalyLocationGetResponseEnvelope
 	path := "radar/traffic_anomalies/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,33 +48,33 @@ func (r *RadarTrafficAnomalyLocationService) List(ctx context.Context, query Rad
 	return
 }
 
-type RadarTrafficAnomalyLocationListResponse struct {
-	TrafficAnomalies []RadarTrafficAnomalyLocationListResponseTrafficAnomaly `json:"trafficAnomalies,required"`
-	JSON             radarTrafficAnomalyLocationListResponseJSON             `json:"-"`
+type RadarTrafficAnomalyLocationGetResponse struct {
+	TrafficAnomalies []RadarTrafficAnomalyLocationGetResponseTrafficAnomaly `json:"trafficAnomalies,required"`
+	JSON             radarTrafficAnomalyLocationGetResponseJSON             `json:"-"`
 }
 
-// radarTrafficAnomalyLocationListResponseJSON contains the JSON metadata for the
-// struct [RadarTrafficAnomalyLocationListResponse]
-type radarTrafficAnomalyLocationListResponseJSON struct {
+// radarTrafficAnomalyLocationGetResponseJSON contains the JSON metadata for the
+// struct [RadarTrafficAnomalyLocationGetResponse]
+type radarTrafficAnomalyLocationGetResponseJSON struct {
 	TrafficAnomalies apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyLocationListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyLocationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarTrafficAnomalyLocationListResponseTrafficAnomaly struct {
-	ClientCountryAlpha2 string                                                    `json:"clientCountryAlpha2,required"`
-	ClientCountryName   string                                                    `json:"clientCountryName,required"`
-	Value               string                                                    `json:"value,required"`
-	JSON                radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON `json:"-"`
+type RadarTrafficAnomalyLocationGetResponseTrafficAnomaly struct {
+	ClientCountryAlpha2 string                                                   `json:"clientCountryAlpha2,required"`
+	ClientCountryName   string                                                   `json:"clientCountryName,required"`
+	Value               string                                                   `json:"value,required"`
+	JSON                radarTrafficAnomalyLocationGetResponseTrafficAnomalyJSON `json:"-"`
 }
 
-// radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON contains the JSON
-// metadata for the struct [RadarTrafficAnomalyLocationListResponseTrafficAnomaly]
-type radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON struct {
+// radarTrafficAnomalyLocationGetResponseTrafficAnomalyJSON contains the JSON
+// metadata for the struct [RadarTrafficAnomalyLocationGetResponseTrafficAnomaly]
+type radarTrafficAnomalyLocationGetResponseTrafficAnomalyJSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -82,28 +82,28 @@ type radarTrafficAnomalyLocationListResponseTrafficAnomalyJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyLocationListResponseTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyLocationGetResponseTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarTrafficAnomalyLocationListParams struct {
+type RadarTrafficAnomalyLocationGetParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific
 	// start and end dates.
-	DateRange param.Field[RadarTrafficAnomalyLocationListParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[RadarTrafficAnomalyLocationGetParamsDateRange] `query:"dateRange"`
 	// Start of the date range (inclusive).
 	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarTrafficAnomalyLocationListParamsFormat] `query:"format"`
+	Format param.Field[RadarTrafficAnomalyLocationGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
-	Limit  param.Field[int64]                                       `query:"limit"`
-	Status param.Field[RadarTrafficAnomalyLocationListParamsStatus] `query:"status"`
+	Limit  param.Field[int64]                                      `query:"limit"`
+	Status param.Field[RadarTrafficAnomalyLocationGetParamsStatus] `query:"status"`
 }
 
-// URLQuery serializes [RadarTrafficAnomalyLocationListParams]'s query parameters
-// as `url.Values`.
-func (r RadarTrafficAnomalyLocationListParams) URLQuery() (v url.Values) {
+// URLQuery serializes [RadarTrafficAnomalyLocationGetParams]'s query parameters as
+// `url.Values`.
+func (r RadarTrafficAnomalyLocationGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -112,56 +112,56 @@ func (r RadarTrafficAnomalyLocationListParams) URLQuery() (v url.Values) {
 
 // Shorthand date ranges for the last X days - use when you don't need specific
 // start and end dates.
-type RadarTrafficAnomalyLocationListParamsDateRange string
+type RadarTrafficAnomalyLocationGetParamsDateRange string
 
 const (
-	RadarTrafficAnomalyLocationListParamsDateRange1d         RadarTrafficAnomalyLocationListParamsDateRange = "1d"
-	RadarTrafficAnomalyLocationListParamsDateRange2d         RadarTrafficAnomalyLocationListParamsDateRange = "2d"
-	RadarTrafficAnomalyLocationListParamsDateRange7d         RadarTrafficAnomalyLocationListParamsDateRange = "7d"
-	RadarTrafficAnomalyLocationListParamsDateRange14d        RadarTrafficAnomalyLocationListParamsDateRange = "14d"
-	RadarTrafficAnomalyLocationListParamsDateRange28d        RadarTrafficAnomalyLocationListParamsDateRange = "28d"
-	RadarTrafficAnomalyLocationListParamsDateRange12w        RadarTrafficAnomalyLocationListParamsDateRange = "12w"
-	RadarTrafficAnomalyLocationListParamsDateRange24w        RadarTrafficAnomalyLocationListParamsDateRange = "24w"
-	RadarTrafficAnomalyLocationListParamsDateRange52w        RadarTrafficAnomalyLocationListParamsDateRange = "52w"
-	RadarTrafficAnomalyLocationListParamsDateRange1dControl  RadarTrafficAnomalyLocationListParamsDateRange = "1dControl"
-	RadarTrafficAnomalyLocationListParamsDateRange2dControl  RadarTrafficAnomalyLocationListParamsDateRange = "2dControl"
-	RadarTrafficAnomalyLocationListParamsDateRange7dControl  RadarTrafficAnomalyLocationListParamsDateRange = "7dControl"
-	RadarTrafficAnomalyLocationListParamsDateRange14dControl RadarTrafficAnomalyLocationListParamsDateRange = "14dControl"
-	RadarTrafficAnomalyLocationListParamsDateRange28dControl RadarTrafficAnomalyLocationListParamsDateRange = "28dControl"
-	RadarTrafficAnomalyLocationListParamsDateRange12wControl RadarTrafficAnomalyLocationListParamsDateRange = "12wControl"
-	RadarTrafficAnomalyLocationListParamsDateRange24wControl RadarTrafficAnomalyLocationListParamsDateRange = "24wControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange1d         RadarTrafficAnomalyLocationGetParamsDateRange = "1d"
+	RadarTrafficAnomalyLocationGetParamsDateRange2d         RadarTrafficAnomalyLocationGetParamsDateRange = "2d"
+	RadarTrafficAnomalyLocationGetParamsDateRange7d         RadarTrafficAnomalyLocationGetParamsDateRange = "7d"
+	RadarTrafficAnomalyLocationGetParamsDateRange14d        RadarTrafficAnomalyLocationGetParamsDateRange = "14d"
+	RadarTrafficAnomalyLocationGetParamsDateRange28d        RadarTrafficAnomalyLocationGetParamsDateRange = "28d"
+	RadarTrafficAnomalyLocationGetParamsDateRange12w        RadarTrafficAnomalyLocationGetParamsDateRange = "12w"
+	RadarTrafficAnomalyLocationGetParamsDateRange24w        RadarTrafficAnomalyLocationGetParamsDateRange = "24w"
+	RadarTrafficAnomalyLocationGetParamsDateRange52w        RadarTrafficAnomalyLocationGetParamsDateRange = "52w"
+	RadarTrafficAnomalyLocationGetParamsDateRange1dControl  RadarTrafficAnomalyLocationGetParamsDateRange = "1dControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange2dControl  RadarTrafficAnomalyLocationGetParamsDateRange = "2dControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange7dControl  RadarTrafficAnomalyLocationGetParamsDateRange = "7dControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange14dControl RadarTrafficAnomalyLocationGetParamsDateRange = "14dControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange28dControl RadarTrafficAnomalyLocationGetParamsDateRange = "28dControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange12wControl RadarTrafficAnomalyLocationGetParamsDateRange = "12wControl"
+	RadarTrafficAnomalyLocationGetParamsDateRange24wControl RadarTrafficAnomalyLocationGetParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarTrafficAnomalyLocationListParamsFormat string
+type RadarTrafficAnomalyLocationGetParamsFormat string
 
 const (
-	RadarTrafficAnomalyLocationListParamsFormatJson RadarTrafficAnomalyLocationListParamsFormat = "JSON"
-	RadarTrafficAnomalyLocationListParamsFormatCsv  RadarTrafficAnomalyLocationListParamsFormat = "CSV"
+	RadarTrafficAnomalyLocationGetParamsFormatJson RadarTrafficAnomalyLocationGetParamsFormat = "JSON"
+	RadarTrafficAnomalyLocationGetParamsFormatCsv  RadarTrafficAnomalyLocationGetParamsFormat = "CSV"
 )
 
-type RadarTrafficAnomalyLocationListParamsStatus string
+type RadarTrafficAnomalyLocationGetParamsStatus string
 
 const (
-	RadarTrafficAnomalyLocationListParamsStatusVerified   RadarTrafficAnomalyLocationListParamsStatus = "VERIFIED"
-	RadarTrafficAnomalyLocationListParamsStatusUnverified RadarTrafficAnomalyLocationListParamsStatus = "UNVERIFIED"
+	RadarTrafficAnomalyLocationGetParamsStatusVerified   RadarTrafficAnomalyLocationGetParamsStatus = "VERIFIED"
+	RadarTrafficAnomalyLocationGetParamsStatusUnverified RadarTrafficAnomalyLocationGetParamsStatus = "UNVERIFIED"
 )
 
-type RadarTrafficAnomalyLocationListResponseEnvelope struct {
-	Result  RadarTrafficAnomalyLocationListResponse             `json:"result,required"`
-	Success bool                                                `json:"success,required"`
-	JSON    radarTrafficAnomalyLocationListResponseEnvelopeJSON `json:"-"`
+type RadarTrafficAnomalyLocationGetResponseEnvelope struct {
+	Result  RadarTrafficAnomalyLocationGetResponse             `json:"result,required"`
+	Success bool                                               `json:"success,required"`
+	JSON    radarTrafficAnomalyLocationGetResponseEnvelopeJSON `json:"-"`
 }
 
-// radarTrafficAnomalyLocationListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarTrafficAnomalyLocationListResponseEnvelope]
-type radarTrafficAnomalyLocationListResponseEnvelopeJSON struct {
+// radarTrafficAnomalyLocationGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarTrafficAnomalyLocationGetResponseEnvelope]
+type radarTrafficAnomalyLocationGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyLocationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

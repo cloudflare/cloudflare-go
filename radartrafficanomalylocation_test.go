@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarTrafficAnomalyLocationListWithOptionalParams(t *testing.T) {
+func TestRadarTrafficAnomalyLocationGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,17 +26,17 @@ func TestRadarTrafficAnomalyLocationListWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.TrafficAnomalies.Locations.List(context.TODO(), cloudflare.RadarTrafficAnomalyLocationListParams{
+	_, err := client.Radar.TrafficAnomalies.Locations.Get(context.TODO(), cloudflare.RadarTrafficAnomalyLocationGetParams{
 		DateEnd:   cloudflare.F(time.Now()),
-		DateRange: cloudflare.F(cloudflare.RadarTrafficAnomalyLocationListParamsDateRange7d),
+		DateRange: cloudflare.F(cloudflare.RadarTrafficAnomalyLocationGetParamsDateRange7d),
 		DateStart: cloudflare.F(time.Now()),
-		Format:    cloudflare.F(cloudflare.RadarTrafficAnomalyLocationListParamsFormatJson),
+		Format:    cloudflare.F(cloudflare.RadarTrafficAnomalyLocationGetParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
-		Status:    cloudflare.F(cloudflare.RadarTrafficAnomalyLocationListParamsStatusVerified),
+		Status:    cloudflare.F(cloudflare.RadarTrafficAnomalyLocationGetParamsStatusVerified),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

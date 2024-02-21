@@ -26,48 +26,63 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.New(
-		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AccessApplicationNewParamsVariant0{
-			Domain:                   cloudflare.F("test.example.com/admin"),
-			Type:                     cloudflare.F("self_hosted"),
-			AllowAuthenticateViaWarp: cloudflare.F(true),
-			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			AppLauncherVisible:       cloudflare.F(true),
-			AutoRedirectToIdentity:   cloudflare.F(true),
-			CorsHeaders: cloudflare.F(cloudflare.AccessApplicationNewParamsVariant0CorsHeaders{
-				AllowAllHeaders:  cloudflare.F(true),
-				AllowAllMethods:  cloudflare.F(true),
-				AllowAllOrigins:  cloudflare.F(true),
-				AllowCredentials: cloudflare.F(true),
-				AllowedHeaders:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
-				AllowedMethods:   cloudflare.F([]cloudflare.AccessApplicationNewParamsVariant0CorsHeadersAllowedMethod{cloudflare.AccessApplicationNewParamsVariant0CorsHeadersAllowedMethodGet}),
-				AllowedOrigins:   cloudflare.F([]interface{}{"https://example.com"}),
-				MaxAge:           cloudflare.F(-1.000000),
+	_, err := client.Access.Applications.New(context.TODO(), cloudflare.AccessApplicationNewParams{
+		AccountID:                cloudflare.F("string"),
+		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		AllowAuthenticateViaWarp: cloudflare.F(true),
+		AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+		AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
+		AutoRedirectToIdentity:   cloudflare.F(true),
+		CorsHeaders: cloudflare.F(cloudflare.AccessApplicationNewParamsCorsHeaders{
+			AllowAllHeaders:  cloudflare.F(true),
+			AllowAllMethods:  cloudflare.F(true),
+			AllowAllOrigins:  cloudflare.F(true),
+			AllowCredentials: cloudflare.F(true),
+			AllowedHeaders:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
+			AllowedMethods:   cloudflare.F([]cloudflare.AccessApplicationNewParamsCorsHeadersAllowedMethod{cloudflare.AccessApplicationNewParamsCorsHeadersAllowedMethodGet}),
+			AllowedOrigins:   cloudflare.F([]interface{}{"https://example.com"}),
+			MaxAge:           cloudflare.F(-1.000000),
+		}),
+		CustomDenyMessage:        cloudflare.F("string"),
+		CustomDenyURL:            cloudflare.F("string"),
+		CustomNonIdentityDenyURL: cloudflare.F("string"),
+		CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+		Domain:                   cloudflare.F[any]("https://mybookmark.com"),
+		EnableBindingCookie:      cloudflare.F(true),
+		HTTPOnlyCookieAttribute:  cloudflare.F(true),
+		LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
+		Name:                     cloudflare.F("Admin Site"),
+		PathCookieAttribute:      cloudflare.F(true),
+		SaasApp: cloudflare.F[cloudflare.AccessApplicationNewParamsSaasApp](cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasApp(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasApp{
+			AuthType:           cloudflare.F(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasAppAuthTypeSaml),
+			ConsumerServiceURL: cloudflare.F("https://example.com"),
+			CustomAttributes: cloudflare.F(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributes{
+				Name:       cloudflare.F("family_name"),
+				NameFormat: cloudflare.F(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic),
+				Source: cloudflare.F(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasAppCustomAttributesSource{
+					Name: cloudflare.F("last_name"),
+				}),
 			}),
-			CustomDenyMessage:        cloudflare.F("string"),
-			CustomDenyURL:            cloudflare.F("string"),
-			CustomNonIdentityDenyURL: cloudflare.F("string"),
-			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			EnableBindingCookie:      cloudflare.F(true),
-			HTTPOnlyCookieAttribute:  cloudflare.F(true),
-			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
-			Name:                     cloudflare.F("Admin Site"),
-			PathCookieAttribute:      cloudflare.F(true),
-			SameSiteCookieAttribute:  cloudflare.F("strict"),
-			SelfHostedDomains:        cloudflare.F([]string{"test.example.com/admin", "test.anotherexample.com/staff"}),
-			ServiceAuth401Redirect:   cloudflare.F(true),
-			SessionDuration:          cloudflare.F("24h"),
-			SkipInterstitial:         cloudflare.F(true),
-			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-		},
-	)
+			DefaultRelayState:      cloudflare.F("https://example.com"),
+			IdpEntityID:            cloudflare.F("https://example.cloudflareaccess.com"),
+			NameIDFormat:           cloudflare.F(cloudflare.AccessApplicationNewParamsSaasAppAccessSamlSaasAppNameIDFormatID),
+			NameIDTransformJsonata: cloudflare.F("$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')"),
+			PublicKey:              cloudflare.F("example unique name"),
+			SpEntityID:             cloudflare.F("example unique name"),
+			SSOEndpoint:            cloudflare.F("https://example.cloudflareaccess.com/cdn-cgi/access/sso/saml/b3f58a2b414e0b51d45c8c2af26fccca0e27c63763c426fa52f98dcf0b3b3bfd"),
+		})),
+		SameSiteCookieAttribute: cloudflare.F("strict"),
+		SelfHostedDomains:       cloudflare.F([]string{"test.example.com/admin", "test.anotherexample.com/staff"}),
+		ServiceAuth401Redirect:  cloudflare.F(true),
+		SessionDuration:         cloudflare.F("24h"),
+		SkipInterstitial:        cloudflare.F(true),
+		Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
+		Type:                    cloudflare.F("bookmark"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -89,29 +104,27 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Update(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
-		cloudflare.AccessApplicationUpdateParamsVariant0{
-			Domain:                   cloudflare.F("test.example.com/admin"),
-			Type:                     cloudflare.F("self_hosted"),
+		cloudflare.AccessApplicationUpdateParams{
+			AccountID:                cloudflare.F("string"),
+			ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AllowAuthenticateViaWarp: cloudflare.F(true),
 			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			AppLauncherVisible:       cloudflare.F(true),
+			AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
 			AutoRedirectToIdentity:   cloudflare.F(true),
-			CorsHeaders: cloudflare.F(cloudflare.AccessApplicationUpdateParamsVariant0CorsHeaders{
+			CorsHeaders: cloudflare.F(cloudflare.AccessApplicationUpdateParamsCorsHeaders{
 				AllowAllHeaders:  cloudflare.F(true),
 				AllowAllMethods:  cloudflare.F(true),
 				AllowAllOrigins:  cloudflare.F(true),
 				AllowCredentials: cloudflare.F(true),
 				AllowedHeaders:   cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
-				AllowedMethods:   cloudflare.F([]cloudflare.AccessApplicationUpdateParamsVariant0CorsHeadersAllowedMethod{cloudflare.AccessApplicationUpdateParamsVariant0CorsHeadersAllowedMethodGet}),
+				AllowedMethods:   cloudflare.F([]cloudflare.AccessApplicationUpdateParamsCorsHeadersAllowedMethod{cloudflare.AccessApplicationUpdateParamsCorsHeadersAllowedMethodGet}),
 				AllowedOrigins:   cloudflare.F([]interface{}{"https://example.com"}),
 				MaxAge:           cloudflare.F(-1.000000),
 			}),
@@ -119,17 +132,37 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("string"),
 			CustomNonIdentityDenyURL: cloudflare.F("string"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
+			Domain:                   cloudflare.F[any]("https://mybookmark.com"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
 			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
 			Name:                     cloudflare.F("Admin Site"),
 			PathCookieAttribute:      cloudflare.F(true),
-			SameSiteCookieAttribute:  cloudflare.F("strict"),
-			SelfHostedDomains:        cloudflare.F([]string{"test.example.com/admin", "test.anotherexample.com/staff"}),
-			ServiceAuth401Redirect:   cloudflare.F(true),
-			SessionDuration:          cloudflare.F("24h"),
-			SkipInterstitial:         cloudflare.F(true),
-			Tags:                     cloudflare.F([]string{"engineers", "engineers", "engineers"}),
+			SaasApp: cloudflare.F[cloudflare.AccessApplicationUpdateParamsSaasApp](cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasApp(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasApp{
+				AuthType:           cloudflare.F(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppAuthTypeSaml),
+				ConsumerServiceURL: cloudflare.F("https://example.com"),
+				CustomAttributes: cloudflare.F(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributes{
+					Name:       cloudflare.F("family_name"),
+					NameFormat: cloudflare.F(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesNameFormatUrnOasisNamesTcSaml2_0AttrnameFormatBasic),
+					Source: cloudflare.F(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppCustomAttributesSource{
+						Name: cloudflare.F("last_name"),
+					}),
+				}),
+				DefaultRelayState:      cloudflare.F("https://example.com"),
+				IdpEntityID:            cloudflare.F("https://example.cloudflareaccess.com"),
+				NameIDFormat:           cloudflare.F(cloudflare.AccessApplicationUpdateParamsSaasAppAccessSamlSaasAppNameIDFormatID),
+				NameIDTransformJsonata: cloudflare.F("$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')"),
+				PublicKey:              cloudflare.F("example unique name"),
+				SpEntityID:             cloudflare.F("example unique name"),
+				SSOEndpoint:            cloudflare.F("https://example.cloudflareaccess.com/cdn-cgi/access/sso/saml/b3f58a2b414e0b51d45c8c2af26fccca0e27c63763c426fa52f98dcf0b3b3bfd"),
+			})),
+			SameSiteCookieAttribute: cloudflare.F("strict"),
+			SelfHostedDomains:       cloudflare.F([]string{"test.example.com/admin", "test.anotherexample.com/staff"}),
+			ServiceAuth401Redirect:  cloudflare.F(true),
+			SessionDuration:         cloudflare.F("24h"),
+			SkipInterstitial:        cloudflare.F(true),
+			Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
+			Type:                    cloudflare.F("bookmark"),
 		},
 	)
 	if err != nil {
@@ -153,15 +186,14 @@ func TestAccessApplicationList(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.List(
-		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-	)
+	_, err := client.Access.Applications.List(context.TODO(), cloudflare.AccessApplicationListParams{
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -183,15 +215,17 @@ func TestAccessApplicationDelete(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Delete(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		cloudflare.AccessApplicationDeleteParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -214,15 +248,17 @@ func TestAccessApplicationGet(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.Get(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		cloudflare.AccessApplicationGetParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -245,15 +281,17 @@ func TestAccessApplicationRevokeTokens(t *testing.T) {
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("dev@cloudflare.com"),
+		option.WithAPIEmail("user@example.com"),
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("My User Service Key"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Applications.RevokeTokens(
 		context.TODO(),
-		"string",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
+		cloudflare.AccessApplicationRevokeTokensParams{
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

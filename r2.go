@@ -13,6 +13,7 @@ import (
 type R2Service struct {
 	Options []option.RequestOption
 	Buckets *R2BucketService
+	Sippy   *R2SippyService
 }
 
 // NewR2Service generates a new service that applies the given options to each
@@ -22,5 +23,6 @@ func NewR2Service(opts ...option.RequestOption) (r *R2Service) {
 	r = &R2Service{}
 	r.Options = opts
 	r.Buckets = NewR2BucketService(opts...)
+	r.Sippy = NewR2SippyService(opts...)
 	return
 }

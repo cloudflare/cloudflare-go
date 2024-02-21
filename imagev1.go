@@ -475,37 +475,14 @@ func init() {
 	)
 }
 
-// This interface is a union satisfied by one of the following:
-// [ImageV1NewParamsImagesImageUploadViaFile],
-// [ImageV1NewParamsImagesImageUploadViaURL].
-type ImageV1NewParams interface {
-	ImplementsImageV1NewParams()
+type ImageV1NewParams struct {
+	Metadata param.Field[interface{}] `json:"metadata"`
+	// Indicates whether the image requires a signature token for the access.
+	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
 }
 
-type ImageV1NewParamsImagesImageUploadViaFile struct {
-	// An image binary data.
-	File param.Field[interface{}] `json:"file,required"`
-}
-
-func (r ImageV1NewParamsImagesImageUploadViaFile) MarshalJSON() (data []byte, err error) {
+func (r ImageV1NewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-func (ImageV1NewParamsImagesImageUploadViaFile) ImplementsImageV1NewParams() {
-
-}
-
-type ImageV1NewParamsImagesImageUploadViaURL struct {
-	// A URL to fetch an image from origin.
-	URL param.Field[string] `json:"url,required"`
-}
-
-func (r ImageV1NewParamsImagesImageUploadViaURL) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (ImageV1NewParamsImagesImageUploadViaURL) ImplementsImageV1NewParams() {
-
 }
 
 type ImageV1NewResponseEnvelope struct {

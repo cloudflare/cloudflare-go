@@ -35,11 +35,20 @@ func NewLogpushJobService(opts ...option.RequestOption) (r *LogpushJobService) {
 }
 
 // Creates a new Logpush job for an account or zone.
-func (r *LogpushJobService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, body LogpushJobNewParams, opts ...option.RequestOption) (res *LogpushJobNewResponse, err error) {
+func (r *LogpushJobService) New(ctx context.Context, params LogpushJobNewParams, opts ...option.RequestOption) (res *LogpushJobNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushJobNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +57,20 @@ func (r *LogpushJobService) New(ctx context.Context, accountOrZone string, accou
 }
 
 // Updates a Logpush job.
-func (r *LogpushJobService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, jobID int64, body LogpushJobUpdateParams, opts ...option.RequestOption) (res *LogpushJobUpdateResponse, err error) {
+func (r *LogpushJobService) Update(ctx context.Context, jobID int64, params LogpushJobUpdateParams, opts ...option.RequestOption) (res *LogpushJobUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushJobUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs/%v", accountOrZone, accountOrZoneID, jobID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +79,20 @@ func (r *LogpushJobService) Update(ctx context.Context, accountOrZone string, ac
 }
 
 // Lists Logpush jobs for an account or zone.
-func (r *LogpushJobService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, opts ...option.RequestOption) (res *[]LogpushJobListResponse, err error) {
+func (r *LogpushJobService) List(ctx context.Context, query LogpushJobListParams, opts ...option.RequestOption) (res *[]LogpushJobListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushJobListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +101,20 @@ func (r *LogpushJobService) List(ctx context.Context, accountOrZone string, acco
 }
 
 // Deletes a Logpush job.
-func (r *LogpushJobService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, jobID int64, opts ...option.RequestOption) (res *LogpushJobDeleteResponse, err error) {
+func (r *LogpushJobService) Delete(ctx context.Context, jobID int64, body LogpushJobDeleteParams, opts ...option.RequestOption) (res *LogpushJobDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushJobDeleteResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs/%v", accountOrZone, accountOrZoneID, jobID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +123,20 @@ func (r *LogpushJobService) Delete(ctx context.Context, accountOrZone string, ac
 }
 
 // Gets the details of a Logpush job.
-func (r *LogpushJobService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, jobID int64, opts ...option.RequestOption) (res *LogpushJobGetResponse, err error) {
+func (r *LogpushJobService) Get(ctx context.Context, jobID int64, query LogpushJobGetParams, opts ...option.RequestOption) (res *LogpushJobGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushJobGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs/%v", accountOrZone, accountOrZoneID, jobID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -761,6 +806,10 @@ const (
 )
 
 type LogpushJobNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
@@ -937,6 +986,10 @@ const (
 )
 
 type LogpushJobUpdateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
@@ -1106,6 +1159,13 @@ const (
 	LogpushJobUpdateResponseEnvelopeSuccessTrue LogpushJobUpdateResponseEnvelopeSuccess = true
 )
 
+type LogpushJobListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LogpushJobListResponseEnvelope struct {
 	Errors   []LogpushJobListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogpushJobListResponseEnvelopeMessages `json:"messages,required"`
@@ -1175,6 +1235,13 @@ const (
 	LogpushJobListResponseEnvelopeSuccessTrue LogpushJobListResponseEnvelopeSuccess = true
 )
 
+type LogpushJobDeleteParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LogpushJobDeleteResponseEnvelope struct {
 	Errors   []LogpushJobDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogpushJobDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -1243,6 +1310,13 @@ type LogpushJobDeleteResponseEnvelopeSuccess bool
 const (
 	LogpushJobDeleteResponseEnvelopeSuccessTrue LogpushJobDeleteResponseEnvelopeSuccess = true
 )
+
+type LogpushJobGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type LogpushJobGetResponseEnvelope struct {
 	Errors   []LogpushJobGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,20 @@ func NewAccessApplicationUserPolicyCheckService(opts ...option.RequestOption) (r
 }
 
 // Tests if a specific user has permission to access an application.
-func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, appID AccessApplicationUserPolicyCheckListParamsAppID, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
+func (r *AccessApplicationUserPolicyCheckService) List(ctx context.Context, appID AccessApplicationUserPolicyCheckListParamsAppID, query AccessApplicationUserPolicyCheckListParams, opts ...option.RequestOption) (res *AccessApplicationUserPolicyCheckListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationUserPolicyCheckListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%v/user_policy_checks", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -145,6 +155,13 @@ type accessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON struct {
 
 func (r *AccessApplicationUserPolicyCheckListResponseUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessApplicationUserPolicyCheckListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 // Identifier

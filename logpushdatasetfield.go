@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,20 @@ func NewLogpushDatasetFieldService(opts ...option.RequestOption) (r *LogpushData
 
 // Lists all fields available for a dataset. The response result is an object with
 // key-value pairs, where keys are field names, and values are descriptions.
-func (r *LogpushDatasetFieldService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, datasetID string, opts ...option.RequestOption) (res *LogpushDatasetFieldListResponse, err error) {
+func (r *LogpushDatasetFieldService) List(ctx context.Context, datasetID string, query LogpushDatasetFieldListParams, opts ...option.RequestOption) (res *LogpushDatasetFieldListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushDatasetFieldListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/fields", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,6 +55,13 @@ func (r *LogpushDatasetFieldService) List(ctx context.Context, accountOrZone str
 }
 
 type LogpushDatasetFieldListResponse = interface{}
+
+type LogpushDatasetFieldListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type LogpushDatasetFieldListResponseEnvelope struct {
 	Errors   []LogpushDatasetFieldListResponseEnvelopeErrors   `json:"errors,required"`

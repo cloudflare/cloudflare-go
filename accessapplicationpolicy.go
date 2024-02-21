@@ -34,11 +34,20 @@ func NewAccessApplicationPolicyService(opts ...option.RequestOption) (r *AccessA
 }
 
 // Create a new Access policy for an application.
-func (r *AccessApplicationPolicyService) New(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, body AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
+func (r *AccessApplicationPolicyService) New(ctx context.Context, uuid string, params AccessApplicationPolicyNewParams, opts ...option.RequestOption) (res *AccessApplicationPolicyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyNewResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +56,20 @@ func (r *AccessApplicationPolicyService) New(ctx context.Context, accountOrZone 
 }
 
 // Update a configured Access policy.
-func (r *AccessApplicationPolicyService) Update(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid1 string, uuid string, body AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
+func (r *AccessApplicationPolicyService) Update(ctx context.Context, uuid1 string, uuid string, params AccessApplicationPolicyUpdateParams, opts ...option.RequestOption) (res *AccessApplicationPolicyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyUpdateResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +78,20 @@ func (r *AccessApplicationPolicyService) Update(ctx context.Context, accountOrZo
 }
 
 // Lists Access policies configured for an application.
-func (r *AccessApplicationPolicyService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid string, opts ...option.RequestOption) (res *[]AccessApplicationPolicyListResponse, err error) {
+func (r *AccessApplicationPolicyService) List(ctx context.Context, uuid string, query AccessApplicationPolicyListParams, opts ...option.RequestOption) (res *[]AccessApplicationPolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,11 +100,20 @@ func (r *AccessApplicationPolicyService) List(ctx context.Context, accountOrZone
 }
 
 // Delete an Access policy.
-func (r *AccessApplicationPolicyService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid1 string, uuid string, opts ...option.RequestOption) (res *AccessApplicationPolicyDeleteResponse, err error) {
+func (r *AccessApplicationPolicyService) Delete(ctx context.Context, uuid1 string, uuid string, body AccessApplicationPolicyDeleteParams, opts ...option.RequestOption) (res *AccessApplicationPolicyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyDeleteResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,11 +122,20 @@ func (r *AccessApplicationPolicyService) Delete(ctx context.Context, accountOrZo
 }
 
 // Fetches a single Access policy.
-func (r *AccessApplicationPolicyService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, uuid1 string, uuid string, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
+func (r *AccessApplicationPolicyService) Get(ctx context.Context, uuid1 string, uuid string, query AccessApplicationPolicyGetParams, opts ...option.RequestOption) (res *AccessApplicationPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationPolicyGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/access/apps/%s/policies/%s", accountOrZone, accountOrZoneID, uuid1, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -9791,6 +9836,10 @@ func (r *AccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDeviceP
 }
 
 type AccessApplicationPolicyNewParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyNewParamsDecision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -11162,6 +11211,10 @@ const (
 )
 
 type AccessApplicationPolicyUpdateParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyUpdateParamsDecision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -12532,6 +12585,13 @@ const (
 	AccessApplicationPolicyUpdateResponseEnvelopeSuccessTrue AccessApplicationPolicyUpdateResponseEnvelopeSuccess = true
 )
 
+type AccessApplicationPolicyListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessApplicationPolicyListResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyListResponseEnvelopeMessages `json:"messages,required"`
@@ -12630,6 +12690,13 @@ func (r *AccessApplicationPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AccessApplicationPolicyDeleteParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationPolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -12698,6 +12765,13 @@ type AccessApplicationPolicyDeleteResponseEnvelopeSuccess bool
 const (
 	AccessApplicationPolicyDeleteResponseEnvelopeSuccessTrue AccessApplicationPolicyDeleteResponseEnvelopeSuccess = true
 )
+
+type AccessApplicationPolicyGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type AccessApplicationPolicyGetResponseEnvelope struct {
 	Errors   []AccessApplicationPolicyGetResponseEnvelopeErrors   `json:"errors,required"`

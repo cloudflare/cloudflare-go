@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 	"github.com/tidwall/gjson"
@@ -35,11 +36,20 @@ func NewRulesetPhaseService(opts ...option.RequestOption) (r *RulesetPhaseServic
 
 // Fetches the latest version of the account or zone entry point ruleset for a
 // given phase.
-func (r *RulesetPhaseService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetPhase RulesetPhaseGetParamsRulesetPhase, opts ...option.RequestOption) (res *RulesetPhaseGetResponse, err error) {
+func (r *RulesetPhaseService) Get(ctx context.Context, rulesetPhase RulesetPhaseGetParamsRulesetPhase, query RulesetPhaseGetParams, opts ...option.RequestOption) (res *RulesetPhaseGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RulesetPhaseGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/rulesets/phases/%v/entrypoint", accountOrZone, accountOrZoneID, rulesetPhase)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -769,6 +779,13 @@ type rulesetPhaseGetResponseRulesRulesetsSkipRuleLoggingJSON struct {
 
 func (r *RulesetPhaseGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetPhaseGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 // The phase of the ruleset.

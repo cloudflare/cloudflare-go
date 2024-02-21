@@ -12,7 +12,7 @@ import (
 // service directly, and instead use the [NewRadarDNSService] method instead.
 type RadarDNSService struct {
 	Options []option.RequestOption
-	Tops    *RadarDNSTopService
+	Top     *RadarDNSTopService
 }
 
 // NewRadarDNSService generates a new service that applies the given options to
@@ -21,6 +21,6 @@ type RadarDNSService struct {
 func NewRadarDNSService(opts ...option.RequestOption) (r *RadarDNSService) {
 	r = &RadarDNSService{}
 	r.Options = opts
-	r.Tops = NewRadarDNSTopService(opts...)
+	r.Top = NewRadarDNSTopService(opts...)
 	return
 }

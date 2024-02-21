@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 	"github.com/tidwall/gjson"
@@ -36,11 +37,20 @@ func NewRulesetVersionService(opts ...option.RequestOption) (r *RulesetVersionSe
 }
 
 // Fetches the versions of an account or zone ruleset.
-func (r *RulesetVersionService) List(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, opts ...option.RequestOption) (res *[]RulesetVersionListResponse, err error) {
+func (r *RulesetVersionService) List(ctx context.Context, rulesetID string, query RulesetVersionListParams, opts ...option.RequestOption) (res *[]RulesetVersionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RulesetVersionListResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,20 +59,38 @@ func (r *RulesetVersionService) List(ctx context.Context, accountOrZone string, 
 }
 
 // Deletes an existing version of an account or zone ruleset.
-func (r *RulesetVersionService) Delete(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, rulesetVersion string, opts ...option.RequestOption) (err error) {
+func (r *RulesetVersionService) Delete(ctx context.Context, rulesetID string, rulesetVersion string, body RulesetVersionDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if body.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = body.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = body.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Fetches a specific version of an account or zone ruleset.
-func (r *RulesetVersionService) Get(ctx context.Context, accountOrZone string, accountOrZoneID string, rulesetID string, rulesetVersion string, opts ...option.RequestOption) (res *RulesetVersionGetResponse, err error) {
+func (r *RulesetVersionService) Get(ctx context.Context, rulesetID string, rulesetVersion string, query RulesetVersionGetParams, opts ...option.RequestOption) (res *RulesetVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RulesetVersionGetResponseEnvelope
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if query.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = query.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = query.ZoneID
+	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/versions/%s", accountOrZone, accountOrZoneID, rulesetID, rulesetVersion)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -872,6 +900,13 @@ func (r *RulesetVersionGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RulesetVersionListParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 // A response object.
 type RulesetVersionListResponseEnvelope struct {
 	// A list of error messages.
@@ -994,6 +1029,20 @@ type RulesetVersionListResponseEnvelopeSuccess bool
 const (
 	RulesetVersionListResponseEnvelopeSuccessTrue RulesetVersionListResponseEnvelopeSuccess = true
 )
+
+type RulesetVersionDeleteParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type RulesetVersionGetParams struct {
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 // A response object.
 type RulesetVersionGetResponseEnvelope struct {
