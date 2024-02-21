@@ -33,17 +33,14 @@ func TestRadarAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer7.Timeseries(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsAggInterval1h),
 		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+		Attack:        cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsAttack{cloudflare.RadarAttackLayer7TimeseriesParamsAttackDDOS, cloudflare.RadarAttackLayer7TimeseriesParamsAttackWAF, cloudflare.RadarAttackLayer7TimeseriesParamsAttackBotManagement}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Direction:     cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsDirectionOrigin),
 		Format:        cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsFormatJson),
-		IPVersion:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsIPVersion{cloudflare.RadarAttackLayer7TimeseriesParamsIPVersionIPv4, cloudflare.RadarAttackLayer7TimeseriesParamsIPVersionIPv6}),
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
-		Metric:        cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsMetricBytes),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
 		Normalization: cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsNormalizationMin0Max),
-		Protocol:      cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsProtocol{cloudflare.RadarAttackLayer7TimeseriesParamsProtocolUdp, cloudflare.RadarAttackLayer7TimeseriesParamsProtocolTcp, cloudflare.RadarAttackLayer7TimeseriesParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

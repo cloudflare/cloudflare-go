@@ -33,11 +33,13 @@ func NewRadarAttackLayer7TopLocationService(opts ...option.RequestOption) (r *Ra
 	return
 }
 
-// Get the origin locations of attacks.
+// Get the top origin locations of and by layer 7 attacks. Values are a percentage
+// out of the total layer 7 attacks. The origin location is determined by the
+// client IP.
 func (r *RadarAttackLayer7TopLocationService) Origin(ctx context.Context, query RadarAttackLayer7TopLocationOriginParams, opts ...option.RequestOption) (res *RadarAttackLayer7TopLocationOriginResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RadarAttackLayer7TopLocationOriginResponseEnvelope
-	path := "radar/attacks/layer3/top/locations/origin"
+	path := "radar/attacks/layer7/top/locations/origin"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -46,11 +48,13 @@ func (r *RadarAttackLayer7TopLocationService) Origin(ctx context.Context, query 
 	return
 }
 
-// Get the target locations of attacks.
+// Get the top target locations of and by layer 7 attacks. Values are a percentage
+// out of the total layer 7 attacks. The target location is determined by the
+// attacked zone's billing country, when available.
 func (r *RadarAttackLayer7TopLocationService) Target(ctx context.Context, query RadarAttackLayer7TopLocationTargetParams, opts ...option.RequestOption) (res *RadarAttackLayer7TopLocationTargetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RadarAttackLayer7TopLocationTargetResponseEnvelope
-	path := "radar/attacks/layer3/top/locations/target"
+	path := "radar/attacks/layer7/top/locations/target"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -330,6 +334,10 @@ func (r *RadarAttackLayer7TopLocationTargetResponseTop0) UnmarshalJSON(data []by
 }
 
 type RadarAttackLayer7TopLocationOriginParams struct {
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	Asn param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -340,18 +348,10 @@ type RadarAttackLayer7TopLocationOriginParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[RadarAttackLayer7TopLocationOriginParamsFormat] `query:"format"`
-	// Filter for ip version.
-	IPVersion param.Field[[]RadarAttackLayer7TopLocationOriginParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
-	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
-	Protocol param.Field[[]RadarAttackLayer7TopLocationOriginParamsProtocol] `query:"protocol"`
 }
 
 // URLQuery serializes [RadarAttackLayer7TopLocationOriginParams]'s query
@@ -391,22 +391,6 @@ const (
 	RadarAttackLayer7TopLocationOriginParamsFormatCsv  RadarAttackLayer7TopLocationOriginParamsFormat = "CSV"
 )
 
-type RadarAttackLayer7TopLocationOriginParamsIPVersion string
-
-const (
-	RadarAttackLayer7TopLocationOriginParamsIPVersionIPv4 RadarAttackLayer7TopLocationOriginParamsIPVersion = "IPv4"
-	RadarAttackLayer7TopLocationOriginParamsIPVersionIPv6 RadarAttackLayer7TopLocationOriginParamsIPVersion = "IPv6"
-)
-
-type RadarAttackLayer7TopLocationOriginParamsProtocol string
-
-const (
-	RadarAttackLayer7TopLocationOriginParamsProtocolUdp  RadarAttackLayer7TopLocationOriginParamsProtocol = "UDP"
-	RadarAttackLayer7TopLocationOriginParamsProtocolTcp  RadarAttackLayer7TopLocationOriginParamsProtocol = "TCP"
-	RadarAttackLayer7TopLocationOriginParamsProtocolIcmp RadarAttackLayer7TopLocationOriginParamsProtocol = "ICMP"
-	RadarAttackLayer7TopLocationOriginParamsProtocolGre  RadarAttackLayer7TopLocationOriginParamsProtocol = "GRE"
-)
-
 type RadarAttackLayer7TopLocationOriginResponseEnvelope struct {
 	Result  RadarAttackLayer7TopLocationOriginResponse             `json:"result,required"`
 	Success bool                                                   `json:"success,required"`
@@ -437,18 +421,10 @@ type RadarAttackLayer7TopLocationTargetParams struct {
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
 	Format param.Field[RadarAttackLayer7TopLocationTargetParamsFormat] `query:"format"`
-	// Filter for ip version.
-	IPVersion param.Field[[]RadarAttackLayer7TopLocationTargetParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
-	// Array of comma separated list of locations (alpha-2 country codes). Start with
-	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
-	// but includes results from PT.
-	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
-	// Array of L3/4 attack types.
-	Protocol param.Field[[]RadarAttackLayer7TopLocationTargetParamsProtocol] `query:"protocol"`
 }
 
 // URLQuery serializes [RadarAttackLayer7TopLocationTargetParams]'s query
@@ -486,22 +462,6 @@ type RadarAttackLayer7TopLocationTargetParamsFormat string
 const (
 	RadarAttackLayer7TopLocationTargetParamsFormatJson RadarAttackLayer7TopLocationTargetParamsFormat = "JSON"
 	RadarAttackLayer7TopLocationTargetParamsFormatCsv  RadarAttackLayer7TopLocationTargetParamsFormat = "CSV"
-)
-
-type RadarAttackLayer7TopLocationTargetParamsIPVersion string
-
-const (
-	RadarAttackLayer7TopLocationTargetParamsIPVersionIPv4 RadarAttackLayer7TopLocationTargetParamsIPVersion = "IPv4"
-	RadarAttackLayer7TopLocationTargetParamsIPVersionIPv6 RadarAttackLayer7TopLocationTargetParamsIPVersion = "IPv6"
-)
-
-type RadarAttackLayer7TopLocationTargetParamsProtocol string
-
-const (
-	RadarAttackLayer7TopLocationTargetParamsProtocolUdp  RadarAttackLayer7TopLocationTargetParamsProtocol = "UDP"
-	RadarAttackLayer7TopLocationTargetParamsProtocolTcp  RadarAttackLayer7TopLocationTargetParamsProtocol = "TCP"
-	RadarAttackLayer7TopLocationTargetParamsProtocolIcmp RadarAttackLayer7TopLocationTargetParamsProtocol = "ICMP"
-	RadarAttackLayer7TopLocationTargetParamsProtocolGre  RadarAttackLayer7TopLocationTargetParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer7TopLocationTargetResponseEnvelope struct {

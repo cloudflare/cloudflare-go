@@ -47,6 +47,20 @@ func (r *RadarQualityIqiService) Summary(ctx context.Context, query RadarQuality
 	return
 }
 
+// Get a time series (percentiles) of bandwidth, latency or DNS response time from
+// the Radar Internet Quality Index (IQI).
+func (r *RadarQualityIqiService) TimeseriesGroups(ctx context.Context, query RadarQualityIqiTimeseriesGroupsParams, opts ...option.RequestOption) (res *RadarQualityIqiTimeseriesGroupsResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarQualityIqiTimeseriesGroupsResponseEnvelope
+	path := "radar/quality/iqi/timeseries_groups"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type RadarQualityIqiSummaryResponse struct {
 	Meta     RadarQualityIqiSummaryResponseMeta     `json:"meta,required"`
 	Summary0 RadarQualityIqiSummaryResponseSummary0 `json:"summary_0,required"`
@@ -180,6 +194,48 @@ func (r *RadarQualityIqiSummaryResponseSummary0) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarQualityIqiTimeseriesGroupsResponse struct {
+	Meta   interface{}                                   `json:"meta,required"`
+	Serie0 RadarQualityIqiTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
+	JSON   radarQualityIqiTimeseriesGroupsResponseJSON   `json:"-"`
+}
+
+// radarQualityIqiTimeseriesGroupsResponseJSON contains the JSON metadata for the
+// struct [RadarQualityIqiTimeseriesGroupsResponse]
+type radarQualityIqiTimeseriesGroupsResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualityIqiTimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarQualityIqiTimeseriesGroupsResponseSerie0 struct {
+	P25        []string                                          `json:"p25,required"`
+	P50        []string                                          `json:"p50,required"`
+	P75        []string                                          `json:"p75,required"`
+	Timestamps []string                                          `json:"timestamps,required"`
+	JSON       radarQualityIqiTimeseriesGroupsResponseSerie0JSON `json:"-"`
+}
+
+// radarQualityIqiTimeseriesGroupsResponseSerie0JSON contains the JSON metadata for
+// the struct [RadarQualityIqiTimeseriesGroupsResponseSerie0]
+type radarQualityIqiTimeseriesGroupsResponseSerie0JSON struct {
+	P25         apijson.Field
+	P50         apijson.Field
+	P75         apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualityIqiTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarQualityIqiSummaryParams struct {
 	// Which metric to return: bandwidth, latency or DNS response time.
 	Metric param.Field[RadarQualityIqiSummaryParamsMetric] `query:"metric,required"`
@@ -271,5 +327,117 @@ type radarQualityIqiSummaryResponseEnvelopeJSON struct {
 }
 
 func (r *RadarQualityIqiSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarQualityIqiTimeseriesGroupsParams struct {
+	// Which metric to return: bandwidth, latency or DNS response time.
+	Metric param.Field[RadarQualityIqiTimeseriesGroupsParamsMetric] `query:"metric,required"`
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[RadarQualityIqiTimeseriesGroupsParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	Asn param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]RadarQualityIqiTimeseriesGroupsParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[RadarQualityIqiTimeseriesGroupsParamsFormat] `query:"format"`
+	// Enable interpolation for all series (using the average).
+	Interpolation param.Field[bool] `query:"interpolation"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [RadarQualityIqiTimeseriesGroupsParams]'s query parameters
+// as `url.Values`.
+func (r RadarQualityIqiTimeseriesGroupsParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Which metric to return: bandwidth, latency or DNS response time.
+type RadarQualityIqiTimeseriesGroupsParamsMetric string
+
+const (
+	RadarQualityIqiTimeseriesGroupsParamsMetricBandwidth RadarQualityIqiTimeseriesGroupsParamsMetric = "BANDWIDTH"
+	RadarQualityIqiTimeseriesGroupsParamsMetricDNS       RadarQualityIqiTimeseriesGroupsParamsMetric = "DNS"
+	RadarQualityIqiTimeseriesGroupsParamsMetricLatency   RadarQualityIqiTimeseriesGroupsParamsMetric = "LATENCY"
+)
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type RadarQualityIqiTimeseriesGroupsParamsAggInterval string
+
+const (
+	RadarQualityIqiTimeseriesGroupsParamsAggInterval15m RadarQualityIqiTimeseriesGroupsParamsAggInterval = "15m"
+	RadarQualityIqiTimeseriesGroupsParamsAggInterval1h  RadarQualityIqiTimeseriesGroupsParamsAggInterval = "1h"
+	RadarQualityIqiTimeseriesGroupsParamsAggInterval1d  RadarQualityIqiTimeseriesGroupsParamsAggInterval = "1d"
+	RadarQualityIqiTimeseriesGroupsParamsAggInterval1w  RadarQualityIqiTimeseriesGroupsParamsAggInterval = "1w"
+)
+
+type RadarQualityIqiTimeseriesGroupsParamsDateRange string
+
+const (
+	RadarQualityIqiTimeseriesGroupsParamsDateRange1d         RadarQualityIqiTimeseriesGroupsParamsDateRange = "1d"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange2d         RadarQualityIqiTimeseriesGroupsParamsDateRange = "2d"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange7d         RadarQualityIqiTimeseriesGroupsParamsDateRange = "7d"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange14d        RadarQualityIqiTimeseriesGroupsParamsDateRange = "14d"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange28d        RadarQualityIqiTimeseriesGroupsParamsDateRange = "28d"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange12w        RadarQualityIqiTimeseriesGroupsParamsDateRange = "12w"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange24w        RadarQualityIqiTimeseriesGroupsParamsDateRange = "24w"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange52w        RadarQualityIqiTimeseriesGroupsParamsDateRange = "52w"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange1dControl  RadarQualityIqiTimeseriesGroupsParamsDateRange = "1dControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange2dControl  RadarQualityIqiTimeseriesGroupsParamsDateRange = "2dControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange7dControl  RadarQualityIqiTimeseriesGroupsParamsDateRange = "7dControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange14dControl RadarQualityIqiTimeseriesGroupsParamsDateRange = "14dControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange28dControl RadarQualityIqiTimeseriesGroupsParamsDateRange = "28dControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange12wControl RadarQualityIqiTimeseriesGroupsParamsDateRange = "12wControl"
+	RadarQualityIqiTimeseriesGroupsParamsDateRange24wControl RadarQualityIqiTimeseriesGroupsParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type RadarQualityIqiTimeseriesGroupsParamsFormat string
+
+const (
+	RadarQualityIqiTimeseriesGroupsParamsFormatJson RadarQualityIqiTimeseriesGroupsParamsFormat = "JSON"
+	RadarQualityIqiTimeseriesGroupsParamsFormatCsv  RadarQualityIqiTimeseriesGroupsParamsFormat = "CSV"
+)
+
+type RadarQualityIqiTimeseriesGroupsResponseEnvelope struct {
+	Result  RadarQualityIqiTimeseriesGroupsResponse             `json:"result,required"`
+	Success bool                                                `json:"success,required"`
+	JSON    radarQualityIqiTimeseriesGroupsResponseEnvelopeJSON `json:"-"`
+}
+
+// radarQualityIqiTimeseriesGroupsResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarQualityIqiTimeseriesGroupsResponseEnvelope]
+type radarQualityIqiTimeseriesGroupsResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarQualityIqiTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -31,15 +31,13 @@ func TestRadarAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Locations.Origin(context.TODO(), cloudflare.RadarAttackLayer7TopLocationOriginParams{
+		Asn:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationOriginParamsDateRange{cloudflare.RadarAttackLayer7TopLocationOriginParamsDateRange1d, cloudflare.RadarAttackLayer7TopLocationOriginParamsDateRange2d, cloudflare.RadarAttackLayer7TopLocationOriginParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(cloudflare.RadarAttackLayer7TopLocationOriginParamsFormatJson),
-		IPVersion: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationOriginParamsIPVersion{cloudflare.RadarAttackLayer7TopLocationOriginParamsIPVersionIPv4, cloudflare.RadarAttackLayer7TopLocationOriginParamsIPVersionIPv6}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationOriginParamsProtocol{cloudflare.RadarAttackLayer7TopLocationOriginParamsProtocolUdp, cloudflare.RadarAttackLayer7TopLocationOriginParamsProtocolTcp, cloudflare.RadarAttackLayer7TopLocationOriginParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -71,11 +69,8 @@ func TestRadarAttackLayer7TopLocationTargetWithOptionalParams(t *testing.T) {
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationTargetParamsDateRange{cloudflare.RadarAttackLayer7TopLocationTargetParamsDateRange1d, cloudflare.RadarAttackLayer7TopLocationTargetParamsDateRange2d, cloudflare.RadarAttackLayer7TopLocationTargetParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:    cloudflare.F(cloudflare.RadarAttackLayer7TopLocationTargetParamsFormatJson),
-		IPVersion: cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationTargetParamsIPVersion{cloudflare.RadarAttackLayer7TopLocationTargetParamsIPVersionIPv4, cloudflare.RadarAttackLayer7TopLocationTargetParamsIPVersionIPv6}),
 		Limit:     cloudflare.F(int64(5)),
-		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
-		Protocol:  cloudflare.F([]cloudflare.RadarAttackLayer7TopLocationTargetParamsProtocol{cloudflare.RadarAttackLayer7TopLocationTargetParamsProtocolUdp, cloudflare.RadarAttackLayer7TopLocationTargetParamsProtocolTcp, cloudflare.RadarAttackLayer7TopLocationTargetParamsProtocolIcmp}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -22,7 +22,7 @@ import (
 type RadarBGPService struct {
 	Options []option.RequestOption
 	Leaks   *RadarBGPLeakService
-	Tops    *RadarBGPTopService
+	Top     *RadarBGPTopService
 	Hijacks *RadarBGPHijackService
 	Routes  *RadarBGPRouteService
 }
@@ -34,7 +34,7 @@ func NewRadarBGPService(opts ...option.RequestOption) (r *RadarBGPService) {
 	r = &RadarBGPService{}
 	r.Options = opts
 	r.Leaks = NewRadarBGPLeakService(opts...)
-	r.Tops = NewRadarBGPTopService(opts...)
+	r.Top = NewRadarBGPTopService(opts...)
 	r.Hijacks = NewRadarBGPHijackService(opts...)
 	r.Routes = NewRadarBGPRouteService(opts...)
 	return

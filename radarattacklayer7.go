@@ -39,11 +39,12 @@ func NewRadarAttackLayer7Service(opts ...option.RequestOption) (r *RadarAttackLa
 	return
 }
 
-// Get attacks change over time by bytes.
+// Get a timeseries of Layer 7 attacks. Values represent HTTP requests and are
+// normalized using min-max by default.
 func (r *RadarAttackLayer7Service) Timeseries(ctx context.Context, query RadarAttackLayer7TimeseriesParams, opts ...option.RequestOption) (res *RadarAttackLayer7TimeseriesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RadarAttackLayer7TimeseriesResponseEnvelope
-	path := "radar/attacks/layer3/timeseries"
+	path := "radar/attacks/layer7/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -53,7 +54,7 @@ func (r *RadarAttackLayer7Service) Timeseries(ctx context.Context, query RadarAt
 }
 
 type RadarAttackLayer7TimeseriesResponse struct {
-	Meta   interface{}                               `json:"meta,required"`
+	Meta   RadarAttackLayer7TimeseriesResponseMeta   `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesResponseSerie0 `json:"serie_0,required"`
 	JSON   radarAttackLayer7TimeseriesResponseJSON   `json:"-"`
 }
@@ -71,8 +72,101 @@ func (r *RadarAttackLayer7TimeseriesResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarAttackLayer7TimeseriesResponseMeta struct {
+	AggInterval    string                                                `json:"aggInterval,required"`
+	DateRange      []RadarAttackLayer7TimeseriesResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    time.Time                                             `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAttackLayer7TimeseriesResponseMetaJSON           `json:"-"`
+}
+
+// radarAttackLayer7TimeseriesResponseMetaJSON contains the JSON metadata for the
+// struct [RadarAttackLayer7TimeseriesResponseMeta]
+type radarAttackLayer7TimeseriesResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                            `json:"startTime,required" format:"date-time"`
+	JSON      radarAttackLayer7TimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// radarAttackLayer7TimeseriesResponseMetaDateRangeJSON contains the JSON metadata
+// for the struct [RadarAttackLayer7TimeseriesResponseMetaDateRange]
+type radarAttackLayer7TimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo struct {
+	Annotations []RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                             `json:"level"`
+	JSON        radarAttackLayer7TimeseriesResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarAttackLayer7TimeseriesResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct [RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo]
+type radarAttackLayer7TimeseriesResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                              `json:"dataSource,required"`
+	Description     string                                                              `json:"description,required"`
+	EventType       string                                                              `json:"eventType,required"`
+	IsInstantaneous interface{}                                                         `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                           `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                              `json:"linkedUrl"`
+	StartTime       time.Time                                                           `json:"startTime" format:"date-time"`
+	JSON            radarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON contains the
+// JSON metadata for the struct
+// [RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation]
+type radarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarAttackLayer7TimeseriesResponseSerie0 struct {
-	Timestamps []string                                      `json:"timestamps,required"`
+	Timestamps []time.Time                                   `json:"timestamps,required" format:"date-time"`
 	Values     []string                                      `json:"values,required"`
 	JSON       radarAttackLayer7TimeseriesResponseSerie0JSON `json:"-"`
 }
@@ -99,6 +193,8 @@ type RadarAttackLayer7TimeseriesParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	Asn param.Field[[]string] `query:"asn"`
+	// Array of L7 attack types.
+	Attack param.Field[[]RadarAttackLayer7TimeseriesParamsAttack] `query:"attack"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -107,26 +203,17 @@ type RadarAttackLayer7TimeseriesParams struct {
 	DateRange param.Field[[]RadarAttackLayer7TimeseriesParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
-	// Together with the `location` parameter, will apply the filter to origin or
-	// target location.
-	Direction param.Field[RadarAttackLayer7TimeseriesParamsDirection] `query:"direction"`
 	// Format results are returned in.
 	Format param.Field[RadarAttackLayer7TimeseriesParamsFormat] `query:"format"`
-	// Filter for ip version.
-	IPVersion param.Field[[]RadarAttackLayer7TimeseriesParamsIPVersion] `query:"ipVersion"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
 	Location param.Field[[]string] `query:"location"`
-	// Measurement units, eg. bytes.
-	Metric param.Field[RadarAttackLayer7TimeseriesParamsMetric] `query:"metric"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Normalization method applied. Refer to
 	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
 	Normalization param.Field[RadarAttackLayer7TimeseriesParamsNormalization] `query:"normalization"`
-	// Array of L3/4 attack types.
-	Protocol param.Field[[]RadarAttackLayer7TimeseriesParamsProtocol] `query:"protocol"`
 }
 
 // URLQuery serializes [RadarAttackLayer7TimeseriesParams]'s query parameters as
@@ -150,6 +237,18 @@ const (
 	RadarAttackLayer7TimeseriesParamsAggInterval1w  RadarAttackLayer7TimeseriesParamsAggInterval = "1w"
 )
 
+type RadarAttackLayer7TimeseriesParamsAttack string
+
+const (
+	RadarAttackLayer7TimeseriesParamsAttackDDOS               RadarAttackLayer7TimeseriesParamsAttack = "DDOS"
+	RadarAttackLayer7TimeseriesParamsAttackWAF                RadarAttackLayer7TimeseriesParamsAttack = "WAF"
+	RadarAttackLayer7TimeseriesParamsAttackBotManagement      RadarAttackLayer7TimeseriesParamsAttack = "BOT_MANAGEMENT"
+	RadarAttackLayer7TimeseriesParamsAttackAccessRules        RadarAttackLayer7TimeseriesParamsAttack = "ACCESS_RULES"
+	RadarAttackLayer7TimeseriesParamsAttackIPReputation       RadarAttackLayer7TimeseriesParamsAttack = "IP_REPUTATION"
+	RadarAttackLayer7TimeseriesParamsAttackAPIShield          RadarAttackLayer7TimeseriesParamsAttack = "API_SHIELD"
+	RadarAttackLayer7TimeseriesParamsAttackDataLossPrevention RadarAttackLayer7TimeseriesParamsAttack = "DATA_LOSS_PREVENTION"
+)
+
 type RadarAttackLayer7TimeseriesParamsDateRange string
 
 const (
@@ -170,36 +269,12 @@ const (
 	RadarAttackLayer7TimeseriesParamsDateRange24wControl RadarAttackLayer7TimeseriesParamsDateRange = "24wControl"
 )
 
-// Together with the `location` parameter, will apply the filter to origin or
-// target location.
-type RadarAttackLayer7TimeseriesParamsDirection string
-
-const (
-	RadarAttackLayer7TimeseriesParamsDirectionOrigin RadarAttackLayer7TimeseriesParamsDirection = "ORIGIN"
-	RadarAttackLayer7TimeseriesParamsDirectionTarget RadarAttackLayer7TimeseriesParamsDirection = "TARGET"
-)
-
 // Format results are returned in.
 type RadarAttackLayer7TimeseriesParamsFormat string
 
 const (
 	RadarAttackLayer7TimeseriesParamsFormatJson RadarAttackLayer7TimeseriesParamsFormat = "JSON"
 	RadarAttackLayer7TimeseriesParamsFormatCsv  RadarAttackLayer7TimeseriesParamsFormat = "CSV"
-)
-
-type RadarAttackLayer7TimeseriesParamsIPVersion string
-
-const (
-	RadarAttackLayer7TimeseriesParamsIPVersionIPv4 RadarAttackLayer7TimeseriesParamsIPVersion = "IPv4"
-	RadarAttackLayer7TimeseriesParamsIPVersionIPv6 RadarAttackLayer7TimeseriesParamsIPVersion = "IPv6"
-)
-
-// Measurement units, eg. bytes.
-type RadarAttackLayer7TimeseriesParamsMetric string
-
-const (
-	RadarAttackLayer7TimeseriesParamsMetricBytes    RadarAttackLayer7TimeseriesParamsMetric = "BYTES"
-	RadarAttackLayer7TimeseriesParamsMetricBytesOld RadarAttackLayer7TimeseriesParamsMetric = "BYTES_OLD"
 )
 
 // Normalization method applied. Refer to
@@ -209,15 +284,6 @@ type RadarAttackLayer7TimeseriesParamsNormalization string
 const (
 	RadarAttackLayer7TimeseriesParamsNormalizationPercentageChange RadarAttackLayer7TimeseriesParamsNormalization = "PERCENTAGE_CHANGE"
 	RadarAttackLayer7TimeseriesParamsNormalizationMin0Max          RadarAttackLayer7TimeseriesParamsNormalization = "MIN0_MAX"
-)
-
-type RadarAttackLayer7TimeseriesParamsProtocol string
-
-const (
-	RadarAttackLayer7TimeseriesParamsProtocolUdp  RadarAttackLayer7TimeseriesParamsProtocol = "UDP"
-	RadarAttackLayer7TimeseriesParamsProtocolTcp  RadarAttackLayer7TimeseriesParamsProtocol = "TCP"
-	RadarAttackLayer7TimeseriesParamsProtocolIcmp RadarAttackLayer7TimeseriesParamsProtocol = "ICMP"
-	RadarAttackLayer7TimeseriesParamsProtocolGre  RadarAttackLayer7TimeseriesParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer7TimeseriesResponseEnvelope struct {
