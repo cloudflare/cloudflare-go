@@ -38,8 +38,15 @@ func TestMagicIpsecTunnelNewWithOptionalParams(t *testing.T) {
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			Psk:                cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
-			ReplayProtection:   cloudflare.F(false),
+			HealthCheck: cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheck{
+				Direction: cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckDirectionBidirectional),
+				Enabled:   cloudflare.F(true),
+				Rate:      cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckRateLow),
+				Target:    cloudflare.F("203.0.113.1"),
+				Type:      cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckTypeRequest),
+			}),
+			Psk:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+			ReplayProtection: cloudflare.F(false),
 		},
 	)
 	if err != nil {
@@ -77,8 +84,15 @@ func TestMagicIpsecTunnelUpdateWithOptionalParams(t *testing.T) {
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			Psk:                cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
-			ReplayProtection:   cloudflare.F(false),
+			HealthCheck: cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheck{
+				Direction: cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckDirectionBidirectional),
+				Enabled:   cloudflare.F(true),
+				Rate:      cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckRateLow),
+				Target:    cloudflare.F("203.0.113.1"),
+				Type:      cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckTypeRequest),
+			}),
+			Psk:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+			ReplayProtection: cloudflare.F(false),
 		},
 	)
 	if err != nil {
