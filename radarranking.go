@@ -22,7 +22,7 @@ import (
 // instead.
 type RadarRankingService struct {
 	Options []option.RequestOption
-	Ranking *RadarRankingRankingService
+	Domain  *RadarRankingDomainService
 }
 
 // NewRadarRankingService generates a new service that applies the given options to
@@ -31,7 +31,7 @@ type RadarRankingService struct {
 func NewRadarRankingService(opts ...option.RequestOption) (r *RadarRankingService) {
 	r = &RadarRankingService{}
 	r.Options = opts
-	r.Ranking = NewRadarRankingRankingService(opts...)
+	r.Domain = NewRadarRankingDomainService(opts...)
 	return
 }
 
@@ -40,6 +40,22 @@ func (r *RadarRankingService) TimeseriesGroups(ctx context.Context, query RadarR
 	opts = append(r.Options[:], opts...)
 	var env RadarRankingTimeseriesGroupsResponseEnvelope
 	path := "radar/ranking/timeseries_groups"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get top or trending domains based on their rank. Popular domains are domains of
+// broad appeal based on how people use the Internet. Trending domains are domains
+// that are generating a surge in interest. For more information on top domains,
+// see https://blog.cloudflare.com/radar-domain-rankings/.
+func (r *RadarRankingService) Top(ctx context.Context, query RadarRankingTopParams, opts ...option.RequestOption) (res *RadarRankingTopResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarRankingTopResponseEnvelope
+	path := "radar/ranking/top"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -120,6 +136,104 @@ type radarRankingTimeseriesGroupsResponseSerie0JSON struct {
 }
 
 func (r *RadarRankingTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopResponse struct {
+	Meta RadarRankingTopResponseMeta   `json:"meta,required"`
+	Top0 []RadarRankingTopResponseTop0 `json:"top_0,required"`
+	JSON radarRankingTopResponseJSON   `json:"-"`
+}
+
+// radarRankingTopResponseJSON contains the JSON metadata for the struct
+// [RadarRankingTopResponse]
+type radarRankingTopResponseJSON struct {
+	Meta        apijson.Field
+	Top0        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopResponseMeta struct {
+	Top0 RadarRankingTopResponseMetaTop0 `json:"top_0,required"`
+	JSON radarRankingTopResponseMetaJSON `json:"-"`
+}
+
+// radarRankingTopResponseMetaJSON contains the JSON metadata for the struct
+// [RadarRankingTopResponseMeta]
+type radarRankingTopResponseMetaJSON struct {
+	Top0        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopResponseMetaTop0 struct {
+	Date string                              `json:"date,required"`
+	JSON radarRankingTopResponseMetaTop0JSON `json:"-"`
+}
+
+// radarRankingTopResponseMetaTop0JSON contains the JSON metadata for the struct
+// [RadarRankingTopResponseMetaTop0]
+type radarRankingTopResponseMetaTop0JSON struct {
+	Date        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponseMetaTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopResponseTop0 struct {
+	Categories []RadarRankingTopResponseTop0Category `json:"categories,required"`
+	Domain     string                                `json:"domain,required"`
+	Rank       int64                                 `json:"rank,required"`
+	// Only available in TRENDING rankings.
+	PctRankChange float64                         `json:"pctRankChange"`
+	JSON          radarRankingTopResponseTop0JSON `json:"-"`
+}
+
+// radarRankingTopResponseTop0JSON contains the JSON metadata for the struct
+// [RadarRankingTopResponseTop0]
+type radarRankingTopResponseTop0JSON struct {
+	Categories    apijson.Field
+	Domain        apijson.Field
+	Rank          apijson.Field
+	PctRankChange apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopResponseTop0Category struct {
+	ID              float64                                 `json:"id,required"`
+	Name            string                                  `json:"name,required"`
+	SuperCategoryID float64                                 `json:"superCategoryId,required"`
+	JSON            radarRankingTopResponseTop0CategoryJSON `json:"-"`
+}
+
+// radarRankingTopResponseTop0CategoryJSON contains the JSON metadata for the
+// struct [RadarRankingTopResponseTop0Category]
+type radarRankingTopResponseTop0CategoryJSON struct {
+	ID              apijson.Field
+	Name            apijson.Field
+	SuperCategoryID apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponseTop0Category) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -208,5 +322,64 @@ type radarRankingTimeseriesGroupsResponseEnvelopeJSON struct {
 }
 
 func (r *RadarRankingTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarRankingTopParams struct {
+	// Array of dates to filter the ranking.
+	Date param.Field[[]string] `query:"date"`
+	// Format results are returned in.
+	Format param.Field[RadarRankingTopParamsFormat] `query:"format"`
+	// Limit the number of objects in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Array of locations (alpha-2 country codes).
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// The ranking type.
+	RankingType param.Field[RadarRankingTopParamsRankingType] `query:"rankingType"`
+}
+
+// URLQuery serializes [RadarRankingTopParams]'s query parameters as `url.Values`.
+func (r RadarRankingTopParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Format results are returned in.
+type RadarRankingTopParamsFormat string
+
+const (
+	RadarRankingTopParamsFormatJson RadarRankingTopParamsFormat = "JSON"
+	RadarRankingTopParamsFormatCsv  RadarRankingTopParamsFormat = "CSV"
+)
+
+// The ranking type.
+type RadarRankingTopParamsRankingType string
+
+const (
+	RadarRankingTopParamsRankingTypePopular        RadarRankingTopParamsRankingType = "POPULAR"
+	RadarRankingTopParamsRankingTypeTrendingRise   RadarRankingTopParamsRankingType = "TRENDING_RISE"
+	RadarRankingTopParamsRankingTypeTrendingSteady RadarRankingTopParamsRankingType = "TRENDING_STEADY"
+)
+
+type RadarRankingTopResponseEnvelope struct {
+	Result  RadarRankingTopResponse             `json:"result,required"`
+	Success bool                                `json:"success,required"`
+	JSON    radarRankingTopResponseEnvelopeJSON `json:"-"`
+}
+
+// radarRankingTopResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RadarRankingTopResponseEnvelope]
+type radarRankingTopResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarRankingTopResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

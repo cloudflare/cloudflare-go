@@ -6151,22 +6151,22 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTimeseriesGroupsResponse">RadarRankingTimeseriesGroupsResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTopResponse">RadarRankingTopResponse</a>
 
 Methods:
 
 - <code title="get /radar/ranking/timeseries_groups">client.Radar.Ranking.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingService.TimeseriesGroups">TimeseriesGroups</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTimeseriesGroupsParams">RadarRankingTimeseriesGroupsParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTimeseriesGroupsResponse">RadarRankingTimeseriesGroupsResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ranking/top">client.Radar.Ranking.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingService.Top">Top</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTopParams">RadarRankingTopParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingTopResponse">RadarRankingTopResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-### Ranking
+### Domain
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingGetResponse">RadarRankingRankingGetResponse</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingTopResponse">RadarRankingRankingTopResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingDomainGetResponse">RadarRankingDomainGetResponse</a>
 
 Methods:
 
-- <code title="get /radar/ranking/domain/{domain}">client.Radar.Ranking.Ranking.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, domain <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingGetParams">RadarRankingRankingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingGetResponse">RadarRankingRankingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /radar/ranking/top">client.Radar.Ranking.Ranking.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingService.Top">Top</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingTopParams">RadarRankingRankingTopParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingRankingTopResponse">RadarRankingRankingTopResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /radar/ranking/domain/{domain}">client.Radar.Ranking.Domain.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingDomainService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, domain <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingDomainGetParams">RadarRankingDomainGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarRankingDomainGetResponse">RadarRankingDomainGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## TrafficAnomalies
 
