@@ -21,7 +21,7 @@ import (
 // service directly, and instead use the [NewSettingService] method instead.
 type SettingService struct {
 	Options                       []option.RequestOption
-	ZeroRtt                       *SettingZeroRttService
+	ZeroRTT                       *SettingZeroRTTService
 	AdvancedDDOS                  *SettingAdvancedDDOSService
 	AlwaysOnline                  *SettingAlwaysOnlineService
 	AlwaysUseHTTPS                *SettingAlwaysUseHTTPSService
@@ -80,7 +80,7 @@ type SettingService struct {
 func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 	r = &SettingService{}
 	r.Options = opts
-	r.ZeroRtt = NewSettingZeroRttService(opts...)
+	r.ZeroRTT = NewSettingZeroRTTService(opts...)
 	r.AdvancedDDOS = NewSettingAdvancedDDOSService(opts...)
 	r.AlwaysOnline = NewSettingAlwaysOnlineService(opts...)
 	r.AlwaysUseHTTPS = NewSettingAlwaysUseHTTPSService(opts...)

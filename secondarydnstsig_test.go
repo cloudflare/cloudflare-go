@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestSecondaryDNSTsigNew(t *testing.T) {
+func TestSecondaryDNSTSIGNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestSecondaryDNSTsigNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.Tsigs.New(
+	_, err := client.SecondaryDNS.TSIGs.New(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
-		cloudflare.SecondaryDNSTsigNewParams{
+		cloudflare.SecondaryDNSTSIGNewParams{
 			Algo:   cloudflare.F("hmac-sha512."),
 			Name:   cloudflare.F("tsig.customer.cf."),
 			Secret: cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
@@ -47,7 +47,7 @@ func TestSecondaryDNSTsigNew(t *testing.T) {
 	}
 }
 
-func TestSecondaryDNSTsigUpdate(t *testing.T) {
+func TestSecondaryDNSTSIGUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -63,11 +63,11 @@ func TestSecondaryDNSTsigUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.Tsigs.Update(
+	_, err := client.SecondaryDNS.TSIGs.Update(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
-		cloudflare.SecondaryDNSTsigUpdateParams{
+		cloudflare.SecondaryDNSTSIGUpdateParams{
 			Algo:   cloudflare.F("hmac-sha512."),
 			Name:   cloudflare.F("tsig.customer.cf."),
 			Secret: cloudflare.F("caf79a7804b04337c9c66ccd7bef9190a1e1679b5dd03d8aa10f7ad45e1a9dab92b417896c15d4d007c7c14194538d2a5d0feffdecc5a7f0e1c570cfa700837c"),
@@ -82,7 +82,7 @@ func TestSecondaryDNSTsigUpdate(t *testing.T) {
 	}
 }
 
-func TestSecondaryDNSTsigList(t *testing.T) {
+func TestSecondaryDNSTSIGList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -98,7 +98,7 @@ func TestSecondaryDNSTsigList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.Tsigs.List(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
+	_, err := client.SecondaryDNS.TSIGs.List(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -108,7 +108,7 @@ func TestSecondaryDNSTsigList(t *testing.T) {
 	}
 }
 
-func TestSecondaryDNSTsigDelete(t *testing.T) {
+func TestSecondaryDNSTSIGDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -124,7 +124,7 @@ func TestSecondaryDNSTsigDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.Tsigs.Delete(
+	_, err := client.SecondaryDNS.TSIGs.Delete(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"69cd1e104af3e6ed3cb344f263fd0d5a",
@@ -138,7 +138,7 @@ func TestSecondaryDNSTsigDelete(t *testing.T) {
 	}
 }
 
-func TestSecondaryDNSTsigGet(t *testing.T) {
+func TestSecondaryDNSTSIGGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -154,7 +154,7 @@ func TestSecondaryDNSTsigGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.Tsigs.Get(
+	_, err := client.SecondaryDNS.TSIGs.Get(
 		context.TODO(),
 		"01a7362d577a6c3019a474fd6f485823",
 		"69cd1e104af3e6ed3cb344f263fd0d5a",

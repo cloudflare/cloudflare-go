@@ -18,7 +18,7 @@ type SecondaryDNSService struct {
 	Outgoing   *SecondaryDNSOutgoingService
 	ACLs       *SecondaryDNSACLService
 	Peers      *SecondaryDNSPeerService
-	Tsigs      *SecondaryDNSTsigService
+	TSIGs      *SecondaryDNSTSIGService
 }
 
 // NewSecondaryDNSService generates a new service that applies the given options to
@@ -32,6 +32,6 @@ func NewSecondaryDNSService(opts ...option.RequestOption) (r *SecondaryDNSServic
 	r.Outgoing = NewSecondaryDNSOutgoingService(opts...)
 	r.ACLs = NewSecondaryDNSACLService(opts...)
 	r.Peers = NewSecondaryDNSPeerService(opts...)
-	r.Tsigs = NewSecondaryDNSTsigService(opts...)
+	r.TSIGs = NewSecondaryDNSTSIGService(opts...)
 	return
 }

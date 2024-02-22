@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestFirewallUaRuleNew(t *testing.T) {
+func TestFirewallUARuleNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestFirewallUaRuleNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.UaRules.New(
+	_, err := client.Firewalls.UARules.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.FirewallUaRuleNewParams{
+		cloudflare.FirewallUARuleNewParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
@@ -45,7 +45,7 @@ func TestFirewallUaRuleNew(t *testing.T) {
 	}
 }
 
-func TestFirewallUaRuleUpdate(t *testing.T) {
+func TestFirewallUARuleUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,11 +61,11 @@ func TestFirewallUaRuleUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.UaRules.Update(
+	_, err := client.Firewalls.UARules.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
-		cloudflare.FirewallUaRuleUpdateParams{
+		cloudflare.FirewallUARuleUpdateParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
@@ -78,7 +78,7 @@ func TestFirewallUaRuleUpdate(t *testing.T) {
 	}
 }
 
-func TestFirewallUaRuleListWithOptionalParams(t *testing.T) {
+func TestFirewallUARuleListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -94,15 +94,15 @@ func TestFirewallUaRuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.UaRules.List(
+	_, err := client.Firewalls.UARules.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.FirewallUaRuleListParams{
+		cloudflare.FirewallUARuleListParams{
 			Description:       cloudflare.F("abusive"),
 			DescriptionSearch: cloudflare.F("abusive"),
 			Page:              cloudflare.F(1.000000),
 			PerPage:           cloudflare.F(1.000000),
-			UaSearch:          cloudflare.F("Safari"),
+			UASearch:          cloudflare.F("Safari"),
 		},
 	)
 	if err != nil {
@@ -114,7 +114,7 @@ func TestFirewallUaRuleListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallUaRuleDelete(t *testing.T) {
+func TestFirewallUARuleDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -130,7 +130,7 @@ func TestFirewallUaRuleDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.UaRules.Delete(
+	_, err := client.Firewalls.UARules.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",
@@ -144,7 +144,7 @@ func TestFirewallUaRuleDelete(t *testing.T) {
 	}
 }
 
-func TestFirewallUaRuleGet(t *testing.T) {
+func TestFirewallUARuleGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -160,7 +160,7 @@ func TestFirewallUaRuleGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.UaRules.Get(
+	_, err := client.Firewalls.UARules.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"372e67954025e0ba6aaa6d586b9e0b59",

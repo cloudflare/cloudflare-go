@@ -749,7 +749,7 @@ const (
 	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetPhaseGetResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )

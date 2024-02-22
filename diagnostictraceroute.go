@@ -161,17 +161,17 @@ type DiagnosticTracerouteNewResponseColosHopsNode struct {
 	// traceroute a node comes from.
 	Labels []string `json:"labels"`
 	// Maximum RTT in ms.
-	MaxRttMs float64 `json:"max_rtt_ms"`
+	MaxRTTMs float64 `json:"max_rtt_ms"`
 	// Mean RTT in ms.
-	MeanRttMs float64 `json:"mean_rtt_ms"`
+	MeanRTTMs float64 `json:"mean_rtt_ms"`
 	// Minimum RTT in ms.
-	MinRttMs float64 `json:"min_rtt_ms"`
+	MinRTTMs float64 `json:"min_rtt_ms"`
 	// Host name of the address, this may be the same as the IP address.
 	Name string `json:"name"`
 	// Number of packets with a response from this node.
 	PacketCount int64 `json:"packet_count"`
 	// Standard deviation of the RTTs in ms.
-	StdDevRttMs float64                                          `json:"std_dev_rtt_ms"`
+	StdDevRTTMs float64                                          `json:"std_dev_rtt_ms"`
 	JSON        diagnosticTracerouteNewResponseColosHopsNodeJSON `json:"-"`
 }
 
@@ -181,12 +181,12 @@ type diagnosticTracerouteNewResponseColosHopsNodeJSON struct {
 	Asn         apijson.Field
 	IP          apijson.Field
 	Labels      apijson.Field
-	MaxRttMs    apijson.Field
-	MeanRttMs   apijson.Field
-	MinRttMs    apijson.Field
+	MaxRTTMs    apijson.Field
+	MeanRTTMs   apijson.Field
+	MinRTTMs    apijson.Field
 	Name        apijson.Field
 	PacketCount apijson.Field
-	StdDevRttMs apijson.Field
+	StdDevRTTMs apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

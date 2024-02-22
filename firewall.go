@@ -15,7 +15,7 @@ type FirewallService struct {
 	Lockdowns   *FirewallLockdownService
 	Rules       *FirewallRuleService
 	AccessRules *FirewallAccessRuleService
-	UaRules     *FirewallUaRuleService
+	UARules     *FirewallUARuleService
 	WAF         *FirewallWAFService
 }
 
@@ -28,7 +28,7 @@ func NewFirewallService(opts ...option.RequestOption) (r *FirewallService) {
 	r.Lockdowns = NewFirewallLockdownService(opts...)
 	r.Rules = NewFirewallRuleService(opts...)
 	r.AccessRules = NewFirewallAccessRuleService(opts...)
-	r.UaRules = NewFirewallUaRuleService(opts...)
+	r.UARules = NewFirewallUARuleService(opts...)
 	r.WAF = NewFirewallWAFService(opts...)
 	return
 }

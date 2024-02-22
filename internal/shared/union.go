@@ -28,8 +28,8 @@ func (UnionString) ImplementsAccessApplicationUpdateParamsAppID()               
 func (UnionString) ImplementsAccessApplicationDeleteParamsAppID()                                 {}
 func (UnionString) ImplementsAccessApplicationGetParamsAppID()                                    {}
 func (UnionString) ImplementsAccessApplicationRevokeTokensParamsAppID()                           {}
-func (UnionString) ImplementsAccessApplicationCaNewResponse()                                     {}
-func (UnionString) ImplementsAccessApplicationCaGetResponse()                                     {}
+func (UnionString) ImplementsAccessApplicationCANewResponse()                                     {}
+func (UnionString) ImplementsAccessApplicationCAGetResponse()                                     {}
 func (UnionString) ImplementsAccessApplicationUserPolicyCheckListParamsAppID()                    {}
 func (UnionString) ImplementsAccessKeyUpdateResponse()                                            {}
 func (UnionString) ImplementsAccessKeyListResponse()                                              {}
@@ -58,9 +58,9 @@ func (UnionString) ImplementsDNSSECDeleteResponse()                             
 func (UnionString) ImplementsFirewallAccessRuleNewResponse()                                      {}
 func (UnionString) ImplementsFirewallAccessRuleEditResponse()                                     {}
 func (UnionString) ImplementsFirewallAccessRuleGetResponse()                                      {}
-func (UnionString) ImplementsFirewallUaRuleNewResponse()                                          {}
-func (UnionString) ImplementsFirewallUaRuleUpdateResponse()                                       {}
-func (UnionString) ImplementsFirewallUaRuleGetResponse()                                          {}
+func (UnionString) ImplementsFirewallUARuleNewResponse()                                          {}
+func (UnionString) ImplementsFirewallUARuleUpdateResponse()                                       {}
+func (UnionString) ImplementsFirewallUARuleGetResponse()                                          {}
 func (UnionString) ImplementsFirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult() {}
 func (UnionString) ImplementsFirewallWAFPackageGetResponseLegacyJhsAPIResponseSingleResult()      {}
 func (UnionString) ImplementsFirewallWAFPackageGroupEditResponse()                                {}

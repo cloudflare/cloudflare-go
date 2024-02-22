@@ -70,7 +70,7 @@ func TestSecondaryDNSPeerUpdateWithOptionalParams(t *testing.T) {
 			IP:         cloudflare.F("192.0.2.53"),
 			IxfrEnable: cloudflare.F(false),
 			Port:       cloudflare.F(53.000000),
-			TsigID:     cloudflare.F("69cd1e104af3e6ed3cb344f263fd0d5a"),
+			TSIGID:     cloudflare.F("69cd1e104af3e6ed3cb344f263fd0d5a"),
 		},
 	)
 	if err != nil {

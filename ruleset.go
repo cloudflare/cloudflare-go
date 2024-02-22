@@ -837,7 +837,7 @@ const (
 	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetNewResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetNewResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
@@ -1561,7 +1561,7 @@ const (
 	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetUpdateResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
@@ -2361,7 +2361,7 @@ const (
 	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductHot           RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductWAF           RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetGetResponseRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetGetResponseRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
@@ -2812,7 +2812,7 @@ const (
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductHot           RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductWAF           RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetNewParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetNewParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )
@@ -3341,7 +3341,7 @@ const (
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductHot           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "hot"
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductRateLimit     RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "rateLimit"
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductSecurityLevel RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "securityLevel"
-	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductUaBlock       RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
+	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductUABlock       RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "uaBlock"
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductWAF           RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "waf"
 	RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProductZoneLockdown  RulesetUpdateParamsRulesRulesetsSkipRuleActionParametersProduct = "zoneLockdown"
 )

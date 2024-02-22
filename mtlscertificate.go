@@ -91,7 +91,7 @@ type MtlsCertificateNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
+	CA bool `json:"ca"`
 	// The uploaded root CA certificate.
 	Certificates string `json:"certificates"`
 	// When the certificate expires.
@@ -115,7 +115,7 @@ type MtlsCertificateNewResponse struct {
 // [MtlsCertificateNewResponse]
 type mtlsCertificateNewResponseJSON struct {
 	ID           apijson.Field
-	Ca           apijson.Field
+	CA           apijson.Field
 	Certificates apijson.Field
 	ExpiresOn    apijson.Field
 	Issuer       apijson.Field
@@ -136,7 +136,7 @@ type MtlsCertificateListResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
+	CA bool `json:"ca"`
 	// The uploaded root CA certificate.
 	Certificates string `json:"certificates"`
 	// When the certificate expires.
@@ -158,7 +158,7 @@ type MtlsCertificateListResponse struct {
 // [MtlsCertificateListResponse]
 type mtlsCertificateListResponseJSON struct {
 	ID           apijson.Field
-	Ca           apijson.Field
+	CA           apijson.Field
 	Certificates apijson.Field
 	ExpiresOn    apijson.Field
 	Issuer       apijson.Field
@@ -178,7 +178,7 @@ type MtlsCertificateDeleteResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
+	CA bool `json:"ca"`
 	// The uploaded root CA certificate.
 	Certificates string `json:"certificates"`
 	// When the certificate expires.
@@ -200,7 +200,7 @@ type MtlsCertificateDeleteResponse struct {
 // [MtlsCertificateDeleteResponse]
 type mtlsCertificateDeleteResponseJSON struct {
 	ID           apijson.Field
-	Ca           apijson.Field
+	CA           apijson.Field
 	Certificates apijson.Field
 	ExpiresOn    apijson.Field
 	Issuer       apijson.Field
@@ -220,7 +220,7 @@ type MtlsCertificateGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca bool `json:"ca"`
+	CA bool `json:"ca"`
 	// The uploaded root CA certificate.
 	Certificates string `json:"certificates"`
 	// When the certificate expires.
@@ -242,7 +242,7 @@ type MtlsCertificateGetResponse struct {
 // [MtlsCertificateGetResponse]
 type mtlsCertificateGetResponseJSON struct {
 	ID           apijson.Field
-	Ca           apijson.Field
+	CA           apijson.Field
 	Certificates apijson.Field
 	ExpiresOn    apijson.Field
 	Issuer       apijson.Field
@@ -260,7 +260,7 @@ func (r *MtlsCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 type MtlsCertificateNewParams struct {
 	// Indicates whether the certificate is a CA or leaf certificate.
-	Ca param.Field[bool] `json:"ca,required"`
+	CA param.Field[bool] `json:"ca,required"`
 	// The uploaded root CA certificate.
 	Certificates param.Field[string] `json:"certificates,required"`
 	// Optional unique name for the certificate. Only used for human readability.

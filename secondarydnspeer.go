@@ -113,7 +113,7 @@ type SecondaryDNSPeerNewResponse struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TsigID string                          `json:"tsig_id"`
+	TSIGID string                          `json:"tsig_id"`
 	JSON   secondaryDNSPeerNewResponseJSON `json:"-"`
 }
 
@@ -125,7 +125,7 @@ type secondaryDNSPeerNewResponseJSON struct {
 	IP          apijson.Field
 	IxfrEnable  apijson.Field
 	Port        apijson.Field
-	TsigID      apijson.Field
+	TSIGID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -151,7 +151,7 @@ type SecondaryDNSPeerUpdateResponse struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TsigID string                             `json:"tsig_id"`
+	TSIGID string                             `json:"tsig_id"`
 	JSON   secondaryDNSPeerUpdateResponseJSON `json:"-"`
 }
 
@@ -163,7 +163,7 @@ type secondaryDNSPeerUpdateResponseJSON struct {
 	IP          apijson.Field
 	IxfrEnable  apijson.Field
 	Port        apijson.Field
-	TsigID      apijson.Field
+	TSIGID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -189,7 +189,7 @@ type SecondaryDNSPeerListResponse struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TsigID string                           `json:"tsig_id"`
+	TSIGID string                           `json:"tsig_id"`
 	JSON   secondaryDNSPeerListResponseJSON `json:"-"`
 }
 
@@ -201,7 +201,7 @@ type secondaryDNSPeerListResponseJSON struct {
 	IP          apijson.Field
 	IxfrEnable  apijson.Field
 	Port        apijson.Field
-	TsigID      apijson.Field
+	TSIGID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -244,7 +244,7 @@ type SecondaryDNSPeerGetResponse struct {
 	// linked to.
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TsigID string                          `json:"tsig_id"`
+	TSIGID string                          `json:"tsig_id"`
 	JSON   secondaryDNSPeerGetResponseJSON `json:"-"`
 }
 
@@ -256,7 +256,7 @@ type secondaryDNSPeerGetResponseJSON struct {
 	IP          apijson.Field
 	IxfrEnable  apijson.Field
 	Port        apijson.Field
-	TsigID      apijson.Field
+	TSIGID      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -358,7 +358,7 @@ type SecondaryDNSPeerUpdateParams struct {
 	// linked to.
 	Port param.Field[float64] `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
-	TsigID param.Field[string] `json:"tsig_id"`
+	TSIGID param.Field[string] `json:"tsig_id"`
 }
 
 func (r SecondaryDNSPeerUpdateParams) MarshalJSON() (data []byte, err error) {

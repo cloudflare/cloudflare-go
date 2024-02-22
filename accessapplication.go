@@ -22,7 +22,7 @@ import (
 // instead.
 type AccessApplicationService struct {
 	Options          []option.RequestOption
-	Cas              *AccessApplicationCaService
+	CAs              *AccessApplicationCAService
 	UserPolicyChecks *AccessApplicationUserPolicyCheckService
 	Policies         *AccessApplicationPolicyService
 }
@@ -33,7 +33,7 @@ type AccessApplicationService struct {
 func NewAccessApplicationService(opts ...option.RequestOption) (r *AccessApplicationService) {
 	r = &AccessApplicationService{}
 	r.Options = opts
-	r.Cas = NewAccessApplicationCaService(opts...)
+	r.CAs = NewAccessApplicationCAService(opts...)
 	r.UserPolicyChecks = NewAccessApplicationUserPolicyCheckService(opts...)
 	r.Policies = NewAccessApplicationPolicyService(opts...)
 	return

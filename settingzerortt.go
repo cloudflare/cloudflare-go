@@ -14,28 +14,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// SettingZeroRttService contains methods and other services that help with
+// SettingZeroRTTService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewSettingZeroRttService] method
+// this service directly, and instead use the [NewSettingZeroRTTService] method
 // instead.
-type SettingZeroRttService struct {
+type SettingZeroRTTService struct {
 	Options []option.RequestOption
 }
 
-// NewSettingZeroRttService generates a new service that applies the given options
+// NewSettingZeroRTTService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewSettingZeroRttService(opts ...option.RequestOption) (r *SettingZeroRttService) {
-	r = &SettingZeroRttService{}
+func NewSettingZeroRTTService(opts ...option.RequestOption) (r *SettingZeroRTTService) {
+	r = &SettingZeroRTTService{}
 	r.Options = opts
 	return
 }
 
 // Changes the 0-RTT session resumption setting.
-func (r *SettingZeroRttService) Edit(ctx context.Context, zoneID string, body SettingZeroRttEditParams, opts ...option.RequestOption) (res *SettingZeroRttEditResponse, err error) {
+func (r *SettingZeroRTTService) Edit(ctx context.Context, zoneID string, body SettingZeroRTTEditParams, opts ...option.RequestOption) (res *SettingZeroRTTEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingZeroRttEditResponseEnvelope
+	var env SettingZeroRTTEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -46,9 +46,9 @@ func (r *SettingZeroRttService) Edit(ctx context.Context, zoneID string, body Se
 }
 
 // Gets 0-RTT session resumption setting.
-func (r *SettingZeroRttService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingZeroRttGetResponse, err error) {
+func (r *SettingZeroRTTService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingZeroRTTGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SettingZeroRttGetResponseEnvelope
+	var env SettingZeroRTTGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -59,22 +59,22 @@ func (r *SettingZeroRttService) Get(ctx context.Context, zoneID string, opts ...
 }
 
 // 0-RTT session resumption enabled for this zone.
-type SettingZeroRttEditResponse struct {
+type SettingZeroRTTEditResponse struct {
 	// ID of the zone setting.
-	ID SettingZeroRttEditResponseID `json:"id,required"`
+	ID SettingZeroRTTEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingZeroRttEditResponseValue `json:"value,required"`
+	Value SettingZeroRTTEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingZeroRttEditResponseEditable `json:"editable"`
+	Editable SettingZeroRTTEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingZeroRttEditResponseJSON `json:"-"`
+	JSON       settingZeroRTTEditResponseJSON `json:"-"`
 }
 
-// settingZeroRttEditResponseJSON contains the JSON metadata for the struct
-// [SettingZeroRttEditResponse]
-type settingZeroRttEditResponseJSON struct {
+// settingZeroRTTEditResponseJSON contains the JSON metadata for the struct
+// [SettingZeroRTTEditResponse]
+type settingZeroRTTEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,51 +83,51 @@ type settingZeroRttEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingZeroRttEditResponseID string
+type SettingZeroRTTEditResponseID string
 
 const (
-	SettingZeroRttEditResponseID0rtt SettingZeroRttEditResponseID = "0rtt"
+	SettingZeroRTTEditResponseID0rtt SettingZeroRTTEditResponseID = "0rtt"
 )
 
 // Current value of the zone setting.
-type SettingZeroRttEditResponseValue string
+type SettingZeroRTTEditResponseValue string
 
 const (
-	SettingZeroRttEditResponseValueOn  SettingZeroRttEditResponseValue = "on"
-	SettingZeroRttEditResponseValueOff SettingZeroRttEditResponseValue = "off"
+	SettingZeroRTTEditResponseValueOn  SettingZeroRTTEditResponseValue = "on"
+	SettingZeroRTTEditResponseValueOff SettingZeroRTTEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingZeroRttEditResponseEditable bool
+type SettingZeroRTTEditResponseEditable bool
 
 const (
-	SettingZeroRttEditResponseEditableTrue  SettingZeroRttEditResponseEditable = true
-	SettingZeroRttEditResponseEditableFalse SettingZeroRttEditResponseEditable = false
+	SettingZeroRTTEditResponseEditableTrue  SettingZeroRTTEditResponseEditable = true
+	SettingZeroRTTEditResponseEditableFalse SettingZeroRTTEditResponseEditable = false
 )
 
 // 0-RTT session resumption enabled for this zone.
-type SettingZeroRttGetResponse struct {
+type SettingZeroRTTGetResponse struct {
 	// ID of the zone setting.
-	ID SettingZeroRttGetResponseID `json:"id,required"`
+	ID SettingZeroRTTGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingZeroRttGetResponseValue `json:"value,required"`
+	Value SettingZeroRTTGetResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingZeroRttGetResponseEditable `json:"editable"`
+	Editable SettingZeroRTTGetResponseEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingZeroRttGetResponseJSON `json:"-"`
+	JSON       settingZeroRTTGetResponseJSON `json:"-"`
 }
 
-// settingZeroRttGetResponseJSON contains the JSON metadata for the struct
-// [SettingZeroRttGetResponse]
-type settingZeroRttGetResponseJSON struct {
+// settingZeroRTTGetResponseJSON contains the JSON metadata for the struct
+// [SettingZeroRTTGetResponse]
+type settingZeroRTTGetResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -136,64 +136,64 @@ type settingZeroRttGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type SettingZeroRttGetResponseID string
+type SettingZeroRTTGetResponseID string
 
 const (
-	SettingZeroRttGetResponseID0rtt SettingZeroRttGetResponseID = "0rtt"
+	SettingZeroRTTGetResponseID0rtt SettingZeroRTTGetResponseID = "0rtt"
 )
 
 // Current value of the zone setting.
-type SettingZeroRttGetResponseValue string
+type SettingZeroRTTGetResponseValue string
 
 const (
-	SettingZeroRttGetResponseValueOn  SettingZeroRttGetResponseValue = "on"
-	SettingZeroRttGetResponseValueOff SettingZeroRttGetResponseValue = "off"
+	SettingZeroRTTGetResponseValueOn  SettingZeroRTTGetResponseValue = "on"
+	SettingZeroRTTGetResponseValueOff SettingZeroRTTGetResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingZeroRttGetResponseEditable bool
+type SettingZeroRTTGetResponseEditable bool
 
 const (
-	SettingZeroRttGetResponseEditableTrue  SettingZeroRttGetResponseEditable = true
-	SettingZeroRttGetResponseEditableFalse SettingZeroRttGetResponseEditable = false
+	SettingZeroRTTGetResponseEditableTrue  SettingZeroRTTGetResponseEditable = true
+	SettingZeroRTTGetResponseEditableFalse SettingZeroRTTGetResponseEditable = false
 )
 
-type SettingZeroRttEditParams struct {
+type SettingZeroRTTEditParams struct {
 	// Value of the 0-RTT setting.
-	Value param.Field[SettingZeroRttEditParamsValue] `json:"value,required"`
+	Value param.Field[SettingZeroRTTEditParamsValue] `json:"value,required"`
 }
 
-func (r SettingZeroRttEditParams) MarshalJSON() (data []byte, err error) {
+func (r SettingZeroRTTEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // Value of the 0-RTT setting.
-type SettingZeroRttEditParamsValue string
+type SettingZeroRTTEditParamsValue string
 
 const (
-	SettingZeroRttEditParamsValueOn  SettingZeroRttEditParamsValue = "on"
-	SettingZeroRttEditParamsValueOff SettingZeroRttEditParamsValue = "off"
+	SettingZeroRTTEditParamsValueOn  SettingZeroRTTEditParamsValue = "on"
+	SettingZeroRTTEditParamsValueOff SettingZeroRTTEditParamsValue = "off"
 )
 
-type SettingZeroRttEditResponseEnvelope struct {
-	Errors   []SettingZeroRttEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZeroRttEditResponseEnvelopeMessages `json:"messages,required"`
+type SettingZeroRTTEditResponseEnvelope struct {
+	Errors   []SettingZeroRTTEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingZeroRTTEditResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result SettingZeroRttEditResponse             `json:"result"`
-	JSON   settingZeroRttEditResponseEnvelopeJSON `json:"-"`
+	Result SettingZeroRTTEditResponse             `json:"result"`
+	JSON   settingZeroRTTEditResponseEnvelopeJSON `json:"-"`
 }
 
-// settingZeroRttEditResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingZeroRttEditResponseEnvelope]
-type settingZeroRttEditResponseEnvelopeJSON struct {
+// settingZeroRTTEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingZeroRTTEditResponseEnvelope]
+type settingZeroRTTEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -202,61 +202,61 @@ type settingZeroRttEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingZeroRttEditResponseEnvelopeErrors struct {
+type SettingZeroRTTEditResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
-	JSON    settingZeroRttEditResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingZeroRTTEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// settingZeroRttEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingZeroRttEditResponseEnvelopeErrors]
-type settingZeroRttEditResponseEnvelopeErrorsJSON struct {
+// settingZeroRTTEditResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingZeroRTTEditResponseEnvelopeErrors]
+type settingZeroRTTEditResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingZeroRttEditResponseEnvelopeMessages struct {
+type SettingZeroRTTEditResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
-	JSON    settingZeroRttEditResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    settingZeroRTTEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingZeroRttEditResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SettingZeroRttEditResponseEnvelopeMessages]
-type settingZeroRttEditResponseEnvelopeMessagesJSON struct {
+// settingZeroRTTEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SettingZeroRTTEditResponseEnvelopeMessages]
+type settingZeroRTTEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingZeroRttGetResponseEnvelope struct {
-	Errors   []SettingZeroRttGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SettingZeroRttGetResponseEnvelopeMessages `json:"messages,required"`
+type SettingZeroRTTGetResponseEnvelope struct {
+	Errors   []SettingZeroRTTGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SettingZeroRTTGetResponseEnvelopeMessages `json:"messages,required"`
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result SettingZeroRttGetResponse             `json:"result"`
-	JSON   settingZeroRttGetResponseEnvelopeJSON `json:"-"`
+	Result SettingZeroRTTGetResponse             `json:"result"`
+	JSON   settingZeroRTTGetResponseEnvelopeJSON `json:"-"`
 }
 
-// settingZeroRttGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [SettingZeroRttGetResponseEnvelope]
-type settingZeroRttGetResponseEnvelopeJSON struct {
+// settingZeroRTTGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [SettingZeroRTTGetResponseEnvelope]
+type settingZeroRTTGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Success     apijson.Field
@@ -265,44 +265,44 @@ type settingZeroRttGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingZeroRttGetResponseEnvelopeErrors struct {
+type SettingZeroRTTGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
-	JSON    settingZeroRttGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    settingZeroRTTGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// settingZeroRttGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [SettingZeroRttGetResponseEnvelopeErrors]
-type settingZeroRttGetResponseEnvelopeErrorsJSON struct {
+// settingZeroRTTGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [SettingZeroRTTGetResponseEnvelopeErrors]
+type settingZeroRTTGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SettingZeroRttGetResponseEnvelopeMessages struct {
+type SettingZeroRTTGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    settingZeroRttGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    settingZeroRTTGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// settingZeroRttGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [SettingZeroRttGetResponseEnvelopeMessages]
-type settingZeroRttGetResponseEnvelopeMessagesJSON struct {
+// settingZeroRTTGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [SettingZeroRTTGetResponseEnvelopeMessages]
+type settingZeroRTTGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingZeroRttGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SettingZeroRTTGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

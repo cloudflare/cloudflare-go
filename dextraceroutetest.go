@@ -603,14 +603,14 @@ type DEXTracerouteTestNetworkPathResponseNetworkPathSlot struct {
 	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// Round trip time in ms of the client to app mile
-	ClientToAppRttMs int64 `json:"clientToAppRttMs,required,nullable"`
+	ClientToAppRTTMs int64 `json:"clientToAppRttMs,required,nullable"`
 	// Round trip time in ms of the client to Cloudflare egress mile
-	ClientToCfEgressRttMs int64 `json:"clientToCfEgressRttMs,required,nullable"`
+	ClientToCfEgressRTTMs int64 `json:"clientToCfEgressRttMs,required,nullable"`
 	// Round trip time in ms of the client to Cloudflare ingress mile
-	ClientToCfIngressRttMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
+	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
 	Timestamp              string `json:"timestamp,required"`
 	// Round trip time in ms of the client to ISP mile
-	ClientToIspRttMs int64                                                   `json:"clientToIspRttMs,nullable"`
+	ClientToIspRTTMs int64                                                   `json:"clientToIspRttMs,nullable"`
 	JSON             dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON `json:"-"`
 }
 
@@ -618,11 +618,11 @@ type DEXTracerouteTestNetworkPathResponseNetworkPathSlot struct {
 // metadata for the struct [DEXTracerouteTestNetworkPathResponseNetworkPathSlot]
 type dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON struct {
 	ID                     apijson.Field
-	ClientToAppRttMs       apijson.Field
-	ClientToCfEgressRttMs  apijson.Field
-	ClientToCfIngressRttMs apijson.Field
+	ClientToAppRTTMs       apijson.Field
+	ClientToCfEgressRTTMs  apijson.Field
+	ClientToCfIngressRTTMs apijson.Field
 	Timestamp              apijson.Field
-	ClientToIspRttMs       apijson.Field
+	ClientToIspRTTMs       apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }

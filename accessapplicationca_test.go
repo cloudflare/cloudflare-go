@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAccessApplicationCaNew(t *testing.T) {
+func TestAccessApplicationCANew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestAccessApplicationCaNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.Cas.New(
+	_, err := client.Access.Applications.CAs.New(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.AccessApplicationCaNewParams{
+		cloudflare.AccessApplicationCANewParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -46,7 +46,7 @@ func TestAccessApplicationCaNew(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCaList(t *testing.T) {
+func TestAccessApplicationCAList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -62,7 +62,7 @@ func TestAccessApplicationCaList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.Cas.List(context.TODO(), cloudflare.AccessApplicationCaListParams{
+	_, err := client.Access.Applications.CAs.List(context.TODO(), cloudflare.AccessApplicationCAListParams{
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
@@ -75,7 +75,7 @@ func TestAccessApplicationCaList(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCaDelete(t *testing.T) {
+func TestAccessApplicationCADelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -91,10 +91,10 @@ func TestAccessApplicationCaDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.Cas.Delete(
+	_, err := client.Access.Applications.CAs.Delete(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.AccessApplicationCaDeleteParams{
+		cloudflare.AccessApplicationCADeleteParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
@@ -108,7 +108,7 @@ func TestAccessApplicationCaDelete(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCaGet(t *testing.T) {
+func TestAccessApplicationCAGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -124,10 +124,10 @@ func TestAccessApplicationCaGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Access.Applications.Cas.Get(
+	_, err := client.Access.Applications.CAs.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.AccessApplicationCaGetParams{
+		cloudflare.AccessApplicationCAGetParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},

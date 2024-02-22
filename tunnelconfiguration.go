@@ -150,7 +150,7 @@ type TunnelConfigurationUpdateParamsConfigIngressOriginRequest struct {
 	Access param.Field[TunnelConfigurationUpdateParamsConfigIngressOriginRequestAccess] `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
-	CaPool param.Field[string] `json:"caPool"`
+	CAPool param.Field[string] `json:"caPool"`
 	// Timeout for establishing a new TCP connection to your origin server. This
 	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
 	ConnectTimeout param.Field[int64] `json:"connectTimeout"`
@@ -213,7 +213,7 @@ type TunnelConfigurationUpdateParamsConfigOriginRequest struct {
 	Access param.Field[TunnelConfigurationUpdateParamsConfigOriginRequestAccess] `json:"access"`
 	// Path to the certificate authority (CA) for the certificate of your origin. This
 	// option should be used only if your certificate is not signed by Cloudflare.
-	CaPool param.Field[string] `json:"caPool"`
+	CAPool param.Field[string] `json:"caPool"`
 	// Timeout for establishing a new TCP connection to your origin server. This
 	// excludes the time taken to establish TLS, which is controlled by tlsTimeout.
 	ConnectTimeout param.Field[int64] `json:"connectTimeout"`

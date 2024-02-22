@@ -251,7 +251,7 @@ type FirewallRuleNewResponseProduct string
 
 const (
 	FirewallRuleNewResponseProductZoneLockdown  FirewallRuleNewResponseProduct = "zoneLockdown"
-	FirewallRuleNewResponseProductUaBlock       FirewallRuleNewResponseProduct = "uaBlock"
+	FirewallRuleNewResponseProductUABlock       FirewallRuleNewResponseProduct = "uaBlock"
 	FirewallRuleNewResponseProductBic           FirewallRuleNewResponseProduct = "bic"
 	FirewallRuleNewResponseProductHot           FirewallRuleNewResponseProduct = "hot"
 	FirewallRuleNewResponseProductSecurityLevel FirewallRuleNewResponseProduct = "securityLevel"
@@ -386,7 +386,7 @@ type FirewallRuleUpdateResponseProduct string
 
 const (
 	FirewallRuleUpdateResponseProductZoneLockdown  FirewallRuleUpdateResponseProduct = "zoneLockdown"
-	FirewallRuleUpdateResponseProductUaBlock       FirewallRuleUpdateResponseProduct = "uaBlock"
+	FirewallRuleUpdateResponseProductUABlock       FirewallRuleUpdateResponseProduct = "uaBlock"
 	FirewallRuleUpdateResponseProductBic           FirewallRuleUpdateResponseProduct = "bic"
 	FirewallRuleUpdateResponseProductHot           FirewallRuleUpdateResponseProduct = "hot"
 	FirewallRuleUpdateResponseProductSecurityLevel FirewallRuleUpdateResponseProduct = "securityLevel"
@@ -520,7 +520,7 @@ type FirewallRuleListResponseProduct string
 
 const (
 	FirewallRuleListResponseProductZoneLockdown  FirewallRuleListResponseProduct = "zoneLockdown"
-	FirewallRuleListResponseProductUaBlock       FirewallRuleListResponseProduct = "uaBlock"
+	FirewallRuleListResponseProductUABlock       FirewallRuleListResponseProduct = "uaBlock"
 	FirewallRuleListResponseProductBic           FirewallRuleListResponseProduct = "bic"
 	FirewallRuleListResponseProductHot           FirewallRuleListResponseProduct = "hot"
 	FirewallRuleListResponseProductSecurityLevel FirewallRuleListResponseProduct = "securityLevel"
@@ -655,7 +655,7 @@ type FirewallRuleDeleteResponseProduct string
 
 const (
 	FirewallRuleDeleteResponseProductZoneLockdown  FirewallRuleDeleteResponseProduct = "zoneLockdown"
-	FirewallRuleDeleteResponseProductUaBlock       FirewallRuleDeleteResponseProduct = "uaBlock"
+	FirewallRuleDeleteResponseProductUABlock       FirewallRuleDeleteResponseProduct = "uaBlock"
 	FirewallRuleDeleteResponseProductBic           FirewallRuleDeleteResponseProduct = "bic"
 	FirewallRuleDeleteResponseProductHot           FirewallRuleDeleteResponseProduct = "hot"
 	FirewallRuleDeleteResponseProductSecurityLevel FirewallRuleDeleteResponseProduct = "securityLevel"
@@ -789,7 +789,7 @@ type FirewallRuleEditResponseProduct string
 
 const (
 	FirewallRuleEditResponseProductZoneLockdown  FirewallRuleEditResponseProduct = "zoneLockdown"
-	FirewallRuleEditResponseProductUaBlock       FirewallRuleEditResponseProduct = "uaBlock"
+	FirewallRuleEditResponseProductUABlock       FirewallRuleEditResponseProduct = "uaBlock"
 	FirewallRuleEditResponseProductBic           FirewallRuleEditResponseProduct = "bic"
 	FirewallRuleEditResponseProductHot           FirewallRuleEditResponseProduct = "hot"
 	FirewallRuleEditResponseProductSecurityLevel FirewallRuleEditResponseProduct = "securityLevel"
@@ -923,7 +923,7 @@ type FirewallRuleGetResponseProduct string
 
 const (
 	FirewallRuleGetResponseProductZoneLockdown  FirewallRuleGetResponseProduct = "zoneLockdown"
-	FirewallRuleGetResponseProductUaBlock       FirewallRuleGetResponseProduct = "uaBlock"
+	FirewallRuleGetResponseProductUABlock       FirewallRuleGetResponseProduct = "uaBlock"
 	FirewallRuleGetResponseProductBic           FirewallRuleGetResponseProduct = "bic"
 	FirewallRuleGetResponseProductHot           FirewallRuleGetResponseProduct = "hot"
 	FirewallRuleGetResponseProductSecurityLevel FirewallRuleGetResponseProduct = "securityLevel"

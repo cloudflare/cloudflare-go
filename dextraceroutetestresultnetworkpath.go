@@ -87,7 +87,7 @@ type DEXTracerouteTestResultNetworkPathListResponseHop struct {
 	Mile          DEXTracerouteTestResultNetworkPathListResponseHopsMile     `json:"mile,nullable"`
 	Name          string                                                     `json:"name,nullable"`
 	PacketLossPct float64                                                    `json:"packetLossPct,nullable"`
-	RttMs         int64                                                      `json:"rttMs,nullable"`
+	RTTMs         int64                                                      `json:"rttMs,nullable"`
 	JSON          dexTracerouteTestResultNetworkPathListResponseHopJSON      `json:"-"`
 }
 
@@ -102,7 +102,7 @@ type dexTracerouteTestResultNetworkPathListResponseHopJSON struct {
 	Mile          apijson.Field
 	Name          apijson.Field
 	PacketLossPct apijson.Field
-	RttMs         apijson.Field
+	RTTMs         apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
