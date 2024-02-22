@@ -12,7 +12,7 @@ func (UnionString) ImplementsMembershipUpdateResponse()                         
 func (UnionString) ImplementsMembershipGetResponse()                                              {}
 func (UnionString) ImplementsUserListResponse()                                                   {}
 func (UnionString) ImplementsUserEditResponse()                                                   {}
-func (UnionString) ImplementsUserAuditLogListResponseWtf()                                        {}
+func (UnionString) ImplementsUserAuditLogListResponse()                                           {}
 func (UnionString) ImplementsUserBillingProfileListResponse()                                     {}
 func (UnionString) ImplementsUserInviteEditResponse()                                             {}
 func (UnionString) ImplementsUserInviteGetResponse()                                              {}
@@ -112,7 +112,7 @@ func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()                
 func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()                                {}
 func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()                                {}
 func (UnionString) ImplementsAddressPrefixDeleteResponse()                                        {}
-func (UnionString) ImplementsAuditLogListResponseWtf()                                            {}
+func (UnionString) ImplementsAuditLogListResponse()                                               {}
 func (UnionString) ImplementsBillingProfileGetResponse()                                          {}
 func (UnionString) ImplementsTunnelConfigurationUpdateResponse()                                  {}
 func (UnionString) ImplementsTunnelConfigurationListResponse()                                    {}
@@ -175,6 +175,10 @@ func (UnionString) ImplementsAlertingV3PolicyDeleteResponse()                   
 func (UnionString) ImplementsAlertingV3PolicyGetResponseMechanismsID()                            {}
 func (UnionString) ImplementsAlertingV3PolicyNewParamsMechanismsID()                              {}
 func (UnionString) ImplementsAlertingV3PolicyUpdateParamsMechanismsID()                           {}
+func (UnionString) ImplementsDeviceGetResponse()                                                  {}
+func (UnionString) ImplementsDevicePostureIntegrationDeleteResponse()                             {}
+func (UnionString) ImplementsDeviceRevokeNewResponse()                                            {}
+func (UnionString) ImplementsDeviceUnrevokeNewResponse()                                          {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
 func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                              {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponse()                                     {}

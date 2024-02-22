@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestHyperdriveConfigNew(t *testing.T) {
+func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,19 @@ func TestHyperdriveConfigNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Hyperdrive.Configs.New(
+	_, err := client.Devices.DEXTests.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.HyperdriveConfigNewParams{
-			Origin: cloudflare.F(cloudflare.HyperdriveConfigNewParamsOrigin{
-				Password: cloudflare.F("password1234!"),
+		"699d98642c564d2e855e9661899b7252",
+		cloudflare.DeviceDEXTestNewParams{
+			Data: cloudflare.F(cloudflare.DeviceDEXTestNewParamsData{
+				Host:   cloudflare.F("https://dash.cloudflare.com"),
+				Kind:   cloudflare.F("http"),
+				Method: cloudflare.F("GET"),
 			}),
+			Enabled:     cloudflare.F(true),
+			Interval:    cloudflare.F("30m"),
+			Name:        cloudflare.F("HTTP dash health check"),
+			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 		},
 	)
 	if err != nil {
@@ -47,7 +53,7 @@ func TestHyperdriveConfigNew(t *testing.T) {
 	}
 }
 
-func TestHyperdriveConfigUpdate(t *testing.T) {
+func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -63,14 +69,20 @@ func TestHyperdriveConfigUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Hyperdrive.Configs.Update(
+	_, err := client.Devices.DEXTests.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.HyperdriveConfigUpdateParams{
-			Origin: cloudflare.F(cloudflare.HyperdriveConfigUpdateParamsOrigin{
-				Password: cloudflare.F("password1234!"),
+		"699d98642c564d2e855e9661899b7252",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.DeviceDEXTestUpdateParams{
+			Data: cloudflare.F(cloudflare.DeviceDEXTestUpdateParamsData{
+				Host:   cloudflare.F("https://dash.cloudflare.com"),
+				Kind:   cloudflare.F("http"),
+				Method: cloudflare.F("GET"),
 			}),
+			Enabled:     cloudflare.F(true),
+			Interval:    cloudflare.F("30m"),
+			Name:        cloudflare.F("HTTP dash health check"),
+			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
 		},
 	)
 	if err != nil {
@@ -82,7 +94,7 @@ func TestHyperdriveConfigUpdate(t *testing.T) {
 	}
 }
 
-func TestHyperdriveConfigList(t *testing.T) {
+func TestDeviceDEXTestList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -98,7 +110,7 @@ func TestHyperdriveConfigList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Hyperdrive.Configs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Devices.DEXTests.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -108,7 +120,7 @@ func TestHyperdriveConfigList(t *testing.T) {
 	}
 }
 
-func TestHyperdriveConfigDelete(t *testing.T) {
+func TestDeviceDEXTestDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -124,45 +136,10 @@ func TestHyperdriveConfigDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Hyperdrive.Configs.Delete(
+	_, err := client.Devices.DEXTests.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-	)
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestHyperdriveConfigEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
-	)
-	_, err := client.Hyperdrive.Configs.Edit(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.HyperdriveConfigEditParams{
-			Origin: cloudflare.F(cloudflare.HyperdriveConfigEditParamsOrigin{
-				Password: cloudflare.F("password1234!"),
-			}),
-		},
+		"699d98642c564d2e855e9661899b7252",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -173,7 +150,7 @@ func TestHyperdriveConfigEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestHyperdriveConfigGet(t *testing.T) {
+func TestDeviceDEXTestGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -189,10 +166,10 @@ func TestHyperdriveConfigGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Hyperdrive.Configs.Get(
+	_, err := client.Devices.DEXTests.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		"699d98642c564d2e855e9661899b7252",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -86,6 +86,20 @@ func (r *HyperdriveConfigService) Delete(ctx context.Context, accountID string, 
 	return
 }
 
+// Patches and returns the specified Hyperdrive configuration. Updates to the
+// origin and caching settings are applied with an all-or-nothing approach.
+func (r *HyperdriveConfigService) Edit(ctx context.Context, accountID string, hyperdriveID string, body HyperdriveConfigEditParams, opts ...option.RequestOption) (res *HyperdriveConfigEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HyperdriveConfigEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Returns the specified Hyperdrive configuration.
 func (r *HyperdriveConfigService) Get(ctx context.Context, accountID string, hyperdriveID string, opts ...option.RequestOption) (res *HyperdriveConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -168,6 +182,24 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type HyperdriveConfigEditResponse struct {
+	// Identifier
+	ID   string                           `json:"id"`
+	JSON hyperdriveConfigEditResponseJSON `json:"-"`
+}
+
+// hyperdriveConfigEditResponseJSON contains the JSON metadata for the struct
+// [HyperdriveConfigEditResponse]
+type hyperdriveConfigEditResponseJSON struct {
+	ID          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type HyperdriveConfigGetResponse struct {
@@ -498,6 +530,93 @@ type HyperdriveConfigDeleteResponseEnvelopeSuccess bool
 
 const (
 	HyperdriveConfigDeleteResponseEnvelopeSuccessTrue HyperdriveConfigDeleteResponseEnvelopeSuccess = true
+)
+
+type HyperdriveConfigEditParams struct {
+	Origin param.Field[HyperdriveConfigEditParamsOrigin] `json:"origin"`
+}
+
+func (r HyperdriveConfigEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type HyperdriveConfigEditParamsOrigin struct {
+	// The password required to access your origin database. This value is write-only
+	// and never returned by the API.
+	Password param.Field[string] `json:"password,required"`
+}
+
+func (r HyperdriveConfigEditParamsOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type HyperdriveConfigEditResponseEnvelope struct {
+	Errors   []HyperdriveConfigEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []HyperdriveConfigEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   HyperdriveConfigEditResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success HyperdriveConfigEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    hyperdriveConfigEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// hyperdriveConfigEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HyperdriveConfigEditResponseEnvelope]
+type hyperdriveConfigEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigEditResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    hyperdriveConfigEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// hyperdriveConfigEditResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [HyperdriveConfigEditResponseEnvelopeErrors]
+type hyperdriveConfigEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type HyperdriveConfigEditResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    hyperdriveConfigEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// hyperdriveConfigEditResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [HyperdriveConfigEditResponseEnvelopeMessages]
+type hyperdriveConfigEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HyperdriveConfigEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type HyperdriveConfigEditResponseEnvelopeSuccess bool
+
+const (
+	HyperdriveConfigEditResponseEnvelopeSuccessTrue HyperdriveConfigEditResponseEnvelopeSuccess = true
 )
 
 type HyperdriveConfigGetResponseEnvelope struct {

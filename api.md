@@ -3915,6 +3915,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#IT1w6UlbTrace">IT1w6UlbTrace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RequestTracerTraceNewResponse">RequestTracerTraceNewResponse</a>
 
 Methods:
@@ -4542,31 +4543,191 @@ Methods:
 
 # Devices
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDevicesListDevicesResponse">DeviceDevicesListDevicesResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceGetResponse">DeviceGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/devices">client.Devices.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceService.DevicesListDevices">DevicesListDevices</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDevicesListDevicesResponse">DeviceDevicesListDevicesResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/{device_id}">client.Devices.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, deviceID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceGetResponse">DeviceGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## DEXTests
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestNewResponse">DeviceDEXTestNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestUpdateResponse">DeviceDEXTestUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestListResponse">DeviceDEXTestListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestDeleteResponse">DeviceDEXTestDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestGetResponse">DeviceDEXTestGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/dex_tests">client.Devices.DEXTests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestNewParams">DeviceDEXTestNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestNewResponse">DeviceDEXTestNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/devices/dex_tests/{dex_test_id}">client.Devices.DEXTests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, dexTestID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestUpdateParams">DeviceDEXTestUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestUpdateResponse">DeviceDEXTestUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/dex_tests">client.Devices.DEXTests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestListResponse">DeviceDEXTestListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/devices/dex_tests/{dex_test_id}">client.Devices.DEXTests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, dexTestID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestDeleteResponse">DeviceDEXTestDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/dex_tests/{dex_test_id}">client.Devices.DEXTests.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, dexTestID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceDEXTestGetResponse">DeviceDEXTestGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Networks
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkNewResponse">DeviceNetworkNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkUpdateResponse">DeviceNetworkUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkListResponse">DeviceNetworkListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkDeleteResponse">DeviceNetworkDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkGetResponse">DeviceNetworkGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/networks">client.Devices.Networks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkNewParams">DeviceNetworkNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkNewResponse">DeviceNetworkNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/devices/networks/{network_id}">client.Devices.Networks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, networkID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkUpdateParams">DeviceNetworkUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkUpdateResponse">DeviceNetworkUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/networks">client.Devices.Networks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkListResponse">DeviceNetworkListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/devices/networks/{network_id}">client.Devices.Networks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, networkID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkDeleteResponse">DeviceNetworkDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/networks/{network_id}">client.Devices.Networks.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, networkID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceNetworkGetResponse">DeviceNetworkGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Policies
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyNewResponse">DevicePolicyNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyListResponse">DevicePolicyListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyDeleteResponse">DevicePolicyDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyEditResponse">DevicePolicyEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyGetResponse">DevicePolicyGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/policy">client.Devices.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyNewParams">DevicePolicyNewParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyNewResponse">DevicePolicyNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/policies">client.Devices.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyListResponse">DevicePolicyListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/devices/policy/{policy_id}">client.Devices.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, policyID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyDeleteResponse">DevicePolicyDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /accounts/{account_id}/devices/policy/{policy_id}">client.Devices.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, policyID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyEditParams">DevicePolicyEditParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyEditResponse">DevicePolicyEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/policy/{policy_id}">client.Devices.Policies.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, policyID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyGetResponse">DevicePolicyGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### DefaultPolicy
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyDefaultPolicyGetResponse">DevicePolicyDefaultPolicyGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/devices/policy">client.Devices.Policies.DefaultPolicy.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyDefaultPolicyService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyDefaultPolicyGetResponse">DevicePolicyDefaultPolicyGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Excludes
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeUpdateResponse">DevicePolicyExcludeUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeListResponse">DevicePolicyExcludeListResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/devices/policy/exclude">client.Devices.Policies.Excludes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeUpdateParams">DevicePolicyExcludeUpdateParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeUpdateResponse">DevicePolicyExcludeUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/policy/exclude">client.Devices.Policies.Excludes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyExcludeListResponse">DevicePolicyExcludeListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### FallbackDomains
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainUpdateResponse">DevicePolicyFallbackDomainUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainListResponse">DevicePolicyFallbackDomainListResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/devices/policy/{policy_id}/fallback_domains">client.Devices.Policies.FallbackDomains.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, policyID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainUpdateParams">DevicePolicyFallbackDomainUpdateParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainUpdateResponse">DevicePolicyFallbackDomainUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/policy/{policy_id}/fallback_domains">client.Devices.Policies.FallbackDomains.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, policyID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyFallbackDomainListResponse">DevicePolicyFallbackDomainListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Includes
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeUpdateResponse">DevicePolicyIncludeUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeListResponse">DevicePolicyIncludeListResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/devices/policy/include">client.Devices.Policies.Includes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeUpdateParams">DevicePolicyIncludeUpdateParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeUpdateResponse">DevicePolicyIncludeUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/policy/include">client.Devices.Policies.Includes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePolicyIncludeListResponse">DevicePolicyIncludeListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Postures
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureNewResponse">DevicePostureNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureUpdateResponse">DevicePostureUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureListResponse">DevicePostureListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureDeleteResponse">DevicePostureDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureGetResponse">DevicePostureGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/posture">client.Devices.Postures.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureNewParams">DevicePostureNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureNewResponse">DevicePostureNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="put /accounts/{account_id}/devices/posture/{rule_id}">client.Devices.Postures.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, ruleID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureUpdateParams">DevicePostureUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureUpdateResponse">DevicePostureUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/posture">client.Devices.Postures.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureListResponse">DevicePostureListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/devices/posture/{rule_id}">client.Devices.Postures.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, ruleID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureDeleteResponse">DevicePostureDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/posture/{rule_id}">client.Devices.Postures.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, ruleID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureGetResponse">DevicePostureGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ### Integrations
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationNewResponse">DevicePostureIntegrationNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationDeleteResponse">DevicePostureIntegrationDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationEditResponse">DevicePostureIntegrationEditResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationGetResponse">DevicePostureIntegrationGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/posture/integration">client.Devices.Postures.Integrations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationNewParams">DevicePostureIntegrationNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationNewResponse">DevicePostureIntegrationNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/devices/posture/integration/{integration_id}">client.Devices.Postures.Integrations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, integrationID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationDeleteResponse">DevicePostureIntegrationDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /accounts/{account_id}/devices/posture/integration/{integration_id}">client.Devices.Postures.Integrations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, integrationID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationEditParams">DevicePostureIntegrationEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationEditResponse">DevicePostureIntegrationEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/posture/integration/{integration_id}">client.Devices.Postures.Integrations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, integrationID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DevicePostureIntegrationGetResponse">DevicePostureIntegrationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Revokes
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceRevokeNewResponse">DeviceRevokeNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/revoke">client.Devices.Revokes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceRevokeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceRevokeNewParams">DeviceRevokeNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceRevokeNewResponse">DeviceRevokeNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## Settings
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingUpdateResponse">DeviceSettingUpdateResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingListResponse">DeviceSettingListResponse</a>
+
+Methods:
+
+- <code title="put /accounts/{account_id}/devices/settings">client.Devices.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingUpdateParams">DeviceSettingUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingUpdateResponse">DeviceSettingUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/devices/settings">client.Devices.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceSettingListResponse">DeviceSettingListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Unrevokes
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceUnrevokeNewResponse">DeviceUnrevokeNewResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/devices/unrevoke">client.Devices.Unrevokes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceUnrevokeService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceUnrevokeNewParams">DeviceUnrevokeNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceUnrevokeNewResponse">DeviceUnrevokeNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ## OverrideCodes
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceOverrideCodeListResponse">DeviceOverrideCodeListResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/devices/{device_id}/override_codes">client.Devices.OverrideCodes.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceOverrideCodeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID interface{}, deviceID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#DeviceOverrideCodeListResponse">DeviceOverrideCodeListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # D1
 
@@ -4945,6 +5106,7 @@ Response Types:
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigUpdateResponse">HyperdriveConfigUpdateResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigListResponse">HyperdriveConfigListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigDeleteResponse">HyperdriveConfigDeleteResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigEditResponse">HyperdriveConfigEditResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigGetResponse">HyperdriveConfigGetResponse</a>
 
 Methods:
@@ -4953,6 +5115,7 @@ Methods:
 - <code title="put /accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}">client.Hyperdrive.Configs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, hyperdriveID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigUpdateParams">HyperdriveConfigUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigUpdateResponse">HyperdriveConfigUpdateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/hyperdrive/configs">client.Hyperdrive.Configs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigListResponse">HyperdriveConfigListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="delete /accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}">client.Hyperdrive.Configs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, hyperdriveID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigDeleteResponse">HyperdriveConfigDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}">client.Hyperdrive.Configs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, hyperdriveID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigEditParams">HyperdriveConfigEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigEditResponse">HyperdriveConfigEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/hyperdrive/configs/{hyperdrive_id}">client.Hyperdrive.Configs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, hyperdriveID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HyperdriveConfigGetResponse">HyperdriveConfigGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # RUM
