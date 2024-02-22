@@ -71,6 +71,8 @@ func (r *URLScannerScanResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type URLScannerScanResponseTask struct {
+	// Alpha-2 country code
+	Country string `json:"country,required"`
 	// Whether scan was successful or not
 	Success bool `json:"success,required"`
 	// When scan was submitted (UTC)
@@ -78,17 +80,21 @@ type URLScannerScanResponseTask struct {
 	// Scan url (after redirects)
 	URL string `json:"url,required"`
 	// Scan id
-	UUID string                         `json:"uuid,required" format:"uuid"`
-	JSON urlScannerScanResponseTaskJSON `json:"-"`
+	UUID string `json:"uuid,required" format:"uuid"`
+	// Visibility status.
+	Visibility string                         `json:"visibility,required"`
+	JSON       urlScannerScanResponseTaskJSON `json:"-"`
 }
 
 // urlScannerScanResponseTaskJSON contains the JSON metadata for the struct
 // [URLScannerScanResponseTask]
 type urlScannerScanResponseTaskJSON struct {
+	Country     apijson.Field
 	Success     apijson.Field
 	Time        apijson.Field
 	URL         apijson.Field
 	UUID        apijson.Field
+	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -106,12 +112,16 @@ type URLScannerScanParams struct {
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
 	// Filter scans by hostname of _any_ request made by the webpage.
 	Hostname param.Field[string] `query:"hostname"`
+	// Filter scans by IP address (IPv4 or IPv6) of _any_ request made by the webpage.
+	IP param.Field[string] `query:"ip"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Pagination cursor to get the next set of results.
 	NextCursor param.Field[string] `query:"next_cursor"`
 	// Filter scans by main page hostname .
 	PageHostname param.Field[string] `query:"page_hostname"`
+	// Filter scans by main page IP address (IPv4 or IPv6).
+	PageIP param.Field[string] `query:"page_ip"`
 	// Filter scans by exact match URL path (also supports suffix search).
 	PagePath param.Field[string] `query:"page_path"`
 	// Filter scans by exact match to scanned URL (_after redirects_)
